@@ -1,0 +1,562 @@
+# Handoff: ROS-2-Brücke für Robotweax CONTROL/SENSOR
+
+Datum: 2026-11-04 · Einstieg für einen Entwickler
+
+## Auftrag und aktueller Zustand
+
+Implementiere die in [ARCHITECTURE.md](ARCHITECTURE.md) beschriebene selektive
+ROS-2-Brücke. Beginne mit M0 und arbeite bis zum simulierten ROS-Demonstrator M2;
+danach folgen Netzwerkvergleich M3 und der Intrinsic-Adapter M4.
+
+**Bei der ursprünglichen Übergabe waren ausschließlich diese beiden Planungsdokumente vorhanden.** Es wurden
+keine Bridge-Pakete, Container, ROS-Launchfiles oder Intrinsic-Adapter erstellt.
+Es wurden keine Builds, Netzwerkversuche oder Robotertests für dieses Vorhaben
+ausgeführt. Die Architektur ist kein gemessener Leistungs- oder Sicherheitsnachweis.
+
+Die Grundentscheidung ist getroffen: SENSOR für kleine aktuelle Zustände,
+CONTROL für einzelne bestätigte Aufträge, zwei getrennte SRT-Verbindungen,
+begrenzte Queues und ein dauerhaftes Auftragsjournal. Der erste Handler ändert
+die Messrate eines Simulators. Eine weitere reine Videobrücke ist nicht das Ziel.
+
+## 1. Vor Arbeitsbeginn lesen
+
+1. Anwendbare lokale `AGENTS.md` und die vollständige [Architektur](ARCHITECTURE.md).
+2. CONTROL-, SENSOR- und SESSIONAUTH-Verträge am unten genannten SRT-Pin.
+3. Installierter öffentlicher C-API-Consumer und Testanleitung am selben Pin.
+4. Vor M4 Intrinsic-README und ICON-/ROS-2-Tutorial an dessen eigenem Pin.
+
+Dieser Ordner liegt als neues Teilprojekt im vorhandenen SRT-Checkout. Die
+`HANDOFF.md` im Repository-Wurzelverzeichnis gehört zu einer anderen Aufgabe.
+Vorhandene Änderungen, andere Teilprojekte und deren Übergaben erhalten.
+Für die Implementierung kann dieser Ordner in ein eigenständiges Repository
+übernommen werden; SRT bleibt eine installierte Abhängigkeit. Vor neuen Dateien
+den tatsächlichen Arbeitsbaum prüfen. Keine vorhandenen Änderungen zurücksetzen.
+
+## 2. Pins und Umgebung
+
+| Zweck | Referenz |
+| --- | --- |
+| Lokaler Ausgangscheckout, nur Quellenkontext | SRT `09ceab33e1fc190472558fdb4d873f38b76fa320`, Version 0.2.8 |
+| Zu qualifizierender SRT-Kandidat | `52be7c86ee1f303cbb0c8718c364217e4dd97a36`, CMake-Version 0.3.1 |
+| Zu qualifizierender Intrinsic-Pin für M4 | `723c3ee01f155f7a8bb04e449d917fe8ac5784e9` |
+| MVP-Betriebssystem | Ubuntu 24.04, Linux amd64 |
+| MVP-ROS | Jazzy; beide Enden identische Typ-Paketversionen |
+| Sprache / Crypto | C++20 / OpenSSL 3.x, GCM und SESSIONAUTH v2 |
+
+Die neuere Quelle wird in einem separaten Dependency-Checkout bereitgestellt.
+Nicht den bestehenden, anderweitig genutzten SRT-Arbeitsbaum auf den Pin resetten.
+Ein geeigneter vorhandener Checkout kann wiederverwendet werden. Gleiche
+Versionsnummern allein genügen nicht: Headers, Bibliothek, Flags und SHA müssen
+zusammenpassen. Für den MVP kein `latest`-Container und kein ungeprüftes `main`.
+
+In M0 `baselines/dependencies.json` anlegen: SRT-/Intrinsic-SHA, Container-Digest,
+ROS-Pakete, RMW, Protobuf, SQLite, Compiler, OpenSSL, Architektur und Buildflags.
+Intrinsic verlangt laut gelesenem README Lyrical; dessen Integration separat
+bauen. Die Jazzy-Baseline ist keine Behauptung einer Intrinsic-Kompatibilität.
+
+## 3. Erster ausführbarer Schritt: SRT-Consumer qualifizieren
+
+In einem vorbereiteten Linux-Entwicklungscontainer sind CMake, C++20-Compiler,
+OpenSSL-Entwicklungsdateien und Python erforderlich. ROS ist für die erste
+Consumer-Prüfung noch nicht erforderlich. Die folgenden Befehle gelten für den
+separaten **gepinnten SRT-Quellbaum**, nicht für diesen Dokumentationsordner.
+Sie sind ein Startrezept und wurden im Rahmen dieser Übergabe nicht ausgeführt.
+
+```sh
+set -eu
+# Im Dependency-Checkout; bei einem anderen HEAD zuerst dessen Herkunft klären.
+test "$(git rev-parse HEAD)" = 52be7c86ee1f303cbb0c8718c364217e4dd97a36
+git status --short
+
+cmake -S . -B build-ros2-profile \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX="$PWD/stage-ros2-profile" \
+  -DROBOTWEAX_SRT_INSTALL_LAYOUT=namespaced \
+  -DROBOTWEAX_SRT_BUILD_TESTS=ON \
+  -DROBOTWEAX_SRT_BUILD_EXAMPLES=ON \
+  -DROBOTWEAX_SRT_BUILD_BENCHMARKS=OFF \
+  -DROBOTWEAX_SRT_BUILD_TOOLS=OFF \
+  -DROBOTWEAX_SRT_CRYPTO_BACKEND=openssl \
+  -DENABLE_AEAD_API_PREVIEW=ON \
+  -DROBOTWEAX_SRT_ENABLE_EXPERIMENTAL_ACP1=OFF
+cmake --build build-ros2-profile --parallel 2
+ctest --test-dir build-ros2-profile -N
+ctest --test-dir build-ros2-profile -L profile --output-on-failure
+cmake --install build-ros2-profile
+```
+
+Vor dem gefilterten Lauf die tatsächliche Testinventur prüfen. Null ausgewählte
+Tests sind ein Fehler. Das `profile`-Label ist ein Einstieg, kein vollständiger
+SESSIONAUTH-/Reconnect-Nachweis. Ergänze die am Pin dokumentierten relevanten
+Tests und protokolliere Namen, Zahl, Ergebnisse und ausgelassene Umgebungsfälle.
+Eine verschmutzte Dependency-Quelle muss im Manifest sichtbar sein und ist
+keine unveränderte Pin-Qualifikation.
+
+Ein eigener kleiner installierter Consumer muss danach über die öffentliche
+C-API zwei echte Sockets betreiben und für CONTROL **und** SENSOR prüfen:
+
+- Explizites Profil, AES-GCM und SESSIONAUTH v2; kein optionales Downgrade.
+- Payload 1.024 Byte bei IPv4/MSS 1500 und IPv6/MSS 1280, identische Einstellungen
+  auf beiden Seiten; CONTROL zusätzlich bis zur 4.096-Byte-Bridge-Grenze.
+- Falsches Profil, falsches Secret, fehlendes GCM und fehlende SESSIONAUTH ablehnen.
+- Gültige Samples empfangen, große SENSOR-Nachricht ablehnen, epoll/Timeout und
+  begrenztes Close korrekt behandeln.
+
+Die vorhandenen Message-Demos sind hilfreich, ersetzen aber nicht diesen
+Consumer mit der vollständigen gewählten Optionskombination. Linker-Anbindung:
+
+```cmake
+find_package(RobotweaxSRT CONFIG REQUIRED)
+target_compile_features(profile_probe PRIVATE cxx_std_20)
+target_link_libraries(profile_probe PRIVATE RobotweaxSRT::srt)
+```
+
+`profile_probe` ist ein in M0 anzulegender Target. Das explizite Versions-/SHA-
+Gate erfolgt über den Dependency-Lock und das Buildmanifest; keine pauschale
+0.2-ABI-Anforderung für eine 0.3-Bibliothek setzen. Keine privaten C++-Headers.
+
+## 4. Geplante Projektstruktur
+
+Diese Struktur anlegen; sie existiert zum Übergabezeitpunkt noch nicht:
+
+```text
+SRT-ROS2/
+  ARCHITECTURE.md
+  HANDOFF.md
+  baselines/dependencies.json
+  config/robot.yaml
+  config/operator.yaml
+  src/robotweax_srt_bridge_core/
+  src/robotweax_srt_bridge_msgs/
+  src/robotweax_srt_bridge/
+  src/robotweax_srt_bridge_demo/
+  tests/protocol/
+  tests/integration/
+  tests/network/
+  tools/
+  evidence/                  # nur bereinigte, bewusst veröffentlichbare Resultate
+```
+
+Build-/Install-/Logverzeichnisse, Credentials und rohe Laufartefakte lokal
+ignorieren. Der Core muss auch ohne ROS mit CMake testbar sein. Für ROS
+`ament_cmake`/colcon verwenden. Ein README mit tatsächlich funktionierenden
+Build-/Startbefehlen entsteht mit M2, nicht mit erfundenen heutigen Launchnamen.
+
+## 5. Implementierung in kleinen überprüfbaren Schritten
+
+### M0 — Umgebung und Profilkombination
+
+- Dependency-Lock und Container-Basis festhalten.
+- Obigen Consumer und Negative Cases ausführen; tatsächliche Grenzen erfassen.
+- ROS-Typhash-/CDR-Verfügbarkeit und Worst-Case-Größen beider MVP-Nachrichten
+  prüfen. 96-Byte-Envelope plus CDR muss in 1.024 Byte passen.
+- Abweichungen zuerst im Architekturvertrag klären; keine stillen Fallbacks.
+
+### M1 — Core ohne ROS
+
+- 96-Byte-Envelope, Management-Protobufs und kanonischen Routenmanifest mit
+  Golden-Vektoren implementieren. Unbekannte Versionen/Flags/Routen ablehnen.
+- CONTROL-Handshake, SENSOR-Binding, ClockMapper und Lifecycle bauen.
+- SENSOR latest-only Queue, Sequenz-/Epochprüfung und Altersprüfung umsetzen.
+- SQLite-Journal mit Admission-, Dispatch-, Ergebnis- und UNKNOWN-Semantik bauen.
+- Abbruch nach Journal-Commit und vor/nach Handler-Aufruf gezielt injizieren.
+  Erneuter Send desselben Auftrags darf nicht blind erneut ausführen.
+- Getrennte Queues und gemeinsame Bandbreiten-Admission implementieren.
+
+### M2 — ROS-Demonstrator
+
+- Zwei Nodes in isolierten ROS-Domänen verbinden. Bridge-Core separat zum
+  ROS-Executor betreiben; keine blockierenden SRT-Aufrufe in ROS-Callbacks.
+- Imu und JointState typisiert mit Größen-/Schema-/QoS-Gates übertragen.
+- ExecuteCommand/GetCommandStatus und den simulierten SetMeasurementRate-Handler
+  anschließen. ID, Generation und Ergebnis an einem realen Zustandswechsel prüfen.
+- Eine saubere Demo zeigt: aktuelle Samples, Messratenwechsel, bestätigtes
+  Ergebnis, 2-s-Unterbrechung, Wiederanlauf ohne alte Samples oder doppelte Wirkung.
+- Tatsächliche ROS-Build-, Launch- und Testbefehle dokumentieren. Ein Transport-
+  ACK oder ein einzelner erfolgreicher Send genügt nicht als Abnahme.
+
+### M3 — Netzqualifikation und Vergleich
+
+- N0–N5 aus der Architektur ausführen, Erstfehler und Seeds bewahren.
+- Direkten DDS-Verkehr zwischen den Enden ausschließen; einen separaten,
+  vergleichbar konfigurierten DDS-Baseline-Lauf ermöglichen.
+- Ergebnisse auf Anwendungsebene messen, mit Raten, Altersabdeckung, CPU/RSS,
+  Overhead, CONTROL-Ergebniszeiten und Reconnect. Kein pauschales „schneller“
+  ohne die zugrunde liegenden Bedingungen und Daten.
+
+### M4 — Intrinsic
+
+- Tatsächliche Lyrical-/Runtime-Pins und erlaubte Zustands-/Auftrags-APIs erfassen.
+- Core erneut gegen die passende Toolchain bauen, beide Gegenstellen kompatibel.
+- Zuerst Zustandsbeobachtung, dann einen simulierten Diagnoseauftrag integrieren.
+- Auftrags-ID/-Status-Abbildung und Unsicherheitsfälle dokumentieren. ICON/HAL-
+  Shared Memory und Echtzeitthreads bleiben außerhalb des Netzwerkadapters.
+
+## 6. Tests, die nicht fehlen dürfen
+
+| Fall | Erwartung |
+| --- | --- |
+| Gleiche Request-ID, anderer Payload | `CONFLICT`, kein Handler-Aufruf. |
+| Reconnect nach Ergebnis-Commit vor Zustellung | QUERY liefert ursprüngliches Ergebnis, keine neue Ausführung. |
+| Absturz nach Dispatch vor Ergebnis-Commit | `UNKNOWN`, kein automatischer Retry. |
+| Neustart mit angenommenem, noch nicht dispatchtem Auftrag | `REJECTED/CONTEXT_LOST`, keine späte Ausführung aus altem Kontext. |
+| Frist läuft in Queue ab | `EXPIRED` vor Dispatch. |
+| Unbekannte Clock-Abbildung / Sprung / Neustart | Kein frischer Sample oder Auftrag vor erfolgreicher Neuqualifikation. |
+| Alter Sample nach neuerem Sample durch FEC | Gezählt und verworfen; publizierte Sequenz steigt streng. |
+| SENSOR-Übergröße / Typhash-Mismatch | Expliziter Fehler; kein Abschneiden oder Profilwechsel. |
+| Volle Queues / volles Journal / langsamer Peer | Begrenzter Speicher, beobachtbares BUSY bzw. SENSOR-Ersetzung. |
+| Datenträger voll / Fehler beim Ergebnis-Commit | Kein unbelegtes SUCCEEDED; ursprüngliche ID bleibt rekonstruierbar bzw. UNKNOWN. |
+| CONTROL gestört, SENSOR noch erreichbar | Alte Sitzung invalidieren; keine unkontrollierte Weiterpublikation. |
+| Shutdown während Reconnect oder vollem Sendpuffer | Höchstens fünf Sekunden im Lifecycle-Test, kein 180-s-Linger, keine Callback-Nutzung freigegebenen Speichers. |
+
+M0 qualifiziert zusätzlich die genaue Transport-/Crypto-Kombination; M1 testet
+Wire und Zustandsautomaten deterministisch. M2 verwendet echte SRT-Sockets und
+ROS-Nodes. M3 verwendet reale Kernel-Netzbeeinträchtigung in isolierter Umgebung.
+Mocks oder Loopback erfüllen die jeweils nachfolgenden Stufen nicht.
+
+## 7. Nächste Übergabe und Definition of Done
+
+### Ursprünglicher Übernahmestand 2026-11-04
+
+- Repository für M0–M3: https://github.com/Robotweax/ros-2-srt-bridge.
+- Separates Repository für den späteren M4-Adapter:
+  https://github.com/Robotweax/intrinsic-core-srt-integration.
+- Beide GitHub-Repositories waren erreichbar und ohne Branches. Lokales
+  Bootstrap in diesem Ordner; kein Commit oder Push bei der Übernahme.
+- Architektur und Handoff vollständig gelesen. README, lokale Ignore-Regeln
+  und `baselines/dependencies.json` als **unqualifiziertes Kandidatenmanifest**
+  ergänzt. Unbekannte Digests/Versionen bleiben ausdrücklich `null`.
+- Host: Darwin arm64. `docker version --format '{{json .Server}}'` scheiterte
+  im Kontext `desktop-linux`: Docker-Socket fehlt, kein Server verfügbar.
+  Docker Desktop ist installiert. Kein Linux-Build und keine Profilprobe gestartet.
+- M0 ist offen. Nächster Ausführungsschritt: Linux-amd64-Umgebung bereitstellen,
+  Image-Digest pinnen und separaten SRT-Kandidaten qualifizieren. Erst danach M1.
+- Intrinsic bleibt M4 im eigenen Repository. Bestehender übergeordneter
+  SRT-Arbeitsbaum und dessen Änderungen bleiben erhalten.
+
+### Verifizierte Übernahme 2026-11-04
+
+- Tatsächlich vorhanden waren nur Architektur, Handoff und README; die zuvor
+  erwähnten lokalen Git-/Ignore-/Baseline-Dateien fehlten. Jetzt eigenständiges
+  Repository mit Branch `main` und dem Bridge-Remote eingerichtet; kein Commit/Push.
+- Kandidatenmanifest und Ignore-Regeln ergänzt. Beide Zielrepositories erneut
+  erreichbar; Intrinsic bleibt M4.
+- Docker-Daemon jetzt verfügbar. Ubuntu 24.04 Linux amd64 im isolierten Container
+  erfolgreich unter Emulation gestartet. Image-Referenz und lokale Plattform-ID
+  im Kandidatenmanifest erfasst; noch kein qualifiziertes Entwicklungsimage.
+- Übergeordneter SRT-HEAD bei Prüfung: `49e615aa6996e2c5a366a426d09bfe3ca2d24c2c`.
+  Keine Änderung am bestehenden SRT-Arbeitsbaum.
+- M0 weiterhin offen: separaten Pin-Checkout und Entwicklungsimage bereitstellen,
+  Verträge am Pin lesen, SRT bauen/installieren und kombinierte Profilprobe erstellen.
+- Befehle und tatsächliche Ergebnisse: [Übernahme-Evidenz](evidence/2026-11-04-takeover.md).
+
+### Entwicklung M0 und erster M1-Baustein — 2026-11-04
+
+- M0 lokal bestanden: sauberer SRT-Pin separat unter `.deps/srt`, namespaced
+  installiertes statisches Paket, OpenSSL/GCM/SESSIONAUTH v2, experimentelle
+  ACP1-/Controller-/Filteroptionen aus. Reale Linux-amd64-Sockets unter Emulation.
+- `python3 tools/run_m0.py --build-image --srt-source ..` erstellt die Umgebung,
+  validiert den Pin und hält pro Versuch Logs, Inventur, Paketstände und JUnit fest.
+  Voraussetzung: das im README gepinnte ROS-Image zuvor herunterladen.
+- Eigene öffentliche C-API-Probe: 40/40 Fälle bestanden (IPv4/MSS 1500,
+  IPv6/MSS 1280, beide Profile, GCM+SESSIONAUTH, negative Gegenstellen,
+  Größen-/TTL-Grenzen, epoll und Close bei gefülltem Sendpuffer).
+- Upstream: vier GCM-Profilpartitionen, eine SESSIONAUTH-Admission-Partition und
+  15 fokussierte SESSIONAUTH-Fälle bestanden. Nicht die gesamte Upstream-Suite.
+- Jazzy-Typhash und CDR-Roundtrip geprüft: Imu 380 Byte; JointState mit sechs
+  Gelenken, 64-Byte-Namen und vollständigen numerischen Arrays 684 Byte.
+  `frame_id` jeweils 64 Byte. Beide passen mit 96-Byte-Envelope in 1.024 Byte.
+- Kandidatenmanifest zur lokal qualifizierten M0-Baseline ergänzt. Image-Digests,
+  tatsächliche Pakete, Archive-Hash und Buffer-Readbacks sind festgehalten.
+- M1 begonnen: unabhängiger C++20-Wire-Codec, initiales Management-Protobuf-Schema,
+  Golden-Vektor und 20.000 deterministische Mutationen (22.576 Assertions).
+  GNU/Linux Debug, ASan+UBSan sowie eigenständiger macOS-arm64-Build bestanden.
+- M1 ist **nicht fertig**: Management-Runtime-Validierung, kanonischer Routenhash,
+  ClockMapper, Sessions/Binding/Reconnect, begrenzte Queues/Scheduler und
+  SQLite-Journal fehlen. Noch keine ROS-Nodes oder Simulatorbefehle.
+- Nachweise und Reproduktion: [M0/M1-Evidenz](evidence/m0-2026-11-04/README.md).
+  Quelldateien sind noch uncommitted; kein Push, kein Intrinsic-Code.
+
+### M1-Fortsetzung: Management und ClockMapper — 2026-11-04
+
+- Management-Codec mit generiertem Protobuf und begrenzter Vorprüfung implementiert:
+  maximal 512 Byte, bekannte/undoppelte Felder, Wire-Typen, feste Hash-/Epochlängen,
+  UTF-8 ohne Steuerzeichen, Peer-ID bis 64 Byte und feste MVP-Limits.
+- HELLO/WELCOME/READY/BIND/TIME_PROBE/TIME_REPLY werden typisiert validiert.
+  Das ist noch keine Gegenstellenautorisierung oder Sitzung. COMMAND/STATUS/QUERY
+  und ERROR-Payloads bleiben dem Journal-/Session-Baustein vorbehalten.
+- ClockMapper implementiert asymmetrieunabhängige Offset-/Altersintervalle mit
+  expliziten Drift-/Timestampfehlergrenzen, konservativer Rundung und Overflow-Gates.
+  Unbekannte/zu breite/abgelaufene Modelle liefern keinen gültigen Alterswert.
+  Epoch-/Domänenfehler, Rücksprung und Widerspruch sperren bis Reset.
+- Protokollpräzisierung: Beide SRT-Endpunkte initiieren eigene Zeitprobes; t1/t4
+  sind lokal, t2/t3 remote. Protobuf-Feldnummern unverändert, Rollenbezeichnungen
+  auf Initiator/Responder korrigiert. Korrelation offener Probes ist noch anzuschließen.
+- Deterministische Tests: 5.000 Drift-Szenarien mit Folgeproben und alten Ereignissen,
+  Integergrenzen, Resets, Frischebudgets sowie 20.000 Management-Mutationen.
+  Linux Debug und ASan+UBSan bestehen; Wire/Clock auch auf macOS arm64 geprüft.
+- Reproduktion: `python3 tools/run_m1.py` mit dem M0-Image. Native Builds ohne
+  Protobuf verwenden `-DBUILD_MANAGEMENT_CODEC=OFF`; der volle Core benötigt
+  Protobuf ab 3.21. README und Architektur entsprechend aktualisiert.
+- Nachweise: [M1-Evidenz](evidence/m1-clock-management-2026-11-04/README.md).
+  M1 ist weiter offen: Routenmanifest/SHA, Session-/Probe-Korrelation, SRT-I/O,
+  Reconnect, begrenzte Queues/Scheduler und SQLite-Journal. Kein Commit/Push.
+
+### M1-Fortsetzung: Routenmanifest und Sitzungen — 2026-11-04
+
+- Kanonischer RWRM-v1-Manifest mit SHA-256, sortierten IDs, Typ-/Hash-/QoS-/
+  Richtungs-/Größen-/Budgetgrenzen und Enabled-Freigabe implementiert. Unabhängiger
+  Python/struct/hashlib-Goldenvektor liegt unter `tests/protocol/routes-v1.*`.
+- Session-Core implementiert HELLO/WELCOME, konfigurierte Peer-/Manifest-/Limit-
+  Gates, gegenseitiges READY, beidseitig korrelierte Zeitprobes, SENSOR-Binding,
+  Sequenz-/Epoch-/Domain-/Altersgates und Close-/Flush-Aktionen bei CONTROL-Verlust.
+  Er besitzt noch keine eigenen Sockets oder Worker und ist nicht kopier-/bewegbar.
+- Erforderliche Protokollpräzisierung: frische 16-Byte-Binding-ID je SENSOR-Socket,
+  auf CONTROL exakt bestätigt. Feld 3 in BIND und READY; alte Prototypen ohne ID
+  werden abgelehnt. Lokale Socketgenerationen schützen gegen alte Close-/Daten-
+  Ereignisse. Source-Sequenzen laufen über Rebind und CONTROL-Reconnect weiter.
+- Echte installierte SRT-Sockets testen IPv4 und IPv6, GCM+SESSIONAUTH v2,
+  beidseitige READY-/Clock-Probes, verspätete alte Binding-Acks, SENSOR-Rebind,
+  tatsächlichen CONTROL-Verlust, neuen Sitzungsaufbau und Abweisung alter Frames.
+  Nutzdaten sind vier synthetische Byte, keine ROS-IMU und kein M2-Demonstrator.
+- Kernverträge: fünf Tests in Debug und ASan+UBSan. Root-Regression: 47/47 Tests.
+  Native Wire/Clock-Minimalspur erneut auf macOS arm64 geprüft.
+- Reproduktion: `python3 tools/run_m1.py --native` nach M0; der Runner prüft den
+  installierten SRT-Archive-Hash und führt die vollständige Root-Matrix aus.
+- [Neue Evidenz](evidence/m1-sessions-2026-11-04/README.md) enthält Ergebnisse,
+  Quellfingerprints, offene Grenzen und erhaltene Fehlläufe. Kein Commit/Push.
+- M1 ist weiterhin offen: bounded Queues/Bandbreiten-Admission, Reconnectkampagne
+  mit Jitter, Produktions-I/O-Owner und SQLite-Auftragsjournal/Crash-Semantik.
+
+### M1-Fortsetzung: Queues, Bandbreite und Reconnectplan — 2026-11-04
+
+- Feste CONTROL-Queue (64/256 KiB, COMMAND maximal 56/224 KiB), acht latest-only
+  SENSOR-Slots und ein BIND-Retry-Slot implementiert. Eigene Packetkopien,
+  BUSY/Drop-Zähler, Deadline-/Raten-/Sequenzgates, round-robin und Generationsgates.
+- Session-Close/-Flush-Aktionen leeren die passenden Queues; wartende COMMAND-IDs
+  werden für spätere Journalauflösung zurückgegeben. Kein ACCEPTED/Erfolg aus Queue-OK.
+- Globales/SENSOR-Tokenbudget mit CONTROL-Reserve und einmaliger Reserve-/Commit-/
+  Refund-Semantik implementiert. Overheadschätzer ist keine harte Wire-Garantie.
+- Reconnectplan implementiert 250 ms–5 s mit geklemmtem ±20-%-Jitter, 3-s-Versuche,
+  exakte 60-s-Kampagnen, eindeutige Versuche, Cancel, Deadlinegates und explizite
+  Reaktivierung nach permanenten Fehlern. Keine blockierenden Sleeps im Plan.
+- Native IPv4/IPv6-Harness nutzt Queues und Budget jetzt für Management/SENSOR,
+  wendet Session-Invalidierungsaktionen an und verwirft absichtlich gealterte
+  Samples vor SRT. Tatsächlich publizierte synthetische Sequenzen sind 1, 3, 4;
+  die wartende 2 läuft lokal ab. Keine ROS-Nodes oder Auftragsausführung.
+- Acht Kernverträge in Debug und ASan+UBSan bestanden, vollständige Root-Matrix
+  50/50. Enthalten: 50.000 Queue-Ereignisse, zehn Sekunden synthetische Überlast,
+  1.000 deterministische Reconnectkampagnen. Minimale native Host-Spur: vier Tests.
+- Reproduktion bleibt `python3 tools/run_m1.py --native` nach M0.
+  [Neue Evidenz](evidence/m1-queues-reconnect-2026-11-04/README.md) bewahrt Logs,
+  Quellhashes, Ergebnisse und Fehlläufe. Kein Commit/Push.
+- Noch offen: produktiver Socket-/epoll-Owner, bounded thread-safe Callback-
+  Ingress und Worker-Shutdown; SQLite-Journal mit durable Admission/Dispatch/
+  Ergebnis und Crash-/Disk-Faults. M1 bleibt unvollständig, M2 folgt erst danach.
+
+### M1-Fortsetzung: dauerhaftes Auftragsjournal — 2026-11-04
+
+- `RobotweaxBridge::journal`: getrennte, exklusiv geöffnete SQLite-WAL-Journale
+  mit FULL-Sync, Peer-/Rollenbindung und festen Datensätzen. Sender persistiert
+  LOCAL_QUEUED vor Send, Empfänger ACCEPTED vor Antwort und DISPATCHING vor Handler.
+- Typisierter SetMeasurementRate-/STATUS-Codec mit stabilen Enumwerten,
+  Descriptor-Schemahash und kanonischem Payloadhash; QUERY bleibt leer.
+  Session prüft Richtung, Session/Epoch/Domain, Route, Sequenz und Startbudget.
+- Neustart: ACCEPTED wird REJECTED/CONTEXT_LOST, DISPATCHING wird UNKNOWN;
+  Sender ohne Endbeleg wird UNKNOWN und fragt zuerst ab. Kein automatischer Resend.
+  Duplikate verlängern keine Frist, Konflikte ändern keinen vorhandenen Auftrag.
+- VFS begrenzt Hauptdatei/WAL/SHM/Rollback auf zusammen 64 MiB logische Längen,
+  10.000 Einträge; reservierter Ergebnisraum, keine Evictions. Write-/Sync-Fehler
+  sperren auch Reads bis zur Wiederöffnung und Recovery. SQLite-Abhängigkeit 3.45+.
+- Fünf SIGKILL-Grenzen prüfen vor/nach Admission, Dispatch und Ergebnis-Commit.
+  Kapazitäts-, echte SQLite-VFS-FULL- und injizierte Write-/Sync-Fehler bestanden.
+  Keine physische Stromausfall- oder Datenträgerqualifikation.
+- Native IPv4/IPv6-Harness: ein Messratenwechsel, Ergebnisnachricht absichtlich
+  verloren, CONTROL-Reconnect, QUERY nach 5-s-Budgetablauf, persistiertes SUCCEEDED
+  ohne erneute Wirkung. Beide Endpunkte laufen synchron in einem Harness-Prozess;
+  Crashtests verwenden separate Kindprozesse. Noch keine ROS-/Geräteanbindung.
+- `python3 tools/run_m1.py --native`: Debug 12/12, ASan+UBSan 12/12,
+  vollständiger installierter SRT-Build 54/54. [Evidenz](evidence/m1-journal-2026-11-04/README.md)
+  enthält Logs, Befehle, Quellhashes und erhaltenen ersten Compile-Fehllauf.
+  Kein Commit/Push; Intrinsic unverändert.
+- M1 bleibt offen: Produktions-Socket-/epoll-Owner, begrenzter Callback-Ingress,
+  beaufsichtigter Journal-/Handler-Worker mit asynchronem Session-/Frische-Fencing,
+  ERROR-Wire-Abbildung und integrierter Shutdown-Nachweis binnen fünf Sekunden.
+
+### M1-Fortsetzung: threaded Transport-Owner — 2026-11-05
+
+- `RobotweaxBridge::transport` als eigener installierter-SRT-Target. Ein Thread
+  besitzt Sockets, epoll, Session, Queues, Budget und getrennte Reconnectpläne.
+  Numerische IPv4/IPv6-Endpunkte, qualifizierte Profile/Buffer/Crypto, nonblocking,
+  Linger null; Listener-Sessions und Caller-Binding-IDs werden zufällig erzeugt.
+- Feste Try-Lock-Mailboxes: CONTROL 64 FIFO, SENSOR acht latest-only Routenplätze.
+  Externe Payloads werden kopiert, ursprünglicher Ingress bleibt erhalten.
+  CONTROL-Readiness pausiert vor voller Empfangsmailbox; keine stillen Drops.
+- Session-/Kanalgenerationen verwerfen veraltete Arbeit und Workerresultate.
+  Automatische Probes starten während Synchronisierung und erneuern Frische;
+  unabhängige zufällige Jitterseeds verhindern identische Retryfolgen.
+- Native IPv4/IPv6-Tests betreiben zwei echte Owner ohne manuelle Session-/SRT-
+  Fortschaltung. SENSOR, QUERY/STATUS, 80 Queries gegen 64er-Mailbox, Ablauf beim
+  Poll, >5 s Clock-Erneuerung, kompletter Reconnect, alte Tokens, permanente
+  Peerablehnung und vier konkurrierende Produzenten sind abgedeckt.
+- Stop bei Verkehr und ausstehenden Verbindungen liegt in den Tests unter fünf
+  Sekunden. Noch kein Nachweis für blockierte Journal-/Handler-Worker.
+- `python3 tools/run_m1.py --native`: Debug 12/12, ASan+UBSan 12/12,
+  Root 56/56 sowie Transport unter ASan+UBSan 2/2 bestanden.
+  [Evidenz](evidence/m1-transport-2026-11-05/README.md) enthält die tatsächlichen
+  Ergebnisse und bewahrt Compile-/Handshake-Fehlversuche. Kein Commit/Push.
+- M1 bleibt offen: begrenzter Journal-/Handler-Worker mit durable Send-Tickets,
+  Freigabe vor/nach Dispatch-Commit, ERROR/BUSY/CONFLICT-Wire-Abbildung und
+  vollständiger Lifecycle-Qualifikation. Transport empfängt COMMAND, führt aber
+  nichts aus; eine COMMAND-Submit-API gibt es ohne diesen Vertrag noch nicht.
+
+### M1-Fortsetzung: Journal-Prozess und durable Send-Tickets — 2026-11-05
+
+- Linux/glibc-Target `RobotweaxBridge::worker` und `robotweax-journal-worker`.
+  posix_spawn nach laufenden Transportthreads, private feste 2.048-Byte-IPC-Frames,
+  maximal 64 ausstehende Requests. Ein externer Koordinator pollt Antworten;
+  Netzwerk-Owner und Parent führen kein SQLite-I/O aus.
+- Child benutzt seinen aktuellen Monotonic-Zeitpunkt bei Operationsstart; keine
+  vom Parent eingefrorene Zeit kann IPC-Wartezeit aus dem Budget entfernen.
+- Nur neu committed LOCAL_QUEUED erzeugt ein einmaliges Sender-Ticket.
+  Duplikate, GET, Empfängeradmission, Ablauf und Write/Sync-Fehler tun dies nicht.
+  Transport prüft Peer/Epoch/Route/Budget/Kontext, reserviert acht Ingressplätze
+  für QUERY/STATUS und verwirft bekannte tote/abgelaufene Tickets vor Send.
+- 64 Owner-Check-Slots liefern asynchrone Session-/Frischebeobachtungen vor/nach
+  Dispatch-Commit. Sie sind ausdrücklich keine Handler-Startfreigabe.
+- Worker-Stop: sofortiger Ticketwiderruf, maximal 2 s Grace, dann SIGKILL;
+  einmalige 4-s-Joinfrist. shutdown_timeout behauptet keinen vollständigen Join.
+  Tests mit SIGSTOP an fünf Commitgrenzen prüfen Recovery und Stop unter 5 s.
+- Native IPv4/IPv6-Integration mit zwei Ownern und getrennten Sender-/Empfänger-
+  Prozessen: committed COMMAND-Ticket, dauerhafte ACCEPTED-Rückantwort, begrenzte
+  Checks, Ablauf nach Dispatch-Commit, Sessionverlust und UNKNOWN nach Recovery.
+  Pausierter Journalprozess blockiert QUERY-Verkehr nicht. Kein neuer Handlerstart.
+- Debug 13/13, ASan+UBSan 13/13, Root 59/59, Transport-/Worker-Sanitizer 4/4
+  und minimaler macOS-Build 4/4 bestanden.
+  Gates und Logs: [Evidenz](evidence/m1-worker-2026-11-05/README.md).
+  Reproduktion `python3 tools/run_m1.py --native`; kein Commit/Push, Intrinsic unverändert.
+- M1 bleibt offen: automatischer Koordinator samt Sessionverlust-/Query-first-
+  Ablauf, final gegen Widerruf linearisierte Startfreigabe, beaufsichtigter Handler,
+  ERROR/BUSY/CONFLICT-Wire-Abbildung und vollständiger Bridge-Lifecycle.
+
+### M1-Fortsetzung: automatischer Endpoint und Start-Fences — 2026-11-05
+
+- `RobotweaxBridge::endpoint`: eigener Koordinatorthread mit 64 Inputs, 64 Events,
+  64 verfolgten IDs und serieller Command-Pipeline. Durable Admission/Sends,
+  ACCEPTED, DISPATCHING, Endstatus, Kontextverlust und Query-first laufen automatisch.
+- Frisch committed DISPATCHING mintet ein einmaliges DispatchTicket. Owner koppelt
+  es an aktuelle Session-/Frischeprüfung; Child konsumiert einen Shared-Memory-
+  Fence per CAS. Widerruf vor Start verhindert Wirkung; RUNNING darf abschließen.
+- Sealed memfd mit 64 Slots, 64-Bit-lock-free Atomics, Slotgenerationen, ID-/Hash-
+  Bindung, konservativen Deadlines. IPC intern v2, Netzwerkvertrag unverändert.
+  Worker-Stop widerruft auch Grants; fehlgeschlagene RUNNING-Slots werden nicht recycelt.
+- Grant-Deadline begrenzt durch Command-Budget UND Clock-Qualifikationsgrenze
+  (Probe-Alter/Driftbreite). Der Child prüft sie unabhängig vom I/O-Tick; spätere
+  Clockprobes verlängern keinen vorhandenen Grant.
+- CONTROL-Kontext bindet SID/CONTROL-Generation; SENSOR bindet zusätzlich seine
+  Generation. SENSOR-Wechsel allein verwirft keine Steuerarbeit. COMMAND bleibt
+  unabhängig von SENSOR-Binding verfügbar.
+- Explizit aktivierter simulierter Rate-Handler im Child, absolute Rate mit
+  Generationstest und Result-Commit. Zustand initial 200 Hz/Generation 0, nach
+  Workerrestart flüchtig zurückgesetzt; Journal bleibt historische Wahrheit.
+- Supervisor-/Coordinator-Timeout und gemeinsame Stopsequenz schließen Admission,
+  widerrufen ungestartete Arbeit und reapen den Child. Tests unter 5 s, auch mit
+  SIGSTOP-Handler, voller Callback-Mailbox und vier Produzenten. Offene lokale
+  Benachrichtigungen werden ohne erfundenen Geräte-Endstatus ausgeliefert.
+- Debug 14/14, ASan+UBSan 14/14, Root 64/64 und kombinierte Native-Sanitizer 8/8
+  bestanden. Neue Race-, Grant-, Endpoint-, Restart-/Query-first- und Shutdown-Evidenz:
+  [Koordination](evidence/m1-coordination-2026-11-05/README.md).
+  Reproduktion `python3 tools/run_m1.py --native`; kein Commit/Push.
+- M1 bleibt offen: allgemeine ERROR/BUSY/CONFLICT/NOT_FOUND-Wire-Antworten und
+  abschließende Acceptance-Evidenz. M2 ROS-Node/CDR/Simulator und M4 Intrinsic unverändert später.
+
+### M1-Abschluss: ERROR-Vertrag und installiertes SDK — 2026-11-05
+
+- Separates `errors_v1.proto`: Code, COMMAND-/QUERY-Referenzsequenz, begrenzter
+  Backoff. Bestehender Rate-Command-Descriptorhash bleibt unverändert. ERROR ist
+  kein Journalstatus und kein Beweis für Ausführung oder Nichtausführung.
+- Session/Route/ID/Direction/Epoch/Domain/Replays werden geprüft; Owner korreliert
+  gegen 64 Recent-Send-ID/Route-Einträge. ERROR beantwortet kein ERROR.
+- Receiver liefert BUSY/CAPACITY/CONFLICT/NOT_FOUND; ausgewählte Frische-/Body-
+  Gates liefern Diagnostik. Speicherfehler bleiben fail-closed ohne Antwortgarantie.
+- Sender behält Journalwahrheit, meldet peer_error ohne Entry und pausiert Query
+  für diese ID/Sitzung. Explizite Query oder Reconnect setzt Reconciliation fort.
+  Kein blindes Resend; Endstatus gewinnt gegen späte Fehler. Fremdes STORAGE
+  vergiftet nicht das eigene Journal. Vor Admission ist ERROR kein ID-Tombstone.
+- Install-/Exportregeln für RobotweaxBridge-CMake-Targets, Worker und Header.
+  Voller Linux-SDK-Consumer nach Prefix-Relocation mit echten Sessions/Command/
+  Status/Duplikatsperre; Required-Component-Negativfall und ROS/zweiter-SRT-Linkcheck.
+  Standalone Minimal-Core samt installiertem Consumer auf macOS arm64 ohne SRT,
+  Protobuf/OpenSSL/SQLite/ROS geprüft.
+- Debug 15/15, ASan+UBSan 15/15, Root 67/67, Native-Sanitizer 10/10 sowie
+  Linux-SDK-Relocation/Consumer/Component-Negativfall bestanden. Host-Minimal-Core
+  4/4 plus installierter relocatable Consumer ebenfalls bestanden.
+  [Abschluss-Evidenz](evidence/m1-errors-sdk-2026-11-05/README.md) dokumentiert
+  tatsächliche Gate-Ergebnisse, unveränderte Providerpins und Install-Artefakte.
+  Reproduktion `python3 tools/run_m1.py --native`; kein Commit/Push.
+- M1 qualifiziert den ROS-freien Core auf der dokumentierten Linux-amd64-Baseline.
+  Kein physischer Geräte-/Netzwerkleistungsnachweis, keine allgemeine Handlerplattform.
+  Simulierte Gerätegeneration bleibt nach Workerrestart flüchtig; UNKNOWN wird nie
+  automatisch neu ausgeführt. M2/M3/M4 folgen gemäß Architektur.
+
+Der Entwickler ergänzt nach jeder Stufe diesen Abschnitt um tatsächlichen
+Commit, Umgebung, ausgeführte Befehle, Ergebnisse, Evidenzpfade, offene Fehler
+und den nächsten konkreten Schritt. Bestehende Fehlläufe bleiben erhalten.
+
+M2 ist fertig, wenn ein frischer Entwickler mit den dokumentierten Befehlen
+den vollständigen Simulatorlauf reproduzieren kann, alle relevanten Gates
+bestanden sind und unbekannte Auftragsergebnisse korrekt sichtbar bleiben.
+M3 ist fertig mit einer auswertbaren Vergleichsmatrix, auch wenn diese keinen
+SRT-Leistungsvorteil zeigt. M4 erfordert einen tatsächlichen Intrinsic-Lauf.
+
+**Nächster Schritt nach M1 (in M2 umgesetzt):** M2-ROS-Jazzy-Demonstrator auf dem installierten
+SDK aufbauen: zwei Nodes in isolierten ROS-Domänen, Imu/JointState mit CDR-/Typ-
+Hash-/Größen-/QoS-Gates, ExecuteCommand/GetCommandStatus und echter simulierter
+Messratenwechsel samt Generation und Ergebnisbeleg. Lifecycle/Callbacks bleiben
+vom SRT-/Journal-I/O getrennt. Intrinsic bleibt M4 im separaten Repository.
+
+
+### M2 abgeschlossen — ROS Jazzy, 2026-11-05
+
+- Drei ROS-Pakete unter `ros2/`: feste Messages/Services, typisierter Adapter und
+  getrennter Sensor-/Messraten-Simulator. colcon baut gegen das installierte SDK.
+- Der ROS-freie SDK-Child-Einstieg `RobotweaxBridge::worker_runtime` erlaubt einen
+  explizit aktivierten externen Rate-Backend. Der ROS-Worker verwendet den lokalen
+  Geräte-Service nach atomarer Startfreigabe. Parent/Child müssen zusammen neu
+  gebaut werden: privates IPC jetzt 3, unverändert Wire 1.
+- Größen-/UTF-8-/Dimensions-/Typ-Hash-/CDR-Gates und echte lokale QoS-Prüfung
+  (Best Effort/Volatile/KeepLast(1)). Fast-RTPS veröffentlicht History-Depth nicht
+  im Discovery-Graph; die lokale tatsächliche RMW-QoS wird separat geprüft.
+  Leere CDR-Vektoren erfordern getrennte Writer-/gemeldete Größenberechnung;
+  der gesamte Serialisierungspuffer wird vorher genullt.
+- Publikation prüft direkt vor ROS-Publish Session, Sensor-Generation,
+  Publication-Epoch, Clock-Qualifikation und Deadline. ROS-Callbacks führen keine
+  SRT-/SQLite-I/O aus; Netzwerk, Koordinator und Geräte-/Journal-Worker sind getrennt.
+- Abschlusslauf `.local/m2/20261105T102439657240Z` mit
+  `python3 tools/run_m2.py`; vorgelagerter `--build-image`-Lauf ebenfalls bestanden: drei Pakete gebaut, sechs Codec-GTests
+  bestanden (colcon zählt zusätzlich den CTest-Wrapper), reale SRT-Verbindung
+  zwischen zwei Container-IP-Adressen, DDS lokal und Domänen 41/42 getrennt.
+- 626 Imu/350 JointState remote, null direkter DDS-Bypass, ungültige Inputs
+  verworfen. Bestätigter Wechsel 200→100 Hz; Generation-Konflikt ohne Wirkung;
+  verlorene Antwort nach Wechsel auf 75 Hz ergibt UNKNOWN/effect_uncertain.
+  Worker-SIGKILL nach tatsächlichem Wechsel auf 50 Hz/Generation 3: Neustart mit
+  neuem SID, QUERY liefert UNKNOWN/context_lost, keine Wiederholung. Vier COMMAND-
+  Frames, drei Effekte trotz wiederholter Execute-Aufrufe.
+- 2,0011 s Bridge-Unterbrechung; keine alte/doppelte Nutzlast nach Wiederanlauf.
+  Saubere Stopps maximal 0,3198 s, Child-Prozesse geerntet. Temporäre Container,
+  Netzwerk und Passphrase entfernt; andere Netze unverändert.
+- SDK-Regressionslauf `.local/m1/20261105T100528666291Z`: 15 Debug, 15 ASan/UBSan,
+  67 native, 10 native ASan/UBSan und relocateter Consumer bestanden. Alle
+  archivierten Quellhashes stimmen mit dem aktuellen Code überein.
+- Abnahme: `baselines/m2-acceptance.json`,
+  `evidence/m2-ros-jazzy-2026-11-05/ACCEPTANCE.md`. Frühere Versuche inklusive
+  Fehlläufen bleiben im dortigen `attempts/`-Verzeichnis. M1-Abnahme unverändert.
+- Kein Commit/Push: neues Repository weiterhin ohne Commit, Dateien lokal
+  untracked. Parent-SRT und Intrinsic-Repository nicht verändert.
+
+**Nächster Schritt:** M3 nach gesonderter Fortsetzung: N0–N5 in isolierter
+Kernel-Netzumgebung, Anwendungsalter/Clock-Abdeckung, CPU/RSS/Overhead und
+CONTROL-Latenzen erfassen und eine vergleichbare DDS-Baseline bauen. Keine
+SRT-Überlegenheit aus M2 ableiten. Der Simulator hält Gerätehistorie nur flüchtig;
+physische Geräte, Power-Cut-Qualifikation, lokale DDS-Authentisierung und M4
+Intrinsic sind nicht abgenommen. Die ursprüngliche Übernahme bis M2 ist erfüllt.

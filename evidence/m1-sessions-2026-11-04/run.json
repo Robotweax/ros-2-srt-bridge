@@ -1,0 +1,100 @@
+{
+  "status": "passed",
+  "image_reference": "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+  "commands": [
+    {
+      "log": "debug.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "-c",
+        "cmake -S src/robotweax_srt_bridge_core -B build/m1-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_MANAGEMENT_CODEC=ON -DCMAKE_CXX_FLAGS= -DCMAKE_EXE_LINKER_FLAGS= && cmake --build build/m1-debug --parallel 3 && ctest --test-dir build/m1-debug --show-only=json-v1 > /workspace/.local/m1/20261104T195146072599Z/debug-inventory.json && ctest --test-dir build/m1-debug --no-tests=error --output-on-failure --test-output-size-passed 1048576 --output-junit /workspace/.local/m1/20261104T195146072599Z/debug.xml"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "asan-ubsan.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "-c",
+        "cmake -S src/robotweax_srt_bridge_core -B build/m1-asan-ubsan -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_MANAGEMENT_CODEC=ON -DCMAKE_CXX_FLAGS=\"-fsanitize=address,undefined -fno-omit-frame-pointer\" -DCMAKE_EXE_LINKER_FLAGS=\"-fsanitize=address,undefined\" && cmake --build build/m1-asan-ubsan --parallel 3 && ctest --test-dir build/m1-asan-ubsan --show-only=json-v1 > /workspace/.local/m1/20261104T195146072599Z/asan-ubsan-inventory.json && ctest --test-dir build/m1-asan-ubsan --no-tests=error --output-on-failure --test-output-size-passed 1048576 --output-junit /workspace/.local/m1/20261104T195146072599Z/asan-ubsan.xml"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "native.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "-c",
+        "cmake -S . -B build/m1-native -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/workspace/install/srt-m0 -DBUILD_MANAGEMENT_CODEC=ON -DBUILD_PROFILE_PROBE=ON -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS= -DCMAKE_EXE_LINKER_FLAGS= && cmake --build build/m1-native --parallel 3 && ctest --test-dir build/m1-native --no-tests=error --output-on-failure --test-output-size-passed 1048576 --output-junit /workspace/.local/m1/20261104T195146072599Z/native.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "source_sha256": {
+    "CMakeLists.txt": "35ed3e1003f4bc469fc874de1e012aada3decf514483b686554150fedff1bb42",
+    "proto/management_v1.proto": "0d33a9af16e7f4eb930900ae7389bfb2fd72ce05af9a685a2f0c99d665207626",
+    "src/robotweax_srt_bridge_core/CMakeLists.txt": "7c0a60a27a98e351c5154788df456e787df694d5dfb3c2d3598f21c96643a5a5",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/clock.hpp": "07f360e9fddc40fdba75e91ed85b1ec1c0345f3105a5c220fd313912496dda78",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/management.hpp": "b3e33d39d93bd09767518c0a55d4330a6033ad2e8c0d77c7c06bf11d2dbce1c3",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/routes.hpp": "f62fccfa5d173a14280336f0eccb250c878039b328d732b0dfadd7b1bc6c2ccf",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/session.hpp": "21443c0e46ec192e90b5be8252e7e81223ad22a87593fefb9187badbf9f2cb43",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/wire.hpp": "7e71d05cd154890d04686f6a1f152039ce774ee0bdf238523dcf0fdf8ce03b82",
+    "src/robotweax_srt_bridge_core/src/clock.cpp": "9c59496f33ec559fc05e03d9b445b5d473e83924c071a954bdc639f1d8773c7a",
+    "src/robotweax_srt_bridge_core/src/management.cpp": "27cd9e20152518f3ac7924203842cd6bb2de8cca61044f7f2faa55ad388dd3be",
+    "src/robotweax_srt_bridge_core/src/routes.cpp": "de3bfec92207a87d2e5917bda47ae602be682102b6b545ffed78dc87bbf87e9d",
+    "src/robotweax_srt_bridge_core/src/session.cpp": "1e36d181ffbd6fe2be84e1c53f66bd7a1dc96744f35dc77585094d1b75a3a902",
+    "src/robotweax_srt_bridge_core/src/wire.cpp": "4df46c7b13e5b33789a8778acf653536ab95177dcc048a937f5734e182132e23",
+    "tests/native/CMakeLists.txt": "1130c2b1a99557b4c000cd7352f658be786a76c66f71c69ddf6945dc2be751d3",
+    "tests/native/session_socket_tests.cpp": "906e81324b26bbcddb6eaa351813a3dc09e8e0d3f395a1dc8a23fc0fc172058b",
+    "tests/protocol/clock_tests.cpp": "c9647250b5968644e298a88a02654bc7b752d58bc08b72487f85b0e8feed3d05",
+    "tests/protocol/management_tests.cpp": "f57594ce485a10807d346ee0bf5f3074f53da24f7599524c372f26952c010303",
+    "tests/protocol/routes-v1.hex": "24344475482593b59ec6c8de44bedeb520930a8f57ef2bd1b17a985a9989e1ac",
+    "tests/protocol/routes-v1.sha256": "1df2471e254af84a35e45136377358adc7d69bbcd72d94a751b7b17d7b12f0b6",
+    "tests/protocol/routes_tests.cpp": "60894b219bd4dbed2c13bac48907fe83e42698708fdc61ced039534ad2100001",
+    "tests/protocol/sample-v1.hex": "f6ccf1ea85a9332d75d22f38bf54adee8149f6e77d1c4b16afc0f1d21a32ad4a",
+    "tests/protocol/session_tests.cpp": "966dd10b28b38777653f79cb7ae328f050da71f538038992fc592f13aa76739f",
+    "tests/protocol/wire_tests.cpp": "2a98a7d60f4e5dbef304596ba5f2a54497e4109563cf8e533a09d36a8be435a9",
+    "tools/run_m1.py": "04fb5198df6e409160e044416585291705822643fac2371541cee8b474c2a660"
+  },
+  "image_platform_id": "sha256:a12fe12e312b7b72878714862d2dc6c23176b4d23928d6906537444f9aa5bcc0",
+  "srt_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673"
+}

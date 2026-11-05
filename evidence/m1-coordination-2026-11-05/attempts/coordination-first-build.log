@@ -1,0 +1,17 @@
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-native
+[1/30] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/worker/execution_pool.cpp.o
+FAILED: src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/worker/execution_pool.cpp.o 
+/usr/bin/c++  -I/workspace/build/m1-native/src/robotweax_srt_bridge_core -I/workspace/src/robotweax_srt_bridge_core/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/worker/execution_pool.cpp.o -MF src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/worker/execution_pool.cpp.o.d -o src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/worker/execution_pool.cpp.o -c /workspace/src/robotweax_srt_bridge_core/src/worker/execution_pool.cpp
+/workspace/src/robotweax_srt_bridge_core/src/worker/execution_pool.cpp: In member function 'uint64_t robotweax::srt_bridge::execution_detail::Pool::deadline(uint32_t, uint64_t) const':
+/workspace/src/robotweax_srt_bridge_core/src/worker/execution_pool.cpp:80:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   80 |     if(slot>=64)return 0;const auto current=atomic(mapping_->slots[slot]).load(std::memory_order_acquire);
+      |     ^~
+/workspace/src/robotweax_srt_bridge_core/src/worker/execution_pool.cpp:80:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   80 |     if(slot>=64)return 0;const auto current=atomic(mapping_->slots[slot]).load(std::memory_order_acquire);
+      |                          ^~~~~
+cc1plus: all warnings being treated as errors
+[2/30] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_journal.dir/src/journal/storage.cpp.o
+[3/30] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_journal.dir/src/journal/journal.cpp.o
+ninja: build stopped: subcommand failed.

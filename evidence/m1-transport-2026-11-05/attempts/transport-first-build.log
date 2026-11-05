@@ -1,0 +1,26 @@
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-native
+[1/2] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o
+FAILED: src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o 
+/usr/bin/c++ -DENABLE_AEAD_API_PREVIEW -I/workspace/src/robotweax_srt_bridge_core/include -isystem /workspace/install/srt-m0/include/robotweax-srt -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o -MF src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o.d -o src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o -c /workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp: In member function 'robotweax::srt_bridge::SubmitResult robotweax::srt_bridge::TransportOwner::Impl::submit(Input)':
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp:284:42: error: 'zero' was not declared in this scope
+  284 |         if(item.context!=shared.context||zero(item.context.session))return SubmitResult::obsolete;
+      |                                          ^~~~
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp:286:13: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+  286 |             if(sample_pending[at])++shared.sensor_replaced;samples[at]=item;sample_pending[at]=true;
+      |             ^~
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp:286:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  286 |             if(sample_pending[at])++shared.sensor_replaced;samples[at]=item;sample_pending[at]=true;
+      |                                                            ^~~~~~~
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp: In member function 'robotweax::srt_bridge::SubmitResult robotweax::srt_bridge::TransportOwner::submit_query(robotweax::srt_bridge::TransportContext, uint32_t, robotweax::srt_bridge::Identity)':
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp:303:125: error: 'zero' was not declared in this scope
+  303 |     if(impl_->config.session.role!=Role::listener||!definition||!definition->enabled||definition->kind!=RouteKind::command||zero(request))return SubmitResult::invalid;
+      |                                                                                                                             ^~~~
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp: In member function 'robotweax::srt_bridge::SubmitResult robotweax::srt_bridge::TransportOwner::submit_status(robotweax::srt_bridge::TransportContext, uint32_t, robotweax::srt_bridge::Identity, const robotweax::srt_bridge::CommandStatus&)':
+/workspace/src/robotweax_srt_bridge_core/src/transport/transport.cpp:307:50: error: 'zero' was not declared in this scope
+  307 |     if(impl_->config.session.role!=Role::caller||zero(request))return SubmitResult::invalid;
+      |                                                  ^~~~
+cc1plus: all warnings being treated as errors
+ninja: build stopped: subcommand failed.

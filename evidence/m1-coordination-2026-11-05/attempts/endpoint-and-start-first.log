@@ -1,0 +1,50 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-native
+[1/18] Linking CXX static library src/robotweax_srt_bridge_core/librobotweax_srt_bridge_worker.a
+[2/18] Linking CXX executable src/robotweax_srt_bridge_core/robotweax-journal-worker
+[3/18] Linking CXX static library src/robotweax_srt_bridge_transport/librobotweax_srt_bridge_transport.a
+[4/18] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o
+[5/18] Linking CXX executable src/robotweax_srt_bridge_core/execution_tests
+[6/18] Linking CXX executable tests/native/session_socket_tests
+[7/18] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/worker_tests.dir/__/__/tests/protocol/worker_tests.cpp.o
+[8/18] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_endpoint.dir/endpoint.cpp.o
+[9/18] Linking CXX static library src/robotweax_srt_bridge_transport/librobotweax_srt_bridge_endpoint.a
+[10/18] Linking CXX executable src/robotweax_srt_bridge_core/worker_tests
+[11/18] Building CXX object tests/native/CMakeFiles/transport_tests.dir/transport_tests.cpp.o
+[12/18] Linking CXX executable tests/native/transport_tests
+[13/18] Building CXX object tests/native/CMakeFiles/endpoint_tests.dir/endpoint_tests.cpp.o
+[14/18] Building CXX object tests/native/CMakeFiles/worker_transport_tests.dir/worker_transport_tests.cpp.o
+[15/18] Linking CXX executable tests/native/endpoint_tests
+[16/18] Linking CXX executable tests/native/worker_transport_tests
+[17/18] Building CXX object tests/native/CMakeFiles/execution_start_tests.dir/execution_start_tests.cpp.o
+[18/18] Linking CXX executable tests/native/execution_start_tests
+Internal ctest changing into directory: /workspace/build/m1-native
+Test project /workspace/build/m1-native
+    Start  5: execution_contract
+1/6 Test  #5: execution_contract ...............   Passed    0.30 sec
+    Start  6: worker_contract
+2/6 Test  #6: worker_contract ..................   Passed   11.50 sec
+    Start 61: command_endpoint_ipv4
+3/6 Test #61: command_endpoint_ipv4 ............   Passed    0.69 sec
+    Start 62: command_endpoint_ipv6
+4/6 Test #62: command_endpoint_ipv6 ............   Passed    0.71 sec
+    Start 63: execution_start_ipv4
+5/6 Test #63: execution_start_ipv4 .............   Passed   11.40 sec
+    Start 64: execution_start_ipv6
+6/6 Test #64: execution_start_ipv6 .............   Passed   11.35 sec
+
+100% tests passed, 0 tests failed out of 6
+
+Label Time Summary:
+crash        =  11.50 sec*proc (1 test)
+endpoint     =   1.41 sec*proc (2 tests)
+execution    =  23.05 sec*proc (3 tests)
+lifecycle    =  35.66 sec*proc (5 tests)
+m1           =  35.96 sec*proc (6 tests)
+native       =  24.16 sec*proc (4 tests)
+process      =  11.80 sec*proc (2 tests)
+race         =  23.05 sec*proc (3 tests)
+worker       =  11.50 sec*proc (1 test)
+
+Total Test time (real) =  36.00 sec

@@ -1,0 +1,34 @@
+{
+  "milestone": "M1",
+  "status": "accepted",
+  "date": "2026-11-05",
+  "timezone": "Europe/Berlin",
+  "scope": "ROS-independent core on the qualified static Linux amd64 profile",
+  "image_reference": "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+  "srt_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+  "source_inventory_sha256": "b353b7afe7aa2e1cda55f83795ccce42b2f7598b7ceb192e767dd52f32cc250f",
+  "source_inventory": "evidence/m1-errors-sdk-2026-11-05/run.json",
+  "results": {
+    "core_debug": 15,
+    "core_asan_ubsan": 15,
+    "root_native": 67,
+    "native_asan_ubsan": 10,
+    "relocated_linux_sdk_consumer": "passed",
+    "required_component_negative": "passed",
+    "runtime_ros_second_srt_link_check": "passed",
+    "macos_minimal_core_tests": 4,
+    "relocated_macos_core_consumer": "passed"
+  },
+  "wire_version": 1,
+  "private_worker_ipc_version": 2,
+  "rate_command_schema_hash": "SHA256_5c6bd6e9a81dcc45aca4e17697441eceb280a454bfe72c784b2fcfca840cca98",
+  "acceptance_matrix": "evidence/m1-errors-sdk-2026-11-05/ACCEPTANCE.md",
+  "not_qualified": [
+    "ROS nodes/CDR runtime integration (M2)",
+    "physical device and power-cut behavior",
+    "WAN impairment/performance claims (M3)",
+    "Intrinsic integration (M4)",
+    "full upstream SRT regression suite",
+    "full SDK on other platforms/compiler/provider profiles"
+  ]
+}

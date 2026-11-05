@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="50"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="2dc43eced615"
+	time="6"
+	timestamp="2026-11-04T20:53:37"
+	>
+	<testcase name="bandwidth_contract" classname="bandwidth_contract" time="0.0227415" status="run">
+		<properties>
+			<property name="cmake_labels" value="bandwidth;m1"/>
+		</properties>
+		<system-out>PASS bandwidth contract: 20027 checks, 10s synthetic overload
+</system-out>
+	</testcase>
+	<testcase name="reconnect_contract" classname="reconnect_contract" time="0.0168042" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;reconnect"/>
+		</properties>
+		<system-out>PASS reconnect contract: 51139 checks, 1000 seeded campaigns
+</system-out>
+	</testcase>
+	<testcase name="clock_contract" classname="clock_contract" time="0.0194062" status="run">
+		<properties>
+			<property name="cmake_labels" value="clock;m1"/>
+		</properties>
+		<system-out>PASS clock contract: 35097 assertions, 5000 drift scenarios
+</system-out>
+	</testcase>
+	<testcase name="wire_contract" classname="wire_contract" time="0.022478" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;protocol"/>
+		</properties>
+		<system-out>PASS wire contract: 22576 assertions, 20000 deterministic mutations
+</system-out>
+	</testcase>
+	<testcase name="routes_contract" classname="routes_contract" time="0.0324627" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;routes"/>
+		</properties>
+		<system-out>PASS routes contract: 24 checks
+</system-out>
+	</testcase>
+	<testcase name="session_contract" classname="session_contract" time="0.0418974" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;session"/>
+		</properties>
+		<system-out>PASS session contract: 712 checks
+</system-out>
+	</testcase>
+	<testcase name="queues_contract" classname="queues_contract" time="0.0641557" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;queues"/>
+		</properties>
+		<system-out>PASS queues contract: 200159 checks, fixed storage=307512 bytes
+</system-out>
+	</testcase>
+	<testcase name="management_contract" classname="management_contract" time="0.0341841" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;management"/>
+		</properties>
+		<system-out>PASS management contract: 30065 assertions, 20000 mutations
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_positive" classname="profile_control_ipv4_positive" time="0.168187" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv4 positive
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_backpressure" classname="profile_control_ipv4_backpressure" time="0.154774" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv4 backpressure
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_wrong-profile" classname="profile_control_ipv4_wrong-profile" time="0.108271" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618045601/140737416468160W:connection: handshake rejected socket=617495346 peer=127.0.0.1:33344 peer_socket=213242258 reason=14 name=FILTER wire=1014
+1793825618047226/140737467557568W:connection: connection setup failed socket=213242258 peer=127.0.0.1:39910 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS control ipv4 wrong-profile
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_wrong-secret" classname="profile_control_ipv4_wrong-secret" time="0.113254" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618161725/140737424860864W:connection: handshake rejected socket=507284059 peer=127.0.0.1:40683 peer_socket=597075758 reason=10 name=BADSECRET wire=1010
+1793825618163225/140737467557568W:connection: connection setup failed socket=597075758 peer=127.0.0.1:56601 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS control ipv4 wrong-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_missing-secret" classname="profile_control_ipv4_missing-secret" time="0.0831133" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>rejection_reason=0 events=0
+PASS control ipv4 missing-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_missing-gcm" classname="profile_control_ipv4_missing-gcm" time="0.106132" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618352108/140737416468160W:connection: handshake rejected socket=847363803 peer=127.0.0.1:34878 peer_socket=934755622 reason=17 name=CRYPTO wire=1017
+1793825618353625/140737467557568W:connection: connection setup failed socket=934755622 peer=127.0.0.1:56368 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv4 missing-gcm
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_missing-sessionauth" classname="profile_control_ipv4_missing-sessionauth" time="0.105931" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618464839/140737433253568W:connection: handshake rejected socket=446866848 peer=127.0.0.1:58856 peer_socket=392325170 reason=11 name=UNSECURE wire=1011
+1793825618466416/140737467557568W:connection: connection setup failed socket=392325170 peer=127.0.0.1:52922 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv4 missing-sessionauth
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_wrong-profile_reverse" classname="profile_control_ipv4_wrong-profile_reverse" time="0.117907" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618583408/140737416468160W:connection: handshake rejected socket=417791240 peer=127.0.0.1:48037 peer_socket=852981406 reason=13 name=CONGESTION wire=1013
+1793825618584921/140737467557568W:connection: connection setup failed socket=852981406 peer=127.0.0.1:46362 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS control ipv4 wrong-profile reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_missing-gcm_reverse" classname="profile_control_ipv4_missing-gcm_reverse" time="0.104968" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618691598/140737416468160W:connection: handshake rejected socket=254664584 peer=127.0.0.1:57049 peer_socket=709445075 reason=17 name=CRYPTO wire=1017
+1793825618692942/140737459164864W:connection: connection setup failed socket=709445075 peer=127.0.0.1:43736 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv4 missing-gcm reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv4_missing-sessionauth_reverse" classname="profile_control_ipv4_missing-sessionauth_reverse" time="0.10383" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825618796036/140737424860864W:connection: handshake rejected socket=889996047 peer=127.0.0.1:40555 peer_socket=754731115 reason=11 name=UNSECURE wire=1011
+1793825618797538/140737459164864W:connection: connection setup failed socket=754731115 peer=127.0.0.1:56829 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv4 missing-sessionauth reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_positive" classname="profile_control_ipv6_positive" time="0.176826" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv6 positive
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_backpressure" classname="profile_control_ipv6_backpressure" time="0.161377" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv6 backpressure
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_wrong-profile" classname="profile_control_ipv6_wrong-profile" time="0.111248" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619247242/140737416468160W:connection: handshake rejected socket=391806875 peer=[0:0:0:0:0:0:0:1%0]:33297 peer_socket=293066563 reason=14 name=FILTER wire=1014
+1793825619248811/140737459164864W:connection: connection setup failed socket=293066563 peer=[0:0:0:0:0:0:0:1%0]:51725 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS control ipv6 wrong-profile
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_wrong-secret" classname="profile_control_ipv6_wrong-secret" time="0.109943" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619359380/140737424860864W:connection: handshake rejected socket=381154676 peer=[0:0:0:0:0:0:0:1%0]:57585 peer_socket=271576409 reason=10 name=BADSECRET wire=1010
+1793825619360870/140737459164864W:connection: connection setup failed socket=271576409 peer=[0:0:0:0:0:0:0:1%0]:47573 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS control ipv6 wrong-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_missing-secret" classname="profile_control_ipv6_missing-secret" time="0.0930558" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>rejection_reason=0 events=0
+PASS control ipv6 missing-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_missing-gcm" classname="profile_control_ipv6_missing-gcm" time="0.105935" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619560386/140737433253568W:connection: handshake rejected socket=936371498 peer=[0:0:0:0:0:0:0:1%0]:49117 peer_socket=141763937 reason=17 name=CRYPTO wire=1017
+1793825619561741/140737459164864W:connection: connection setup failed socket=141763937 peer=[0:0:0:0:0:0:0:1%0]:58411 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv6 missing-gcm
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_missing-sessionauth" classname="profile_control_ipv6_missing-sessionauth" time="0.104825" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619666848/140737433253568W:connection: handshake rejected socket=606883574 peer=[0:0:0:0:0:0:0:1%0]:42417 peer_socket=965620404 reason=11 name=UNSECURE wire=1011
+1793825619668322/140737467557568W:connection: connection setup failed socket=965620404 peer=[0:0:0:0:0:0:0:1%0]:35024 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv6 missing-sessionauth
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_wrong-profile_reverse" classname="profile_control_ipv6_wrong-profile_reverse" time="0.118615" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619785546/140737433253568W:connection: handshake rejected socket=291584896 peer=[0:0:0:0:0:0:0:1%0]:41702 peer_socket=644525371 reason=13 name=CONGESTION wire=1013
+1793825619787042/140737459164864W:connection: connection setup failed socket=644525371 peer=[0:0:0:0:0:0:0:1%0]:39729 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS control ipv6 wrong-profile reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_missing-gcm_reverse" classname="profile_control_ipv6_missing-gcm_reverse" time="0.10704" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825619894704/140737433253568W:connection: handshake rejected socket=575161315 peer=[0:0:0:0:0:0:0:1%0]:54752 peer_socket=472762435 reason=17 name=CRYPTO wire=1017
+1793825619895948/140737459164864W:connection: connection setup failed socket=472762435 peer=[0:0:0:0:0:0:0:1%0]:52589 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv6 missing-gcm reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_control_ipv6_missing-sessionauth_reverse" classname="profile_control_ipv6_missing-sessionauth_reverse" time="0.105749" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620001561/140737433253568W:connection: handshake rejected socket=889625519 peer=[0:0:0:0:0:0:0:1%0]:51002 peer_socket=274249135 reason=11 name=UNSECURE wire=1011
+1793825620002910/140737459164864W:connection: connection setup failed socket=274249135 peer=[0:0:0:0:0:0:0:1%0]:48721 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv6 missing-sessionauth reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_positive" classname="profile_sensor_ipv4_positive" time="0.158031" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv4 positive
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_backpressure" classname="profile_sensor_ipv4_backpressure" time="0.161238" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv4 backpressure
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_wrong-profile" classname="profile_sensor_ipv4_wrong-profile" time="0.11812" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620442722/140737416468160W:connection: handshake rejected socket=728660379 peer=127.0.0.1:55540 peer_socket=1073389318 reason=13 name=CONGESTION wire=1013
+1793825620444283/140737467557568W:connection: connection setup failed socket=1073389318 peer=127.0.0.1:44474 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS sensor ipv4 wrong-profile
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_wrong-secret" classname="profile_sensor_ipv4_wrong-secret" time="0.110617" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620554369/140737433253568W:connection: handshake rejected socket=147668445 peer=127.0.0.1:58264 peer_socket=613159398 reason=10 name=BADSECRET wire=1010
+1793825620556234/140737467557568W:connection: connection setup failed socket=613159398 peer=127.0.0.1:50093 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS sensor ipv4 wrong-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_missing-secret" classname="profile_sensor_ipv4_missing-secret" time="0.0923081" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>rejection_reason=0 events=0
+PASS sensor ipv4 missing-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_missing-gcm" classname="profile_sensor_ipv4_missing-gcm" time="0.107229" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620755293/140737433253568W:connection: handshake rejected socket=50206000 peer=127.0.0.1:34633 peer_socket=964355303 reason=17 name=CRYPTO wire=1017
+1793825620756802/140737459164864W:connection: connection setup failed socket=964355303 peer=127.0.0.1:55470 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv4 missing-gcm
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_missing-sessionauth" classname="profile_sensor_ipv4_missing-sessionauth" time="0.105579" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620862917/140737433253568W:connection: handshake rejected socket=683287762 peer=127.0.0.1:38891 peer_socket=994807125 reason=11 name=UNSECURE wire=1011
+1793825620864395/140737459164864W:connection: connection setup failed socket=994807125 peer=127.0.0.1:43323 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv4 missing-sessionauth
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_wrong-profile_reverse" classname="profile_sensor_ipv4_wrong-profile_reverse" time="0.106087" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825620969782/140737424860864W:connection: handshake rejected socket=501645342 peer=127.0.0.1:60354 peer_socket=763571403 reason=14 name=FILTER wire=1014
+1793825620971249/140737459164864W:connection: connection setup failed socket=763571403 peer=127.0.0.1:56435 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS sensor ipv4 wrong-profile reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_missing-gcm_reverse" classname="profile_sensor_ipv4_missing-gcm_reverse" time="0.106979" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825621077914/140737433253568W:connection: handshake rejected socket=241769037 peer=127.0.0.1:45428 peer_socket=966735344 reason=17 name=CRYPTO wire=1017
+1793825621079436/140737467557568W:connection: connection setup failed socket=966735344 peer=127.0.0.1:59921 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv4 missing-gcm reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv4_missing-sessionauth_reverse" classname="profile_sensor_ipv4_missing-sessionauth_reverse" time="0.105957" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825621184898/140737433253568W:connection: handshake rejected socket=911923265 peer=127.0.0.1:46508 peer_socket=1056020750 reason=11 name=UNSECURE wire=1011
+1793825621186389/140737467557568W:connection: connection setup failed socket=1056020750 peer=127.0.0.1:50504 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv4 missing-sessionauth reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_positive" classname="profile_sensor_ipv6_positive" time="0.175659" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv6 positive
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_backpressure" classname="profile_sensor_ipv6_backpressure" time="0.173063" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=4
+PASS sensor ipv6 backpressure
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_wrong-profile" classname="profile_sensor_ipv6_wrong-profile" time="0.118537" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825621655805/140737433253568W:connection: handshake rejected socket=717764317 peer=[0:0:0:0:0:0:0:1%0]:42883 peer_socket=398289939 reason=13 name=CONGESTION wire=1013
+1793825621657189/140737459164864W:connection: connection setup failed socket=398289939 peer=[0:0:0:0:0:0:0:1%0]:43862 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS sensor ipv6 wrong-profile
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_wrong-secret" classname="profile_sensor_ipv6_wrong-secret" time="0.109401" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825621766654/140737433253568W:connection: handshake rejected socket=506543459 peer=[0:0:0:0:0:0:0:1%0]:35149 peer_socket=86204477 reason=10 name=BADSECRET wire=1010
+1793825621768125/140737459164864W:connection: connection setup failed socket=86204477 peer=[0:0:0:0:0:0:0:1%0]:48542 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS sensor ipv6 wrong-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_missing-secret" classname="profile_sensor_ipv6_missing-secret" time="0.0921814" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>rejection_reason=0 events=0
+PASS sensor ipv6 missing-secret
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_missing-gcm" classname="profile_sensor_ipv6_missing-gcm" time="0.106615" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825621966973/140737433253568W:connection: handshake rejected socket=28887972 peer=[0:0:0:0:0:0:0:1%0]:60077 peer_socket=83971125 reason=17 name=CRYPTO wire=1017
+1793825621968482/140737459164864W:connection: connection setup failed socket=83971125 peer=[0:0:0:0:0:0:0:1%0]:58099 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv6 missing-gcm
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_missing-sessionauth" classname="profile_sensor_ipv6_missing-sessionauth" time="0.106986" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825622074311/140737416468160W:connection: handshake rejected socket=273638843 peer=[0:0:0:0:0:0:0:1%0]:54728 peer_socket=36936445 reason=11 name=UNSECURE wire=1011
+1793825622075817/140737459164864W:connection: connection setup failed socket=36936445 peer=[0:0:0:0:0:0:0:1%0]:38864 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv6 missing-sessionauth
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_wrong-profile_reverse" classname="profile_sensor_ipv6_wrong-profile_reverse" time="0.106824" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825622182870/140737416468160W:connection: handshake rejected socket=763077876 peer=[0:0:0:0:0:0:0:1%0]:39822 peer_socket=664037052 reason=14 name=FILTER wire=1014
+1793825622184246/140737467557568W:connection: connection setup failed socket=664037052 peer=[0:0:0:0:0:0:0:1%0]:54934 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS sensor ipv6 wrong-profile reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_missing-gcm_reverse" classname="profile_sensor_ipv6_missing-gcm_reverse" time="0.107" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825622290506/140737433253568W:connection: handshake rejected socket=651597318 peer=[0:0:0:0:0:0:0:1%0]:36236 peer_socket=66734585 reason=17 name=CRYPTO wire=1017
+1793825622291990/140737459164864W:connection: connection setup failed socket=66734585 peer=[0:0:0:0:0:0:0:1%0]:43331 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv6 missing-gcm reverse
+</system-out>
+	</testcase>
+	<testcase name="profile_sensor_ipv6_missing-sessionauth_reverse" classname="profile_sensor_ipv6_missing-sessionauth_reverse" time="0.100146" status="run">
+		<properties>
+			<property name="cmake_labels" value="m0;profile;socket"/>
+		</properties>
+		<system-out>1793825622397958/140737416468160W:connection: handshake rejected socket=838298628 peer=[0:0:0:0:0:0:0:1%0]:47495 peer_socket=678280813 reason=11 name=UNSECURE wire=1011
+1793825622399449/140737459164864W:connection: connection setup failed socket=678280813 peer=[0:0:0:0:0:0:0:1%0]:47260 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv6 missing-sessionauth reverse
+</system-out>
+	</testcase>
+	<testcase name="session_sockets_ipv4" classname="session_sockets_ipv4" time="0.596175" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;native;session;socket"/>
+		</properties>
+		<system-out>PASS native session ipv4: mutual READY, correlated probes, delayed binding ACK, SENSOR/full reconnect, samples=3, queued sample expired, old session rejected
+</system-out>
+	</testcase>
+	<testcase name="session_sockets_ipv6" classname="session_sockets_ipv6" time="0.593194" status="run">
+		<properties>
+			<property name="cmake_labels" value="m1;native;session;socket"/>
+		</properties>
+		<system-out>PASS native session ipv6: mutual READY, correlated probes, delayed binding ACK, SENSOR/full reconnect, samples=3, queued sample expired, old session rejected
+</system-out>
+	</testcase>
+</testsuite>

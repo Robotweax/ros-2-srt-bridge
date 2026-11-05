@@ -1,0 +1,163 @@
+{
+  "status": "passed",
+  "commands": [
+    {
+      "log": "development-packages.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "dpkg-query",
+        "-W"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "ros-packages.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+        "dpkg-query",
+        "-W"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "build.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "tools/build_m0.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "transport-tests.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "tools/test_m0.sh",
+        "/workspace/.local/m0/20261104T185958288329Z"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "ros-build.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-e",
+        "RMW_IMPLEMENTATION=rmw_fastrtps_cpp",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+        "bash",
+        "-c",
+        "source /opt/ros/jazzy/setup.bash && cmake -S tests/ros_types -B build/ros-types -DCMAKE_BUILD_TYPE=Release && cmake --build build/ros-types --parallel 2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "ros-type-output.json",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-e",
+        "RMW_IMPLEMENTATION=rmw_fastrtps_cpp",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+        "bash",
+        "-c",
+        "source /opt/ros/jazzy/setup.bash && build/ros-types/ros_type_probe"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "baseline_sha256": "04c17e3934fe53207c6a854ab005465c8445e9f8e5c8d3e42f836ed464a2b95c",
+  "srt_sha": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "srt_source_dirty": false,
+  "development_image_id": "sha256:a12fe12e312b7b72878714862d2dc6c23176b4d23928d6906537444f9aa5bcc0",
+  "ros_image_id": "sha256:c26c86a28e1addf9d10a81232869791974a3f7907943d5634742b58b2f26e1a3",
+  "development_image_reference": "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+  "ros_image_reference": "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+  "ros_types": {
+    "ros_distro": "jazzy",
+    "rmw": "rmw_fastrtps_cpp",
+    "frame_id_max_utf8_bytes": 64,
+    "joint_name_max_utf8_bytes": 64,
+    "joint_count_max": 6,
+    "imu": {
+      "type_hash": "RIHS01_7d9a00ff131080897a5ec7e26e315954b8eae3353c3f995c55faf71574000b5b",
+      "bounded_cdr_bytes": 380
+    },
+    "joint_state": {
+      "type_hash": "RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e",
+      "bounded_cdr_bytes": 684
+    },
+    "envelope_bytes": 96,
+    "sensor_payload_budget_bytes": 928
+  },
+  "installed_library_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673"
+}

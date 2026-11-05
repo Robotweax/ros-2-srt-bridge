@@ -1,0 +1,27 @@
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found suitable version "3.0.13", minimum required is "3.0") found components: Crypto 
+-- Configuring done (0.5s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-debug
+[1/19] Building CXX object CMakeFiles/robotweax_srt_bridge_core.dir/src/wire.cpp.o
+[2/19] Building CXX object CMakeFiles/robotweax_srt_bridge_core.dir/src/clock.cpp.o
+[3/19] Linking CXX static library librobotweax_srt_bridge_core.a
+[4/19] Running cpp protocol buffer compiler on /workspace/src/robotweax_srt_bridge_core/../../proto/management_v1.proto
+[5/19] Building CXX object CMakeFiles/clock_tests.dir/workspace/tests/protocol/clock_tests.cpp.o
+[6/19] Linking CXX executable clock_tests
+[7/19] Building CXX object CMakeFiles/wire_tests.dir/workspace/tests/protocol/wire_tests.cpp.o
+[8/19] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/src/routes.cpp.o
+FAILED: CMakeFiles/robotweax_srt_bridge_management.dir/src/routes.cpp.o 
+/usr/bin/c++  -I/workspace/build/m1-debug -I/workspace/src/robotweax_srt_bridge_core/include -g -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT CMakeFiles/robotweax_srt_bridge_management.dir/src/routes.cpp.o -MF CMakeFiles/robotweax_srt_bridge_management.dir/src/routes.cpp.o.d -o CMakeFiles/robotweax_srt_bridge_management.dir/src/routes.cpp.o -c /workspace/src/robotweax_srt_bridge_core/src/routes.cpp
+/workspace/src/robotweax_srt_bridge_core/src/routes.cpp: In function 'robotweax::srt_bridge::ManifestResult robotweax::srt_bridge::make_manifest(std::span<const Route>)':
+/workspace/src/robotweax_srt_bridge_core/src/routes.cpp:70:67: error: cannot convert 'std::array<std::byte, 32>::pointer' {aka 'std::byte*'} to 'unsigned char*'
+   70 |     if (EVP_Digest(canonical.data(), canonical.size(), digest.data(), &size, EVP_sha256(), nullptr) != 1 || size != digest.size())
+      |                                                        ~~~~~~~~~~~^~
+      |                                                                   |
+      |                                                                   std::array<std::byte, 32>::pointer {aka std::byte*}
+In file included from /workspace/src/robotweax_srt_bridge_core/src/routes.cpp:2:
+/usr/include/openssl/evp.h:717:42: note:   initializing argument 3 of 'int EVP_Digest(const void*, size_t, unsigned char*, unsigned int*, const EVP_MD*, ENGINE*)'
+  717 |                           unsigned char *md, unsigned int *size,
+      |                           ~~~~~~~~~~~~~~~^~
+[9/19] Linking CXX executable wire_tests
+[10/19] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/src/management.cpp.o
+ninja: build stopped: subcommand failed.

@@ -1,0 +1,43 @@
+syntax = "proto3";
+package robotweax.srt_bridge.v1;
+message SetMeasurementRateCommand {
+  uint32 rate_hz = 1;
+  uint64 expected_generation = 2;
+  uint64 new_generation = 3;
+  uint32 budget_ms = 4;
+}
+enum CommandStateCode {
+  COMMAND_STATE_UNSPECIFIED = 0;
+  CMD_LOCAL_QUEUED = 1;
+  CMD_ACCEPTED = 2;
+  CMD_DISPATCHING = 3;
+  CMD_SUCCEEDED = 4;
+  CMD_FAILED = 5;
+  CMD_REJECTED = 6;
+  CMD_EXPIRED = 7;
+  CMD_UNKNOWN = 8;
+}
+enum CommandReasonCode {
+  CMD_REASON_NONE = 0;
+  CMD_CONTEXT_LOST = 1;
+  CMD_RECONCILE_REQUIRED = 2;
+  CMD_START_DEADLINE = 3;
+  CMD_GENERATION_CONFLICT = 4;
+  CMD_HANDLER_FAILED = 5;
+  CMD_EFFECT_UNCERTAIN = 6;
+}
+message CommandStatus {
+  CommandStateCode state = 1;       // commands.hpp CommandState 2..8, no LOCAL_QUEUED on wire
+  CommandReasonCode reason = 2;      // commands.hpp CommandReason 0..6
+  bytes payload_hash = 3; // exactly 32 bytes, canonical RWC1 hash
+  uint64 revision = 4;
+  uint32 rate_hz = 5;
+  uint64 expected_generation = 6;
+  uint64 new_generation = 7;
+  uint32 budget_ms = 8;
+  bool result_valid = 9;
+  uint32 result_rate_hz = 10;
+  uint64 result_generation = 11;
+}
+// QUERY is empty; request ID and route remain in the envelope. ERROR diagnostics
+// are defined separately in errors_v1.proto; handler outcomes use typed STATUS.

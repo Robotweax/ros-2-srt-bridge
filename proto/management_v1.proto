@@ -1,0 +1,62 @@
+syntax = "proto3";
+package robotweax.srt_bridge.v1;
+
+// Envelope header is fixed-width network byte order, not a Protobuf message.
+// These IDs are the shared wire registry; zero and unknown IDs are rejected.
+enum Kind {
+  KIND_UNSPECIFIED = 0;
+  HELLO = 1;
+  WELCOME = 2;
+  READY = 3;
+  BIND = 4;
+  SAMPLE = 5;
+  COMMAND = 6;
+  STATUS = 7;
+  QUERY = 8;
+  TIME_PROBE = 9;
+  TIME_REPLY = 10;
+  ERROR = 11;
+}
+
+// Payload limits below require explicit runtime validation before session
+// admission. Protobuf itself does not enforce byte lengths or peer identity.
+message Hello {
+  string peer_id = 1;                 // 1..64 UTF-8 bytes; local authorization required
+  bytes routes_sha256 = 2;            // exactly 32 bytes
+  uint32 max_sensor_message_bytes = 3; // exactly 1024 for MVP
+  uint32 max_control_message_bytes = 4;// exactly 4096 for MVP
+  uint32 max_routes = 5;              // 1..8
+}
+message Welcome {
+  string peer_id = 1;                 // 1..64 UTF-8 bytes
+  bytes routes_sha256 = 2;            // exactly 32 bytes
+  bytes caller_epoch = 3;             // exactly 16 bytes; echo authenticated HELLO epoch
+  bytes listener_epoch = 4;           // exactly 16 bytes; equals sender envelope epoch
+  uint32 max_sensor_message_bytes = 5;
+  uint32 max_control_message_bytes = 6;
+  uint32 max_routes = 7;
+}
+message Ready {
+  enum Phase {
+    PHASE_UNSPECIFIED = 0;
+    CONTROL_READY = 1;
+    SENSOR_BOUND = 2;
+  }
+  Phase phase = 1;
+  bytes routes_sha256 = 2;            // exactly 32 bytes
+  bytes sensor_binding_id = 3;        // 16 nonzero bytes for SENSOR_BOUND; absent for CONTROL_READY
+}
+message Bind {
+  bytes control_caller_epoch = 1;     // exactly 16 bytes
+  bytes control_listener_epoch = 2;   // exactly 16 bytes
+  bytes sensor_binding_id = 3;        // fresh 16 nonzero bytes per SENSOR connection
+}
+// Both SRT endpoints initiate probes and qualify their own incoming data.
+message TimeProbe { uint64 initiator_send_ns = 1; }
+message TimeReply {
+  uint64 initiator_send_ns = 1;
+  uint64 responder_receive_ns = 2;
+  uint64 responder_send_ns = 3;
+}
+// Typed COMMAND/STATUS payloads are defined in commands_v1.proto. QUERY has an
+// empty body. Request-scoped ERROR diagnostics are defined in errors_v1.proto.

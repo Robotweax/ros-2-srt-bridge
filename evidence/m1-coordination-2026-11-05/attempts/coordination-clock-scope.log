@@ -1,0 +1,73 @@
+[1/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_core.dir/src/clock.cpp.o
+[2/39] Linking CXX static library src/robotweax_srt_bridge_core/librobotweax_srt_bridge_core.a
+[3/39] Linking CXX executable src/robotweax_srt_bridge_core/reconnect_tests
+[4/39] Linking CXX executable src/robotweax_srt_bridge_core/bandwidth_tests
+[5/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/clock_tests.dir/__/__/tests/protocol/clock_tests.cpp.o
+[6/39] Linking CXX executable src/robotweax_srt_bridge_core/wire_tests
+[7/39] Linking CXX executable src/robotweax_srt_bridge_core/clock_tests
+[8/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/queues.cpp.o
+[9/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/session.cpp.o
+[10/39] Linking CXX static library src/robotweax_srt_bridge_core/librobotweax_srt_bridge_management.a
+[11/39] Linking CXX executable src/robotweax_srt_bridge_core/robotweax-journal-worker
+[12/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o
+[13/39] Linking CXX executable src/robotweax_srt_bridge_core/execution_tests
+[14/39] Linking CXX executable src/robotweax_srt_bridge_core/journal_quota_tests
+[15/39] Linking CXX executable src/robotweax_srt_bridge_core/journal_crash_tests
+[16/39] Linking CXX executable src/robotweax_srt_bridge_core/journal_tests
+[17/39] Linking CXX executable src/robotweax_srt_bridge_core/routes_tests
+[18/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/session_tests.dir/__/__/tests/protocol/session_tests.cpp.o
+[19/39] Linking CXX executable src/robotweax_srt_bridge_core/session_tests
+[20/39] Linking CXX executable src/robotweax_srt_bridge_core/command_tests
+[21/39] Linking CXX executable src/robotweax_srt_bridge_core/management_tests
+[22/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/worker_tests.dir/__/__/tests/protocol/worker_tests.cpp.o
+[23/39] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/queues_tests.dir/__/__/tests/protocol/queues_tests.cpp.o
+[24/39] Linking CXX executable src/robotweax_srt_bridge_core/worker_tests
+[25/39] Linking CXX executable src/robotweax_srt_bridge_core/queues_tests
+[26/39] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o
+[27/39] Linking CXX static library src/robotweax_srt_bridge_transport/librobotweax_srt_bridge_transport.a
+[28/39] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_endpoint.dir/endpoint.cpp.o
+[29/39] Building CXX object tests/native/CMakeFiles/session_socket_tests.dir/session_socket_tests.cpp.o
+[30/39] Linking CXX static library src/robotweax_srt_bridge_transport/librobotweax_srt_bridge_endpoint.a
+[31/39] Linking CXX executable tests/native/session_socket_tests
+[32/39] Building CXX object tests/native/CMakeFiles/transport_tests.dir/transport_tests.cpp.o
+[33/39] Linking CXX executable tests/native/transport_tests
+[34/39] Building CXX object tests/native/CMakeFiles/worker_transport_tests.dir/worker_transport_tests.cpp.o
+[35/39] Linking CXX executable tests/native/worker_transport_tests
+[36/39] Building CXX object tests/native/CMakeFiles/endpoint_tests.dir/endpoint_tests.cpp.o
+[37/39] Linking CXX executable tests/native/endpoint_tests
+[38/39] Building CXX object tests/native/CMakeFiles/execution_start_tests.dir/execution_start_tests.cpp.o
+[39/39] Linking CXX executable tests/native/execution_start_tests
+Internal ctest changing into directory: /workspace/build/m1-native
+Test project /workspace/build/m1-native
+    Start  3: clock_contract
+1/5 Test  #3: clock_contract ...................   Passed    0.02 sec
+    Start 61: command_endpoint_ipv4
+2/5 Test #61: command_endpoint_ipv4 ............   Passed   14.41 sec
+    Start 62: command_endpoint_ipv6
+3/5 Test #62: command_endpoint_ipv6 ............   Passed   14.45 sec
+    Start 63: execution_start_ipv4
+4/5 Test #63: execution_start_ipv4 .............***Failed   13.07 sec
+FAIL: wrong fenced handler result
+
+    Start 64: execution_start_ipv6
+5/5 Test #64: execution_start_ipv6 .............***Failed   13.03 sec
+FAIL: wrong fenced handler result
+
+
+60% tests passed, 2 tests failed out of 5
+
+Label Time Summary:
+clock        =   0.02 sec*proc (1 test)
+endpoint     =  28.87 sec*proc (2 tests)
+execution    =  26.11 sec*proc (2 tests)
+lifecycle    =  54.97 sec*proc (4 tests)
+m1           =  55.00 sec*proc (5 tests)
+native       =  54.97 sec*proc (4 tests)
+race         =  26.11 sec*proc (2 tests)
+
+Total Test time (real) =  55.04 sec
+
+The following tests FAILED:
+	 63 - execution_start_ipv4 (Failed)
+	 64 - execution_start_ipv6 (Failed)
+Errors while running CTest

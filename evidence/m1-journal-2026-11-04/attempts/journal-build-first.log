@@ -1,0 +1,48 @@
+-- Found SQLite3: /usr/include (found suitable version "3.45.1", minimum required is "3.45") 
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-debug
+[1/11] Running cpp protocol buffer compiler on /workspace/src/robotweax_srt_bridge_core/../../proto/commands_v1.proto
+[2/11] Building CXX object CMakeFiles/robotweax_srt_bridge_journal.dir/src/journal/journal.cpp.o
+[3/11] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o
+FAILED: CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o 
+/usr/bin/c++  -I/workspace/build/m1-debug -I/workspace/src/robotweax_srt_bridge_core/include -g -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o -MF CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o.d -o CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o -c /workspace/src/robotweax_srt_bridge_core/src/commands.cpp
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp: In function 'bool robotweax::srt_bridge::{anonymous}::preflight(std::span<const std::byte>, bool)':
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:23:9: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   23 |         if(!field||field>(status?11U:4U)||(seen&(1U<<field)))return false;seen|=1U<<field;
+      |         ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:23:75: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   23 |         if(!field||field>(status?11U:4U)||(seen&(1U<<field)))return false;seen|=1U<<field;
+      |                                                                           ^~~~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp: In function 'std::optional<robotweax::srt_bridge::RateCommand> robotweax::srt_bridge::decode_rate_command(std::span<const std::byte>)':
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:61:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   61 |     if(!preflight(bytes,false))return {};pb::SetMeasurementRateCommand p;if(!p.ParseFromArray(bytes.data(),bytes.size()))return {};
+      |     ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:61:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   61 |     if(!preflight(bytes,false))return {};pb::SetMeasurementRateCommand p;if(!p.ParseFromArray(bytes.data(),bytes.size()))return {};
+      |                                          ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp: In function 'std::optional<robotweax::srt_bridge::CommandStatus> robotweax::srt_bridge::decode_command_status(uint32_t, std::span<const std::byte>)':
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:65:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   65 |     if(!preflight(bytes,true))return {};pb::CommandStatus p;if(!p.ParseFromArray(bytes.data(),bytes.size()))return {};
+      |     ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:65:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   65 |     if(!preflight(bytes,true))return {};pb::CommandStatus p;if(!p.ParseFromArray(bytes.data(),bytes.size()))return {};
+      |                                         ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp: In function 'robotweax::srt_bridge::CommandEncoding robotweax::srt_bridge::encode_rate_command(const RateCommand&, std::span<std::byte>)':
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:72:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   72 |     if(!valid_command(c))return {CommandCodecError::invalid};pb::SetMeasurementRateCommand p;
+      |     ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:72:62: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   72 |     if(!valid_command(c))return {CommandCodecError::invalid};pb::SetMeasurementRateCommand p;
+      |                                                              ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp: In function 'robotweax::srt_bridge::CommandEncoding robotweax::srt_bridge::encode_command_status(uint32_t, const CommandStatus&, std::span<std::byte>)':
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:76:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   76 |     if(!valid_remote_status(route,s))return {CommandCodecError::invalid};pb::CommandStatus p;
+      |     ^~
+/workspace/src/robotweax_srt_bridge_core/src/commands.cpp:76:74: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   76 |     if(!valid_remote_status(route,s))return {CommandCodecError::invalid};pb::CommandStatus p;
+      |                                                                          ^~
+cc1plus: all warnings being treated as errors
+[4/11] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/commands_v1.pb.cc.o
+[5/11] Building CXX object CMakeFiles/robotweax_srt_bridge_journal.dir/src/journal/storage.cpp.o
+ninja: build stopped: subcommand failed.

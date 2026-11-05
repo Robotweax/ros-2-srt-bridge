@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(robotweax_bridge_minimal_consumer LANGUAGES CXX)
+find_package(RobotweaxBridge 0.1 CONFIG REQUIRED COMPONENTS core)
+if(TARGET RobotweaxBridge::protocol OR TARGET RobotweaxBridge::transport)
+  message(FATAL_ERROR "Minimal package unexpectedly includes optional targets")
+endif()
+add_executable(minimal_bridge_consumer main.cpp)
+target_link_libraries(minimal_bridge_consumer PRIVATE RobotweaxBridge::core)
