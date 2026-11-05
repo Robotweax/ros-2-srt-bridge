@@ -935,3 +935,63 @@ spezifizieren/prüfen; bloßer Timeout oder NOT_FOUND reicht nicht. Keine alte
 Absicht erneut senden, keine Frische-/Start-Gates lockern. N5-Discovery, dann
 vergleichbare Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix. PR #2 bleibt Draft,
 M3 offen, Intrinsic/M4 unverändert.
+
+### M3 DDS-Protokoll v2: empfangsseitige Expiry-Versiegelung — 2026-11-05
+
+- `SEAL_EXPIRED` ist strikt nicht ausführend. Der Sender kann es nur für
+  LOCAL_QUEUED/Revision 0 ohne bestätigte Receiver-Admission in ursprünglichem
+  Owner/Prozess und derselben live Session senden, strikt nach gespeicherter
+  5-s-Deadline. Nach Prozess-/Session-Wechsel bleiben alte Absichten QUERY-only.
+  Alle DDS-Frames einschließlich HELLO verlangen Protokollversion 2; beide Enden
+  neu bauen, kein Downgrade. Keine SDK-Wire-/IPC-/SRT-Änderung.
+- Neuer ROS-Helper nutzt ausschließlich die öffentliche, unveränderte SDK-
+  Journal-API. Existierender Record wird unverändert geliefert (auch ACCEPTED,
+  DISPATCHING, SUCCEEDED, UNKNOWN); widersprüchliche Metadaten sind Konflikte.
+  Nur fehlende ID nach Deadline erzeugt per vorhandener FULL-synchroner Admission
+  EXPIRED/START_DEADLINE, Revision 1, ohne Dispatch/Resultat. Commit vor STATUS.
+  Kein Handlerpfad; späteres COMMAND findet das ID-/Hash-Tombstone und startet
+  nicht. Journal-Records werden in der Session nicht eviziert. Context-Verlust
+  während Commit kann nichts ausführen; unbekannte Historie in neuem Kontext
+  wird nicht als Expiry ausgegeben. Bestehendes Tombstone bleibt per QUERY lesbar.
+- Separate Seal-Sent/Received/Inserted/Existing/Rejected-Zähler. Vorhandener
+  Record ist keine neue Expiry. Ausführbares COMMAND wird nicht erneut publiziert;
+  Reliable-DDS-Paketretransmission bleibt erlaubt. Timeout/NOT_FOUND allein sind
+  weiterhin kein Terminalresultat. Erst bestätigter Receiver-Status beendet die
+  Unsicherheit; Lab-Cadence darf danach neue ID ohne Generationserhöhung anbieten.
+- Drei N2-Probes je 60 s: 1701 24 SUCCEEDED/24 Intents; 2903 28 SUCCEEDED plus
+  eine EXPIRED/29; 4211 24 SUCCEEDED plus eine EXPIRED/25. Alle ohne offene Intents.
+  Beide Expiry-IDs auf beiden Seiten Revision 1, identische Hashes/Generation,
+  keine Dispatch-Zeit/kein Resultat; Receiver-Admission strikt nach Deadline.
+  Bei 4211 verfällt ID 20, neue geplante ID 21 gelingt mit expected generation 19
+  und result generation 20. Insgesamt 25 COMMAND-Publikationen/25 neue Intents,
+  nur 24 Starts/Effekte. Bei 1701 liefert Seal echten schon committeten Erfolg;
+  keinerlei Überschreiben nach Deadline. Kein deterministischer Paket-Replay-
+  Vergleich mit alten Seeds und kein 600-s-Abnahmegate.
+- Fünfminütiges N0 `20261105T205705247794Z`: 150/150 SUCCEEDED/150 Effekte,
+  keine Seals. Ist 199,984/50,001 Hz; 75.024 produziert/75.002 empfangen, 20 IMU-
+  und zwei Joint-Gaps vor Callback. Lokale Shared-VM-Alterschecks bestanden,
+  keine isolierte WAN-Verlust-/Cross-Host-/Hardware-Aussage. Beide Journale stimmen
+  in allen 150 Resultaten überein, quick_check bestanden.
+- N4-Smoke bleibt 4/5 SUCCEEDED/ein offen, beide Enden nach Outage wieder ready;
+  keine Seals über den Context-Wechsel. N5 control-first zwei SUCCEEDED/zwei
+  Effekte, 31 Seals auf vorhandene Records, kein falsches EXPIRED, sechs Slots
+  blockiert. N5 simultaneous erneut fehlgeschlagen vor Messfenster; Discovery offen.
+- Acht neue tatsächliche SDK-Journal-GTests: Deadline-Grenze, Metadaten/Context,
+  Tombstone/Duplikat/später Dispatch, vorhandene Zustände, Konflikte, Sender-
+  Eligibility, verlorener Reply mit Owner-Reopen/QUERY, Speicherfehler. Insgesamt
+  32 echte ROS-GTests/36 mit Wrappern und 33 Python-Tests bestanden. DDS-Fault-
+  Acceptance einschließlich Receiver-/Sender-SIGKILL/UNKNOWN/No-Replay und volle
+  originale M2-Neubau-/Runtime-Regression bestanden.
+- Evidenz `evidence/m3-dds-expiry-seal-2026-11-05/`: neun finale Source-Inventare
+  passen (DDS 140/M2 88), Binaryhash identisch, installierte Python-Dateien
+  bytegleich. C++-Build `205428937697Z` hat ausschließlich spätere nicht kompilierte
+  Änderungen an zwei Runner-Metadaten und Host-Testdatei; alle kompilierten Inputs
+  passen. Finale Fault-/M2-Läufe `205705247608Z`/`205705247870Z`. SDK-Archivhashes
+  gegen b8e198d identisch, Core/Proto und SRT-Quelle unverändert. Roh-PCAPs/Journale
+  lokal, Hashes/Größen erhalten. Frühere Evidenz unverändert.
+
+**Weiter:** Kontext-/Owner-wechselnde Unsicherheit bleibt explizit offen; keinen
+Abwesenheitsnachweis aus einem neuen leeren Journal ableiten. N5-Discovery und
+SRT-Parität der neuen Reconciliation-Semantik/-Kosten qualifizieren, danach
+Clock-/Crypto-/CPU-/Wire-Gleichheit und volle Matrix. M3 offen, PR #2 Draft,
+Intrinsic/M4 unverändert.

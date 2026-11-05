@@ -898,3 +898,36 @@ Publish-Aufrufs. Accepted ist hier keine Journal-/Start-Admission. Counter sind
 kumulative Snapshots, kein Pipeline-Ledger. Publish-Dauer isoliert keinen Netz-
 oder nachgelagerten Queue-Anteil. Workload protokolliert letzte lokale Status-
 Beobachtung samt Fehler auch bei offenem Intent. SDK/Wire/IPC-Verträge unverändert.
+
+
+M3-DDS-Protokoll v2 (2026-11-05): `SEAL_EXPIRED` ist eine explizit nicht
+ausführende Reconciliation-Operation. Jeder Frame einschließlich HELLO verlangt
+`protocol_version=2`; beide DDS-Enden neu bauen, kein Downgrade. SDK-Wire 1,
+Worker-IPC 3 und SRT bleiben unverändert. Neue SRT-Semantik-/Kostenparität ist
+nicht qualifiziert und bleibt Vergleichsgate.
+
+Der Sender darf nur seine ursprüngliche LOCAL_QUEUED/Revision-0-Absicht ohne
+belegte Empfänger-Admission versiegeln: gleicher Prozess/Owner, gleiche noch live
+Session, strikt nach der gespeicherten 5-s-Startdeadline. Neue Owner oder neue
+Sessions führen für alte Absichten weiterhin nur QUERY aus. Anfrage trägt
+ursprüngliche ID, Hash, Auftragsparameter, Origin und Deadline; sie ist kein
+COMMAND-Replay. Paketfrische, Peer-/Clock-/Sequenz-/Session-Checks bleiben gleich.
+
+Der Empfängerjournal-Thread validiert Metadaten und Deadline. Existiert der
+passende Record, liefert er ihn unverändert, auch ACCEPTED/DISPATCHING/SUCCEEDED/
+UNKNOWN; Konflikte sind Fehler. Nur bei fehlender ID darf die vorhandene SDK-
+Admission nach Deadline ein dauerhaftes EXPIRED/START_DEADLINE, Revision 1 ohne
+Dispatch/Resultat erzeugen. FULL-Commit vor STATUS, kein Handlerpfad. Spätere
+COMMANDs finden diesen unveränderlichen ID-/Hash-Record und dürfen nicht starten.
+Journal lebt ohne Record-Eviction für die ganze Session; deshalb gilt der
+Abwesenheitsnachweis nur in deren ursprünglicher Receiver-Lebenszeit. Ein
+Context-Wechsel während Commit kann nichts starten; ein Resultat wird erst in
+frischer Session/Receipt-Korrelation beobachtet. Neue Kontexte ohne Record
+bleiben unsicher, vorhandene Tombstones sind per QUERY wiederherstellbar.
+
+Erst bestätigter Receiver-Status macht den Sender EXPIRED. Der Lab-Cadence darf
+danach eine neue ID mit unveränderter Generation anbieten; UNKNOWN pausiert
+weiterhin. Keine Frische-/Lease-/Budget-Lockerung, kein automatisches altes
+COMMAND. Separate Seal-Zähler unterscheiden Inserts und bereits vorhandene
+Records von ausführbaren COMMANDs und reinen QUERYs. Evidenz:
+`evidence/m3-dds-expiry-seal-2026-11-05/`.

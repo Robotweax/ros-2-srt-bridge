@@ -315,5 +315,56 @@
     "n5_status": "failed before measurement; zero endpoint matches/received HELLOs at both peers",
     "final_manifests_verified": 7,
     "n2_rejected_before_start_deadline": true
+  },
+  "dds_expiry_seal_followup": {
+    "status": "original-session absence can be durably sealed after deadline; context-change uncertainty remains",
+    "evidence": "evidence/m3-dds-expiry-seal-2026-11-05",
+    "dds_command_protocol": 2,
+    "operation": "SEAL_EXPIRED; non-executing",
+    "same_original_sender_process_and_session_required": true,
+    "unacknowledged_revision": 0,
+    "strictly_after_saved_deadline": true,
+    "existing_records_unchanged": true,
+    "expiry_revision": 1,
+    "expires_without_dispatch": true,
+    "full_commit_before_reply": true,
+    "recovery_across_context_changes": "QUERY only",
+    "sdk_source_changed": false,
+    "srt_semantic_cost_equivalence_qualified": false,
+    "ros_gtests": 32,
+    "python_tests": 33,
+    "n0_run": "20261105T205705247794Z",
+    "n0_confirmed": 150,
+    "n0_effects": 150,
+    "n0_produced": 75024,
+    "n0_received": 75002,
+    "n0_age_estimates_qualified": true,
+    "n2_seconds_per_seed": 60,
+    "n2_results": {
+      "1701": {
+        "success": 24,
+        "expired": 0,
+        "unresolved": 0,
+        "effects": 24
+      },
+      "2903": {
+        "success": 28,
+        "expired": 1,
+        "unresolved": 0,
+        "effects": 28
+      },
+      "4211": {
+        "success": 24,
+        "expired": 1,
+        "unresolved": 0,
+        "effects": 24
+      }
+    },
+    "n4_unresolved": 1,
+    "n4_seals_sent": 0,
+    "n5_control_first_success": 2,
+    "n5_control_first_existing_seal_replies": 31,
+    "n5_simultaneous_status": "failed before measurement",
+    "complete_m3_acceptance": false
   }
 }

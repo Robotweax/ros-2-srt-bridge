@@ -83,6 +83,17 @@ class OutcomeTests(unittest.TestCase):
         rows[0]['result_generation']=2
         with self.assertRaisesRegex(ValueError,'confirmed'):audit_commands(rows,begin,end)
 
+    def test_authoritative_expiry_allows_new_id_without_generation_advance(self):
+        expired=dict(number=1,expected_generation=0,new_generation=1,terminal=7,reason=3,result_valid=False)
+        before=dict(effects=0,generation=0)
+        report=audit_commands([expired],before,before)
+        self.assertEqual(report['confirmed_successes'],0);self.assertEqual(report['unresolved'],0)
+        self.assertEqual(report['unknown'],0);self.assertFalse(report['all_succeeded'])
+        success=dict(number=2,expected_generation=0,new_generation=1,terminal=4,result_valid=True,result_rate_hz=200,result_generation=1)
+        report=audit_commands([expired,success],before,dict(effects=1,generation=1))
+        self.assertEqual(report['confirmed_successes'],1);self.assertEqual(report['effects'],1)
+        self.assertEqual(report['attempts'],2)
+
     def test_unknown_and_unresolved_can_have_effects_without_success_claim(self):
         rows,begin,end=self.fixture();rows[0].update(terminal=8,result_valid=False)
         report=audit_commands(rows,begin,end);self.assertEqual(report['unknown'],1);self.assertFalse(report['all_succeeded'])

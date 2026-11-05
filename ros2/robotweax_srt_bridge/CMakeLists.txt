@@ -29,6 +29,8 @@ install(TARGETS ros_rate_worker bridge_node dds_command_node DESTINATION lib/${P
 install(DIRECTORY include/ DESTINATION include)
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(dds_expiry_seal_test test/dds_expiry_seal_test.cpp)
+  target_link_libraries(dds_expiry_seal_test sensor_codec RobotweaxBridge::journal RobotweaxBridge::protocol)
   ament_add_gtest(dds_command_session_test test/dds_command_session_test.cpp)
   target_link_libraries(dds_command_session_test sensor_codec RobotweaxBridge::protocol OpenSSL::Crypto)
   target_compile_options(dds_command_session_test PRIVATE -Wall -Wextra -Wpedantic -Werror)

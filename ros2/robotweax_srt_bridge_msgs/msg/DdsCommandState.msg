@@ -38,3 +38,9 @@ uint64 remote_not_found
 # Reliable publish call wall duration; excludes queue time before/after that call.
 uint64 control_publish_max_ns
 uint64 control_publish_over_freshness
+# Protocol-v2 reconciliation; distinct from executable COMMAND and read-only QUERY.
+uint64 expiry_seals_sent
+uint64 expiry_seals_received
+uint64 expiry_seals_inserted
+uint64 expiry_seals_existing
+uint64 expiry_seals_rejected

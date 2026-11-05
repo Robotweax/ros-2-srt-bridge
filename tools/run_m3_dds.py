@@ -42,9 +42,10 @@ def main():
             for folder in ['src','ros2','proto','cmake','containers','tools','tests']
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['full-duration combined impairment/seed qualification','matched-window CPU/wire accounting',
-            'age-clock equivalence with conservative SRT bounds','encryption/security cost equivalence','full seed/duration matrix'],
+            'age-clock equivalence with conservative SRT bounds','encryption/security cost equivalence','expiry-seal semantic/cost equivalence with SRT','full seed/duration matrix'],
         topology='direct typed DDS sensor publisher/subscriber; no SRT bridge hops; simulator services/diagnostics also discoverable',
         clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification',
+        dds_command_protocol=2,expiry_seal_scope='non-executing durable absence seal; original sender/process/session only, strictly past saved 5s deadline; existing records unchanged',
         dds_command_channels=dict(control='Reliable/Volatile/KeepLast(64)',liveness='BestEffort/Volatile/KeepLast(1)',hello_period_ms=100,lease_ns=1500000000,sequence_scope='independent per channel'))
     lab=None;processes=[];captures=[]
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')

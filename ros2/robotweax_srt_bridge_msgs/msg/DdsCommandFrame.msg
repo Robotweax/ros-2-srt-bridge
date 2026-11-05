@@ -4,6 +4,9 @@ uint8 COMMAND=2
 uint8 QUERY=3
 uint8 STATUS=4
 uint8 ERROR=5
+# Non-executing, same-session durable absence seal, strictly past original deadline.
+uint8 SEAL_EXPIRED=6
+uint16 PROTOCOL_VERSION=2
 uint8 kind
 uint8[16] process_epoch
 uint8[16] link_epoch
@@ -25,3 +28,5 @@ uint8[32] payload_hash
 CommandStatus status
 # HELLO owner eligibility; never a handler-start grant.
 bool owner_ready
+
+uint16 protocol_version

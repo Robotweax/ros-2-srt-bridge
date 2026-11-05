@@ -579,3 +579,20 @@ a pending row. A five-second observation age or NOT_FOUND never manufactures a
 terminal result or permits replay. Three short N2 seeds exercise these diagnostics;
 they do not replace the full impaired qualification matrix. The freshness cutoff,
 start gates, workload and default DDS configuration remain unchanged.
+
+
+DDS command protocol v2 now supports receiver-backed expiry sealing. A
+`SEAL_EXPIRED` request can only close an unacknowledged intent in its original
+live sender/process/session, strictly after the stored deadline. An existing
+receiver record is returned unchanged; an absent ID is durably recorded as
+EXPIRED before replying, without dispatching. A later COMMAND cannot start that
+ID. After restarts or session rotation, old intents remain QUERY-only. Both DDS
+endpoints must rebuild; the SDK, SRT, wire v1 and IPC v3 are unchanged.
+
+The three short N2 probes now have zero unresolved intents: 76 successes and two
+authoritative expiries, kept separate. The five-minute N0 confirms 150/150 with
+150 effects. All 32 actual ROS GTests, 33 Python tests, DDS fault acceptance and
+a full M2 rebuild pass. N4 cross-session uncertainty and N5 simultaneous startup
+remain open. See [expiry-seal evidence](evidence/m3-dds-expiry-seal-2026-11-05/README.md).
+The extra DDS reconciliation semantics/costs still need SRT comparison parity;
+M3 remains incomplete.
