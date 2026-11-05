@@ -375,7 +375,12 @@ struct TransportOwner::Impl {
                 while(!stopping.load(std::memory_order_relaxed)){
                     timers();publish();process_checks();inputs();send(0);send(1);
                     if(links[0].ready){int events=SRT_EPOLL_ERR|(control_space()?SRT_EPOLL_IN:0);require(srt_epoll_update_usock(epoll,links[0].fd,&events)!=SRT_ERROR);}
-                    std::array<SRT_EPOLL_EVENT,4> events{};const int count=srt_epoll_uwait(epoll,events.data(),events.size(),10);
+                    // A 10 ms idle wait coalesces a 200 Hz producer into roughly 100 Hz
+                    // in the latest-only mailbox. The pinned provider also polls system
+                    // wake descriptors at 10 ms, so keep a bounded 1 ms sender cadence.
+                    // Disconnected/listener owners retain the quieter 10 ms wait.
+                    const int wait_ms=config.session.role==Role::caller&&session.state()==SessionState::active?1:10;
+                    std::array<SRT_EPOLL_EVENT,4> events{};const int count=srt_epoll_uwait(epoll,events.data(),events.size(),wait_ms);
                     if(count==SRT_ERROR){if(srt_getlasterror(nullptr)==SRT_ETIMEOUT)continue;throw std::runtime_error("epoll failed");}
                     for(int n=0;n<count;++n)for(unsigned i=0;i<2;++i){
                         if(events[n].fd==links[i].listener){if(events[n].events&SRT_EPOLL_ERR)throw std::runtime_error("listener failed");accept(i);}

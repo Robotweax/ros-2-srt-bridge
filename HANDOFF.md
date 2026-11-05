@@ -608,3 +608,44 @@ vollständig zählen; DDS Best Effort und Reliable mit demselben Journalvertrag
 implementieren; N3 DATA-/FEC-selektive deterministische Verluste und N4-Barrieren
 bauen; vollständige Dauer-/Seed-Matrix ausführen. Keine Leistungsüberlegenheit
 behaupten. M4 unverändert später; Parent-SRT nicht verändert.
+
+### M3 N0-Sensorlücken: Hauptursache behoben — 2026-11-05
+
+- 30-s-Attribution mit Quell-Diagnose: 5.461 IMU-/1.481 Joint-Ingress-Callbacks,
+  nur zwei BUSY-Abgaben, aber 2.633 Ersetzungen in der Sender-Mailbox. Im
+  beobachteten IMU-Span fehlen 2.650 Samples. Der 10-ms-Owner-Wait reduziert
+  eine 200-Hz-Quelle im Latest-only-Slot auf ungefähr 100 Hz.
+- Native 200-Hz-Regression reproduziert den alten Fehler (100 admitted,
+  48 delivered). Aktive Caller fordern jetzt 1 ms Epoll-Timeout an, Listener und
+  nicht aktive Caller weiter 10 ms (keine Scheduler-Laufzeitgarantie). Kein Busy-Spin, keine Queue-Vergrößerung,
+  keine gelockerten Clock-/Session-/Bandbreiten-/250-ms-Altersgates. Der gepinnte
+  SRT-Provider pollt System-Wake-Deskriptoren selbst nur alle 10 ms; der Parent-
+  SRT-Code und das qualifizierte Archiv wurden nicht verändert.
+- Neue ROS-Diagnose: Ingress pro Route und BUSY/obsolete-Abgaben. Der M3-Observer
+  bewahrt Quell-/Senken-/Simulator-Snapshots vor Stop. `gap_attribution` zeigt die
+  Stufen, ohne unterschiedlich getimte kumulative Zähler exakt zu bilanzieren.
+- Neuer Fünfminutenlauf `.local/m3/20261105T140142459719Z` bestanden:
+  IMU 52.793 erhalten, 741/53.534 im beobachteten Quellspan fehlen (1,38% statt
+  49,24%); Joint 29/14.576 fehlen (0,20% statt 6,27%). 150 Aufträge bestätigt,
+  genau 150 Effekte. Quelle zuletzt 48 BUSY und vier Mailbox-Ersetzungen;
+  Senke ohne Admission-Rejection/Stale/Unknown/Ersetzung. Restlücken bleiben offen.
+- CPU-Beobachtung auf derselben emulierten Linux-amd64-Baseline: Quelle etwa
+  17,35→22,39%, Senke 7,75→10,87% eines VM-Kerns bei erheblich mehr zugestellten
+  Daten. Keine kontrollierte Hardware-/DDS-Leistungsvergleichsaussage ableiten.
+- SDK-Vollregression `.local/m1/20261105T135638164666Z`: 15 Debug, 15 ASan/UBSan,
+  67 native, 10 native ASan/UBSan und Consumer bestanden. Erster San-Lauf blieb
+  an einer alten BUSY-Testannahme hängen, nicht an einem Sanitizer-Speicherfehler.
+  Reconnect-Negativtests wiederholen nur BUSY und verlangen den ersten anderen
+  Rückgabewert OBSOLETE; QUEUED alter Arbeit bleibt Fehler.
+- Originale M2-Demo `.local/m2/20261105T135416286568Z` bestanden. Sieben ROS- und
+  sieben Python-Tests bestanden. N5-Smoke unter höherer angebotener Last: sechs
+  von sieben Aufträgen vor Cutoff bestätigt, sieben Effekte, ein Ergebnis explizit
+  offen/zensoriert; keine falsche Erfolgsaussage und kein blindes Replay.
+- Evidenz inklusive fehlgeschlagener Regression und Vorher/Nachher-Runs:
+  `evidence/m3-sensor-cadence-2026-11-05/`. Source-/Artefakthashes erhalten;
+  neue vollständige N0-/SDK-/M2-Manifeste stimmen mit aktuellem Code überein.
+
+**Weiter offen:** verbleibende Rate-/Outbound-Queue-Verluste, exakter Diagnose-
+Tail und erreichte Quellrate; danach DDS-Baseline mit gleichem Journalvertrag,
+N3-Selektor, N4-Auftragsphasen und volle Seed-/Dauermatrix. M3 bleibt in Arbeit;
+Wire 1, privates IPC 3, M4 unverändert. Draft-PR #2 wird mit diesem Fix fortgeführt.

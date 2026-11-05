@@ -30,3 +30,8 @@ uint64[251] imu_age_upper_histogram_ms
 uint64[251] joint_age_upper_histogram_ms
 uint64 imu_age_upper_max_ns
 uint64 joint_age_upper_max_ns
+# Ingress at typed ROS callbacks, before validation/serialization.
+uint64 imu_ingress
+uint64 joint_ingress
+uint64 samples_submit_busy
+uint64 samples_submit_obsolete

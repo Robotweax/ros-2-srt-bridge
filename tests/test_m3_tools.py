@@ -9,7 +9,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_network import PROFILES, SEEDS
 from m3_capture import classify, summarize
-from m3_results import percentiles, summarize_commands, summarize_resources
+from m3_results import percentiles, summarize_commands, summarize_resources, summarize_gaps
 
 
 class ProfileTests(unittest.TestCase):
@@ -55,6 +55,18 @@ class ResultTests(unittest.TestCase):
         self.assertEqual(result['unresolved'],1);self.assertEqual(result['not_admitted'],1)
         self.assertEqual(result['terminal_observation_latency_ms']['maximum'],1)
         self.assertIsNone(percentiles([])['p99'])
+
+    def test_missing_source_instrumentation_is_unknown(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result=dict(final_bridge_state={},source_marker_spans={'imu':100},missing_within_observed_source_span={'imu':40})
+            before=summarize_gaps(directory,result)
+            self.assertIsNone(before['source_snapshot'])
+            source=dict(observed_monotonic_ns=50,bridge=dict(imu_ingress=100,transport_sensor_replaced=39))
+            (Path(directory)/'robot-final-bridge-state.json').write_text(json.dumps(source))
+            after=summarize_gaps(directory,result)
+            self.assertEqual(after['source_snapshot']['transport_sensor_replaced'],39)
+            self.assertIsNone(after['source_snapshot']['samples_submit_busy'])
+            self.assertIn('not an exact',after['scope'])
 
     def test_process_identity_and_cpu_accounting(self):
         with tempfile.TemporaryDirectory() as directory:

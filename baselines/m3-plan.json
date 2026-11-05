@@ -81,7 +81,7 @@
     "N4 admission/dispatch/result-commit barriers",
     "complete three-seed full-duration comparison matrix",
     "final exact measurement-window/tail accounting and achieved source-rate qualification",
-    "attribute substantial N0 source-to-wire sample gaps before throughput qualification"
+    "attribute residual N0 gaps and finish exact source/window accounting; major 10ms mailbox cadence loss is fixed"
   ],
   "qualification": "Development evidence only; no M3 acceptance or SRT performance advantage claimed",
   "environment": {
@@ -90,5 +90,24 @@
     "tc_version": "6.17.0",
     "iproute2_source_sha256": "9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec"
   },
-  "evidence": "evidence/m3-network-harness-2026-11-05"
+  "evidence": "evidence/m3-network-harness-2026-11-05",
+  "sensor_cadence_followup": {
+    "status": "major local loss fixed; M3 remains in progress",
+    "evidence": "evidence/m3-sensor-cadence-2026-11-05",
+    "active_caller_wait_ms": 1,
+    "other_owner_wait_ms": 10,
+    "before_5min": {
+      "imu_span": 54311,
+      "imu_missing": 26742
+    },
+    "after_5min": {
+      "imu_span": 53534,
+      "imu_missing": 741,
+      "joint_span": 14576,
+      "joint_missing": 29,
+      "confirmed_commands": 150,
+      "effects": 150
+    },
+    "native_delivery_gate": "200 Hz, >=80% of admitted samples on the qualified Linux test profile"
+  }
 }

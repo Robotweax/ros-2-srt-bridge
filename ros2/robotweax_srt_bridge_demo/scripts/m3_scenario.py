@@ -199,6 +199,17 @@ class Benchmark(Driver):
         result['shutdowns']=self.shutdowns
         write(self.run/'operator-result.json',result)
 
+    def stop(self, process):
+        # Preserve the sender's final observed diagnostics before it disappears.
+        # These are explicitly snapshots, not an exact shutdown tail count.
+        from rosidl_runtime_py.convert import message_to_ordereddict
+        if process is self.bridge and self.state is not None:
+            write(self.run/(self.args.role+'-final-bridge-state.json'),dict(
+                observed_monotonic_ns=self.last_diagnostic[1],bridge=message_to_ordereddict(self.state)))
+        if process is self.sim and self.device is not None:
+            write(self.run/'robot-final-device-state.json',message_to_ordereddict(self.device))
+        super().stop(process)
+
     def cleanup(self):
         super().cleanup()
         self.resources.close()

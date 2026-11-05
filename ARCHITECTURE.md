@@ -763,6 +763,18 @@ Diagnosesnapshots, einschließlich Start-/Transienten, als konservative Obergren
 in aufgerundeten 1-ms-Buckets. Der Diagnose-Tail und nicht zugestellte Samples
 werden nicht als günstige Messwerte interpretiert. Admission-Stale und Unknown-
 Age sind separat sichtbar; eine vollständige Verlustzuordnung aller lokalen
-Queues und Poll-Gates fehlt noch. Das N0-Ergebnis enthält erhebliche Lücken vor
+Queues und Poll-Gates fehlt noch. Das erste N0-Ergebnis enthält erhebliche Lücken vor
 WAN trotz niedriger Alterswerte der zugestellten Samples. Damit ist weder die
 Sollrate erreicht belegt noch eine M3-Leistungsabnahme erfolgt.
+
+
+M3-Cadence-Follow-up: Der 10-ms-Timeout des aktiven Caller-Owners ersetzt im
+Latest-only-Eingang einen großen Teil einer 200-Hz-Quelle. Ein nativer
+200-Hz-Test reproduziert das Verhalten. Aktive Caller fordern jetzt 1 ms
+Epoll-Timeout an, andere Zustände/Listener weiter 10 ms; dies ist keine maximale
+Scheduler-Laufzeitgarantie. Queue-/Budget-/Frischeverträge bleiben unverändert.
+Ingress pro Route, BUSY/obsolete-Abgaben und finale Observer-Snapshots ergänzen
+die Zuordnung. Der neue Fünfminutenlauf reduziert IMU-Lücken im beobachteten
+Quellspan von 49,24% auf 1,38% bei 150 bestätigten Aufträgen/150 Effekten.
+CPU-Kosten, Restlücken und Grenzen stehen in
+`evidence/m3-sensor-cadence-2026-11-05/`; M3 ist weiterhin nicht abgenommen.

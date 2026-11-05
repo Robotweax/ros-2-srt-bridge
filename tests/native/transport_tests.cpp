@@ -29,6 +29,29 @@ TransportConfig config(Role role,const std::string& ip,const std::string& key){
 }
 void ready(TransportOwner& a,TransportOwner& b){try{until([&]{return a.snapshot().state==SessionState::active&&b.snapshot().state==SessionState::active;},"session not active");}catch(...){for(auto* owner:{&a,&b}){const auto s=owner->snapshot();std::cerr<<"state="<<int(s.state)<<" fault="<<int(s.fault)<<" running="<<s.running<<" gen="<<s.context.control_generation<<","<<s.context.sensor_generation<<" retry="<<int(s.control_retry)<<","<<int(s.sensor_retry)<<" tx/rx/reject="<<s.sent<<","<<s.received<<","<<s.rejected<<"\n";}throw;}}
 void stop(TransportOwner& owner){const auto begin=TransportOwner::monotonic_ns();owner.request_stop();owner.join();check(TransportOwner::monotonic_ns()-begin<5ULL*1000000000,"shutdown exceeded five seconds");check(!owner.snapshot().running&&owner.snapshot().state==SessionState::stopped,"not stopped");owner.join();}
+// The advertised 200 Hz route must not be decimated by the owner's idle wait.
+// A relative delivery gate leaves scheduling slack on the qualified Linux VM.
+void cadence(TransportOwner& caller,TransportOwner& listener){
+    std::atomic<unsigned> admitted{0};
+    std::array<std::byte,8> payload{};
+    const auto start=TransportOwner::monotonic_ns();
+    std::thread producer([&]{
+        const auto origin=std::chrono::steady_clock::now();
+        for(unsigned n=0;n<100;++n){
+            std::this_thread::sleep_until(origin+std::chrono::milliseconds(5*n));
+            if(caller.submit_sample(caller.snapshot().context,1,payload,TransportOwner::monotonic_ns())==SubmitResult::queued)++admitted;
+        }
+    });
+    unsigned delivered=0;TransportMessage sample;
+    while(TransportOwner::monotonic_ns()-start<800000000ULL){
+        if(listener.poll_sample(sample)&&listener.authorize_sample(sample))++delivered;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    producer.join();
+    std::cout<<"cadence admitted="<<admitted.load()<<" delivered="<<delivered<<'\n';
+    check(admitted.load()>=80,"200 Hz producer could not enter bounded mailbox");
+    check(delivered*10>=admitted.load()*8,"200 Hz route decimated by transport owner cadence");
+}
 void lifecycle(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();auto listener_config=config(Role::listener,ip,key);
     auto listener=std::make_unique<TransportOwner>(listener_config);
@@ -48,6 +71,7 @@ void lifecycle(bool ipv6){
     check(caller.submit_sample(old,1,payload,TransportOwner::monotonic_ns()-300000000)==SubmitResult::invalid,"expired ingress admitted");
     check(caller.submit_sample(old,1,payload,TransportOwner::monotonic_ns()+1000000000)==SubmitResult::invalid,"future ingress admitted");
     check(caller.submit_sample(old,999,payload,TransportOwner::monotonic_ns())==SubmitResult::invalid,"unknown route admitted");
+    cadence(caller,*listener);
     const auto request=random_identity();
     until([&]{return listener->submit_query(listener->snapshot().context,100,request)==SubmitResult::queued;},"query enqueue failed");
     until([&]{return caller.poll_control(message);},"query not received");
@@ -89,8 +113,11 @@ void lifecycle(bool ipv6){
     stop(*listener);check(!listener->authorize_sample(held),"held sample authorized after stop");listener.reset();listener_config.control.port=bound.control_port;listener_config.sensor.port=bound.sensor_port;
     listener_config.session.local_epoch=random_identity();listener=std::make_unique<TransportOwner>(listener_config);
     until([&]{return caller.snapshot().context.session!=old.session&&caller.snapshot().state==SessionState::active&&listener->snapshot().state==SessionState::active;},"full reconnect failed",12000);
-    check(caller.submit_sample(old,1,payload,TransportOwner::monotonic_ns())==SubmitResult::obsolete,"old sample work survived reconnect");
-    check(caller.submit_status(old,100,request,status)==SubmitResult::obsolete,"old worker result survived reconnect");
+    SubmitResult old_sample=SubmitResult::busy,old_status=SubmitResult::busy;
+    until([&]{old_sample=caller.submit_sample(old,1,payload,TransportOwner::monotonic_ns());return old_sample!=SubmitResult::busy;},"old sample admission stayed busy");
+    check(old_sample==SubmitResult::obsolete,"old sample work survived reconnect");
+    until([&]{old_status=caller.submit_status(old,100,request,status);return old_status!=SubmitResult::busy;},"old status admission stayed busy");
+    check(old_status==SubmitResult::obsolete,"old worker result survived reconnect");
     until([&]{return caller.submit_sample(caller.snapshot().context,1,payload,TransportOwner::monotonic_ns())==SubmitResult::queued;},"new session sample enqueue failed");
     until([&]{return listener->poll_sample(message);},"new session sample missing");check(message.envelope.sequence>2,"source sequence reset on reconnect");
     // Concurrent producers cannot grow mailbox storage or make callbacks wait on

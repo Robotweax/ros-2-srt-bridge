@@ -35,13 +35,14 @@ class BridgeNode final:public rclcpp::Node {
     rb::PublicationMetrics imu_metrics_,joint_metrics_;
     std::uint32_t max_clock_interval_ms_=50;
     core::Identity imu_session_{},joint_session_{};
+    std::uint64_t imu_ingress_=0,joint_ingress_=0,submit_busy_=0,submit_obsolete_=0;
     std::uint64_t ingress_=0,published_=0,invalid_=0,oversize_=0,stale_=0,context_=0,imu_seq_=0,joint_seq_=0;
     Cached& cache(const std::array<std::uint8_t,16>& id,std::uint32_t route){for(auto& c:cache_)if(c.used&&c.status.request_id==id&&c.status.route_id==route)return c;auto& c=cache_[cursor_];cursor_=(cursor_+1)%cache_.size();c={};c.used=true;c.status.request_id=id;c.status.route_id=route;return c;}
-    template<class T> void ingress(std::uint32_t route,const T& message){const auto origin=core::TransportOwner::monotonic_ns();++ingress_;
+    template<class T> void ingress(std::uint32_t route,const T& message){const auto origin=core::TransportOwner::monotonic_ns();++ingress_;if constexpr(std::is_same_v<T,Imu>)++imu_ingress_;else ++joint_ingress_;
         bool large=message.header.frame_id.size()>64;
         if constexpr(std::is_same_v<T,Joints>){large=large||message.name.size()>6||message.position.size()>6||message.velocity.size()>6||message.effort.size()>6;for(const auto& n:message.name)large=large||n.size()>64;}
         if(large){++oversize_;return;}if(!rb::valid(message)){++invalid_;return;}rb::SensorBytes encoded;if(!rb::encode(message,encoded)){++invalid_;return;}
-        const auto result=endpoint_->transport().submit_sample(endpoint_->transport().snapshot().context,route,std::span(encoded.bytes).first(encoded.size),origin);if(result!=core::SubmitResult::queued)++context_;
+        const auto result=endpoint_->transport().submit_sample(endpoint_->transport().snapshot().context,route,std::span(encoded.bytes).first(encoded.size),origin);if(result!=core::SubmitResult::queued){++context_;if(result==core::SubmitResult::busy)++submit_busy_;if(result==core::SubmitResult::obsolete)++submit_obsolete_;}
     }
     void events(){core::CommandEvent event;for(unsigned n=0;n<16&&endpoint_->poll(event);++n){std::array<std::uint8_t,16> id{};for(std::size_t i=0;i<16;++i)id[i]=std::to_integer<unsigned>(event.request_id[i]);auto& c=cache(id,event.route).status;
         c.query_queued=false;c.local_error=unsigned(event.error);c.peer_error=event.peer_error?unsigned(event.peer_error->code):0;
@@ -55,6 +56,7 @@ class BridgeNode final:public rclcpp::Node {
         else{++invalid_;continue;}++published_;
     }}
     void state(){const auto snapshot=endpoint_->snapshot();msgs::msg::BridgeState s;s.ready=snapshot.ready;s.sensor_qos_verified=sensor_qos_verified_;s.clock_qualified=snapshot.transport.clock_qualified;s.session_state=unsigned(snapshot.transport.state);s.fault=unsigned(snapshot.fault);s.worker_fault=unsigned(snapshot.worker_fault);for(std::size_t i=0;i<16;++i)s.session_id[i]=std::to_integer<unsigned>(snapshot.transport.context.session[i]);s.control_generation=snapshot.transport.context.control_generation;s.sensor_generation=snapshot.transport.context.sensor_generation;s.samples_ingress=ingress_;s.samples_published=published_;s.invalid_samples=invalid_;s.oversize_samples=oversize_;s.stale_samples=stale_;s.context_drops=context_;s.imu_sequence=imu_session_==snapshot.transport.context.session?imu_seq_:0;s.joint_sequence=joint_session_==snapshot.transport.context.session?joint_seq_:0;s.commands_sent=snapshot.commands_sent;s.queries_sent=snapshot.queries_sent;s.peer_errors=snapshot.peer_errors;
+        s.imu_ingress=imu_ingress_;s.joint_ingress=joint_ingress_;s.samples_submit_busy=submit_busy_;s.samples_submit_obsolete=submit_obsolete_;
         s.max_clock_interval_ms=max_clock_interval_ms_;s.transport_samples_received=snapshot.transport.samples_received;s.transport_samples_rejected=snapshot.transport.samples_rejected;s.transport_samples_unknown_age=snapshot.transport.samples_unknown_age;s.transport_samples_stale=snapshot.transport.samples_stale;s.transport_sensor_replaced=snapshot.transport.sensor_replaced;s.transport_rejected=snapshot.transport.rejected;
         s.imu_age_upper_histogram_ms=imu_metrics_.age_upper_ms;s.joint_age_upper_histogram_ms=joint_metrics_.age_upper_ms;s.imu_age_upper_max_ns=imu_metrics_.maximum_ns;s.joint_age_upper_max_ns=joint_metrics_.maximum_ns;diagnostics_->publish(s);}
 public:

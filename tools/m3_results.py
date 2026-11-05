@@ -39,3 +39,22 @@ def summarize_commands(commands):
         terminal_observation_latency_ms=percentiles([(c['result_observed_monotonic_ns']-c['submitted_monotonic_ns'])/1e6 for c in finalized]),
         by_state_reason={key:percentiles(values) for key,values in groups.items()},
         scope='local Execute invocation to terminal status observation; includes up to 200ms status polling; unresolved attempts excluded and counted separately')
+
+
+def summarize_gaps(run, result):
+    """Expose stage snapshots without pretending their different tails balance."""
+    run=Path(run)
+    source_file=run/'robot-final-bridge-state.json'
+    source=json.loads(source_file.read_text()) if source_file.exists() else None
+    device_file=run/'robot-final-device-state.json'
+    device=json.loads(device_file.read_text()) if device_file.exists() else None
+    fields=('imu_ingress','joint_ingress','samples_submit_busy','samples_submit_obsolete',
+            'invalid_samples','oversize_samples','context_drops','transport_sensor_replaced')
+    return dict(source_marker_spans=result.get('source_marker_spans'),
+        missing_within_observed_source_span=result.get('missing_within_observed_source_span'),
+        source_snapshot=({key:source['bridge'].get(key) for key in fields} if source else None),
+        source_snapshot_observed_monotonic_ns=source.get('observed_monotonic_ns') if source else None,
+        device_snapshot=device,
+        sink_admission={key:result['final_bridge_state'].get(key) for key in
+            ('transport_samples_received','transport_samples_rejected','transport_samples_unknown_age','transport_samples_stale','transport_sensor_replaced')},
+        scope='cumulative snapshots have different startup/tail boundaries; stage counts are not an exact conservation equation')

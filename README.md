@@ -417,3 +417,13 @@ than silently omitting packets. Raw pcap files and journals stay ignored locally
 These are SRT development measurements. N3, the fully journaled DDS baseline,
 the three-seed duration matrix, and final window/rate qualification must pass
 before an M3 comparison or performance claim is accepted.
+
+The [sensor-cadence follow-up](evidence/m3-sensor-cadence-2026-11-05/README.md)
+identifies a major N0 gap cause: a 10 ms owner wait coalesced the 200 Hz producer
+in a latest-only mailbox. Active callers now use a bounded 1 ms wait. Five-minute
+N0 IMU gaps fell from 49.24% to 1.38% within observed source-counter spans, with
+all 150 commands confirmed. CPU observations and remaining gaps are disclosed;
+this is not a lossless/full-rate or DDS performance claim. Per-route ingress and
+BUSY/obsolete submission counts plus final test-observer snapshots help attribute
+remaining losses. The latest follow-up evidence supersedes the earlier open
+hypothesis about the major gap cause while preserving the original measurements.
