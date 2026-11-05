@@ -80,7 +80,7 @@
     "bounded command result drain with per-row cutoff flag"
   ],
   "pending_gates": [
-    "combined journaled DDS sensor/command workload with equivalent clock/security and impairment qualification",
+    "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
     "N3 deterministic source-DATA fault selector",
     "N4 admission/dispatch/result-commit barriers",
     "complete three-seed full-duration comparison matrix",
@@ -141,7 +141,7 @@
     "measurement": "source-fenced enabled-window production/receive/accept/reject deltas; no source/WAN stage attribution",
     "age": "same-VM realtime-header estimate; not equivalent to conservative SRT clock bounds",
     "remaining": [
-      "combine implemented journaled Reliable coordinator with steady sensor workload",
+      "qualify implemented combined workload under impairment, age and security gates",
       "matched command workload, crypto, age-clock and CPU/wire scope",
       "full seed/duration matrix"
     ],
@@ -178,6 +178,29 @@
     "retired_link_capacity": 64,
     "cross_host_clock_qualified": false,
     "dds_encryption_qualified": false,
+    "complete_m3_acceptance": false
+  },
+  "dds_combined_followup": {
+    "status": "steady workload implemented; full N0 command completion demonstrated; impairment/age gates open",
+    "runner": "tools/run_m3_dds.py --commands",
+    "evidence": "evidence/m3-dds-combined-2026-11-05",
+    "n0_run": "20261105T183834692545Z",
+    "n0_seconds": 300.127383179,
+    "n0_confirmed": 150,
+    "n0_effects": 150,
+    "n0_imu_hz": 199.97842037693664,
+    "n0_joint_hz": 50.002101911006314,
+    "n0_produced": 75026,
+    "n0_received": 75025,
+    "n0_age_estimates_qualified": false,
+    "n1_non_admitted": 1,
+    "n2_unresolved": 1,
+    "n4_unresolved": 1,
+    "n5_status": "cold-start sender readiness timeout; no measurement window",
+    "ros_gtests": 19,
+    "python_tests": 27,
+    "incoming_contention_loss_fixed": true,
+    "sdk_source_changed": false,
     "complete_m3_acceptance": false
   }
 }

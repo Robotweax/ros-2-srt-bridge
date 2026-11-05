@@ -1,5 +1,9 @@
 #include <robotweax_srt_bridge/dds_command_session.hpp>
 #include <gtest/gtest.h>
+#include <robotweax_srt_bridge/dds_inbox.hpp>
+#include <barrier>
+#include <thread>
+#include <atomic>
 namespace rb=robotweax::ros_bridge;
 namespace core=robotweax::srt_bridge;
 namespace {
@@ -9,6 +13,19 @@ struct Pair {
     rb::DdsCommandSession a{true,id(1),id(2),proof()},b{false,id(3),id(4),proof()};
     Pair(){EXPECT_TRUE(a.hello(id(3),id(4),{},{},proof(),1,100,100));EXPECT_TRUE(b.hello(id(1),id(2),{},{},proof(),1,100,100));EXPECT_EQ(a.session(),b.session());EXPECT_TRUE(a.hello(id(3),id(4),id(2),b.session(),proof(),2,101,101));EXPECT_TRUE(b.hello(id(1),id(2),id(4),a.session(),proof(),2,101,101));}
 };
+TEST(DdsInbox,ConcurrentReceivedFramesAreNotDroppedOnMutexContention){
+    struct Task {unsigned id=0;std::array<std::byte,512> payload{};};
+    for(unsigned run=0;run<16;++run){
+        rb::DdsInbox<Task> inbox;std::barrier start(8);std::array<std::thread,8> threads;
+        std::atomic<unsigned> admitted=0;
+        for(unsigned n=0;n<threads.size();++n)threads[n]=std::thread([&,n]{start.arrive_and_wait();for(unsigned i=0;i<8;++i){Task task;task.id=n*8+i;if(inbox.receive(task))++admitted;}});
+        for(auto& thread:threads)thread.join();
+        EXPECT_EQ(admitted,64U);EXPECT_FALSE(inbox.receive({}));
+        std::array<bool,64> seen{};Task task;unsigned count=0;
+        while(inbox.pop(task)){ASSERT_LT(task.id,seen.size());EXPECT_FALSE(seen[task.id]);seen[task.id]=true;++count;}
+        EXPECT_EQ(count,64U);EXPECT_TRUE(inbox.try_push({}));EXPECT_TRUE(inbox.pop(task));
+    }
+}
 TEST(DdsSession,RequiresNamespaceAcknowledgmentAndFreshMonotonicLease){
     rb::DdsCommandSession a{true,id(1),id(2),proof()};
     EXPECT_FALSE(a.hello(id(3),id(4),{},{},proof(2),1,100,100));

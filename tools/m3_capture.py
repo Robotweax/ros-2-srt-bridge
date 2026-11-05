@@ -45,7 +45,7 @@ def summarize(paths, local_address, *, allow_udp_fragments=False):
                 if included<original:issues['snaplen_truncated']+=1;continue
                 if len(frame)<34 or frame[12:14]!=b'\x08\x00':issues['non_ipv4_or_short']+=1;continue
                 ip=frame[14:];length=(ip[0]&15)*4
-                if ip[0]>>4!=4 or length<20 or len(ip)<length+8:issues['invalid_ip_header']+=1;continue
+                if ip[0]>>4!=4 or length<20 or len(ip)<length:issues['invalid_ip_header']+=1;continue
                 if ip[9]!=17:issues['non_udp']+=1;continue
                 source=str(ipaddress.ip_address(ip[12:16]));destination=str(ipaddress.ip_address(ip[16:20]))
                 direction='out' if source==local_address else 'in' if destination==local_address else 'other'
@@ -56,7 +56,8 @@ def summarize(paths, local_address, *, allow_udp_fragments=False):
                     # captured frame, without pretending continuation fragments
                     # expose UDP headers or RTPS payload classification.
                     total=struct.unpack_from('!H',ip,2)[0]
-                    if total<length or total>len(ip):issues['invalid_fragment_length']+=1;continue
+                    payload_length=total-length
+                    if payload_length<=0 or total>len(ip) or (fragment&0x2000 and payload_length%8) or (not fragment&0x1fff and payload_length<8):issues['invalid_fragment_length']+=1;continue
                     if not fragment&0x1fff:
                         sp,dp=struct.unpack_from('!HH',ip,length)
                         if 10080 in (sp,dp) or 10081 in (sp,dp):issues['fragmented_srt']+=1
@@ -65,6 +66,7 @@ def summarize(paths, local_address, *, allow_udp_fragments=False):
                     row['udp_payload_bytes']=None
                     row['ip_fragment_payload_bytes']=row.get('ip_fragment_payload_bytes',0)+total-length
                     continue
+                if len(ip)<length+8:issues['invalid_udp_length']+=1;continue
                 udp=ip[length:];sp,dp,udp_length=struct.unpack_from('!HHH',udp)
                 if udp_length<8 or udp_length>len(udp):issues['invalid_udp_length']+=1;continue
                 payload=udp[8:udp_length];kind=classify(payload,sp,dp)

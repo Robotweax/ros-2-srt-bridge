@@ -1,4 +1,5 @@
 #include <robotweax_srt_bridge/dds_command_session.hpp>
+#include <robotweax_srt_bridge/dds_inbox.hpp>
 #include <robotweax_srt_bridge/ros_rate_backend.hpp>
 #include <robotweax_srt_bridge_msgs/msg/dds_command_frame.hpp>
 #include <robotweax_srt_bridge_msgs/msg/dds_command_state.hpp>
@@ -33,25 +34,26 @@ class DdsCommandNode final:public rclcpp::Node {
     rclcpp::Service<Execute>::SharedPtr execute_;rclcpp::Service<Get>::SharedPtr get_;
     rclcpp::TimerBase::SharedPtr state_timer_;
     struct Task {unsigned kind=0;core::Identity id{},session{};core::RateCommand command{};std::uint64_t origin=0;bool refresh=false;Frame frame{};};
-    std::mutex inbox_mutex_;std::array<Task,64> inbox_{};std::size_t head_=0,count_=0;
+    rb::DdsInbox<Task> inbox_;
     struct Cached {bool used=false;Status value{};};std::mutex cache_mutex_;std::array<Cached,64> cache_{};std::size_t cursor_=0;
     struct Receipt {std::uint64_t sequence=0;core::Identity id{},session{};};std::array<Receipt,64> receipts_{};std::size_t receipt_cursor_=0;
     std::uint64_t sequence_=0;
     std::thread worker_;
     bool fresh(core::Identity id){std::lock_guard lock(authority_);return !stop_&&!failed_&&session_.fresh(id,mono_ns());}
     core::Identity context(){std::lock_guard lock(authority_);return session_.session();}
-    void tick(){std::lock_guard lock(authority_);session_.tick(mono_ns(),core::random_identity());if(session_.failed())failed_=true;}
-    bool push(Task task){std::unique_lock lock(inbox_mutex_,std::try_to_lock);if(!lock.owns_lock()||count_==inbox_.size())return false;inbox_[(head_+count_++)%inbox_.size()]=std::move(task);return true;}
-    bool pop(Task& task){std::lock_guard lock(inbox_mutex_);if(!count_)return false;task=std::move(inbox_[head_]);inbox_[head_]={};head_=(head_+1)%inbox_.size();--count_;return true;}
+    void tick(){const auto replacement=core::random_identity();std::lock_guard lock(authority_);session_.tick(mono_ns(),replacement);if(session_.failed())failed_=true;}
+    bool push(Task task){return inbox_.try_push(std::move(task));}
+    bool pop(Task& task){return inbox_.pop(task);}
     Cached& slot(core::Identity id){for(auto& item:cache_)if(item.used&&bytes(item.value.request_id)==id)return item;auto& item=cache_[cursor_++%cache_.size()];item={};item.used=true;item.value.request_id=octets(id);item.value.route_id=100;return item;}
     void cache(core::Identity id,const core::JournalResult& r){if(r.error==core::JournalError::storage||r.error==core::JournalError::corrupt){++errors_;failed_=true;}std::lock_guard lock(cache_mutex_);auto& s=slot(id).value;if(r.entry)s=status(*r.entry);s.local_error=unsigned(r.error);s.query_queued=false;}
     void receive(const Frame& f){
-        std::unique_lock lock(authority_,std::try_to_lock);if(!lock.owns_lock()){++drops_;return;}
-        const auto time=mono_ns();session_.tick(time,core::random_identity());
+        const auto replacement=core::random_identity();
+        std::unique_lock lock(authority_);
+        const auto time=mono_ns();session_.tick(time,replacement);
         const auto process=bytes(f.process_epoch),link=bytes(f.link_epoch),target=bytes(f.target_link),sid=bytes(f.session_id);const auto proof=bytes(f.clock_namespace);
         if(f.kind==Frame::HELLO){if(!session_.hello(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time))++rejected_;if(session_.failed())failed_=true;return;}
         if((sender_?f.kind!=Frame::STATUS&&f.kind!=Frame::ERROR:f.kind!=Frame::COMMAND&&f.kind!=Frame::QUERY)||f.route_id!=100||bytes(f.request_id)==core::Identity{}||!session_.frame(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time)){++rejected_;return;}
-        lock.unlock();Task t;t.kind=3;t.frame=f;if(!push(std::move(t)))++drops_;
+        lock.unlock();Task t;t.kind=3;t.frame=f;if(!inbox_.receive(std::move(t)))++drops_;
     }
     Frame frame(unsigned kind){Frame f;f.kind=kind;std::lock_guard lock(authority_);f.process_epoch=octets(process_);f.link_epoch=octets(session_.link());f.target_link=octets(session_.peer_link());f.session_id=octets(session_.session());f.clock_namespace=octets(session_.clock());return f;}
     bool send(Frame f,bool track=false){

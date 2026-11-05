@@ -828,3 +828,27 @@ blockierender Handler kann ausgehende HELLOs verzögern und Session konservativ
 rotieren. Keine Durchsatz-/Verfügbarkeitsüberlegenheit ableiten. Gemeinsame stetige
 Sensor-/Auftragslast, Crypto-/Clock-/CPU-/Wire-Gleichheit und volle Matrix bleiben
 M3-Gates. Evidenz: `evidence/m3-dds-commands-2026-11-05/`.
+
+M3-DDS-Kombinationslauf: `tools/run_m3_dds.py --commands` betreibt dieselbe stetige
+200/50-Hz-Sensorquelle plus absolute 200-Hz-Absichten alle 2 s. Ein offener Auftrag
+blockiert weitere Arbeit, UNKNOWN führt nicht zu Replay. Freie Slots werden auch
+bei NOT_READY an Execute angeboten und als Non-Admission erfasst. Vor Messbeginn
+müssen beide Journal-Koordinatoren bereit und ihre Auftragshistorien leer sein.
+Cutoff stoppt neue Absichten, maximal 8 s Ergebnis-Drain danach; separate Device-
+Fence für Effekte/Generation, unveränderte Sensorzähler und Owner-Epochen geprüft.
+Cumulative 100-ms-Auftragsdiagnosen sind kein exaktes Pipeline-Ledger.
+
+Ein langer N0 machte Try-Lock-Verluste schon empfangener DDS-Frames sichtbar.
+Der Callback serialisiert nun kurze Validierungs-/Kopierabschnitte; keine Disk-,
+Handler- oder Netzoperation unter diesen Mutexen. Inbox bleibt 64 Slots, echte
+Kapazitätsverluste gezählt; lokale Service-Admission bleibt Try-Lock/BUSY. Lease,
+Deadline und No-Replay unverändert. Parallelproduzenten-GTest prüft 64 Aufnahmen.
+Capture behandelt gültige 4-Byte-Endfragmente als IP-Fragmente ohne UDP-Header;
+SRT verwirft Fragmente weiterhin standardmäßig, alte SRT-Summaries sind identisch.
+
+Finales N0: 150 bestätigt/150 Effekte, keine Inbox-Drops, Ist 199,978/50,002 Hz;
+75.026 produziert/75.025 empfangen, ein IMU vor Callback fehlt. Altersmetriken
+nach Clock-Schritt unqualifiziert. N1 hat Non-Admission, N2/N4 je ein offenes
+Intent, N5 erreicht im belasteten Cold-Start keine Bereitschaft. Diese Grenzen
+werden nicht durch Queue-/Lease-/Clock-Lockerung oder Replay grün gemacht.
+M3 bleibt offen; Evidenz `evidence/m3-dds-combined-2026-11-05/`.

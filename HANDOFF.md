@@ -774,3 +774,56 @@ N0/N1/N2/N4/N5 mit denselben Fenstern, CPU-/Wire-Scope und Ergebnis-Drain wie SR
 qualifizieren; Clock-Ursprung/-Grenzen und Kryptografie vergleichbar machen.
 N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-Barrieren und volle
 Seed-/Dauermatrix offen. M3 bleibt in Arbeit, PR #2 Draft; keine M4-Änderung.
+
+### M3 stetige DDS-Sensor-/Auftragslast zusammengeführt — 2026-11-05
+
+- `tools/run_m3_dds.py --commands`: Quelle 200/50 Hz, absolute 200-Hz-Aufträge
+  alle 2 s. Ein Pending, keine Catch-up-Bursts, UNKNOWN/Pending blockiert weitere
+  Absichten. Freie Slots fragen Execute trotz NOT_READY-Diagnose an; explizite
+  Non-Admissions werden gezählt. Sensor-only ohne Flag bleibt erhalten.
+- Vor Beginn beide Journal-Koordinatoren bereit, keine Auftragshistorie/Effekte.
+  Sensor-Fences unverändert; Cutoff stoppt neue Aufträge, Ergebnisbeobachtung
+  maximal bis Cutoff+8 s, danach eingefroren. Separate letzte Device-Fence für
+  Effekte/Generation; Sensorzähler dürfen nicht mehr steigen. Owner-Epochen
+  müssen gleich bleiben. Auftragsdiagnosen behalten 100-ms-Snapshot-Scope.
+- Erster langer Lauf `20261105T181542377101Z`: nur zwei bestätigt/ein offener
+  Auftrag, Sender/Empfänger mit 30/18 Callback-Drops. Code konnte schon empfangene
+  Reliable-Frames bei Try-Lock-Contention verlieren. Kurze Validierungs-/Kopier-
+  abschnitte serialisieren jetzt, ohne Disk/Handler/Netz unter Mutex. Inbox bleibt
+  64; voller Puffer zählt Drop. Lokale Service-Admission bleibt Try-Lock/BUSY.
+  Neuer Parallelproduzenten-Test prüft 64 Aufnahmen ohne Contention-Verlust.
+  Keine Queue-, Lease-, Clock- oder Deadline-Lockerung und kein Intent-Replay.
+- N1-Capture deckte gültiges 4-Byte-Endfragment auf: es besitzt keinen UDP-Header.
+  Parser prüft IP-/Fragment-Länge und MF-Ausrichtung, verlangt UDP-Header nur wo
+  vorhanden. Regression getestet; alte SRT-N0-Summaries weiter identisch. Alte
+  Manifeste unverändert; separate Reanalyse dokumentiert den Fix.
+- Finales N0 `.local/m3-dds-combined/20261105T183834692545Z`: 300,127 s, Ist
+  199,978/50,002 Hz, 75.026 erzeugt/75.025 empfangen, ein IMU fehlt vor Callback.
+  150/150 bestätigt und 150 Effekte, keine Inbox-Drops. Beide geschlossenen
+  Journale quick_check ok, dieselben 150 Payload-Hashes/Revisionen 3/SUCCEEDED,
+  Rate 200 und Generationen 1–150. Alter nach Clock-Schritt unqualifiziert:
+  54.313 IMU/13.580 Joint-Callbacks clock-rejected; empfangene Callbacks, kein
+  isoliertes Netzverlustmaß.
+- Finale Smokes, jeweils 15 s und Seed 1701:
+  N1 `20261105T184311488522Z`: 7/8 bestätigt, eine Non-Admission, sieben Effekte.
+  N2 `20261105T184014775290Z`: 1/2 bestätigt, ein Pending, sechs Slots blockiert.
+  N4 `20261105T184051558249Z`: 4/5 bestätigt, ein Pending, drei Slots blockiert;
+  mittiges Kernel-Outage, keine präzisen Auftragsphasen-Barrieren.
+  N5 `20261105T184126432851Z`: fehlgeschlagen nach 45 s Sender-Ready-Wartezeit im
+  Cold-Start unter dem unveränderten 512-kbit/128K-Konkurrenz-Profil; kein Messfenster.
+  Nicht als vollständige Auftrags-/M3-Abnahme auslegen, keine Nullwerte erfinden.
+- Korrigierter C++-Build `20261105T182432483577Z`: 19 echte ROS-GTests, 22 mit
+  Wrappern bestanden. 27 Python-Tests bestanden. Finale Sensor-only-Regresssion
+  `.local/m3-dds/20261105T184339550820Z` und DDS-Fault-Acceptance
+  `.local/m3-dds-commands/20261105T184405437225Z` bestanden. Finale Läufe verwenden
+  dieses aufgezeichnete Binary wieder; alle 136 Sourcehashes passen, installierte
+  Python-Dateien bytegleich. SDK/SRT-Source und Wire 1/IPC 3 unverändert.
+- Evidenz `evidence/m3-dds-combined-2026-11-05/`: auch Fehlversuche, Parser-Reanalyse,
+  Journalprüfung und Rohartefakthashes. N0 lief zeitweise parallel zu Entwicklungs-
+  fixtures; keine kontrollierte CPU-/Hardware-Aussage, keine Überlegenheit.
+
+**Weiter:** DDS-Ready-/Completion-Grenzen unter N1/N2/N5 untersuchen, ohne die
+Sicherheitsgates oder No-Replay zu lockern. Altersursprung/-Qualifikation und
+Kryptografie vergleichbar machen; CPU/Wire an dieselben Fenster koppeln. Danach
+volle Seed-/Dauermatrix, N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-
+Barrieren. M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Isolated DDS Best Effort SENSOR development runs, without command qualification."""
+"""Isolated DDS sensor or combined journaled-command development workload."""
 import argparse
 from datetime import datetime,timezone
 import hashlib
@@ -12,14 +12,17 @@ import time
 from m3_dds import DdsLab,summarize_sensor_window
 from m3_network import SEEDS
 from m3_capture import summarize
+from m3_results import summarize_commands
 
 ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--profile',choices=['N0','N1','N2','N5'],default='N0')
+    parser.add_argument('--profile',choices=['N0','N1','N2','N4','N5'],default='N0')
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
+    parser.add_argument('--commands',action='store_true',help='combine steady sensors and journaled commands every 2s')
+    parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--smoke',action='store_true')
     parser.add_argument('--seconds',type=int)
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 binaries; recorded as development reuse')
@@ -28,14 +31,15 @@ def main():
     seconds=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
     if not 10<=seconds<=7200:parser.error('duration must be 10..7200 seconds')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    run=ROOT/'.local/m3-dds'/stamp;run.mkdir(parents=True)
+    run=ROOT/('.local/m3-dds-combined' if args.commands else '.local/m3-dds')/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
-    report=dict(status='running',milestone='M3 DDS sensor development',sensor_only=True,commands_qualified=False,
+    report=dict(status='running',milestone='M3 DDS combined development' if args.commands else 'M3 DDS sensor development',sensor_only=not args.commands,commands_qualified=False,
+        configured_workload=dict(imu_hz=200,joint_hz=50,command_period_s=2 if args.commands else None),
         complete_m3_acceptance=False,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
             for folder in ['src','ros2','proto','cmake','containers','tools','tests']
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
-        missing_gates=['fully journaled Reliable DDS command coordinator','matched-window CPU/wire accounting',
+        missing_gates=['full-duration combined impairment/seed qualification','matched-window CPU/wire accounting',
             'age-clock equivalence with conservative SRT bounds','encryption/security cost equivalence','full seed/duration matrix'],
         topology='direct typed DDS sensor publisher/subscriber; no SRT bridge hops; simulator services/diagnostics also discoverable',
         clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification')
@@ -55,8 +59,16 @@ def main():
                 'set -e; source /opt/ros/jazzy/setup.bash; colcon --log-base '+inside+'/colcon-build build '
                 '--cmake-clean-first --base-paths ros2 --build-base build/m3-ros --install-base install/m3-ros '
                 '--cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="/workspace/install/bridge-m3;/workspace/install/srt-m0"'])
+            execute('ros-tests',['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none',
+                '-v',str(ROOT)+':/workspace','-w','/workspace',image,'bash','-c',
+                'set -e; source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; '
+                'colcon --log-base '+inside+'/colcon-test test --base-paths ros2 --build-base build/m3-ros '
+                '--install-base install/m3-ros --return-code-on-test-failure; colcon test-result --test-result-base build/m3-ros --verbose'])
         binary=ROOT/'install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'
         report['simulator_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
+        if args.commands:
+            binary=ROOT/'install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
+            report['command_node_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
         lab=DdsLab(ROOT,run,image);lab.start()
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
@@ -65,7 +77,7 @@ def main():
             'cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for role in lab.containers}
         if len(set(clocks.values()))!=1:raise RuntimeError('DDS age estimate requires common VM clock namespaces')
         report['clock_namespace_proof']=clocks
-        lab.apply(args.profile,args.seed)
+        lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
             p=subprocess.Popen(['docker','exec',name,'tcpdump','-n','-i','eth0','-s','0','-B','4096','-U',
@@ -80,23 +92,37 @@ def main():
         lab.snapshot('before')
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
-                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds)])
+                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds)]+(['--commands'] if args.commands else []))
             log=(run/(role+'-scenario.log')).open('w')
             peer=lab.addresses['operator' if role=='robot' else 'robot']
             p=subprocess.Popen(['docker','exec','-e','ROS_STATIC_PEERS='+peer,name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT)
             processes.append((p,log))
-        deadline=time.monotonic()+seconds+150
+        deadline=time.monotonic()+seconds+150;outage=False
         while time.monotonic()<deadline:
             if any(p.poll() not in (None,0) for p,_ in processes):raise RuntimeError('DDS scenario failed')
             if all(p.poll() is not None for p,_ in processes):break
+            if args.profile=='N4' and not outage and (run/'measurement-start.json').exists():
+                if 'outage_due' not in report:report['outage_due']=time.monotonic()+seconds/2;save()
+                if time.monotonic()>=report['outage_due']:
+                    roles=('operator','robot') if args.outage_direction=='both' else (args.outage_direction,)
+                    lab.apply('N4',args.seed,roles,label='outage');started=time.monotonic_ns()
+                    time.sleep(2);lab.apply('N0',args.seed,roles,label='restore')
+                    report['outage']=dict(direction=args.outage_direction,host_elapsed_ns=time.monotonic_ns()-started,
+                        placement='mid-window kernel outage; not command-phase barriers')
+                    outage=True;save()
             time.sleep(.25)
         else:raise RuntimeError('DDS scenario deadline exceeded')
+        if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
         lab.snapshot('after')
         result=json.loads((run/'operator-result.json').read_text())
         report['results']=result
         report['sensor_count_checks_passed']=result['sensor_count_checks_passed']
         report['age_estimates_qualified']=result['age_estimates_qualified']
         report['measurement_window']=summarize_sensor_window(result['checkpoints']['begin'],result['checkpoints']['end'],result['publication_interval'])
+        if args.commands:
+            report['command_summary']=summarize_commands(result['commands'])
+            report['command_audit']=result['command_audit']
+            report['command_latency_scope']='includes terminal observations during the <=8s post-cutoff drain; rows flag observation phase'
         report['status']='passed'
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise

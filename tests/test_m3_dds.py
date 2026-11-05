@@ -14,9 +14,9 @@ from dds_clock import interval_distance, ClockMonitor
 
 
 class FragmentTests(unittest.TestCase):
-    def capture(self,path,port=22410):
+    def capture(self,path,port=22410,tail=b'y'*16,tail_fragment=2):
         frames=[]
-        for fragment,payload in [(0x2000,struct.pack('!HHHH',port,22412,2000,0)+b'RTPS'+b'x'*4),(2,b'y'*16)]:
+        for fragment,payload in [(0x2000,struct.pack('!HHHH',port,22412,2000,0)+b'RTPS'+b'x'*4),(tail_fragment,tail)]:
             ip=bytearray(20);ip[0]=0x45;ip[9]=17
             struct.pack_into('!H',ip,2,len(ip)+len(payload));struct.pack_into('!H',ip,6,fragment)
             ip[12:16]=bytes([10,0,0,1]);ip[16:20]=bytes([10,0,0,2])
@@ -25,6 +25,17 @@ class FragmentTests(unittest.TestCase):
         for frame in frames:data+=struct.pack('<IIII',0,0,len(frame),len(frame))+frame
         path.write_bytes(data)
         return sum(map(len,frames))
+
+    def test_short_final_fragment_has_no_udp_header_but_counts_frame_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'capture';size=self.capture(path,tail=b'y'*4)
+            result=summarize([path],'10.0.0.1',allow_udp_fragments=True)
+            self.assertFalse(result['unaccounted'])
+            self.assertEqual(result['classes']['out/ipv4_udp_fragment']['ethernet_bytes'],size)
+            self.assertEqual(result['classes']['out/ipv4_udp_fragment']['packets'],2)
+            self.assertEqual(summarize([path],'10.0.0.1')['unaccounted'],{'fragmented':2})
+            self.capture(path,tail=b'y'*4,tail_fragment=0x2002)
+            self.assertEqual(summarize([path],'10.0.0.1',allow_udp_fragments=True)['unaccounted'],{'invalid_fragment_length':1})
 
     def test_fragment_opt_in_counts_frames_without_claiming_rtps_payload(self):
         with tempfile.TemporaryDirectory() as directory:

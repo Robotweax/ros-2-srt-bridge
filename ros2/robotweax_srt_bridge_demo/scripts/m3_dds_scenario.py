@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Direct Best Effort sensor baseline. File coordination carries controls only.
 
-No command execution is substituted for the fully journaled command contract.
+Optional --commands adds the journaled Reliable DDS coordinator and steady load.
 All participants run in the same Linux VM/time namespace; header age is a
 realtime estimate, deliberately distinct from SRT's conservative clock bound.
 """
@@ -46,6 +46,10 @@ class DdsScenario(Node):
         self.clock_reference=min((interval for _,interval in samples),key=lambda x:x[1]-x[0])
         if self.clock_reference[1]-self.clock_reference[0]>1000000:raise RuntimeError('cannot establish clock reference')
         self.clock=ClockMonitor(self.clock_reference)
+        self.load=None
+        if args.commands:
+            from dds_command_load import DdsCommandLoad
+            self.load=DdsCommandLoad(self)
 
     def sample(self,route,m):
         row=self.counts[route];row['received']+=1
@@ -73,8 +77,10 @@ class DdsScenario(Node):
     def spin(self,seconds=.05):
         end=time.monotonic()+seconds
         while time.monotonic()<end:
+            if self.load:self.load.tick()
             rclpy.spin_once(self,timeout_sec=min(.025,max(0,end-time.monotonic())))
             if self.process and self.process.poll() is not None:raise RuntimeError('simulator exited')
+            if self.load:self.load.check()
 
     def wait(self,predicate,label,seconds=45):
         end=time.monotonic()+seconds
@@ -105,10 +111,19 @@ class DdsScenario(Node):
         log=(self.run/'simulator.log').open('w')
         self.process=subprocess.Popen(['/workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'],stdout=log,stderr=subprocess.STDOUT)
         try:
+            if self.load:self.load.launch()
             write(self.run/'robot-ready.json',dict(ready=True))
             for phase,enabled in [('begin',False),('resume',True),('end',False)]:
                 self.wait(lambda:(self.run/(phase+'-request.json')).exists(),phase+' request',self.args.seconds+90)
-                write(self.run/(phase+'-source.json'),self.publishing(enabled))
+                if self.load and phase=='begin':self.wait(self.load.ready,'journaled DDS receiver ready')
+                response=self.publishing(enabled)
+                if self.load:response['command_state']=self.load.snapshot()
+                write(self.run/(phase+'-source.json'),response)
+            if self.load:
+                self.wait(lambda:(self.run/'final-request.json').exists(),'final device snapshot')
+                response=self.publishing(False);self.spin(.25)
+                response['command_state']=self.load.snapshot()
+                write(self.run/'final-source.json',response)
             self.wait(lambda:(self.run/'finished.json').exists(),'observer finished')
         finally:
             self.process.send_signal(signal.SIGINT)
@@ -117,6 +132,8 @@ class DdsScenario(Node):
             self.process=None;log.close()
 
     def operator(self):
+        if self.load:
+            self.load.launch();self.wait(self.load.ready,'journaled DDS sender ready')
         self.wait(lambda:all(self.counts[r]['received']>20 for r in self.counts),'typed DDS stream')
         for sub in self.subs:
             q=sub.qos_profile
@@ -130,21 +147,46 @@ class DdsScenario(Node):
             discovered[topic]=[str(e.qos_profile) for e in endpoints]
         write(self.run/'begin-request.json',{})
         self.wait(lambda:(self.run/'begin-source.json').exists(),'begin source fence')
-        begin=dict(device=read(self.run/'begin-source.json')['device'],observer=self.stable())
+        begin_source=read(self.run/'begin-source.json')
+        begin=dict(device=begin_source['device'],observer=self.stable())
+        if self.load:
+            begin['command_sender']=self.load.snapshot();begin['command_receiver']=begin_source['command_state']
+            if begin['device']['effects'] or begin['device']['generation'] or begin['command_sender']['commands_sent'] or begin['command_receiver']['start_claims']:raise RuntimeError('command history before measurement window')
         self.window_begin=dict(imu=begin['device']['imu_published'],joints=begin['device']['joints_published'])
         write(self.run/'resume-request.json',{})
         self.wait(lambda:(self.run/'resume-source.json').exists(),'resume source fence')
         resumed=read(self.run/'resume-source.json')
         write(self.run/'measurement-start.json',dict(observer_monotonic_ns=time.monotonic_ns()))
+        if self.load:self.load.begin(begin['device']['generation'])
         self.spin(self.args.seconds)
+        if self.load:self.load.cutoff()
         write(self.run/'end-request.json',{})
         self.wait(lambda:(self.run/'end-source.json').exists(),'end source fence')
         paused=read(self.run/'end-source.json')
+        command_report={}
+        if self.load:
+            from command_workload import audit_commands
+            drain_deadline=self.load.cutoff_ns/1e9+8
+            while self.load.pending and time.monotonic()<drain_deadline:self.spin(.05)
+            self.load.freeze()
+            write(self.run/'final-request.json',{})
+            self.wait(lambda:(self.run/'final-source.json').exists(),'final device snapshot')
+            final_source=read(self.run/'final-source.json')
+            if any(final_source['device'][key]!=paused['device'][key] for key in ('imu_published','joints_published')):raise RuntimeError('publication changed after source fence')
+            self.spin(.25)
+            end_sender=self.load.snapshot();end_receiver=final_source['command_state']
+            for role,last in [('command_sender',end_sender),('command_receiver',end_receiver)]:
+                if begin[role]['process_epoch']!=last['process_epoch']:raise RuntimeError('command owner restarted during measurement')
+            command_report=dict(commands=self.load.rows,command_audit=audit_commands(self.load.rows,begin['device'],final_source['device'],cutoff_ns=self.load.cutoff_ns),
+                command_data_cutoff_monotonic_ns=self.load.cutoff_ns,command_result_drain_limit_s=8,skipped_command_slots=self.load.cadence.skipped,
+                commands_paused_after_unknown=self.load.paused,unresolved_command=self.load.pending,
+                final_device=final_source['device'],final_command_sender=end_sender,final_command_receiver=end_receiver,
+                command_scope='absolute 200Hz intents every 2s; one pending intent; UNKNOWN pauses new work; result latency includes bounded drain')
         end=dict(device=paused['device'],observer=self.stable())
         if self.boundary_errors:raise RuntimeError(str(self.boundary_errors))
         for route,key in [('imu','imu_published'),('joints','joints_published')]:
             if self.markers[route]>end['device'][key]:raise RuntimeError('callback after end source fence')
-        write(self.run/'operator-result.json',dict(status='passed',sensor_only=True,commands_qualified=False,
+        write(self.run/'operator-result.json',dict(status='passed',sensor_only=not bool(self.load),commands_qualified=False,**command_report,
             checkpoints=dict(begin=begin,end=end),publication_interval=dict(resume_monotonic_ns=resumed['monotonic_ns'],pause_monotonic_ns=paused['monotonic_ns']),
             sensor_count_checks_passed=True,age_estimates_qualified=self.clock.qualified,clock_steps=self.clock.steps,
             clock_max_offset_step_ns=self.clock.max_step_ns,clock_max_offset_deviation_ns=self.clock.max_deviation_ns,clock_max_bracket_width_ns=self.clock.max_width_ns,qos_checked=True,publisher_qos=discovered,
@@ -156,11 +198,17 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--role',choices=['robot','operator'],required=True)
     parser.add_argument('--run',required=True);parser.add_argument('--seconds',type=int,required=True)
-    args=parser.parse_args();rclpy.init();driver=DdsScenario(args)
+    parser.add_argument('--commands',action='store_true',help='journaled Reliable DDS commands every two seconds')
+    args=parser.parse_args()
+    if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
+    rclpy.init();driver=DdsScenario(args)
     try:getattr(driver,args.role)()
     except BaseException:
         write(driver.run/(args.role+'-failure.json'),dict(traceback=traceback.format_exc()));raise
-    finally:driver.destroy_node();rclpy.shutdown()
+    finally:
+        try:
+            if driver.load:driver.load.stop()
+        finally:driver.destroy_node();rclpy.shutdown()
 
 
 if __name__=='__main__':main()

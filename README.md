@@ -499,3 +499,36 @@ queue admission. This is common-VM command acceptance with changing sensor rates
 not the complete steady M3 comparison. Combining the steady sensor/command
 workload, qualifying cross-host clocks/security and aligning CPU/wire windows
 remain next.
+
+The combined steady DDS workload is now available:
+
+```sh
+python3 tools/run_m3_dds.py --commands
+python3 tools/run_m3_dds.py --commands --profile N1 --smoke --skip-build
+python3 tools/run_m3_dds.py --commands --profile N4 --smoke --skip-build
+```
+
+It keeps the source at 200/50 Hz and offers absolute 200 Hz intents every two
+seconds, with one pending intent and no replay. NOT_READY/BUSY are explicit
+non-admissions. At cutoff it stops new intents, observes pending results for at
+most eight seconds, freezes the command population and takes a final device
+fence. Command effects can advance during drain; sensor counts must stay fixed.
+Rows identify post-cutoff results, and unresolved outcomes remain separate.
+
+A long run exposed an ordinary mutex-contention drop in the DDS callback. Incoming
+frames now serialize short validation/copy critical sections; a genuinely full
+64-slot inbox still records a drop. Local service admission keeps try-lock/BUSY.
+The queue, lease, deadlines and no-replay rules are unchanged. The capture parser
+also accounts for valid four-byte terminal IP fragments without requiring a UDP
+header there; SRT fragment rejection remains the default.
+
+The final five-minute N0 confirms 150/150 commands with 150 effects and no SDK
+inbox drops, at actual 199.978/50.002 Hz. It produces 75,026 samples and receives
+75,025, with one pre-callback IMU gap. Its age estimates are unqualified after an
+observed clock step; received samples are not relabeled as network losses. N1 has
+one non-admission; N2/N4 each retain an unresolved intent; N5 times out during
+cold-start readiness under congestion. These remain qualification limits.
+See [combined evidence](evidence/m3-dds-combined-2026-11-05/README.md). Nineteen ROS
+GTests and 27 Python tests passed, plus sensor-only and crash/lost-reply regressions.
+Full seeded durations, DDS readiness, clock/security equivalence and matched
+CPU/wire windows remain open; no performance advantage is claimed.
