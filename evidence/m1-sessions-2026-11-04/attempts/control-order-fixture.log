@@ -1,0 +1,39 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-debug
+[1/6] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/src/session.cpp.o
+[2/6] Building CXX object CMakeFiles/session_tests.dir/workspace/tests/protocol/session_tests.cpp.o
+[3/6] Linking CXX static library librobotweax_srt_bridge_management.a
+[4/6] Linking CXX executable routes_tests
+[5/6] Linking CXX executable management_tests
+[6/6] Linking CXX executable session_tests
+Internal ctest changing into directory: /workspace/build/m1-debug
+Test project /workspace/build/m1-debug
+    Start 1: clock_contract
+1/5 Test #1: clock_contract ...................   Passed    0.03 sec
+    Start 2: wire_contract
+2/5 Test #2: wire_contract ....................   Passed    0.04 sec
+    Start 3: routes_contract
+3/5 Test #3: routes_contract ..................   Passed    0.04 sec
+    Start 4: session_contract
+4/5 Test #4: session_contract .................***Failed    0.05 sec
+FAIL: delayed CONTROL READY rejected
+
+    Start 5: management_contract
+5/5 Test #5: management_contract ..............   Passed    0.09 sec
+
+80% tests passed, 1 tests failed out of 5
+
+Label Time Summary:
+clock         =   0.03 sec*proc (1 test)
+m1            =   0.26 sec*proc (5 tests)
+management    =   0.09 sec*proc (1 test)
+protocol      =   0.04 sec*proc (1 test)
+routes        =   0.04 sec*proc (1 test)
+session       =   0.05 sec*proc (1 test)
+
+Total Test time (real) =   0.29 sec
+
+The following tests FAILED:
+	  4 - session_contract (Failed)
+Errors while running CTest

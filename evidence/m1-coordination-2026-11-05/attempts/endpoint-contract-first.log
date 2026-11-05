@@ -1,0 +1,13 @@
+-- Configuring done (0.3s)
+-- Generating done (0.2s)
+-- Build files have been written to: /workspace/build/m1-native
+[1/18] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o
+FAILED: src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o 
+/usr/bin/c++  -I/workspace/src/robotweax_srt_bridge_core/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o -MF src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o.d -o src/robotweax_srt_bridge_core/CMakeFiles/execution_tests.dir/__/__/tests/protocol/execution_tests.cpp.o -c /workspace/tests/protocol/execution_tests.cpp
+/workspace/tests/protocol/execution_tests.cpp: In function 'void {anonymous}::capacity()':
+/workspace/tests/protocol/execution_tests.cpp:20:11: error: inconsistent deduction for 'auto': 'const unsigned int' and then 'const long unsigned int'
+   20 |     const auto slot=held[0]->slot,generation=held[0]->generation;p->revoke_all();for(auto& r:held)check(p->state(*r)==State::revoked,"prepared grant not revoked");held.clear();
+      |           ^~~~
+[2/18] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax-journal-worker.dir/src/worker/main.cpp.o
+[3/18] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o
+ninja: build stopped: subcommand failed.

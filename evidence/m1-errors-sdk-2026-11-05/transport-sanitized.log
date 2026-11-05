@@ -1,0 +1,52 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-transport-sanitized
+[1/11] Running cpp protocol buffer compiler on /workspace/src/robotweax_srt_bridge_core/../../proto/commands_v1.proto
+[2/11] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/commands_v1.pb.cc.o
+[3/11] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_management.dir/src/commands.cpp.o
+[4/11] Linking CXX static library src/robotweax_srt_bridge_core/librobotweax_srt_bridge_management.a
+[5/11] Linking CXX executable src/robotweax_srt_bridge_core/robotweax-journal-worker
+[6/11] Linking CXX executable tests/native/transport_tests
+[7/11] Linking CXX executable tests/native/worker_transport_tests
+[8/11] Linking CXX executable tests/native/endpoint_tests
+[9/11] Linking CXX executable tests/native/execution_start_tests
+[10/11] Building CXX object tests/native/CMakeFiles/error_transport_tests.dir/error_transport_tests.cpp.o
+[11/11] Linking CXX executable tests/native/error_transport_tests
+Internal ctest changing into directory: /workspace/build/m1-transport-sanitized
+Test project /workspace/build/m1-transport-sanitized
+      Start 58: transport_owner_ipv4
+ 1/10 Test #58: transport_owner_ipv4 .............   Passed    9.31 sec
+      Start 59: transport_owner_ipv6
+ 2/10 Test #59: transport_owner_ipv6 .............   Passed    9.39 sec
+      Start 60: worker_transport_ipv4
+ 3/10 Test #60: worker_transport_ipv4 ............   Passed    8.63 sec
+      Start 61: worker_transport_ipv6
+ 4/10 Test #61: worker_transport_ipv6 ............   Passed    8.68 sec
+      Start 62: command_endpoint_ipv4
+ 5/10 Test #62: command_endpoint_ipv4 ............   Passed   15.30 sec
+      Start 63: command_endpoint_ipv6
+ 6/10 Test #63: command_endpoint_ipv6 ............   Passed   15.33 sec
+      Start 64: execution_start_ipv4
+ 7/10 Test #64: execution_start_ipv4 .............   Passed   15.22 sec
+      Start 65: execution_start_ipv6
+ 8/10 Test #65: execution_start_ipv6 .............   Passed   15.38 sec
+      Start 66: wire_errors_ipv4
+ 9/10 Test #66: wire_errors_ipv4 .................   Passed    4.39 sec
+      Start 67: wire_errors_ipv6
+10/10 Test #67: wire_errors_ipv6 .................   Passed    4.39 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Label Time Summary:
+endpoint          =  30.63 sec*proc (2 tests)
+error             =   8.77 sec*proc (2 tests)
+execution         =  30.60 sec*proc (2 tests)
+lifecycle         =  79.92 sec*proc (6 tests)
+m1                = 106.01 sec*proc (10 tests)
+native            = 106.01 sec*proc (10 tests)
+race              =  30.60 sec*proc (2 tests)
+reconciliation    =   8.77 sec*proc (2 tests)
+transport         =  36.01 sec*proc (4 tests)
+worker            =  17.31 sec*proc (2 tests)
+
+Total Test time (real) = 106.05 sec

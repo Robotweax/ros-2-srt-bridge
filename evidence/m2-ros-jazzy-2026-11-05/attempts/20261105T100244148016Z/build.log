@@ -1,0 +1,64 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m2-sdk
+[1/3] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker_runtime.dir/src/worker/runtime.cpp.o
+[2/3] Linking CXX static library src/robotweax_srt_bridge_core/librobotweax_srt_bridge_worker_runtime.a
+[3/3] Linking CXX executable src/robotweax_srt_bridge_core/robotweax-journal-worker
+-- Install configuration: "Release"
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_core.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_management.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_journal.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_worker.a
+-- Installing: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_worker_runtime.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_transport.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_endpoint.a
+-- Installing: /workspace/install/bridge-m2/bin/robotweax-journal-worker
+-- Up-to-date: /workspace/install/bridge-m2/include
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/errors.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/handler.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/execution.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/ticket.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/session.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/bandwidth.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/management.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/transport.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/worker.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/queues.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/commands.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/journal.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/clock.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/endpoint.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/routes.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/wire.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/reconnect.hpp
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/commands_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/errors_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/management_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets-release.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeConfig.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeConfigVersion.cmake
+Starting >>> robotweax_srt_bridge_msgs
+Finished <<< robotweax_srt_bridge_msgs [2.85s]
+Starting >>> robotweax_srt_bridge
+Finished <<< robotweax_srt_bridge [1.48s]
+Starting >>> robotweax_srt_bridge_demo
+--- stderr: robotweax_srt_bridge_demo
+/usr/bin/ld: CMakeFiles/rate_simulator.dir/src/simulator.cpp.o: in function `(anonymous namespace)::Simulator::apply(robotweax_srt_bridge_msgs::srv::ApplyMeasurementRate_Request_<std::allocator<void> > const&, robotweax_srt_bridge_msgs::srv::ApplyMeasurementRate_Response_<std::allocator<void> >&)':
+simulator.cpp:(.text+0x1110): undefined reference to `robotweax::srt_bridge::TransportOwner::monotonic_ns()'
+/usr/bin/ld: simulator.cpp:(.text+0x12c5): undefined reference to `robotweax::srt_bridge::TransportOwner::monotonic_ns()'
+/usr/bin/ld: CMakeFiles/rate_simulator.dir/src/simulator.cpp.o: in function `(anonymous namespace)::Simulator::publish()':
+simulator.cpp:(.text+0x41ef): undefined reference to `robotweax::srt_bridge::TransportOwner::monotonic_ns()'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/rate_simulator.dir/build.make:197: rate_simulator] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/rate_simulator.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
+---
+Failed   <<< robotweax_srt_bridge_demo [10.7s, exited with code 2]
+
+Summary: 2 packages finished [15.2s]
+  1 package failed: robotweax_srt_bridge_demo
+  1 package had stderr output: robotweax_srt_bridge_demo

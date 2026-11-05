@@ -1,0 +1,32 @@
+[1/3] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o
+[2/3] Linking CXX static library src/robotweax_srt_bridge_transport/librobotweax_srt_bridge_transport.a
+[3/3] Linking CXX executable tests/native/transport_tests
+Internal ctest changing into directory: /workspace/build/m1-native
+Test project /workspace/build/m1-native
+    Start 55: transport_owner_ipv4
+1/2 Test #55: transport_owner_ipv4 .............***Failed    7.11 sec
+state=0 fault=0 running=1 gen=3,0 retry=2,6 tx/rx/reject=2,0,0
+state=0 fault=0 running=1 gen=2,0 retry=0,0 tx/rx/reject=2,0,0
+FAIL: session not active
+
+    Start 56: transport_owner_ipv6
+2/2 Test #56: transport_owner_ipv6 .............***Failed    7.11 sec
+state=0 fault=0 running=1 gen=3,0 retry=2,6 tx/rx/reject=2,0,0
+state=0 fault=0 running=1 gen=2,0 retry=0,0 tx/rx/reject=2,0,0
+FAIL: session not active
+
+
+0% tests passed, 2 tests failed out of 2
+
+Label Time Summary:
+lifecycle    =  14.22 sec*proc (2 tests)
+m1           =  14.22 sec*proc (2 tests)
+native       =  14.22 sec*proc (2 tests)
+transport    =  14.22 sec*proc (2 tests)
+
+Total Test time (real) =  14.26 sec
+
+The following tests FAILED:
+	 55 - transport_owner_ipv4 (Failed)
+	 56 - transport_owner_ipv6 (Failed)
+Errors while running CTest

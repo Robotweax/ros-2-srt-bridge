@@ -1,0 +1,28 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-debug
+[1/16] Building CXX object CMakeFiles/robotweax_srt_bridge_core.dir/src/reconnect.cpp.o
+[2/16] Building CXX object CMakeFiles/robotweax_srt_bridge_core.dir/src/bandwidth.cpp.o
+[3/16] Building CXX object CMakeFiles/bandwidth_tests.dir/workspace/tests/protocol/bandwidth_tests.cpp.o
+[4/16] Linking CXX static library librobotweax_srt_bridge_core.a
+[5/16] Linking CXX executable bandwidth_tests
+[6/16] Linking CXX executable clock_tests
+[7/16] Linking CXX executable wire_tests
+[8/16] Building CXX object CMakeFiles/reconnect_tests.dir/workspace/tests/protocol/reconnect_tests.cpp.o
+[9/16] Linking CXX executable reconnect_tests
+[10/16] Building CXX object CMakeFiles/robotweax_srt_bridge_management.dir/src/queues.cpp.o
+[11/16] Linking CXX static library librobotweax_srt_bridge_management.a
+[12/16] Building CXX object CMakeFiles/queues_tests.dir/workspace/tests/protocol/queues_tests.cpp.o
+FAILED: CMakeFiles/queues_tests.dir/workspace/tests/protocol/queues_tests.cpp.o 
+/usr/bin/c++ -DGOLDEN_DIRECTORY=\"/workspace/src/robotweax_srt_bridge_core/../../tests/protocol\" -I/workspace/src/robotweax_srt_bridge_core/include -g -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT CMakeFiles/queues_tests.dir/workspace/tests/protocol/queues_tests.cpp.o -MF CMakeFiles/queues_tests.dir/workspace/tests/protocol/queues_tests.cpp.o.d -o CMakeFiles/queues_tests.dir/workspace/tests/protocol/queues_tests.cpp.o -c /workspace/tests/protocol/queues_tests.cpp
+/workspace/tests/protocol/queues_tests.cpp: In function 'robotweax::srt_bridge::Envelope {anonymous}::envelope(robotweax::srt_bridge::Kind, uint32_t, uint64_t)':
+/workspace/tests/protocol/queues_tests.cpp:18:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+   18 |     if(kind==Kind::sample)e.valid_for_ms=250;return e;
+      |     ^~
+/workspace/tests/protocol/queues_tests.cpp:18:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   18 |     if(kind==Kind::sample)e.valid_for_ms=250;return e;
+      |                                              ^~~~~~
+cc1plus: all warnings being treated as errors
+[13/16] Linking CXX executable routes_tests
+[14/16] Linking CXX executable session_tests
+ninja: build stopped: subcommand failed.

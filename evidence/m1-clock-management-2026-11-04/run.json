@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "image_reference": "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+  "commands": [
+    {
+      "log": "debug.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "-c",
+        "cmake -S src/robotweax_srt_bridge_core -B build/m1-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_MANAGEMENT_CODEC=ON -DCMAKE_CXX_FLAGS= -DCMAKE_EXE_LINKER_FLAGS= && cmake --build build/m1-debug --parallel 3 && ctest --test-dir build/m1-debug --show-only=json-v1 > /workspace/.local/m1/20261104T191941325159Z/debug-inventory.json && ctest --test-dir build/m1-debug --no-tests=error --output-on-failure --test-output-size-passed 1048576 --output-junit /workspace/.local/m1/20261104T191941325159Z/debug.xml"
+      ],
+      "exit_code": 0
+    },
+    {
+      "log": "asan-ubsan.log",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "${PROJECT}:/workspace",
+        "-w",
+        "/workspace",
+        "ros2-srt-m0@sha256:846a5709778253c92eecd34116ccc536c9739ce81eab278ff759ce9acc5ad2cc",
+        "sh",
+        "-c",
+        "cmake -S src/robotweax_srt_bridge_core -B build/m1-asan-ubsan -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_MANAGEMENT_CODEC=ON -DCMAKE_CXX_FLAGS=\"-fsanitize=address,undefined -fno-omit-frame-pointer\" -DCMAKE_EXE_LINKER_FLAGS=\"-fsanitize=address,undefined\" && cmake --build build/m1-asan-ubsan --parallel 3 && ctest --test-dir build/m1-asan-ubsan --show-only=json-v1 > /workspace/.local/m1/20261104T191941325159Z/asan-ubsan-inventory.json && ctest --test-dir build/m1-asan-ubsan --no-tests=error --output-on-failure --test-output-size-passed 1048576 --output-junit /workspace/.local/m1/20261104T191941325159Z/asan-ubsan.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "source_sha256": {
+    "proto/management_v1.proto": "b2499e4289d82f37a617a6e2c9bdcf7d5569d29aa10bc8866d4c3e78b840e3de",
+    "src/robotweax_srt_bridge_core/CMakeLists.txt": "8e8095305a86145e447ecd66f2ec9fa5b3b68738e9b3637da85bf9b5510d73c5",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/clock.hpp": "566400675fd61e6f42c25be0291b54ce851f9529b5f84a76c98e8ff67d0a23fc",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/management.hpp": "b663d03bbccdc69e7653811328f54c269cbe7e5836cf7edb0e6dae908fe4ed74",
+    "src/robotweax_srt_bridge_core/include/robotweax/srt_bridge/wire.hpp": "4b501a5a74de64211758a4e832ec3c6ec8c3b8696a0cc492f99d928cf990bd78",
+    "src/robotweax_srt_bridge_core/src/clock.cpp": "611993ea99bd5c073f51efe66827017e0c453743daf01737a4b2dc109aef7f95",
+    "src/robotweax_srt_bridge_core/src/management.cpp": "5e5a5bbea29d62ccf00ced9f06edfcfb263df67de4f014523d9b7a829b02f4ab",
+    "src/robotweax_srt_bridge_core/src/wire.cpp": "4df46c7b13e5b33789a8778acf653536ab95177dcc048a937f5734e182132e23",
+    "tests/protocol/clock_tests.cpp": "5786c621cb99a4e189fbc591242be775ff3162d662c4bccfc833b39cb3867d4e",
+    "tests/protocol/management_tests.cpp": "e6752c602944ce9ad4672a01da4dc96059a48295c6510160c960609c4b15d2b8",
+    "tests/protocol/sample-v1.hex": "f6ccf1ea85a9332d75d22f38bf54adee8149f6e77d1c4b16afc0f1d21a32ad4a",
+    "tests/protocol/wire_tests.cpp": "2a98a7d60f4e5dbef304596ba5f2a54497e4109563cf8e533a09d36a8be435a9",
+    "tools/run_m1.py": "120a9863b322a1e933a8ca87e0ecd552093aa53b20d9c01cebb3bfa248b72a65"
+  },
+  "image_platform_id": "sha256:a12fe12e312b7b72878714862d2dc6c23176b4d23928d6906537444f9aa5bcc0"
+}

@@ -1,0 +1,63 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m2-sdk
+ninja: no work to do.
+-- Install configuration: "Release"
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_core.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_management.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_journal.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_worker.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_worker_runtime.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_transport.a
+-- Up-to-date: /workspace/install/bridge-m2/lib/librobotweax_srt_bridge_endpoint.a
+-- Up-to-date: /workspace/install/bridge-m2/bin/robotweax-journal-worker
+-- Up-to-date: /workspace/install/bridge-m2/include
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/errors.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/handler.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/execution.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/ticket.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/session.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/bandwidth.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/management.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/transport.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/worker.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/queues.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/commands.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/journal.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/clock.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/endpoint.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/routes.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/wire.hpp
+-- Up-to-date: /workspace/install/bridge-m2/include/robotweax/srt_bridge/reconnect.hpp
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/commands_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/errors_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/share/robotweax-srt-bridge/proto/management_v1.proto
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets-release.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeConfig.cmake
+-- Up-to-date: /workspace/install/bridge-m2/lib/cmake/RobotweaxBridge/RobotweaxBridgeConfigVersion.cmake
+Starting >>> robotweax_srt_bridge_msgs
+Finished <<< robotweax_srt_bridge_msgs [2.74s]
+Starting >>> robotweax_srt_bridge
+--- stderr: robotweax_srt_bridge
+/workspace/ros2/robotweax_srt_bridge/test/sensor_codec_test.cpp: In member function ‘virtual void SensorCodec_AllFieldAlignments_Test::TestBody()’:
+/workspace/ros2/robotweax_srt_bridge/test/sensor_codec_test.cpp:14:9: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+   14 |         if(mask&1)m.position.resize(n,1);if(mask&2)m.velocity.resize(n,2);if(mask&4)m.effort.resize(n,3);
+      |         ^~
+/workspace/ros2/robotweax_srt_bridge/test/sensor_codec_test.cpp:14:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   14 |         if(mask&1)m.position.resize(n,1);if(mask&2)m.velocity.resize(n,2);if(mask&4)m.effort.resize(n,3);
+      |                                          ^~
+cc1plus: all warnings being treated as errors
+gmake[2]: *** [CMakeFiles/sensor_codec_test.dir/build.make:76: CMakeFiles/sensor_codec_test.dir/test/sensor_codec_test.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:212: CMakeFiles/sensor_codec_test.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
+---
+Failed   <<< robotweax_srt_bridge [4.70s, exited with code 2]
+
+Summary: 1 package finished [7.60s]
+  1 package failed: robotweax_srt_bridge
+  1 package had stderr output: robotweax_srt_bridge
+  1 package not processed

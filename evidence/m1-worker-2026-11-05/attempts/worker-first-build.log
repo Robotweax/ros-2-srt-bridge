@@ -1,0 +1,12 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-native
+[1/4] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o
+FAILED: src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o 
+/usr/bin/c++  -I/workspace/src/robotweax_srt_bridge_core/include -O3 -DNDEBUG -std=c++20 -Wall -Wextra -Wpedantic -Werror -MD -MT src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o -MF src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o.d -o src/robotweax_srt_bridge_core/CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o -c /workspace/src/robotweax_srt_bridge_core/src/worker/supervisor.cpp
+/workspace/src/robotweax_srt_bridge_core/src/worker/supervisor.cpp: In member function 'bool robotweax::srt_bridge::JournalWorker::Impl::join()':
+/workspace/src/robotweax_srt_bridge_core/src/worker/supervisor.cpp:112:22: error: inconsistent deduction for 'auto': 'const long unsigned int' and then 'const long long unsigned int'
+  112 |         stop();const auto begin=now(),kill_at=begin+2000000000ULL,end=begin+4000000000ULL;bool killed=false;
+      |                      ^~~~
+[2/4] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/robotweax-journal-worker.dir/src/worker/main.cpp.o
+ninja: build stopped: subcommand failed.

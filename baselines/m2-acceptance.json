@@ -1,0 +1,73 @@
+{
+  "milestone": "M2",
+  "status": "accepted",
+  "date": "2026-11-05",
+  "scope": "ROS Jazzy simulator and installed SDK on Linux amd64, internal Docker network",
+  "image_reference": "ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f",
+  "image_platform_id": "sha256:bab4ed00856d8bbe557e404e1c5bf88a5978628ab55bfea058ac1d4e6012cb86",
+  "source_inventory": "evidence/m2-ros-jazzy-2026-11-05/run.json",
+  "source_inventory_sha256": "21be845d370807184797776d69507077ffc45989d4e033ec3dc5c4ce0c364246",
+  "driver_sha256": "cfb4cc9e774c22f773b53715884f0ca421ff701ac4818e3decbec34bae5924de",
+  "acceptance_matrix": "evidence/m2-ros-jazzy-2026-11-05/ACCEPTANCE.md",
+  "sdk_regression": "evidence/m2-ros-jazzy-2026-11-05/sdk-regression/run.json",
+  "private_worker_ipc_version": 3,
+  "wire_version": 1,
+  "srt_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+  "results": {
+    "ros_codec_cases": 6,
+    "core_debug": 15,
+    "core_asan_ubsan": 15,
+    "native": 67,
+    "native_asan_ubsan": 10,
+    "relocated_sdk_consumer": "passed",
+    "remote_imu": 626,
+    "remote_joints": 350,
+    "direct_dds_samples": 0,
+    "command_frames": 4,
+    "device_effects": 3,
+    "device_generation": 3,
+    "final_rate_hz": 50,
+    "outage_seconds": 2.0011072510001213,
+    "max_shutdown_seconds": 0.3197785830000157,
+    "command_outcomes": {
+      "succeeded": {
+        "state": 4,
+        "reason": 0,
+        "revision": 3,
+        "result_valid": true,
+        "rate": 100,
+        "generation": 1
+      },
+      "generation_conflict": {
+        "state": 5,
+        "reason": 4,
+        "revision": 3,
+        "result_valid": false,
+        "rate": 0,
+        "generation": 0
+      },
+      "lost_reply": {
+        "state": 8,
+        "reason": 6,
+        "revision": 3,
+        "result_valid": false,
+        "rate": 0,
+        "generation": 0
+      },
+      "crash_recovery": {
+        "state": 8,
+        "reason": 1,
+        "revision": 3,
+        "result_valid": false,
+        "rate": 0,
+        "generation": 0
+      }
+    }
+  },
+  "not_qualified": [
+    "WAN impairments, application performance and DDS comparison (M3)",
+    "physical device, power-cut durability or safety qualification",
+    "Intrinsic runtime integration (M4)",
+    "ROS adapter profiles other than the recorded Jazzy/Fast-RTPS Linux amd64 image"
+  ]
+}

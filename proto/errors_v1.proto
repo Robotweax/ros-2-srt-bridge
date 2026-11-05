@@ -1,0 +1,22 @@
+syntax = "proto3";
+package robotweax.srt_bridge.v1;
+// Diagnostic response only: no journal state, admission proof or device result.
+// Kept separate so the existing rate-command descriptor hash remains stable.
+enum ControlErrorCode {
+  CONTROL_ERROR_UNSPECIFIED = 0;
+  CONTROL_BUSY = 1;
+  CONTROL_CONFLICT = 2;
+  CONTROL_NOT_FOUND = 3;
+  CONTROL_INVALID_REQUEST = 4;
+  CONTROL_CLOCK_UNQUALIFIED = 5;
+  CONTROL_START_EXPIRED = 6;
+  CONTROL_CONTEXT_LOST = 7;
+  CONTROL_CAPACITY = 8;
+  CONTROL_STORAGE = 9;
+}
+message ControlError {
+  ControlErrorCode code = 1;
+  uint32 request_kind = 2;     // frozen envelope kind COMMAND=6 or QUERY=8
+  uint64 request_sequence = 3; // nonzero original sequence in the current session/route
+  uint32 retry_after_ms = 4;  // 1..5000 only for BUSY/CAPACITY; zero otherwise
+}

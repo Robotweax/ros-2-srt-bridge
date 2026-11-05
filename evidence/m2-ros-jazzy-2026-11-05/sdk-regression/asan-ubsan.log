@@ -1,0 +1,68 @@
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build/m1-asan-ubsan
+[1/8] Building CXX object CMakeFiles/robotweax-journal-worker.dir/src/worker/main.cpp.o
+[2/8] Building CXX object CMakeFiles/robotweax_srt_bridge_worker_runtime.dir/src/worker/runtime.cpp.o
+[3/8] Linking CXX static library librobotweax_srt_bridge_worker_runtime.a
+[4/8] Linking CXX executable robotweax-journal-worker
+[5/8] Building CXX object CMakeFiles/robotweax_srt_bridge_worker.dir/src/worker/supervisor.cpp.o
+[6/8] Linking CXX static library librobotweax_srt_bridge_worker.a
+[7/8] Building CXX object CMakeFiles/worker_tests.dir/workspace/tests/protocol/worker_tests.cpp.o
+[8/8] Linking CXX executable worker_tests
+Internal ctest changing into directory: /workspace/build/m1-asan-ubsan
+Test project /workspace/build/m1-asan-ubsan
+      Start  1: bandwidth_contract
+ 1/15 Test  #1: bandwidth_contract ...............   Passed    0.05 sec
+      Start  2: reconnect_contract
+ 2/15 Test  #2: reconnect_contract ...............   Passed    0.05 sec
+      Start  3: clock_contract
+ 3/15 Test  #3: clock_contract ...................   Passed    0.06 sec
+      Start  4: wire_contract
+ 4/15 Test  #4: wire_contract ....................   Passed    0.13 sec
+      Start  5: execution_contract
+ 5/15 Test  #5: execution_contract ...............   Passed    0.53 sec
+      Start  6: worker_contract
+ 6/15 Test  #6: worker_contract ..................   Passed   12.44 sec
+      Start  7: journal_quota_contract
+ 7/15 Test  #7: journal_quota_contract ...........   Passed    0.10 sec
+      Start  8: journal_crash_contract
+ 8/15 Test  #8: journal_crash_contract ...........   Passed    0.32 sec
+      Start  9: journal_contract
+ 9/15 Test  #9: journal_contract .................   Passed    0.47 sec
+      Start 10: routes_contract
+10/15 Test #10: routes_contract ..................   Passed    0.08 sec
+      Start 11: session_contract
+11/15 Test #11: session_contract .................   Passed    0.13 sec
+      Start 12: queues_contract
+12/15 Test #12: queues_contract ..................   Passed    0.45 sec
+      Start 13: command_contract
+13/15 Test #13: command_contract .................   Passed    0.10 sec
+      Start 14: error_contract
+14/15 Test #14: error_contract ...................   Passed    0.18 sec
+      Start 15: management_contract
+15/15 Test #15: management_contract ..............   Passed    0.38 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Label Time Summary:
+bandwidth     =   0.05 sec*proc (1 test)
+clock         =   0.06 sec*proc (1 test)
+command       =   0.10 sec*proc (1 test)
+crash         =  12.76 sec*proc (2 tests)
+error         =   0.18 sec*proc (1 test)
+execution     =   0.53 sec*proc (1 test)
+journal       =   0.89 sec*proc (3 tests)
+lifecycle     =  12.44 sec*proc (1 test)
+m1            =  15.47 sec*proc (15 tests)
+management    =   0.38 sec*proc (1 test)
+process       =  12.97 sec*proc (2 tests)
+protocol      =   0.13 sec*proc (1 test)
+queues        =   0.45 sec*proc (1 test)
+quota         =   0.10 sec*proc (1 test)
+race          =   0.53 sec*proc (1 test)
+reconnect     =   0.05 sec*proc (1 test)
+routes        =   0.08 sec*proc (1 test)
+session       =   0.13 sec*proc (1 test)
+worker        =  12.44 sec*proc (1 test)
+
+Total Test time (real) =  15.52 sec
