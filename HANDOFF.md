@@ -685,3 +685,45 @@ Messfenster implementieren; CPU/Wire zeitlich angleichen, N3-DATA/FEC-Selektor,
 N4-Auftragsphasen und volle Seed-/Dauermatrix. Outbound-Ersetzungen bei echter
 200-Hz-Last und N5-Auftragsabschluss weiter qualifizieren. M3 bleibt in Arbeit,
 Draft-PR #2 bleibt offen. Parent-SRT, Wire 1, privates IPC 3 und M4 unverändert.
+
+### M3 DDS-Sensorpfad implementiert — 2026-11-05
+
+- `tools/run_m3_dds.py` und separater DDS-Driver betreiben direkte typisierte
+  Best-Effort/Volatile/KeepLast(1)-Sensoren in internem Docker-Netz, Domäne 60,
+  explizite statische Peers. Multicast allein lieferte in diesem Lab keine
+  Discovery; Timeout ist erhalten. Kein SRT-Prozess, keine Host-qdisc/Ports.
+- Source-Fences und stabile Observer-Snapshots bilanzieren tatsächlich erzeugte,
+  empfangene, akzeptierte, stale/invalid/clock-rejected Samples. Fehlend vor
+  Callback umfasst Middleware/Kernel/Netz/History, keinen isolierten WAN-Verlust.
+  Discovery prüft Best Effort/Volatile; History/Depth kann UNKNOWN sein.
+- N0 30 s `.local/m3-dds/20261105T161851009485Z`: 6.023 IMU + 1.507 Joints erzeugt
+  und alle empfangen, Ist 199,891/50,014 Hz. Gemeldeter Mindest-Offset-Schritt
+  1.281.694 ns disqualifiziert Altersmetriken; 3.152 folgende Samples am Clock-
+  Gate verworfen. Ursache nicht belegt. Count-Pass ist keine Altersabnahme.
+- N1-Smoke `.local/m3-dds/20261105T161943936259Z`: 3.022/756 erzeugt, 2.079/746
+  empfangen/akzeptiert; 943/10 vor Callback fehlen. Lokale Shared-VM-Alterschecks
+  bestanden, aber weder konservative SRT-Clock-Grenze noch gleicher Zeitursprung:
+  DDS nutzt Simulator-Header, SRT Bridge-Ingress. Kein Leistungsvergleich.
+- Ungeklammerte Clock-Reads hatten Scheduling als Sprung fehlklassifiziert;
+  geklammerte Intervalle trennen Read-Unsicherheit, Drift und gemeldete Schritte.
+  Ein Fünfminutenversuch scheiterte am ursprünglichen harten Clock-Gate und
+  bewahrte keine finalen Zähler: daraus keine Sample-Zahlen ableiten. Der finale
+  Runner bewahrt Zähler und begrenzte Sprungdiagnose, markiert Alter separat.
+- DDS-Capture zählt IPv4-Fragment-Frames separat ohne RTPS-Payload-Zuordnung.
+  SRT bleibt standardmäßig strikt; Reparse des alten vollen N0 ergibt identisch
+  156.443 Frames je Endpunkt und identische Summary-Felder. Beide finalen DDS-
+  Captures vollständig und ohne Kernel-Capture-Drops. 19 Python-Tests bestanden;
+  installierter Driver/Helper bytegleich und Import/Help bestanden. Keine SDK-
+  oder ROS-C++-Änderung, außer Installation der neuen Python-Tools.
+- Evidenz: `evidence/m3-dds-sensors-2026-11-05/`. Finale Läufe wiederverwenden
+  Simulator-Binary explizit, Hash erhalten; alle 124 Inventar-Sourcehashes passen.
+  Fehlversuche und Rohcapture-Hashes erhalten, PCAPs bleiben ignoriert lokal.
+
+**Weiter:** vollständig journalisierten Reliable-DDS-Auftragskoordinator bauen,
+mit dauerhaftem Sender-Admission vor Send, frischer Session/Clock-Autorisierung
+vor DISPATCHING/Handler-Start, identischem Journal/Handler, QUERY/UNKNOWN und
+keinem Replay alter Absicht nach Reconnect/Crash. Direkter Apply-Service-Aufruf
+ist kein Ersatz. Sensor-Runner sendet keine Aufträge und nutzt keine DDS-Krypto;
+Command-/Security-/Age-/CPU-/Wire-Vergleich und voller Seed-/Dauerlauf fehlen.
+N2/N5 sind im neuen Runner implementiert, hier noch nicht ausgeführt; N3 und N4-
+Auftragsphasen weiterhin offen. PR #2 bleibt Draft, M3 nicht abgenommen.

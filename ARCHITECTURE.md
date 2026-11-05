@@ -793,3 +793,16 @@ N0 erreicht 199,96/50,00 Hz mit vollständig zugeordneten Sample-Verlusten und
 150 bestätigten Aufträgen. N5-Smoke hat einen offenen Auftrag; M3 bleibt offen.
 Details: `evidence/m3-window-accounting-2026-11-05/`. Wire 1 und privates IPC 3
 unverändert. CPU/Wire-Fenster, DDS, N3, N4-Phasen und volle Matrix fehlen weiter.
+
+DDS-SENSOR-Entwicklung: `tools/run_m3_dds.py` betreibt denselben Simulator mit
+Best Effort/Volatile/KeepLast(1) direkt über Container-eth0 in Domäne 60 und
+expliziten statischen Discovery-Peers. Die Source-Fences liefern echte Zähler-
+Fenster; fehlende Callbacks werden nicht als isolierter WAN-Verlust bezeichnet.
+DDS-Discovery-Fragmente erhalten ein eigenes Frame-Byte-Ledger, keine erfundene
+RTPS-/Sensor-Payload-Zuordnung; SRT verwirft Fragmente weiter standardmäßig.
+Header-Alter ist ein Shared-VM-Realtime-Schätzwert mit geklammerten Clock-Reads,
+kein konservatives SRT-Clock-Intervall. Boot-ID und Time-Namespace werden geprüft.
+Dieser Runner sendet keine Aufträge: der vollständig journalisierte Reliable-
+Auftragskoordinator ist noch offen. Direkter ROS-Service-Aufruf ersetzt ihn nicht.
+CPU/Wire, Kryptografie, Auftragslast und Altersmetriken sind noch nicht als
+vergleichbar qualifiziert. Details: `evidence/m3-dds-sensors-2026-11-05/`.

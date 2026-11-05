@@ -80,7 +80,7 @@
     "bounded command result drain with per-row cutoff flag"
   ],
   "pending_gates": [
-    "DDS Best Effort sensor and fully journaled Reliable command baseline",
+    "fully journaled Reliable DDS commands and matched-workload qualification of the implemented Best Effort sensor path",
     "N3 deterministic source-DATA fault selector",
     "N4 admission/dispatch/result-commit barriers",
     "complete three-seed full-duration comparison matrix",
@@ -126,5 +126,35 @@
     "confirmed_commands": 150,
     "n5_smoke_unresolved_commands": 1,
     "status": "sensor windows balanced; M3 acceptance pending"
+  },
+  "dds_sensor_followup": {
+    "status": "sensor count harness validated on 30-second N0 and N1 smoke; commands and comparable age qualification pending",
+    "runner": "tools/run_m3_dds.py",
+    "profiles": [
+      "N0",
+      "N1",
+      "N2",
+      "N5"
+    ],
+    "topology": "direct typed Best Effort/Volatile/KeepLast(1) DDS in domain 60, explicit static peers, isolated container eth0",
+    "commands_qualified": false,
+    "measurement": "source-fenced enabled-window production/receive/accept/reject deltas; no source/WAN stage attribution",
+    "age": "same-VM realtime-header estimate; not equivalent to conservative SRT clock bounds",
+    "remaining": [
+      "fully journaled Reliable command transport/coordinator",
+      "matched command workload, crypto, age-clock and CPU/wire scope",
+      "full seed/duration matrix"
+    ],
+    "evidence": "evidence/m3-dds-sensors-2026-11-05",
+    "n0_run": "20261105T161851009485Z",
+    "n1_run": "20261105T161943936259Z",
+    "n0_produced_received": 7530,
+    "n0_clock_rejected": 3152,
+    "n0_age_estimates_qualified": false,
+    "n1_missing_before_callback": {
+      "imu": 943,
+      "joints": 10
+    },
+    "python_tests": 19
   }
 }

@@ -443,3 +443,32 @@ qualify command completion under congestion. Command summaries include a bounded
 post-cutoff result drain, identified per row. CPU/capture totals still cover the
 whole observation rather than the exact sample window. DDS comparison, N3,
 N4 command-phase barriers and the full duration/seed matrix remain pending.
+
+A sensor-only DDS development baseline is available separately:
+
+```sh
+python3 tools/run_m3_dds.py --smoke
+python3 tools/run_m3_dds.py --profile N0
+python3 tools/run_m3_dds.py --profile N1 --seed 2903 --smoke
+```
+
+It uses the same pinned M3 image, simulator, profile readbacks and capture checks,
+with direct typed Best Effort/Volatile/KeepLast(1) DDS on a shared domain inside
+an internal Docker network. Explicit static peers establish discovery without
+relying on Docker multicast delivery. No host networking or published ports are
+used. Source pause/resume checkpoints fence publication; observer counts partition
+pre-callback losses, invalid, stale, clock-rejected and accepted samples.
+Discovery endpoints verify publisher Best Effort/Volatile QoS; discovered history
+and depth can be unknown, so the depth-one configuration is also retained locally.
+
+This runner is explicitly sensor-only: it sends no measurement-rate commands and
+does not qualify Reliable command behavior. Source control files contain fence
+counts/timestamps, never sensor payloads. Age is a shared-VM realtime-header
+estimate, with bracketed monotonic clock checks; it is not the SRT conservative
+clock-interval bound. The runner checks common boot/time namespaces; observed clock steps disqualify
+age estimates while preserving sensor count accounting. Capture totals include discovery/control traffic;
+fragment frames are counted separately without RTPS payload attribution. Default
+SRT capture handling still rejects fragmentation. CPU/wire windows, equivalent
+security/command workloads and the full matrix remain pending; these DDS results
+support harness validation, not a performance advantage claim. See the
+[DDS sensor evidence](evidence/m3-dds-sensors-2026-11-05/README.md).

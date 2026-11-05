@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 157, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 151, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 117, in operator
+    self.wait(lambda:all(self.counts[r]['received']>20 for r in self.counts),'typed DDS stream')
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 81, in wait
+    raise RuntimeError('timeout: '+label)
+RuntimeError: timeout: typed DDS stream
