@@ -931,3 +931,29 @@ weiterhin. Keine Frische-/Lease-/Budget-Lockerung, kein automatisches altes
 COMMAND. Separate Seal-Zähler unterscheiden Inserts und bereits vorhandene
 Records von ausführbaren COMMANDs und reinen QUERYs. Evidenz:
 `evidence/m3-dds-expiry-seal-2026-11-05/`.
+
+
+M3-DDS-Pacing-Experiment (2026-11-05): `--dds-profile paced-sensors` ist eine
+explizite Variante, Default bleibt system. Gleiche 200/50-Hz-Quelle und
+simultaneous-Start, gleiche N5-Kernel-/Konkurrenzbedingungen. UDPv4/SHM mit 1200-
+Byte-Paketisierung plus nur zwei asynchrone Sensor-Writer auf gemeinsamem
+1600-Byte/50-ms-Flowcontroller ihres Participants. ROS-Endpoint-QoS bleibt
+BestEffort/Volatile/KeepLast(1); Control Reliable/Volatile/KeepLast(64) bleibt
+synchron auf Default-Controller. Keine Netzwerkpriorität oder Discovery-Bypass.
+RMW-XML-Opt-in nur für diese Variante; Memory-Policy PREALLOCATED_WITH_REALLOC und
+DataSharing OFF explizit erhalten. SHM-Transport bleibt aktiv.
+
+Standalone-Native-Probe prüft reale Provider-QoS/Controller vor dem Labor in
+separatem network-none-Container, ohne Warmup gemessener Peers. N5-Prüfung verlangt
+lebenden Konkurrenten im Szenario-Polling und plausibles gesamtes UDP-Angebot bei
+128.000 bit/s/1024 Byte; kein Nachweis fenstergenauer Zustellung. Publish-Fences
+frieren Aufrufe ein; asynchrone Restdaten werden weiter mit unveränderten
+Quieszenz-/Sequenzgrenzen geprüft, kein behaupteter Wire-Flush.
+
+Fünf Minuten N5: 150/150 SUCCEEDED/150 Effekte, drei Smoke-Seeds je 8/8. Dafür
+75.025 produziert/19.128 Callbacks; bewusste Middleware-Pacing-/Ersetzungsverluste
+sind Teil fehlender Pre-Callback-Population, kein isolierter WAN-Verlustnachweis.
+System/UDP1200 scheitern weiterhin am Cold-Start. Variante ist ein DDS-Baseline-
+Kandidat, keine SRT-/DDS-Überlegenheits- oder M3-Abnahme. SDK, Frame-Protokoll v2,
+Wire 1, IPC 3 und alle Ausführungsgates unverändert. Evidenz:
+`evidence/m3-dds-paced-sensors-2026-11-05/`.

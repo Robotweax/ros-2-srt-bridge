@@ -8,7 +8,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_dds import summarize_sensor_window, DdsLab
+from m3_dds import summarize_sensor_window, DdsLab, profile_environment, summarize_competitor
 from m3_capture import summarize
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
 from dds_clock import interval_distance, ClockMonitor
@@ -26,6 +26,40 @@ class TransportProfileTests(unittest.TestCase):
         self.assertFalse(tree.findall('.//d:publisher',ns));self.assertFalse(tree.findall('.//d:subscriber',ns))
         with self.assertRaisesRegex(ValueError,'unsupported'):DdsLab('.', '.', 'unused', 'unknown')
         self.assertEqual(DdsLab('.', '.', 'unused').transport_profile,'system')
+
+    def test_pacing_is_sensor_only_with_explicit_memory_and_xml_opt_in(self):
+        root=Path(__file__).resolve().parents[1];ns={'d':'http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles'}
+        tree=ET.parse(root/'containers/dds-paced-sensors.xml')
+        flow=tree.find('.//d:flow_controller_descriptor',ns)
+        self.assertEqual((flow.find('d:max_bytes_per_period',ns).text,flow.find('d:period_ms',ns).text),('1600','50'))
+        publishers=tree.findall('.//d:publisher',ns)
+        asynchronous=[p for p in publishers if p.find('d:qos/d:publishMode/d:kind',ns).text=='ASYNCHRONOUS']
+        self.assertEqual({p.get('profile_name') for p in asynchronous},{'/robot/imu','/robot/joint_states'})
+        for p in publishers:
+            self.assertEqual(p.find('d:historyMemoryPolicy',ns).text,'PREALLOCATED_WITH_REALLOC')
+            self.assertEqual(p.find('d:qos/d:data_sharing/d:kind',ns).text,'OFF')
+            self.assertIsNone(p.find('d:qos/d:reliability',ns));self.assertIsNone(p.find('d:qos/d:history',ns))
+        default=next(p for p in publishers if p.get('is_default_profile')=='true')
+        self.assertEqual(default.find('d:qos/d:publishMode/d:kind',ns).text,'SYNCHRONOUS')
+        self.assertIsNone(default.find('d:qos/d:publishMode/d:flow_controller_name',ns))
+        self.assertEqual(profile_environment('system'),{})
+        self.assertNotIn('RMW_FASTRTPS_USE_QOS_FROM_XML',profile_environment('udp1200'))
+        self.assertEqual(profile_environment('paced-sensors')['RMW_FASTRTPS_USE_QOS_FROM_XML'],'1')
+
+
+class CompetitorTests(unittest.TestCase):
+    def test_requires_measured_offered_load_and_explicit_stop_reason(self):
+        data=dict(start=dict(test_start=dict(protocol='UDP',target_bitrate=128000,blksize=1024)),
+            intervals=[{}],end=dict(sum=dict(bits_per_second=128100,bytes=16000,seconds=1)),error='interrupt - the client has terminated')
+        self.assertEqual(summarize_competitor(data)['target_bitrate'],128000)
+        for key,value in [('target_bitrate',0),('protocol','TCP'),('blksize',1400)]:
+            bad=copy.deepcopy(data);bad['start']['test_start'][key]=value
+            with self.assertRaises(ValueError):summarize_competitor(bad)
+        for key,value in [('bits_per_second',0),('bytes',0),('seconds',0)]:
+            bad=copy.deepcopy(data);bad['end']['sum'][key]=value
+            with self.assertRaises(ValueError):summarize_competitor(bad)
+        bad=copy.deepcopy(data);bad['error']='connect failed'
+        with self.assertRaises(ValueError):summarize_competitor(bad)
 
 
 class FragmentTests(unittest.TestCase):

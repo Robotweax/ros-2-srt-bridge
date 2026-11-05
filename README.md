@@ -596,3 +596,28 @@ a full M2 rebuild pass. N4 cross-session uncertainty and N5 simultaneous startup
 remain open. See [expiry-seal evidence](evidence/m3-dds-expiry-seal-2026-11-05/README.md).
 The extra DDS reconciliation semantics/costs still need SRT comparison parity;
 M3 remains incomplete.
+
+
+An explicit `paced-sensors` DDS lab profile now reaches simultaneous N5 readiness
+with telemetry already streaming:
+
+```sh
+python3 tools/run_m3_dds.py --commands --profile N5 --dds-profile paced-sensors --smoke
+```
+
+Only the two sensor writers use asynchronous publication and a shared
+1600-bytes/50-ms controller. Controls retain their QoS and default publication
+mode. A standalone native provider preflight verifies the applied settings in
+an isolated container. Source production stays at 200/50 Hz; fewer sensor updates
+reach callbacks. The profile changes egress policy and is not a lossless result.
+
+The five-minute N5 probe confirms 150/150 commands with 150 effects; three smoke
+seeds each confirm 8/8. The long run produces 75,025 samples and receives 19,128,
+all passing its shared-VM age estimate gate. System and UDP-1200 still fail cold
+readiness. The default remains system. The N5 runner validates whole-run offered
+competition and checks process liveness; matched-window delivery remains open.
+35 Python checks, native positive/negative checks, paced fault acceptance and
+N0/sensor regressions pass. Production compiled sources and binaries are unchanged.
+See [paced-profile evidence](evidence/m3-dds-paced-sensors-2026-11-05/README.md).
+SRT pacing/reconciliation cost parity, clock/security and CPU/wire/matrix gates
+remain open; M3 stays in development.

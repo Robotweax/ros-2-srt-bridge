@@ -9,7 +9,7 @@ import re
 import shlex
 import subprocess
 import time
-from m3_dds import DdsLab
+from m3_dds import DdsLab,DDS_PROFILES,verify_profile
 from m3_network import SEEDS
 from m3_capture import summarize
 
@@ -19,6 +19,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--profile',choices=['N0'],default='N0')
+    parser.add_argument('--dds-profile',choices=list(DDS_PROFILES),default='system')
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 binaries; recorded as development reuse')
     args=parser.parse_args()
@@ -27,7 +28,7 @@ def main():
     run=ROOT/'.local/m3-dds-commands'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
     report=dict(status='running',milestone='M3 DDS command development acceptance',sensor_only=False,commands_qualified=False,
-        complete_m3_acceptance=False,profile=args.profile,seed=args.seed,scenario_deadline_seconds=seconds+150,skip_build=args.skip_build,
+        complete_m3_acceptance=False,dds_transport_profile=args.dds_profile,profile=args.profile,seed=args.seed,scenario_deadline_seconds=seconds+150,skip_build=args.skip_build,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
             for folder in ['src','ros2','proto','cmake','containers','tools','tests']
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
@@ -63,7 +64,8 @@ def main():
         report['sdk_archives_sha256']={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((ROOT/'install/bridge-m3').glob('lib*/lib*.a'))}
         binary=ROOT/'install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'
         report['simulator_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
-        lab=DdsLab(ROOT,run,image);lab.start()
+        report.update(verify_profile(ROOT,run,image,args.dds_profile,execute,build_probe=not args.skip_build))
+        lab=DdsLab(ROOT,run,image,args.dds_profile);lab.start()
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
         # time namespaces. Capture the raw proof rather than assuming host time.

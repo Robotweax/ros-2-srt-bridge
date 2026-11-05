@@ -366,5 +366,42 @@
     "n5_control_first_existing_seal_replies": 31,
     "n5_simultaneous_status": "failed before measurement",
     "complete_m3_acceptance": false
+  },
+  "dds_paced_sensor_followup": {
+    "status": "explicit paced profile passes simultaneous N5 development runs; system default cold-start remains open",
+    "evidence": "evidence/m3-dds-paced-sensors-2026-11-05",
+    "default_profile": "system",
+    "profile": "paced-sensors",
+    "topics": [
+      "/robot/imu",
+      "/robot/joint_states"
+    ],
+    "max_bytes_per_period": 1600,
+    "period_ms": 50,
+    "publication_mode": "ASYNCHRONOUS sensors only",
+    "shared_controller_scope": "two simulator writers in one participant; not Ethernet/global cap",
+    "control_qos_unchanged": true,
+    "native_preflight_required": true,
+    "competitor_validation_scope": "whole-run UDP offered load plus process liveness; not matched-window delivery",
+    "long_run": "20261105T214042516097Z",
+    "seconds": 300,
+    "n5_confirmed": 150,
+    "n5_effects": 150,
+    "n5_produced": 75025,
+    "n5_received": 19128,
+    "n5_age_estimates_qualified": true,
+    "n5_lease_expirations_each": 0,
+    "n5_smoke_seeds": [
+      1701,
+      2903,
+      4211
+    ],
+    "n5_smoke_successes_each": 8,
+    "system_n5_status": "failed before measurement",
+    "udp1200_n5_status": "failed before measurement",
+    "host_python_tests": 35,
+    "production_compiled_inputs_unchanged_since": "02d40e6",
+    "final_source_manifests_verified": 10,
+    "complete_m3_acceptance": false
   }
 }

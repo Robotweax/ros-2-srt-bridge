@@ -9,7 +9,7 @@ import re
 import shlex
 import subprocess
 import time
-from m3_dds import DdsLab,summarize_sensor_window
+from m3_dds import DdsLab,summarize_sensor_window,DDS_PROFILES,verify_profile,summarize_competitor
 from m3_network import SEEDS
 from m3_capture import summarize
 from m3_results import summarize_commands
@@ -21,7 +21,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--profile',choices=['N0','N1','N2','N4','N5'],default='N0')
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
-    parser.add_argument('--dds-profile',choices=['system','udp1200'],default='system',help='explicit DDS transport variant; system remains default')
+    parser.add_argument('--dds-profile',choices=list(DDS_PROFILES),default='system',help='explicit DDS transport variant; system remains default')
     parser.add_argument('--startup',choices=['simultaneous','control-first'],default='simultaneous',help='explicit combined startup ordering; impairment stays active')
     parser.add_argument('--commands',action='store_true',help='combine steady sensors and journaled commands every 2s')
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
@@ -47,7 +47,7 @@ def main():
         clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification',
         dds_command_protocol=2,expiry_seal_scope='non-executing durable absence seal; original sender/process/session only, strictly past saved 5s deadline; existing records unchanged',
         dds_command_channels=dict(control='Reliable/Volatile/KeepLast(64)',liveness='BestEffort/Volatile/KeepLast(1)',hello_period_ms=100,lease_ns=1500000000,sequence_scope='independent per channel'))
-    lab=None;processes=[];captures=[]
+    lab=None;processes=[];captures=[];competitor=None;competitor_alive_checks=0
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
         print(label,flush=True)
@@ -73,9 +73,7 @@ def main():
         if args.commands:
             binary=ROOT/'install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
             report['command_node_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
-        if args.dds_profile!='system':
-            profile=ROOT/'containers/dds-udp1200.xml'
-            report['dds_transport_xml_sha256']=hashlib.sha256(profile.read_bytes()).hexdigest()
+        report.update(verify_profile(ROOT,run,image,args.dds_profile,execute,build_probe=not args.skip_build))
         lab=DdsLab(ROOT,run,image,args.dds_profile);lab.start()
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
@@ -95,7 +93,7 @@ def main():
             log=(run/'competitor-process.log').open('w')
             p=subprocess.Popen(['docker','exec',lab.containers['robot'],'iperf3','-c',lab.addresses['operator'],
                 '-u','-b','128K','-t',str(seconds+90),'-l','1024','--logfile',inside+'/competing-traffic.json','-J'],stdout=log,stderr=subprocess.STDOUT)
-            captures.append((p,log))
+            captures.append((p,log));competitor=p
         lab.snapshot('before')
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
@@ -106,6 +104,9 @@ def main():
             processes.append((p,log))
         deadline=time.monotonic()+seconds+150;outage=False
         while time.monotonic()<deadline:
+            if competitor is not None:
+                if competitor.poll() is not None:raise RuntimeError('N5 competitor exited before scenario completion')
+                competitor_alive_checks+=1
             if any(p.poll() not in (None,0) for p,_ in processes):raise RuntimeError('DDS scenario failed')
             if all(p.poll() is not None for p,_ in processes):break
             if args.profile=='N4' and not outage and (run/'measurement-start.json').exists():
@@ -155,13 +156,19 @@ def main():
                     if any('_srt_' in key or '_source_data' in key or '_fec_parity' in key for key in capture['classes']):raise RuntimeError('SRT traffic on DDS baseline')
                 report['capture_scope']='whole-run Ethernet frames including discovery, simulator diagnostics/services and N5 competitor; multicast ingress may be direction other; IP fragment frames counted separately without RTPS/payload attribution; not matched-window sensor bytes'
             except Exception as error:report['status']='failed';report['capture_error']=str(error)
+            if competitor is not None:
+                try:
+                    report['competitor_check']=summarize_competitor(json.loads((run/'competing-traffic.json').read_text()))
+                    report['competitor_check']['alive_poll_checks']=competitor_alive_checks
+                    if not competitor_alive_checks:raise RuntimeError('competitor was never observed alive')
+                except Exception as error:report['status']='failed';report['competitor_error']=str(error)
             lab.cleanup()
         for p,log in processes:
             try:p.wait(timeout=5)
             except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=5)
             log.close()
         save();print(run,flush=True)
-    if report['status']!='passed':raise RuntimeError(report.get('capture_error',report.get('error','DDS baseline failed')))
+    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('capture_error',report.get('error','DDS baseline failed'))))
 
 
 if __name__=='__main__':main()

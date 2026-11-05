@@ -2,12 +2,62 @@
 from m3_network import NetworkLab
 import ipaddress
 import json
+import hashlib
+from pathlib import Path
+
+
+DDS_PROFILES={'system':None,'udp1200':'containers/dds-udp1200.xml','paced-sensors':'containers/dds-paced-sensors.xml'}
+
+
+def profile_environment(profile):
+    if profile not in DDS_PROFILES:raise ValueError('unsupported DDS transport profile')
+    result={}
+    if DDS_PROFILES[profile]:result['FASTRTPS_DEFAULT_PROFILES_FILE']='/workspace/'+DDS_PROFILES[profile]
+    if profile=='paced-sensors':result['RMW_FASTRTPS_USE_QOS_FROM_XML']='1'
+    return result
+
+
+def verify_profile(root,run,image,profile,execute,*,build_probe=False):
+    """Isolated native provider preflight; never joins the measured lab network."""
+    root=Path(root);run=Path(run);result=dict(dds_profile_environment=profile_environment(profile))
+    if profile!='system':result['dds_transport_xml_sha256']=hashlib.sha256((root/DDS_PROFILES[profile]).read_bytes()).hexdigest()
+    if profile!='paced-sensors':return result
+    docker=['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none']
+    mount=['-v',str(root)+':/workspace','-w','/workspace',image,'bash','-c']
+    if build_probe:
+        execute('dds-profile-probe-build',docker+mount+[
+            'set -e; source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; '
+            'cmake -S tools/dds_profile_probe -B build/m3-dds-profile-probe -G Ninja -DCMAKE_BUILD_TYPE=Release; '
+            'cmake --build build/m3-dds-profile-probe --parallel 2'])
+    probe=root/'build/m3-dds-profile-probe/dds_profile_probe'
+    result['profile_probe_binary_sha256']=hashlib.sha256(probe.read_bytes()).hexdigest()
+    execute('dds-profile-probe',docker+[arg for key,value in profile_environment(profile).items() for arg in ('-e',key+'='+value)]+
+        ['-e','ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST','-e','RMW_IMPLEMENTATION=rmw_fastrtps_cpp']+mount+[
+            'source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec build/m3-dds-profile-probe/dds_profile_probe'])
+    result['profile_probe']=json.loads((run/'dds-profile-probe.log').read_text())
+    if result['profile_probe'].get('verified') is not True:raise RuntimeError('DDS profile probe did not verify settings')
+    result['sensor_output_policy']='explicit asynchronous sensor-only shared 1600-byte/50ms controller; KeepLast(1); not an Ethernet rate guarantee'
+    return result
+
+
+def summarize_competitor(data):
+    """Whole-run offered UDP load; not a matched-window delivery measurement."""
+    setup=data['start']['test_start'];total=data['end']['sum']
+    if setup.get('protocol')!='UDP' or setup.get('target_bitrate')!=128000 or setup.get('blksize')!=1024:
+        raise ValueError('unexpected N5 competitor configuration')
+    if data.get('error') not in (None,'interrupt - the client has terminated'):
+        raise ValueError('N5 competitor error: '+str(data['error']))
+    rate=total.get('bits_per_second',0)
+    if not data.get('intervals') or total.get('bytes',0)<=0 or total.get('seconds',0)<=0 or not 115200<=rate<=140800:
+        raise ValueError('N5 competitor offered load not established')
+    return dict(protocol='UDP',target_bitrate=128000,block_bytes=1024,bytes=total['bytes'],seconds=total['seconds'],
+        offered_bits_per_second=rate,scope='whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss')
 
 
 class DdsLab(NetworkLab):
     def __init__(self,root,run,image,transport_profile='system'):
         super().__init__(root,run,image)
-        if transport_profile not in ('system','udp1200'):raise ValueError('unsupported DDS transport profile')
+        if transport_profile not in DDS_PROFILES:raise ValueError('unsupported DDS transport profile')
         self.transport_profile=transport_profile
 
     def save(self):
@@ -15,6 +65,7 @@ class DdsLab(NetworkLab):
         path=self.run/'network.json'
         data=json.loads(path.read_text())
         data['dds_transport_profile']=self.transport_profile
+        data['dds_profile_environment']=profile_environment(self.transport_profile)
         data['isolation']='internal Docker bridge; shared ROS domain 60, explicit static peers; DDS over container eth0; no SRT processes'
         path.write_text(json.dumps(data,indent=2)+'\n')
 
@@ -28,7 +79,7 @@ class DdsLab(NetworkLab):
                 '--network',self.name,'--name',name,'--cap-add','NET_ADMIN',
                 '-e','ROS_DOMAIN_ID=60','-e','ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET',
                 '-e','RMW_IMPLEMENTATION=rmw_fastrtps_cpp']+
-                (['-e','FASTRTPS_DEFAULT_PROFILES_FILE=/workspace/containers/dds-udp1200.xml'] if self.transport_profile=='udp1200' else [])+
+                [arg for key,value in profile_environment(self.transport_profile).items() for arg in ('-e',key+'='+value)]+
                 ['-v',str(self.root)+':/workspace',
                 '-w','/workspace',self.image,'sleep','infinity'])
             info=json.loads(self.execute(role+'-inspect',['docker','inspect',name]))[0]

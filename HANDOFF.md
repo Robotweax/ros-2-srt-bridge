@@ -995,3 +995,56 @@ Abwesenheitsnachweis aus einem neuen leeren Journal ableiten. N5-Discovery und
 SRT-Parität der neuen Reconciliation-Semantik/-Kosten qualifizieren, danach
 Clock-/Crypto-/CPU-/Wire-Gleichheit und volle Matrix. M3 offen, PR #2 Draft,
 Intrinsic/M4 unverändert.
+
+### M3 explizites DDS-Sensor-Pacing für N5 — 2026-11-05
+
+- Neue optionale `--dds-profile paced-sensors` in Combined- und Fault-Runner.
+  Default bleibt system. Keine ROS-/Core-/SDK-/SRT-/Protokolländerung; unveränderte
+  kompilierte Inputs/Binaries seit 02d40e6. Keine Gates gelockert. Normale
+  Nicht-skip-Builds bauen die separate Native-Probe automatisch; Preflight bei
+  jeder paced-Ausführung, auch bei dokumentierter Binary-Wiederverwendung.
+- XML: gleiche UDPv4/SHM-1200-Paketisierung wie vorheriger negativer Versuch,
+  nur `/robot/imu` und `/robot/joint_states` asynchron auf gemeinsamem Controller
+  1600 Byte/50 ms pro Simulator-Participant. Kein Ethernet-/globales Budget oder
+  TC-Prioritätsbypass. Source bleibt 200/50 Hz, Sensor-QoS BE/Volatile/KeepLast(1),
+  Controls Reliable/Volatile/KeepLast(64) synchron auf Default-Controller.
+  RMW-XML-Opt-in nur für diese Variante; PREALLOCATED_WITH_REALLOC und DataSharing
+  OFF explizit erhalten, SHM-Transport weiter aktiv.
+- Standalone-C++-Probe nutzt öffentliche RMW/Fast-DDS-Handles für reale Controller-
+  und Writer-QoS. Positive Prüfung und Build-Rezept bestanden. Ohne XML-Opt-in
+  verweigert Provider die Writer-Erzeugung. Probe läuft vor Laborerzeugung in
+  eigenem network-none-Container, ohne Discovery-Warmup gemessener Peers.
+  Sie wird nicht in Bridge/Simulator gelinkt; Fast-DDS-spezifisches Lab-Werkzeug.
+- N5-Runner prüft jetzt lebenden Konkurrenten während Szenario-Polls sowie UDP,
+  Ziel 128.000 bit/s, 1024 Byte und plausibles gesamtes tatsächliches Angebot.
+  Cleanup-SIGINT akzeptiert; anderer Fehler/fehlende Last scheitert. Kein Beleg
+  fenstergenauer Zustellung. TBF 512 kbit/s/Netem 16 und Konkurrenz bleiben vor
+  Source-/Koordinatorstart aktiv; kein control-first-Publikationsstopp.
+- Fünfminütiges N5 simultaneous/paced `20261105T214042516097Z`: 150/150 bestätigt,
+  150 Effekte, keine Lease-Abläufe/Inbox-Drops/Seals, beide Enden ready. Source
+  Ist 199,993/50,002 Hz, 60.019 IMU/15.006 Joints produziert, 11.752/7.376 Callbacks.
+  Alle 19.128 empfangenen Samples bestehen lokale Alterschecks. 55.897 fehlen
+  vor Callback inklusive beabsichtigter Middleware-Pacing-/Ersetzungsanteile;
+  kein isolierter WAN-Verlust. Beide geschlossenen Journale quick_check ok,
+  identische 150 SUCCEEDED/Revision-3-Records, Resultgenerationen 1–150.
+  Konkurrenz gesamt 128.009,2 bit/s, 1250 lebende Prozess-Polls.
+- Drei paced-N5-Smokes, Seeds 1701/2903/4211, je 8/8 bestätigt/acht Effekte.
+  Frische System- und UDP1200-N5-Runs scheitern vor Messfenster trotz validierter
+  Konkurrenz. Pacing ist expliziter Baseline-Kandidat, kein Default-Fix und kein
+  verlustloses Ergebnis. N0 system, N0 paced, sensor-only paced und paced-N0-
+  Fault-Acceptance mit Duplikat/Konflikt/UNKNOWN/SIGKILL/QUERY/No-Replay/5-s-Shutdown
+  bestanden; blockierter Handler lässt Leases unverändert. 35 Python-Tests bestanden.
+  Die 32 ROS-GTests/volle M2-Regression bei 02d40e6 bleiben historische Evidenz,
+  nicht als hier erneut ausgeführt ausgeben.
+- Evidenz `evidence/m3-dds-paced-sensors-2026-11-05/`: zehn finale Source-Inventare
+  passen (143 Dateien), installierte Python-Dateien bytegleich, unveränderte
+  Bridge-/Simulator-Binaries und Native-Probe-Build-/Sourcehashes geprüft.
+  Erster Smoke vor strenger Konkurrenzprüfung separat unter development erhalten.
+  Roh-PCAPs/Journale lokal, bereinigte Resultate/Hashes/Provider-QoS gespeichert.
+  Async-Fences frieren Publish-Aufrufe ein; Restdaten bleiben durch bestehende
+  Quieszenz-/Sequenzprüfungen beobachtet, kein behaupteter physischer Wire-Flush.
+
+**Weiter:** getunte DDS-Pacing-/Reconciliation-Semantik und Kosten gegenüber SRT
+angleichen; DDS-Emissionsstufen, Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix
+qualifizieren. System-N5-Discovery und Context-wechselnde Unsicherheit bleiben
+explizit offen. M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
