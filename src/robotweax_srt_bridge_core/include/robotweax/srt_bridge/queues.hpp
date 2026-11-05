@@ -1,5 +1,6 @@
 #pragma once
 #include <robotweax/srt_bridge/session.hpp>
+#include <optional>
 
 namespace robotweax::srt_bridge {
 enum class QueueError { none, busy, oversize, malformed, obsolete_connection, unknown_route, disabled_route, expired, out_of_order, stopped, invalid_time };
@@ -12,6 +13,7 @@ struct QueuedPacket {
     std::span<const std::byte> wire() const noexcept { return {bytes.data(),size}; }
 };
 struct QueueStats {
+    std::uint64_t sensor_enqueue_expired=0;
     std::uint64_t sensor_replaced=0, sensor_expired=0, sensor_flushed=0, sensor_out_of_order=0;
     std::uint64_t control_busy=0, control_flushed=0;
 };
@@ -38,6 +40,9 @@ public:
     void sensor_sent(std::uint32_t route) noexcept;
     DiscardedCommands apply(const SessionAction& action) noexcept;
     DiscardedCommands stop() noexcept;
+    // Earliest eligibility of any occupied sample; null when empty.
+    std::optional<std::uint64_t> sensor_due_ns(std::uint64_t now) const noexcept;
+    std::size_t sensor_count() const noexcept;
     std::size_t control_count() const noexcept { return count_; }
     std::size_t control_bytes() const noexcept { return bytes_; }
     const QueueStats& stats() const noexcept { return stats_; }

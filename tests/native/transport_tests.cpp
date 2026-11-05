@@ -48,6 +48,10 @@ void cadence(TransportOwner& caller,TransportOwner& listener){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     producer.join();
+    const auto source=caller.snapshot(),sink=listener.snapshot();
+    check(source.sensor_submitted==source.sensor_ingress_pending+source.sensor_ingress_replaced+source.sensor_ingress_flushed+source.sensor_inputs,"sender mailbox accounting");
+    check(source.sensor_inputs==source.sensor_input_rejected+source.sensor_outbound_pending+source.sensor_outbound_replaced+source.sensor_outbound_expired+source.sensor_outbound_flushed+source.sensor_sent,"sender paced queue accounting");
+    check(sink.samples_received==sink.samples_rejected+sink.sensor_receive_pending+sink.sensor_receive_replaced+sink.sensor_receive_flushed+sink.sensor_polled+sink.sensor_poll_expired,"receiver mailbox accounting");
     std::cout<<"cadence admitted="<<admitted.load()<<" delivered="<<delivered<<'\n';
     check(admitted.load()>=80,"200 Hz producer could not enter bounded mailbox");
     check(delivered*10>=admitted.load()*8,"200 Hz route decimated by transport owner cadence");

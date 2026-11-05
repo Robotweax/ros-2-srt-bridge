@@ -73,15 +73,19 @@
     "terminal status observation latency with unresolved population",
     "payload-counter gap counts within observed spans",
     "per-process CPU and summed RSS observations",
-    "Ethernet frame accounting and FEC parity/source distinction"
+    "Ethernet frame accounting and FEC parity/source distinction",
+    "source-fenced stable empty-pipeline sensor counter deltas with owner epochs",
+    "six sensor-stage conservation equations and window-only age histograms",
+    "actual simulator source rates with phase-preserving schedule",
+    "bounded command result drain with per-row cutoff flag"
   ],
   "pending_gates": [
     "DDS Best Effort sensor and fully journaled Reliable command baseline",
     "N3 deterministic source-DATA fault selector",
     "N4 admission/dispatch/result-commit barriers",
     "complete three-seed full-duration comparison matrix",
-    "final exact measurement-window/tail accounting and achieved source-rate qualification",
-    "attribute residual N0 gaps and finish exact source/window accounting; major 10ms mailbox cadence loss is fixed"
+    "matched-window CPU and wire-byte measurements; controlled resource comparison",
+    "further reduce and qualify strict-pacing replacements at actual 200/50 Hz; N5 command outcome qualification"
   ],
   "qualification": "Development evidence only; no M3 acceptance or SRT performance advantage claimed",
   "environment": {
@@ -109,5 +113,18 @@
       "effects": 150
     },
     "native_delivery_gate": "200 Hz, >=80% of admitted samples on the qualified Linux test profile"
+  },
+  "window_accounting_followup": {
+    "evidence": "evidence/m3-window-accounting-2026-11-05",
+    "n0_run": "20261105T153616391199Z",
+    "actual_imu_hz": 199.958791044,
+    "actual_joint_hz": 49.997195341,
+    "source_produced": 75011,
+    "observer_received": 72372,
+    "missing": 2639,
+    "unaccounted": 0,
+    "confirmed_commands": 150,
+    "n5_smoke_unresolved_commands": 1,
+    "status": "sensor windows balanced; M3 acceptance pending"
   }
 }

@@ -72,6 +72,12 @@ struct TransportOwner::Impl {
     std::thread thread;
     mutable std::mutex mutex;
     TransportSnapshot shared{},current{};
+    struct MailboxCounts {std::uint64_t sensor_submitted=0,sensor_ingress_replaced=0,sensor_ingress_flushed=0,sensor_inputs=0,sensor_receive_replaced=0,sensor_receive_flushed=0,sensor_polled=0,sensor_poll_expired=0;} mailbox_counts;
+    void flush_mailboxes(){
+        mailbox_counts.sensor_ingress_flushed+=std::count(sample_pending.begin(),sample_pending.end(),true);
+        mailbox_counts.sensor_receive_flushed+=std::count(sample_received.begin(),sample_received.end(),true);
+        sample_pending.fill(false);sample_received.fill(false);
+    }
     std::array<Input,8> samples{};
     std::array<bool,8> sample_pending{},sample_received{};
     std::array<Input,64> controls{};
@@ -125,7 +131,7 @@ struct TransportOwner::Impl {
         current.clock_deadline_ns=session.clock_deadline().value_or(0);current.clock_qualified=session.clock_state()==ClockError::none&&monotonic_ns()<current.clock_deadline_ns;
         current.control_retry=links[0].retry.state();current.sensor_retry=links[1].retry.state();
         std::lock_guard lock(mutex);
-        if(shared.context!=current.context||!current.running){sample_pending.fill(false);sample_received.fill(false);}
+        if(shared.context!=current.context||!current.running)flush_mailboxes();
         if(!same_control(shared.context,current.context)||!current.running){
             current.stale_work+=input_count+output_count;receipts={};receipt_cursor=0;
             for(auto& slot:checks)if(slot.state){if(slot.proof)slot.proof->pool->revoke(*slot.proof);slot.result.error=SessionError::obsolete_connection;slot.result.start_granted=false;slot.state=2;}
@@ -133,6 +139,20 @@ struct TransportOwner::Impl {
         }
         publication_allowed=current.running&&current.state==SessionState::active&&current.clock_qualified&&publication_epoch!=UINT64_MAX;
         current.control_ingress=input_count;current.control_received=output_count;
+        current.sensor_submitted=mailbox_counts.sensor_submitted;
+        current.sensor_ingress_replaced=mailbox_counts.sensor_ingress_replaced;
+        current.sensor_ingress_flushed=mailbox_counts.sensor_ingress_flushed;
+        current.sensor_inputs=mailbox_counts.sensor_inputs;
+        current.sensor_receive_replaced=mailbox_counts.sensor_receive_replaced;
+        current.sensor_receive_flushed=mailbox_counts.sensor_receive_flushed;
+        current.sensor_polled=mailbox_counts.sensor_polled;
+        current.sensor_poll_expired=mailbox_counts.sensor_poll_expired;
+        current.sensor_ingress_pending=std::count(sample_pending.begin(),sample_pending.end(),true);
+        current.sensor_receive_pending=std::count(sample_received.begin(),sample_received.end(),true);
+        current.sensor_outbound_pending=queues.sensor_count();
+        current.sensor_outbound_replaced=queues.stats().sensor_replaced;
+        current.sensor_outbound_expired=queues.stats().sensor_expired-queues.stats().sensor_enqueue_expired;
+        current.sensor_outbound_flushed=queues.stats().sensor_flushed;
         current.sensor_replaced+=shared.sensor_replaced;shared=current;current.sensor_replaced=0;
     }
     void close_fd(SRTSOCKET& fd){
@@ -184,7 +204,7 @@ struct TransportOwner::Impl {
         if(action.close_sensor)drop(1,permanent);
         if(action.close_control){drop(0,permanent);next_probe=0;}
         if(permanent){current.fault=TransportFault::protocol;links[0].retry.permanent_failure();links[1].retry.permanent_failure();}
-        if(action.flush_samples){std::lock_guard lock(mutex);sample_pending.fill(false);sample_received.fill(false);publication_allowed=false;if(publication_epoch!=UINT64_MAX)++publication_epoch;}
+        if(action.flush_samples){std::lock_guard lock(mutex);flush_mailboxes();publication_allowed=false;if(publication_epoch!=UINT64_MAX)++publication_epoch;}
         if(action.send){
             std::array<std::byte,management_payload_bytes> bytes{};auto& out=*action.send;
             const auto encoded=encode_management(out.payload,bytes);require(bool(encoded));
@@ -266,7 +286,7 @@ struct TransportOwner::Impl {
                 message.deadline_ns=result.evaluated_ns+max_age-std::uint64_t(result.age.age_ns->upper);
             }
             std::lock_guard lock(mutex);
-            if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at])++current.sensor_replaced;incoming_samples[at]=message;sample_received[at]=true;}
+            if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at]){++current.sensor_replaced;++mailbox_counts.sensor_receive_replaced;}incoming_samples[at]=message;sample_received[at]=true;}
             else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;}
             ++current.received;
         }
@@ -307,18 +327,18 @@ struct TransportOwner::Impl {
         std::array<Input,9> work{};std::size_t count=0;
         {std::lock_guard lock(mutex);
             if(input_count&&queues.control_count()<64){work[count++]=controls[input_head];if(controls[input_head].kind==Kind::command)--input_commands;controls[input_head]={};input_head=(input_head+1)%controls.size();--input_count;}
-            for(std::size_t i=0;i<route_count;++i)if(sample_pending[i]){work[count++]=samples[i];samples[i]={};sample_pending[i]=false;}
+            for(std::size_t i=0;i<route_count;++i)if(sample_pending[i]){work[count++]=samples[i];++mailbox_counts.sensor_inputs;samples[i]={};sample_pending[i]=false;}
         }
         for(std::size_t i=0;i<count;++i){auto& item=work[i];
-            if((item.kind==Kind::sample?item.context!=context():!same_control(item.context,context()))||(item.proof&&(!item.proof->live->load()||time_expired(item.proof->entry)))){++current.stale_work;continue;}
+            if((item.kind==Kind::sample?item.context!=context():!same_control(item.context,context()))||(item.proof&&(!item.proof->live->load()||time_expired(item.proof->entry)))){++current.stale_work;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;}
             const auto time=monotonic_ns();
             auto made=item.kind==Kind::sample?session.make_sample(item.route,item.size,time):session.make_control(item.kind,item.route,item.request,item.size,item.origin,time);
-            apply(made.action);if(!made.envelope){++current.rejected;continue;}
+            apply(made.action);if(!made.envelope){++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;}
             auto envelope=*made.envelope;
             if(item.kind==Kind::sample)envelope.source_monotonic_ns=item.origin; // Preserve callback ingress, not dequeue time.
             const auto body=std::span(item.bytes).first(item.size);
             const auto result=item.kind==Kind::sample?queues.sensor({Channel::sensor,links[1].generation},envelope,body,time):queues.control({Channel::control,links[0].generation},envelope,body);
-            if(result!=QueueError::none)++current.rejected;
+            if(result!=QueueError::none){++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;}
             else if(item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
         }
     }
@@ -340,7 +360,7 @@ struct TransportOwner::Impl {
             const int count=srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
             const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;require(budget.finish(permit.id,count!=SRT_ERROR));
             if(count==SRT_ERROR){if(error!=SRT_EASYNCSND)lost(i);return;}
-            require(count==static_cast<int>(packet->size));++current.sent;
+            require(count==static_cast<int>(packet->size));++current.sent;if(packet->envelope.kind==Kind::sample)++current.sensor_sent;
             if(packet->envelope.kind==Kind::command||packet->envelope.kind==Kind::query)remember(packet->envelope);
             else if(packet->envelope.kind==Kind::error)++current.errors_sent;
             const auto route=packet->envelope.route_id;
@@ -375,13 +395,22 @@ struct TransportOwner::Impl {
                 while(!stopping.load(std::memory_order_relaxed)){
                     timers();publish();process_checks();inputs();send(0);send(1);
                     if(links[0].ready){int events=SRT_EPOLL_ERR|(control_space()?SRT_EPOLL_IN:0);require(srt_epoll_update_usock(epoll,links[0].fd,&events)!=SRT_ERROR);}
-                    // A 10 ms idle wait coalesces a 200 Hz producer into roughly 100 Hz
-                    // in the latest-only mailbox. The pinned provider also polls system
-                    // wake descriptors at 10 ms, so keep a bounded 1 ms sender cadence.
-                    // Disconnected/listener owners retain the quieter 10 ms wait.
-                    const int wait_ms=config.session.role==Role::caller&&session.state()==SessionState::active?1:10;
+                    // Keep the active sender's maximum requested wait at 1ms.
+                    // If a paced sample becomes eligible sooner, poll SRT first,
+                    // then sleep only to that deadline. Never spin or round a
+                    // near-due sample past its next replacement arrival.
+                    const auto before_wait=monotonic_ns();
+                    const bool sending=config.session.role==Role::caller&&session.state()==SessionState::active;
+                    std::uint64_t wait_ns=sending?1000000:10000000;
+                    if(sending){const auto due=queues.sensor_due_ns(before_wait);if(due&&*due>before_wait)wait_ns=std::min(wait_ns,*due-before_wait);}
+                    const int wait_ms=static_cast<int>(wait_ns/1000000);
+                    const auto wake_at=before_wait+wait_ns;
                     std::array<SRT_EPOLL_EVENT,4> events{};const int count=srt_epoll_uwait(epoll,events.data(),events.size(),wait_ms);
-                    if(count==SRT_ERROR){if(srt_getlasterror(nullptr)==SRT_ETIMEOUT)continue;throw std::runtime_error("epoll failed");}
+                    if(count==SRT_ERROR&&srt_getlasterror(nullptr)!=SRT_ETIMEOUT)throw std::runtime_error("epoll failed");
+                    if(count<=0){
+                        if(!wait_ms){const auto time=monotonic_ns();if(time<wake_at)std::this_thread::sleep_for(std::chrono::nanoseconds(wake_at-time));}
+                        continue;
+                    }
                     for(int n=0;n<count;++n)for(unsigned i=0;i<2;++i){
                         if(events[n].fd==links[i].listener){if(events[n].events&SRT_EPOLL_ERR)throw std::runtime_error("listener failed");accept(i);}
                         else if(events[n].fd==links[i].fd){if(events[n].events&SRT_EPOLL_ERR)lost(i);else if(links[i].ready&&(events[n].events&SRT_EPOLL_IN))receive(i);}
@@ -410,7 +439,8 @@ struct TransportOwner::Impl {
         if(stopping.load())return SubmitResult::stopped;
         if((item.kind==Kind::sample?item.context!=shared.context:!same_control(item.context,shared.context))||zero(item.context.session))return SubmitResult::obsolete;
         if(item.kind==Kind::sample){const auto at=index(item.route);if(at==route_count)return SubmitResult::invalid;
-            if(sample_pending[at])++shared.sensor_replaced;
+            ++mailbox_counts.sensor_submitted;
+            if(sample_pending[at]){++shared.sensor_replaced;++mailbox_counts.sensor_ingress_replaced;}
             samples[at]=item;sample_pending[at]=true;
         }else{
             if(input_count==controls.size()||(item.proof&&input_commands==56))return SubmitResult::busy;
@@ -490,8 +520,8 @@ bool TransportOwner::poll_control(TransportMessage& message){
 bool TransportOwner::poll_sample(TransportMessage& message){
     std::lock_guard lock(impl_->mutex);const auto time=monotonic_ns();
     for(std::size_t n=0;n<impl_->route_count;++n){const auto at=(impl_->sample_cursor+n)%impl_->route_count;if(!impl_->sample_received[at])continue;
-        impl_->sample_received[at]=false;const auto& item=impl_->incoming_samples[at];if(time>=item.deadline_ns)continue;
-        message=item;impl_->sample_cursor=(at+1)%impl_->route_count;return true;}
+        impl_->sample_received[at]=false;const auto& item=impl_->incoming_samples[at];if(time>=item.deadline_ns){++impl_->mailbox_counts.sensor_poll_expired;continue;}
+        ++impl_->mailbox_counts.sensor_polled;message=item;impl_->sample_cursor=(at+1)%impl_->route_count;return true;}
     return false;
 }
 }

@@ -15,7 +15,7 @@ import traceback
 
 import rclpy
 from robotweax_srt_bridge_msgs.msg import CommandStatus
-from robotweax_srt_bridge_msgs.srv import ExecuteCommand, GetCommandStatus
+from robotweax_srt_bridge_msgs.srv import ExecuteCommand, GetCommandStatus, GetBridgeMetrics, SetPublishing
 from m2_scenario import Driver, read, write
 
 
@@ -44,6 +44,8 @@ class Benchmark(Driver):
         self.sessions=set()
         self.last_resource = 0
         self.first_imu_marker=self.first_joint_marker=None
+        self.metric_client=self.create_client(GetBridgeMetrics,'/bridge/get_metrics')
+        self.publishing_client=self.create_client(SetPublishing,'/robot/set_publishing')
         self.resources = (self.run/(args.role+'-resources.jsonl')).open('w')
 
     def imu(self, message):
@@ -114,6 +116,56 @@ class Benchmark(Driver):
         self.resources.write(json.dumps(dict(monotonic_ns=stamp,clock_ticks_per_second=os.sysconf('SC_CLK_TCK'),processes=rows))+'\n')
         self.resources.flush()
 
+    def robot_action(self, action, request, response):
+        from rosidl_runtime_py.convert import message_to_ordereddict
+        if action=='reset_link':
+            self.stop(self.bridge);self.bridge=None
+            self.start_bridge()
+            self.wait(lambda:self.state and self.state.ready and self.state.clock_qualified,'fresh source link ready',30)
+            return True
+        if action in ('pause','resume'):
+            r=self.rpc(self.publishing_client,SetPublishing.Request(enabled=action=='resume'))
+            assert r.enabled==(action=='resume')
+            response.update(device=message_to_ordereddict(r.snapshot),monotonic_ns=r.monotonic_ns,enabled=r.enabled)
+            return True
+        if action=='metrics':
+            r=self.rpc(self.metric_client,GetBridgeMetrics.Request())
+            response.update(bridge=message_to_ordereddict(r.snapshot),monotonic_ns=r.monotonic_ns)
+            return True
+        return False
+
+    def checkpoint(self, pause):
+        from rosidl_runtime_py.convert import message_to_ordereddict
+        # Publishing is fenced in the simulator's timer callback group. Drain
+        # outstanding 250ms samples and local DDS before taking stable snapshots.
+        self.spin(2)
+        def take():
+            sender=self.robot_command('metrics')
+            r=self.rpc(self.metric_client,GetBridgeMetrics.Request())
+            return dict(sender=sender['bridge'],receiver=message_to_ordereddict(r.snapshot),
+                device=pause['device'],device_pause_monotonic_ns=pause['monotonic_ns'],
+                sender_snapshot_monotonic_ns=sender['monotonic_ns'],receiver_snapshot_monotonic_ns=r.monotonic_ns,
+                observer=dict(imu=self.remote_imu,joints=self.remote_joints))
+        end=time.monotonic()+8
+        while time.monotonic()<end:
+            before=take();self.spin(.15);after=take()
+            stable=lambda data:{key:value for key,value in data.items() if key.startswith('sensor_') or key.startswith('samples_') or key in ('imu_ingress','joint_ingress','transport_samples_received','transport_samples_rejected')}
+            empty=all(after[role][key]==0 for role in ('sender','receiver') for key in ('sensor_ingress_pending','sensor_outbound_pending','sensor_receive_pending'))
+            if empty and before['observer']==after['observer'] and all(stable(before[role])==stable(after[role]) for role in ('sender','receiver')):
+                return after
+        raise RuntimeError('sensor pipeline did not reach a stable, empty checkpoint')
+
+    def observe_command(self, row):
+        status=self.rpc(self.query,GetCommandStatus.Request(request_id=list(row['number'].to_bytes(16,'little')),route_id=100,refresh=True)).status
+        if not status.found or status.state not in (CommandStatus.SUCCEEDED,CommandStatus.FAILED,CommandStatus.REJECTED,CommandStatus.EXPIRED,CommandStatus.UNKNOWN) or status.reason==2:
+            return None
+        row.update(terminal=status.state,reason=status.reason,result_valid=status.result_valid,
+            result_rate_hz=status.result_rate_hz,result_generation=status.result_generation,result_observed_monotonic_ns=time.monotonic_ns())
+        if status.state==CommandStatus.SUCCEEDED:
+            assert status.result_valid and status.result_rate_hz==200 and status.result_generation==row['new_generation']
+        if status.state==CommandStatus.UNKNOWN:assert not status.result_valid
+        return status.state
+
     def operator(self):
         self.start_bridge()
         self.wait(lambda:(self.run/'robot-ready.json').exists(),'robot source without bridge')
@@ -123,6 +175,15 @@ class Benchmark(Driver):
         self.wait(lambda:self.state and self.state.ready and self.state.clock_qualified and self.remote_imu>20,
                   'qualified typed SRT stream',45)
         self.check_qos()
+        paused_source=self.robot_command('pause')
+        old_session=bytes(self.state.session_id)
+        # The warmup FEC decoder may retain an incomplete row. A fresh source
+        # session while publishing is disabled excludes every warmup SAMPLE.
+        self.robot_command('reset_link')
+        self.wait(lambda:self.state and self.state.ready and self.state.clock_qualified and bytes(self.state.session_id)!=old_session,'fresh measurement session',30)
+        begin=self.checkpoint(paused_source)
+        assert begin['sender']['samples_ingress']==begin['sender']['sensor_submitted']==begin['sender']['sensor_sent']==0
+        resumed=self.robot_command('resume')
         start=time.monotonic();next_command=start;next_poll=start
         beginning_counts=(self.remote_imu,self.remote_joints)
         commands=[];pending=None;generation=0;paused=False;skipped=0
@@ -147,23 +208,26 @@ class Benchmark(Driver):
                     else:row['terminal']='not_admitted'
             if pending and now>=next_poll:
                 next_poll=now+.2
-                number=pending['number']
-                status=self.rpc(self.query,GetCommandStatus.Request(request_id=list(number.to_bytes(16,'little')),route_id=100,refresh=True)).status
-                if status.found and status.state in (CommandStatus.SUCCEEDED,CommandStatus.FAILED,
-                        CommandStatus.REJECTED,CommandStatus.EXPIRED,CommandStatus.UNKNOWN) and status.reason!=2:
-                    pending.update(terminal=status.state,reason=status.reason,result_valid=status.result_valid,
-                        result_rate_hz=status.result_rate_hz,result_generation=status.result_generation,
-                        result_observed_monotonic_ns=time.monotonic_ns())
-                    if status.state==CommandStatus.SUCCEEDED:
-                        assert status.result_valid and status.result_rate_hz==200 and status.result_generation==pending['new_generation']
-                        generation=status.result_generation
-                    elif status.state==CommandStatus.UNKNOWN:
-                        assert not status.result_valid
-                        paused=True  # device generation is uncertain; never guess/replay
+                terminal=self.observe_command(pending)
+                if terminal is not None:
+                    if terminal==CommandStatus.SUCCEEDED:generation=pending['result_generation']
+                    elif terminal==CommandStatus.UNKNOWN:paused=True
                     pending=None
             self.spin(.025)
             self.check_processes()
         measured_seconds=time.monotonic()-start
+        cutoff_ns=time.monotonic_ns()
+        pause_response=self.robot_command('pause')
+        # No new commands or samples; observe already-admitted command results.
+        drain_deadline=time.monotonic()+8
+        while pending and time.monotonic()<drain_deadline:
+            terminal=self.observe_command(pending)
+            if terminal is not None:
+                pending['observed_after_data_cutoff']=True
+                if terminal==CommandStatus.UNKNOWN:paused=True
+                pending=None
+            else:self.spin(.1)
+        finish=self.checkpoint(pause_response)
         end_counts=(self.remote_imu,self.remote_joints)
         device=self.robot_command('device')
         self.spin(.2)
@@ -177,7 +241,8 @@ class Benchmark(Driver):
             if c.get('terminal')==CommandStatus.SUCCEEDED:assert c['result_generation']<=device['generation']
         from rosidl_runtime_py.convert import message_to_ordereddict
         result=dict(status='passed',configured_workload=dict(imu_hz=200,joints_hz=50,command_period_s=2),session_ids=sorted(self.sessions),qualification='development; not the complete M3 matrix',
-            measured_seconds=measured_seconds,remote_imu=self.remote_imu,remote_joints=self.remote_joints,
+            measured_seconds=measured_seconds,warmup_sensor_history_excluded=True,command_data_cutoff_monotonic_ns=cutoff_ns,command_result_drain_limit_s=8,checkpoints=dict(begin=begin,end=finish),
+            publication_interval=dict(resume_monotonic_ns=resumed['monotonic_ns'],pause_monotonic_ns=pause_response['monotonic_ns']),remote_imu=self.remote_imu,remote_joints=self.remote_joints,
             steady_window_imu=end_counts[0]-beginning_counts[0],steady_window_joints=end_counts[1]-beginning_counts[1],
             direct_dds_samples=self.direct,typed_errors=self.bad,commands=commands,skipped_command_slots=skipped,
             source_marker_spans=dict(imu=int(self.imu_marker)-self.first_imu_marker+1,

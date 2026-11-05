@@ -35,3 +35,24 @@ uint64 imu_ingress
 uint64 joint_ingress
 uint64 samples_submit_busy
 uint64 samples_submit_obsolete
+
+# Detailed bounded sensor accounting, cumulative owner lifetime.
+uint64 sensor_submitted
+uint64 sensor_ingress_replaced
+uint64 sensor_ingress_flushed
+uint64 sensor_inputs
+uint64 sensor_input_rejected
+uint64 sensor_outbound_replaced
+uint64 sensor_outbound_expired
+uint64 sensor_outbound_flushed
+uint64 sensor_sent
+uint64 sensor_receive_replaced
+uint64 sensor_receive_flushed
+uint64 sensor_polled
+uint64 sensor_poll_expired
+uint64 sensor_ingress_pending
+uint64 sensor_outbound_pending
+uint64 sensor_receive_pending
+
+# Stable across reconnects; changes if this bridge owner is reconstructed.
+uint8[16] owner_epoch

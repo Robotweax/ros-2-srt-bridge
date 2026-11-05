@@ -649,3 +649,39 @@ behaupten. M4 unverändert später; Parent-SRT nicht verändert.
 Tail und erreichte Quellrate; danach DDS-Baseline mit gleichem Journalvertrag,
 N3-Selektor, N4-Auftragsphasen und volle Seed-/Dauermatrix. M3 bleibt in Arbeit;
 Wire 1, privates IPC 3, M4 unverändert. Draft-PR #2 wird mit diesem Fix fortgeführt.
+
+### M3 exakte Sensorfenster und Quellphase — 2026-11-05
+
+- Sensor-Stufenzähler, Pending-Slots und Owner-Epoch per lokalem read-only
+  `/bridge/get_metrics`; `/robot/set_publishing` pausiert mit Callback-Fence.
+  Frische SRT-Session vor Messbeginn entfernt Warmup-SAMPLE-/FEC-Historie.
+  Stabile leere Checkpoints, unveränderte Epochen und sechs Nullresiduen sind
+  Pflicht. Fenster-Histogramme stimmen mit Publikationspopulation überein.
+- Sender wartet bis zu nahen Pacing-Terminen unter 1 ms, ohne Busy-Spin. Simulator
+  erhält Zeitphase, vermeidet Catch-up-Bursts und Phasenreset bei gleicher Rate.
+  Strict pacing, Latest-only, Queue-/250-ms-Grenzen und Kryptografie unverändert.
+- N0 `.local/m3/20261105T153616391199Z`: 300,097 s, Ist 199,959/49,997 Hz,
+  75.011 produziert, 72.372 beobachtet; 2.639 fehlen, alle zugeordnet: 2.542
+  Outbound-Ersetzungen, 91 Admission, drei DDS-Ingress, je eine Ingress- und
+  Empfangsersetzung sowie ein DDS-Observer-Verlust. Kein SRT-Akzeptanz/Empfang-Gap,
+  aber kein Beweis für physisch verlustfreies WAN. 150 bestätigt/150 Effekte.
+- N4-Smoke `20261105T154538668977Z`: sieben bestätigt/ sieben Effekte. N5-Smoke
+  `20261105T154456488682Z`: zwei bestätigt/zwei Effekte, ein Auftrag offen;
+  Bilanz-Pass ist keine Auftragsabnahme. Ergebnisse werden bis acht Sekunden nach
+  Cutoff abgefragt und pro Zeile markiert; gepoolte Latenzen enthalten Drain.
+- SDK `.local/m1/20261105T145359704756Z`: 15/15/67/10 Tests und Consumer bestanden.
+  M2 `.local/m2/20261105T154053788107Z` bestanden; sieben Codec-/vier Schedule-
+  GTests, elf Python-Tests. Finale Source-Hashes geprüft. Ein vorheriger M2-Lauf
+  scheiterte an Image-Pin-Preflight; spätere Inspects und unveränderter Retry
+  bestanden. Ursache unbekannt, Assertion nicht gelockert; Evidenz erhalten.
+- Evidenz `evidence/m3-window-accounting-2026-11-05/` bewahrt finale Manifeste,
+  Entwicklungsläufe, Tests, Artefakthashes und Grenzen. CPU/Wire umfasst weiterhin
+  Gesamtbeobachtung; N0 überlappte teilweise mit M2 in derselben VM. Keine
+  kontrollierte CPU- oder Überlegenheitsaussage. Frühere Marker-Spans bei ~178 Hz
+  sind nicht direkt mit dem neuen 200-Hz-Fenster vergleichbar.
+
+**Nächster Schritt:** DDS Best Effort + Reliable mit gleichem Journalvertrag und
+Messfenster implementieren; CPU/Wire zeitlich angleichen, N3-DATA/FEC-Selektor,
+N4-Auftragsphasen und volle Seed-/Dauermatrix. Outbound-Ersetzungen bei echter
+200-Hz-Last und N5-Auftragsabschluss weiter qualifizieren. M3 bleibt in Arbeit,
+Draft-PR #2 bleibt offen. Parent-SRT, Wire 1, privates IPC 3 und M4 unverändert.

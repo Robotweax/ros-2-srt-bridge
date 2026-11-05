@@ -203,6 +203,9 @@ class Driver(Node):
                 pass
         return None
 
+    def robot_action(self, action, request, response):
+        return False
+
     def robot(self):
         self.sim = self.start('rate_simulator', 'simulator')
         self.wait(lambda: self.device and self.source > 20, 'simulator source')
@@ -261,6 +264,8 @@ class Driver(Node):
                 write(self.run / 'robot-final.json', {'shutdowns': self.shutdowns, 'source_samples': self.source})
                 write(self.run / 'robot-reply.json', response)
                 return
+            elif self.robot_action(action, request, response):
+                pass
             else:
                 raise RuntimeError('unknown robot action')
             write(self.run / 'robot-reply.json', response)

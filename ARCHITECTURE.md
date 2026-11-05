@@ -778,3 +778,18 @@ die Zuordnung. Der neue Fünfminutenlauf reduziert IMU-Lücken im beobachteten
 Quellspan von 49,24% auf 1,38% bei 150 bestätigten Aufträgen/150 Effekten.
 CPU-Kosten, Restlücken und Grenzen stehen in
 `evidence/m3-sensor-cadence-2026-11-05/`; M3 ist weiterhin nicht abgenommen.
+
+M3-Window-Follow-up: lokale Services `/bridge/get_metrics` (read-only Snapshot mit
+Owner-Epoch) und `/robot/set_publishing` (Fence in derselben Callback-Gruppe wie
+Sensor-Publishing) ermöglichen stabile, leere Pipeline-Checkpoints. Eine frische
+Session vor Messbeginn schließt Warmup-SAMPLE-/FEC-Historie aus. Sechs Bilanzen
+prüfen Quell-DDS, Ingress, Outbound, Empfang, Veröffentlichung und Ende-zu-Ende;
+Histogramme werden als Fensterdifferenz ausgewertet. Der Abstand zwischen SRT-
+Send-Akzeptanz und dekodiertem Empfang ist kein isolierter WAN-Paketverlust.
+Der Simulator erhält die Zeitphase, überspringt verpasste Slots ohne Burst und
+setzt bei unveränderter Rate die Phase nicht zurück. Der Sender wartet bei nahen
+Pacing-Terminen begrenzt unter einer Millisekunde; Rate-/TTL-/Queue-Gates bleiben.
+N0 erreicht 199,96/50,00 Hz mit vollständig zugeordneten Sample-Verlusten und
+150 bestätigten Aufträgen. N5-Smoke hat einen offenen Auftrag; M3 bleibt offen.
+Details: `evidence/m3-window-accounting-2026-11-05/`. Wire 1 und privates IPC 3
+unverändert. CPU/Wire-Fenster, DDS, N3, N4-Phasen und volle Matrix fehlen weiter.

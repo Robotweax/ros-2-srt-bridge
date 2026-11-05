@@ -427,3 +427,19 @@ this is not a lossless/full-rate or DDS performance claim. Per-route ingress and
 BUSY/obsolete submission counts plus final test-observer snapshots help attribute
 remaining losses. The latest follow-up evidence supersedes the earlier open
 hypothesis about the major gap cause while preserving the original measurements.
+
+The [window-accounting follow-up](evidence/m3-window-accounting-2026-11-05/README.md)
+now fences source publication and takes stable, drained snapshots through local
+`/robot/set_publishing` and `/bridge/get_metrics` services. Fresh-session startup
+excludes warmup sensor/FEC history. Owner epochs detect resets; six conservation
+equations account for every sample, and age histograms use window deltas. These
+services are local ROS measurement controls, not additional bridge wire messages.
+
+The phase-preserving simulator achieves 199.96/50.00 Hz in the latest five-minute
+N0: 75,011 produced, 72,372 observed, 2,639 classified losses (mostly outbound
+pacing replacements), zero unaccounted samples, 150 confirmed commands/effects.
+The short N5 smoke has two confirmed commands and one unresolved; it does not
+qualify command completion under congestion. Command summaries include a bounded
+post-cutoff result drain, identified per row. CPU/capture totals still cover the
+whole observation rather than the exact sample window. DDS comparison, N3,
+N4 command-phase barriers and the full duration/seed matrix remain pending.

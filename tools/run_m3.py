@@ -16,6 +16,7 @@ import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
 from m3_capture import summarize
+from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -121,7 +122,7 @@ def main():
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
         lab.snapshot('after')
         result=json.loads((run/'operator-result.json').read_text());assert result['status']=='passed'
-        report['results']=result;report['gap_attribution']=summarize_gaps(run,result);report['command_summary']=summarize_commands(result['commands']);report['resources']={role:summarize_resources(run/(role+'-resources.jsonl')) for role in ('robot','operator')};report['status']='passed'
+        report['results']=result;report['measurement_window']=summarize_window(result['checkpoints']['begin'],result['checkpoints']['end'],result['publication_interval']);report['gap_attribution']=summarize_gaps(run,result);report['command_summary']=summarize_commands(result['commands']);report['resources']={role:summarize_resources(run/(role+'-resources.jsonl')) for role in ('robot','operator')};report['status']='passed'
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise
     finally:
