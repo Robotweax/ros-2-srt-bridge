@@ -240,9 +240,15 @@ struct TransportOwner::Impl {
             if(!decoded){++current.rejected;lost(i);return;}
             const auto& view=decoded.message;const auto kind=view.envelope.kind;const Connection connection{channel(i),link.generation};
             if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
+            if(kind==Kind::sample)++current.samples_received;
             const auto result=i?session.admit_sample(connection,view,monotonic_ns()):session.admit_control(connection,view,monotonic_ns());
             apply(result.action);if(!result.envelope){
                 ++current.rejected;
+                if(kind==Kind::sample){
+                    ++current.samples_rejected;
+                    if(result.action.error==SessionError::clock_unqualified||result.action.error==SessionError::clock_invalid)++current.samples_unknown_age;
+                    if(result.action.error==SessionError::stale_sample)++current.samples_stale;
+                }
                 switch(result.action.error){
                     case SessionError::clock_unqualified:queue_error(view.envelope,ControlErrorCode::clock_unqualified);break;
                     case SessionError::stale_sample:queue_error(view.envelope,ControlErrorCode::start_expired);break;

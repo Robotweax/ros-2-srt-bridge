@@ -1,0 +1,94 @@
+{
+  "milestone": "M3",
+  "status": "in_progress",
+  "base_commit": "32c53b27839182ec45c448694c60fe1691466118",
+  "base_pr": "https://github.com/Robotweax/ros-2-srt-bridge/pull/1",
+  "platform": "Linux amd64 ROS Jazzy under Docker Desktop emulation",
+  "workload": {
+    "configured_imu_hz": 200,
+    "joints": 6,
+    "configured_joint_hz": 50,
+    "command_period_s": 2
+  },
+  "base_seeds": [
+    1701,
+    2903,
+    4211
+  ],
+  "direction_seeds": {
+    "robot_to_operator": "base",
+    "operator_to_robot": "base + 1"
+  },
+  "profiles": {
+    "N0": {
+      "seconds": 300,
+      "delay_ms": 0,
+      "loss_percent": 0,
+      "queue_packets": 256
+    },
+    "N1": {
+      "seconds_per_seed": 600,
+      "delay_ms_each_direction": 20,
+      "jitter_ms": 5,
+      "jitter_distribution": "normal",
+      "loss_percent": 1,
+      "queue_packets": 256
+    },
+    "N2": {
+      "seconds_per_seed": 600,
+      "delay_ms_each_direction": 60,
+      "jitter_ms": 15,
+      "jitter_distribution": "normal",
+      "loss_percent": 3,
+      "queue_packets": 256
+    },
+    "N3": {
+      "status": "pending",
+      "requirement": "deterministically remove one/two SENSOR source DATA packets in the same FEC group; preserve parity distinction"
+    },
+    "N4": {
+      "requested_outage_seconds": 2,
+      "implemented": "mid-window kernel outage, both directions or one endpoint egress",
+      "pending": "barriers before admission, after dispatch, after result commit; precise VM-clock transition timing"
+    },
+    "N5": {
+      "seconds": 300,
+      "shared_rate_kbit_each_direction": 512,
+      "tbf_burst_bytes": 4096,
+      "tbf_limit_bytes": 32768,
+      "child_netem_queue_packets": 16,
+      "competing_iperf3_bitrate": "128K (131072 bits/s target)"
+    }
+  },
+  "clock_assumptions": {
+    "relative_drift_ppm": 1000,
+    "timestamp_error_ns": 1000000,
+    "max_probe_age_ns": 5000000000,
+    "max_interval_ms": 200,
+    "sensor_budget_ms": 250
+  },
+  "implemented_metrics": [
+    "bounded publication age-upper histograms",
+    "stale and unknown-age rejection counters",
+    "terminal status observation latency with unresolved population",
+    "payload-counter gap counts within observed spans",
+    "per-process CPU and summed RSS observations",
+    "Ethernet frame accounting and FEC parity/source distinction"
+  ],
+  "pending_gates": [
+    "DDS Best Effort sensor and fully journaled Reliable command baseline",
+    "N3 deterministic source-DATA fault selector",
+    "N4 admission/dispatch/result-commit barriers",
+    "complete three-seed full-duration comparison matrix",
+    "final exact measurement-window/tail accounting and achieved source-rate qualification",
+    "attribute substantial N0 source-to-wire sample gaps before throughput qualification"
+  ],
+  "qualification": "Development evidence only; no M3 acceptance or SRT performance advantage claimed",
+  "environment": {
+    "image_reference": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+    "image_platform_id": "sha256:53b49a94ab2e46600a0037c29e2b9d5f56a7c505d6d4a3308584c007b219d268",
+    "tc_version": "6.17.0",
+    "iproute2_source_sha256": "9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec"
+  },
+  "evidence": "evidence/m3-network-harness-2026-11-05"
+}

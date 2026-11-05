@@ -1,0 +1,31 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from m3.Dockerfile
+#1 transferring dockerfile: 995B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f
+#2 ...
+
+#3 [auth] library/ros2-srt-m2:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f
+#2 ...
+
+#4 [auth] library/ros2-srt-m2:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f
+#2 ERROR: pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+------
+ > [internal] load metadata for docker.io/library/ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f:
+------
+m3.Dockerfile:2
+--------------------
+   1 |     ARG M2_BASE=ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f
+   2 | >>> FROM ${M2_BASE}
+   3 |     # M3 needs the netem PRNG seed attribute absent from Noble's older tc binary.
+   4 |     # Retain source URL/hash; runtime uses the resulting immutable image digest.
+--------------------
+ERROR: failed to build: failed to solve: ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f: failed to resolve source metadata for docker.io/library/ros2-srt-m2@sha256:a1a5be39e8933fb4b288f76008b3ceb4b542351b70559b4717a9d11f37fabf3f: pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed

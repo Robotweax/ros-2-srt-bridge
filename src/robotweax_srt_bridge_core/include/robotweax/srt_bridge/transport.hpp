@@ -34,6 +34,7 @@ struct TransportSnapshot {
     std::size_t control_ingress=0,control_received=0;
     std::uint64_t received=0,sent=0,rejected=0,stale_work=0,sensor_replaced=0;
     std::uint64_t errors_sent=0,errors_received=0,unmatched_errors=0;
+    std::uint64_t samples_received=0,samples_rejected=0,samples_unknown_age=0,samples_stale=0;
 };
 struct TransportMessage {
     TransportContext context{};

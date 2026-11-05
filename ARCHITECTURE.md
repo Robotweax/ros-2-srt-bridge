@@ -749,3 +749,20 @@ qualifiziert die Umgebung; ohne Option wird die vorhandene gepinnte Umgebung
 verwendet. Evidenz und Grenzen stehen in `baselines/m2-acceptance.json` und
 `evidence/m2-ros-jazzy-2026-11-05/`. M3-Netzbeeinträchtigung und DDS-Vergleich
 sowie M4-Intrinsic bleiben offen.
+
+## 13. M3-Entwicklung: Messharness, noch keine Abnahme
+
+Der erste SRT-Netzharness ist mit `tools/run_m3.py` verfügbar. Er verändert nur
+qdiscs neu erzeugter Container, prüft die tatsächliche Kernelkonfiguration und
+bewahrt Seeds/Fehlversuche. Fünfminütiges N0 und kurze N1/N2/N4/N5-Smokes sind in
+`evidence/m3-network-harness-2026-11-05/` dokumentiert. Die vollständige
+DDS-/N3-/N4-Phasen-/Dauer-Matrix bleibt offen (`baselines/m3-plan.json`).
+
+Die Altersverteilung umfasst alle Publikationen des letzten beobachteten
+Diagnosesnapshots, einschließlich Start-/Transienten, als konservative Obergrenze
+in aufgerundeten 1-ms-Buckets. Der Diagnose-Tail und nicht zugestellte Samples
+werden nicht als günstige Messwerte interpretiert. Admission-Stale und Unknown-
+Age sind separat sichtbar; eine vollständige Verlustzuordnung aller lokalen
+Queues und Poll-Gates fehlt noch. Das N0-Ergebnis enthält erhebliche Lücken vor
+WAN trotz niedriger Alterswerte der zugestellten Samples. Damit ist weder die
+Sollrate erreicht belegt noch eine M3-Leistungsabnahme erfolgt.

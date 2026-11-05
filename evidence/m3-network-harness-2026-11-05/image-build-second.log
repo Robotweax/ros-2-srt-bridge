@@ -1,0 +1,675 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from m3.Dockerfile
+#1 transferring dockerfile: 1.14kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617
+#2 ...
+
+#3 [auth] library/ros:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617
+#2 DONE 1.3s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 126B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617
+#5 resolve docker.io/library/ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617 0.0s done
+#5 CACHED
+
+#6 [2/3] RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends     ninja-build=1.11.1-2 libprotobuf-dev=3.21.12-8.2ubuntu0.4 protobuf-compiler=3.21.12-8.2ubuntu0.4     libssl-dev=3.0.13-0ubuntu3.16 libsqlite3-dev=3.45.1-1ubuntu2.8     curl bison flex pkg-config libmnl-dev libelf-dev libbpf-dev libcap-dev     iputils-ping tcpdump iperf3     && rm -rf /var/lib/apt/lists/*
+#6 2.253 Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+#6 2.279 Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+#6 2.468 Get:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+#6 2.522 Get:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+#6 2.800 Get:5 http://packages.ros.org/ros2/ubuntu noble InRelease [4679 B]
+#6 3.076 Get:6 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [55.6 kB]
+#6 3.172 Get:7 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2132 kB]
+#6 3.351 Get:8 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1552 kB]
+#6 3.400 Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1424 kB]
+#6 3.671 Get:10 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+#6 3.725 Get:11 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+#6 3.763 Get:12 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+#6 3.860 Get:13 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+#6 4.534 Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1742 kB]
+#6 4.586 Get:15 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [61.7 kB]
+#6 4.588 Get:16 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2173 kB]
+#6 4.655 Get:17 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2240 kB]
+#6 4.874 Get:18 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]
+#6 4.915 Get:19 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+#6 4.916 Get:20 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [669 B]
+#6 5.589 Get:21 http://packages.ros.org/ros2/ubuntu noble/main Sources [2238 kB]
+#6 6.820 Get:22 http://packages.ros.org/ros2/ubuntu noble/main amd64 Packages [2112 kB]
+#6 7.103 Fetched 38.0 MB in 7s (5587 kB/s)
+#6 7.103 Reading package lists...
+#6 8.086 Reading package lists...
+#6 8.990 Building dependency tree...
+#6 9.245 Reading state information...
+#6 9.615 libssl-dev is already the newest version (3.0.13-0ubuntu3.16).
+#6 9.615 libssl-dev set to manually installed.
+#6 9.615 libsqlite3-dev is already the newest version (3.45.1-1ubuntu2.8).
+#6 9.615 libsqlite3-dev set to manually installed.
+#6 9.615 curl is already the newest version (8.5.0-2ubuntu10.16).
+#6 9.615 pkg-config is already the newest version (1.8.1-2build1).
+#6 9.615 pkg-config set to manually installed.
+#6 9.615 The following additional packages will be installed:
+#6 9.615   libbpf1 libcap2-bin libelf1t64 libibverbs1 libiperf0 libmnl0 libnl-3-200
+#6 9.615   libnl-route-3-200 libpcap0.8t64 libprotobuf-lite32t64 libprotobuf32t64
+#6 9.617   libprotoc32t64 libsctp1 m4
+#6 9.618 Suggested packages:
+#6 9.618   bison-doc flex-doc manpages-dev lksctp-tools m4-doc protobuf-mode-el
+#6 9.618   apparmor
+#6 9.618 Recommended packages:
+#6 9.618   libfl-dev libpam-cap ibverbs-providers
+#6 9.717 The following NEW packages will be installed:
+#6 9.717   bison flex iperf3 iputils-ping libbpf-dev libbpf1 libcap-dev libcap2-bin
+#6 9.718   libelf-dev libelf1t64 libibverbs1 libiperf0 libmnl-dev libmnl0 libnl-3-200
+#6 9.718   libnl-route-3-200 libpcap0.8t64 libprotobuf-dev libprotobuf-lite32t64
+#6 9.719   libprotobuf32t64 libprotoc32t64 libsctp1 m4 ninja-build protobuf-compiler
+#6 9.719   tcpdump
+#6 9.909 0 upgraded, 26 newly installed, 0 to remove and 5 not upgraded.
+#6 9.909 Need to get 7027 kB of archives.
+#6 9.909 After this operation, 31.8 MB of additional disk space will be used.
+#6 9.909 Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 m4 amd64 1.4.19-4build1 [244 kB]
+#6 10.14 Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 flex amd64 2.6.4-8.2build1 [301 kB]
+#6 10.18 Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 libsctp1 amd64 1.0.19+dfsg-2build1 [9146 B]
+#6 10.18 Get:4 http://archive.ubuntu.com/ubuntu noble/universe amd64 libiperf0 amd64 3.16-1build2 [87.1 kB]
+#6 10.19 Get:5 http://archive.ubuntu.com/ubuntu noble/universe amd64 iperf3 amd64 3.16-1build2 [19.0 kB]
+#6 10.19 Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcap2-bin amd64 1:2.66-5ubuntu2.4 [34.1 kB]
+#6 10.20 Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 iputils-ping amd64 3:20240117-1ubuntu0.1 [44.6 kB]
+#6 10.20 Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libelf1t64 amd64 0.190-1.1ubuntu0.1 [57.8 kB]
+#6 10.21 Get:9 http://archive.ubuntu.com/ubuntu noble/main amd64 libbpf1 amd64 1:1.3.0-2build2 [166 kB]
+#6 10.22 Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 libmnl0 amd64 1.0.5-2build1 [12.3 kB]
+#6 10.22 Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnl-3-200 amd64 3.7.0-0.3build1.1 [55.7 kB]
+#6 10.22 Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnl-route-3-200 amd64 3.7.0-0.3build1.1 [189 kB]
+#6 10.23 Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libibverbs1 amd64 50.0-2ubuntu0.2 [68.0 kB]
+#6 10.24 Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpcap0.8t64 amd64 1.10.4-4.1ubuntu3.1 [151 kB]
+#6 10.25 Get:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 tcpdump amd64 4.99.4-3ubuntu4.24.04.1 [479 kB]
+#6 10.27 Get:16 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 bison amd64 2:3.8.2+dfsg-1ubuntu0.24.04.1 [749 kB]
+#6 10.30 Get:17 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libelf-dev amd64 0.190-1.1ubuntu0.1 [68.5 kB]
+#6 10.30 Get:18 http://archive.ubuntu.com/ubuntu noble/main amd64 libbpf-dev amd64 1:1.3.0-2build2 [259 kB]
+#6 10.31 Get:19 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcap-dev amd64 1:2.66-5ubuntu2.4 [596 kB]
+#6 10.33 Get:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libprotobuf-lite32t64 amd64 3.21.12-8.2ubuntu0.4 [239 kB]
+#6 10.33 Get:21 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libprotobuf32t64 amd64 3.21.12-8.2ubuntu0.4 [923 kB]
+#6 10.36 Get:22 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libprotoc32t64 amd64 3.21.12-8.2ubuntu0.4 [683 kB]
+#6 10.38 Get:23 http://archive.ubuntu.com/ubuntu noble/universe amd64 ninja-build amd64 1.11.1-2 [129 kB]
+#6 10.39 Get:24 http://archive.ubuntu.com/ubuntu noble/main amd64 libmnl-dev amd64 1.0.5-2build1 [21.9 kB]
+#6 10.39 Get:25 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libprotobuf-dev amd64 3.21.12-8.2ubuntu0.4 [1413 kB]
+#6 10.43 Get:26 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 protobuf-compiler amd64 3.21.12-8.2ubuntu0.4 [29.0 kB]
+#6 10.73 debconf: delaying package configuration, since apt-utils is not installed
+#6 10.81 Fetched 7027 kB in 1s (10.3 MB/s)
+#6 10.92 Selecting previously unselected package m4.
+#6 10.92 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 40133 files and directories currently installed.)
+#6 10.99 Preparing to unpack .../00-m4_1.4.19-4build1_amd64.deb ...
+#6 10.99 Unpacking m4 (1.4.19-4build1) ...
+#6 11.12 Selecting previously unselected package flex.
+#6 11.13 Preparing to unpack .../01-flex_2.6.4-8.2build1_amd64.deb ...
+#6 11.13 Unpacking flex (2.6.4-8.2build1) ...
+#6 11.25 Selecting previously unselected package libsctp1:amd64.
+#6 11.25 Preparing to unpack .../02-libsctp1_1.0.19+dfsg-2build1_amd64.deb ...
+#6 11.26 Unpacking libsctp1:amd64 (1.0.19+dfsg-2build1) ...
+#6 11.37 Selecting previously unselected package libiperf0:amd64.
+#6 11.37 Preparing to unpack .../03-libiperf0_3.16-1build2_amd64.deb ...
+#6 11.38 Unpacking libiperf0:amd64 (3.16-1build2) ...
+#6 11.50 Selecting previously unselected package iperf3.
+#6 11.50 Preparing to unpack .../04-iperf3_3.16-1build2_amd64.deb ...
+#6 11.52 Unpacking iperf3 (3.16-1build2) ...
+#6 11.63 Selecting previously unselected package libcap2-bin.
+#6 11.64 Preparing to unpack .../05-libcap2-bin_1%3a2.66-5ubuntu2.4_amd64.deb ...
+#6 11.64 Unpacking libcap2-bin (1:2.66-5ubuntu2.4) ...
+#6 11.75 Selecting previously unselected package iputils-ping.
+#6 11.75 Preparing to unpack .../06-iputils-ping_3%3a20240117-1ubuntu0.1_amd64.deb ...
+#6 11.76 Unpacking iputils-ping (3:20240117-1ubuntu0.1) ...
+#6 11.87 Selecting previously unselected package libelf1t64:amd64.
+#6 11.87 Preparing to unpack .../07-libelf1t64_0.190-1.1ubuntu0.1_amd64.deb ...
+#6 11.87 Unpacking libelf1t64:amd64 (0.190-1.1ubuntu0.1) ...
+#6 11.99 Selecting previously unselected package libbpf1:amd64.
+#6 11.99 Preparing to unpack .../08-libbpf1_1%3a1.3.0-2build2_amd64.deb ...
+#6 12.00 Unpacking libbpf1:amd64 (1:1.3.0-2build2) ...
+#6 12.11 Selecting previously unselected package libmnl0:amd64.
+#6 12.11 Preparing to unpack .../09-libmnl0_1.0.5-2build1_amd64.deb ...
+#6 12.12 Unpacking libmnl0:amd64 (1.0.5-2build1) ...
+#6 12.23 Selecting previously unselected package libnl-3-200:amd64.
+#6 12.24 Preparing to unpack .../10-libnl-3-200_3.7.0-0.3build1.1_amd64.deb ...
+#6 12.24 Unpacking libnl-3-200:amd64 (3.7.0-0.3build1.1) ...
+#6 12.35 Selecting previously unselected package libnl-route-3-200:amd64.
+#6 12.36 Preparing to unpack .../11-libnl-route-3-200_3.7.0-0.3build1.1_amd64.deb ...
+#6 12.36 Unpacking libnl-route-3-200:amd64 (3.7.0-0.3build1.1) ...
+#6 12.47 Selecting previously unselected package libibverbs1:amd64.
+#6 12.48 Preparing to unpack .../12-libibverbs1_50.0-2ubuntu0.2_amd64.deb ...
+#6 12.48 Unpacking libibverbs1:amd64 (50.0-2ubuntu0.2) ...
+#6 12.59 Selecting previously unselected package libpcap0.8t64:amd64.
+#6 12.60 Preparing to unpack .../13-libpcap0.8t64_1.10.4-4.1ubuntu3.1_amd64.deb ...
+#6 12.60 Unpacking libpcap0.8t64:amd64 (1.10.4-4.1ubuntu3.1) ...
+#6 12.71 Selecting previously unselected package tcpdump.
+#6 12.72 Preparing to unpack .../14-tcpdump_4.99.4-3ubuntu4.24.04.1_amd64.deb ...
+#6 12.79 Unpacking tcpdump (4.99.4-3ubuntu4.24.04.1) ...
+#6 12.91 Selecting previously unselected package bison.
+#6 12.92 Preparing to unpack .../15-bison_2%3a3.8.2+dfsg-1ubuntu0.24.04.1_amd64.deb ...
+#6 12.95 Unpacking bison (2:3.8.2+dfsg-1ubuntu0.24.04.1) ...
+#6 13.09 Selecting previously unselected package libelf-dev:amd64.
+#6 13.09 Preparing to unpack .../16-libelf-dev_0.190-1.1ubuntu0.1_amd64.deb ...
+#6 13.09 Unpacking libelf-dev:amd64 (0.190-1.1ubuntu0.1) ...
+#6 13.21 Selecting previously unselected package libbpf-dev:amd64.
+#6 13.21 Preparing to unpack .../17-libbpf-dev_1%3a1.3.0-2build2_amd64.deb ...
+#6 13.21 Unpacking libbpf-dev:amd64 (1:1.3.0-2build2) ...
+#6 13.33 Selecting previously unselected package libcap-dev:amd64.
+#6 13.34 Preparing to unpack .../18-libcap-dev_1%3a2.66-5ubuntu2.4_amd64.deb ...
+#6 13.34 Unpacking libcap-dev:amd64 (1:2.66-5ubuntu2.4) ...
+#6 13.47 Selecting previously unselected package libprotobuf-lite32t64:amd64.
+#6 13.47 Preparing to unpack .../19-libprotobuf-lite32t64_3.21.12-8.2ubuntu0.4_amd64.deb ...
+#6 13.47 Unpacking libprotobuf-lite32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 13.59 Selecting previously unselected package libprotobuf32t64:amd64.
+#6 13.59 Preparing to unpack .../20-libprotobuf32t64_3.21.12-8.2ubuntu0.4_amd64.deb ...
+#6 13.59 Unpacking libprotobuf32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 13.72 Selecting previously unselected package libprotoc32t64:amd64.
+#6 13.72 Preparing to unpack .../21-libprotoc32t64_3.21.12-8.2ubuntu0.4_amd64.deb ...
+#6 13.72 Unpacking libprotoc32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 13.85 Selecting previously unselected package ninja-build.
+#6 13.85 Preparing to unpack .../22-ninja-build_1.11.1-2_amd64.deb ...
+#6 13.85 Unpacking ninja-build (1.11.1-2) ...
+#6 13.97 Selecting previously unselected package libmnl-dev:amd64.
+#6 13.97 Preparing to unpack .../23-libmnl-dev_1.0.5-2build1_amd64.deb ...
+#6 13.98 Unpacking libmnl-dev:amd64 (1.0.5-2build1) ...
+#6 14.09 Selecting previously unselected package libprotobuf-dev:amd64.
+#6 14.09 Preparing to unpack .../24-libprotobuf-dev_3.21.12-8.2ubuntu0.4_amd64.deb ...
+#6 14.10 Unpacking libprotobuf-dev:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 14.25 Selecting previously unselected package protobuf-compiler.
+#6 14.26 Preparing to unpack .../25-protobuf-compiler_3.21.12-8.2ubuntu0.4_amd64.deb ...
+#6 14.26 Unpacking protobuf-compiler (3.21.12-8.2ubuntu0.4) ...
+#6 14.36 Setting up libprotobuf-lite32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 14.36 Setting up libprotobuf32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 14.37 Setting up m4 (1.4.19-4build1) ...
+#6 14.38 Setting up ninja-build (1.11.1-2) ...
+#6 14.38 Setting up libelf1t64:amd64 (0.190-1.1ubuntu0.1) ...
+#6 14.39 Setting up libprotobuf-dev:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 14.39 Setting up libcap2-bin (1:2.66-5ubuntu2.4) ...
+#6 14.40 Setting up libmnl0:amd64 (1.0.5-2build1) ...
+#6 14.40 Setting up libelf-dev:amd64 (0.190-1.1ubuntu0.1) ...
+#6 14.41 Setting up libsctp1:amd64 (1.0.19+dfsg-2build1) ...
+#6 14.41 Setting up libnl-3-200:amd64 (3.7.0-0.3build1.1) ...
+#6 14.42 Setting up bison (2:3.8.2+dfsg-1ubuntu0.24.04.1) ...
+#6 14.47 update-alternatives: using /usr/bin/bison.yacc to provide /usr/bin/yacc (yacc) in auto mode
+#6 14.47 update-alternatives: warning: skip creation of /usr/share/man/man1/yacc.1.gz because associated file /usr/share/man/man1/bison.yacc.1.gz (of link group yacc) doesn't exist
+#6 14.48 Setting up libprotoc32t64:amd64 (3.21.12-8.2ubuntu0.4) ...
+#6 14.48 Setting up libcap-dev:amd64 (1:2.66-5ubuntu2.4) ...
+#6 14.49 Setting up iputils-ping (3:20240117-1ubuntu0.1) ...
+#6 14.57 Setting up libbpf1:amd64 (1:1.3.0-2build2) ...
+#6 14.57 Setting up flex (2.6.4-8.2build1) ...
+#6 14.60 Setting up libbpf-dev:amd64 (1:1.3.0-2build2) ...
+#6 14.60 Setting up protobuf-compiler (3.21.12-8.2ubuntu0.4) ...
+#6 14.60 Setting up libnl-route-3-200:amd64 (3.7.0-0.3build1.1) ...
+#6 14.61 Setting up libmnl-dev:amd64 (1.0.5-2build1) ...
+#6 14.61 Setting up libiperf0:amd64 (3.16-1build2) ...
+#6 14.62 Setting up libibverbs1:amd64 (50.0-2ubuntu0.2) ...
+#6 14.90 Setting up iperf3 (3.16-1build2) ...
+#6 15.56 invoke-rc.d: could not determine current runlevel
+#6 15.62 invoke-rc.d: policy-rc.d denied execution of stop.
+#6 16.21 Setting up libpcap0.8t64:amd64 (1.10.4-4.1ubuntu3.1) ...
+#6 16.21 Setting up tcpdump (4.99.4-3ubuntu4.24.04.1) ...
+#6 16.94 Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+#6 DONE 17.2s
+
+#7 [3/3] RUN curl --fail --location --silent --show-error       https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.17.0.tar.xz -o /tmp/iproute2.tar.xz     && echo '9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec  /tmp/iproute2.tar.xz' | sha256sum -c -     && tar -xJf /tmp/iproute2.tar.xz -C /tmp     && cd /tmp/iproute2-6.17.0 && make -j3 && make install     && rm -rf /tmp/iproute2-6.17.0 /tmp/iproute2.tar.xz
+#7 0.516 /tmp/iproute2.tar.xz: OK
+#7 0.771 TC schedulers
+#7 0.820 
+#7 0.845 lib directory: /usr/lib
+#7 0.845 libc has setns: yes
+#7 1.189 libc has name_to_handle_at: yes
+#7 1.522 SELinux support: no
+#7 1.542 libtirpc support: no
+#7 1.562 libbpf support: yes
+#7 2.361 	libbpf version 1.3.0
+#7 2.361 ELF support: yes
+#7 2.415 libmnl support: yes
+#7 2.469 Berkeley DB: no
+#7 2.609 need for strlcpy: no
+#7 2.930 libcap support: yes
+#7 2.983 color output: never
+#7 3.049 
+#7 3.050 lib
+#7 3.103     CC       libnetlink.o
+#7 3.107     CC       libgenl.o
+#7 3.110     CC       mnl_utils.o
+#7 3.663     CC       utils.o
+#7 3.747     CC       utils_math.o
+#7 4.107     CC       rt_names.o
+#7 4.290     CC       ll_map.o
+#7 4.889     CC       ll_types.o
+#7 4.930     CC       ll_proto.o
+#7 4.993     CC       ll_addr.o
+#7 5.318     CC       inet_proto.o
+#7 5.382     CC       namespace.o
+#7 5.564     CC       json_writer.o
+#7 5.794     CC       json_print.o
+#7 5.976     CC       json_print_math.o
+#7 6.125     CC       names.o
+#7 6.480     CC       color.o
+#7 6.484     CC       bpf_legacy.o
+#7 6.717     CC       bpf_glue.o
+#7 7.032     CC       exec.o
+#7 7.235     CC       fs.o
+#7 7.510     CC       cg_map.o
+#7 7.674     CC       ppp_proto.o
+#7 7.867     CC       bridge.o
+#7 8.047     CC       bpf_libbpf.o
+#7 8.051     CC       selinux.o
+#7 8.358     CC       ax25_ntop.o
+#7 8.396     CC       rose_ntop.o
+#7 8.693     CC       mpls_ntop.o
+#7 8.882     CC       mpls_pton.o
+#7 8.906     CC       netrom_ntop.o
+#7 9.196     AR       libnetlink.a
+#7 9.400     AR       libutil.a
+#7 9.452 
+#7 9.452 ip
+#7 9.507     CC       ipaddress.o
+#7 9.512     CC       ipaddrlabel.o
+#7 9.513     CC       ip.o
+#7 10.12     CC       iproute.o
+#7 10.14     CC       iprule.o
+#7 10.78     CC       ipnetns.o
+#7 11.02     CC       rtm_map.o
+#7 11.46     CC       iptunnel.o
+#7 11.54     CC       ip6tunnel.o
+#7 11.63     CC       tunnel.o
+#7 12.25     CC       ipneigh.o
+#7 12.25     CC       ipntable.o
+#7 12.29     CC       iplink.o
+#7 12.98     CC       ipmaddr.o
+#7 13.04     CC       ipmonitor.o
+#7 13.31     CC       ipmroute.o
+#7 13.68     CC       ipprefix.o
+#7 13.69     CC       iptuntap.o
+#7 13.97     CC       iptoken.o
+#7 14.17     CC       ipxfrm.o
+#7 14.37     CC       xfrm_state.o
+#7 14.57     CC       xfrm_policy.o
+#7 15.20     CC       xfrm_monitor.o
+#7 15.35     CC       iplink_dummy.o
+#7 15.47     CC       iplink_ifb.o
+#7 15.73     CC       iplink_nlmon.o
+#7 15.84     CC       iplink_team.o
+#7 15.85     CC       iplink_vcan.o
+#7 16.10     CC       iplink_vxcan.o
+#7 16.22     CC       iplink_vlan.o
+#7 16.23     CC       link_veth.o
+#7 16.58     CC       link_gre.o
+#7 16.71     CC       iplink_can.o
+#7 16.82     CC       iplink_xdp.o
+#7 17.28     CC       iplink_macvlan.o
+#7 17.42     CC       ipl2tp.o
+#7 17.49     CC       link_vti.o
+#7 17.93     CC       link_vti6.o
+#7 18.11     CC       link_xfrm.o
+#7 18.21     CC       iplink_vxlan.o
+#7 18.54     CC       tcp_metrics.o
+#7 18.63     CC       iplink_ipoib.o
+#7 18.97     CC       ipnetconf.o
+#7 19.18     CC       link_ip6tnl.o
+#7 19.27     CC       link_iptnl.o
+#7 19.56     CC       link_gre6.o
+#7 19.84     CC       iplink_bond.o
+#7 19.94     CC       iplink_bond_slave.o
+#7 20.25     CC       iplink_hsr.o
+#7 20.52     CC       iplink_bridge.o
+#7 20.62     CC       iplink_bridge_slave.o
+#7 20.82     CC       iplink_dsa.o
+#7 21.27     CC       ipfou.o
+#7 21.29     CC       iplink_ipvlan.o
+#7 21.34     CC       iplink_geneve.o
+#7 21.83     CC       iplink_vrf.o
+#7 21.91     CC       iproute_lwtunnel.o
+#7 21.99     CC       ipmacsec.o
+#7 22.40     CC       ipila.o
+#7 22.91     CC       ipvrf.o
+#7 23.09     CC       iplink_xstats.o
+#7 23.09     CC       ipseg6.o
+#7 23.56     CC       iplink_netdevsim.o
+#7 23.62     CC       iplink_rmnet.o
+#7 23.68     CC       ipnexthop.o
+#7 23.94     CC       ipmptcp.o
+#7 24.21     CC       iplink_bareudp.o
+#7 24.64     CC       iplink_wwan.o
+#7 24.68     CC       ipioam6.o
+#7 24.75     CC       iplink_amt.o
+#7 25.15     CC       iplink_batadv.o
+#7 25.33     CC       iplink_gtp.o
+#7 25.33     CC       iplink_virt_wifi.o
+#7 25.65     CC       iplink_netkit.o
+#7 25.71     CC       ipstats.o
+#7 25.86     CC       rtmon.o
+#7 26.45     LINK     rtmon
+#7 26.61     LINK     ip
+#7 26.75 
+#7 26.75 tc
+#7 26.81     CC       tc.o
+#7 26.81     CC       tc_class.o
+#7 26.82     CC       tc_qdisc.o
+#7 27.45     CC       tc_filter.o
+#7 27.53     CC       tc_util.o
+#7 27.54     CC       tc_monitor.o
+#7 28.08     CC       tc_exec.o
+#7 28.21     CC       m_police.o
+#7 28.39     CC       m_estimator.o
+#7 28.59     CC       m_action.o
+#7 28.83     CC       m_ematch.o
+#7 28.86     YACC     emp_ematch.tab.c
+#7 28.99     LEX      emp_ematch.lex.c
+#7 29.05     CC       q_fifo.o
+#7 29.40     CC       q_dualpi2.o
+#7 29.56     CC       q_sfq.o
+#7 29.59     CC       q_red.o
+#7 30.14     CC       q_prio.o
+#7 30.19     CC       q_skbprio.o
+#7 30.23     CC       q_tbf.o
+#7 30.71     CC       q_multiq.o
+#7 30.71     CC       q_netem.o
+#7 30.88     CC       q_choke.o
+#7 31.18     CC       q_sfb.o
+#7 31.50     CC       f_u32.o
+#7 31.59     CC       f_route.o
+#7 31.81     CC       f_fw.o
+#7 32.16     CC       f_basic.o
+#7 32.35     CC       f_bpf.o
+#7 32.45     CC       f_flow.o
+#7 32.71     CC       f_cgroup.o
+#7 32.94     CC       f_flower.o
+#7 33.09     CC       q_gred.o
+#7 33.24     CC       q_ingress.o
+#7 33.72     CC       q_hfsc.o
+#7 33.79     CC       q_htb.o
+#7 34.23     CC       q_drr.o
+#7 34.42     CC       q_qfq.o
+#7 34.47     CC       m_gact.o
+#7 34.77     CC       m_mirred.o
+#7 34.96     CC       m_mpls.o
+#7 35.00     CC       m_nat.o
+#7 35.36     CC       m_pedit.o
+#7 35.56     CC       m_ife.o
+#7 35.57     CC       m_skbedit.o
+#7 36.14     CC       m_skbmod.o
+#7 36.15     CC       m_csum.o
+#7 36.16     CC       m_simple.o
+#7 36.69     CC       m_vlan.o
+#7 36.72     CC       m_connmark.o
+#7 36.73     CC       m_ctinfo.o
+#7 37.24     CC       m_bpf.o
+#7 37.28     CC       m_tunnel_key.o
+#7 37.30     CC       m_sample.o
+#7 37.81     CC       m_ct.o
+#7 37.84     CC       m_gate.o
+#7 37.99     CC       p_ip.o
+#7 38.48     CC       p_ip6.o
+#7 38.48     CC       p_icmp.o
+#7 38.49     CC       p_eth.o
+#7 38.82     CC       p_tcp.o
+#7 38.94     CC       p_udp.o
+#7 38.98     CC       em_nbyte.o
+#7 39.27     CC       em_cmp.o
+#7 39.39     CC       em_u32.o
+#7 39.54     CC       em_canid.o
+#7 39.85     CC       em_meta.o
+#7 39.96     CC       q_mqprio.o
+#7 40.12     CC       q_codel.o
+#7 40.54     CC       q_fq_codel.o
+#7 40.65     CC       q_fq.o
+#7 40.67     CC       q_pie.o
+#7 41.11     CC       q_fq_pie.o
+#7 41.24     CC       q_cake.o
+#7 41.33     CC       q_hhf.o
+#7 41.66     CC       q_clsact.o
+#7 41.89     CC       e_bpf.o
+#7 42.00     CC       f_matchall.o
+#7 42.09     CC       q_cbs.o
+#7 42.49     CC       q_etf.o
+#7 42.55     CC       q_taprio.o
+#7 42.64     CC       q_plug.o
+#7 43.04     CC       q_ets.o
+#7 43.14     CC       tc_core.o
+#7 43.27     CC       tc_red.o
+#7 43.66     CC       tc_estimator.o
+#7 43.78     CC       tc_stab.o
+#7 43.85     CC       tc_qevent.o
+#7 44.18     CC       emp_ematch.tab.o
+#7 44.37     CC       emp_ematch.lex.o
+#7 44.42     AR       libtc.a
+#7 45.12     LINK     tc
+#7 45.25 rm emp_ematch.lex.c
+#7 45.25 
+#7 45.25 bridge
+#7 45.30     CC       fdb.o
+#7 45.30     CC       bridge.o
+#7 45.30     CC       monitor.o
+#7 45.82     CC       link.o
+#7 45.84     CC       mdb.o
+#7 46.07     CC       mst.o
+#7 46.55     CC       vlan.o
+#7 46.65     CC       vni.o
+#7 47.38     LINK     bridge
+#7 47.50 
+#7 47.50 misc
+#7 47.56     CC       ss.o
+#7 47.56     CC       ssfilter_check.o
+#7 47.56     YACC     ssfilter.tab.c
+#7 47.69     CC       nstat
+#7 48.04     CC       ifstat
+#7 48.60     CC       rtacct
+#7 49.03     CC       lnstat.o
+#7 49.52     CC       lnstat_util.o
+#7 49.56     CC       ssfilter.tab.o
+#7 50.13     LINK     lnstat
+#7 50.22     LINK     ss
+#7 50.34 
+#7 50.34 netem
+#7 50.37 gcc  -I../include -o maketable maketable.c -lm
+#7 50.37 gcc  -I../include -o normal normal.c -lm
+#7 50.38 gcc  -I../include -o pareto pareto.c -lm
+#7 50.76 gcc  -I../include -o paretonormal paretonormal.c -lm
+#7 50.78 ./pareto > pareto.dist
+#7 50.79 ./normal > normal.dist
+#7 50.81 ./maketable experimental.dat > experimental.dist
+#7 51.15 ./paretonormal > paretonormal.dist
+#7 51.20 
+#7 51.20 genl
+#7 51.25     CC       genl.o
+#7 51.25     CC       ctrl.o
+#7 51.88     LINK     genl
+#7 52.00 
+#7 52.00 man
+#7 52.08 make[2]: Nothing to be done for 'all'.
+#7 52.11 make[2]: Nothing to be done for 'all'.
+#7 52.15 sed \
+#7 52.15 	-e "s|@NETNS_ETC_DIR@|/etc/netns|g" \
+#7 52.15 	-e "s|@NETNS_RUN_DIR@|/var/run/netns|g" \
+#7 52.15 	-e "s|@SYSCONF_ETC_DIR@|/etc/iproute2|g" \
+#7 52.15 	-e "s|@SYSCONF_USR_DIR@|/usr/share/iproute2|g" \
+#7 52.15 	ip-address.8.in > ip-address.8
+#7 52.15 sed \
+#7 52.15 	-e "s|@NETNS_ETC_DIR@|/etc/netns|g" \
+#7 52.15 	-e "s|@NETNS_RUN_DIR@|/var/run/netns|g" \
+#7 52.15 	-e "s|@SYSCONF_ETC_DIR@|/etc/iproute2|g" \
+#7 52.15 	-e "s|@SYSCONF_USR_DIR@|/usr/share/iproute2|g" \
+#7 52.15 	ip-link.8.in > ip-link.8
+#7 52.15 sed \
+#7 52.15 	-e "s|@NETNS_ETC_DIR@|/etc/netns|g" \
+#7 52.15 	-e "s|@NETNS_RUN_DIR@|/var/run/netns|g" \
+#7 52.15 	-e "s|@SYSCONF_ETC_DIR@|/etc/iproute2|g" \
+#7 52.15 	-e "s|@SYSCONF_USR_DIR@|/usr/share/iproute2|g" \
+#7 52.15 	ip-netns.8.in > ip-netns.8
+#7 52.20 sed \
+#7 52.20 	-e "s|@NETNS_ETC_DIR@|/etc/netns|g" \
+#7 52.20 	-e "s|@NETNS_RUN_DIR@|/var/run/netns|g" \
+#7 52.20 	-e "s|@SYSCONF_ETC_DIR@|/etc/iproute2|g" \
+#7 52.20 	-e "s|@SYSCONF_USR_DIR@|/usr/share/iproute2|g" \
+#7 52.20 	ip-route.8.in > ip-route.8
+#7 52.20 sed \
+#7 52.20 	-e "s|@NETNS_ETC_DIR@|/etc/netns|g" \
+#7 52.20 	-e "s|@NETNS_RUN_DIR@|/var/run/netns|g" \
+#7 52.20 	-e "s|@SYSCONF_ETC_DIR@|/etc/iproute2|g" \
+#7 52.20 	-e "s|@SYSCONF_USR_DIR@|/usr/share/iproute2|g" \
+#7 52.20 	ip-rule.8.in > ip-rule.8
+#7 52.26 
+#7 52.26 tipc
+#7 52.31     CC       bearer.o
+#7 52.32     CC       cmdl.o
+#7 52.32     CC       link.o
+#7 52.84     CC       media.o
+#7 53.10     CC       misc.o
+#7 53.17     CC       msg.o
+#7 53.36     CC       nametable.o
+#7 53.54     CC       node.o
+#7 53.69     CC       socket.o
+#7 53.87     CC       peer.o
+#7 54.14     CC       tipc.o
+#7 54.62     LINK     tipc
+#7 54.74 
+#7 54.74 devlink
+#7 54.79     CC       devlink.o
+#7 54.79     CC       mnlg.o
+#7 57.38     LINK     devlink
+#7 57.49 
+#7 57.49 rdma
+#7 57.54     CC       rdma.o
+#7 57.54     CC       utils.o
+#7 57.54     CC       dev.o
+#7 58.10     CC       link.o
+#7 58.16     CC       res.o
+#7 58.32     CC       res-pd.o
+#7 58.69     CC       res-mr.o
+#7 58.79     CC       res-cq.o
+#7 58.82     CC       res-cmid.o
+#7 59.21     CC       res-qp.o
+#7 59.33     CC       sys.o
+#7 59.39     CC       stat.o
+#7 59.76     CC       stat-mr.o
+#7 59.86     CC       res-ctx.o
+#7 60.20     CC       res-srq.o
+#7 60.26     CC       monitor.o
+#7 60.78     LINK     rdma
+#7 60.90 
+#7 60.90 dcb
+#7 60.95     CC       dcb.o
+#7 60.95     CC       dcb_app.o
+#7 60.95     CC       dcb_buffer.o
+#7 61.51     CC       dcb_dcbx.o
+#7 61.63     CC       dcb_ets.o
+#7 61.75     CC       dcb_maxrate.o
+#7 62.07     CC       dcb_pfc.o
+#7 62.24     CC       dcb_apptrust.o
+#7 62.28     CC       dcb_rewr.o
+#7 62.87     LINK     dcb
+#7 62.98 
+#7 62.98 vdpa
+#7 63.03     CC       vdpa.o
+#7 63.71     LINK     vdpa
+#7 63.87 
+#7 63.87 lib
+#7 63.90 make[1]: Nothing to be done for 'all'.
+#7 63.91 
+#7 63.91 ip
+#7 63.94 make[1]: Nothing to be done for 'all'.
+#7 63.94 
+#7 63.94 tc
+#7 63.98 make[1]: Nothing to be done for 'all'.
+#7 63.98 
+#7 63.98 bridge
+#7 64.01 make[1]: Nothing to be done for 'all'.
+#7 64.01 
+#7 64.01 misc
+#7 64.04 make[1]: Nothing to be done for 'all'.
+#7 64.04 
+#7 64.04 netem
+#7 64.07 make[1]: Nothing to be done for 'all'.
+#7 64.08 
+#7 64.08 genl
+#7 64.11 make[1]: Nothing to be done for 'all'.
+#7 64.11 
+#7 64.11 man
+#7 64.18 make[2]: Nothing to be done for 'all'.
+#7 64.22 make[2]: Nothing to be done for 'all'.
+#7 64.25 make[2]: Nothing to be done for 'all'.
+#7 64.25 
+#7 64.25 tipc
+#7 64.28 make[1]: Nothing to be done for 'all'.
+#7 64.29 
+#7 64.29 devlink
+#7 64.32 make[1]: Nothing to be done for 'all'.
+#7 64.32 
+#7 64.32 rdma
+#7 64.35 make[1]: Nothing to be done for 'all'.
+#7 64.35 
+#7 64.35 dcb
+#7 64.38 make[1]: Nothing to be done for 'all'.
+#7 64.39 
+#7 64.39 vdpa
+#7 64.42 make[1]: Nothing to be done for 'all'.
+#7 64.44 install -m 0755 -d /sbin
+#7 64.46 install -m 0755 -d /usr/share/iproute2
+#7 64.48 install -m 0755 -d /usr/include/iproute2
+#7 64.54 make[1]: Nothing to be done for 'install'.
+#7 64.58 install -m 0755 ip rtmon /sbin
+#7 64.60 install -m 0755 routel /sbin
+#7 64.65 mkdir -p /usr/lib/tc
+#7 64.67 install -m 0755 tc /sbin
+#7 64.69 for i in ; \
+#7 64.69 do install -m 755 $i /usr/lib/tc; \
+#7 64.69 done
+#7 64.71 if [ ! -f /usr/lib/tc/m_ipt.so ]; then \
+#7 64.71 if [ -f /usr/lib/tc/m_xt.so ]; \
+#7 64.71 	then ln -s m_xt.so /usr/lib/tc/m_ipt.so ; \
+#7 64.71 elif [ -f /usr/lib/tc/m_xt_old.so ]; \
+#7 64.71 	then ln -s m_xt_old.so /usr/lib/tc/m_ipt.so ; \
+#7 64.71 fi; \
+#7 64.71 fi
+#7 64.76 install -m 0755 bridge /sbin
+#7 64.81 install -m 0755 ss nstat ifstat rtacct lnstat /sbin
+#7 64.83 ln -sf lnstat /sbin/rtstat
+#7 64.85 ln -sf lnstat /sbin/ctstat
+#7 64.90 mkdir -p /usr/lib/tc
+#7 64.91 for i in normal.dist pareto.dist paretonormal.dist experimental.dist; \
+#7 64.91 do install -m 644 $i /usr/lib/tc; \
+#7 64.91 done
+#7 65.04 install -m 0755 genl /sbin
+#7 65.13 install -m 0755 -d /usr/share/man/man3
+#7 65.15 install -m 0644 libnetlink.3 /usr/share/man/man3
+#7 65.20 install -m 0755 -d /usr/share/man/man7
+#7 65.22 install -m 0644 tc-hfsc.7 /usr/share/man/man7
+#7 65.28 install -m 0755 -d /usr/share/man/man8
+#7 65.29 install -m 0644 ip-address.8 ip-link.8 ip-netns.8 ip-route.8 ip-rule.8 arpd.8 bridge.8 ctstat.8 dcb-app.8 dcb-apptrust.8 dcb-buffer.8 dcb-dcbx.8 dcb-ets.8 dcb-maxrate.8 dcb-pfc.8 dcb-rewr.8 dcb.8 devlink-dev.8 devlink-dpipe.8 devlink-health.8 devlink-lc.8 devlink-monitor.8 devlink-port.8 devlink-rate.8 devlink-region.8 devlink-resource.8 devlink-sb.8 devlink-trap.8 devlink.8 genl.8 ifstat.8 ip-addrlabel.8 ip-fou.8 ip-gue.8 ip-ioam.8 ip-l2tp.8 ip-macsec.8 ip-maddress.8 ip-monitor.8 ip-mptcp.8 ip-mroute.8 ip-neighbour.8 ip-netconf.8 ip-nexthop.8 ip-ntable.8 ip-sr.8 ip-stats.8 ip-tcp_metrics.8 ip-token.8 ip-tunnel.8 ip-vrf.8 ip-xfrm.8 ip.8 lnstat.8 nstat.8 rdma-dev.8 rdma-link.8 rdma-monitor.8 rdma-resource.8 rdma-statistic.8 rdma-system.8 rdma.8 routel.8 rtacct.8 rtmon.8 rtstat.8 ss.8 tc-actions.8 tc-basic.8 tc-bfifo.8 tc-bpf.8 tc-cake.8 tc-cbs.8 tc-cgroup.8 tc-choke.8 tc-codel.8 tc-connmark.8 tc-csum.8 tc-ct.8 tc-ctinfo.8 tc-drr.8 tc-dualpi2.8 tc-ematch.8 tc-etf.8 tc-ets.8 tc-flow.8 tc-flower.8 tc-fq.8 tc-fq_codel.8 tc-fq_pie.8 tc-fw.8 tc-gact.8 tc-gate.8 tc-hfsc.8 tc-htb.8 tc-ife.8 tc-matchall.8 tc-mirred.8 tc-mpls.8 tc-mqprio.8 tc-nat.8 tc-netem.8 tc-pedit.8 tc-pfifo.8 tc-pfifo_fast.8 tc-pie.8 tc-police.8 tc-prio.8 tc-red.8 tc-route.8 tc-sample.8 tc-sfb.8 tc-sfq.8 tc-simple.8 tc-skbedit.8 tc-skbmod.8 tc-skbprio.8 tc-stab.8 tc-taprio.8 tc-tbf.8 tc-tunnel_key.8 tc-u32.8 tc-vlan.8 tc.8 tipc-bearer.8 tipc-link.8 tipc-media.8 tipc-nametable.8 tipc-node.8 tipc-peer.8 tipc-socket.8 tipc.8 vdpa-dev.8 vdpa-mgmtdev.8 vdpa.8 /usr/share/man/man8
+#7 65.35 for i in tipc; \
+#7 65.35 do install -m 0755 $i /sbin; \
+#7 65.35 done
+#7 65.43 for i in devlink; \
+#7 65.43 do install -m 0755 $i /sbin; \
+#7 65.43 done
+#7 65.50 for i in rdma; \
+#7 65.50 do install -m 0755 $i /sbin; \
+#7 65.50 done
+#7 65.57 for i in dcb; \
+#7 65.57 do install -m 0755 $i /sbin; \
+#7 65.57 done
+#7 65.64 for i in vdpa; \
+#7 65.64 do install -m 0755 $i /sbin; \
+#7 65.64 done
+#7 65.68 install -m 0644 etc/iproute2/rt_tables etc/iproute2/rt_protos etc/iproute2/rt_dsfield etc/iproute2/bpf_pinning etc/iproute2/rt_scopes etc/iproute2/rt_realms etc/iproute2/group etc/iproute2/ematch_map etc/iproute2/nl_protos /usr/share/iproute2
+#7 65.70 install -m 0755 -d /usr/share/bash-completion/completions
+#7 65.72 install -m 0644 bash-completion/tc /usr/share/bash-completion/completions
+#7 65.74 install -m 0644 bash-completion/devlink /usr/share/bash-completion/completions
+#7 65.76 install -m 0644 include/bpf_elf.h /usr/include/iproute2
+#7 DONE 65.8s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 0.8s done
+#8 exporting manifest sha256:53b49a94ab2e46600a0037c29e2b9d5f56a7c505d6d4a3308584c007b219d268 done
+#8 exporting config sha256:7f99f29dde668cc056d41c1d7cb39988b97d55371be4939dc279dd2501adc98b done
+#8 exporting attestation manifest sha256:4119477f706f7d7f95ac5cd7813e93b0f614ce5afc5ec7ef291fc6f4a1711359 done
+#8 exporting manifest list sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab done
+#8 naming to docker.io/library/ros2-srt-m3:20261105 done
+#8 DONE 0.9s

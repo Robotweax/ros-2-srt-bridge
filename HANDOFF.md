@@ -560,3 +560,51 @@ CONTROL-Latenzen erfassen und eine vergleichbare DDS-Baseline bauen. Keine
 SRT-Überlegenheit aus M2 ableiten. Der Simulator hält Gerätehistorie nur flüchtig;
 physische Geräte, Power-Cut-Qualifikation, lokale DDS-Authentisierung und M4
 Intrinsic sind nicht abgenommen. Die ursprüngliche Übernahme bis M2 ist erfüllt.
+
+### M3 begonnen — isolierter Netz-Harness, 2026-11-05
+
+- PR #1 auf ausdrücklichen Nutzerwunsch gemergt: Main-Commit
+  `32c53b27839182ec45c448694c60fe1691466118`. Weiterentwicklung auf
+  `dev/m3-network-qualification`.
+- `tools/run_m3.py` baut ein eigenes SDK-/ROS-Präfix, erzeugt ein internes
+  Docker-Netz und neue Endpunkt-Container mit NET_ADMIN; keine Host-qdisc.
+  N0/N1/N2/N4/N5 werden als SRT-Entwicklungsläufe unterstützt. Kernel-Readbacks
+  prüfen Seeds, Queuegrenzen und Rate. Alte `tc`-Version ohne Seed ersetzt durch
+  hash-geprüftes iproute2 6.17.0 im gepinnten ROS-Basisimage.
+- ROS-Diagnose ergänzt begrenzte 1-ms-Histogramme konservativer Altersobergrenzen,
+  Maximum und separate Sample-Admission-Zähler für Stale/Unknown-Age. Clock-
+  Intervallbreite ist konfigurierbar (M2 weiterhin 50 ms, M3 explizit 200 ms bei
+  unverändertem 250-ms-SENSOR-Budget). Wire 1 und privates IPC 3 unverändert.
+- Stetiger Test hält Sollrate 200 Hz; absolute 200-Hz-Aufträge alle 2 s ändern
+  die Generation. UNKNOWN pausiert weitere Aufträge statt eine Generation zu
+  raten. Nicht abgeschlossene Aufträge werden getrennt von Latenzperzentilen
+  gezählt. Ressourcenbeobachter und rotierte, auf Vollständigkeit geprüfte
+  Ethernet-PCAPs zählen DATA/Parität/SRT-Controls getrennt. Kein DDS-Bypass.
+- Fünfminütiges N0: `.local/m3/20261105T130451724258Z`, 300,009 s, 150 bestätigte
+  Aufträge und genau 150 Effekte; 27.569 Imu/13.709 JointState beobachtet.
+  Altersobergrenze IMU p99 15 ms/Max 17,62 ms, Gelenke p99 28 ms/Max 32,65 ms.
+  Gleichzeitig fehlen 26.742 IMU im beobachteten Quellzähler-Span von 54.311.
+  Capture vor/nach WAN passt; Senke meldet keine Rejections/Ersetzungen. Verlust
+  vor WAN (lokaler DDS-Ingress bzw. Latest-only-/Send-Pump-Kadenz) muss vor
+  Durchsatzqualifikation genauer zugeordnet werden. 200 Hz sind konfiguriert,
+  kein belegtes Erreichen der Sollrate in dieser emulierten Umgebung.
+- N1/N2/N4/N5-Smokes bestanden, nur Seedbasis 1701. N4 ist derzeit mittiges
+  Kernel-Outage, keine Admission-/Dispatch-/Ergebnis-Commit-Barriere. N5-Prototyp
+  mit 256-Paket-Kindqueue hatte Stale/Unknown-Drops und einen offenen Auftrag;
+  korrigierte 16-Paket-Kindqueue bestätigte alle acht Aufträge. TBF allein begrenzt
+  einen ersetzten Netem-Child nicht auf die angegebene Bytezahl. Paritäts-/DATA-
+  Frame-Byte-Verhältnis tatsächlich etwa 0,60 bei kleinen Messages, nicht aus
+  einem nominellen 4:1-Paketschema als 0,25 angenommen.
+- SDK-Regressionslauf `.local/m1/20261105T124908573510Z`: 15 Debug, 15 ASan/UBSan,
+  67 native, 10 native ASan/UBSan und installierter Consumer bestanden.
+  Originale M2-Demo `.local/m2/20261105T131111749554Z` ebenfalls bestanden.
+  Sieben ROS-GTests plus Wrapper, sechs Python-Harness-Tests bestanden.
+- Evidenz/Fehlversuche: `evidence/m3-network-harness-2026-11-05/`; Plan und
+  tatsächlich verwendetes Image: `baselines/m3-plan.json`. Roh-PCAPs/JSONL und
+  Journale bleiben ignoriert lokal; Artefakthashes liegen in der Evidenz.
+
+**M3 bleibt offen:** N0-Lücken zuordnen und Quellrate/Zeitschnitt/Diagnose-Tail
+vollständig zählen; DDS Best Effort und Reliable mit demselben Journalvertrag
+implementieren; N3 DATA-/FEC-selektive deterministische Verluste und N4-Barrieren
+bauen; vollständige Dauer-/Seed-Matrix ausführen. Keine Leistungsüberlegenheit
+behaupten. M4 unverändert später; Parent-SRT nicht verändert.

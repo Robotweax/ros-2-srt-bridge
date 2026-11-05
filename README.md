@@ -344,3 +344,76 @@ regular file, rather than ROS parameters or command arguments. The laboratory DD
 service path assumes trusted processes within each local ROS domain; WAN SRT
 protection does not authenticate local DDS participants. This demo qualifies local
 Linux functionality, not WAN performance, physical device safety or Intrinsic.
+
+## M3 network measurements (in progress)
+
+PR #1 contains the merged M0–M2 implementation. M3 now has an isolated SRT
+measurement harness; the complete DDS comparison and deterministic FEC fault
+matrix remain open. The planned profiles/seeds are in `baselines/m3-plan.json`.
+
+After M0 has installed the pinned SRT archive, run:
+
+```sh
+python3 tests/test_m3_tools.py
+python3 tools/run_m3.py --build-image --profile N0 --smoke
+python3 tools/run_m3.py --profile N0
+python3 tools/run_m3.py --profile N1 --seed 1701
+```
+
+The default N0 run is five minutes; N1/N2 default to ten minutes per selected
+seed. `--smoke` selects 15 seconds and `--seconds` selects a development duration.
+Both stay development evidence. `--skip-build` reuses M3 binaries and is also
+explicitly marked. The runner never declares complete M3 acceptance.
+
+`containers/m3.Dockerfile` uses the pinned public ROS base and M0 development
+package versions. It builds iproute2 6.17.0 from a hash-checked upstream archive
+because the older distribution `tc` lacks netem's seed option. Each run records
+the actual immutable image, full package inventory, kernel, qdisc readbacks,
+source hashes, per-process resource samples, packet accounting and results in
+`.local/m3/`. No host qdisc is changed. Only newly created endpoint containers
+receive NET_ADMIN; they use an internal Docker network without published ports.
+ROS domains remain 41/42 with localhost-only DDS discovery. Packet capture also
+checks that no RTPS traffic appears on the SRT network.
+
+N1/N2 apply delay, normal-distributed jitter and seeded random loss to each
+endpoint's whole `eth0` egress. The robot direction uses the selected seed and
+the operator direction uses seed + 1. Seeds fix PRNG inputs, not application
+scheduling or exact packet identities across runs. N0 is neutral netem, enabling
+N4 loss/restore transitions without changing qdisc kind. N4 currently injects a
+mid-window outage; command-commit barrier timing is still pending. For example:
+
+```sh
+python3 tools/run_m3.py --profile N4 --smoke --outage-direction robot
+python3 tools/run_m3.py --profile N5 --smoke
+```
+
+N5 applies a shared 512 kbit/s TBF per direction and iperf3 `-b 128K` competing UDP from
+robot to operator (131,072 bit/s target). The child netem queue is capped at 16 packets; its packet cap
+is authoritative after replacing the TBF's default child queue. The workload
+keeps the simulator's configured rate at 200 Hz and requests absolute 200 Hz
+with a new device generation every two seconds. An uncertain result pauses new
+commands; the harness does not guess the device generation or replay the intent.
+Actual received rates and payload-counter gaps are recorded, not assumed to
+match configured timer rates under emulation.
+
+Age histograms round conservative bridge-ingress age upper bounds up to 1 ms.
+They include all publications in the last received diagnostic snapshot, including
+startup/transients, and expose exact maximum upper bounds. Up to one diagnostic
+interval of tail is not represented; observer counts are retained separately.
+Unknown-age and stale rejections are counted separately. Configured clock
+assumptions are explicit: 1000 ppm drift, 1 ms timing error, 5 s maximum probe age
+and 200 ms maximum interval width for the impaired runs, with the same 250 ms
+sample budget. M2's default interval-width limit remains 50 ms.
+
+Command latency includes local Execute invocation through terminal status
+observation and up to 200 ms polling. Unresolved/non-admitted attempts are counted
+separately. CPU uses process tick deltas; summed RSS can count shared pages more
+than once. Packet counts distinguish FEC parity (reserved SRT DATA message number
+zero in the pinned provider) from source DATA and SRT protocol controls. Byte
+counts are captured Ethernet frame lengths, excluding physical-link overhead;
+egress capture occurs before qdisc drops. Capture loss/rotation is checked rather
+than silently omitting packets. Raw pcap files and journals stay ignored locally.
+
+These are SRT development measurements. N3, the fully journaled DDS baseline,
+the three-seed duration matrix, and final window/rate qualification must pass
+before an M3 comparison or performance claim is accepted.

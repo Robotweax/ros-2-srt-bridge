@@ -18,3 +18,15 @@ uint64 joint_sequence
 uint64 commands_sent
 uint64 queries_sent
 uint64 peer_errors
+# Cumulative counters for this node lifetime. Histogram buckets are ceil(ms).
+uint32 max_clock_interval_ms
+uint64 transport_samples_received
+uint64 transport_samples_rejected
+uint64 transport_samples_unknown_age
+uint64 transport_samples_stale
+uint64 transport_sensor_replaced
+uint64 transport_rejected
+uint64[251] imu_age_upper_histogram_ms
+uint64[251] joint_age_upper_histogram_ms
+uint64 imu_age_upper_max_ns
+uint64 joint_age_upper_max_ns
