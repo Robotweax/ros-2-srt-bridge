@@ -6,11 +6,12 @@ from rosidl_runtime_py.convert import message_to_ordereddict
 from robotweax_srt_bridge_msgs.msg import DdsCommandState,CommandStatus
 from robotweax_srt_bridge_msgs.srv import ExecuteCommand,GetCommandStatus
 from command_workload import Cadence
+from m2_scenario import write
 
 
 class DdsCommandLoad:
     def __init__(self,node):
-        self.node=node;self.state=None;self.process=None;self.log=None
+        self.node=node;self.state=None;self.process=None;self.log=None;self.last_diagnostic_write_ns=0;self.last_ready=None
         self.sender=node.args.role=='operator';self.rows=[];self.pending=None
         self.cadence=None;self.generation=0;self.paused=False;self.cutoff_ns=None;self.frozen=False
         self.execute_future=self.query_future=None;self.next_poll=0
@@ -21,6 +22,10 @@ class DdsCommandLoad:
 
     def diagnostic(self,state):
         self.state=state
+        stamp=time.monotonic_ns()
+        if stamp-self.last_diagnostic_write_ns>=1000000000 or state.ready!=self.last_ready or state.failed:
+            write(self.node.run/(self.node.args.role+'-command-state.json'),message_to_ordereddict(state))
+            self.last_diagnostic_write_ns=stamp;self.last_ready=state.ready
         if state.failed:raise RuntimeError('DDS command coordinator failed')
 
     def launch(self):

@@ -23,3 +23,5 @@ uint64 expected_generation
 uint64 new_generation
 uint8[32] payload_hash
 CommandStatus status
+# HELLO owner eligibility; never a handler-start grant.
+bool owner_ready

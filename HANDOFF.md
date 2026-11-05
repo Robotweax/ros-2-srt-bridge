@@ -827,3 +827,64 @@ Sicherheitsgates oder No-Replay zu lockern. Altersursprung/-Qualifikation und
 Kryptografie vergleichbar machen; CPU/Wire an dieselben Fenster koppeln. Danach
 volle Seed-/Dauermatrix, N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-
 Barrieren. M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+### M3 DDS-Readiness und Lifecycle nachgebessert — 2026-11-05
+
+- Nach Lease-Ablauf fehlte die erneute Zielsuche: beide Enden konnten HELLOs an
+  pensionierte Peer-Links senden. Jetzt zunächst leeres Discovery-Ziel, dann
+  weiterhin gegenseitige Bestätigung der aktuellen Nonces; alte Links bleiben
+  retired. Simultane und einseitige Abläufe durch deterministische GTests geprüft.
+- HELLO auf separater BestEffort/Volatile/KeepLast(1)-Spur mit eigenem 100-ms-
+  Thread. Reliable/Volatile/KeepLast(64) für COMMAND/QUERY/STATUS/ERROR bleibt.
+  Strenge Replay-Cursor pro Spur verhindern, dass neue HELLOs ältere gültige
+  Controls verwerfen. Tatsächliche lokale QoS beim Start geprüft. Beide DDS-
+  Enden gemeinsam neu bauen (neues owner_ready-Feld), SDK-Wire 1/IPC 3 gleich.
+- Journal-/ROS-Handler-Eligibility ist Teil der Bereitschaft und wird im HELLO
+  gemeldet; lokale Start-Prüfung bleibt. Diagnosen für Matches, HELLOs, Ablehnung,
+  Lease-Abläufe und Epochen ergänzt. Kein Lock über Journal, Handler oder Netz.
+- Shutdown-Repeats fanden einen intermittierenden >5-s-Timeout. Pre-Shutdown
+  stoppt/ joint Threads vor Middleware-Shutdown; verschachtelter Handler-Context
+  gehört jetzt der Node und wird außerhalb des gejointen Workers zerstört.
+  Drei aufeinanderfolgende finale Fault-Läufe bestehen inklusive 5-s-Gate,
+  Duplikat/Konflikt, verzögerter Antwort UNKNOWN, Receiver-/Sender-SIGKILL,
+  Reopen/QUERY ohne altes COMMAND und neuer Absicht nach Device-Reconciliation.
+  Beim blockierten Handler bleiben beide Lease-Zähler 0 → 0. Vorherige Timeouts
+  bleiben Evidenz; kein Debugger-Stack beweist einen bestimmten Middleware-Lock.
+- Testharness wartet auf kumulative Diagnosen vor Send-Assertions. Atomare
+  Phase-Dateien tolerieren kurz fehlende Datei beim Lesen, kein exists/open-Race;
+  kaputtes JSON bleibt Fehler. Phasen-ID steigt im Speicher. Dateien sind kein
+  Ersatz für DDS-Auftragsresultate. 23 echte ROS-GTests/26 mit Wrappern und
+  30 Python-Tests bestanden; vollständiges originales M2 erneut gebaut/bestanden.
+- Finaler N1-Smoke 8/8 bestätigt. N2 (60 s) 17/18 bestätigt, ein offen/17 Effekte,
+  zwölf Slots blockiert; beide Enden am Ende ready, keine Lease-Abläufe. N4-Smoke
+  4/5 bestätigt/ein offen/vier Effekte, beide Enden nach je einem Lease-Ablauf
+  wieder ready. Kein Replay der offenen Absichten. Früherer N2-Entwicklungslauf
+  schaffte 28/28; variable Completion bleibt sichtbar, keine Vollabnahme.
+- Explizites `--startup control-first`: Sensorquelle bleibt bis Ready aus,
+  Nullproduktion geprüft, dann Warmup und gleiche Fences. Impairment und N5-
+  Konkurrent schon aktiv. Finaler N5-Smoke zwei bestätigt/zwei Effekte, sechs
+  Slots blockiert. Kein Nachweis für Beitritt bei bereits laufender Telemetrie.
+  Default bleibt simultaneous. `--dds-profile udp1200` ist zweite explizite
+  Variante; keine IP-Fragmente im Entwicklungscapture, N5-Start trotzdem gescheitert.
+  Default bleibt system. Keine Queue-/Lease-/Frische-/Deadline-Lockerung.
+- Evidenz `evidence/m3-dds-readiness-2026-11-05/`: finale Manifeste/Sourceprüfung,
+  vorherige Fehlversuche, gemischte Completion, Paketfeld-Analyse, Rohartefakthashes.
+  Roh-PCAPs/Journale lokal; ältere Evidenz unverändert. Zwei M2-Aufrufe scheiterten
+  vor Build am unveränderten Image-ID-Gate; Read-only-Rechecks passen, unveränderte
+  vollständige Wiederholungen bestanden. Ursache unbewiesen, Gate bleibt streng.
+
+- Finales fünfminütiges N0 `20261105T201220121826Z`: 150/150 bestätigt, 150 Effekte,
+  Ist 199,976/50,002 Hz; 75.025 produziert/75.022 empfangen, drei IMU vor Callback
+  fehlen. Lokale Alterschecks bestanden, keine Cross-Host-Aussage. Beide Journale
+  quick_check ok, identische 150 SUCCEEDED/Revision-3-Records und Generationen
+  1–150. Inbox-Drops/Lease-Abläufe jeweils null. Finale elf Manifeste (inklusive
+  N5-Fehler) passen: DDS 138/M2 86 Source-Dateien, installierte Python-Dateien
+  bytegleich. Binary-Build `201016201590Z`, Fault-Repeats `201144179119Z` und
+  `201202123026Z`; M2 `201220118978Z`. Keine kontrollierte CPU-/Hardware-Messung.
+
+**Weiter:** offene DDS-Aufträge trotz bestehender Readiness unter N2 und belasteten
+simultaneous-N5-Start untersuchen; keine Absichten blind erneut senden. Clock-/
+Crypto-Gleichheit und gemeinsame CPU-/Wire-Fenster qualifizieren, danach volle
+Seed-/Dauermatrix, N3-DATA/FEC-Selektor und N4-Auftragsphasen-Barrieren. M3 bleibt
+in Arbeit, PR #2 Draft, SRT/SDK unverändert, Intrinsic/M4 weiterhin unberührt.

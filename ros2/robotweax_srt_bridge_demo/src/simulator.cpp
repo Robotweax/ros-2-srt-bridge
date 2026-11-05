@@ -61,7 +61,7 @@ class Simulator final:public rclcpp::Node {
     void state(){msgs::msg::SimulatorState s;{std::lock_guard lock(mutex_);s.rate_hz=rate_;s.generation=generation_;s.effects=effects_;s.imu_published=imus_;s.joints_published=joints_;}state_->publish(s);}
 public:
     Simulator():Node("rate_simulator"){
-        declare_parameter<int>("response_delay_ms",0);device_group_=create_callback_group(rclcpp::CallbackGroupType::Reentrant);timer_group_=create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+        enabled_=declare_parameter<bool>("publishing_enabled",true);declare_parameter<int>("response_delay_ms",0);device_group_=create_callback_group(rclcpp::CallbackGroupType::Reentrant);timer_group_=create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
         const auto qos=rclcpp::SensorDataQoS().keep_last(1);imu_=create_publisher<sensor_msgs::msg::Imu>("/robot/imu",qos);joint_=create_publisher<sensor_msgs::msg::JointState>("/robot/joint_states",qos);state_=create_publisher<msgs::msg::SimulatorState>("/robot/simulator_state",rclcpp::QoS(1).reliable());
         apply_=create_service<Apply>("/robot/apply_measurement_rate",[this](Apply::Request::SharedPtr q,Apply::Response::SharedPtr response){apply(*q,*response);},rclcpp::ServicesQoS(),device_group_);
         // Serialized with the publish callback, including its actual ROS sends.

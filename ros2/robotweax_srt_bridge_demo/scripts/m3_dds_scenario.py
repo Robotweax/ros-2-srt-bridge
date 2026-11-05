@@ -109,9 +109,19 @@ class DdsScenario(Node):
 
     def robot(self):
         log=(self.run/'simulator.log').open('w')
-        self.process=subprocess.Popen(['/workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'],stdout=log,stderr=subprocess.STDOUT)
+        argv=['/workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator']
+        if self.load and self.args.startup=='control-first':argv+=['--ros-args','-p','publishing_enabled:=false']
+        self.process=subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT)
         try:
             if self.load:self.load.launch()
+            if self.load and self.args.startup=='control-first':
+                self.wait(self.load.ready,'control-first receiver ready')
+                paused=self.publishing(False)
+                if paused['device']['imu_published'] or paused['device']['joints_published']:raise RuntimeError('control-first source published before readiness')
+                paused['command_state']=self.load.snapshot()
+                write(self.run/'control-ready.json',paused)
+                self.wait(lambda:(self.run/'warmup-request.json').exists(),'warmup request')
+                write(self.run/'warmup-source.json',self.publishing(True))
             write(self.run/'robot-ready.json',dict(ready=True))
             for phase,enabled in [('begin',False),('resume',True),('end',False)]:
                 self.wait(lambda:(self.run/(phase+'-request.json')).exists(),phase+' request',self.args.seconds+90)
@@ -134,6 +144,9 @@ class DdsScenario(Node):
     def operator(self):
         if self.load:
             self.load.launch();self.wait(self.load.ready,'journaled DDS sender ready')
+            if self.args.startup=='control-first':
+                self.wait(lambda:(self.run/'control-ready.json').exists(),'control-first source ready')
+                write(self.run/'warmup-request.json',{})
         self.wait(lambda:all(self.counts[r]['received']>20 for r in self.counts),'typed DDS stream')
         for sub in self.subs:
             q=sub.qos_profile
@@ -198,13 +211,15 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--role',choices=['robot','operator'],required=True)
     parser.add_argument('--run',required=True);parser.add_argument('--seconds',type=int,required=True)
+    parser.add_argument('--startup',choices=['simultaneous','control-first'],default='simultaneous')
     parser.add_argument('--commands',action='store_true',help='journaled Reliable DDS commands every two seconds')
     args=parser.parse_args()
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
     rclpy.init();driver=DdsScenario(args)
     try:getattr(driver,args.role)()
     except BaseException:
-        write(driver.run/(args.role+'-failure.json'),dict(traceback=traceback.format_exc()));raise
+        write(driver.run/(args.role+'-failure.json'),dict(traceback=traceback.format_exc(),
+            command_state=driver.load.snapshot() if driver.load and driver.load.state else None));raise
     finally:
         try:
             if driver.load:driver.load.stop()

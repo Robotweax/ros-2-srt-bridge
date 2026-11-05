@@ -1,0 +1,115 @@
+[
+  {
+    "label": "fault-1",
+    "args": [
+      "tools/run_m3_dds_commands.py"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-fault-1.log"
+  },
+  {
+    "label": "fault-2",
+    "args": [
+      "tools/run_m3_dds_commands.py",
+      "--skip-build"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-fault-2.log"
+  },
+  {
+    "label": "fault-3",
+    "args": [
+      "tools/run_m3_dds_commands.py",
+      "--skip-build"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-fault-3.log"
+  },
+  {
+    "label": "n2",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--skip-build",
+      "--commands",
+      "--profile",
+      "N2",
+      "--seconds",
+      "60"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-n2.log"
+  },
+  {
+    "label": "m2",
+    "args": [
+      "tools/run_m2.py"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-m2.log"
+  },
+  {
+    "label": "n4",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--skip-build",
+      "--commands",
+      "--profile",
+      "N4",
+      "--smoke"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-n4.log"
+  },
+  {
+    "label": "n5-control-first",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--skip-build",
+      "--commands",
+      "--profile",
+      "N5",
+      "--startup",
+      "control-first",
+      "--smoke"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-n5-control-first.log"
+  },
+  {
+    "label": "n5-simultaneous",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--skip-build",
+      "--commands",
+      "--profile",
+      "N5",
+      "--smoke"
+    ],
+    "exit_code": 1,
+    "log": ".local/readiness-final-n5-simultaneous.log"
+  },
+  {
+    "label": "sensor-only",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--skip-build",
+      "--profile",
+      "N0",
+      "--smoke"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-sensor-only.log"
+  },
+  {
+    "label": "n0",
+    "args": [
+      "tools/run_m3_dds.py",
+      "--commands",
+      "--profile",
+      "N0",
+      "--skip-build"
+    ],
+    "exit_code": 0,
+    "log": ".local/readiness-final-n0.log"
+  }
+]

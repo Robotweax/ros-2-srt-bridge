@@ -12,3 +12,17 @@ uint64 inbox_drops
 uint64 rejected_frames
 uint64 journal_errors
 uint64 effects
+uint64 hellos_sent
+uint64 hellos_received
+uint64 hellos_rejected
+uint64 lease_expirations
+uint64 control_subscribers
+uint64 control_publishers
+uint64 last_peer_hello_ns
+uint8[16] peer_link_epoch
+uint8[16] hello_target
+uint64 hello_subscribers
+uint64 hello_publishers
+bool qos_verified
+bool handler_ready
+bool peer_ready

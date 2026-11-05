@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 152, in stop
+    p.wait(timeout=5)
+  File "/usr/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 2045, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/workspace/install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node', '--ros-args', '-p', 'role:=receiver', '-p', 'journal_path:=/workspace/.local/m3-dds-commands/20261105T200500282457Z/robot.sqlite']' timed out after 5 seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_commands_scenario.py", line 162, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_commands_scenario.py", line 156, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_commands_scenario.py", line 73, in robot
+    self.stop(self.bridge);self.bridge=None;self.stop(self.sim);self.sim=None
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 156, in stop
+    raise RuntimeError('shutdown exceeded five seconds')
+RuntimeError: shutdown exceeded five seconds

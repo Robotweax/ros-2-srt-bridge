@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <mutex>
+#include <optional>
 #include <thread>
 namespace core=robotweax::srt_bridge;
 namespace rb=robotweax::ros_bridge;
@@ -27,9 +28,11 @@ class DdsCommandNode final:public rclcpp::Node {
     const bool sender_;
     const core::Identity process_=core::random_identity();
     std::mutex authority_;rb::DdsCommandSession session_;
-    std::atomic<bool> stop_{false},failed_{false},journal_ready_{false};
+    std::atomic<bool> stop_{false},failed_{false},journal_ready_{false},handler_ready_{false};
     std::atomic<std::uint64_t> commands_{0},queries_{0},dispatches_{0},starts_{0},drops_{0},rejected_{0},errors_{0},effects_{0};
-    rclcpp::Publisher<Frame>::SharedPtr out_;rclcpp::Subscription<Frame>::SharedPtr in_;
+    std::atomic<std::uint64_t> hellos_sent_{0},hellos_received_{0},hellos_rejected_{0};
+    rclcpp::Publisher<Frame>::SharedPtr out_,hello_out_;rclcpp::Subscription<Frame>::SharedPtr in_,hello_in_;
+    bool qos_verified_=false;
     rclcpp::Publisher<msgs::msg::DdsCommandState>::SharedPtr states_;
     rclcpp::Service<Execute>::SharedPtr execute_;rclcpp::Service<Get>::SharedPtr get_;
     rclcpp::TimerBase::SharedPtr state_timer_;
@@ -37,30 +40,39 @@ class DdsCommandNode final:public rclcpp::Node {
     rb::DdsInbox<Task> inbox_;
     struct Cached {bool used=false;Status value{};};std::mutex cache_mutex_;std::array<Cached,64> cache_{};std::size_t cursor_=0;
     struct Receipt {std::uint64_t sequence=0;core::Identity id{},session{};};std::array<Receipt,64> receipts_{};std::size_t receipt_cursor_=0;
-    std::uint64_t sequence_=0;
-    std::thread worker_;
-    bool fresh(core::Identity id){std::lock_guard lock(authority_);return !stop_&&!failed_&&session_.fresh(id,mono_ns());}
+    std::uint64_t sequence_=0,hello_sequence_=0;
+    // Keep the nested ROS context alive until the node is destroyed. Its
+    // destructor must not run on a worker joined by a signal shutdown callback.
+    std::unique_ptr<rb::RosRateBackend> backend_;
+    std::thread worker_,liveness_;
+    std::mutex shutdown_mutex_;
+    std::optional<rclcpp::PreShutdownCallbackHandle> pre_shutdown_;
+    void stop_workers()noexcept{std::lock_guard lifecycle(shutdown_mutex_);{std::lock_guard lock(authority_);stop_=true;}if(liveness_.joinable())liveness_.join();if(worker_.joinable())worker_.join();}
+    bool fresh(core::Identity id){std::lock_guard lock(authority_);return !stop_&&!failed_&&handler_ready_&&session_.fresh(id,mono_ns());}
     core::Identity context(){std::lock_guard lock(authority_);return session_.session();}
     void tick(){const auto replacement=core::random_identity();std::lock_guard lock(authority_);session_.tick(mono_ns(),replacement);if(session_.failed())failed_=true;}
     bool push(Task task){return inbox_.try_push(std::move(task));}
     bool pop(Task& task){return inbox_.pop(task);}
     Cached& slot(core::Identity id){for(auto& item:cache_)if(item.used&&bytes(item.value.request_id)==id)return item;auto& item=cache_[cursor_++%cache_.size()];item={};item.used=true;item.value.request_id=octets(id);item.value.route_id=100;return item;}
     void cache(core::Identity id,const core::JournalResult& r){if(r.error==core::JournalError::storage||r.error==core::JournalError::corrupt){++errors_;failed_=true;}std::lock_guard lock(cache_mutex_);auto& s=slot(id).value;if(r.entry)s=status(*r.entry);s.local_error=unsigned(r.error);s.query_queued=false;}
-    void receive(const Frame& f){
+    void receive(const Frame& f,bool hello_channel){
+        if((f.kind==Frame::HELLO)!=hello_channel){++rejected_;return;}
         const auto replacement=core::random_identity();
         std::unique_lock lock(authority_);
         const auto time=mono_ns();session_.tick(time,replacement);
         const auto process=bytes(f.process_epoch),link=bytes(f.link_epoch),target=bytes(f.target_link),sid=bytes(f.session_id);const auto proof=bytes(f.clock_namespace);
-        if(f.kind==Frame::HELLO){if(!session_.hello(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time))++rejected_;if(session_.failed())failed_=true;return;}
+        if(f.kind==Frame::HELLO){++hellos_received_;if(!session_.hello(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time,f.owner_ready)){++rejected_;++hellos_rejected_;}if(session_.failed())failed_=true;return;}
         if((sender_?f.kind!=Frame::STATUS&&f.kind!=Frame::ERROR:f.kind!=Frame::COMMAND&&f.kind!=Frame::QUERY)||f.route_id!=100||bytes(f.request_id)==core::Identity{}||!session_.frame(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time)){++rejected_;return;}
         lock.unlock();Task t;t.kind=3;t.frame=f;if(!inbox_.receive(std::move(t)))++drops_;
     }
-    Frame frame(unsigned kind){Frame f;f.kind=kind;std::lock_guard lock(authority_);f.process_epoch=octets(process_);f.link_epoch=octets(session_.link());f.target_link=octets(session_.peer_link());f.session_id=octets(session_.session());f.clock_namespace=octets(session_.clock());return f;}
+    Frame frame(unsigned kind){Frame f;f.kind=kind;std::lock_guard lock(authority_);f.process_epoch=octets(process_);f.link_epoch=octets(session_.link());f.target_link=octets(kind==Frame::HELLO?session_.hello_target():session_.peer_link());f.session_id=octets(session_.session());f.clock_namespace=octets(session_.clock());f.owner_ready=journal_ready_&&handler_ready_;return f;}
     bool send(Frame f,bool track=false){
         if(stop_||failed_||(f.kind!=Frame::HELLO&&!fresh(bytes(f.session_id))))return false;
-        if(sequence_==UINT64_MAX){failed_=true;return false;}f.sequence=++sequence_;f.sent_monotonic_ns=mono_ns();
-        // Only this journal worker publishes; no disk or DDS sends in callbacks.
-        out_->publish(f);
+        auto& sequence=f.kind==Frame::HELLO?hello_sequence_:sequence_;
+        if(sequence==UINT64_MAX){failed_=true;return false;}f.sequence=++sequence;f.sent_monotonic_ns=mono_ns();
+        // Separate owners: journal worker writes Reliable controls, liveness
+        // worker writes ephemeral HELLOs. No network write holds authority_.
+        (f.kind==Frame::HELLO?hello_out_:out_)->publish(f);if(f.kind==Frame::HELLO)++hellos_sent_;
         if(track)receipts_[receipt_cursor_++%receipts_.size()]={f.sequence,bytes(f.request_id),bytes(f.session_id)};
         return true;
     }
@@ -95,7 +107,7 @@ class DdsCommandNode final:public rclcpp::Node {
             // stop use the same mutex. A post-claim revocation cannot undo an
             // already-started handler; uncertain outcomes remain UNKNOWN.
             std::lock_guard lock(authority_);const auto t=mono_ns();
-            claimed=!stop_&&!failed_&&session_.fresh(r.entry->context.session,t)&&r.entry->owner_epoch==process_&&r.entry->context.source_epoch==session_.peer_process()&&t<r.entry->context.deadline_ns;
+            claimed=!stop_&&!failed_&&handler_ready_&&session_.fresh(r.entry->context.session,t)&&r.entry->owner_epoch==process_&&r.entry->context.source_epoch==session_.peer_process()&&t<r.entry->context.deadline_ns;
             if(claimed)++starts_;
         }
         core::HandlerOutcome outcome;
@@ -107,17 +119,21 @@ class DdsCommandNode final:public rclcpp::Node {
         reply(f,r);
         if(!journal.healthy()){++errors_;failed_=true;}
     }
+    void heartbeat()noexcept{
+        try{while(!stop_&&!failed_){tick();send(frame(Frame::HELLO));std::this_thread::sleep_for(std::chrono::milliseconds(100));}}
+        catch(const std::exception& e){RCLCPP_ERROR(get_logger(),"DDS liveness worker: %s",e.what());failed_=true;}
+    }
     void work(core::JournalOptions options)noexcept{
         try{
-            core::CommandJournal journal(options);std::unique_ptr<rb::RosRateBackend> backend;
-            if(!sender_){backend=std::make_unique<rb::RosRateBackend>();backend->initialize();}
-            journal_ready_=true;core::Identity previous{};std::uint64_t hello_at=0;
+            core::CommandJournal journal(options);
+            if(!sender_){backend_=std::make_unique<rb::RosRateBackend>();backend_->initialize();}
+            journal_ready_=true;core::Identity previous{};
             while(!stop_&&!failed_){
                 if(!journal.healthy()){++errors_;failed_=true;break;}
+                handler_ready_=sender_||backend_->ready();
                 tick();const auto sid=context();if(previous!=core::Identity{}&&previous!=sid){if(journal.invalidate_session(previous,mono_ns())!=core::JournalError::none){++errors_;failed_=true;break;}}previous=sid;
-                if(mono_ns()>=hello_at){send(frame(Frame::HELLO));hello_at=mono_ns()+100000000ULL;}
                 Task task;if(!pop(task)){std::this_thread::sleep_for(std::chrono::milliseconds(2));continue;}
-                if(task.kind==3){peer(journal,backend.get(),task.frame);continue;}
+                if(task.kind==3){peer(journal,backend_.get(),task.frame);continue;}
                 if(task.kind==2){auto r=journal.get(task.id);cache(task.id,r);if(r.entry&&task.refresh&&!terminal(*r.entry))query(task.id);continue;}
                 if(!fresh(task.session)){cache(task.id,{core::JournalError::context_lost});continue;}
                 auto r=journal.admit(task.id,100,task.command,{task.session,process_,task.origin,task.origin+5000000000ULL},mono_ns());cache(task.id,r);
@@ -128,21 +144,34 @@ class DdsCommandNode final:public rclcpp::Node {
                 }else if(!terminal(*r.entry))query(task.id); // Never resend a duplicate/recovered intent.
             }
         }catch(const std::exception& e){RCLCPP_ERROR(get_logger(),"DDS command worker: %s",e.what());failed_=true;}
-        journal_ready_=false;
+        journal_ready_=false;handler_ready_=false;
     }
-    void state(){msgs::msg::DdsCommandState s;{std::lock_guard lock(authority_);s.process_epoch=octets(process_);s.link_epoch=octets(session_.link());s.session_id=octets(session_.session());s.ready=!stop_&&!failed_&&journal_ready_&&session_.fresh(session_.session(),mono_ns());}s.journal_ready=journal_ready_;s.failed=failed_;s.commands_sent=commands_;s.queries_sent=queries_;s.dispatches=dispatches_;s.start_claims=starts_;s.inbox_drops=drops_;s.rejected_frames=rejected_;s.journal_errors=errors_;s.effects=effects_;states_->publish(s);}
+    void state(){msgs::msg::DdsCommandState s;{std::lock_guard lock(authority_);s.process_epoch=octets(process_);s.link_epoch=octets(session_.link());s.session_id=octets(session_.session());s.lease_expirations=session_.expirations();s.last_peer_hello_ns=session_.last_hello();s.peer_link_epoch=octets(session_.peer_link());s.hello_target=octets(session_.hello_target());s.peer_ready=session_.peer_ready();s.ready=!stop_&&!failed_&&journal_ready_&&handler_ready_&&session_.fresh(session_.session(),mono_ns());}s.journal_ready=journal_ready_;s.handler_ready=handler_ready_;s.failed=failed_;s.commands_sent=commands_;s.queries_sent=queries_;s.dispatches=dispatches_;s.start_claims=starts_;s.inbox_drops=drops_;s.rejected_frames=rejected_;s.journal_errors=errors_;s.effects=effects_;s.hellos_sent=hellos_sent_;s.hellos_received=hellos_received_;s.hellos_rejected=hellos_rejected_;s.control_subscribers=out_->get_subscription_count();s.control_publishers=in_->get_publisher_count();s.hello_subscribers=hello_out_->get_subscription_count();s.hello_publishers=hello_in_->get_publisher_count();s.qos_verified=qos_verified_;states_->publish(s);}
 public:
     DdsCommandNode():Node("dds_command_coordinator"),sender_(declare_parameter<std::string>("role","sender")=="sender"),session_(sender_,process_,core::random_identity(),namespace_proof()){
         const auto role=get_parameter("role").as_string();if(role!="sender"&&role!="receiver")throw std::invalid_argument("DDS role must be sender/receiver");
         const auto path=declare_parameter<std::string>("journal_path","");if(path.empty())throw std::invalid_argument("DDS journal path required");
-        const auto qos=rclcpp::QoS(64).reliable().durability_volatile();out_=create_publisher<Frame>(sender_?"/dds/commands/operator":"/dds/commands/robot",qos);in_=create_subscription<Frame>(sender_?"/dds/commands/robot":"/dds/commands/operator",qos,[this](Frame::ConstSharedPtr f){receive(*f);});
+        const auto qos=rclcpp::QoS(64).reliable().durability_volatile();out_=create_publisher<Frame>(sender_?"/dds/commands/operator":"/dds/commands/robot",qos);in_=create_subscription<Frame>(sender_?"/dds/commands/robot":"/dds/commands/operator",qos,[this](Frame::ConstSharedPtr f){receive(*f,false);});
+        const auto hello_qos=rclcpp::QoS(1).best_effort().durability_volatile();
+        hello_out_=create_publisher<Frame>(sender_?"/dds/commands/operator_hello":"/dds/commands/robot_hello",hello_qos);
+        hello_in_=create_subscription<Frame>(sender_?"/dds/commands/robot_hello":"/dds/commands/operator_hello",hello_qos,[this](Frame::ConstSharedPtr f){receive(*f,true);});
+        const auto matches=[](const auto& handle,auto reliability,std::size_t depth){const auto q=handle->get_actual_qos().get_rmw_qos_profile();return q.reliability==reliability&&q.durability==RMW_QOS_POLICY_DURABILITY_VOLATILE&&q.history==RMW_QOS_POLICY_HISTORY_KEEP_LAST&&q.depth==depth;};
+        qos_verified_=matches(out_,RMW_QOS_POLICY_RELIABILITY_RELIABLE,64)&&matches(in_,RMW_QOS_POLICY_RELIABILITY_RELIABLE,64)&&matches(hello_out_,RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,1)&&matches(hello_in_,RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,1);
+        if(!qos_verified_)throw std::runtime_error("DDS control/liveness QoS mismatch");
         states_=create_publisher<msgs::msg::DdsCommandState>(sender_?"/dds/commands/sender/state":"/dds/commands/receiver/state",rclcpp::QoS(1).reliable().durability_volatile());
         if(sender_){execute_=create_service<Execute>("/bridge/execute_command",[this](Execute::Request::SharedPtr q,Execute::Response::SharedPtr r){r->request_id=q->request_id;const core::RateCommand cmd{q->rate_hz,5000,q->expected_generation,q->new_generation};const auto sid=context();if(q->route_id!=100||bytes(q->request_id)==core::Identity{}||!core::valid_command(cmd)){r->submission=Execute::Response::INVALID;return;}if(!journal_ready_||!fresh(sid)){r->submission=Execute::Response::NOT_READY;return;}Task t;t.kind=1;t.id=bytes(q->request_id);t.session=sid;t.command=cmd;t.origin=mono_ns();r->submission=push(t)?Execute::Response::QUEUED:Execute::Response::BUSY;});
             get_=create_service<Get>("/bridge/get_command_status",[this](Get::Request::SharedPtr q,Get::Response::SharedPtr r){const auto id=bytes(q->request_id);std::lock_guard lock(cache_mutex_);auto& s=slot(id).value;if(q->route_id!=100||id==core::Identity{}){s.local_error=unsigned(core::JournalError::invalid);}else if(!journal_ready_||failed_){s.local_error=unsigned(core::JournalError::context_lost);s.query_queued=false;}else if(!s.query_queued){Task t;t.kind=2;t.id=id;t.refresh=q->refresh;if(push(t))s.query_queued=true;else s.local_error=unsigned(core::JournalError::busy);}r->status=s;});}
         core::JournalOptions options;options.path=path;options.local_peer_id=sender_?"operator":"robot";options.remote_peer_id=sender_?"robot":"operator";options.side=sender_?core::JournalSide::sender:core::JournalSide::receiver;options.process_epoch=process_;
-        worker_=std::thread([this,options]{work(options);});state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
+        state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
+        try{
+            worker_=std::thread([this,options]{work(options);});
+            liveness_=std::thread([this]{heartbeat();});
+            // Stop publishers while the ROS context is still valid. Joining
+            // only in the destructor races rmw shutdown on SIGINT.
+            pre_shutdown_=get_node_base_interface()->get_context()->add_pre_shutdown_callback([this]{stop_workers();});
+        }catch(...){stop_workers();throw;}
     }
-    ~DdsCommandNode()override{{std::lock_guard lock(authority_);stop_=true;}if(worker_.joinable())worker_.join();}
+    ~DdsCommandNode()override{stop_workers();if(pre_shutdown_)get_node_base_interface()->get_context()->remove_pre_shutdown_callback(*pre_shutdown_);}
 };
 }
 int main(int argc,char** argv){rclcpp::init(argc,argv);try{auto node=std::make_shared<DdsCommandNode>();rclcpp::spin(node);node.reset();rclcpp::shutdown();return 0;}catch(const std::exception& e){std::cerr<<e.what()<<'\n';rclcpp::shutdown();return 1;}}

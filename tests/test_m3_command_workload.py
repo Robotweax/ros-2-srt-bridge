@@ -3,8 +3,29 @@ import copy
 from pathlib import Path
 import sys
 import unittest
+import tempfile
+import json
+from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
 from command_workload import Cadence,audit_commands
+from scenario_files import read,write
+
+
+class PhaseFileTests(unittest.TestCase):
+    def test_disappearing_phase_file_is_absent_not_a_failed_workload(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'control.json';write(path,dict(sequence=1))
+            self.assertTrue(path.exists())
+            with patch.object(Path,'read_text',side_effect=FileNotFoundError):self.assertEqual(read(path),{})
+            self.assertEqual(read(path),dict(sequence=1))
+
+    def test_atomic_roundtrip_and_corrupt_phase_is_not_silenced(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'control.json';self.assertEqual(read(path),{})
+            write(path,dict(sequence=7,action='ready'));self.assertEqual(read(path)['sequence'],7)
+            self.assertFalse(path.with_suffix('.tmp').exists())
+            path.write_text('{')
+            with self.assertRaises(json.JSONDecodeError):read(path)
 
 
 class CadenceTests(unittest.TestCase):

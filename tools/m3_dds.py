@@ -5,10 +5,16 @@ import json
 
 
 class DdsLab(NetworkLab):
+    def __init__(self,root,run,image,transport_profile='system'):
+        super().__init__(root,run,image)
+        if transport_profile not in ('system','udp1200'):raise ValueError('unsupported DDS transport profile')
+        self.transport_profile=transport_profile
+
     def save(self):
         super().save()
         path=self.run/'network.json'
         data=json.loads(path.read_text())
+        data['dds_transport_profile']=self.transport_profile
         data['isolation']='internal Docker bridge; shared ROS domain 60, explicit static peers; DDS over container eth0; no SRT processes'
         path.write_text(json.dumps(data,indent=2)+'\n')
 
@@ -21,7 +27,9 @@ class DdsLab(NetworkLab):
             self.execute(role+'-create',['docker','run','-d','--pull=never','--platform','linux/amd64',
                 '--network',self.name,'--name',name,'--cap-add','NET_ADMIN',
                 '-e','ROS_DOMAIN_ID=60','-e','ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET',
-                '-e','RMW_IMPLEMENTATION=rmw_fastrtps_cpp','-v',str(self.root)+':/workspace',
+                '-e','RMW_IMPLEMENTATION=rmw_fastrtps_cpp']+
+                (['-e','FASTRTPS_DEFAULT_PROFILES_FILE=/workspace/containers/dds-udp1200.xml'] if self.transport_profile=='udp1200' else [])+
+                ['-v',str(self.root)+':/workspace',
                 '-w','/workspace',self.image,'sleep','infinity'])
             info=json.loads(self.execute(role+'-inspect',['docker','inspect',name]))[0]
             address=info['NetworkSettings']['Networks'][self.name]['IPAddress']

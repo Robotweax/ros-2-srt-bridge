@@ -56,6 +56,8 @@ class CommandDriver(Driver):
             if q.get('sequence',0)<=sequence:continue
             sequence=q['sequence'];action=q['action'];response=dict(sequence=sequence,ok=True)
             if action=='ready':self.ready()
+            elif action=='metrics':
+                self.spin(.2);response['command_state']=message_to_ordereddict(self.command_state)
             elif action=='delay':self.set_delay(q['milliseconds'])
             elif action=='device':
                 if 'effects' in q:self.wait(lambda:self.device.effects>=q['effects'],'expected device effect')
@@ -104,16 +106,20 @@ class CommandDriver(Driver):
         self.results.append(dict(number=1,conflict=message_to_ordereddict(conflict)))
         assert self.command_state.commands_sent==1
         assert self.robot_command('device')['effects']==1
+        lease_before=dict(sender=self.command_state.lease_expirations,receiver=self.robot_command('metrics')['command_state']['lease_expirations'])
         self.robot_command('delay',milliseconds=4500)
         self.submit(2,75,1,2);uncertain=self.result(2,CommandStatus.UNKNOWN)
         assert not uncertain.result_valid
         self.submit(2,75,1,2);self.result(2,CommandStatus.UNKNOWN)
         self.spin(.3);device=self.robot_command('device');assert device['effects']==2 and device['generation']==2
+        lease_after=dict(sender=self.command_state.lease_expirations,receiver=self.robot_command('metrics')['command_state']['lease_expirations'])
+        assert lease_after==lease_before,(lease_before,lease_after)
         self.robot_command('delay',milliseconds=0)
         self.ready();self.robot_command('ready')
         self.robot_command('arm_crash',effects=3)
         self.submit(3,50,2,3)
         self.wait(lambda:(self.run/'crashed.json').exists(),'receiver killed after effect',10)
+        self.wait(lambda:self.command_state.commands_sent>=3,'sender diagnostic records third durable send')
         before_restart=message_to_ordereddict(self.command_state)
         assert before_restart['commands_sent']==3
         # Kill the sender before it can reconcile receiver status. Reopening
@@ -131,11 +137,12 @@ class CommandDriver(Driver):
         self.robot_command('delay',milliseconds=0)
         self.submit(4,200,3,4);self.result(4,CommandStatus.SUCCEEDED)
         device=self.robot_command('device',effects=4);assert device['effects']==4 and device['generation']==4
+        self.wait(lambda:self.command_state.commands_sent>=1,'sender diagnostic records new intent')
         final=message_to_ordereddict(self.command_state)
         assert final['commands_sent']==1
         self.robot_command('finish');self.stop(self.bridge);self.bridge=None
         write(self.run/'operator-result.json',dict(status='passed',common_vm_only=True,commands_qualified_for_complete_m3=False,
-            results=self.results,before_sender_restart=before_restart,after_sender_restart=final,device=device,
+            results=self.results,blocked_handler_lease_counts=dict(before=lease_before,after=lease_after),before_sender_restart=before_restart,after_sender_restart=final,device=device,
             checks=['durable sender/receiver journals','one command send per new durable intent','duplicate no effect','same-id conflict no send',
                 'unobserved handler reply is UNKNOWN','receiver crash after effect recovers UNKNOWN','sender crash/reopen queries without replay','new intent after explicit device reconciliation'],
             scope='DDS command development acceptance, not full impairment matrix; no cross-host clock or DDS encryption qualification'))

@@ -532,3 +532,40 @@ See [combined evidence](evidence/m3-dds-combined-2026-11-05/README.md). Nineteen
 GTests and 27 Python tests passed, plus sensor-only and crash/lost-reply regressions.
 Full seeded durations, DDS readiness, clock/security equivalence and matched
 CPU/wire windows remain open; no performance advantage is claimed.
+
+The readiness follow-up separates ephemeral HELLOs from ordered command traffic:
+Best Effort/Volatile/KeepLast(1), a dedicated 100 ms liveness thread and independent
+replay cursors; controls remain Reliable/Volatile/KeepLast(64). Expired sessions
+rediscover with an empty target before requiring mutual current-nonce ACKs.
+Readiness includes journal and local ROS handler eligibility. Matched endpoint,
+HELLO, lease and eligibility diagnostics make startup failures observable. Both
+DDS peers must rebuild; SDK wire v1, private IPC v3 and SRT remain unchanged.
+Workers stop before ROS context shutdown, and the nested handler context outlives
+the joined worker. The original five-second shutdown check remains enforced.
+
+Two explicit lab options preserve the existing defaults:
+
+```sh
+python3 tools/run_m3_dds.py --commands --profile N5 --startup control-first --smoke --skip-build
+python3 tools/run_m3_dds.py --commands --profile N5 --dds-profile udp1200 --smoke --skip-build
+```
+
+Control-first holds source publication until command readiness, then warms up
+and measures with the same fences; impairment and the N5 competitor stay active
+throughout. It does not qualify joining an already-streaming system. The separate
+1200-byte transport experiment removed IP fragmentation but still failed N5
+startup. Simultaneous startup and the system transport remain defaults. Completion
+under N2/N5 varies; unresolved intents still block new work without replay.
+See the [readiness evidence](evidence/m3-dds-readiness-2026-11-05/README.md) for
+final runs, fault repeats, failed experiments and remaining M3 gates.
+
+
+The follow-up five-minute N0 confirms 150/150 commands and 150 effects at actual
+199.976/50.002 Hz, with 75,025 samples produced and 75,022 received (three IMU
+gaps before callbacks). Its shared-VM age checks pass. Both closed journals agree
+on all 150 results. Twenty-three actual ROS GTests, 30 Python tests, three
+consecutive crash/lost-reply fault runs, sensor-only and a full M2 rebuild pass.
+N4 regains readiness after lease expiry at both peers; an unresolved intent stays
+unreplayed. Final N2 retains one unresolved intent despite both peers being ready;
+N5 simultaneous startup still fails with partial/asymmetric discovery. These
+remain M3 gates; control-first is an explicit limited startup variant.

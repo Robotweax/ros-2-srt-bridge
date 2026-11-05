@@ -21,6 +21,8 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--profile',choices=['N0','N1','N2','N4','N5'],default='N0')
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
+    parser.add_argument('--dds-profile',choices=['system','udp1200'],default='system',help='explicit DDS transport variant; system remains default')
+    parser.add_argument('--startup',choices=['simultaneous','control-first'],default='simultaneous',help='explicit combined startup ordering; impairment stays active')
     parser.add_argument('--commands',action='store_true',help='combine steady sensors and journaled commands every 2s')
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--smoke',action='store_true')
@@ -35,14 +37,15 @@ def main():
     inside='/workspace/'+str(run.relative_to(ROOT))
     report=dict(status='running',milestone='M3 DDS combined development' if args.commands else 'M3 DDS sensor development',sensor_only=not args.commands,commands_qualified=False,
         configured_workload=dict(imu_hz=200,joint_hz=50,command_period_s=2 if args.commands else None),
-        complete_m3_acceptance=False,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,
+        complete_m3_acceptance=False,startup_mode=args.startup if args.commands else 'sensor-only',dds_transport_profile=args.dds_profile,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
             for folder in ['src','ros2','proto','cmake','containers','tools','tests']
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['full-duration combined impairment/seed qualification','matched-window CPU/wire accounting',
             'age-clock equivalence with conservative SRT bounds','encryption/security cost equivalence','full seed/duration matrix'],
         topology='direct typed DDS sensor publisher/subscriber; no SRT bridge hops; simulator services/diagnostics also discoverable',
-        clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification')
+        clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification',
+        dds_command_channels=dict(control='Reliable/Volatile/KeepLast(64)',liveness='BestEffort/Volatile/KeepLast(1)',hello_period_ms=100,lease_ns=1500000000,sequence_scope='independent per channel'))
     lab=None;processes=[];captures=[]
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
@@ -69,7 +72,10 @@ def main():
         if args.commands:
             binary=ROOT/'install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
             report['command_node_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
-        lab=DdsLab(ROOT,run,image);lab.start()
+        if args.dds_profile!='system':
+            profile=ROOT/'containers/dds-udp1200.xml'
+            report['dds_transport_xml_sha256']=hashlib.sha256(profile.read_bytes()).hexdigest()
+        lab=DdsLab(ROOT,run,image,args.dds_profile);lab.start()
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
         # time namespaces. Capture the raw proof rather than assuming host time.
@@ -92,7 +98,7 @@ def main():
         lab.snapshot('before')
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
-                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds)]+(['--commands'] if args.commands else []))
+                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds),'--startup',args.startup]+(['--commands'] if args.commands else []))
             log=(run/(role+'-scenario.log')).open('w')
             peer=lab.addresses['operator' if role=='robot' else 'robot']
             p=subprocess.Popen(['docker','exec','-e','ROS_STATIC_PEERS='+peer,name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT)

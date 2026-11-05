@@ -852,3 +852,32 @@ nach Clock-Schritt unqualifiziert. N1 hat Non-Admission, N2/N4 je ein offenes
 Intent, N5 erreicht im belasteten Cold-Start keine Bereitschaft. Diese Grenzen
 werden nicht durch Queue-/Lease-/Clock-Lockerung oder Replay grün gemacht.
 M3 bleibt offen; Evidenz `evidence/m3-dds-combined-2026-11-05/`.
+
+
+M3-DDS-Readiness-Follow-up (2026-11-05): Liveness ist jetzt eine separate
+BestEffort/Volatile/KeepLast(1)-HELLO-Spur je Richtung, 100-ms-Thread unabhängig
+von Journal und Handler. COMMAND/QUERY/STATUS/ERROR bleiben Reliable/Volatile/
+KeepLast(64); tatsächliche lokale QoS wird geprüft. Beide Spuren haben eigene
+streng monotone Replay-Cursor. Ein frisches HELLO darf kein verzögertes gültiges
+CONTROL unterdrücken. Beide typisierten DDS-Enden müssen gemeinsam aktualisiert
+werden; SDK-Wire 1, IPC 3 und SRT bleiben unverändert.
+
+Nach lokalem Lease-Ablauf wird bis zum frischen Peer-HELLO ohne Zielnonce gesucht.
+Ein solches Discovery-HELLO bestätigt keine Session; erst gegenseitig gerichtete
+Bestätigung der aktuellen Nonces erlaubt Arbeit. Alte Peer-Nonces bleiben retired.
+HELLO meldet außerdem Owner-Eligibility: Journal und lokaler ROS-Handler müssen
+bereit sein. Dies ersetzt keine erneute Live-/Epochen-/Deadline-Prüfung beim Start.
+Diagnosen enthalten Match-Zahlen, HELLOs, Lease-Abläufe, Zielnonce und Eligibility.
+Keine Queue-, 1,5-s-Lease-, Frische- oder 5-s-Auftragsbudget-Lockerung, kein Replay.
+Threads werden vor ROS-Context-Shutdown gestoppt; der verschachtelte Handler-
+Context bleibt bis zur Node-Destruktion erhalten, statt auf einem gejointen
+Worker zerstört zu werden. Der SRT-Handler-Ablauf bleibt gleich.
+
+Zwei explizite Laborvarianten, keine stillen Defaults: `--startup control-first`
+hält nur die Sensorpublikation bis zur Koordinatorbereitschaft an; Kernelprofil
+und N5-Konkurrent sind bereits aktiv. Danach folgen Warmup und dieselben Fences.
+Der Default `simultaneous` bleibt der Start mit laufender Telemetrie. Control-first
+belegt keinen Beitritt zu einem bereits streamenden System. `--dds-profile udp1200`
+setzt UDPv4/SHM maxMessageSize 1200 ohne QoS-/Lease-Override; sein N5-Cold-Start
+scheiterte trotz beseitigter IP-Fragmentierung. Default bleibt `system`.
+Readiness-/Fault-Evidenz: `evidence/m3-dds-readiness-2026-11-05/`. M3 bleibt offen.

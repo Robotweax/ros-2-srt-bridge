@@ -19,6 +19,7 @@ public:
         context_=std::make_shared<rclcpp::Context>();context_->init(0,nullptr);rclcpp::NodeOptions options;options.context(context_);options.use_global_arguments(false);node_=std::make_shared<rclcpp::Node>("srt_rate_worker",options);
         client_=node_->create_client<Apply>("/robot/apply_measurement_rate");rclcpp::ExecutorOptions eo;eo.context=context_;executor_=std::make_unique<rclcpp::executors::SingleThreadedExecutor>(eo);executor_->add_node(node_);
     }
+    bool ready()const{return client_&&client_->service_is_ready();}
     core::HandlerSnapshot snapshot()const noexcept override{return snapshot_;}
     core::HandlerOutcome execute(const core::JournalEntry& entry,std::uint64_t deadline)override{
         if(now()>=deadline)return {core::CommandState::expired,core::CommandReason::start_deadline,{}};

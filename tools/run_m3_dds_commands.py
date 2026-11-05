@@ -34,7 +34,8 @@ def main():
         missing_gates=['combined steady sensor/command impairment qualification','matched-window CPU/wire accounting',
             'age-clock equivalence with conservative SRT bounds','encryption/security cost equivalence','full seed/duration matrix'],
         topology='Reliable fixed-size DDS command frames, separate sender/receiver SQLite journal threads; concurrent direct DDS simulator telemetry',
-        clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification')
+        clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification',
+        dds_command_channels=dict(control='Reliable/Volatile/KeepLast(64)',liveness='BestEffort/Volatile/KeepLast(1)',hello_period_ms=100,lease_ns=1500000000,sequence_scope='independent per channel'))
     lab=None;processes=[];captures=[]
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):

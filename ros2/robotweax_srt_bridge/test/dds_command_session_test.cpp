@@ -42,6 +42,23 @@ TEST(DdsSession,RejectsReplayWrongTargetNamespaceProcessAndFutureTime){
     EXPECT_TRUE(p.a.frame(id(3),id(4),id(2),sid,proof(),3,300,300));
     EXPECT_FALSE(p.a.frame(id(3),id(4),id(2),sid,proof(),3,300,300));
 }
+TEST(DdsSession,LiveAcknowledgedPeerIsNotReadyUntilItsOwnerIsEligible){
+    Pair p;const auto sid=p.a.session();
+    EXPECT_TRUE(p.a.hello(id(3),id(4),id(2),sid,proof(),3,300,300,false));
+    EXPECT_FALSE(p.a.peer_ready());EXPECT_FALSE(p.a.fresh(sid,300));
+    EXPECT_FALSE(p.a.frame(id(3),id(4),id(2),sid,proof(),1,300,300));
+    EXPECT_TRUE(p.a.hello(id(3),id(4),id(2),sid,proof(),4,301,301,true));
+    EXPECT_TRUE(p.a.peer_ready());EXPECT_TRUE(p.a.fresh(sid,301));
+    EXPECT_TRUE(p.a.frame(id(3),id(4),id(2),sid,proof(),1,301,301));
+}
+TEST(DdsSession,LivenessCannotSuppressDelayedReliableControlAndReplayRemainsRejected){
+    Pair p;const auto sid=p.a.session();
+    EXPECT_TRUE(p.a.hello(id(3),id(4),id(2),sid,proof(),100,300,300));
+    EXPECT_TRUE(p.a.frame(id(3),id(4),id(2),sid,proof(),3,299,300));
+    EXPECT_FALSE(p.a.frame(id(3),id(4),id(2),sid,proof(),3,299,300));
+    EXPECT_FALSE(p.a.hello(id(3),id(4),id(2),sid,proof(),100,300,300));
+    EXPECT_FALSE(p.a.frame(id(3),id(4),id(2),sid,proof(),4,300,300+rb::DdsCommandSession::lease_ns));
+}
 TEST(DdsSession,ExpiredLeaseCannotBeRevivedByOldReliableTraffic){
     Pair p;const auto old=p.a.session();const auto time=101+rb::DdsCommandSession::lease_ns;
     p.a.tick(time,id(5));EXPECT_NE(p.a.session(),old);EXPECT_FALSE(p.a.fresh(old,time));
@@ -50,6 +67,32 @@ TEST(DdsSession,ExpiredLeaseCannotBeRevivedByOldReliableTraffic){
     EXPECT_TRUE(p.b.hello(id(1),id(5),id(4),p.a.session(),proof(),3,time,time));
     EXPECT_TRUE(p.a.hello(id(3),id(4),id(5),p.b.session(),proof(),3,time,time));
     EXPECT_TRUE(p.a.fresh(p.a.session(),time));EXPECT_EQ(p.a.session(),p.b.session());
+}
+TEST(DdsSession,SimultaneousExpiryRediscoversBeforeMutualAcknowledgment){
+    Pair p;const auto old=p.a.session();const auto time=101+rb::DdsCommandSession::lease_ns;
+    p.a.tick(time,id(5));p.b.tick(time,id(6));
+    EXPECT_EQ(p.a.hello_target(),core::Identity{});EXPECT_EQ(p.b.hello_target(),core::Identity{});
+    EXPECT_EQ(p.a.expirations(),1U);EXPECT_EQ(p.b.expirations(),1U);
+    // The old directed HELLO behavior is rejected by the new local nonce.
+    EXPECT_FALSE(p.a.hello(id(3),id(6),id(2),p.b.session(),proof(),3,time,time));
+    EXPECT_FALSE(p.b.hello(id(1),id(5),id(4),p.a.session(),proof(),3,time,time));
+    EXPECT_TRUE(p.a.hello(id(3),id(6),p.b.hello_target(),p.b.session(),proof(),3,time,time));
+    EXPECT_TRUE(p.b.hello(id(1),id(5),{},p.a.session(),proof(),3,time,time));
+    EXPECT_FALSE(p.a.fresh(p.a.session(),time));EXPECT_FALSE(p.b.fresh(p.b.session(),time));
+    EXPECT_FALSE(p.a.frame(id(3),id(6),id(5),old,proof(),4,time,time));
+    EXPECT_TRUE(p.a.hello(id(3),id(6),p.b.hello_target(),p.b.session(),proof(),4,time,time));
+    EXPECT_TRUE(p.b.hello(id(1),id(5),p.a.hello_target(),p.a.session(),proof(),4,time,time));
+    EXPECT_TRUE(p.a.fresh(p.a.session(),time));EXPECT_TRUE(p.b.fresh(p.b.session(),time));
+    EXPECT_EQ(p.a.session(),p.b.session());EXPECT_NE(p.a.session(),old);
+}
+TEST(DdsSession,OneSidedExpiryRediscoversWithoutRetiringLiveRemoteNonce){
+    Pair p;const auto time=101+rb::DdsCommandSession::lease_ns;
+    EXPECT_TRUE(p.b.hello(id(1),id(2),id(4),p.a.session(),proof(),3,time-100,time-100));
+    p.a.tick(time,id(5));p.b.tick(time,id(6));EXPECT_EQ(p.b.link(),id(4));
+    EXPECT_TRUE(p.b.hello(id(1),id(5),p.a.hello_target(),p.a.session(),proof(),4,time,time));
+    EXPECT_TRUE(p.a.hello(id(3),id(4),p.b.hello_target(),p.b.session(),proof(),3,time,time));
+    EXPECT_TRUE(p.b.hello(id(1),id(5),p.a.hello_target(),p.a.session(),proof(),5,time,time));
+    EXPECT_TRUE(p.a.fresh(p.a.session(),time));EXPECT_TRUE(p.b.fresh(p.b.session(),time));
 }
 TEST(DdsSession,RetiredPeerNonceCannotRollBackSession){
     Pair p;const auto old=p.a.session();

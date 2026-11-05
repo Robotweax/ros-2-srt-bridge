@@ -5,12 +5,27 @@ from pathlib import Path
 import sys
 import struct
 import tempfile
+import xml.etree.ElementTree as ET
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_dds import summarize_sensor_window
+from m3_dds import summarize_sensor_window, DdsLab
 from m3_capture import summarize
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
 from dds_clock import interval_distance, ClockMonitor
+
+
+class TransportProfileTests(unittest.TestCase):
+    def test_udp1200_is_explicit_and_does_not_change_application_gates(self):
+        path=Path(__file__).resolve().parents[1]/'containers/dds-udp1200.xml'
+        ns={'d':'http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles'}
+        tree=ET.parse(path)
+        descriptors=tree.findall('.//d:transport_descriptor',ns)
+        self.assertEqual({d.find('d:type',ns).text for d in descriptors},{'UDPv4','SHM'})
+        self.assertEqual([d.find('d:maxMessageSize',ns).text for d in descriptors],['1200','1200'])
+        self.assertFalse(tree.findall('.//d:sendBufferSize',ns));self.assertFalse(tree.findall('.//d:receiveBufferSize',ns))
+        self.assertFalse(tree.findall('.//d:publisher',ns));self.assertFalse(tree.findall('.//d:subscriber',ns))
+        with self.assertRaisesRegex(ValueError,'unsupported'):DdsLab('.', '.', 'unused', 'unknown')
+        self.assertEqual(DdsLab('.', '.', 'unused').transport_profile,'system')
 
 
 class FragmentTests(unittest.TestCase):
