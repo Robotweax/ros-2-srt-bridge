@@ -888,3 +888,50 @@ simultaneous-N5-Start untersuchen; keine Absichten blind erneut senden. Clock-/
 Crypto-Gleichheit und gemeinsame CPU-/Wire-Fenster qualifizieren, danach volle
 Seed-/Dauermatrix, N3-DATA/FEC-Selektor und N4-Auftragsphasen-Barrieren. M3 bleibt
 in Arbeit, PR #2 Draft, SRT/SDK unverändert, Intrinsic/M4 weiterhin unberührt.
+
+
+### M3 offene DDS-Aufträge auf Paketfrische zurückgeführt — 2026-11-05
+
+- Frühere N2-Captures/geschlossene Journale read-only analysiert: ID 18 lokal
+  LOCAL_QUEUED/Revision 0, kein Empfängereintrag; erster beobachteter COMMAND
+  relativ zum lokalen HELLO-Zeitoffset etwa 2,13 s alt, danach NOT_FOUND-ERRORs.
+  Das isoliert keinen Netzanteil. Originale Evidenz und Rohartefakthashes erhalten.
+- Neue Session-Validierungsdiagnosen mit erstem Ablehnungsgrund: accepted,
+  session, peer, clock, sequence, invalid_time, stale. Letzter stale COMMAND
+  erhält ID/Send-/Ingresszeit. accepted ist weder Journal-Admission noch Start.
+  Receipt-gematchte NOT_FOUND-Antworten und maximale Reliable-Publish-Aufrufdauer
+  getrennt gezählt. Feste Counter/Snapshots, kein unbegrenztes Event-Logging.
+- Workload speichert letzte lokale Status-/Fehlerbeobachtung auch beim offenen
+  Intent. found bezieht sich auf lokales Journal; NOT_FOUND kann vom Peer gecacht
+  sein. budget_elapsed meint 5 s seit lokalem Client-Aufruf, keine autoritative
+  Empfänger-Expiration. Timeout/NOT_FOUND erzeugen keinen Terminalzustand und
+  erlauben kein Replay. Der einzelne offene Auftrag blockiert weiter neue Slots.
+- Drei finale N2-Probes je 60 s: Seed 1701 2/3 bestätigt, ein offen/zwei Effekte;
+  Seed 2903 28/28 bestätigt/28 Effekte; Seed 4211 11/12 bestätigt, ein offen/elf
+  Effekte. Bei 1701/4211 je ein COMMAND direkt am Callback mit 2.212,649 bzw.
+  2.474,505 ms Alter verworfen, noch vor der 5-s-Startdeadline. Stale-ID entspricht
+  offenem Intent; kein Empfängereintrag, später 247/171 gematchte NOT_FOUNDs.
+  Beide Enden bleiben ready. Maximale Sender-Publish-Aufrufe unter 1 ms; kein
+  Beleg für blockierenden Publish als Ursache dieser beiden Fälle. Middleware-
+  Repair/Queue/Transport/Executor noch nicht einzeln isoliert. Kein 600-s-Gate.
+- N0 30 s: 15/15 bestätigt/15 Effekte, keine stale Commands. N4-Smoke 4/5/ein
+  offen, beide Enden wieder ready; Kontextablehnungen während Outage, kein
+  stale-COMMAND-Inkrement. N5 simultaneous erneut vor Fenster gescheitert:
+  beide Enden ohne Matches/empfangene HELLOs. Discovery bleibt offen.
+- Vollständige DDS-Fault-Acceptance nach Build `20261105T203710218043Z` bestanden,
+  einschließlich Duplikat/Konflikt, verlorener Antwort UNKNOWN, Receiver-/Sender-
+  SIGKILL, Reopen/QUERY ohne Intent-Replay, neuer Absicht nach Reconciliation und
+  5-s-Shutdown. 24 echte ROS-GTests/27 mit Wrappern und 32 Python-Tests bestanden.
+  Deterministischer Test prüft jeden Rejection-Grund, exakte Stale-Grenze, lebende
+  HELLOs und unveränderten Replay-Cursor nach Ablehnung. Beobachtungstests erzeugen
+  keinen Terminal-/Result-/Nichtausführungsnachweis aus NOT_FOUND oder Timeout.
+- Evidenz `evidence/m3-dds-completion-2026-11-05/`: sieben finale Source-Inventare
+  und Binaryhashes passen, installierte Python-Dateien bytegleich. SDK/SRT/Wire 1/
+  IPC 3 unverändert. Die volle M2-/5-min-N0-Evidenz bleibt historisch bei 940b4cb;
+  diese Diagnose-Stufe wiederholt sie nicht. Keine Clock-/Crypto-/CPU-/Wire-Parität.
+
+**Weiter:** belastbare empfangsseitige Reconciliation für nie admittierte Absichten
+spezifizieren/prüfen; bloßer Timeout oder NOT_FOUND reicht nicht. Keine alte
+Absicht erneut senden, keine Frische-/Start-Gates lockern. N5-Discovery, dann
+vergleichbare Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix. PR #2 bleibt Draft,
+M3 offen, Intrinsic/M4 unverändert.

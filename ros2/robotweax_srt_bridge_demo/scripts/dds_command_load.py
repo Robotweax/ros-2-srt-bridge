@@ -5,7 +5,7 @@ import time
 from rosidl_runtime_py.convert import message_to_ordereddict
 from robotweax_srt_bridge_msgs.msg import DdsCommandState,CommandStatus
 from robotweax_srt_bridge_msgs.srv import ExecuteCommand,GetCommandStatus
-from command_workload import Cadence
+from command_workload import Cadence,record_status_observation
 from m2_scenario import write
 
 
@@ -65,6 +65,7 @@ class DdsCommandLoad:
                 self.pending['terminal']='not_admitted';self.pending=None
         if self.query_future is not None and self.query_future.done():
             status=self.query_future.result().status;self.query_future=None
+            if self.pending:record_status_observation(self.pending,message_to_ordereddict(status),time.monotonic_ns())
             if self.pending and status.found and status.state in (4,5,6,7,8) and status.reason!=2:
                 observed=time.monotonic_ns()
                 if self.cutoff_ns is not None and observed>self.cutoff_ns+8000000000:

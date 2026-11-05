@@ -31,6 +31,9 @@ class DdsCommandNode final:public rclcpp::Node {
     std::atomic<bool> stop_{false},failed_{false},journal_ready_{false},handler_ready_{false};
     std::atomic<std::uint64_t> commands_{0},queries_{0},dispatches_{0},starts_{0},drops_{0},rejected_{0},errors_{0},effects_{0};
     std::atomic<std::uint64_t> hellos_sent_{0},hellos_received_{0},hellos_rejected_{0};
+    std::array<std::uint64_t,7> control_checks_{}; // authority_ protects ingress diagnostics
+    std::uint64_t stale_commands_=0,stale_sent_=0,stale_received_=0;core::Identity stale_id_{};
+    std::atomic<std::uint64_t> remote_not_found_{0},publish_max_{0},publish_slow_{0};
     rclcpp::Publisher<Frame>::SharedPtr out_,hello_out_;rclcpp::Subscription<Frame>::SharedPtr in_,hello_in_;
     bool qos_verified_=false;
     rclcpp::Publisher<msgs::msg::DdsCommandState>::SharedPtr states_;
@@ -62,7 +65,13 @@ class DdsCommandNode final:public rclcpp::Node {
         const auto time=mono_ns();session_.tick(time,replacement);
         const auto process=bytes(f.process_epoch),link=bytes(f.link_epoch),target=bytes(f.target_link),sid=bytes(f.session_id);const auto proof=bytes(f.clock_namespace);
         if(f.kind==Frame::HELLO){++hellos_received_;if(!session_.hello(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time,f.owner_ready)){++rejected_;++hellos_rejected_;}if(session_.failed())failed_=true;return;}
-        if((sender_?f.kind!=Frame::STATUS&&f.kind!=Frame::ERROR:f.kind!=Frame::COMMAND&&f.kind!=Frame::QUERY)||f.route_id!=100||bytes(f.request_id)==core::Identity{}||!session_.frame(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time)){++rejected_;return;}
+        if((sender_?f.kind!=Frame::STATUS&&f.kind!=Frame::ERROR:f.kind!=Frame::COMMAND&&f.kind!=Frame::QUERY)||f.route_id!=100||bytes(f.request_id)==core::Identity{}){++rejected_;return;}
+        const auto check=session_.check_frame(process,link,target,sid,proof,f.sequence,f.sent_monotonic_ns,time);
+        ++control_checks_[unsigned(check)];
+        if(check!=rb::DdsFrameCheck::accepted){
+            if(check==rb::DdsFrameCheck::stale&&f.kind==Frame::COMMAND){++stale_commands_;stale_id_=bytes(f.request_id);stale_sent_=f.sent_monotonic_ns;stale_received_=time;}
+            ++rejected_;return;
+        }
         lock.unlock();Task t;t.kind=3;t.frame=f;if(!inbox_.receive(std::move(t)))++drops_;
     }
     Frame frame(unsigned kind){Frame f;f.kind=kind;std::lock_guard lock(authority_);f.process_epoch=octets(process_);f.link_epoch=octets(session_.link());f.target_link=octets(kind==Frame::HELLO?session_.hello_target():session_.peer_link());f.session_id=octets(session_.session());f.clock_namespace=octets(session_.clock());f.owner_ready=journal_ready_&&handler_ready_;return f;}
@@ -72,7 +81,9 @@ class DdsCommandNode final:public rclcpp::Node {
         if(sequence==UINT64_MAX){failed_=true;return false;}f.sequence=++sequence;f.sent_monotonic_ns=mono_ns();
         // Separate owners: journal worker writes Reliable controls, liveness
         // worker writes ephemeral HELLOs. No network write holds authority_.
-        (f.kind==Frame::HELLO?hello_out_:out_)->publish(f);if(f.kind==Frame::HELLO)++hellos_sent_;
+        const auto begin=mono_ns();(f.kind==Frame::HELLO?hello_out_:out_)->publish(f);
+        if(f.kind==Frame::HELLO)++hellos_sent_;
+        else{const auto elapsed=mono_ns()-begin;publish_max_=std::max(publish_max_.load(),elapsed);if(elapsed>=rb::DdsCommandSession::lease_ns)++publish_slow_;}
         if(track)receipts_[receipt_cursor_++%receipts_.size()]={f.sequence,bytes(f.request_id),bytes(f.session_id)};
         return true;
     }
@@ -89,7 +100,7 @@ class DdsCommandNode final:public rclcpp::Node {
         const auto id=bytes(f.request_id);
         if(sender_){
             if(!matched(f)){++rejected_;return;}
-            if(f.kind==Frame::ERROR){if(!f.status.local_error||f.status.local_error>unsigned(core::JournalError::corrupt)){++rejected_;return;}auto r=journal.get(id);if(r.entry)r.error=static_cast<core::JournalError>(f.status.local_error);cache(id,r);return;}
+            if(f.kind==Frame::ERROR){if(!f.status.local_error||f.status.local_error>unsigned(core::JournalError::corrupt)){++rejected_;return;}if(f.status.local_error==unsigned(core::JournalError::not_found))++remote_not_found_;auto r=journal.get(id);if(r.entry)r.error=static_cast<core::JournalError>(f.status.local_error);cache(id,r);return;}
             const auto& s=f.status;core::CommandStatus remote{static_cast<core::CommandState>(s.state),static_cast<core::CommandReason>(s.reason),{s.rate_hz,5000,s.expected_generation,s.new_generation},bytes(f.payload_hash),{s.result_rate_hz,s.result_generation,s.result_valid},s.revision};
             if(!s.found||s.request_id!=f.request_id||s.route_id!=100||!core::valid_remote_status(100,remote)){++rejected_;return;}
             const auto result=journal.observe_remote(id,100,remote,mono_ns());auto r=journal.get(id);if(result!=core::JournalError::none)r.error=result;cache(id,r);return;
@@ -146,7 +157,7 @@ class DdsCommandNode final:public rclcpp::Node {
         }catch(const std::exception& e){RCLCPP_ERROR(get_logger(),"DDS command worker: %s",e.what());failed_=true;}
         journal_ready_=false;handler_ready_=false;
     }
-    void state(){msgs::msg::DdsCommandState s;{std::lock_guard lock(authority_);s.process_epoch=octets(process_);s.link_epoch=octets(session_.link());s.session_id=octets(session_.session());s.lease_expirations=session_.expirations();s.last_peer_hello_ns=session_.last_hello();s.peer_link_epoch=octets(session_.peer_link());s.hello_target=octets(session_.hello_target());s.peer_ready=session_.peer_ready();s.ready=!stop_&&!failed_&&journal_ready_&&handler_ready_&&session_.fresh(session_.session(),mono_ns());}s.journal_ready=journal_ready_;s.handler_ready=handler_ready_;s.failed=failed_;s.commands_sent=commands_;s.queries_sent=queries_;s.dispatches=dispatches_;s.start_claims=starts_;s.inbox_drops=drops_;s.rejected_frames=rejected_;s.journal_errors=errors_;s.effects=effects_;s.hellos_sent=hellos_sent_;s.hellos_received=hellos_received_;s.hellos_rejected=hellos_rejected_;s.control_subscribers=out_->get_subscription_count();s.control_publishers=in_->get_publisher_count();s.hello_subscribers=hello_out_->get_subscription_count();s.hello_publishers=hello_in_->get_publisher_count();s.qos_verified=qos_verified_;states_->publish(s);}
+    void state(){msgs::msg::DdsCommandState s;{std::lock_guard lock(authority_);s.process_epoch=octets(process_);s.link_epoch=octets(session_.link());s.session_id=octets(session_.session());s.lease_expirations=session_.expirations();s.last_peer_hello_ns=session_.last_hello();s.peer_link_epoch=octets(session_.peer_link());s.hello_target=octets(session_.hello_target());s.peer_ready=session_.peer_ready();s.control_checks=control_checks_;s.stale_commands=stale_commands_;s.last_stale_command_id=octets(stale_id_);s.last_stale_command_sent_ns=stale_sent_;s.last_stale_command_received_ns=stale_received_;s.ready=!stop_&&!failed_&&journal_ready_&&handler_ready_&&session_.fresh(session_.session(),mono_ns());}s.journal_ready=journal_ready_;s.handler_ready=handler_ready_;s.failed=failed_;s.commands_sent=commands_;s.queries_sent=queries_;s.dispatches=dispatches_;s.start_claims=starts_;s.inbox_drops=drops_;s.rejected_frames=rejected_;s.journal_errors=errors_;s.effects=effects_;s.hellos_sent=hellos_sent_;s.hellos_received=hellos_received_;s.hellos_rejected=hellos_rejected_;s.control_subscribers=out_->get_subscription_count();s.control_publishers=in_->get_publisher_count();s.hello_subscribers=hello_out_->get_subscription_count();s.hello_publishers=hello_in_->get_publisher_count();s.qos_verified=qos_verified_;s.remote_not_found=remote_not_found_;s.control_publish_max_ns=publish_max_;s.control_publish_over_freshness=publish_slow_;states_->publish(s);}
 public:
     DdsCommandNode():Node("dds_command_coordinator"),sender_(declare_parameter<std::string>("role","sender")=="sender"),session_(sender_,process_,core::random_identity(),namespace_proof()){
         const auto role=get_parameter("role").as_string();if(role!="sender"&&role!="receiver")throw std::invalid_argument("DDS role must be sender/receiver");

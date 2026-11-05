@@ -569,3 +569,13 @@ N4 regains readiness after lease expiry at both peers; an unresolved intent stay
 unreplayed. Final N2 retains one unresolved intent despite both peers being ready;
 N5 simultaneous startup still fails with partial/asymmetric discovery. These
 remain M3 gates; control-first is an explicit limited startup variant.
+
+The [completion diagnosis](evidence/m3-dds-completion-2026-11-05/README.md) now
+records why a command can remain unresolved despite live peers. Session checks
+report rejection reasons and the last stale COMMAND; receipt-matched NOT_FOUND
+responses and Reliable publish-call duration are counted separately. Workload
+rows retain the last local status/error instead of hiding that information behind
+a pending row. A five-second observation age or NOT_FOUND never manufactures a
+terminal result or permits replay. Three short N2 seeds exercise these diagnostics;
+they do not replace the full impaired qualification matrix. The freshness cutoff,
+start gates, workload and default DDS configuration remain unchanged.

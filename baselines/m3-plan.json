@@ -253,5 +253,67 @@
       "20261105T201202123026Z"
     ],
     "final_source_manifests_verified": 11
+  },
+  "dds_completion_diagnosis": {
+    "status": "stale COMMAND before receiver admission identified; no execution or retry policy change",
+    "evidence": "evidence/m3-dds-completion-2026-11-05",
+    "prior_run": "20261105T201220120574Z",
+    "prior_unresolved_id": "12000000000000000000000000000000",
+    "rejection_reasons": [
+      "accepted",
+      "session",
+      "peer",
+      "clock",
+      "sequence",
+      "invalid_time",
+      "stale"
+    ],
+    "freshness_ns": 1500000000,
+    "ros_gtests": 24,
+    "python_tests": 32,
+    "build_and_fault_run": "20261105T203710218043Z",
+    "n2_seconds_per_seed": 60,
+    "n2_results": {
+      "1701": {
+        "attempts": 3,
+        "confirmed": 2,
+        "unresolved": 1,
+        "stale_commands": 1
+      },
+      "2903": {
+        "attempts": 28,
+        "confirmed": 28,
+        "unresolved": 0,
+        "stale_commands": 0
+      },
+      "4211": {
+        "attempts": 12,
+        "confirmed": 11,
+        "unresolved": 1,
+        "stale_commands": 1
+      }
+    },
+    "n0_seconds": 30,
+    "n0_confirmed": 15,
+    "n0_effects": 15,
+    "n4_confirmed": 4,
+    "n4_unresolved": 1,
+    "status_snapshots_retained": true,
+    "not_found_is_terminal": false,
+    "automatic_intent_replay": false,
+    "sdk_source_changed": false,
+    "complete_m3_acceptance": false,
+    "n2_stale_ages_ms": {
+      "1701": 2212.649043,
+      "4211": 2474.505251
+    },
+    "n2_sender_publish_max_ms": {
+      "1701": 0.342708,
+      "2903": 0.253959,
+      "4211": 0.336875
+    },
+    "n5_status": "failed before measurement; zero endpoint matches/received HELLOs at both peers",
+    "final_manifests_verified": 7,
+    "n2_rejected_before_start_deadline": true
   }
 }

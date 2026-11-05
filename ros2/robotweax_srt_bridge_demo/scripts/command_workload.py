@@ -41,3 +41,13 @@ def audit_commands(rows,begin_device,final_device,cutoff_ns=None):
         unresolved=sum('terminal' not in r for r in rows),not_admitted=sum(r.get('terminal')=='not_admitted' for r in rows),
         all_succeeded=bool(rows) and successes==len(rows) and effects==successes,
         scope='effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred')
+
+
+def record_status_observation(row,status,observed_ns):
+    """Local status snapshot only: errors/timeouts never manufacture a terminal result."""
+    if observed_ns<row['submitted_monotonic_ns']:raise ValueError('status predates submission')
+    row['status_observations']=row.get('status_observations',0)+1
+    row['last_status_observation']={key:status[key] for key in ('found','state','reason','local_error','revision','query_queued')}
+    row['last_status_observation'].update(observed_monotonic_ns=observed_ns,
+        budget_elapsed=observed_ns-row['submitted_monotonic_ns']>=5000000000)
+    if status['local_error']==2:row['not_found_status_observations']=row.get('not_found_status_observations',0)+1

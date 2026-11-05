@@ -26,3 +26,15 @@ uint64 hello_publishers
 bool qos_verified
 bool handler_ready
 bool peer_ready
+# Session validation only, after kind/route/request-ID checks; first failure wins.
+# Indices: accepted, session, peer, clock namespace, sequence, invalid time, stale.
+uint64[7] control_checks
+uint64 stale_commands
+uint8[16] last_stale_command_id
+uint64 last_stale_command_sent_ns
+uint64 last_stale_command_received_ns
+# Sender receipt-matched ERROR/not_found responses, not local polling snapshots.
+uint64 remote_not_found
+# Reliable publish call wall duration; excludes queue time before/after that call.
+uint64 control_publish_max_ns
+uint64 control_publish_over_freshness

@@ -881,3 +881,20 @@ belegt keinen Beitritt zu einem bereits streamenden System. `--dds-profile udp12
 setzt UDPv4/SHM maxMessageSize 1200 ohne QoS-/Lease-Override; sein N5-Cold-Start
 scheiterte trotz beseitigter IP-Fragmentierung. Default bleibt `system`.
 Readiness-/Fault-Evidenz: `evidence/m3-dds-readiness-2026-11-05/`. M3 bleibt offen.
+
+M3-DDS-Completion-Diagnose (2026-11-05): Eine live bestätigte Session garantiert
+keinen frischen Reliable-COMMAND. Der bestehende 1,5-s-Paketfilter bleibt auch
+bei laufenden HELLOs wirksam. Wird ein Auftrag vor Journal-Admission verworfen,
+kann QUERY NOT_FOUND liefern, während der Sender noch LOCAL_QUEUED führt. Daraus
+folgt weder ein bestätigter Ablauf noch Nichtausführung. Keine Wiederholung der
+Absicht und kein neuer Terminalzustand aus Timeout/NOT_FOUND. Finale Beobachtung
+bleibt offen und blockiert weitere Slots; `budget_elapsed` ist nur 5 s seit lokalem
+Client-Aufruf, kein autoritativer Empfänger-Deadline-Nachweis.
+
+Neue begrenzte Diagnosen: Session-Validierungsergebnis (accepted/session/peer/
+clock/sequence/invalid_time/stale), letzter stale COMMAND mit ID und Send-/Ingress-
+Zeit, receipt-gematchte NOT_FOUND-Antworten und maximale Dauer des Reliable-
+Publish-Aufrufs. Accepted ist hier keine Journal-/Start-Admission. Counter sind
+kumulative Snapshots, kein Pipeline-Ledger. Publish-Dauer isoliert keinen Netz-
+oder nachgelagerten Queue-Anteil. Workload protokolliert letzte lokale Status-
+Beobachtung samt Fehler auch bei offenem Intent. SDK/Wire/IPC-Verträge unverändert.

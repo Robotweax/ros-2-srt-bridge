@@ -59,6 +59,22 @@ TEST(DdsSession,LivenessCannotSuppressDelayedReliableControlAndReplayRemainsReje
     EXPECT_FALSE(p.a.hello(id(3),id(4),id(2),sid,proof(),100,300,300));
     EXPECT_FALSE(p.a.frame(id(3),id(4),id(2),sid,proof(),4,300,300+rb::DdsCommandSession::lease_ns));
 }
+TEST(DdsSession,RejectionReasonsPreserveFreshnessAndDoNotAdvanceRejectedSequence){
+    Pair p;const auto sid=p.a.session();const auto now=rb::DdsCommandSession::lease_ns+500;
+    ASSERT_TRUE(p.a.hello(id(3),id(4),id(2),sid,proof(),3,now,now));
+    using Check=rb::DdsFrameCheck;
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),id(99),proof(),10,now,now),Check::session);
+    EXPECT_EQ(p.a.check_frame(id(9),id(4),id(2),sid,proof(),10,now,now),Check::peer);
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(2),10,now,now),Check::clock);
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),0,now,now),Check::sequence);
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),10,now+1,now),Check::invalid_time);
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),10,0,now),Check::invalid_time);
+    // Exactly 1.5 seconds is stale even while independent HELLOs keep us live.
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),10,now-rb::DdsCommandSession::lease_ns,now),Check::stale);
+    EXPECT_TRUE(p.a.fresh(sid,now));
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),5,now,now),Check::accepted);
+    EXPECT_EQ(p.a.check_frame(id(3),id(4),id(2),sid,proof(),5,now,now),Check::sequence);
+}
 TEST(DdsSession,ExpiredLeaseCannotBeRevivedByOldReliableTraffic){
     Pair p;const auto old=p.a.session();const auto time=101+rb::DdsCommandSession::lease_ns;
     p.a.tick(time,id(5));EXPECT_NE(p.a.session(),old);EXPECT_FALSE(p.a.fresh(old,time));

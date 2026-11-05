@@ -7,8 +7,34 @@ import tempfile
 import json
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
-from command_workload import Cadence,audit_commands
+from command_workload import Cadence,audit_commands,record_status_observation
 from scenario_files import read,write
+
+
+class StatusObservationTests(unittest.TestCase):
+    def status(self,**values):
+        return dict(found=True,state=1,reason=0,local_error=2,revision=0,query_queued=False,**values)
+
+    def test_not_found_after_budget_does_not_invent_terminal_or_nonexecution(self):
+        row=dict(number=1,submitted_monotonic_ns=10)
+        record_status_observation(row,self.status(),5000000010)
+        self.assertTrue(row['last_status_observation']['budget_elapsed'])
+        self.assertEqual(row['not_found_status_observations'],1)
+        self.assertEqual(row['last_status_observation']['state'],1)
+        self.assertNotIn('terminal',row);self.assertNotIn('result_valid',row)
+        self.assertNotIn('result_observed_monotonic_ns',row)
+
+    def test_observation_retains_latest_fields_without_clearing_prior_error_count(self):
+        row=dict(submitted_monotonic_ns=10)
+        record_status_observation(row,self.status(),11)
+        status=self.status();status.update(state=4,local_error=0,revision=3)
+        record_status_observation(row,status,12)
+        self.assertEqual(row['status_observations'],2)
+        self.assertEqual(row['not_found_status_observations'],1)
+        self.assertEqual(row['last_status_observation']['state'],4)
+        self.assertFalse(row['last_status_observation']['budget_elapsed'])
+        self.assertNotIn('terminal',row) # transport adapter validates/records terminal results
+        with self.assertRaisesRegex(ValueError,'predates'):record_status_observation(row,status,9)
 
 
 class PhaseFileTests(unittest.TestCase):

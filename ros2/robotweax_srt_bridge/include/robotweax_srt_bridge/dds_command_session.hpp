@@ -10,6 +10,7 @@ inline core::Digest digest(std::span<const std::byte> bytes){core::Digest out{};
 // Caller serializes these methods with the start-claim mutex. No journal or
 // handler operation may hold that mutex. Epochs are transport leases, distinct
 // from the durable journal's process owner epoch. Never trusts remote wall time.
+enum class DdsFrameCheck : unsigned { accepted,session,peer,clock,sequence,invalid_time,stale };
 class DdsCommandSession {
     bool sender_;
     core::Identity process_,link_,peer_process_{},peer_link_{},session_{};
@@ -38,10 +39,16 @@ public:
         return true;
     }
     bool fresh(core::Identity session,std::uint64_t now)const{return !failed_&&acked_&&peer_ready_&&session!=core::Identity{}&&session==session_&&last_hello_&&now>=last_hello_&&now-last_hello_<lease_ns;}
-    bool frame(core::Identity process,core::Identity link,core::Identity target,core::Identity session,core::Digest clock,std::uint64_t sequence,std::uint64_t sent,std::uint64_t now){
-        if(!fresh(session,now)||process!=peer_process_||link!=peer_link_||target!=link_||clock!=clock_||!sequence||sequence<=control_sequence_||!sent||sent>now||now-sent>=lease_ns)return false;
-        control_sequence_=sequence;return true;
+    DdsFrameCheck check_frame(core::Identity process,core::Identity link,core::Identity target,core::Identity session,core::Digest clock,std::uint64_t sequence,std::uint64_t sent,std::uint64_t now){
+        if(!fresh(session,now))return DdsFrameCheck::session;
+        if(process!=peer_process_||link!=peer_link_||target!=link_)return DdsFrameCheck::peer;
+        if(clock!=clock_)return DdsFrameCheck::clock;
+        if(!sequence||sequence<=control_sequence_)return DdsFrameCheck::sequence;
+        if(!sent||sent>now)return DdsFrameCheck::invalid_time;
+        if(now-sent>=lease_ns)return DdsFrameCheck::stale;
+        control_sequence_=sequence;return DdsFrameCheck::accepted;
     }
+    bool frame(core::Identity process,core::Identity link,core::Identity target,core::Identity session,core::Digest clock,std::uint64_t sequence,std::uint64_t sent,std::uint64_t now){return check_frame(process,link,target,session,clock,sequence,sent,now)==DdsFrameCheck::accepted;}
     // After local expiry the remote target may have rotated too. Discovery
     // HELLOs use an empty target until a fresh peer HELLO is observed. This
     // never acknowledges a session or authorizes COMMAND/handler execution.
