@@ -727,3 +727,50 @@ ist kein Ersatz. Sensor-Runner sendet keine Aufträge und nutzt keine DDS-Krypto
 Command-/Security-/Age-/CPU-/Wire-Vergleich und voller Seed-/Dauerlauf fehlen.
 N2/N5 sind im neuen Runner implementiert, hier noch nicht ausgeführt; N3 und N4-
 Auftragsphasen weiterhin offen. PR #2 bleibt Draft, M3 nicht abgenommen.
+
+### M3 Reliable-DDS-Auftragsjournal implementiert — 2026-11-05
+
+- `dds_command_node` + `tools/run_m3_dds_commands.py`: feste Reliable/Volatile/
+  KeepLast(64)-Frames, pro Endpunkt eigener Journal-Thread, Route 100, Budget
+  5.000 ms. SDK-`CommandJournal` unverändert; `RosRateBackend` in geteilten Header
+  verschoben und identisch vom bisherigen SRT-Worker und DDS genutzt.
+- Neue Sender-Admission vor einzigem COMMAND; Duplikat/Recovery nur GET/QUERY.
+  Empfänger committet Admission/DISPATCHING, prüft vor atomarem Start unter dem
+  Session-Mutex Live-Lease, Epochen, Deadline. Kein Disk-/Handler-Aufruf unter
+  diesem Mutex. Bereits beanspruchter Start kann bei späterer Revokation Effekte
+  haben; fehlendes Resultat bleibt UNKNOWN. SRT-Ticket-/IPC-Fences unverändert.
+- Common-VM-only: lokaler Boot-/Time-Namespace-Digest muss auf beiden Seiten
+  passen. Acknowledged Session aus Prozess-/Link-Nonces, Sequenz-/Frischechecks,
+  1,5-s-Lease; Ablauf ändert lokale Link-Nonce. 64 retired Peer-Nonces verhindern
+  Rollback; Kapazität erschöpft → Fail-Closed. Keine DDS-Krypto-/Cross-Host-
+  Authentisierungs-/Clock-Abnahme. Keine vorgetäuschten SRT-Security-Flags.
+- Final `.local/m3-dds-commands/20261105T175009991487Z` bestanden: ID 1 100 Hz
+  SUCCEEDED, Duplikat ohne neuen Send/Effekt, andere Payload desselben IDs meldet
+  lokalen Konflikt. ID 2 75 Hz bewirkt Effekt, verspätete Antwort → UNKNOWN.
+  ID 3 50 Hz bewirkt Effekt, Receiver SIGKILL und Sender SIGKILL vor Reconciliation;
+  nach Reopen QUERY → UNKNOWN/context_lost, kein altes COMMAND. Nach expliziter
+  Device-Reconciliation und Reset der Fault-Verzögerung neue ID 4 200 Hz SUCCEEDED.
+  Insgesamt vier Absichten/vier Effekte; drei COMMANDs vor Sender-Crash, danach
+  ein QUERY und nur das neue COMMAND ID 4. Zwei UNKNOWN haben kein gültiges Resultat.
+- Read-only SQLite quick_check nach Cleanup auf beiden Journals bestanden:
+  identische vier IDs, Payload-Hashes, Revision 3, Status-/Result-Felder. Captures
+  vollständig: Robot 5.107 / Operator 5.081 Frames, keine unzugeordneten Frames
+  oder Kernel-Capture-Drops. Sender meldet nach Restart einen Callback-Admission-
+  Drop, Typ unbekannt; nicht als WAN-Verlust oder garantiertes Admission auslegen.
+  Handler/Journal können ausgehende HELLOs verzögern und konservativ Lease drehen.
+- Sieben neue Session-GTests + sieben Codec + vier Schedule bestanden (18 echte,
+  21 inklusive Wrapper). 19 Python-Tests bestanden. Originales vollständiges M2
+  `.local/m2/20261105T175011079038Z` nach Handler-Extraktion bestanden. Finale
+  DDS-/M2-Source-Inventare 132/81 Dateien passen. SDK-Source/Wire 1/IPC 3 unverändert.
+- Evidenz `evidence/m3-dds-commands-2026-11-05/` inklusive Journal-Inspektion,
+  Artefakthashes und früherem Fault-Test, der UNKNOWN korrekt lieferte, weil die
+  Testverzögerung für neue Arbeit noch aktiv war. Test setzt sie jetzt explizit
+  zurück. Roh-Journale/PCAPs bleiben lokal ignoriert. Auftragsresultate stammen
+  aus DDS-Status; Dateien tragen Teststeuerung und Geräte-Diagnosen.
+
+**Nächster Schritt:** diesen journalisierten Koordinator mit stetiger 200/50-Hz-
+DDS-Sensorlast und absoluten 200-Hz-Absichten alle 2 s zusammenführen. Danach
+N0/N1/N2/N4/N5 mit denselben Fenstern, CPU-/Wire-Scope und Ergebnis-Drain wie SRT
+qualifizieren; Clock-Ursprung/-Grenzen und Kryptografie vergleichbar machen.
+N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-Barrieren und volle
+Seed-/Dauermatrix offen. M3 bleibt in Arbeit, PR #2 Draft; keine M4-Änderung.

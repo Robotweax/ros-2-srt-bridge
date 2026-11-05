@@ -1,0 +1,14 @@
+bool ready
+bool journal_ready
+bool failed
+uint8[16] process_epoch
+uint8[16] link_epoch
+uint8[16] session_id
+uint64 commands_sent
+uint64 queries_sent
+uint64 dispatches
+uint64 start_claims
+uint64 inbox_drops
+uint64 rejected_frames
+uint64 journal_errors
+uint64 effects

@@ -472,3 +472,30 @@ SRT capture handling still rejects fragmentation. CPU/wire windows, equivalent
 security/command workloads and the full matrix remain pending; these DDS results
 support harness validation, not a performance advantage claim. See the
 [DDS sensor evidence](evidence/m3-dds-sensors-2026-11-05/README.md).
+
+The journaled DDS command coordinator now has a separate development acceptance
+runner:
+
+```sh
+python3 tools/run_m3_dds_commands.py
+```
+
+`dds_command_node` uses Reliable/Volatile/KeepLast(64) fixed control frames and one
+bounded journal worker thread per endpoint. It shares the SDK `CommandJournal`
+and ROS rate handler with SRT. New intents commit before send; duplicates and
+recovered intents query instead of resending. A common-VM namespace proof,
+acknowledged nonce-derived session, 1.5 s lease and mutex-protected start claim
+fence receiver execution. Lease expiry rotates the link nonce, including when
+both processes survive. The SRT SDK, ticket/start fence and wire/IPC formats are
+unchanged.
+
+The [DDS command evidence](evidence/m3-dds-commands-2026-11-05/README.md) records
+four distinct intents/four effects: two confirmed successes and two UNKNOWNs from
+a lost handler reply and a receiver crash. Sender SIGKILL/reopen issued QUERY
+with zero replayed old COMMANDs. Both journals agree after recovery. Eighteen
+ROS GTests, nineteen Python tests and the original M2 regression passed. A callback
+admission drop remains visible; Reliable middleware is not guaranteed application
+queue admission. This is common-VM command acceptance with changing sensor rates,
+not the complete steady M3 comparison. Combining the steady sensor/command
+workload, qualifying cross-host clocks/security and aligning CPU/wire windows
+remain next.

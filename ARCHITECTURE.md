@@ -806,3 +806,25 @@ Dieser Runner sendet keine Aufträge: der vollständig journalisierte Reliable-
 Auftragskoordinator ist noch offen. Direkter ROS-Service-Aufruf ersetzt ihn nicht.
 CPU/Wire, Kryptografie, Auftragslast und Altersmetriken sind noch nicht als
 vergleichbar qualifiziert. Details: `evidence/m3-dds-sensors-2026-11-05/`.
+
+DDS-COMMAND-Follow-up: separater ROS-Koordinator mit Reliable/Volatile/KeepLast(64)
+und fester Frame-Größe für HELLO/COMMAND/QUERY/STATUS/ERROR. Pro Endpunkt besitzt
+nur ein Thread das unveränderte SDK-Journal; derselbe extrahierte ROS-Rate-Handler
+wird von SRT und DDS genutzt. Neue Absicht wird vor einzigem Anwendungs-COMMAND
+committet; Duplikat/Recovery führt zu Status/QUERY, nicht Replay. Empfang committet
+ACCEPTED und DISPATCHING, bevor ein unter dem Session-Mutex atomar beanspruchter
+Start Live-Lease, Epochen und Deadline prüft. Journal/Handler halten diesen Mutex
+nicht. Nach Start mögliche Effekte bleiben bei fehlendem Ergebnis UNKNOWN.
+Die SRT-Ticket-/Shared-Memory-Start-Fences werden weder ersetzt noch geöffnet.
+
+Dieser DDS-Pfad verlangt denselben Linux-Boot-/Time-Namespace. HELLOs bestätigen
+Nonce-abgeleitete Session, monotone Sequenz und 1,5-s-Lease; Ablauf rotiert lokale
+Link-Nonce. Maximal 64 alte Peer-Link-Nonces verhindern Rollback, danach Fail-Closed.
+Das ist keine kryptografische Peer-Authentisierung und keine Cross-Host-Clock-
+Abnahme. Vier Absichten/vier Effekte, zwei SUCCEEDED und zwei UNKNOWN sowie QUERY
+nach Sender-/Empfänger-SIGKILL sind belegt. Beide Journale stimmen überein, M2
+bleibt bestanden. Bounded Callback-Admission darf Frames verwerfen und zählt das;
+blockierender Handler kann ausgehende HELLOs verzögern und Session konservativ
+rotieren. Keine Durchsatz-/Verfügbarkeitsüberlegenheit ableiten. Gemeinsame stetige
+Sensor-/Auftragslast, Crypto-/Clock-/CPU-/Wire-Gleichheit und volle Matrix bleiben
+M3-Gates. Evidenz: `evidence/m3-dds-commands-2026-11-05/`.
