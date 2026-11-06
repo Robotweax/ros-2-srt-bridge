@@ -1157,3 +1157,53 @@ M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
 qualifizieren; danach kontrollierter SRT-/DDS-Kostenvergleich bei angeglichener
 Pacing-/Reconciliation-/Age-/Crypto-Semantik. M3 in Arbeit, PR #2 Draft,
 Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Cgroup-Scope und präregistrierte Observer-Studie
+
+- Read-only cgroup-v2-Counter im bestehenden 250-ms-Endpoint-Sampler: Root-/
+  Domain-/Self-PID-Prüfung, Namespace-/Device-/Inode-Identität, CPU-/Memory-Limits,
+  CPU-Mikrosekunden, charged Memory und Memory-Events. Neue unabhängige
+  `container_cgroup`-Phasen neben Prozess-CPU. Capture/Competitor enthalten,
+  außerhalb der Gruppe abgerechnete Host-/Kernelarbeit nicht garantiert erfasst.
+  Inner/outer beobachtete Deltas ohne Interpolation, keine CPU-Konfidenzintervalle.
+  Charged Memory mit Cache/Kernel, kein RSS/PSS/harter Peak. Fehler/Änderungen
+  verwerfen Ressourcenqualifikation, Ausführungsgates unverändert.
+- `tools/m3_observer_study.py` schreibt Plan/Quellen vor erstem Kind: SRT N0
+  off/on/on/off und DDS system N0 on/off/off/on, jeweils viermal 45 s/Seed1701;
+  danach paced N5/Monotonic jeweils 300 s für 1701/2903/4211. Sequentiell, frische
+  Endpoints, keine Retries/Host-Tuning. Pärchen verlangen passende Konfiguration/
+  qualifizierte Counter; negative Differenzen erhalten, Commandcounts/Effects
+  getrennt geprüft und Sensorpopulationen gespeichert. Vorhandene Builds als
+  explizite Development-Wiederverwendung; normaler separater M3-Build Voraussetzung.
+- 68 Python-Tests und Demo-Install bestanden. Alle elf Plan-Läufe ohne Retry
+  bestanden. 44 Cgroup-Fenster aus projizierten Original-Brackets exakt nachgerechnet,
+  alle 44 engeren Prozess-CPU-Fenster ebenfalls qualifiziert. Sieben Opt-in-Läufe
+  mit 28 qualifizierten Monotonic-Endpunkt-/Phasenfenstern, kein Recorderverlust.
+  Lokale Throttle-/Memory-Events null; kein Nachweis ungestörter VM-/Ancestor-CPU.
+- Drei Fünfminuten-N5-Läufe bestätigen je 150/150 Commands/150 Effekte, insgesamt
+  450. Produced/Callbacks: Seed1701 75.032/19.079, Seed2903 75.018/19.236,
+  Seed4211 75.031/19.286. 200/50-Hz-Produktion bleibt erhalten; fehlende Callback-
+  Population enthält bewusstes Pacing/Replacement und andere Stufen, kein isolierter
+  WAN-Loss. Keine N5-Randomloss-/Jitter-Konfiguration: Seeds markieren hier frische
+  Wiederholungen. System-N5-Cold-Discovery damit nicht behoben.
+- Acht N0-Paarläufe je 23 bestätigt/23 Effekte. CPU-Differenzen haben wechselnde
+  Vorzeichen, keine isolierte Observer-Overheadzahl ableiten. Beobachtete Charged-
+  Memory-Maxima on-minus-off ca. 19–23 MiB/Endpunkt; kein physischer Footprint.
+  Erster SRT-Off-Lauf IMU 198,182 statt ca. 200 Hz, Callbackpopulationen variieren;
+  keinen Lauf post hoc zum Glätten verwerfen. Tabellen/alle Paare erhalten.
+- Alle 22 geschlossenen Journale quick_check ok, passende IDs/Hashes/Ergebnisse:
+  insgesamt 634 SUCCEEDED/Revision-3-Records pro Seite, Generationen lückenlos.
+  Read-only-Audit ändert Haupt-DB-Hashes nicht; keine zusätzliche Crash-Fault-Quali.
+- Evidenz `evidence/m3-observer-study-2026-11-06/`: Plan/Studie, projizierte
+  Cgroup-Samples, vollständige Run-Manifeste, Scope-/Capability-/Namespace-Proofs,
+  Raw-Hashes und Journal-Audits. Initialer Cgroup-Smoke nur Development. Elf
+  Inventare je 156 aktuelle Source-Dateien, installierte Scripts bytegleich;
+  56 Produktionsquellen und Command-/Simulator-/Native-Capture-Binaries unverändert.
+  Keine neuen ROS-GTests/volle M2 behaupten; Roh-PCAPs/Prefixes/Journale lokal.
+
+**Weiter:** kontrollierte/geeignete Ressourcen-Umgebung und Tap-/Offload-Scope
+qualifizieren; längere SRT-/DDS-Läufe/weitere Impairment-Profile, volle Matrix und
+N3-/N4-Spezialgates. Pacing/Reconciliation/Age/Crypto-Semantik bleibt vor einem
+Transportkostenvergleich anzugleichen. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.

@@ -1008,3 +1008,21 @@ Population-Attributionsnachweis. Endpoint-/Richtungszahlen nicht als eindeutige
 Netzwerkbytes zusammenzählen. Observer-Prozess von CPU-Scope ausgeschlossen,
 Kernelarbeit kann Endpoint-Tasks belastet werden; keine behauptete kostenlose
 Messung. Evidenz `evidence/m3-monotonic-capture-2026-11-06/`.
+
+
+M3-Observer-Studie (2026-11-06): Read-only cgroup-v2-Root-Counter im vorhandenen
+250-ms-Sampler. V2/Domain/Root-Membership/Self-PID, stabile Namespace-/Device-/
+Inode-Identität und Limits erforderlich. `container_cgroup` pro vorhandener Phase,
+inner/outer beobachtete CPU-Mikrosekunden ohne Interpolation, sampled charged
+memory statt RSS/PSS/Peak. Umfasst Capture-/Observer-/Competitor-Prozesse im
+Container, keine Garantie für Kernel-/Host-Arbeit außerhalb dieser Abrechnung.
+Alte Prozess-CPU bleibt eigener Scope. Counter-/Identitäts-/Limit-Fehler verwerfen
+nur diese Ressourcenqualifikation; Ausführungsgates unverändert.
+
+Präregistrierte sequentielle On/Off-Studie: SRT N0 off/on/on/off, DDS system N0
+on/off/off/on, dann paced N5 mit Monotonic-Observer über drei Seeds. Quellen vor
+Start eingefroren, frische Container, keine Retries/Host-Tuning. Paare benötigen
+passende Images/Dauer/Profile/Seeds/Limits und qualifizierte Counter. Differenzen
+inklusive negativer Werte nur deskriptiv, keine CPU-Konfidenzintervalle oder
+isolierter Observer-Kostennachweis; Workload-/Callback-Populationen getrennt.
+Evidenz `evidence/m3-observer-study-2026-11-06/`.

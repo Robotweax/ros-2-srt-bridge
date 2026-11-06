@@ -690,3 +690,21 @@ link transmission/delivery or sensor-population overhead. Capture processes are
 excluded from endpoint CPU, while kernel observer work may be charged to endpoint
 tasks; the added observer changes host load. Results therefore identify this
 capture variant explicitly. See [implementation and evidence](evidence/m3-monotonic-capture-2026-11-06/README.md).
+
+
+### Container resource scope and observer study
+
+M3 phase summaries now include read-only `container_cgroup` CPU and charged-memory
+observations alongside the narrower endpoint-process totals. This scope includes
+capture and competitor processes; work accounted outside the container is still
+excluded. Inner/outer observed CPU deltas are not exact physical bounds. Sampled
+charged memory includes cache/kernel memory and is not RSS/PSS or a hard peak.
+Missing/changed cgroups and invalid counters reject resource qualification without
+changing command execution gates.
+
+`python3 tools/m3_observer_study.py --out .local/m3-observer-study/new-run`
+preregisters and executes balanced sequential N0 observer on/off blocks, then
+three five-minute paced N5 repetitions. It reuses the installed development build,
+freezes sources and retains failures. See the [study design and evidence](evidence/m3-observer-study-2026-11-06/README.md).
+Results describe this shared emulated VM; they do not establish isolated observer
+cost or controlled SRT/DDS performance.

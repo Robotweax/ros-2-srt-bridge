@@ -445,5 +445,38 @@
       "physical observation-stage/offload qualification",
       "SRT/DDS semantic and crypto alignment"
     ]
+  },
+  "observer_resource_study": {
+    "status": "read-only cgroup observations and three five-minute paced N5 repetitions pass; CPU overhead not isolated",
+    "evidence": "evidence/m3-observer-study-2026-11-06",
+    "on_off_design": {
+      "srt": "off/on/on/off",
+      "dds": "on/off/off/on",
+      "profile": "N0",
+      "seconds": 45,
+      "seed": 1701
+    },
+    "long_paced_n5": {
+      "seconds_each": 300,
+      "seeds": [
+        1701,
+        2903,
+        4211
+      ],
+      "successes": 450,
+      "effects": 450,
+      "recorder_failures": 0,
+      "stochastic_loss_jitter_configured": false
+    },
+    "host_python_tests": 68,
+    "final_source_files_each": 156,
+    "final_source_manifests": 11,
+    "cgroup_windows_replayed_exactly": 44,
+    "qualified_monotonic_endpoint_phase_windows": 28,
+    "closed_journals_audited": 22,
+    "total_successful_commands": 634,
+    "cpu_overhead": "signs vary; shared emulated VM and differing sensor populations prevent causal estimate",
+    "memory": "on-minus-off sampled charged maxima roughly 19..23 MiB per endpoint, not physical footprint/PSS",
+    "complete_m3_acceptance": false
   }
 }

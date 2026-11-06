@@ -56,6 +56,38 @@ def summarize_cpu(samples,start,end):
     return result
 
 
+def summarize_cgroup(samples,start,end):
+    result=dict(qualified=False,window_monotonic_ns=[start,end],
+        scope='namespace-root cgroup v2 counters including applications, test observers, capture and competitor processes; excludes work accounted outside cgroup; inner/outer observed deltas without interpolation; not isolated transport/observer cost')
+    try:
+        selected=select_window(samples,start,end)
+        groups=[s.get('cgroup',{}) for s in selected]
+        if any(g.get('available') is not True for g in groups):raise ValueError('cgroup sample unavailable')
+        if any(g['identity']!=groups[0]['identity'] or g['limits']!=groups[0]['limits'] for g in groups):raise ValueError('cgroup identity or limits changed')
+        if any(g['memory_current_bytes']<0 for g in groups):raise ValueError('negative cgroup memory')
+        for field in ('cpu','memory_events'):
+            if any(set(g[field])!=set(groups[0][field]) for g in groups):raise ValueError('cgroup counter set changed')
+            for key in groups[0][field]:
+                values=[g[field][key] for g in groups]
+                if any(v<0 for v in values) or any(b<a for a,b in zip(values,values[1:])):raise ValueError('cgroup counter regressed')
+        if not {'usage_usec','user_usec','system_usec'}<=groups[0]['cpu'].keys():raise ValueError('missing cgroup CPU counters')
+        inner=[i for i,s in enumerate(selected) if s['begin_ns']>=start and s['end_ns']<=end]
+        if len(inner)<2:raise ValueError('insufficient inner cgroup samples')
+        def delta(field,first,last):return {k:groups[last][field][k]-groups[first][field][k] for k in groups[0][field]}
+        result.update(qualified=True,identity=groups[0]['identity'],limits=groups[0]['limits'],
+            inner_cpu_deltas=delta('cpu',inner[0],inner[-1]),outer_cpu_deltas=delta('cpu',0,-1),
+            inner_memory_event_deltas=delta('memory_events',inner[0],inner[-1]),outer_memory_event_deltas=delta('memory_events',0,-1),
+            maximum_observed_memory_current_bytes=max(groups[i]['memory_current_bytes'] for i in inner),
+            memory_scope='sampled charged cgroup memory including cache/kernel allocations; not RSS/PSS or a hard peak',
+            inner_observation_span_ns=[selected[inner[0]]['begin_ns'],selected[inner[-1]]['end_ns']],
+            outer_observation_span_ns=[selected[0]['begin_ns'],selected[-1]['end_ns']],cpu_counter_unit_seconds=1e-6)
+        for side in ('inner','outer'):
+            seconds=result[side+'_cpu_deltas']['usage_usec']/1e6
+            result[side+'_cpu_seconds']=seconds;result[side+'_cpu_core_percent']=100*seconds/((end-start)/1e9)
+    except ValueError as error:result['reason']=str(error)
+    return result
+
+
 def capture_window(samples,start,end,*,max_gap_ns=1000000000):
     """Realtime bounds conditional on no hidden step and <=1000ppm relative drift."""
     result=dict(qualified=False,window_monotonic_ns=[start,end],
@@ -100,5 +132,5 @@ def summarize_endpoints(run,windows,*,require_dedicated=False):
         if wire['qualified']:
             low=min(c['offset_envelope_ns'][0] for c in clocks.values());high=max(c['offset_envelope_ns'][1] for c in clocks.values())
             wire['timestamp_bounds_ns']=[start+low,start+high,end+low,end+high]
-        result[name]=dict(monotonic_ns=[start,end],seconds=(end-start)/1e9,cpu=cpu,wire_clock=wire)
+        result[name]=dict(monotonic_ns=[start,end],seconds=(end-start)/1e9,cpu=cpu,container_cgroup={role:summarize_cgroup(rows,start,end) for role,rows in samples.items()},wire_clock=wire)
     return dict(windows=result,scope='same phase definitions for SRT/DDS; includes observers/coordination overhead, excludes capture/competitor; conditional clock mapping; not isolated transport cost')
