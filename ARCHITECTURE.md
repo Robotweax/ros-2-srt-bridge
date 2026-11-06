@@ -1305,3 +1305,28 @@ this is a new diagnostic configuration requiring its own full cohort. This
 change removes a contention-loss mechanism without claiming it uniquely caused
 the retained failure. Wire, journal, deadline, lease, handler fencing and replay
 policy are unchanged. Consumers must be rebuilt for the trace representation.
+
+### Session-close cause observations
+
+The independent-lane N5 cohort's first case retained every diagnostic record but
+failed the command-outcome gate: 14 successes/effects and intent 15 unresolved
+with sender UNKNOWN/reconcile-required, no receiver entry. Live receiver and
+sender invalidations were observed around 37.5 / 42.5 seconds after measurement
+start. These traces establish live context loss, not its initiating cause;
+SDK acceptance and journal absence do not prove execution or nonexecution.
+
+Additional opt-in events now distinguish session close decisions from provider
+link loss. `session_action` (30) carries SessionError in value and close-control /
+close-sensor / flush-samples flags 1/2/4 in detail. `link_lost` (31) records channel
+0 CONTROL / 1 SENSOR and a reason-specific socket state, security timeout, epoll
+flags, receive/send provider error or wire-decode error. `transport_stopping`
+carries TransportFault in value. Flags/channels are checked by the read-only
+parser; old records without these new points remain readable. Only actions that
+close a link are recorded, avoiding per-sample soft-clock noise. Producers still
+use the same bounded owner lanes without I/O/callbacks or policy decisions.
+A controlled native peer shutdown verifies a control-link cause and session-close
+action before receiver teardown. No existing failed trace is retroactively
+assigned a cause; future incidents require new observations. Record layout grows
+for the detail field, so consumers are rebuilt; diagnostic capacity stays 256
+records (128 per owner), with overflow still fatal to completeness. Command,
+wire, IPC, deadline, lease and replay semantics remain unchanged.

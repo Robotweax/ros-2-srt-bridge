@@ -8,11 +8,11 @@ enum class CommandTracePoint : unsigned {
     endpoint_started=1,session_changed,invalidate_requested,invalidate_completed,
     sender_admission,submit_result,worker_unknown,endpoint_stopping,endpoint_stopped,
     mailbox_flushed=20,input_dropped,make_rejected,queue_rejected,outbound_dropped,
-    provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred
+    provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred,session_action,link_lost
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
-    missing_proof,session_rejected,queue_rejected,provider_error,shutdown
+    missing_proof,session_rejected,queue_rejected,provider_error,shutdown,socket_state,security_timeout,epoll_error,receive_error,wire_decode,session_decision
 };
 struct CommandTraceEvent {
     std::uint64_t sequence=0,monotonic_ns=0;
@@ -24,6 +24,7 @@ struct CommandTraceEvent {
     // Point-specific enum/error value, not an authoritative command outcome.
     unsigned value=0;
     Identity entry_owner_epoch{}; // Populated for worker-record observations only.
+    unsigned detail=0; // session_action: close-control/close-sensor/flush bits 1/2/4; link_lost: channel 0/1.
 };
 enum class CommandTraceProducer : unsigned { coordinator=0,transport=1 };
 // Two fixed SPSC lanes: exactly one coordinator producer and one transport

@@ -23,6 +23,18 @@ class CommandTraceTests(unittest.TestCase):
         result=self.parse(events,dict(attempted=6,dropped=0))
         self.assertTrue(result['complete']);self.assertEqual(result['counts']['provider_sent'],1)
 
+    def test_connection_cause_fields_and_legacy_records_are_readable(self):
+        events=[self.event(1,1),self.event(2,31),self.event(3,30),self.event(4,8),self.event(5,28),self.event(6,9)]
+        events[1].update(reason=11,value=6,detail=0)
+        events[2].update(reason=16,value=14,detail=7)
+        result=self.parse(events,dict(attempted=6,dropped=0))
+        self.assertTrue(result['complete']);self.assertEqual(result['counts']['link_lost'],1)
+        self.assertEqual(result['events'][2]['value'],14)
+        events[1]['detail']=2
+        with self.assertRaisesRegex(ValueError,'channel'):self.parse(events,dict(attempted=6,dropped=0))
+        events[1]['detail']=0;events[2]['detail']=8
+        with self.assertRaisesRegex(ValueError,'flags'):self.parse(events,dict(attempted=6,dropped=0))
+
     def test_loss_is_explicit_and_never_complete(self):
         events=[self.event(1,1),self.event(3,9)]
         self.assertFalse(self.parse(events,dict(attempted=4,dropped=2))['complete'])

@@ -4,9 +4,9 @@ import json
 POINTS={1:'endpoint_started',2:'session_changed',3:'invalidate_requested',4:'invalidate_completed',
     5:'sender_admission',6:'submit_result',7:'worker_unknown',8:'endpoint_stopping',9:'endpoint_stopped',
     20:'mailbox_flushed',21:'input_dropped',22:'make_rejected',23:'queue_rejected',24:'outbound_dropped',
-    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred'}
+    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred',30:'session_action',31:'link_lost'}
 REASONS={0:'none',1:'session_changed',2:'abandoned_submit',3:'context_mismatch',4:'proof_revoked',
-    5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown'}
+    5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown',11:'socket_state',12:'security_timeout',13:'epoll_error',14:'receive_error',15:'wire_decode',16:'session_decision'}
 
 
 def summarize(path):
@@ -25,12 +25,15 @@ def summarize(path):
         if event['point'] not in POINTS or event['reason'] not in REASONS or event['monotonic_ns']<=0:raise ValueError('invalid trace event')
         for key in ('request','session','owner_epoch','entry_owner_epoch'):
             if len(event[key])!=32 or len(bytes.fromhex(event[key]))!=16:raise ValueError('invalid trace identity')
+    for event in events:
+        if event['point']==30 and (type(event.get('detail')) is not int or not 1<=event['detail']<=7):raise ValueError('invalid session action flags')
+        if event['point']==31 and event.get('detail') not in (0,1):raise ValueError('invalid link channel')
     phases={point:[e for e in events if e['point']==point] for point in (1,8,9,28)}
     complete=status['dropped']==0 and all(len(rows)==1 for rows in phases.values())
     if complete and phases[9][0]['monotonic_ns']<phases[8][0]['monotonic_ns']:raise ValueError('invalid endpoint lifecycle bracket')
     return dict(complete=complete,attempted=status['attempted'],dropped=status['dropped'],records=len(events),
         counts={name:sum(e['point']==point for e in events) for point,name in POINTS.items()},
-        events=events,point_names=POINTS,reason_names=REASONS,
+        events=events,point_names=POINTS,reason_names=REASONS,detail_schema={'session_action':'bit flags: close control 1, close sensor 2, flush samples 4; value=SessionError','link_lost':'channel 0 CONTROL / 1 SENSOR; value=reason-specific socket state, provider error, epoll flags or wire error','transport_stopping':'value=TransportFault'},
         scope='local lossy observations only; no replay/execution/absence authority; sequence order across producers is not causal order; provider_sent is SDK acceptance, not delivery')
 
 

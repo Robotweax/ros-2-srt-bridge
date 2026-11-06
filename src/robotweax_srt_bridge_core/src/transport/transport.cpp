@@ -122,11 +122,11 @@ struct TransportOwner::Impl {
         thread=std::thread([this]{run();});
     }
     ~Impl(){stopping=true;if(thread.joinable())thread.join();}
-    void trace(CommandTracePoint point,CommandTraceReason reason,const Identity& id={},std::uint32_t route=0,unsigned value=0){
+    void trace(CommandTracePoint point,CommandTraceReason reason,const Identity& id={},std::uint32_t route=0,unsigned value=0,unsigned detail=0){
         if(!config.command_trace)return;
         const auto c=context();
         config.command_trace->record(CommandTraceProducer::transport,{0,monotonic_ns(),point,reason,id,c.session,config.session.local_epoch,
-            c.control_generation,c.sensor_generation,route,value});
+            c.control_generation,c.sensor_generation,route,value,{},detail});
     }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}
     std::size_t index(std::uint32_t route)const{
@@ -207,6 +207,9 @@ struct TransportOwner::Impl {
         }
     }
     void apply(SessionAction action){
+        if(action.close_control||action.close_sensor)
+            trace(CommandTracePoint::session_action,shutting_down?CommandTraceReason::shutdown:CommandTraceReason::session_decision,{},0,unsigned(action.error),
+                unsigned(action.close_control)|(unsigned(action.close_sensor)<<1)|(unsigned(action.flush_samples)<<2));
         if(action.close_control||(action.flush_samples&&!action.close_sensor))revoke_grants();
         const bool permanent=session.state()==SessionState::failed;
         const auto discarded=queues.apply(action);current.stale_work+=discarded.count;
@@ -224,7 +227,8 @@ struct TransportOwner::Impl {
             if(result!=QueueError::none){++current.rejected;apply(session.control_lost(links[0].generation));}
         }
     }
-    void lost(unsigned i){
+    void lost(unsigned i,CommandTraceReason reason,unsigned value=0){
+        trace(CommandTracePoint::link_lost,reason,{},0,value,i);
         if(!links[i].ready){drop(i,false);return;}
         apply(i?session.sensor_lost(links[i].generation):session.control_lost(links[i].generation));
     }
@@ -266,9 +270,9 @@ struct TransportOwner::Impl {
             if(!i&&!control_space())return; // Backpressure before consuming any CONTROL frame.
             std::array<std::byte,control_message_bytes+1> bytes{};
             const int count=srt_recvmsg(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size());
-            if(count==SRT_ERROR){if(srt_getlasterror(nullptr)!=SRT_EASYNCRCV)lost(i);return;}
+            if(count==SRT_ERROR){const auto error=srt_getlasterror(nullptr);if(error!=SRT_EASYNCRCV)lost(i,CommandTraceReason::receive_error,unsigned(error));return;}
             const auto decoded=decode(std::span(bytes).first(count),channel(i),std::span(route_ids).first(route_count));
-            if(!decoded){++current.rejected;lost(i);return;}
+            if(!decoded){++current.rejected;lost(i,CommandTraceReason::wire_decode,unsigned(decoded.error));return;}
             const auto& view=decoded.message;const auto kind=view.envelope.kind;const Connection connection{channel(i),link.generation};
             if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
             if(kind==Kind::sample)++current.samples_received;
@@ -397,7 +401,7 @@ struct TransportOwner::Impl {
             const auto ttl=i?(binding?200:sensor_ttl_ms(*packet,time)):-1;
             const int count=srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
             const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;require(budget.finish(permit.id,count!=SRT_ERROR));
-            if(count==SRT_ERROR){if(packet->envelope.kind==Kind::command&&error!=SRT_EASYNCSND)trace(CommandTracePoint::provider_error,CommandTraceReason::provider_error,packet->envelope.request_id,packet->envelope.route_id,unsigned(error));if(error!=SRT_EASYNCSND)lost(i);return;}
+            if(count==SRT_ERROR){if(packet->envelope.kind==Kind::command&&error!=SRT_EASYNCSND)trace(CommandTracePoint::provider_error,CommandTraceReason::provider_error,packet->envelope.request_id,packet->envelope.route_id,unsigned(error));if(error!=SRT_EASYNCSND)lost(i,CommandTraceReason::provider_error,unsigned(error));return;}
             require(count==static_cast<int>(packet->size));
             if(packet->envelope.kind==Kind::command)trace(CommandTracePoint::provider_sent,CommandTraceReason::none,packet->envelope.request_id,packet->envelope.route_id);
             ++current.sent;if(packet->envelope.kind==Kind::sample)++current.sensor_sent;
@@ -421,8 +425,8 @@ struct TransportOwner::Impl {
             }
             if(link.fd==SRT_INVALID_SOCK)continue;
             const auto state=srt_getsockstate(link.fd);
-            if(state==SRTS_BROKEN||state==SRTS_CLOSED||state==SRTS_NONEXIST){lost(i);continue;}
-            if(!link.ready){if(monotonic_ns()>=link.security_deadline){lost(i);continue;}if(state==SRTS_CONNECTED)secured(i);}
+            if(state==SRTS_BROKEN||state==SRTS_CLOSED||state==SRTS_NONEXIST){lost(i,CommandTraceReason::socket_state,unsigned(state));continue;}
+            if(!link.ready){if(monotonic_ns()>=link.security_deadline){lost(i,CommandTraceReason::security_timeout);continue;}if(state==SRTS_CONNECTED)secured(i);}
         }
     }
     void run() noexcept {
@@ -453,11 +457,11 @@ struct TransportOwner::Impl {
                     }
                     for(int n=0;n<count;++n)for(unsigned i=0;i<2;++i){
                         if(events[n].fd==links[i].listener){if(events[n].events&SRT_EPOLL_ERR)throw std::runtime_error("listener failed");accept(i);}
-                        else if(events[n].fd==links[i].fd){if(events[n].events&SRT_EPOLL_ERR)lost(i);else if(links[i].ready&&(events[n].events&SRT_EPOLL_IN))receive(i);}
+                        else if(events[n].fd==links[i].fd){if(events[n].events&SRT_EPOLL_ERR)lost(i,CommandTraceReason::epoll_error,unsigned(events[n].events));else if(links[i].ready&&(events[n].events&SRT_EPOLL_IN))receive(i);}
                     }
                 }
             }catch(...){current.fault=TransportFault::io;}
-            shutting_down=true;trace(CommandTracePoint::transport_stopping,CommandTraceReason::shutdown);
+            shutting_down=true;trace(CommandTracePoint::transport_stopping,CommandTraceReason::shutdown,{},0,unsigned(current.fault));
             apply(session.stop());queues.stop();links[0].retry.cancel();links[1].retry.cancel();
             for(auto& link:links){close_fd(link.fd);close_fd(link.listener);}
             if(epoll>=0){srt_epoll_release(epoll);epoll=-1;}

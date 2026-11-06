@@ -57,7 +57,7 @@ class BridgeNode final:public rclcpp::Node {
                 <<",\"point\":"<<unsigned(e.point)<<",\"reason\":"<<unsigned(e.reason)<<",\"request\":\""<<hex(e.request)
                 <<"\",\"session\":\""<<hex(e.session)<<"\",\"owner_epoch\":\""<<hex(e.owner_epoch)
                 <<"\",\"control_generation\":"<<e.control_generation<<",\"sensor_generation\":"<<e.sensor_generation
-                <<",\"route\":"<<e.route<<",\"value\":"<<e.value<<",\"entry_owner_epoch\":\""<<hex(e.entry_owner_epoch)<<"\"}";
+                <<",\"route\":"<<e.route<<",\"detail\":"<<e.detail<<",\"value\":"<<e.value<<",\"entry_owner_epoch\":\""<<hex(e.entry_owner_epoch)<<"\"}";
             std::cout<<line.str()<<std::endl;
         }
     }

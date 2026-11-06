@@ -43,7 +43,15 @@ void normal(const std::string& ip,const std::filesystem::path& directory){Pair p
 }
 void diagnostic_lifecycle(const std::string& ip,const std::filesystem::path& directory){
     Pair p(ip,directory,false,{},0,3000000000ULL,false,true);const auto id=random_identity();
-    submit(*p.op,id,{100,5000,0,1});result(*p.op,id,CommandState::succeeded);stop(*p.op);stop(*p.robot);
+    submit(*p.op,id,{100,5000,0,1});result(*p.op,id,CommandState::succeeded);stop(*p.op);
+    CommandTraceEvent peer_event;bool control_lost=false,session_closed=false;
+    until([&]{while(p.rc.transport.command_trace->poll(peer_event)){
+        if(peer_event.point==CommandTracePoint::link_lost&&peer_event.detail==0){
+            check(peer_event.reason==CommandTraceReason::socket_state||peer_event.reason==CommandTraceReason::receive_error||peer_event.reason==CommandTraceReason::epoll_error,"unexpected controlled socket-loss cause");control_lost=true;
+        }
+        if(peer_event.point==CommandTracePoint::session_action&&peer_event.reason==CommandTraceReason::session_decision&&(peer_event.detail&1))session_closed=true;
+    }return control_lost&&session_closed;},"controlled peer close missing link/session cause trace");
+    stop(*p.robot);
     CommandTraceEvent e;unsigned count=0;bool admitted=false,queued=false,sent=false,stopping=false,stopped=false;
     while(p.oc.transport.command_trace->poll(e)){
         ++count;check(e.monotonic_ns>0&&e.owner_epoch==p.oc.transport.session.local_epoch,"trace provenance missing");
