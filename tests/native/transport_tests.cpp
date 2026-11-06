@@ -6,6 +6,11 @@
 #include <thread>
 #include <vector>
 #include <stdexcept>
+#include <arpa/inet.h>
+#include <poll.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <cerrno>
 using namespace robotweax::srt_bridge;
 namespace {
 unsigned checks=0;
@@ -27,6 +32,50 @@ TransportConfig config(Role role,const std::string& ip,const std::string& key){
         role==Role::caller?1U:2U,manifest(),{1000,1000000,5000000000ULL,100000000}};
     return {std::move(session),{ip,0},{ip,0},key};
 }
+// Test-owned loopback UDP gate: only the CONTROL path passes through it.
+class ControlGate {
+    int fd_=-1;unsigned family_;std::uint16_t server_port_,port_=0;
+    sockaddr_storage server_{};socklen_t server_length_=0;
+    std::atomic<bool> stop_{false};std::thread thread_;
+    static std::uint16_t port(const sockaddr_storage& address){return ntohs(address.ss_family==AF_INET?
+        reinterpret_cast<const sockaddr_in&>(address).sin_port:reinterpret_cast<const sockaddr_in6&>(address).sin6_port);}
+    void run(){
+        sockaddr_storage client{};socklen_t client_length=0;std::array<std::byte,65536> bytes{};
+        while(!stop_.load()){
+            pollfd descriptor{fd_,POLLIN,0};const int ready=::poll(&descriptor,1,5);
+            if(ready<0){if(errno==EINTR)continue;failed=true;return;}if(!ready)continue;
+            for(unsigned n=0;n<64;++n){sockaddr_storage source{};socklen_t length=sizeof(source);
+                const auto count=recvfrom(fd_,bytes.data(),bytes.size(),MSG_DONTWAIT,reinterpret_cast<sockaddr*>(&source),&length);
+                if(count<0){if(errno==EAGAIN||errno==EWOULDBLOCK)break;if(errno==EINTR)continue;failed=true;return;}
+                const bool from_server=port(source)==server_port_;
+                if(from_server){if(!client_length)continue;if(drop_reply.load()){++dropped;continue;}}
+                else{client=source;client_length=length;}
+                const auto& destination=from_server?client:server_;
+                const auto size=from_server?client_length:server_length_;
+                if(sendto(fd_,bytes.data(),count,0,reinterpret_cast<const sockaddr*>(&destination),size)!=count){failed=true;return;}
+                if(from_server)++forwarded_reply;else ++forwarded_request;
+            }
+        }
+    }
+public:
+    std::atomic<bool> drop_reply{false},failed{false};
+    std::atomic<unsigned> dropped{0},forwarded_reply{0},forwarded_request{0};
+    ControlGate(bool ipv6,std::uint16_t server_port):family_(ipv6?AF_INET6:AF_INET),server_port_(server_port){
+        fd_=socket(family_,SOCK_DGRAM|SOCK_NONBLOCK|SOCK_CLOEXEC,0);if(fd_<0)throw std::runtime_error("gate socket failed");
+        try{
+            sockaddr_storage local{};socklen_t length;
+            if(ipv6){auto& a=reinterpret_cast<sockaddr_in6&>(local);a.sin6_family=AF_INET6;a.sin6_addr=in6addr_loopback;length=sizeof(a);
+                auto& server=reinterpret_cast<sockaddr_in6&>(server_);server=a;server.sin6_port=htons(server_port);}
+            else{auto& a=reinterpret_cast<sockaddr_in&>(local);a.sin_family=AF_INET;a.sin_addr.s_addr=htonl(INADDR_LOOPBACK);length=sizeof(a);
+                auto& server=reinterpret_cast<sockaddr_in&>(server_);server=a;server.sin_port=htons(server_port);}
+            server_length_=length;
+            if(bind(fd_,reinterpret_cast<const sockaddr*>(&local),length)||getsockname(fd_,reinterpret_cast<sockaddr*>(&local),&length))throw std::runtime_error("gate bind failed");
+            port_=port(local);thread_=std::thread([this]{run();});
+        }catch(...){close(fd_);throw;}
+    }
+    ~ControlGate(){stop_=true;if(thread_.joinable())thread_.join();close(fd_);}
+    std::uint16_t listen_port()const{return port_;}
+};
 void ready(TransportOwner& a,TransportOwner& b){try{until([&]{return a.snapshot().state==SessionState::active&&b.snapshot().state==SessionState::active;},"session not active");}catch(...){for(auto* owner:{&a,&b}){const auto s=owner->snapshot();std::cerr<<"state="<<int(s.state)<<" fault="<<int(s.fault)<<" running="<<s.running<<" gen="<<s.context.control_generation<<","<<s.context.sensor_generation<<" retry="<<int(s.control_retry)<<","<<int(s.sensor_retry)<<" tx/rx/reject="<<s.sent<<","<<s.received<<","<<s.rejected<<"\n";}throw;}}
 void stop(TransportOwner& owner){const auto begin=TransportOwner::monotonic_ns();owner.request_stop();owner.join();check(TransportOwner::monotonic_ns()-begin<5ULL*1000000000,"shutdown exceeded five seconds");check(!owner.snapshot().running&&owner.snapshot().state==SessionState::stopped,"not stopped");owner.join();}
 // The advertised 200 Hz route must not be decimated by the owner's idle wait.
@@ -143,5 +192,32 @@ void lifecycle(bool ipv6){
     std::this_thread::sleep_for(std::chrono::milliseconds(300));check(refusing.snapshot().state==SessionState::failed,"permanent error auto-reactivated");
     stop(refused);stop(refusing);
 }
+
+void one_way_control_silence(bool ipv6){
+    const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
+    auto lc=config(Role::listener,ip,key);TransportOwner listener(lc);
+    until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"silence listener missing");
+    ControlGate gate(ipv6,listener.snapshot().control_port);
+    auto cc=config(Role::caller,ip,key);cc.control.port=gate.listen_port();cc.sensor.port=listener.snapshot().sensor_port;
+    cc.command_trace=std::make_shared<CommandTrace>();TransportOwner caller(cc);ready(caller,listener);
+    check(gate.forwarded_reply>0&&gate.forwarded_request>0&&!gate.failed,"gate did not forward handshake both ways");
+    const auto reverse_before=gate.forwarded_request.load();const auto blocked=TransportOwner::monotonic_ns();gate.drop_reply=true;
+    CommandTraceEvent event;bool control_lost=false,session_closed=false;std::uint64_t lost_at=0;
+    until([&]{while(cc.command_trace->poll(event)){
+        if(event.point==CommandTracePoint::link_lost&&event.detail==0){
+            check(event.reason==CommandTraceReason::socket_state||event.reason==CommandTraceReason::epoll_error||event.reason==CommandTraceReason::receive_error,"one-way silence did not use provider loss path");
+            control_lost=true;lost_at=event.monotonic_ns;
+        }
+        if(event.point==CommandTracePoint::session_action&&(event.detail&1)&&event.monotonic_ns>=blocked){
+            check(event.value==unsigned(SessionError::none)&&event.reason==CommandTraceReason::session_decision,"one-way silence closed on a local protocol/clock error");session_closed=true;
+        }
+    }return control_lost&&session_closed;},"one-way CONTROL silence did not surface loss",10000);
+    check(lost_at>=blocked+3000000000ULL,"provider loss was not an idle interval");
+    check(gate.dropped>0&&gate.forwarded_request>reverse_before&&!gate.failed,"silence was not directional/observed");
+    check(cc.command_trace->dropped()==0,"silence cause trace incomplete");
+    stop(caller);stop(listener);
+    std::cout<<"PASS one-way CONTROL silence: provider loss before session close; blocked_ms="<<(lost_at-blocked)/1000000<<", dropped="<<gate.dropped.load()<<", reverse_forwarded="<<gate.forwarded_request.load()-reverse_before<<"\n";
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+
+}
+int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");one_way_control_silence(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
