@@ -1217,9 +1217,22 @@
   "control_egress_fault": {
     "enabled_by_default": false,
     "scope": "development-only known CONTROL egress drop; not N4 phase or historical cause qualification",
-    "status": "first live execution failed tc JSON validator; fix and cleanup host-tested; not reexecuted",
+    "status": "corrected harness validated in one separately planned N0 run; original attempt remains failed",
     "host_tests_after_fix": 115,
-    "evidence": "evidence/m3-control-egress-fault-2026-11-06/README.md",
-    "qualification": false
+    "evidence": "evidence/m3-control-egress-validation-2026-11-06/README.md",
+    "qualification": false,
+    "validation": {
+      "seed": 1701,
+      "seconds": 45,
+      "filter_pre_removal_drops": 303,
+      "operator_selected_data_sent_delta": 137,
+      "operator_selected_retransmitted_delta": 135,
+      "operator_selected_ack_sent_delta": 159,
+      "operator_outgoing_control_tap_observations_during_fault": 0,
+      "command_successes": 8,
+      "unresolved": 1,
+      "skipped_slots": 14,
+      "qualification": false
+    }
   }
 }

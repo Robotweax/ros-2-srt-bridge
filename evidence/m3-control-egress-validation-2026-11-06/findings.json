@@ -1,0 +1,349 @@
+{
+  "qualification": false,
+  "known_fault_signature_observed": true,
+  "original_status": "passed",
+  "source_commit": "cd54446",
+  "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T213402911275Z",
+  "executions": 1,
+  "previous_failure_unchanged": true,
+  "guaranteed_active_seconds": 6.410313587,
+  "filter_final_snapshot": {
+    "packets": 303,
+    "drops": 303,
+    "bytes": 39356
+  },
+  "provider_deltas": {
+    "operator": {
+      "data_sent": 137,
+      "data_received": 158,
+      "retransmitted": 135,
+      "ack_sent": 159,
+      "ack_received": 0,
+      "nak_sent": 0,
+      "nak_received": 0,
+      "undecrypt": 0,
+      "bytes_sent": 20830,
+      "bytes_received": 23068
+    },
+    "robot": {
+      "data_sent": 158,
+      "data_received": 0,
+      "retransmitted": 157,
+      "ack_sent": 0,
+      "ack_received": 0,
+      "nak_sent": 0,
+      "nak_received": 0,
+      "undecrypt": 0,
+      "bytes_sent": 23068,
+      "bytes_received": 0
+    }
+  },
+  "captures": {
+    "operator": {
+      "native_sha256": "d630bebc22149e7bd0b3b1bdc20355f8fef89d3403ca6499c4bbea701330195a",
+      "sensor_observations_during_fault": {
+        "in/sensor_source_data": 1046,
+        "out/sensor_srt_control": 416,
+        "in/sensor_srt_control": 417,
+        "in/sensor_fec_parity": 262
+      },
+      "old_flow_during_fault": 0,
+      "all_control_out_during_fault": 0,
+      "old_reverse_during_fault": 159,
+      "control_out_after_restoration": 92
+    },
+    "robot": {
+      "native_sha256": "cea3e2eaaa85ed1f32649b2eb2f03747233037e27557361fa4504c8feb850ce6",
+      "sensor_observations_during_fault": {
+        "out/sensor_source_data": 1046,
+        "in/sensor_srt_control": 416,
+        "out/sensor_srt_control": 417,
+        "out/sensor_fec_parity": 262
+      },
+      "old_flow_during_fault": 0,
+      "all_control_out_during_fault": 166,
+      "old_reverse_during_fault": 159,
+      "control_out_after_restoration": 92
+    }
+  },
+  "command_summary": {
+    "attempts": 9,
+    "not_admitted": 0,
+    "unresolved": 1,
+    "terminal_observation_latency_ms": {
+      "count": 8,
+      "p50": 103.719875,
+      "p95": 260.799042,
+      "p99": 260.799042,
+      "maximum": 260.799042
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 8,
+        "p50": 103.719875,
+        "p95": 260.799042,
+        "p99": 260.799042,
+        "maximum": 260.799042
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "device": {
+    "sequence": 10,
+    "ok": true,
+    "rate": 200,
+    "generation": 8,
+    "effects": 8
+  },
+  "skipped_command_slots": 14,
+  "unresolved_command": {
+    "number": 9,
+    "submission": 0,
+    "submitted_monotonic_ns": 33219847389,
+    "status_observations": 191,
+    "last_status_observation": {
+      "found": true,
+      "state": 8,
+      "reason": 2,
+      "local_error": 2,
+      "revision": 0,
+      "query_queued": true,
+      "peer_error": 3,
+      "observed_monotonic_ns": 70383303989,
+      "budget_elapsed": true
+    }
+  },
+  "control_events": [
+    {
+      "process": "operator-bridge-0.log",
+      "sequence": 36,
+      "monotonic_ns": 37177295224,
+      "point": 31,
+      "reason": 13,
+      "request": "00000000000000000000000000000000",
+      "session": "10dc3036f8533dc7581675348b8209ac",
+      "owner_epoch": "44baf617bd5c257526acdc51a477ee16",
+      "control_generation": 2,
+      "sensor_generation": 2,
+      "route": 0,
+      "detail": 0,
+      "value": 9,
+      "entry_owner_epoch": "00000000000000000000000000000000"
+    },
+    {
+      "process": "operator-bridge-0.log",
+      "sequence": 37,
+      "monotonic_ns": 37177297808,
+      "point": 30,
+      "reason": 16,
+      "request": "00000000000000000000000000000000",
+      "session": "00000000000000000000000000000000",
+      "owner_epoch": "44baf617bd5c257526acdc51a477ee16",
+      "control_generation": 2,
+      "sensor_generation": 2,
+      "route": 0,
+      "detail": 7,
+      "value": 0,
+      "entry_owner_epoch": "00000000000000000000000000000000"
+    },
+    {
+      "process": "robot-bridge-2.log",
+      "sequence": 2,
+      "monotonic_ns": 37176100516,
+      "point": 31,
+      "reason": 13,
+      "request": "00000000000000000000000000000000",
+      "session": "10dc3036f8533dc7581675348b8209ac",
+      "owner_epoch": "64b64c9a2fd1c717cc48025f2559b122",
+      "control_generation": 1,
+      "sensor_generation": 1,
+      "route": 0,
+      "detail": 0,
+      "value": 9,
+      "entry_owner_epoch": "00000000000000000000000000000000"
+    },
+    {
+      "process": "robot-bridge-2.log",
+      "sequence": 3,
+      "monotonic_ns": 37176130933,
+      "point": 30,
+      "reason": 16,
+      "request": "00000000000000000000000000000000",
+      "session": "00000000000000000000000000000000",
+      "owner_epoch": "64b64c9a2fd1c717cc48025f2559b122",
+      "control_generation": 1,
+      "sensor_generation": 1,
+      "route": 0,
+      "detail": 7,
+      "value": 0,
+      "entry_owner_epoch": "00000000000000000000000000000000"
+    }
+  ],
+  "provider": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "status": {
+        "attempted": 643,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 2519750,
+      "max_sample_start_gap_ns": 114167500
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "status": {
+        "attempted": 22,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 615125,
+      "max_sample_start_gap_ns": 105422250
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "status": {
+        "attempted": 604,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 653417,
+      "max_sample_start_gap_ns": 113152166
+    }
+  },
+  "command_diagnostics": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "attempted": 371,
+      "dropped": 0
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "attempted": 10,
+      "dropped": 0
+    }
+  },
+  "pcap": {
+    "operator": {
+      "records": 23862,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    },
+    "robot": {
+      "records": 23862,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    }
+  },
+  "monotonic_statuses": {
+    "operator": {
+      "complete": true,
+      "records": 23879,
+      "seen": 23879,
+      "submitted": 23879,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 5158571459,
+      "stop_before_ns": 76589350576,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "robot": {
+      "complete": true,
+      "records": 23882,
+      "seen": 23882,
+      "submitted": 23882,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 5154273251,
+      "stop_before_ns": 76756101784,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "measurement_window": {
+    "source_produced": 11291,
+    "observer_received": 10248,
+    "missing": 1043,
+    "losses": {
+      "upstream_dds": 1,
+      "validation": 0,
+      "admission": 603,
+      "ingress_replaced": 36,
+      "ingress_flushed": 6,
+      "input_rejected": 44,
+      "outbound_replaced": 341,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 0,
+      "receiver_rejected": 0,
+      "receive_replaced": 2,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 10
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 45.174491728,
+    "source_actual_hz": {
+      "imu": 199.93584110215448,
+      "joints": 50.00609666184311
+    },
+    "published": 10258,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 8157,
+        "rounding": "up to 1ms",
+        "maximum_ms": 17,
+        "p50_ms": 9,
+        "p95_ms": 12,
+        "p99_ms": 14
+      },
+      "joint": {
+        "count": 2101,
+        "rounding": "up to 1ms",
+        "maximum_ms": 32,
+        "p50_ms": 17,
+        "p95_ms": 26,
+        "p99_ms": 28
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "realtime_windows_withheld": true,
+  "limits": [
+    "Known injected filter cause, not historical N5 initiating cause",
+    "Filter counters are a pre-removal snapshot, not a guaranteed lifetime total",
+    "DATA sent includes retransmissions; do not add retransmitted again",
+    "Selected provider counters and filter counts differ in packet types and time coverage",
+    "Harness passed permits one unresolved command; not qualification acceptance",
+    "No physical delivery, nonexecution, performance or full N4/M3 claim"
+  ]
+}

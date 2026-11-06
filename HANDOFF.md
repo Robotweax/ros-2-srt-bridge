@@ -1948,3 +1948,45 @@ Ressourcengates offen. Alte Fehlläufe unverändert; PR #2 Draft, Intrinsic/M4 u
 validieren; alten Fehlversuch erhalten. Danach qualifiziertes Signature für N5-
 Triangulation nutzen. Historischer Initiator, volle N5-/M3-Abnahme und sonstige
 Gates offen; PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: Korrigierter CONTROL-Faultharness live validiert
+
+- Frischer vorab commiteter Ein-Ausführungsplan cd54446, N0/45 s/Seed 1701,
+  operator→robot CONTROL-only tc-Drop. Alter FAILED-Versuch unverändert. 115
+  Hosttests/Syntaxchecks bestanden; Sourcehashes und acht Runtimehashes zum
+  vorher getesteten SDK-/ROS-Build vorher/nachher gleich. Keine Runtime-/Policy-/
+  Timeout-/Dependencyänderung, keine frischen SDK-/ROS-/M2-Tests behauptet.
+- Lokal .local/m3/20261106T213402911275Z. Filter installiert/validiert/entfernt,
+  leeres Restore-Readback. Finaler Pre-Remove-Counter 303 Drops/39356 Bytes,
+  kein garantierter Lifetimecounter. Garantiert aktives VM-Intervall 6,410313587 s,
+  angefordert sechs Hostsekunden. Keine Epoch-Subtraktion/Exaktdauerbehauptung.
+- Bekannte Signature beobachtet: operator gleiche Socketidentität, 43 verfügbare
+  benachbarte Readpaare komplett im Intervall: DATA-sent +137 inkl.135 Retransmits,
+  ACK-sent +159; Post-Filter-CONTROL out 0, Robot alter CONTROL in 0. Reverse alter
+  CONTROL am Operator 159, SENSOR-Source je Hook 1046 plus262 Parity, nach Remove
+  im Drei-Sekundenfenster CONTROL out je92. Countertypen/Zeitgrenzen verschieden,
+  keine Summierung von Retransmits auf DATA/keine exakte Dropgleichheit.
+- Robot LinkLoss 5,001006502 s nach letztem alten incoming CONTROL, dann Close
+  ohne SessionError. Operator-Loss ca.1,195 ms später. Anders als historische
+  ca.fünf Sekunden Endpoint-Close-Abstand; kein Beweis desselben N5-Initiators.
+  Bekannte Filterursache dieses Experiments, keine Rückwärtsattribution.
+- Acht bestätigte Erfolge/Effekte, Intent9 UNKNOWN/reconcile-required Revision0
+  ohne gültiges Result, 14 Slots übersprungen. Immutable geschlossene Journale:
+  neun Sender-/acht Receiverrecords, acht Erfolge/Hashes/Kontexte/Resultate passen;
+  Receiverdeadline konservativ früher, nicht Gleichheit unterstellt. Für9 genau
+  ein SDK-Handoff, Receiverrecord fehlt, Peer-NOT_FOUND und UNKNOWN nach Budget
+  erhalten. Keine Nonexecution/Expiry/Replay-/Result-Erfindung. Harness PASSED
+  erlaubt UNKNOWN und bedeutet keine Qualification-Abnahme.
+- Providerlogs643/22/604, Commandtrace371/5/10 vollständig, zero Drops/Exhaustion.
+  Max Readspan2,519750 ms/Startgap114,167500 ms beobachtet, keine Bounds. PCAP
+  23862 Records/Filter je Endpoint zero Kerneldrops, Native23879/23882 zero
+  Reserve-/Copyverluste bei separaten Populationen. Realtimefenster withheld.
+  Source/Published/Observer11291/10258/10248, alle Conservationbalances0.
+- Evidenz evidence/m3-control-egress-validation-2026-11-06/ mit neuem Plan,
+  Originalmanifest/Logs/Result, unabhängiger Provider-vs-Egress-/Flowanalyse,
+  Journalvergleich, Inventaren/Testlog/Rohhashes. Payloads/Prefixes/Journale/
+  Clocks lokal; keine Secrets/Inspect-/Env-Dumps. Historische Fehlläufe unverändert.
+
+**Weiter:** Validierte Unterscheidung in separatem prospektiv begrenztem N5-
+Diagnoseplan mit Providerdaten/Flowisolierung anwenden. Historischer Initiator,
+UNKNOWNs, volle N5-/M3- und sonstige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.

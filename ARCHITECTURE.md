@@ -1382,5 +1382,9 @@ counter reads wholly inside active brackets. It retains reverse CONTROL,
 SENSOR and post-restoration observations independently. No payload decryption,
 physical delivery, command nonexecution or historical initiating-cause claim
 is implied. The first live attempt failed on a tc JSON omission and remains
-failed; the parser/cleanup fix has host regression tests but has not been
-reexecuted live. See evidence/m3-control-egress-fault-2026-11-06/.
+failed. A fresh one-execution plan subsequently validated the corrected harness:
+selected provider sends increased with zero outgoing CONTROL tap observations,
+positive filter drops/reverse CONTROL/SENSOR and post-removal CONTROL. One
+command's UNKNOWN state remains intact. This known injected-fault signature is
+not attribution of the historical N5 cause or full N4/M3 acceptance. See
+evidence/m3-control-egress-validation-2026-11-06/.

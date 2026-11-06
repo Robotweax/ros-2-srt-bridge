@@ -868,7 +868,9 @@ types and do not prove delivery. See the prospective
 
 An experimental `--control-egress-fault operator|robot` runner option injects a
 six-second CONTROL-only egress drop in owned containers. It requires N0 >=45 s
-and command/provider/monotonic diagnostics. The first live attempt failed on a
-tc JSON validation assumption; the parser and error cleanup are fixed and host
-tested, with successful live validation still pending. See the
-[retained failure and plan](evidence/m3-control-egress-fault-2026-11-06/README.md).
+and command/provider/monotonic diagnostics. After a retained tc JSON validation
+failure, one fresh planned run validated the corrected harness: provider send
+counters grew with zero outgoing CONTROL tap observations during the injected
+filter drop, and traffic resumed after removal. One command remains UNKNOWN;
+this is diagnostic validation, with historical N5 cause and M3 still open. See
+[validation and limits](evidence/m3-control-egress-validation-2026-11-06/README.md).
