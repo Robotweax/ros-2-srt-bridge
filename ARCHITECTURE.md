@@ -1330,3 +1330,33 @@ assigned a cause; future incidents require new observations. Record layout grows
 for the detail field, so consumers are rebuilt; diagnostic capacity stays 256
 records (128 per owner), with overflow still fatal to completeness. Command,
 wire, IPC, deadline, lease and replay semantics remain unchanged.
+
+### Opt-in CONTROL provider observations (2026-11-06)
+
+`TransportConfig::provider_diagnostics` is a separate one-producer/one-consumer
+SPSC queue, disabled by default. The transport owner samples CONTROL at a target
+100 ms cadence, and before CONTROL close through the normal drop path. No catch-up
+samples are synthesized. Each read retains monotonic begin/end, owner epoch,
+session, socket ID and generation, states before/after, actual peer-idle option
+readback, availability/error, cumulative DATA/ACK/NAK/byte counters and buffer,
+flight and RTT gauges. Unavailable values are placeholders, not measurements.
+RTT zero can mean no estimate. SDK reads use `srt_bstats(..., 0)` and do not clear
+intervals, but take provider locks and perform statistics bookkeeping; observer
+work can perturb scheduling. The pinned SDK dependency and protocol policy stay
+unchanged. Public configuration changed, so SDK consumers must rebuild.
+
+The queue has 128 records and a 75000-record lifetime budget per owner. Overflow
+and budget exhaustion remain explicit; sequence gaps are never backfilled.
+The ROS `provider_diagnostics` parameter drains/serializes outside the transport
+owner and emits final accounting after owner join. `tools/run_m3.py
+--provider-diagnostics` requires complete logs for every bridge incarnation;
+`tools/m3_provider_stats.py` retains read spans/cadence gaps and computes only
+adjacent, available cumulative deltas within the same owner/generation/socket.
+Do not share a queue between simultaneous owners or consumers. Gauges are not
+counter deltas. Saturated 32-bit cumulative counters are flagged.
+
+These selected counters exclude keepalive, handshake and ACKACK traffic. DATA
+send counts reflect provider send accounting, not application execution or peer
+delivery. Flat counters do not prove UDP silence. A separately qualified egress
+capture is still required to locate an observed gap relative to the tap; neither
+observer alone identifies a historical initiating cause.

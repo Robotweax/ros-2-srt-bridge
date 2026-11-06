@@ -857,3 +857,11 @@ one-way CONTROL silence test exercises provider loss followed by session close o
 IPv4/IPv6. Both native tests and 98 host tests pass. The original operator-side
 withholding mechanism remains unproven; no timeout, production behavior or failed
 qualification verdict was changed.
+
+For bounded development diagnostics, the ROS `provider_diagnostics` parameter
+(default `false`) or M3 runner `--provider-diagnostics` records non-clearing
+CONTROL provider counters and buffer gauges at a target 100 ms cadence. Read
+brackets, socket generations, unavailable samples and queue/budget loss are
+explicit. Sampling adds SDK lock/bookkeeping work. Counters omit some UDP packet
+types and do not prove delivery. See the prospective
+[diagnostic plan](evidence/m3-provider-diagnostics-2026-11-06/diagnostic-plan.json).

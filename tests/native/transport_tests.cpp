@@ -195,15 +195,31 @@ void lifecycle(bool ipv6){
 
 void one_way_control_silence(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
-    auto lc=config(Role::listener,ip,key);TransportOwner listener(lc);
+    auto lc=config(Role::listener,ip,key);lc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();TransportOwner listener(lc);
     until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"silence listener missing");
     ControlGate gate(ipv6,listener.snapshot().control_port);
     auto cc=config(Role::caller,ip,key);cc.control.port=gate.listen_port();cc.sensor.port=listener.snapshot().sensor_port;
+    cc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();
     cc.command_trace=std::make_shared<CommandTrace>();TransportOwner caller(cc);ready(caller,listener);
     check(gate.forwarded_reply>0&&gate.forwarded_request>0&&!gate.failed,"gate did not forward handshake both ways");
+    ProviderObservation first[2]{},last[2]{};unsigned observed[2]{};
+    auto collect=[&]{for(unsigned side=0;side<2;++side){ProviderObservation row;
+        auto& buffer=side?lc.provider_diagnostics:cc.provider_diagnostics;
+        while(buffer->poll(row)){
+            check(row.end_ns>=row.begin_ns,"invalid provider sampling bracket");
+            if(!row.available)continue;
+            check(row.idle_timeout_available&&row.idle_timeout_ms==5000,"missing actual provider idle readback");
+            if(!observed[side])first[side]=row;
+            check(row.owner_epoch==first[side].owner_epoch&&row.generation==first[side].generation&&row.socket==first[side].socket,"provider observation crossed connection");
+            last[side]=row;++observed[side];
+        }
+    }};
+    until([&]{collect();return observed[0]&&observed[1];},"no connected provider observations");
     const auto reverse_before=gate.forwarded_request.load();const auto blocked=TransportOwner::monotonic_ns();gate.drop_reply=true;
+    std::int64_t settled_received=-1;
     CommandTraceEvent event;bool control_lost=false,session_closed=false;std::uint64_t lost_at=0;
-    until([&]{while(cc.command_trace->poll(event)){
+    until([&]{collect();if(last[0].begin_ns>blocked+1000000000ULL&&settled_received<0)settled_received=last[0].data_received;
+        while(cc.command_trace->poll(event)){
         if(event.point==CommandTracePoint::link_lost&&event.detail==0){
             check(event.reason==CommandTraceReason::socket_state||event.reason==CommandTraceReason::epoll_error||event.reason==CommandTraceReason::receive_error,"one-way silence did not use provider loss path");
             control_lost=true;lost_at=event.monotonic_ns;
@@ -215,7 +231,13 @@ void one_way_control_silence(bool ipv6){
     check(lost_at>=blocked+3000000000ULL,"provider loss was not an idle interval");
     check(gate.dropped>0&&gate.forwarded_request>reverse_before&&!gate.failed,"silence was not directional/observed");
     check(cc.command_trace->dropped()==0,"silence cause trace incomplete");
+    collect();
+    check(observed[0]>=20&&observed[1]>=20,"insufficient provider samples during controlled silence");
+    check(settled_received>=0&&last[0].data_received==settled_received,"caller received DATA despite directional gate");
+    check(last[1].data_sent>first[1].data_sent||last[1].ack_sent>first[1].ack_sent||last[1].nak_sent>first[1].nak_sent,"sender provider counters did not grow despite dropped replies");
+    check(cc.provider_diagnostics->dropped()==0&&lc.provider_diagnostics->dropped()==0,"provider observation loss");
     stop(caller);stop(listener);
+    std::cout<<"PASS provider observations: caller="<<observed[0]<<", listener="<<observed[1]<<", idle_readback_ms="<<last[0].idle_timeout_ms<<"\n";
     std::cout<<"PASS one-way CONTROL silence: provider loss before session close; blocked_ms="<<(lost_at-blocked)/1000000<<", dropped="<<gate.dropped.load()<<", reverse_forwarded="<<gate.forwarded_request.load()-reverse_before<<"\n";
 }
 

@@ -67,7 +67,7 @@ struct TransportOwner::Impl {
     std::array<std::uint32_t,8> route_ids{};
     std::size_t route_count=0;
     int epoll=-1;
-    std::uint64_t next_probe=0;
+    std::uint64_t next_probe=0,next_provider_sample=0;
     std::atomic<bool> stopping{false};
     std::thread thread;
     mutable std::mutex mutex;
@@ -186,7 +186,37 @@ struct TransportOwner::Impl {
         require(srt_bind(link.listener,address.ptr(),address.size)!=SRT_ERROR&&srt_listen(link.listener,4)!=SRT_ERROR);add(link.listener,false);
         (i?current.sensor_port:current.control_port)=port(link.listener);
     }
+    void provider_sample(bool before_close=false){
+        if(!config.provider_diagnostics||config.provider_diagnostics->exhausted())return;
+        const auto now=monotonic_ns();
+        if(!before_close&&now<next_provider_sample)return;
+        next_provider_sample=now+100000000ULL;
+        ProviderObservation o;o.begin_ns=now;o.owner_epoch=config.session.local_epoch;
+        o.session=session.session_id();o.generation=links[0].generation;o.socket=links[0].fd;o.before_close=before_close;
+        if(links[0].fd!=SRT_INVALID_SOCK){
+            o.state_before=unsigned(srt_getsockstate(links[0].fd));o.unavailable=2;
+            int size=sizeof(o.idle_timeout_ms);
+            o.idle_timeout_available=srt_getsockflag(links[0].fd,SRTO_PEERIDLETIMEO,&o.idle_timeout_ms,&size)!=SRT_ERROR;
+            if(links[0].ready){
+                SRT_TRACEBSTATS stats{};
+                if(srt_bstats(links[0].fd,&stats,0)==SRT_ERROR){o.unavailable=3;o.error=srt_getlasterror(nullptr);}
+                else{
+                    o.available=true;o.unavailable=0;
+                    o.data_sent=stats.pktSentTotal;o.data_received=stats.pktRecvTotal;o.retransmitted=stats.pktRetransTotal;
+                    o.ack_sent=stats.pktSentACKTotal;o.ack_received=stats.pktRecvACKTotal;
+                    o.nak_sent=stats.pktSentNAKTotal;o.nak_received=stats.pktRecvNAKTotal;o.undecrypt=stats.pktRcvUndecryptTotal;
+                    o.bytes_sent=stats.byteSentTotal;o.bytes_received=stats.byteRecvTotal;
+                    o.send_buffer_packets=stats.pktSndBuf;o.send_buffer_bytes=stats.byteSndBuf;
+                    o.receive_buffer_packets=stats.pktRcvBuf;o.receive_buffer_bytes=stats.byteRcvBuf;
+                    o.flight_packets=stats.pktFlightSize;o.rtt_ms=stats.msRTT;
+                }
+            }
+            o.state_after=unsigned(srt_getsockstate(links[0].fd));
+        }
+        o.end_ns=monotonic_ns();config.provider_diagnostics->record(o);
+    }
     void drop(unsigned i,bool permanent){
+        if(i==0&&links[0].fd!=SRT_INVALID_SOCK)provider_sample(true);
         auto& link=links[i];close_fd(link.fd);link.ready=false;
         if(config.session.role==Role::caller){
             const auto time=monotonic_ns();
@@ -437,7 +467,7 @@ struct TransportOwner::Impl {
                 if(config.session.role==Role::listener){listen(0);listen(1);}
                 current.running=true;publish();
                 while(!stopping.load(std::memory_order_relaxed)){
-                    timers();publish();process_checks();inputs();send(0);send(1);
+                    timers();provider_sample();publish();process_checks();inputs();send(0);send(1);
                     if(links[0].ready){int events=SRT_EPOLL_ERR|(control_space()?SRT_EPOLL_IN:0);require(srt_epoll_update_usock(epoll,links[0].fd,&events)!=SRT_ERROR);}
                     // Keep the active sender's maximum requested wait at 1ms.
                     // If a paced sample becomes eligible sooner, poll SRT first,

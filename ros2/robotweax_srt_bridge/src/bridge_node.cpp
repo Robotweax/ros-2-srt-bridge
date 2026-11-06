@@ -29,6 +29,7 @@ class BridgeNode final:public rclcpp::Node {
     std::unique_ptr<core::CommandEndpoint> endpoint_;
     bool caller_=false,sensor_qos_verified_=false;
     std::shared_ptr<core::CommandTrace> command_trace_;
+    std::shared_ptr<core::ProviderDiagnostics> provider_diagnostics_;
     rclcpp::Subscription<Imu>::SharedPtr imu_in_;rclcpp::Subscription<Joints>::SharedPtr joints_in_;
     rclcpp::Publisher<Imu>::SharedPtr imu_out_;rclcpp::Publisher<Joints>::SharedPtr joints_out_;
     rclcpp::Publisher<msgs::msg::BridgeState>::SharedPtr diagnostics_;
@@ -61,11 +62,49 @@ class BridgeNode final:public rclcpp::Node {
             std::cout<<line.str()<<std::endl;
         }
     }
+    void provider_diagnostics(){
+        if(!provider_diagnostics_)return;
+        core::ProviderObservation o;
+        for(unsigned n=0;n<core::ProviderDiagnostics::capacity&&provider_diagnostics_->poll(o);++n){
+            std::ostringstream line;line.precision(17);line<<"PROVIDER_STATS {";
+            line<<"\"sequence\":"<<o.sequence;
+            line<<",\"begin_ns\":"<<o.begin_ns;
+            line<<",\"end_ns\":"<<o.end_ns;
+            line<<",\"generation\":"<<o.generation;
+            line<<",\"socket\":"<<o.socket;
+            line<<",\"state_before\":"<<o.state_before;
+            line<<",\"state_after\":"<<o.state_after;
+            line<<",\"unavailable\":"<<o.unavailable;
+            line<<",\"error\":"<<o.error;
+            line<<",\"idle_timeout_ms\":"<<o.idle_timeout_ms;
+            line<<",\"available\":"<<o.available;
+            line<<",\"idle_timeout_available\":"<<o.idle_timeout_available;
+            line<<",\"before_close\":"<<o.before_close;
+            line<<",\"data_sent\":"<<o.data_sent;
+            line<<",\"data_received\":"<<o.data_received;
+            line<<",\"retransmitted\":"<<o.retransmitted;
+            line<<",\"ack_sent\":"<<o.ack_sent;
+            line<<",\"ack_received\":"<<o.ack_received;
+            line<<",\"nak_sent\":"<<o.nak_sent;
+            line<<",\"nak_received\":"<<o.nak_received;
+            line<<",\"undecrypt\":"<<o.undecrypt;
+            line<<",\"bytes_sent\":"<<o.bytes_sent;
+            line<<",\"bytes_received\":"<<o.bytes_received;
+            line<<",\"send_buffer_packets\":"<<o.send_buffer_packets;
+            line<<",\"send_buffer_bytes\":"<<o.send_buffer_bytes;
+            line<<",\"receive_buffer_packets\":"<<o.receive_buffer_packets;
+            line<<",\"receive_buffer_bytes\":"<<o.receive_buffer_bytes;
+            line<<",\"flight_packets\":"<<o.flight_packets;
+            line<<",\"rtt_ms\":"<<o.rtt_ms;
+            line<<",\"owner_epoch\":\""<<hex(o.owner_epoch)<<"\",\"session\":\""<<hex(o.session)<<"\"}";
+            std::cout<<line.str()<<std::endl;
+        }
+    }
     void events(){core::CommandEvent event;for(unsigned n=0;n<16&&endpoint_->poll(event);++n){std::array<std::uint8_t,16> id{};for(std::size_t i=0;i<16;++i)id[i]=std::to_integer<unsigned>(event.request_id[i]);auto& c=cache(id,event.route).status;
         c.query_queued=false;c.local_error=unsigned(event.error);c.peer_error=event.peer_error?unsigned(event.peer_error->code):0;
         if(event.entry){const auto& e=*event.entry;c.found=true;c.state=unsigned(e.state);c.reason=unsigned(e.reason);c.revision=e.revision;c.rate_hz=e.command.rate_hz;c.expected_generation=e.command.expected_generation;c.new_generation=e.command.new_generation;c.result_valid=e.result.valid;c.result_rate_hz=e.result.rate_hz;c.result_generation=e.result.generation;}
     }}
-    void pump(){command_trace();events();if(caller_)return;core::TransportMessage packet;for(unsigned n=0;n<8&&endpoint_->transport().poll_sample(packet);++n){
+    void pump(){command_trace();provider_diagnostics();events();if(caller_)return;core::TransportMessage packet;for(unsigned n=0;n<8&&endpoint_->transport().poll_sample(packet);++n){
         if(packet.envelope.route_id==1){Imu message;if(!rb::decode(packet.body(),message)){++invalid_;continue;}if(core::TransportOwner::monotonic_ns()>=packet.deadline_ns){++stale_;continue;}if(!endpoint_->transport().authorize_sample(packet)){++context_;continue;}const auto age=250000000ULL-(packet.deadline_ns-core::TransportOwner::monotonic_ns());
             if(!imu_metrics_.observe(age)){++stale_;continue;}imu_out_->publish(message);imu_seq_=packet.envelope.sequence;imu_session_=packet.context.session;}
         else if(packet.envelope.route_id==2){Joints message;if(!rb::decode(packet.body(),message)){++invalid_;continue;}if(core::TransportOwner::monotonic_ns()>=packet.deadline_ns){++stale_;continue;}if(!endpoint_->transport().authorize_sample(packet)){++context_;continue;}const auto age=250000000ULL-(packet.deadline_ns-core::TransportOwner::monotonic_ns());
@@ -110,6 +149,7 @@ public:
         core::TransportConfig transport{session,{address,std::uint16_t(control_port)},{address,std::uint16_t(sensor_port)},key};core::WorkerOptions worker;worker.executable=worker_path;worker.journal.path=journal;worker.journal.local_peer_id=peer;worker.journal.remote_peer_id=remote;worker.journal.process_epoch=session.local_epoch;worker.journal.side=caller_?core::JournalSide::receiver:core::JournalSide::sender;worker.external_rate_handler=caller_;
         local_epoch_=session.local_epoch;
         if(declare_parameter<bool>("command_diagnostics",false)){command_trace_=std::make_shared<core::CommandTrace>();transport.command_trace=command_trace_;}
+        if(declare_parameter<bool>("provider_diagnostics",false)){provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.provider_diagnostics=provider_diagnostics_;}
         endpoint_=std::make_unique<core::CommandEndpoint>(core::EndpointOptions{transport,worker});
         const auto qos=rclcpp::SensorDataQoS().keep_last(1);
         if(caller_){imu_in_=create_subscription<Imu>(imu_input,qos,[this](Imu::ConstSharedPtr m){ingress(1,*m);});joints_in_=create_subscription<Joints>(joint_input,qos,[this](Joints::ConstSharedPtr m){ingress(2,*m);});}
@@ -125,7 +165,8 @@ public:
         metrics_=create_service<msgs::srv::GetBridgeMetrics>("/bridge/get_metrics",[this](msgs::srv::GetBridgeMetrics::Request::SharedPtr, msgs::srv::GetBridgeMetrics::Response::SharedPtr response){response->snapshot=metrics();response->monotonic_ns=core::TransportOwner::monotonic_ns();});
         diagnostics_=create_publisher<msgs::msg::BridgeState>("/bridge/state",rclcpp::QoS(1).reliable().durability_volatile());pump_=create_wall_timer(std::chrono::milliseconds(1),[this]{pump();});state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
     }
-    ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();
+    ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();
+            if(provider_diagnostics_)std::cout<<"PROVIDER_STATS_STATUS {\"attempted\":"<<provider_diagnostics_->attempted()<<",\"dropped\":"<<provider_diagnostics_->dropped()<<",\"exhausted\":"<<provider_diagnostics_->exhausted()<<",\"limit\":"<<provider_diagnostics_->limit()<<"}"<<std::endl;
             if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}}
 };
 }
