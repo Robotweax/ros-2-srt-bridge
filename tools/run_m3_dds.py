@@ -13,6 +13,7 @@ from m3_dds import DdsLab,summarize_sensor_window,DDS_PROFILES,verify_profile,su
 from m3_network import SEEDS
 from m3_capture import summarize
 from m3_window_measurement import summarize_endpoints
+import m3_monotonic_capture as mono_capture
 from m3_results import summarize_commands
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -29,6 +30,7 @@ def main():
     parser.add_argument('--smoke',action='store_true')
     parser.add_argument('--seconds',type=int)
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 binaries; recorded as development reuse')
+    parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     seconds=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
@@ -75,7 +77,8 @@ def main():
             binary=ROOT/'install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
             report['command_node_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
         report.update(verify_profile(ROOT,run,image,args.dds_profile,execute,build_probe=not args.skip_build))
-        lab=DdsLab(ROOT,run,image,args.dds_profile);lab.start()
+        if args.monotonic_capture:report['monotonic_capture_config']=mono_capture.prepare(ROOT,run,image,execute,args.skip_build)
+        lab=DdsLab(ROOT,run,image,args.dds_profile,monotonic_capture=args.monotonic_capture);lab.start()
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
         # time namespaces. Capture the raw proof rather than assuming host time.
@@ -89,6 +92,7 @@ def main():
             p=subprocess.Popen(['docker','exec',name,'tcpdump','-n','-i','eth0','-s','0','-B','4096','-U',
                 '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT)
             captures.append((p,log))
+        if args.monotonic_capture:mono_capture.start(run,inside,lab,captures)
         if args.profile=='N5':
             lab.inside('operator','competitor-server',['iperf3','-s','-D'])
             log=(run/'competitor-process.log').open('w')
@@ -141,7 +145,7 @@ def main():
         if lab:
             for role in lab.containers:
                 try:lab.inside(role,role+'-capture-stop',['python3','-c',
-                    'import pathlib,os,signal; [(os.kill(int(p.parent.name),signal.SIGINT)) for p in pathlib.Path("/proc").glob("[0-9]*/comm") if p.read_text().strip() in ("tcpdump","iperf3")]'])
+                    'import pathlib,os,signal; [(os.kill(int(p.parent.name),signal.SIGINT)) for p in pathlib.Path("/proc").glob("[0-9]*/comm") if p.read_text().strip() in ("tcpdump","iperf3","m3_mono_cap")]'])
                 except Exception:pass
             for p,log in captures:
                 try:p.wait(timeout=5)
@@ -157,6 +161,7 @@ def main():
                     if capture['unaccounted']:raise RuntimeError('unaccounted DDS capture frames')
                     if not any(key.endswith('/dds_rtps') for key in capture['classes']):raise RuntimeError('no RTPS observed on eth0')
                     if any('_srt_' in key or '_source_data' in key or '_fec_parity' in key for key in capture['classes']):raise RuntimeError('SRT traffic on DDS baseline')
+                if args.monotonic_capture:report['monotonic_captures']=mono_capture.summarize_run(run,lab.addresses,report['endpoint_measurements'],allow_udp_fragments=True)
                 report['window_captures']={}
                 for window,measurement in report.get('endpoint_measurements',{}).get('windows',{}).items():
                     clock=measurement['wire_clock']
@@ -165,7 +170,7 @@ def main():
                             allow_udp_fragments=True,timestamp_window=clock['timestamp_bounds_ns'])['time_window'] for role,address in lab.addresses.items()}
 
                 report['capture_scope']='whole-run Ethernet frames including discovery, simulator diagnostics/services and N5 competitor; multicast ingress may be direction other; IP fragment frames counted separately without RTPS/payload attribution; not matched-window sensor bytes'
-            except Exception as error:report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None)
+            except Exception as error:report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None);report.pop('monotonic_captures',None)
             if competitor is not None:
                 try:
                     report['competitor_check']=summarize_competitor(json.loads((run/'competing-traffic.json').read_text()))

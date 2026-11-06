@@ -988,3 +988,23 @@ Eigenständige Read-only-Native-/Python-Probe vergleicht libc und direkte
 clock_gettime-Syscalls, RAW/BOOTTIME sowie adjtimex(modes=0). Keine Uhränderung,
 keine Capabilities/Netzwerkverbindung. Neue Evidenz unter
 `evidence/m3-clock-diagnosis-2026-11-06/`; kein abgeleiteter Transportvorteil.
+
+
+M3-Monotonic-Observer (2026-11-06): optionale `--monotonic-capture` in beiden
+Runnern. Eigenständiger AF_PACKET-Socketfilter mit bpf_ktime_get_ns, 128-Byte-
+Prefix und skb-Länge, ohne tc/XDP-/Netzwerk-Verdict. Return 0 betrifft nur den
+Observer-Socket; Anwendungsverkehr bleibt unverändert. CAP_BPF nur bei Opt-in
+in eigenen Endpoints, kein Privileged-/Host-Netzwerk. Kernel-Monotonic-Domain
+verlangt Time-Namespace-Offsets 0 und vorhandenen gemeinsamen Boot-/Clock-Proof.
+16-MiB-Ring, 128-MiB-Dateigrenze, atomare Seen/Submitted/Reserve-/Copy-Fehlerzähler,
+Socket-Close/Drain und stabile Abschlusszähler. Fehler verwerfen Resultate.
+
+Separate `monotonic_captures` über dieselben [start,end)-Phasen. Realtime-PCAP-
+Gates und verworfene Clock-Mappings bleiben erhalten. IPv4-UDP-Präfix genügt
+für maximale IPv4-Header plus SRT-/RTPS-Klassifikation; DDS-IPv4-Fragmente getrennt
+mit unbekanntem UDP-Payload-Total. Bekannte Nicht-UDP-Frames werden ignoriert,
+unbekannte/UDP-IPv6-Ketten verworfen. Kein physischer Wire-/Delivery- oder
+Population-Attributionsnachweis. Endpoint-/Richtungszahlen nicht als eindeutige
+Netzwerkbytes zusammenzählen. Observer-Prozess von CPU-Scope ausgeschlossen,
+Kernelarbeit kann Endpoint-Tasks belastet werden; keine behauptete kostenlose
+Messung. Evidenz `evidence/m3-monotonic-capture-2026-11-06/`.

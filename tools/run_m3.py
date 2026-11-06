@@ -17,6 +17,7 @@ import time
 from m3_network import NetworkLab, SEEDS
 from m3_capture import summarize
 from m3_window_measurement import summarize_endpoints
+import m3_monotonic_capture as mono_capture
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -32,6 +33,7 @@ def main():
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 build during development')
     parser.add_argument('--build-image',action='store_true')
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
+    parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     duration=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
@@ -80,7 +82,8 @@ def main():
                 'colcon --log-base '+inside+'/colcon-test test --base-paths ros2 --build-base build/m3-ros '
                 '--install-base install/m3-ros --return-code-on-test-failure; colcon test-result --test-result-base build/m3-ros --verbose'))
         execute('versions',offline('dpkg-query -W; tc -V'))
-        lab=NetworkLab(ROOT,run,image);lab.start(credential)
+        if args.monotonic_capture:report['monotonic_capture_config']=mono_capture.prepare(ROOT,run,image,execute,args.skip_build)
+        lab=NetworkLab(ROOT,run,image,monotonic_capture=args.monotonic_capture);lab.start(credential)
         clocks={role:lab.inside(role,role+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for role in lab.containers}
         if len(set(clocks.values()))!=1:raise RuntimeError('endpoint measurements require common VM clock namespaces')
         report['clock_namespace_proof']=clocks
@@ -90,6 +93,7 @@ def main():
             argv=['docker','exec',name,'tcpdump','-n','-i','eth0','-s','0','-B','4096','-U',
                   '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
+        if args.monotonic_capture:mono_capture.start(run,inside,lab,captures)
         if args.profile=='N5':
             lab.inside('operator','competitor-server',['iperf3','-s','-D'])
             log=(run/'competitor-process.log').open('w')
@@ -136,7 +140,7 @@ def main():
         if lab:
             for role in lab.containers:
                 try:lab.inside(role,role+'-capture-stop',['python3','-c',
-                    'import pathlib,os,signal; [(os.kill(int(p.parent.name),signal.SIGINT)) for p in pathlib.Path("/proc").glob("[0-9]*/comm") if p.read_text().strip() in ("tcpdump","iperf3")]'])
+                    'import pathlib,os,signal; [(os.kill(int(p.parent.name),signal.SIGINT)) for p in pathlib.Path("/proc").glob("[0-9]*/comm") if p.read_text().strip() in ("tcpdump","iperf3","m3_mono_cap")]'])
                 except Exception:pass
             for p,log in captures:
                 try:p.wait(timeout=5)
@@ -154,6 +158,7 @@ def main():
                         raise RuntimeError('incomplete packet capture for '+role)
                     if any(key.endswith('/dds_rtps') for key in capture['classes']):raise RuntimeError('DDS traffic leaked onto the SRT-only network')
                     if capture['unaccounted']:raise RuntimeError('capture contains unaccounted frames')
+                if args.monotonic_capture:report['monotonic_captures']=mono_capture.summarize_run(run,lab.addresses,report['endpoint_measurements'],allow_udp_fragments=False)
                 report['window_captures']={}
                 for window,measurement in report.get('endpoint_measurements',{}).get('windows',{}).items():
                     clock=measurement['wire_clock']
@@ -162,7 +167,7 @@ def main():
                             allow_udp_fragments=False,timestamp_window=clock['timestamp_bounds_ns'])['time_window'] for role,address in lab.addresses.items()}
 
             except Exception as error:
-                report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None)
+                report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None);report.pop('monotonic_captures',None)
             lab.cleanup()
         for p,log in processes:
             try:p.wait(timeout=10)

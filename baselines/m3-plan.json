@@ -426,5 +426,24 @@
     "process_sample_minimum_spacing_ns": 250000000,
     "relative_drift_ppm": 1000,
     "scope": "finite sampling cannot rule out hidden steps; no clock setting or transport qualification waiver"
+  },
+  "monotonic_capture_followup": {
+    "status": "experimental optional kernel-monotonic socket observer",
+    "evidence": "evidence/m3-monotonic-capture-2026-11-06",
+    "option": "--monotonic-capture",
+    "extra_capability": "BPF only on opted-in owned endpoint containers",
+    "clock": "bpf_ktime_get_ns; zero time namespace offsets required",
+    "scope": "AF_PACKET observation times and skb frame lengths; not physical transmission/delivery or source population overhead",
+    "limits": {
+      "ring_bytes": 16777216,
+      "file_bytes": 134217728,
+      "prefix_bytes": 128
+    },
+    "remaining": [
+      "full durations and seeds",
+      "capture overhead/control of host resource costs",
+      "physical observation-stage/offload qualification",
+      "SRT/DDS semantic and crypto alignment"
+    ]
   }
 }

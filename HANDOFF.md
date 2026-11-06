@@ -1119,3 +1119,41 @@ Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
 Packet-Timestamp-Erfassung entwickeln, ohne Driftmodell/Unsicherheit zu lockern.
 Danach kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen.
 M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: optionaler Kernel-Monotonic-Packet-Observer
+
+- `--monotonic-capture` in SRT-/DDS-Runner: eigener passiver AF_PACKET-Socketfilter
+  mit bpf_ktime_get_ns, skb-Länge, Interface/Richtung und 128-Byte-Prefix. Keine
+  Realtime-Konvertierung. Gemeinsame vorhandene Source-/Fenced-Phasen [start,end).
+  Eigene Ergebnisse `monotonic_captures`; Realtime-PCAP-Gates unverändert.
+- Standalone g++/libbpf-Tool erzeugt verifiergeprüfte BPF-Instruktionen direkt,
+  ohne clang/BTF/neues Image. CAP_BPF nur auf eigenen Opt-in-Endpunkten;
+  Default-Caps unverändert. Kein Host-/Privileged-/tc-/XDP-/Clock-Eingriff.
+  Zero Time-Namespace-Offsets zwingend; vorhandener gemeinsamer Boot-/Clock-Proof.
+- 16-MiB-Ring, Datei unter 128 MiB, atomare Seen-/Submitted-/Reserve-/Copy-Zähler,
+  Socket-Close/Drain/stabile Footer-Zähler plus Coverage-/Records-Gates.
+  Fehler verwerfen Resultate. Präfixparser IPv4 UDP, DDS-IPv4-Fragmente getrennt;
+  bekannte IPv6-Nicht-UDP-Ketten begrenzt prüfen/ignorieren, IPv6-UDP/unsupported
+  verwerfen. Kein behaupteter physischer Wire-/Delivery-/Population-Nachweis.
+  Kernel-Observer-Arbeit kann Endpoint-CPU belastet werden; Messvariante explizit.
+- 58 Python-Tests bestanden. Isoliert 40 Datagramme/80 Loopback-Observations:
+  Längen stimmen, sämtliche Kernelstamps innerhalb Userspace-Send/Receive-
+  Monotonic-Brackets. Gezielter 4-KiB-Overflow: 2.000 Seen, 25 Submitted,
+  1.975 Reserve-Fehler, erwarteter Exit 2/Analyzer-Reject. Ohne CAP_BPF kein Ready.
+- Vier finale Source-153-Dateien-Inventare passen: SRT N0 Smoke15s/8 bestätigt,
+  DDS N0 Smoke15s/8 bestätigt, paced N5 30s/15 bestätigt, Default-Sensor Smoke15s
+  ohne Observer/BPF-Cap. Alle funktional bestanden; alle Opt-in-Phasen beider
+  Enden CPU-/Monotonic-Capture-qualifiziert, kein Recorderverlust. Installierte
+  Scripts bytegleich; 56 Produktionsquellen und Command-/Simulator-Binaries
+  unverändert. Keine neue ROS-GTest-/volle-M2-Ausführung.
+- Evidenz `evidence/m3-monotonic-capture-2026-11-06/`: Roh-Hashes, native Provenienz,
+  Namespace-/Capability-Proofs, Counter/Phasen, synthetische Timestamp-Brackets.
+  Frühe IPv6-Parserfehler und längere Development-Runs vor CPU-Scope-Textkorrektur
+  separat erhalten. Roh-PCAPs/Prefixes/Journale lokal. Whole-capture-Korroboration
+  ist wegen verschiedener Socket-Lebensdauer keine Gleichheits-/Loss-Garantie.
+
+**Weiter:** längere Läufe/Seeds, Observer-Overhead und Tap-/Offload-Scope
+qualifizieren; danach kontrollierter SRT-/DDS-Kostenvergleich bei angeglichener
+Pacing-/Reconciliation-/Age-/Crypto-Semantik. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.

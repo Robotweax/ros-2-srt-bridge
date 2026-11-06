@@ -55,8 +55,8 @@ def summarize_competitor(data):
 
 
 class DdsLab(NetworkLab):
-    def __init__(self,root,run,image,transport_profile='system'):
-        super().__init__(root,run,image)
+    def __init__(self,root,run,image,transport_profile='system',*,monotonic_capture=False):
+        super().__init__(root,run,image,monotonic_capture=monotonic_capture)
         if transport_profile not in DDS_PROFILES:raise ValueError('unsupported DDS transport profile')
         self.transport_profile=transport_profile
 
@@ -76,7 +76,8 @@ class DdsLab(NetworkLab):
             name=self.name+'-'+role
             self.containers[role]=name
             self.execute(role+'-create',['docker','run','-d','--pull=never','--platform','linux/amd64',
-                '--network',self.name,'--name',name,'--cap-add','NET_ADMIN',
+                '--network',self.name,'--name',name,'--cap-add','NET_ADMIN']+
+                (['--cap-add','BPF'] if self.monotonic_capture else [])+[
                 '-e','ROS_DOMAIN_ID=60','-e','ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET',
                 '-e','RMW_IMPLEMENTATION=rmw_fastrtps_cpp']+
                 [arg for key,value in profile_environment(self.transport_profile).items() for arg in ('-e',key+'='+value)]+

@@ -45,8 +45,9 @@ PROFILES = {p.name: p for p in (Profile('N0'), Profile('N1', 20, 5, 1),
 
 
 class NetworkLab:
-    def __init__(self, root, run, image):
+    def __init__(self, root, run, image, *, monotonic_capture=False):
         self.root, self.run, self.image = Path(root), Path(run), image
+        self.monotonic_capture=monotonic_capture
         self.name = 'ros2-srt-m3-' + secrets.token_hex(6)
         self.containers = {}
         self.addresses = {}
@@ -84,7 +85,8 @@ class NetworkLab:
             name = self.name+'-'+role
             self.containers[role] = name  # also clean up partially created containers
             self.execute(role+'-create', ['docker', 'run', '-d', '--pull=never', '--platform', 'linux/amd64',
-                '--network', self.name, '--name', name, '--cap-add', 'NET_ADMIN',
+                '--network', self.name, '--name', name, '--cap-add', 'NET_ADMIN']+
+                (['--cap-add','BPF'] if self.monotonic_capture else [])+[
                 '-e', 'ROS_DOMAIN_ID='+str(domain), '-e', 'ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST',
                 '-e', 'RMW_IMPLEMENTATION=rmw_fastrtps_cpp', '-v', str(self.root)+':/workspace',
                 '-v', str(credential)+':/run/bridge/passphrase:ro', '-w', '/workspace', self.image, 'sleep', 'infinity'])

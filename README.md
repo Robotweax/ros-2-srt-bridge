@@ -663,3 +663,30 @@ libc/direct-syscall realtime with Python and checks raw/boottime offsets, withou
 setting clocks or requiring network/capabilities. A finite diagnostic pass does
 not qualify a later workload. VM clock control and a monotonic packet-timestamp
 path remain possible follow-ups, subject to evidence.
+
+
+### Experimental kernel-monotonic packet observer
+
+`--monotonic-capture` on either M3 runner adds a passive AF_PACKET socket observer
+inside each owned endpoint. It timestamps observations with `bpf_ktime_get_ns`
+in the kernel and accounts UDP frame lengths over the existing source-enabled
+and fenced-observation phases, independently of realtime clock drift. The
+realtime capture path and its rejection gates remain intact.
+
+```sh
+python3 tools/run_m3.py --profile N0 --smoke --monotonic-capture
+python3 tools/run_m3_dds.py --commands --profile N5 --dds-profile paced-sensors --smoke --monotonic-capture
+```
+
+Normal runs build the standalone observer using the pinned image's g++/libbpf.
+Development `--skip-build` requires that binary. The flag adds CAP_BPF only to the
+owned endpoint containers; default runs retain their original capabilities.
+No privileged container, host interface, tc/XDP hook, clock setting or new image
+is needed. Zero time-namespace offsets, capture coverage and zero recorder loss
+are required. A bounded ring and 128-MiB output cap fail closed on exhaustion.
+
+These are kernel socket observation times and skb frame lengths, not physical
+link transmission/delivery or sensor-population overhead. Capture processes are
+excluded from endpoint CPU, while kernel observer work may be charged to endpoint
+tasks; the added observer changes host load. Results therefore identify this
+capture variant explicitly. See [implementation and evidence](evidence/m3-monotonic-capture-2026-11-06/README.md).
