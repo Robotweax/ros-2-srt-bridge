@@ -74,6 +74,42 @@ void lost_result(const std::string& ip,const std::filesystem::path& directory){
     check(p.op->snapshot().commands_sent==1&&p.op->snapshot().queries_sent>0&&p.robot->snapshot().effects==0,"reconnect resent a command");
     stop(*p.op);stop(*p.robot);
 }
+void lost_before_admission_commit(const std::string& ip,const std::filesystem::path& directory){
+    Pair p(ip,directory,false,JournalPoint::admission_before_commit,0,20000000000ULL,false,true);
+    const auto id=random_identity();const auto invoked=now();const auto old_session=p.op->snapshot().transport.context.session;
+    submit(*p.op,id,{100,5000,0,1});
+    until([&]{return p.robot->snapshot().test_paused;},"receiver admission barrier missing");
+    check(p.op->snapshot().commands_sent==1&&p.robot->snapshot().effects==0,"admission barrier not after one sender handoff/before effect");
+    stop(*p.robot);p.robot.reset();
+    p.rc.worker.test_pause_at.reset();p.rc.transport.session.local_epoch=random_identity();p.rc.worker.journal.process_epoch=p.rc.transport.session.local_epoch;
+    p.robot=std::make_unique<CommandEndpoint>(p.rc);p.ready();
+    check(p.op->snapshot().transport.context.session!=old_session,"admission-loss fixture did not reconnect");
+    bool queried=false,unknown=false,not_found=false;CommandEvent event;
+    until([&]{
+        if(!queried)queried=p.op->query(100,id)==SubmitResult::queued;
+        while(p.op->poll(event))if(event.request_id==id){
+            if(event.error==JournalError::none&&event.entry&&event.entry->state==CommandState::unknown){
+                check(event.entry->reason==CommandReason::reconcile_required&&!event.entry->result.valid&&event.entry->revision==0,"admission loss invented authoritative outcome");unknown=true;
+            }
+            if(event.peer_error&&event.peer_error->code==ControlErrorCode::not_found)not_found=true;
+        }
+        return unknown&&not_found;
+    },"missing retained uncertainty/peer NOT_FOUND after admission loss");
+    until([&]{return now()>=invoked+5050000000ULL;},"original command budget did not elapse");
+    until([&]{return p.op->query(100,id)==SubmitResult::queued;},"post-budget query not admitted");
+    auto retained=result(*p.op,id,CommandState::unknown);
+    check(retained.entry->reason==CommandReason::reconcile_required&&!retained.entry->result.valid&&retained.entry->revision==0,"budget/absence converted uncertainty to expiry or success");
+    check(p.op->snapshot().commands_sent==1&&p.robot->snapshot().effects==0,"admission-loss recovery replayed the command");
+    stop(*p.op);stop(*p.robot);
+    CommandTraceEvent e;unsigned sends=0;bool link_lost=false,live_unknown=false;
+    while(p.oc.transport.command_trace->poll(e)){
+        if(e.point==CommandTracePoint::provider_sent&&e.request==id)++sends;
+        if(e.point==CommandTracePoint::link_lost&&e.detail==0)link_lost=true;
+        if(e.point==CommandTracePoint::worker_unknown&&e.request==id&&e.entry_owner_epoch==e.owner_epoch)live_unknown=true;
+    }
+    check(sends==1&&link_lost&&live_unknown&&p.oc.transport.command_trace->dropped()==0,"admission-loss provenance incomplete");
+    std::cout<<"PASS admission-before-commit peer loss: UNKNOWN retained after budget/NOT_FOUND, no replay/effect\n";
+}
 void unknown_restart(const std::string& ip,const std::filesystem::path& directory){
     Pair p(ip,directory,false,{},2,3000000000ULL,false,true);const auto old_epoch=p.oc.transport.session.local_epoch;const auto id=random_identity();submit(*p.op,id,{100,5000,0,1});
     until([&]{return p.robot->snapshot().test_paused;},"running handler barrier missing");check(p.robot->snapshot().effects==0,"before-effect barrier applied effect");
@@ -107,4 +143,4 @@ void bounded_shutdown(const std::string& ip,const std::filesystem::path& directo
     check(cancelled==queued+1,"unresolved local callbacks lost at shutdown");check(p.robot->snapshot().effects==0,"uncommitted sender admission executed");stop(*p.robot);
 }
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";auto dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(dir);++n)dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(dir);normal(ip,dir/"normal");diagnostic_lifecycle(ip,dir/"trace");lost_result(ip,dir/"lost-result");unknown_restart(ip,dir/"unknown");timeout(ip,dir/"timeout");bounded_shutdown(ip,dir/"bounded");std::cout<<"PASS command endpoint "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+int main(int argc,char** argv){try{check(argc==2,"family required");const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";auto dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(dir);++n)dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(dir);normal(ip,dir/"normal");diagnostic_lifecycle(ip,dir/"trace");lost_result(ip,dir/"lost-result");lost_before_admission_commit(ip,dir/"admission-loss");unknown_restart(ip,dir/"unknown");timeout(ip,dir/"timeout");bounded_shutdown(ip,dir/"bounded");std::cout<<"PASS command endpoint "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
