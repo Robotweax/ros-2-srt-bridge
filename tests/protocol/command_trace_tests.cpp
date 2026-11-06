@@ -31,9 +31,21 @@ int main(){
     for(auto& thread:producers)thread.join();
     while(concurrent.poll(event))consume();
     check(count+concurrent.dropped()==40000&&concurrent.attempted()==40000);
-    // Serialized enqueue/drain never drops merely because the consumer polls.
-    CommandTrace sequential;
-    for(unsigned n=0;n<10000;++n){sequential.record({});check(sequential.poll(event));}
-    check(sequential.dropped()==0);
+    // Force concurrent drain with at most one outstanding event per lane.
+    // Full lanes are impossible here: any loss is an actual storage failure.
+    CommandTrace interleaved;std::atomic<unsigned> acknowledged[2]{};
+    std::vector<std::thread> owners;
+    for(unsigned lane=0;lane<2;++lane)owners.emplace_back([&,lane]{
+        for(unsigned n=1;n<=1000;++n){CommandTraceEvent e;e.route=lane;e.value=n;interleaved.record(CommandTraceProducer(lane),e);
+            while(acknowledged[lane].load()<n)std::this_thread::yield();
+        }
+    });
+    unsigned drained=0;
+    while(drained<2000){if(interleaved.poll(event)){
+        check(event.route<2&&event.value==acknowledged[event.route].load()+1);
+        acknowledged[event.route].store(event.value);++drained;
+    }else std::this_thread::yield();}
+    for(auto& owner:owners)owner.join();
+    check(interleaved.attempted()==2000&&interleaved.dropped()==0);
     std::cout<<"bounded SPSC lanes, FIFO/overflow/concurrent drain accounting passed\n";
 }
