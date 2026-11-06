@@ -1343,3 +1343,48 @@ M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
 Ressourcen, andere Device-/Offload-Pfade sowie N3-/N4-Spezialgates. Lange STATUS-
 Beobachtung und andere SRT-/DDS-Semantik/Security verhindern Transportkosten- oder
 Echtzeit-Überlegenheitsbehauptungen. M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Default DDS N2 je 600 s/drei Seeds
+
+- Eingefrorener Plan vor erstem Lauf: System-DDS, N2, Seeds 1701/2903/4211,
+  je 600 s, frische sequentielle eigene Container, Native Observer v2 aktiv,
+  Immediate/Full-Snapshot/32.768-KiB-PCAP-Request. Keine Retries/Ersatzläufe,
+  kein Rebuild/Policy-Wechsel. Netem-Readbacks und konkrete TC-Argumente erhalten.
+- Alle drei Source-Fenster vollständig (600,141/600,126/600,138 s), Execution- und
+  Capture-Gates bestanden. Pro Seed Versuche/Erfolge/Effekte/Expiry/Not-admitted/
+  Skipped: 282/277/277/5/0/18, 285/281/281/4/0/15, 276/272/272/3/1/24.
+  Insgesamt 843 Versuche, 830 SUCCEEDED/Effekte, zwölf Receiver-EXPIRED Revision 1
+  ohne Dispatch, ein BUSY vor Queue-Aufnahme, 57 übersprungene Slots. Keine
+  UNKNOWN/unaufgelösten Intents, keine automatischen Wiederholungen.
+- Seed 4211 Intent 268: Submission BUSY=1, kein Journal-Record an beiden Seiten,
+  Sender überträgt nur 275 der 276 Versuche. Explizite Admission-Antwort und
+  Abwesenheit getrennt halten; aus generischem NOT_FOUND keine Nichtausführung
+  ableiten. Späterer neuer Intent behält erwartete Generation. Sechs Journale
+  integral/terminal identisch; Generation-Chains ergeben 277/281/272. Dispatches
+  und atomare Startclaims entsprechen Effekten; zwölf Expiries erhöhen Generation
+  nicht. Max. Terminalbeobachtung je Seed 8.463,640/5.610,490/5.895,465 ms.
+- Sensor-Altersqualifikation: Seed 1701 **fehlgeschlagen** (sechs Clock-Steps,
+  max. 6,206431 ms, max. Offset-Abweichung 9,055105 ms). 25.435 IMU-/13.445 Joint-
+  Callbacks clock-rejected. Histogramme nicht als qualifizierte Gesamtverteilung
+  lesen. Seeds 2903/4211 Shared-VM-Age-Estimates qualifiziert; trotzdem sämtliche
+  Realtime-PCAP-Fenster wegen strengerem Clockmodell unterdrückt. Native Kernel-
+  Monotonic-Counter separat qualifiziert, kein Physical-/Delivery-Nachweis.
+- Alle PCAP-Kerneldrops/native Reserve-/Copy-Verluste null, zwölf Cgroup-Phasen
+  aus archivierten Projektionen exakt reproduziert. 161 Sources in drei Manifesten
+  und acht installierte Binär-/SDK-Hashes sowie installierte Python-Bytes konstant.
+  Seed 2903 Robot-PCAP zusätzlich Filterpopulation unreconciled: 170.340 gefiltert
+  vs. 170.338 Captured/File, null Kerneldrops; keine Ursache/Vollständigkeit daraus
+  ableiten. Realtime-Fenster ohnehin unterdrückt, Native-Gates separat.
+  56 Produktions-C++/Header/Proto-Quellen unverändert seit eb46aba. Ein gemeinsamer
+  VM-Boot in dieser Kohorte. Vorige 83 Host-Python-Tests unverändert; keine neuen
+  ROS-GTests/volle M2-Ausführung behaupten. Diese Fortsetzung ändert keine Runtime-
+  Quellen, nur Evidenz/Planungsdokumentation. Intrinsic/M4 unverändert.
+- Evidenz: evidence/m3-dds-n2-full-2026-11-06/ mit Plan, drei Manifesten, per-State-
+  Latenzen, Admission-/Generationsbelegen, Clock-/Sensorpopulationen, Journal-Audits,
+  Raw-Hashes und Cgroup-Projektionen. Keine vollen Inspect-/Env-Dumps; Roh-PCAPs,
+  Prefixes, Journale und Clocks lokal. Keine kausale Ressourcen-/Transportüberlegenheit.
+
+**Weiter:** DDS-N2-Dauer/Seed-Ausführung erledigt, **N2-Altersgate weiter offen**.
+Volle SRT-N2- und beide N1-Matrizen, V2/langes N5, deterministisches N3, N4-Phasen,
+andere Devices/Offloads, kontrollierte Ressourcen und Semantik-/Security-Parität.
+M3 in Arbeit, PR #2 bleibt Draft; keine Echtzeit-/Lossless-/Hardwarefreigabe.

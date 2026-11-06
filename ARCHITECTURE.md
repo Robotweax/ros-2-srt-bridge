@@ -1093,3 +1093,18 @@ The helper performs no recovery or transmission. The 2026-11-06 diagnosis finds
 prompt receiver completion with a long result-reconciliation tail, consistent
 with Reliable ordered middleware delays and stale-frame rejection. This is not
 per-frame callback proof, a policy waiver or a realtime guarantee.
+
+### Default DDS N2 full-duration execution
+
+The 2026-11-06 frozen cohort executes 600 seconds for each N2 base seed
+1701/2903/4211, with default DDS and unchanged binaries/policies. It observes
+830 confirmed successes/effects, 12 receiver-backed expiries without dispatch,
+one BUSY admission rejection, 57 skipped slots and zero UNKNOWN/unresolved
+intents. Six closed journals agree; final generations match the successful-intent
+chains. PCAP/native recorder gates pass, with 12 exactly replayed cgroup windows.
+This closes the default-DDS N2 duration/seed execution item only. Seed 1701 age
+estimates are unqualified after observed clock steps (up to 6.206431 ms), with
+38,880 clock-rejected sensor callbacks explicitly counted. Seeds 2903/4211 qualify
+their shared-VM age estimates; realtime packet windows remain withheld in all
+three cases. N2 age acceptance, SRT N2, other profiles and full M3 acceptance
+remain open. Evidence: `evidence/m3-dds-n2-full-2026-11-06/`.

@@ -763,3 +763,10 @@ Terminal observation still reached 8.46 seconds. Analyze a closed combined DDS
 run with `python3 tools/m3_dds_result_timeline.py RUN --out FRESH_OUTPUT.json`.
 The tool requires common-VM/zero-offset proof and checkpointed journals; timestamp
 stages are observations before commits, not execution or delivery guarantees.
+
+The [full-duration default DDS N2 cohort](evidence/m3-dds-n2-full-2026-11-06/README.md)
+executes all three seeds for 600 seconds each: 830 successes/effects, 12 expiries
+without dispatch, one BUSY admission rejection and 57 skipped slots, with no
+UNKNOWN or unresolved intents. All capture integrity gates pass. One seed's age
+estimates fail clock qualification, so the N2 age gate and full M3 acceptance
+remain open. Sources and installed binaries are unchanged from `eb46aba`.
