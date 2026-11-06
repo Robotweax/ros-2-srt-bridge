@@ -754,3 +754,12 @@ A fresh twelve-case plan passed with zero PCAP kernel drops and native recorder
 losses: 299 confirmed commands/effects. DDS N2 skipped five command slots and
 observed a 10.87-second maximum terminal-status latency. These short probes do
 not complete the duration/seed matrix or establish isolated observer CPU cost.
+
+The [DDS status-timeline follow-up](evidence/m3-dds-status-timeline-2026-11-06/README.md)
+separates receiver finish from late sender result observation and adds bounded
+status-poll history. Three further 60-second N2 seeds ended with 82 successes/
+effects and two receiver-backed expiries without dispatch; no unresolved intents.
+Terminal observation still reached 8.46 seconds. Analyze a closed combined DDS
+run with `python3 tools/m3_dds_result_timeline.py RUN --out FRESH_OUTPUT.json`.
+The tool requires common-VM/zero-offset proof and checkpointed journals; timestamp
+stages are observations before commits, not execution or delivery guarantees.

@@ -1071,3 +1071,25 @@ weiter vollständig, positives Recovery-Control. Diagnose-Shim nur Setup-Logging
 nicht im normalen Workload. Null-Drop-Gate unverändert; Kapazität endlich.
 Buffer-/Snapshot-Konfiguration in Manifest/Studienvergleich festhalten, Kosten-
 Aussagen versionsabhängig. Alte fehlgeschlagene Pläne nicht post hoc überschreiben.
+
+### DDS command result-observation diagnosis
+
+The DDS workload retains bounded local status-service history per intent: first
+32 and most recent 32 observations, with an explicit omitted count. These are
+found/state/reason/error/revision/query-queued snapshots and local monotonic times,
+not remote middleware callbacks. Budget expiry, missing status and NOT_FOUND
+remain nonterminal without authoritative receiver state. The nominal 200-ms poll
+cadence is not a latency bound; result latency includes service, transport and
+reconciliation waits. Poll history changes the development observer workload.
+
+`tools/m3_dds_result_timeline.py` correlates completed combined DDS runs with
+closed, checkpointed, immutable/read-only SQLite journals. Common boot/zero time
+namespace offsets, record/command hashes, contexts and current coordinator owners
+must agree. Only matching confirmed successes receive the timestamp decomposition;
+unknown/missing/recovered records retain uncertainty. A journal's admission,
+dispatch, finish and sender result-observation timestamps are sampled before
+mutation/commit, not durable-commit completion or atomic handler-start times.
+The helper performs no recovery or transmission. The 2026-11-06 diagnosis finds
+prompt receiver completion with a long result-reconciliation tail, consistent
+with Reliable ordered middleware delays and stale-frame rejection. This is not
+per-frame callback proof, a policy waiver or a realtime guarantee.

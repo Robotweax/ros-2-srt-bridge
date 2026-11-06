@@ -1300,3 +1300,46 @@ weitere Device-/Offload-Pfade und N3-/N4-Spezialgates. DDS N2 zeigt weiter groß
 Terminalbeobachtungs-Latenz trotz erfolgreicher Effekte; nicht als Echtzeitgarantie
 lesen. Pacing/Reconciliation/Age/Crypto vor Transportkostenvergleich angleichen.
 M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: DDS-Status-Timeline und begrenzte Poll-Historie
+
+- Historischen N2-Intent 15 korreliert: Receiver-Finish-Zeitstempel 83,47 ms nach
+  Aufruf, danach 10.655,11 ms bis Sender-Resultbeobachtung und weitere 132,41 ms
+  bis Driver. Zeitstempel vor Journal-Mutation/Commit, kein fsync-/Handlerstart-
+  Nachweis. Empfangene SUCCEEDED-STATUS am Tap schon nach 157,52 ms; vorherige
+  Control-Sequenz 55 erstmals nach 10.735,75 ms. 51 Stale-Control-Rejections im
+  Sender. Reliable-Ordering/Retransmission-Blockade mit anschließender Freshness-
+  Ablehnung ist damit konsistent, aber keine per-Frame-Callback-Ursache bewiesen.
+- Offline Generated-CDR-Fingerprint-Probe: 516 gegen Journale validierte
+  Beobachtungen, je eindeutiger Native-Längen-/128-Byte-Prefix-Match. Kein
+  generischer RTPS-Parser/Reassembler/Population-Vollständigkeitsnachweis;
+  Serialisierungs-Roundtrip-Differenzoffsets explizit, keine volle Bytegleichheit
+  behaupten. Native-Monotonic-Stamps, keine PCAP-Realtime-Konvertierung. Rohdaten
+  lokal, Decoder-/Image-/Generated-Type-Provenienz und Hashes archiviert.
+- DDS-Driver speichert erste 32/letzte 32 Status-Service-Polls je Intent, Zähler
+  für ausgelassene Mitte. Keine Terminalerfindung aus Budgetablauf/NOT_FOUND.
+  Neue Read-only-Timeline unter tools/m3_dds_result_timeline.py verlangt geschlossene
+  checkpointed Journale, Common-VM/Zero-Offsets, Hash-/Kontext-Konsistenz und
+  passende aktuelle Owner. Unknown/fehlende/recovered Records ohne Zerlegung.
+- Drei eingefrorene neue N2-System-DDS-Läufe je 60 s/Seeds 1701, 2903, 4211:
+  84 Versuche, 82 SUCCEEDED/Effekte, zwei Receiver-EXPIRED Revision 1 ohne Dispatch,
+  keine unaufgelösten Intents. Pro Seed Erfolg/Expiry/Skipped: 27/1/2, 30/0/0,
+  25/1/4. Max. Terminalbeobachtung 5.413/1.448/8.459 ms. Beide Expiries mit einem
+  Stale-COMMAND am Receiver; Poll-Historien vollständig (27/42), spätere neue IDs
+  erfolgreich. Kein generationsändernder Effekt für die Expiries.
+- PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null; sechs Journale integral
+  und terminal identisch. 161 Quellen während aller drei Läufe unverändert,
+  acht installierte Binär-/SDK-Hashes sowie installierte Python-Scripts konstant.
+  Danach nur Offline-Analyzer/Test um Current-Owner-Guard ergänzt: eingefrorene
+  Versionen erhalten, finale Reanalyse aller Timelines identisch. 56 Produktions-
+  C++/Header/Proto-Quellen unverändert, keine neuen ROS-GTests/volle M2-Ausführung.
+  Demo-Python-Paket normal installiert, 83 finale Host-Python-Tests bestanden.
+- Evidenz: evidence/m3-dds-status-timeline-2026-11-06/ mit Histories, getrennten
+  Success-/Expiry-Ergebnissen, Source-/Owner-Guard-Provenienz und Raw-Hashes.
+  Keine vollständigen Inspect-/Env-Dumps. Deadline/Lease/Freshness/QoS/SDK/Wire/
+  IPC/Atomic-Start/Sealing/No-Replay unverändert, Intrinsic/M4 unverändert.
+
+**Weiter:** volle 600-s-N1/N2-Matrix mit drei Seeds, V2/langes N5 und kontrollierte
+Ressourcen, andere Device-/Offload-Pfade sowie N3-/N4-Spezialgates. Lange STATUS-
+Beobachtung und andere SRT-/DDS-Semantik/Security verhindern Transportkosten- oder
+Echtzeit-Überlegenheitsbehauptungen. M3 in Arbeit, PR #2 bleibt Draft.

@@ -36,6 +36,28 @@ class StatusObservationTests(unittest.TestCase):
         self.assertNotIn('terminal',row) # transport adapter validates/records terminal results
         with self.assertRaisesRegex(ValueError,'predates'):record_status_observation(row,status,9)
 
+    def test_long_wait_retains_beginning_and_recent_polls_with_explicit_gap(self):
+        row=dict(submitted_monotonic_ns=1)
+        for n in range(70):record_status_observation(row,self.status(),n+1)
+        history=row['status_observation_history']
+        self.assertEqual(len(history),64)
+        self.assertEqual([s['observed_monotonic_ns'] for s in history],list(range(1,33))+list(range(39,71)))
+        self.assertEqual(row['status_observations_omitted'],6)
+        self.assertEqual(row['status_observations'],70)
+        self.assertNotIn('terminal',row)
+        with self.assertRaisesRegex(ValueError,'regressed'):record_status_observation(row,self.status(),69)
+        self.assertEqual(row['status_observations'],70)
+
+    def test_history_is_a_snapshot_and_late_success_does_not_rewrite_earlier_polls(self):
+        row=dict(submitted_monotonic_ns=10);pending=self.status()
+        record_status_observation(row,pending,11)
+        terminal=self.status();terminal.update(state=4,revision=3,local_error=0)
+        record_status_observation(row,terminal,6000000010)
+        terminal['state']=8
+        self.assertEqual([s['state'] for s in row['status_observation_history']],[1,4])
+        self.assertEqual([s['budget_elapsed'] for s in row['status_observation_history']],[False,True])
+        self.assertNotIn('terminal',row)
+
 
 class PhaseFileTests(unittest.TestCase):
     def test_disappearing_phase_file_is_absent_not_a_failed_workload(self):

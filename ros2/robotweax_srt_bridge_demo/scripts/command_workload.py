@@ -46,8 +46,16 @@ def audit_commands(rows,begin_device,final_device,cutoff_ns=None):
 def record_status_observation(row,status,observed_ns):
     """Local status snapshot only: errors/timeouts never manufacture a terminal result."""
     if observed_ns<row['submitted_monotonic_ns']:raise ValueError('status predates submission')
+    if observed_ns<row.get('last_status_observation',{}).get('observed_monotonic_ns',0):raise ValueError('status observation time regressed')
     row['status_observations']=row.get('status_observations',0)+1
     row['last_status_observation']={key:status[key] for key in ('found','state','reason','local_error','revision','query_queued')}
     row['last_status_observation'].update(observed_monotonic_ns=observed_ns,
         budget_elapsed=observed_ns-row['submitted_monotonic_ns']>=5000000000)
+    # Keep the first 32 and most recent 32 polls. Long reconciliation waits must
+    # remain diagnosable without unbounded per-intent memory or invented results.
+    history=row.setdefault('status_observation_history',[])
+    history.append(dict(row['last_status_observation']))
+    if len(history)>64:
+        del history[32]
+        row['status_observations_omitted']=row.get('status_observations_omitted',0)+1
     if status['local_error']==2:row['not_found_status_observations']=row.get('not_found_status_observations',0)+1

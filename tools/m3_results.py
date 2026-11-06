@@ -38,7 +38,7 @@ def summarize_commands(commands):
         unresolved=sum('terminal' not in c for c in commands),
         terminal_observation_latency_ms=percentiles([(c['result_observed_monotonic_ns']-c['submitted_monotonic_ns'])/1e6 for c in finalized]),
         by_state_reason={key:percentiles(values) for key,values in groups.items()},
-        scope='local Execute invocation to terminal status observation; includes up to 200ms status polling; unresolved attempts excluded and counted separately')
+        scope='local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately')
 
 
 def summarize_gaps(run, result):
