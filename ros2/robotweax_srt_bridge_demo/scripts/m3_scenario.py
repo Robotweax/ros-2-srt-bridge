@@ -17,6 +17,7 @@ import rclpy
 from robotweax_srt_bridge_msgs.msg import CommandStatus
 from robotweax_srt_bridge_msgs.srv import ExecuteCommand, GetCommandStatus, GetBridgeMetrics, SetPublishing
 from m2_scenario import Driver, read, write
+from command_workload import record_status_observation
 
 
 def histogram(values, maximum):
@@ -167,6 +168,8 @@ class Benchmark(Driver):
 
     def observe_command(self, row):
         status=self.rpc(self.query,GetCommandStatus.Request(request_id=list(row['number'].to_bytes(16,'little')),route_id=100,refresh=True)).status
+        record_status_observation(row,{key:getattr(status,key) for key in
+            ('found','state','reason','local_error','revision','query_queued','peer_error')},time.monotonic_ns())
         if not status.found or status.state not in (CommandStatus.SUCCEEDED,CommandStatus.FAILED,CommandStatus.REJECTED,CommandStatus.EXPIRED,CommandStatus.UNKNOWN) or status.reason==2:
             return None
         row.update(terminal=status.state,reason=status.reason,result_valid=status.result_valid,

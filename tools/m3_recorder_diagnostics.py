@@ -72,9 +72,11 @@ def summarize(rows):
     return dict(samples=len(rows), processes=processes,
         missing_process_samples=sum(not r['processes'] for r in rows),
         sample_errors=sum(len(r['errors']) for r in rows),
+        unavailable_field_observations={field:sum(item['field']==field for row in rows for p in row['processes'] for item in p.get('unavailable',[]))
+            for field in sorted({item['field'] for row in rows for p in row['processes'] for item in p.get('unavailable',[])})},
         maximum_sample_gap_ns=max((b['begin_ns']-a['end_ns'] for a,b in zip(rows,rows[1:])),default=0),
         maximum_read_span_ns=max(r['end_ns']-r['begin_ns'] for r in rows),
-        scope='sampled process state and non-atomic cumulative counters; identities never merged across start times; no root-cause or capture-completeness inference')
+        scope='sampled process state and non-atomic cumulative counters; identities never merged across start times; wchan=0 can mean restricted/unavailable; scheduler counters depend on kernel configuration; no root-cause or capture-completeness inference')
 
 
 def sample(out, ready, stop):

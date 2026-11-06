@@ -15,6 +15,7 @@ import struct
 import subprocess
 import threading
 import time
+import uuid
 from m3_capture import pcap_options, pcap_rotation_options, pcap_configuration, summarize, validate_tcpdump_footer
 import m3_recorder_diagnostics as diagnostics
 
@@ -111,11 +112,14 @@ def main():
         scope='synthetic loopback diagnostic controls in network-none; not an N5 retry or historical root-cause proof')
     try:
         for case in ('baseline','pause'):
-            argv=['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none',
+            name='m3-recorder-control-'+uuid.uuid4().hex[:12]
+            argv=['docker','run','--rm','--name',name,'--pull=never','--platform','linux/amd64','--network','none',
                   '-v',str(ROOT)+':/workspace','-w','/workspace',image,'python3','tools/check_m3_recorder.py',
                   '--container-child','--out','/workspace/'+str(relative/case)]
             if case=='pause':argv.append('--pause')
-            with (run/(case+'.log')).open('w') as log:subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,check=True,timeout=45)
+            try:
+                with (run/(case+'.log')).open('w') as log:subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,check=True,timeout=45)
+            finally:subprocess.run(['docker','rm','-f',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=10,check=False)
             report['cases'].append(json.loads((run/case/'result.json').read_text()))
             print(case+': passed',flush=True)
         report['status']='passed'

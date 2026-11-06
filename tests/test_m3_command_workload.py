@@ -24,6 +24,15 @@ class StatusObservationTests(unittest.TestCase):
         self.assertNotIn('terminal',row);self.assertNotIn('result_valid',row)
         self.assertNotIn('result_observed_monotonic_ns',row)
 
+    def test_srt_peer_error_and_reconcile_required_remain_observations(self):
+        row=dict(submitted_monotonic_ns=1)
+        status=self.status();status.update(state=8,reason=2,peer_error=2)
+        record_status_observation(row,status,6000000001)
+        self.assertEqual(row['last_status_observation']['peer_error'],2)
+        self.assertEqual(row['status_observation_history'][0]['reason'],2)
+        self.assertNotIn('terminal',row)
+        self.assertNotIn('result_valid',row)
+
     def test_observation_retains_latest_fields_without_clearing_prior_error_count(self):
         row=dict(submitted_monotonic_ns=10)
         record_status_observation(row,self.status(),11)

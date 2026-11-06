@@ -49,6 +49,7 @@ def record_status_observation(row,status,observed_ns):
     if observed_ns<row.get('last_status_observation',{}).get('observed_monotonic_ns',0):raise ValueError('status observation time regressed')
     row['status_observations']=row.get('status_observations',0)+1
     row['last_status_observation']={key:status[key] for key in ('found','state','reason','local_error','revision','query_queued')}
+    if 'peer_error' in status:row['last_status_observation']['peer_error']=status['peer_error']
     row['last_status_observation'].update(observed_monotonic_ns=observed_ns,
         budget_elapsed=observed_ns-row['submitted_monotonic_ns']>=5000000000)
     # Keep the first 32 and most recent 32 polls. Long reconciliation waits must
