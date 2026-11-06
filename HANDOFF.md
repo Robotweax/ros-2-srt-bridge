@@ -1871,3 +1871,43 @@ mit Operator-Egress korrelieren; Scheduling vs. Socket/Qdisc unterscheiden, bevo
 Verhalten geändert wird. Historischer Initiator und vollständige N5-/M3-Abnahme
 bleiben offen; alte UNKNOWNs/Fehler erhalten, N3/N4/Default-DDS-N5/Age-/Clock-/
 Security-/Resource-Gates unverändert. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: Begrenzte CONTROL-Providerdiagnostik
+
+- Neue optionale `TransportConfig::provider_diagnostics`, ROS-Parameter und
+  Runner-Flag `--provider-diagnostics`, Default aus. CONTROL alle nominell 100 ms
+  und vor Close im Drop-Pfad; `srt_bstats(...,0)` ohne Counter-Clear, tatsächliches
+  Peer-Idle-Readback, Read-Brackets, Owner/Generation/Socket, Verfügbarkeit/Fehler,
+  kumulative DATA/ACK/NAK/Bytes plus Buffer/Flight/RTT-Gauges. Separater SPSC-Puffer
+  128 Records, Lifetimebudget 75000; Verlust/Exhaustion explizit und Runnerfehler.
+  ROS serialisiert außerhalb des Owners, Finalstatus nach Join. Public Config
+  geändert, SDK und alle ROS-Consumer rebuilt. Kein Policy-/Timeout-/Pin-Change.
+- Parser hält beide Read-Brackets pro Delta, trennt Socketidentitäten und
+  unavailable Samples, prüft Accounting und meldet mögliche 32-bit-Sättigung.
+  SDK-Locks/Bookkeeping beeinflussen Timing; kein Nonblocking-/Zero-Overhead-
+  Versprechen. Counter erfassen nicht Keepalive/Handshake/ACKACK, beweisen weder
+  UDP-Stille noch Delivery. RTT 0 kann fehlender Estimate sein.
+- 105 Hosttests, voller SDK-CTest 69/69 und ROS 36 reported Tests bestanden.
+  Native gerichtete CONTROL-Stille mit Diagnostik IPv4/IPv6: 5005/5003 ms,
+  tatsächliches Idle-Readback 5000 ms, 788/781 Checks; Counterwachstum trotz
+  bekannter Gate-Drops und flacher Caller-DATA-RX nach Settling nachgewiesen.
+- Prospektiver Plan, genau ein N0-Smoke und ein N5-90-s/Seed-1701-Lauf; keine
+  Random-Retry. Quellstand 0ace537 (SDK/ROS eedf5d3), Sources/Install-Matches und
+  acht Runtimehashes vorher/nachher gleich. N0 8 Erfolge/Effekte, keine UNKNOWNs;
+  Provider 271/23/226 vollständig. N5 39 Erfolge/Effekte, 6 Slots übersprungen,
+  keine UNKNOWNs; Provider 974/24/959 und Commandtrace 135/5/5 vollständig,
+  null Drops/Exhaustion. Kein aktiver CONTROL-Loss/Close reproduziert; daher nur
+  Instrumentierungsvalidierung, keine historische Initiatorzuschreibung/Fix.
+- N5 max beobachteter Startgap 113,283167 ms, Readspan 0,673250 ms, keine Bounds.
+  PCAP 39550 Records/Filter je Endpoint, zero Kerneldrops; Native 39598/39603,
+  zero Reserve-/Copyverluste bei separaten Populationen/Intervallen. Realtime-
+  PCAP-Fenster weiter withheld. N5 Source/Published/Observer 22534/7173/7173;
+  Sensordefizit erhalten, keine Performance-/Lossless-Behauptung.
+- Evidenz evidence/m3-provider-diagnostics-2026-11-06/ mit Originalmanifesten,
+  Diagnoselogs, Outcomes, Accounting, Testlogs, Prospektivplan und Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal, keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Mit eingefrorener Diagnostik einen begrenzten Plan zur Trennung von
+Provider-Scheduling/Socket-Send und Post-Qdisc-CONTROL verfolgen. Historischer
+Initiator/UNKNOWNs, volle N5-/M3-Abnahme, N3/N4/Default-DDS-N5/Age-/Clock-/Security-/
+Ressourcengates offen. Alte Fehlläufe unverändert; PR #2 Draft, Intrinsic/M4 unberührt.
