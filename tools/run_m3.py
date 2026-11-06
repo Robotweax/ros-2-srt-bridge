@@ -15,7 +15,7 @@ import shlex
 import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
-from m3_capture import summarize
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_accounting import summarize_window
@@ -41,7 +41,7 @@ def main():
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
-    report=dict(status='running',milestone='M3 development',complete_m3_acceptance=False,
+    report=dict(status='running',pcap_dispatch_mode='immediate',milestone='M3 development',complete_m3_acceptance=False,
         profile=args.profile,seed=args.seed,seconds=duration,smoke=args.smoke,skip_build=args.skip_build,
         max_clock_interval_ms=200,clock_assumptions=dict(relative_drift_ppm=1000,timestamp_error_ns=1000000,max_probe_age_ns=5000000000),
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
@@ -90,10 +90,12 @@ def main():
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
-            argv=['docker','exec',name,'tcpdump','-n','-i','eth0','-s','0','-B','4096','-U',
+            argv=['docker','exec',name,'tcpdump','--immediate-mode','-n','-i','eth0','-s','0','-B','4096','-U',
                   '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
-        if args.monotonic_capture:mono_capture.start(run,inside,lab,captures)
+        if args.monotonic_capture:
+            report['monotonic_capture_config']['features_before']=mono_capture.feature_snapshot(lab,'features-before')
+            mono_capture.start(run,inside,lab,captures)
         if args.profile=='N5':
             lab.inside('operator','competitor-server',['iperf3','-s','-D'])
             log=(run/'competitor-process.log').open('w')
@@ -129,6 +131,9 @@ def main():
         else:raise RuntimeError('M3 scenario deadline exceeded')
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
         lab.snapshot('after')
+        if args.monotonic_capture:
+            report['monotonic_capture_config']['features_after']=mono_capture.feature_snapshot(lab,'features-after')
+            if report['monotonic_capture_config']['features_before']!=report['monotonic_capture_config']['features_after']:raise RuntimeError('interface feature state changed during run')
         result=json.loads((run/'operator-result.json').read_text());assert result['status']=='passed'
         report['results']=result;report['measurement_window']=summarize_window(result['checkpoints']['begin'],result['checkpoints']['end'],result['publication_interval']);report['gap_attribution']=summarize_gaps(run,result);report['command_summary']=summarize_commands(result['commands']);report['resources']={role:summarize_resources(run/(role+'-resources.jsonl')) for role in ('robot','operator')}
         interval=result['publication_interval']
@@ -138,10 +143,8 @@ def main():
         report['status']='failed';report['error']=str(error);raise
     finally:
         if lab:
-            for role in lab.containers:
-                try:lab.inside(role,role+'-capture-stop',['python3','-c',
-                    'import pathlib,os,signal; [(os.kill(int(p.parent.name),signal.SIGINT)) for p in pathlib.Path("/proc").glob("[0-9]*/comm") if p.read_text().strip() in ("tcpdump","iperf3","m3_mono_cap")]'])
-                except Exception:pass
+            try:stop_captures(lab)
+            except Exception as error:report['status']='failed';report['capture_stop_error']=str(error)
             for p,log in captures:
                 try:p.wait(timeout=5)
                 except subprocess.TimeoutExpired:p.terminate()
@@ -150,19 +153,15 @@ def main():
                 report['captures']={role:summarize(sorted(run.glob(role+'.pcap*')),address) for role,address in lab.addresses.items()}
                 for role,capture in report['captures'].items():
                     footer=(run/(role+'-capture.log')).read_text()
-                    captured=re.search(r'(\d+) packets captured',footer)
-                    dropped=re.search(r'(\d+) packets dropped by kernel',footer)
-                    capture['tcpdump_reported_packets']=int(captured[1]) if captured else None
-                    capture['tcpdump_kernel_drops']=int(dropped[1]) if dropped else None
-                    if not captured or not dropped or int(dropped[1]) or int(captured[1])!=capture['records'] or not capture['records']:
-                        raise RuntimeError('incomplete packet capture for '+role)
+                    capture.update(validate_tcpdump_footer(footer,capture['records']))
                     if any(key.endswith('/dds_rtps') for key in capture['classes']):raise RuntimeError('DDS traffic leaked onto the SRT-only network')
                     if capture['unaccounted']:raise RuntimeError('capture contains unaccounted frames')
-                if args.monotonic_capture:report['monotonic_captures']=mono_capture.summarize_run(run,lab.addresses,report['endpoint_measurements'],allow_udp_fragments=False)
+                if args.monotonic_capture:report['monotonic_captures']=mono_capture.summarize_run(run,lab.addresses,report['endpoint_measurements'],allow_udp_fragments=False,features=report['monotonic_capture_config']['features_before'])
+                report['pcap_population_reconciled']=all(c['tcpdump_population_reconciled'] for c in report['captures'].values())
                 report['window_captures']={}
                 for window,measurement in report.get('endpoint_measurements',{}).get('windows',{}).items():
                     clock=measurement['wire_clock']
-                    if clock['qualified']:
+                    if clock['qualified'] and report['pcap_population_reconciled']:
                         report['window_captures'][window]={role:summarize(sorted(run.glob(role+'.pcap*')),address,
                             allow_udp_fragments=False,timestamp_window=clock['timestamp_bounds_ns'])['time_window'] for role,address in lab.addresses.items()}
 

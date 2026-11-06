@@ -1026,3 +1026,26 @@ passende Images/Dauer/Profile/Seeds/Limits und qualifizierte Counter. Differenze
 inklusive negativer Werte nur deskriptiv, keine CPU-Konfidenzintervalle oder
 isolierter Observer-Kostennachweis; Workload-/Callback-Populationen getrennt.
 Evidenz `evidence/m3-observer-study-2026-11-06/`.
+
+
+M3-Tap-/Offload-Qualifikation (2026-11-06): Kontrollierte Linuxkit/veth-UDP-Probes
+zeigen Egress-Tap nach geprüftem netem-Drop/Delay und Receive-Tap vor geprüftem
+Ingress-Drop. Historisches generisches `pre-qdisc`-Label ist für diese Umgebung
+falsch; Artefakte unverändert lassen, Interpretation anhand neuer Evidenz
+korrigieren. Keine globale Kernel-/Device-/Physical-Wire-Garantie ableiten.
+
+Capture-Artefakt v2: 168 Byte pro Record, GSO-Segs/Size, VLAN-Present/TCI und MTU;
+128-Byte-Prefix bleibt. Reader unterstützt v1 (152 Byte), Offload-Metadaten dann
+unbekannt; neue Runner verlangen v2. Eine 9.642-Byte-SKB-Observation kann acht
+1.200-Byte-UDP-Datagramme repräsentieren. `frame_interpretation` daher unabhängig
+von Observation-Qualifikation, keine Physical-/Padding-/FCS-/Delivery-Quali.
+Readonly-Ethtool-Feature-Probe (GET-only) speichert Vorher/Nachher, MTU-Abgleich;
+aktive Features allein beweisen keine Nutzung. Keine Offload-SET-Operation.
+
+PCAP nun Immediate-Mode, UDP-Client zuerst stoppen, kurze Inflight-Drainphase,
+danach Taps schließen. Geschriebene Records/Captured-Counter/Kerneldrops separat
+prüfen; Filter-/File-Differenzen können auch bei vollständig bekannten Populationen
+auftreten. Population-Reconciliation-Flag statt falscher universeller Gleichheits-
+Invariante; unreconciled verwirft Realtime-PCAP-Fenster, nicht unabhängige native
+Counter. Frühere V1-/Buffered-Overhead-Studie nicht als V2-/Immediate-Kosten ausgeben.
+Evidenz `evidence/m3-tap-offload-2026-11-06/`. Ausführungsgates/SDK/Wire/IPC unverändert.

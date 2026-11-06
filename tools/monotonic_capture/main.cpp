@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/prctl.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
@@ -28,8 +29,8 @@ namespace {
 volatile sig_atomic_t stopping=0;
 void stop(int){stopping=1;}
 uint64_t mono(){timespec t{};if(clock_gettime(CLOCK_MONOTONIC,&t))throw std::runtime_error("clock_gettime");return uint64_t(t.tv_sec)*1000000000+t.tv_nsec;}
-struct Record {uint64_t ns;uint32_t length,captured,type,ifindex;std::array<uint8_t,128> prefix;};
-static_assert(sizeof(Record)==152);
+struct Record {uint64_t ns;uint32_t length,captured,type,ifindex,gso_segs,gso_size,vlan_present,vlan_tci;std::array<uint8_t,128> prefix;};
+static_assert(sizeof(Record)==168);
 struct Counters {uint64_t seen,submitted,reserve_failed,copy_failed;};
 struct Program {
  std::vector<bpf_insn> code;std::map<std::string,size_t> labels;std::vector<std::pair<size_t,std::string>> jumps;
@@ -48,8 +49,8 @@ Program program(int stats,int ring){
  p.call(BPF_FUNC_ktime_get_ns);p.mov(7,0);p.map(1,ring);p.imm(2,sizeof(Record));p.imm(3,0);p.call(BPF_FUNC_ringbuf_reserve);p.jump(BPF_JEQ,0,0,"reserve_failed");p.mov(9,0);
  for(int offset=0;offset<int(sizeof(Record));offset+=8)p.op(BPF_ST|BPF_DW|BPF_MEM,9,0,offset,0);
  p.op(BPF_STX|BPF_DW|BPF_MEM,9,7,0);p.op(BPF_LDX|BPF_W|BPF_MEM,7,6,offsetof(__sk_buff,len));p.op(BPF_STX|BPF_W|BPF_MEM,9,7,8);p.jump(BPF_JLE,7,128,"bounded");p.imm(7,128);p.label("bounded");p.jump(BPF_JEQ,7,0,"copy_failed");p.op(BPF_STX|BPF_W|BPF_MEM,9,7,12);
- for(const auto& pair:std::array<std::pair<int,int>,2>{{{int(offsetof(__sk_buff,pkt_type)),16},{int(offsetof(__sk_buff,ifindex)),20}}}){p.op(BPF_LDX|BPF_W|BPF_MEM,0,6,pair.first);p.op(BPF_STX|BPF_W|BPF_MEM,9,0,pair.second);}
- p.mov(1,6);p.imm(2,0);p.mov(3,9);p.op(BPF_ALU64|BPF_ADD|BPF_K,3,0,0,24);p.mov(4,7);p.call(BPF_FUNC_skb_load_bytes);p.jump(BPF_JNE,0,0,"copy_failed");p.mov(1,9);p.imm(2,0);p.call(BPF_FUNC_ringbuf_submit);p.count(8);p.jump(BPF_JA,0,0,"exit");
+ for(const auto& pair:std::array<std::pair<int,int>,6>{{{int(offsetof(__sk_buff,pkt_type)),16},{int(offsetof(__sk_buff,ifindex)),20},{int(offsetof(__sk_buff,gso_segs)),24},{int(offsetof(__sk_buff,gso_size)),28},{int(offsetof(__sk_buff,vlan_present)),32},{int(offsetof(__sk_buff,vlan_tci)),36}}}){p.op(BPF_LDX|BPF_W|BPF_MEM,0,6,pair.first);p.op(BPF_STX|BPF_W|BPF_MEM,9,0,pair.second);}
+ p.mov(1,6);p.imm(2,0);p.mov(3,9);p.op(BPF_ALU64|BPF_ADD|BPF_K,3,0,0,40);p.mov(4,7);p.call(BPF_FUNC_skb_load_bytes);p.jump(BPF_JNE,0,0,"copy_failed");p.mov(1,9);p.imm(2,0);p.call(BPF_FUNC_ringbuf_submit);p.count(8);p.jump(BPF_JA,0,0,"exit");
  p.label("copy_failed");p.mov(1,9);p.imm(2,0);p.call(BPF_FUNC_ringbuf_discard);p.count(24);p.jump(BPF_JA,0,0,"exit");p.label("reserve_failed");p.count(16);p.label("exit");p.imm(0,0);p.op(BPF_JMP|BPF_EXIT);p.finish();return p;
 }
 struct Sink {std::ofstream file;uint64_t records=0;bool failed=false;};
@@ -73,10 +74,11 @@ int main(int argc,char** argv){
   Fd prog{bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER,"m3_monotonic","GPL",p.code.data(),p.code.size(),&opts)};
   if(prog.value<0){std::cerr<<verifier.data();throw std::runtime_error("BPF program load: "+std::string(strerror(errno)));}
   Sink sink{std::ofstream(argv[2],std::ios::binary)};if(!sink.file)throw std::runtime_error("output open failed");
-  // File header: magic, version=1, record size=152, clock=1 (kernel MONOTONIC).
-  const std::array<uint32_t,4> header{0x314d5253,1,sizeof(Record),1};sink.file.write(reinterpret_cast<const char*>(header.data()),sizeof(header));
+  // Artifact v2 adds GSO/VLAN metadata; SDK wire/IPC is unchanged.
+  const std::array<uint32_t,4> header{0x314d5253,2,sizeof(Record),1};sink.file.write(reinterpret_cast<const char*>(header.data()),sizeof(header));
   ring_buffer* buffer=ring_buffer__new(ring.value,consume,&sink,nullptr);if(!buffer)throw std::runtime_error("ring buffer create failed");
   Fd socket{::socket(AF_PACKET,SOCK_RAW|SOCK_CLOEXEC,htons(ETH_P_ALL))};if(socket.value<0)throw std::runtime_error("AF_PACKET socket failed");
+  ifreq device{};std::strncpy(device.ifr_name,argv[1],IFNAMSIZ-1);if(ioctl(socket.value,SIOCGIFMTU,&device))throw std::runtime_error("MTU read failed");const int mtu=device.ifr_mtu;
   sockaddr_ll address{};address.sll_family=AF_PACKET;address.sll_protocol=htons(ETH_P_ALL);address.sll_ifindex=index;
   if(bind(socket.value,reinterpret_cast<sockaddr*>(&address),sizeof(address)))throw std::runtime_error("socket bind failed");
   const auto attach_before=mono();if(setsockopt(socket.value,SOL_SOCKET,SO_ATTACH_BPF,&prog.value,sizeof(prog.value)))throw std::runtime_error("socket attach failed");const auto ready=mono();
@@ -90,7 +92,7 @@ int main(int argc,char** argv){
   if(ring_buffer__poll(buffer,100)<0)poll_failed=true;
   if(bpf_map_lookup_elem(stats.value,&key,&later))throw std::runtime_error("stats reread failed");
   ring_buffer__free(buffer);sink.file.flush();const bool complete=!poll_failed&&!sink.failed&&sink.file.good()&&!std::memcmp(&counters,&later,sizeof(counters))&&counters.seen==counters.submitted+counters.reserve_failed+counters.copy_failed&&counters.submitted==sink.records&&!counters.reserve_failed&&!counters.copy_failed;
-  std::cout<<"{\"complete\":"<<(complete?"true":"false")<<",\"records\":"<<sink.records<<",\"seen\":"<<counters.seen<<",\"submitted\":"<<counters.submitted<<",\"reserve_failed\":"<<counters.reserve_failed<<",\"copy_failed\":"<<counters.copy_failed<<",\"ready_ns\":"<<ready<<",\"stop_before_ns\":"<<stop_before<<",\"ifindex\":"<<index<<",\"time_namespace_zero\":true,\"ring_bytes\":"<<ring_bytes<<",\"clock\":\"kernel_monotonic\",\"record_bytes\":152,\"prefix_bytes\":128}\n";
+  std::cout<<"{\"complete\":"<<(complete?"true":"false")<<",\"records\":"<<sink.records<<",\"seen\":"<<counters.seen<<",\"submitted\":"<<counters.submitted<<",\"reserve_failed\":"<<counters.reserve_failed<<",\"copy_failed\":"<<counters.copy_failed<<",\"ready_ns\":"<<ready<<",\"stop_before_ns\":"<<stop_before<<",\"ifindex\":"<<index<<",\"time_namespace_zero\":true,\"ring_bytes\":"<<ring_bytes<<",\"clock\":\"kernel_monotonic\",\"artifact_version\":2,\"mtu\":"<<mtu<<",\"record_bytes\":168,\"prefix_bytes\":128}\n";
   return complete?0:2;
  }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
 }

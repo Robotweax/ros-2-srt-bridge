@@ -708,3 +708,25 @@ three five-minute paced N5 repetitions. It reuses the installed development buil
 freezes sources and retains failures. See the [study design and evidence](evidence/m3-observer-study-2026-11-06/README.md).
 Results describe this shared emulated VM; they do not establish isolated observer
 cost or controlled SRT/DDS performance.
+
+
+### Tap/offload scope correction
+
+Controlled Linuxkit/veth probes place the egress socket tap after the tested
+netem drop/delay and the receive tap before the tested ingress drop. The older
+`pre-qdisc` scope label is corrected; historical artifacts keep their original
+text and require this qualification when interpreted.
+
+Capture artifact v2 records GSO/VLAN metadata and MTU. One segmented UDP send can
+appear as one large skb while delivering eight datagrams, so `frame_interpretation`
+is separate from observation qualification. Opt-in runners snapshot interface
+features read-only; old v1 metadata remains explicitly unknown. Physical frame
+bytes/delivery are still outside this accounting.
+
+PCAP mode is now immediate, with ordered load-stop/drain. Captured/file counts
+and kernel-drop gates remain required; filter-counter population reconciliation
+is tracked separately. Unreconciled PCAP populations withhold realtime window
+summaries. The independent native observer retains its own loss/coverage gates.
+See [tap/offload evidence](evidence/m3-tap-offload-2026-11-06/README.md). The earlier
+observer-cost study applies to v1/buffered mode; v2/immediate costs need separate
+qualification.

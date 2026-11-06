@@ -478,5 +478,41 @@
     "cpu_overhead": "signs vary; shared emulated VM and differing sensor populations prevent causal estimate",
     "memory": "on-minus-off sampled charged maxima roughly 19..23 MiB per endpoint, not physical footprint/PSS",
     "complete_m3_acceptance": false
+  },
+  "tap_offload_followup": {
+    "status": "seven controlled veth cases and four live regressions pass; physical scope remains open",
+    "evidence": "evidence/m3-tap-offload-2026-11-06",
+    "capture_artifact_version": 2,
+    "capture_record_bytes": 168,
+    "offload_metadata": [
+      "gso_segs",
+      "gso_size",
+      "vlan_present",
+      "vlan_tci",
+      "mtu"
+    ],
+    "observer_stage": {
+      "egress": "after tested netem root drop/delay",
+      "ingress": "before tested ingress drop"
+    },
+    "gso_counterexample": {
+      "observations_each_endpoint": 1,
+      "skb_bytes": 9642,
+      "application_datagrams": 8,
+      "payload_bytes_each": 1200,
+      "frame_interpretation_qualified": false
+    },
+    "pcap_mode": "immediate; file integrity and filter population reconciliation are separate; unreconciled populations withhold realtime windows",
+    "host_python_tests": 74,
+    "final_source_files": 159,
+    "live_regressions": 4,
+    "production_cpp_unchanged": true,
+    "remaining": [
+      "other kernels/devices/offload paths",
+      "v2/immediate observer cost",
+      "controlled resources and remaining duration/profile matrix",
+      "N3/N4 and semantic/age/crypto alignment"
+    ],
+    "complete_m3_acceptance": false
   }
 }

@@ -92,9 +92,40 @@ def summarize(paths, local_address, *, allow_udp_fragments=False, timestamp_wind
                            source_frame_bytes=source,parity_frame_bytes=parity)
     result=dict(records=records,first_timestamp_ns=first,last_timestamp_ns=last,
         classes=dict(counts),unaccounted=dict(issues),fec=fec,
-        byte_scope='captured Ethernet frame lengths; excludes preamble, FCS and physical-link overhead; egress is pre-qdisc')
+        byte_scope='captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification')
 
     if timestamp_window is not None:
         result['time_window']=dict(accounting_complete=not bool(issues),timestamp_bounds_ns=list(timestamp_window),buckets={key:dict(records=value['records'],classes=dict(value['classes'])) for key,value in buckets.items()},
             scope='certain inside + boundary gives conditional upper frame-byte bound; all UDP traffic, not source-population attribution; timestamp quantization included')
     return result
+
+
+def validate_tcpdump_footer(footer,records,*,require_nonempty=True):
+    """Validate written-record integrity; retain ambiguous filter population counts."""
+    import re
+    def counter(pattern):
+        matches=re.findall(pattern,footer)
+        if not matches:raise ValueError('missing tcpdump counter')
+        return int(matches[-1])
+    captured=counter(r'(\d+) packets? captured')
+    filtered=counter(r'(\d+) packets? received by filter')
+    dropped=counter(r'(\d+) packets? dropped by kernel')
+    if dropped or captured!=records or (require_nonempty and not records):raise ValueError('unreconciled tcpdump counters: captured/filter/file counts differ or drops present')
+    return dict(tcpdump_reported_packets=captured,tcpdump_reported_filtered_packets=filtered,tcpdump_kernel_drops=dropped,tcpdump_file_integrity_valid=True,tcpdump_population_reconciled=filtered==captured)
+
+
+def stop_captures(lab):
+    """Stop the owned UDP load first, allow buffered dispatch, then close taps."""
+    import time
+    def stop(role,label,names):
+        code='import pathlib,os,signal\nfor p in pathlib.Path("/proc").glob("[0-9]*/comm"):\n try:\n  if p.read_text().strip() in '+repr(tuple(names))+':os.kill(int(p.parent.name),signal.SIGINT)\n except (FileNotFoundError,ProcessLookupError):pass\n'
+        lab.inside(role,label,['python3','-c',code])
+    errors=[]
+    if 'robot' in lab.containers:
+        try:stop('robot','competitor-stop',('iperf3',))
+        except Exception as error:errors.append(str(error))
+    time.sleep(1.25) # Allow in-flight traffic to settle; immediate dispatch counters still fail closed.
+    for role in lab.containers:
+        try:stop(role,role+'-capture-stop',('tcpdump','m3_mono_cap'))
+        except Exception as error:errors.append(str(error))
+    if errors:raise RuntimeError('; '.join(errors))

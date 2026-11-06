@@ -1,0 +1,2017 @@
+{
+  "status": "passed",
+  "case": "baseline",
+  "number": 1,
+  "scope": "synthetic UDP only, no ROS/SRT application peers; fresh internal containers; no competitor; offload settings read-only",
+  "clock_proof": {
+    "operator": "eec6bb52-6781-4e81-8f80-7b87d00379da\nmonotonic           0         0\nboottime            0         0\n",
+    "robot": "eec6bb52-6781-4e81-8f80-7b87d00379da\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "features_before": {
+    "operator": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    },
+    "robot": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    }
+  },
+  "filters": {
+    "before": [],
+    "after": []
+  },
+  "features_after": {
+    "operator": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    },
+    "robot": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    }
+  },
+  "stage": "plain UDP observation population matches delivery",
+  "sent_datagrams": 16,
+  "sender_observations": 16,
+  "receiver_observations": 16,
+  "application_deliveries": 16,
+  "drop_count": 0,
+  "sender_delay_ns": [
+    499958,
+    35041,
+    34750,
+    33875,
+    33875,
+    34625,
+    35375,
+    46459,
+    32167,
+    23833,
+    33000,
+    29333,
+    24000,
+    21125,
+    29792,
+    21709
+  ],
+  "capture_status": {
+    "robot": {
+      "complete": true,
+      "records": 28,
+      "seen": 28,
+      "submitted": 28,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 1588232549597,
+      "stop_before_ns": 1593391075473,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "operator": {
+      "complete": true,
+      "records": 26,
+      "seen": 26,
+      "submitted": 26,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 1588232316013,
+      "stop_before_ns": 1593152575098,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "pcap_dispatch": {
+    "robot": {
+      "qualified": true,
+      "tcpdump_reported_packets": 17,
+      "tcpdump_reported_filtered_packets": 17,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_file_integrity_valid": true,
+      "tcpdump_population_reconciled": true,
+      "scope": "filter population reconciliation separate from file integrity; exact known-probe equality checked independently"
+    },
+    "operator": {
+      "qualified": true,
+      "tcpdump_reported_packets": 17,
+      "tcpdump_reported_filtered_packets": 17,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_file_integrity_valid": true,
+      "tcpdump_population_reconciled": true,
+      "scope": "filter population reconciliation separate from file integrity; exact known-probe equality checked independently"
+    }
+  },
+  "observations": {
+    "robot": [
+      {
+        "monotonic_ns": 1588707310513,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 0
+      },
+      {
+        "monotonic_ns": 1588716729138,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 1
+      },
+      {
+        "monotonic_ns": 1588723773888,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 2
+      },
+      {
+        "monotonic_ns": 1588730740597,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 3
+      },
+      {
+        "monotonic_ns": 1588737756680,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 4
+      },
+      {
+        "monotonic_ns": 1588744700680,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 5
+      },
+      {
+        "monotonic_ns": 1588752444805,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 6
+      },
+      {
+        "monotonic_ns": 1588760115222,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 7
+      },
+      {
+        "monotonic_ns": 1588765450847,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 8
+      },
+      {
+        "monotonic_ns": 1588771383138,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 9
+      },
+      {
+        "monotonic_ns": 1588777384638,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 10
+      },
+      {
+        "monotonic_ns": 1588784756555,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 11
+      },
+      {
+        "monotonic_ns": 1588790561597,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 12
+      },
+      {
+        "monotonic_ns": 1588798103305,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 13
+      },
+      {
+        "monotonic_ns": 1588803436805,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 14
+      },
+      {
+        "monotonic_ns": 1588808686222,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 15
+      },
+      {
+        "monotonic_ns": 1590949974347,
+        "length": 1242,
+        "packet_type": 4,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1001,
+        "sequence": 0
+      }
+    ],
+    "operator": [
+      {
+        "monotonic_ns": 1588707378388,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 0
+      },
+      {
+        "monotonic_ns": 1588716771472,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 1
+      },
+      {
+        "monotonic_ns": 1588723818472,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 2
+      },
+      {
+        "monotonic_ns": 1588730782055,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 3
+      },
+      {
+        "monotonic_ns": 1588737796347,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 4
+      },
+      {
+        "monotonic_ns": 1588744739680,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 5
+      },
+      {
+        "monotonic_ns": 1588752494972,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 6
+      },
+      {
+        "monotonic_ns": 1588760163597,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 7
+      },
+      {
+        "monotonic_ns": 1588765486305,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 8
+      },
+      {
+        "monotonic_ns": 1588771412388,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 9
+      },
+      {
+        "monotonic_ns": 1588777424555,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 10
+      },
+      {
+        "monotonic_ns": 1588784789555,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 11
+      },
+      {
+        "monotonic_ns": 1588790597847,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 12
+      },
+      {
+        "monotonic_ns": 1588798134430,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 13
+      },
+      {
+        "monotonic_ns": 1588803472513,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 14
+      },
+      {
+        "monotonic_ns": 1588808714347,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1,
+        "sequence": 15
+      },
+      {
+        "monotonic_ns": 1590950041764,
+        "length": 1242,
+        "packet_type": 0,
+        "ifindex": 11,
+        "artifact_version": 2,
+        "gso_segs": 0,
+        "gso_size": 0,
+        "vlan_present": 0,
+        "vlan_tci": 0,
+        "case": 1001,
+        "sequence": 0
+      }
+    ]
+  },
+  "positive_restoration_control_passed": true
+}

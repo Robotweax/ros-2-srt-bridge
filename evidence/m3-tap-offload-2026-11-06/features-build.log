@@ -1,0 +1,14 @@
+tools/netdev_features/main.cpp: In function ‘int main(int, char**)’:
+tools/netdev_features/main.cpp:19:3: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+   19 |   if(ioctl(fd,SIOCGIFMTU,&req))throw std::runtime_error("MTU read failed");int mtu=req.ifr_mtu;
+      |   ^~
+tools/netdev_features/main.cpp:19:76: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   19 |   if(ioctl(fd,SIOCGIFMTU,&req))throw std::runtime_error("MTU read failed");int mtu=req.ifr_mtu;
+      |                                                                            ^~~
+tools/netdev_features/main.cpp:22:3: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+   22 |   if(!(info->sset_mask&(1ULL<<ETH_SS_FEATURES))||!info->data[0]||info->data[0]>4096)throw std::runtime_error("feature set unavailable");const uint32_t count=info->data[0],blocks=(count+31)/32;
+      |   ^~
+tools/netdev_features/main.cpp:22:137: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   22 |   if(!(info->sset_mask&(1ULL<<ETH_SS_FEATURES))||!info->data[0]||info->data[0]>4096)throw std::runtime_error("feature set unavailable");const uint32_t count=info->data[0],blocks=(count+31)/32;
+      |                                                                                                                                         ^~~~~
+cc1plus: all warnings being treated as errors

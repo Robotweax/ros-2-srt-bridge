@@ -6,19 +6,25 @@ import struct
 from m3_capture import classify
 
 HEADER=struct.Struct('<IIII')
-RECORD=struct.Struct('<QIIII128s')
+RECORD=struct.Struct('<QIIII128s') # Historical v1.
+RECORD_V2=struct.Struct('<QIIIIIIII128s')
 
 
 def records(path):
     with Path(path).open('rb') as file:
-        if file.read(HEADER.size)!=HEADER.pack(0x314d5253,1,RECORD.size,1):raise ValueError('invalid monotonic capture header')
+        header=file.read(HEADER.size)
+        if header==HEADER.pack(0x314d5253,1,RECORD.size,1):version=1;record=RECORD
+        elif header==HEADER.pack(0x314d5253,2,RECORD_V2.size,1):version=2;record=RECORD_V2
+        else:raise ValueError('invalid monotonic capture header')
         while True:
-            data=file.read(RECORD.size)
+            data=file.read(record.size)
             if not data:break
-            if len(data)!=RECORD.size:raise ValueError('truncated monotonic record')
-            ns,length,captured,kind,index,prefix=RECORD.unpack(data)
+            if len(data)!=record.size:raise ValueError('truncated monotonic record')
+            values=record.unpack(data);ns,length,captured,kind,index=values[:5];prefix=values[-1]
+            metadata=dict(zip(('gso_segs','gso_size','vlan_present','vlan_tci'),values[5:9])) if version==2 else dict.fromkeys(('gso_segs','gso_size','vlan_present','vlan_tci'))
+            if version==2 and (metadata['vlan_present'] not in (0,1) or metadata['gso_segs']>65535 or metadata['gso_size']>65535 or metadata['vlan_tci']>65535):raise ValueError('invalid offload metadata')
             if not ns or not index or kind not in range(5) or captured!=min(length,128) or any(prefix[captured:]):raise ValueError('invalid monotonic record fields')
-            yield dict(monotonic_ns=ns,length=length,prefix=prefix[:captured],packet_type=kind,ifindex=index)
+            yield dict(monotonic_ns=ns,length=length,prefix=prefix[:captured],packet_type=kind,ifindex=index,artifact_version=version,**metadata)
 
 
 def decode(row,local_address,allow_udp_fragments=False):
@@ -34,6 +40,7 @@ def decode(row,local_address,allow_udp_fragments=False):
             if offset+size>min(len(frame),end):break
             protocol=frame[offset];offset+=size
         raise ValueError('IPv6 UDP/unsupported extension chain outside qualified parser')
+    if frame[12:14] in (b'\x81\x00',b'\x88\xa8'):raise ValueError('inline VLAN outside qualified parser')
     if frame[12:14]!=b'\x08\x00':return None
     if len(frame)<34:raise ValueError('short IPv4 prefix')
     ip=frame[14:];ihl=(ip[0]&15)*4
@@ -71,17 +78,23 @@ def summarize(path,status,local_address,window,*,allow_udp_fragments=False):
     if not rows or len(rows)!=status['records'] or status['seen']!=status['submitted'] or status['submitted']!=len(rows) or status['reserve_failed'] or status['copy_failed']:raise ValueError('incomplete monotonic capture counters')
     indexes={r['ifindex'] for r in rows}
     if indexes!={status['ifindex']}:raise ValueError('capture interface changed')
-    counts=defaultdict(lambda:dict(packets=0,ethernet_bytes=0,udp_payload_bytes=0));inside=0;ignored=0
+    counts=defaultdict(lambda:dict(packets=0,ethernet_bytes=0,udp_payload_bytes=0));inside=0;ignored=0;udp_rows=[]
     for row in rows:
         decoded=decode(row,local_address,allow_udp_fragments)
         if not start<=row['monotonic_ns']<end:continue
         inside+=1
         if decoded is None:ignored+=1;continue
+        udp_rows.append(row)
         key,payload=decoded;c=counts[key];c['packets']+=1;c['ethernet_bytes']+=row['length']
         if payload is None:c['udp_payload_bytes']=None
         elif c['udp_payload_bytes'] is not None:c['udp_payload_bytes']+=payload
-    return dict(qualified=True,clock='kernel_monotonic',window_monotonic_ns=[start,end],total_records=len(rows),inside_records=inside,ignored_non_udp_records=ignored,classes=dict(counts),
-        scope='AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load')
+    metadata_known=all(r['artifact_version']==2 for r in udp_rows) and bool(udp_rows)
+    gso=sum(bool(r['gso_size'] or (r['gso_segs'] or 0)>1) for r in udp_rows)
+    vlan=sum(bool(r['vlan_present']) for r in udp_rows)
+    oversized=sum(r['length']>status['mtu']+14 for r in udp_rows) if 'mtu' in status else None
+    framing=dict(qualified=metadata_known and not gso and not vlan and oversized==0,metadata_available=metadata_known,gso_observations=gso if metadata_known else None,vlan_observations=vlan if metadata_known else None,over_mtu_observations=oversized,mtu=status.get('mtu'),scope='no indicated segmentation/VLAN/over-MTU skb in measured IPv4 UDP observations; not physical frame/delivery qualification; legacy ethernet_bytes keys contain observed skb lengths')
+    return dict(qualified=True,frame_interpretation=framing,clock='kernel_monotonic',window_monotonic_ns=[start,end],total_records=len(rows),inside_records=inside,ignored_non_udp_records=ignored,classes=dict(counts),
+        byte_unit='observed_skb_length_bytes',scope='AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; GSO/VLAN metadata gates frame interpretation; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load')
 
 
 def prepare(root,run,image,execute,skip_build):
@@ -89,10 +102,10 @@ def prepare(root,run,image,execute,skip_build):
     if not skip_build:
         execute('monotonic-capture-build',['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none',
             '-v',str(root)+':/workspace','-w','/workspace',image,'bash','-c',
-            'mkdir -p build/m3-monotonic-capture && g++ -std=c++20 -O2 -Wall -Wextra -Wpedantic -Werror tools/monotonic_capture/main.cpp -lbpf -o build/m3-monotonic-capture/monotonic_capture'])
+            'mkdir -p build/m3-monotonic-capture build/m3-netdev-features && g++ -std=c++20 -O2 -Wall -Wextra -Wpedantic -Werror tools/monotonic_capture/main.cpp -lbpf -o build/m3-monotonic-capture/monotonic_capture && g++ -std=c++20 -O2 -Wall -Wextra -Wpedantic -Werror tools/netdev_features/main.cpp -o build/m3-netdev-features/netdev_features'])
     binary=Path(root)/'build/m3-monotonic-capture/monotonic_capture'
     if not binary.is_file():raise ValueError('monotonic capture binary missing; run without --skip-build')
-    return dict(enabled=True,binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),source_sha256=hashlib.sha256((Path(root)/'tools/monotonic_capture/main.cpp').read_bytes()).hexdigest(),extra_capability='BPF on owned endpoints only',scope='experimental passive AF_PACKET observation; zero time-namespace offsets required; not physical wire delivery')
+    return dict(enabled=True,binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),source_sha256=hashlib.sha256((Path(root)/'tools/monotonic_capture/main.cpp').read_bytes()).hexdigest(),feature_probe_sha256=hashlib.sha256((Path(root)/'build/m3-netdev-features/netdev_features').read_bytes()).hexdigest(),extra_capability='BPF on owned endpoints only',scope='experimental passive AF_PACKET observation; zero time-namespace offsets required; not physical wire delivery')
 
 
 def start(run,inside,lab,captures):
@@ -110,10 +123,19 @@ def start(run,inside,lab,captures):
         time.sleep(.01)
 
 
-def summarize_run(run,addresses,measurements,*,allow_udp_fragments):
+def feature_snapshot(lab,label):
+    import json
+    result={role:json.loads(lab.inside(role,label+'-'+role,['build/m3-netdev-features/netdev_features','eth0'])) for role in lab.containers}
+    if any(r.get('read_only') is not True or r.get('interface')!='eth0' or r.get('mtu',0)<=0 or not r.get('features') for r in result.values()):raise ValueError('invalid feature snapshot')
+    return result
+
+
+def summarize_run(run,addresses,measurements,*,allow_udp_fragments,features=None):
     import json
     run=Path(run)
     statuses={role:json.loads((run/(role+'-monotonic-capture.log')).read_text().splitlines()[-1]) for role in addresses}
+    if any(s.get('artifact_version')!=2 for s in statuses.values()):raise ValueError('new runs require artifact v2; rebuild monotonic observer')
+    if features and any(statuses[r].get('mtu')!=features[r]['mtu'] for r in addresses):raise ValueError('observer MTU differs from interface snapshot')
     windows={name:{role:summarize(run/(role+'.mono'),statuses[role],address,window['monotonic_ns'],allow_udp_fragments=allow_udp_fragments) for role,address in addresses.items()} for name,window in measurements['windows'].items()}
     if not windows:raise ValueError('no workload windows for monotonic capture')
     return dict(statuses=statuses,windows=windows)

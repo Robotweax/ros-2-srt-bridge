@@ -1207,3 +1207,58 @@ qualifizieren; längere SRT-/DDS-Läufe/weitere Impairment-Profile, volle Matrix
 N3-/N4-Spezialgates. Pacing/Reconciliation/Age/Crypto-Semantik bleibt vor einem
 Transportkostenvergleich anzugleichen. M3 in Arbeit, PR #2 Draft,
 Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Tap-/Offload-Probes und Capture-Artefakt v2
+
+- Kontrollierte synthetische UDP-Probes mit frischen eigenen Endpoint-Paaren:
+  normales UDP, 100% Egress-netem-Drop, 200-ms-Delay, gezielter Ingress-Drop,
+  UDP_SEGMENT ohne/mit netem und shaping-only 512 kbit/s. Kein ROS/SRT-App-Peer,
+  kein Konkurrent im Shaping-Probe; kein voller N5-Nachweis dadurch. Je Probe
+  positives Restoration-Control im selben offenen Observer zwingend.
+- Laufzeitbeleg: 16 normale Datagramme an beiden Taps/Empfänger. Egress-Drop:
+  16 gezielte UDP-Matches vor Root, null Tap-/App-Beobachtungen; globale Rootdrops
+  enthalten zusätzlich IPv6-Hintergrund. Delay: Sender-Tap inklusive Queue-Delay,
+  finale Spanne 200,02–206,94 ms (Klassifikationsschwelle 150 ms, kein Präzisionsbound).
+  Ingress-Drop: 16 an beiden Taps, 16 gezielte Drops, null App-Receipts.
+  Historisches generisches `egress is pre-qdisc`-Label war für dieses Fixture
+  falsch. Neue Scope-Texte neutral, alte Artefakte unverändert mit Korrektur lesen.
+- UDP_SEGMENT in beiden Fällen: eine 9.642-Byte-SKB-Observation pro Seite,
+  gso_segs=8/gso_size=1200, acht 1.200-Byte-Datagramme an der App. Keine physische
+  Frame-/Datagrammzählung aus SKB-Anzahl ableiten. Native Capture-Artefakt v2 mit
+  168-Byte-Records/GSO-/VLAN-/MTU-Metadaten, 128-Byte-Prefix bleibt. Reader unterstützt
+  v1/152 Byte mit unbekannten Offloads; neue Runner verlangen v2. SDK-Wire/IPC
+  unverändert. Eigenständige GET-only-Ethtool-Probe speichert Feature-/MTU-Vorher/
+  Nachher, kein SET/keine neuen Privilegien; aktive Features allein beweisen Nutzung
+  nicht. `frame_interpretation` unabhängig von gültiger SKB-Observation und weiter
+  kein Physical-/Checksum-/Padding-/FCS-/Delivery-Nachweis.
+- Capture-Datengap entdeckt: Buffered-PCAP schrieb 16 statt 17 bekannter Beobachtungen,
+  letztes Control fehlte. Runner jetzt Immediate-Mode, Client zuerst stoppen,
+  kurze Inflight-Drainphase. Captured/File/Kerneldrop-Gates strikt. Filtercounter
+  können auch bei exakt passenden bekannten Tap-Populationen abweichen; Ursache/
+  Einheit nicht vollständig geklärt. Daher separates Population-Reconciliation-Flag,
+  keine falsche universelle Gleichheitsinvariante. Unreconciled verwirft Realtime-
+  PCAP-Fenster, nicht unabhängige native Observer-Counter. Bekannte-Probe-Tupel in
+  finalen Fällen zwischen Native/PCAP exakt identisch.
+- 74 Python-Tests bestanden, native Builds mit -Werror. V2-Loopback 40 Datagramme/
+  80 korrekte Stamps/Längen; forcierter 4-KiB-Overflow 2.000 Seen/23 Stored/
+  1.977 Reserve-Fehler, erwarteter Exit 2. Sieben kontrollierte Fälle bestanden.
+  Vier finale Live-Läufe: SRT/DDS N0 Smoke je 8 bestätigt, paced N5 30s/15 bestätigt,
+  Default-Sensor Smoke ohne BPF-Observer. Alle Opt-in-Phasen qualifiziert, keine
+  Recorderfehler/GSO/VLAN/Over-MTU-SKBs in gemessener UDP-Population; PCAP-Counter
+  hier reconciled. Feature-Snapshots stimmen. 159 aktuelle Quellen in Probe und
+  vier Manifesten; installierte Python-Dateien bytegleich, 56 Produktionsquellen
+  und Command-/Simulator-Binaries unverändert. Native Observer/Feature-Binaries neu.
+- Vier alte Classic-Captures numerisch/Klassen unverändert (nur Scope korrigiert),
+  vier v1-Endpunkt-/Phasenfenster identisch mit Offload-Metadaten unbekannt/
+  Frameinterpretation unqualifiziert. Rohdaten/alte Evidenz nicht umschreiben.
+  Neue Evidenz `evidence/m3-tap-offload-2026-11-06/` mit Feature-/Flow-/TC-Proofs,
+  Counter-Gegenbeispielen und separaten Development-Iterationen. Volle Docker-
+  Inspect-Logs nicht publiziert, nur Capability-/Namespace-Projektion. Roh-PCAPs/
+  Prefixes lokal mit Hashes. Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+
+**Weiter:** V2-/Immediate-Observer-Kosten neu qualifizieren; die vorige V1-/Buffered-
+Studie gilt dafür nicht direkt. Weitere Device-/Offload-Pfade, kontrollierte
+Ressourcen, verbleibende Profile/Dauern und N3-/N4-Gates. Pacing/Reconciliation/
+Age/Crypto vor Transportkostenvergleich angleichen. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.
