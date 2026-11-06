@@ -8,7 +8,7 @@ enum class CommandTracePoint : unsigned {
     endpoint_started=1,session_changed,invalidate_requested,invalidate_completed,
     sender_admission,submit_result,worker_unknown,endpoint_stopping,endpoint_stopped,
     mailbox_flushed=20,input_dropped,make_rejected,queue_rejected,outbound_dropped,
-    provider_sent,provider_error,outbound_flushed,transport_stopping
+    provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,

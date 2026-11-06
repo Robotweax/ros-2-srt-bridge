@@ -1255,3 +1255,23 @@ order; the trace records the evaluated rejection branch rather than re-reading
 revocable proof state. Header/config layout changes require rebuilding consumers;
 SRT wire and worker IPC formats are unchanged. Traced workloads add observer and
 logging cost and are separate development cases from frozen qualification runs.
+
+### Retaining an unsent command during soft clock failure
+
+The traced N5 development case exposed a command admitted to the volatile
+transport mailbox but discarded when `Session::make_control` returned
+`clock_unqualified`, before any SDK handoff. The fix keeps that original command
+in one reserved ingress slot until the soft clock condition clears. The slot is
+charged to the existing 64-item ingress / 56-command limits, preserves FIFO order,
+and does not allocate an additional unbounded queue. Session probes and socket
+ownership continue independently. Original proof liveness, context and deadline
+are checked on each attempt; expiry/revocation/context loss still discard it.
+There is no re-admission, origin/deadline renewal or resending of an SDK-accepted
+command. Other envelope errors retain their existing fail-closed behavior.
+`clock_deferred` records the first soft-clock deferral for that pending command.
+
+The pre-fix trace distinguishes LOCAL_QUEUED through the final driver poll from
+later session invalidation during scenario teardown. Historical IDs without
+traces remain uncertain. The SRT checkpoint labels sender/receiver refer to
+sensor direction: the operator is the sensor receiver and command sender. Do
+not compare an operator journal owner epoch to the robot checkpoint by mistake.

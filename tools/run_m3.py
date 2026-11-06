@@ -194,8 +194,7 @@ def main():
             log.close()
         if args.command_diagnostics:
             try:
-                report['command_diagnostics']={p.name:m3_command_trace.summarize(p) for p in sorted(run.glob('*-bridge-*.log'))}
-                if len(report['command_diagnostics'])!=2 or not all(c['complete'] for c in report['command_diagnostics'].values()):raise RuntimeError('command diagnostics incomplete')
+                report['command_diagnostics']=m3_command_trace.summarize_run(run)
             except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
         credential.unlink(missing_ok=True);save();print(run,flush=True)
     if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('command_diagnostics_error',report.get('capture_error',report.get('error','M3 failed')))))

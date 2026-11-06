@@ -82,6 +82,7 @@ struct TransportOwner::Impl {
     std::array<bool,8> sample_pending{},sample_received{};
     std::array<Input,64> controls{};
     std::size_t input_head=0,input_count=0,input_commands=0;
+    std::optional<Input> pending_command{};bool pending_clock_reported=false;
     std::array<std::shared_ptr<DurableCommandTicket::Proof>,64> command_proofs{};
     std::array<TransportMessage,64> incoming{};
     std::size_t output_head=0,output_count=0,sample_cursor=0;
@@ -141,12 +142,13 @@ struct TransportOwner::Impl {
         if(!same_control(shared.context,current.context)||!current.running){
             for(std::size_t n=0;n<input_count;++n){const auto& item=controls[(input_head+n)%controls.size()];
                 if(item.kind==Kind::command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,item.request,item.route);}
-            current.stale_work+=input_count+output_count;receipts={};receipt_cursor=0;
+            if(pending_command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+            current.stale_work+=input_count+output_count+(pending_command?1:0);pending_command.reset();receipts={};receipt_cursor=0;
             for(auto& slot:checks)if(slot.state){if(slot.proof)slot.proof->pool->revoke(*slot.proof);slot.result.error=SessionError::obsolete_connection;slot.result.start_granted=false;slot.state=2;}
             input_head=input_count=input_commands=output_head=output_count=0;
         }
         publication_allowed=current.running&&current.state==SessionState::active&&current.clock_qualified&&publication_epoch!=UINT64_MAX;
-        current.control_ingress=input_count;current.control_received=output_count;
+        current.control_ingress=input_count+(pending_command?1:0);current.control_received=output_count;
         current.sensor_submitted=mailbox_counts.sensor_submitted;
         current.sensor_ingress_replaced=mailbox_counts.sensor_ingress_replaced;
         current.sensor_ingress_flushed=mailbox_counts.sensor_ingress_flushed;
@@ -330,12 +332,19 @@ struct TransportOwner::Impl {
             std::lock_guard lock(mutex);checks[at].result=result;checks[at].state=2;
         }
     }
+    void release_pending_command(){std::lock_guard lock(mutex);pending_command.reset();}
     void inputs(){
         // One CONTROL item and eight latest samples per iteration bound owner work.
         // Keep an item in the ingress mailbox while the outgoing CONTROL FIFO is full.
         std::array<Input,9> work{};std::size_t count=0;
         {std::lock_guard lock(mutex);
-            if(input_count&&queues.control_count()<64){work[count++]=controls[input_head];if(controls[input_head].kind==Kind::command)--input_commands;controls[input_head]={};input_head=(input_head+1)%controls.size();--input_count;}
+            if(queues.control_count()<64){
+                if(pending_command)work[count++]=*pending_command;
+                else if(input_count){work[count++]=controls[input_head];
+                    if(controls[input_head].kind==Kind::command){--input_commands;pending_command=work[count-1];pending_clock_reported=false;}
+                    controls[input_head]={};input_head=(input_head+1)%controls.size();--input_count;
+                }
+            }
             for(std::size_t i=0;i<route_count;++i)if(sample_pending[i]){work[count++]=samples[i];++mailbox_counts.sensor_inputs;samples[i]={};sample_pending[i]=false;}
         }
         for(std::size_t i=0;i<count;++i){auto& item=work[i];
@@ -345,16 +354,25 @@ struct TransportOwner::Impl {
             if(bad_context||revoked||expired){++current.stale_work;if(item.kind==Kind::sample)++current.sensor_input_rejected;
                 if(item.kind==Kind::command)trace(CommandTracePoint::input_dropped,bad_context?CommandTraceReason::context_mismatch:
                     revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,item.request,item.route);
+                if(item.kind==Kind::command)release_pending_command();
                 continue;}
             const auto time=monotonic_ns();
             auto made=item.kind==Kind::sample?session.make_sample(item.route,item.size,time):session.make_control(item.kind,item.route,item.request,item.size,item.origin,time);
-            apply(made.action);if(!made.envelope){if(item.kind==Kind::command)trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;}
+            apply(made.action);if(!made.envelope){
+                if(item.kind==Kind::command&&made.action.error==SessionError::clock_unqualified){
+                    if(!pending_clock_reported){trace(CommandTracePoint::clock_deferred,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));pending_clock_reported=true;}
+                    continue; // Retain original proof/origin/deadline in the reserved ingress slot.
+                }
+                if(item.kind==Kind::command){trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));release_pending_command();}
+                ++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;
+            }
             auto envelope=*made.envelope;
             if(item.kind==Kind::sample)envelope.source_monotonic_ns=item.origin; // Preserve callback ingress, not dequeue time.
             const auto body=std::span(item.bytes).first(item.size);
             const auto result=item.kind==Kind::sample?queues.sensor({Channel::sensor,links[1].generation},envelope,body,time):queues.control({Channel::control,links[0].generation},envelope,body);
             if(result!=QueueError::none){if(item.kind==Kind::command)trace(CommandTracePoint::queue_rejected,CommandTraceReason::queue_rejected,item.request,item.route,unsigned(result));++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;}
             else if(item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
+            if(item.kind==Kind::command)release_pending_command();
         }
     }
     bool time_expired(const JournalEntry& e)const{return monotonic_ns()>=e.context.deadline_ns;}
@@ -466,7 +484,7 @@ struct TransportOwner::Impl {
             if(sample_pending[at]){++shared.sensor_replaced;++mailbox_counts.sensor_ingress_replaced;}
             samples[at]=item;sample_pending[at]=true;
         }else{
-            if(input_count==controls.size()||(item.proof&&input_commands==56))return SubmitResult::busy;
+            if(input_count+(pending_command?1:0)==controls.size()||(item.proof&&input_commands+(pending_command?1:0)==56))return SubmitResult::busy;
             if(item.proof){if(!item.proof->live->load()||item.proof->claimed.exchange(true))return SubmitResult::obsolete;++input_commands;}
             controls[(input_head+input_count++)%controls.size()]=std::move(item);
         }

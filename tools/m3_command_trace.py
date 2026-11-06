@@ -4,7 +4,7 @@ import json
 POINTS={1:'endpoint_started',2:'session_changed',3:'invalidate_requested',4:'invalidate_completed',
     5:'sender_admission',6:'submit_result',7:'worker_unknown',8:'endpoint_stopping',9:'endpoint_stopped',
     20:'mailbox_flushed',21:'input_dropped',22:'make_rejected',23:'queue_rejected',24:'outbound_dropped',
-    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping'}
+    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred'}
 REASONS={0:'none',1:'session_changed',2:'abandoned_submit',3:'context_mismatch',4:'proof_revoked',
     5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown'}
 
@@ -32,3 +32,13 @@ def summarize(path):
         counts={name:sum(e['point']==point for e in events) for point,name in POINTS.items()},
         events=events,point_names=POINTS,reason_names=REASONS,
         scope='local lossy observations only; no replay/execution/absence authority; sequence order across producers is not causal order; provider_sent is SDK acceptance, not delivery')
+
+
+def summarize_run(run):
+    traces={p.name:summarize(p) for p in sorted(run.glob('*-bridge-*.log'))}
+    # The scenario deliberately replaces the robot bridge during setup. Validate
+    # every recorded incarnation, rather than requiring exactly two processes.
+    if not all(any(name.startswith(role+'-bridge-') for name in traces) for role in ('robot','operator')):
+        raise ValueError('missing endpoint command diagnostics')
+    if not all(trace['complete'] for trace in traces.values()):raise ValueError('command diagnostics incomplete')
+    return traces
