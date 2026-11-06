@@ -125,7 +125,7 @@ struct TransportOwner::Impl {
     void trace(CommandTracePoint point,CommandTraceReason reason,const Identity& id={},std::uint32_t route=0,unsigned value=0){
         if(!config.command_trace)return;
         const auto c=context();
-        config.command_trace->record({0,monotonic_ns(),point,reason,id,c.session,config.session.local_epoch,
+        config.command_trace->record(CommandTraceProducer::transport,{0,monotonic_ns(),point,reason,id,c.session,config.session.local_epoch,
             c.control_generation,c.sensor_generation,route,value});
     }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}

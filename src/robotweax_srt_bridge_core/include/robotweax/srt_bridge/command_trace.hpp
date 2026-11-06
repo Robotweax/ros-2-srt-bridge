@@ -1,7 +1,7 @@
 #pragma once
 #include <robotweax/srt_bridge/commands.hpp>
 #include <atomic>
-#include <mutex>
+
 
 namespace robotweax::srt_bridge {
 enum class CommandTracePoint : unsigned {
@@ -25,30 +25,43 @@ struct CommandTraceEvent {
     unsigned value=0;
     Identity entry_owner_epoch{}; // Populated for worker-record observations only.
 };
-// Optional observational storage shared by coordinator/transport producers and
-// one external consumer. Producers never wait, allocate, call back or perform
-// I/O. Full/contended writes are counted and dropped, never used for decisions.
-// Sequence allocation precedes try-lock: concurrent producer arrival order is
-// not a causal order. Monotonic timestamps bracket local observations only.
+enum class CommandTraceProducer : unsigned { coordinator=0,transport=1 };
+// Two fixed SPSC lanes: exactly one coordinator producer and one transport
+// producer, plus one external consumer. No producer/consumer mutex contention,
+// retry loop, allocation, callback or I/O. Each lane retains FIFO order; a full
+// lane drops new observations explicitly. Traces never authorize decisions.
+// One producer thread per lane is mandatory; producer replacement requires join.
 class CommandTrace {
 public:
-    static constexpr std::size_t capacity=256;
-    void record(CommandTraceEvent event){
+    static constexpr std::size_t capacity=256,lane_capacity=capacity/2;
+    void record(CommandTraceProducer producer,CommandTraceEvent event){
         event.sequence=attempted_.fetch_add(1)+1;
-        std::unique_lock lock(mutex_,std::try_to_lock);
-        if(!lock.owns_lock()||count_==capacity){++dropped_;return;}
-        events_[(head_+count_++)%capacity]=event;
+        auto& lane=lanes_[static_cast<unsigned>(producer)];
+        const auto tail=lane.tail.load(std::memory_order_relaxed);
+        if(tail-lane.head.load(std::memory_order_acquire)>=lane_capacity){++dropped_;return;}
+        lane.events[tail%lane_capacity]=event;
+        lane.tail.store(tail+1,std::memory_order_release);
     }
+    // Convenience for a standalone single coordinator producer.
+    void record(CommandTraceEvent event){record(CommandTraceProducer::coordinator,event);}
     bool poll(CommandTraceEvent& event){
-        std::lock_guard lock(mutex_);if(!count_)return false;
-        event=events_[head_];head_=(head_+1)%capacity;--count_;return true;
+        for(unsigned n=0;n<2;++n){const auto index=(cursor_+n)%2;auto& lane=lanes_[index];
+            const auto head=lane.head.load(std::memory_order_relaxed);
+            if(head==lane.tail.load(std::memory_order_acquire))continue;
+            event=lane.events[head%lane_capacity];lane.head.store(head+1,std::memory_order_release);
+            cursor_=(index+1)%2;return true;
+        }
+        return false;
     }
     std::uint64_t attempted()const{return attempted_.load();}
-    std::uint64_t dropped()const{return dropped_.load();}
+    std::uint64_t dropped()const{return dropped_.load();} // Full lane only, never contention.
 private:
-    std::array<CommandTraceEvent,capacity> events_{};
-    std::size_t head_=0,count_=0;
-    std::mutex mutex_;
+    struct Lane {
+        std::array<CommandTraceEvent,lane_capacity> events{};
+        std::atomic<std::uint64_t> head{0},tail{0};
+    };
+    std::array<Lane,2> lanes_{};
+    unsigned cursor_=0; // Single consumer only.
     std::atomic<std::uint64_t> attempted_{0},dropped_{0};
 };
 }

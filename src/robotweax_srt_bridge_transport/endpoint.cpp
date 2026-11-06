@@ -79,7 +79,7 @@ struct CommandEndpoint::Impl {
     void trace(CommandTracePoint point,CommandTraceReason reason=CommandTraceReason::none,unsigned value=0,Identity session={},Identity entry_owner={}){
         if(!options.transport.command_trace)return;
         const auto c=transport.snapshot().context;
-        options.transport.command_trace->record({0,now(),point,reason,job.task.id,zero(session)?c.session:session,
+        options.transport.command_trace->record(CommandTraceProducer::coordinator,{0,now(),point,reason,job.task.id,zero(session)?c.session:session,
             options.transport.session.local_epoch,c.control_generation,c.sensor_generation,job.task.route,value,entry_owner});
     }
     void fail(EndpointFault fault){if(current.fault==EndpointFault::none)current.fault=fault;stopping=true;transport.request_stop();}

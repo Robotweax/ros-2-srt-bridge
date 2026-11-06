@@ -1283,3 +1283,25 @@ tests and 92 host tests passing. A separate post-fix 90-s N5 development case ha
 32 confirmed successes/effects, two successful soft-clock deferrals and zero
 unresolved commands/recorder drops. Original failed manifests and old uncertainty
 remain retained; this does not close full SRT N5 or M3 qualification.
+
+### Independent trace producers after the long N5 cohort
+
+The fixed-command-runtime cohort completed one passing 300-s case, then failed
+its second case on one missing diagnostic observation (397 retained / 398
+attempted). Both cases' commands resolved successfully and PCAP kernel drops were
+zero; the third case was not run. The diagnostic completeness gate is unchanged.
+The former shared try-lock buffer combined contention/full losses in one counter,
+so those artifacts do not uniquely identify the drop mechanism.
+
+The trace now has two fixed single-producer/single-consumer lanes, 128 events
+per owner (256 total). Only the coordinator writes its lane, only the transport
+owner writes the other, and one external consumer drains both fairly. Producer
+replacement requires joining the previous producer. Release/acquire indices
+protect slot reuse; no producer mutex, retry loop, allocation or I/O is used.
+A full lane still drops new records explicitly and fails completeness. Global
+sequence assignment precedes publication, so cross-owner merged order is not
+causal order. Total storage is unchanged, but per-owner reservations differ;
+this is a new diagnostic configuration requiring its own full cohort. This
+change removes a contention-loss mechanism without claiming it uniquely caused
+the retained failure. Wire, journal, deadline, lease, handler fencing and replay
+policy are unchanged. Consumers must be rebuilt for the trace representation.
