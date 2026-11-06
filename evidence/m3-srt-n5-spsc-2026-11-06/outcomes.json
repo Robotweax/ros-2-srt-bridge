@@ -1,0 +1,211 @@
+{
+  "status": "failed",
+  "rows": [
+    {
+      "seed": 1701,
+      "cohort_case_status": "failed",
+      "harness_status": "passed",
+      "errors": {},
+      "pcap": {
+        "robot": {
+          "captured": 150432,
+          "filter_received": 150432,
+          "kernel_drops": 0,
+          "file_records": 150432
+        },
+        "operator": {
+          "captured": 150432,
+          "filter_received": 150432,
+          "kernel_drops": 0,
+          "file_records": 150432
+        }
+      },
+      "command_summary": {
+        "attempts": 15,
+        "not_admitted": 0,
+        "unresolved": 1,
+        "terminal_observation_latency_ms": {
+          "count": 14,
+          "p50": 1087.450584,
+          "p95": 3252.744002,
+          "p99": 3252.744002,
+          "maximum": 3252.744002
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 14,
+            "p50": 1087.450584,
+            "p95": 3252.744002,
+            "p99": 3252.744002,
+            "maximum": 3252.744002
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "trace_summary": {
+        "robot-bridge-2.log": {
+          "complete": true,
+          "records": 7,
+          "dropped": 0,
+          "counts": {
+            "endpoint_started": 1,
+            "session_changed": 1,
+            "invalidate_requested": 1,
+            "invalidate_completed": 1,
+            "sender_admission": 0,
+            "submit_result": 0,
+            "worker_unknown": 0,
+            "endpoint_stopping": 1,
+            "endpoint_stopped": 1,
+            "mailbox_flushed": 0,
+            "input_dropped": 0,
+            "make_rejected": 0,
+            "queue_rejected": 0,
+            "outbound_dropped": 0,
+            "provider_sent": 0,
+            "provider_error": 0,
+            "outbound_flushed": 0,
+            "transport_stopping": 1,
+            "clock_deferred": 0
+          }
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "records": 4,
+          "dropped": 0,
+          "counts": {
+            "endpoint_started": 1,
+            "session_changed": 0,
+            "invalidate_requested": 0,
+            "invalidate_completed": 0,
+            "sender_admission": 0,
+            "submit_result": 0,
+            "worker_unknown": 0,
+            "endpoint_stopping": 1,
+            "endpoint_stopped": 1,
+            "mailbox_flushed": 0,
+            "input_dropped": 0,
+            "make_rejected": 0,
+            "queue_rejected": 0,
+            "outbound_dropped": 0,
+            "provider_sent": 0,
+            "provider_error": 0,
+            "outbound_flushed": 0,
+            "transport_stopping": 1,
+            "clock_deferred": 0
+          }
+        },
+        "operator-bridge-0.log": {
+          "complete": true,
+          "records": 1496,
+          "dropped": 0,
+          "counts": {
+            "endpoint_started": 1,
+            "session_changed": 3,
+            "invalidate_requested": 3,
+            "invalidate_completed": 3,
+            "sender_admission": 15,
+            "submit_result": 15,
+            "worker_unknown": 1438,
+            "endpoint_stopping": 1,
+            "endpoint_stopped": 1,
+            "mailbox_flushed": 0,
+            "input_dropped": 0,
+            "make_rejected": 0,
+            "queue_rejected": 0,
+            "outbound_dropped": 0,
+            "provider_sent": 15,
+            "provider_error": 0,
+            "outbound_flushed": 0,
+            "transport_stopping": 1,
+            "clock_deferred": 0
+          }
+        }
+      },
+      "effects": 14,
+      "skipped": 135,
+      "measurement": {
+        "source_produced": 74987,
+        "observer_received": 11863,
+        "missing": 63124,
+        "losses": {
+          "upstream_dds": 46,
+          "validation": 0,
+          "admission": 1526,
+          "ingress_replaced": 105,
+          "ingress_flushed": 1174,
+          "input_rejected": 61,
+          "outbound_replaced": 2759,
+          "outbound_expired": 0,
+          "outbound_flushed": 11,
+          "srt_accept_to_receiver_gap": 57037,
+          "receiver_rejected": 403,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 1,
+          "observer_dds": 1
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 300.127702636,
+        "source_actual_hz": {
+          "imu": 199.84826283345384,
+          "joints": 50.00204868859023
+        },
+        "published": 11864,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 9819,
+            "rounding": "up to 1ms",
+            "maximum_ms": 232,
+            "p50_ms": 106,
+            "p95_ms": 133,
+            "p99_ms": 147
+          },
+          "joint": {
+            "count": 2045,
+            "rounding": "up to 1ms",
+            "maximum_ms": 238,
+            "p50_ms": 112,
+            "p95_ms": 141,
+            "p99_ms": 155
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": {
+        "protocol": "UDP",
+        "target_bitrate": 128000,
+        "block_bytes": 1024,
+        "bytes": 5201920,
+        "seconds": 325.093848,
+        "offered_bits_per_second": 128010.2968912534,
+        "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+        "alive_poll_checks": 1274
+      },
+      "journal_unknown_ids": [
+        "0f000000000000000000000000000000"
+      ],
+      "sender_only": [
+        "0f000000000000000000000000000000"
+      ],
+      "divergent": [],
+      "realtime_window_qualification": {
+        "source_enabled": false,
+        "fenced_observation": false
+      }
+    }
+  ],
+  "unexecuted_seeds": [
+    2903,
+    4211
+  ],
+  "complete_m3_acceptance": false
+}

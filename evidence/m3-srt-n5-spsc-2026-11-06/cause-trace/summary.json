@@ -1,0 +1,205 @@
+{
+  "status": "passed",
+  "source_commit": "fd0107efa486c064a80d50940734a82194319598",
+  "scope": "15-second N0 cause-schema smoke only; no N5 retry/qualification or historical cause inference",
+  "commands": {
+    "attempts": 8,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 8,
+      "p50": 103.523417,
+      "p95": 259.739917,
+      "p99": 259.739917,
+      "maximum": 259.739917
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 8,
+        "p50": 103.523417,
+        "p95": 259.739917,
+        "p99": 259.739917,
+        "maximum": 259.739917
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "effects": 8,
+  "traces": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "records": 42,
+      "dropped": 0,
+      "new_cause_events": [
+        {
+          "sequence": 2,
+          "monotonic_ns": 2350896453652,
+          "point": 31,
+          "reason": 13,
+          "request": "00000000000000000000000000000000",
+          "session": "d938853faf95ca1b750452b70b063df5",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 1,
+          "value": 9,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 3,
+          "monotonic_ns": 2350896466985,
+          "point": 30,
+          "reason": 16,
+          "request": "00000000000000000000000000000000",
+          "session": "d938853faf95ca1b750452b70b063df5",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 6,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 4,
+          "monotonic_ns": 2350898374944,
+          "point": 31,
+          "reason": 11,
+          "request": "00000000000000000000000000000000",
+          "session": "d938853faf95ca1b750452b70b063df5",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 0,
+          "value": 6,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 5,
+          "monotonic_ns": 2350898392777,
+          "point": 30,
+          "reason": 16,
+          "request": "00000000000000000000000000000000",
+          "session": "00000000000000000000000000000000",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 5,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 33,
+          "monotonic_ns": 2374324899537,
+          "point": 31,
+          "reason": 13,
+          "request": "00000000000000000000000000000000",
+          "session": "560a49ed6e1081dc42f86a83cbd88623",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 2,
+          "sensor_generation": 2,
+          "route": 0,
+          "detail": 1,
+          "value": 9,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 34,
+          "monotonic_ns": 2374324899954,
+          "point": 30,
+          "reason": 16,
+          "request": "00000000000000000000000000000000",
+          "session": "560a49ed6e1081dc42f86a83cbd88623",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 2,
+          "sensor_generation": 2,
+          "route": 0,
+          "detail": 6,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 35,
+          "monotonic_ns": 2374326924162,
+          "point": 31,
+          "reason": 13,
+          "request": "00000000000000000000000000000000",
+          "session": "560a49ed6e1081dc42f86a83cbd88623",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 2,
+          "sensor_generation": 2,
+          "route": 0,
+          "detail": 0,
+          "value": 9,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        },
+        {
+          "sequence": 36,
+          "monotonic_ns": 2374326928496,
+          "point": 30,
+          "reason": 16,
+          "request": "00000000000000000000000000000000",
+          "session": "00000000000000000000000000000000",
+          "owner_epoch": "a051e4fc1d14d6f0feb431f197b8650b",
+          "control_generation": 2,
+          "sensor_generation": 2,
+          "route": 0,
+          "detail": 5,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "records": 5,
+      "dropped": 0,
+      "new_cause_events": [
+        {
+          "sequence": 3,
+          "monotonic_ns": 2350893512569,
+          "point": 30,
+          "reason": 10,
+          "request": "00000000000000000000000000000000",
+          "session": "00000000000000000000000000000000",
+          "owner_epoch": "20d4b145dd2b16052673b730f7bbe2f5",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 7,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "records": 5,
+      "dropped": 0,
+      "new_cause_events": [
+        {
+          "sequence": 3,
+          "monotonic_ns": 2374321264621,
+          "point": 30,
+          "reason": 10,
+          "request": "00000000000000000000000000000000",
+          "session": "00000000000000000000000000000000",
+          "owner_epoch": "bc3bac070ffb6b8c719dc08cf26ac37e",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 0,
+          "detail": 7,
+          "value": 0,
+          "entry_owner_epoch": "00000000000000000000000000000000"
+        }
+      ]
+    }
+  },
+  "pcap_drops": {
+    "operator": 0,
+    "robot": 0
+  }
+}

@@ -834,3 +834,11 @@ the third case was not run. Both executed 300-s cases completed all commands:
 The diagnostic gate remains strict. The trace buffer now uses independent bounded
 writer lanes; focused native/ROS tests and a separate N0 smoke pass. A fresh full
 N5 cohort is still required for that new trace configuration. M3 remains incomplete.
+
+The [independent-trace N5 cohort](evidence/m3-srt-n5-spsc-2026-11-06/) retained
+every trace and packet record but stopped on a live session change and one
+unresolved command: 14 successes/effects, intent 15 UNKNOWN, other two cases not
+run. New opt-in events now distinguish provider link-loss causes from session-
+close decisions; controlled peer-close tests and a separate N0 smoke pass.
+Five focused native tests, 36 ROS-reported tests and 93 host tests pass. Next is
+cause-tagged reproduction of the reset; full N5 and M3 qualification remain open.

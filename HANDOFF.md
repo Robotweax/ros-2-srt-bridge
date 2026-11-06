@@ -1739,3 +1739,51 @@ Bisherige Kohorte bleibt failed, dritter Fall unexecuted; nichts ersetzen/waiven
 N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/Ressourcengates weiter offen.
 Historische Recorderverluste und UNKNOWNs erhalten; M3 in Arbeit, PR #2 Draft,
 Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: SPSC-N5 mit live beobachteter Unsicherheit
+
+- Neue vorab eingefrorene Kohorte 649b4ce: Labels 1701/2903/4211 je 300 s,
+  unabhängige SPSC-Lanes, beide Diagnostik-Observer und native V2-Aufnahme aktiv.
+  168 Quellen, acht ausgewählte Dateien, installierte Scriptbytes, immutable
+  Image-Referenz und gemeinsame VM-/Time-Namespace-Proof vorab fixiert.
+- Erster Fall **failed am Command-Outcomes-Gate**, weitere zwei nicht ausgeführt.
+  Originaler Harness bleibt development-passed (dort unresolved erlaubt),
+  Originalkohorte failed; keine Umklassifikation/Retry/Ersatzfälle.
+- 15 Versuche: 14 SUCCEEDED/Effekte, Intent 15 unresolved, 135 Skipped,
+  keine Nonadmission. Senderjournal 15 UNKNOWN/reconcile-required, Revision 0,
+  ungültiges Result; Receiver ohne Record. 14 gemeinsame Erfolge identisch inkl.
+  Result-Rate/Generation, Device Generation/Effekte 14. Kein Nichtausführungs-
+  beweis/Expiry/Erfolg/Replay aus NOT_FOUND oder Abwesenheit erfinden.
+- Trace: SDK-Accept 15 bei ca. 34,039 s, Robot Sessionchange/Invalidation ca.
+  37,517/37,519 s; Operator bei 42,470 s, Completion 42,478 s. Erstes beobachtetes
+  UNKNOWN 43,305 s mit passender Entry-/Current-Owner-Epoche. Live-Kontextverlust
+  innerhalb des Messfensters, nicht nur Teardown. Bestehende Events erklären
+  den initiierenden Socket-/Session-Close noch nicht; keine eindeutige Ursache.
+- Alle Traces vollständig: Operator 1496, Robot 4/7, Dropped überall 0. Beide
+  PCAPs Captured/Filter/File exakt 150432, null Kernel-/Native Reserve-/Copy-Loss.
+  Sechs Source-Bilanzen und vier Cgroup-Fenster reproduziert. Produced 74987,
+  Published 11864, Observer 11863; Stage-Defizite nicht isolierter WAN-Loss.
+  Max. gemessener Age-Upper-Bucket 238 ms innerhalb 250, Realtime-PCAP-Fenster
+  weiter clockbedingt unqualifiziert. Keine Kosten-/Performance-/Physical-Inferenz.
+- fd0107e ergänzt opt-in Cause-Events: session_action (30) mit SessionError und
+  Close-Control/Close-Sensor/Flush-Bits 1/2/4; link_lost (31) mit Channel 0/1
+  sowie Socketstate/Security-Timeout/Epoll-/Provider-/Decode-Ursache. Transport-
+  Stopping trägt TransportFault. Nur schließende Actions, kein Sensor-Error-Flood.
+  Alte Traces lesbar; Detailfeld erweitert Layout, Consumer neu gebaut. Kapazität
+  weiterhin 256 Records, 128 je Owner; keine Producer-I/O/Callbacks/Policyentscheidung.
+  Wire/IPC/Journal-/Deadline-/Lease-/Start-Fence-/Replay-Policy unverändert.
+- Fünf fokussierte SDK-/Native-Tests bestanden, inkl. kontrolliertem Peer-Close
+  auf IPv4/IPv6 mit Link-Cause und Session-Close vor Receiver-Teardown; 36 ROS-
+  reported Tests und 93 Hosttests bestanden. Kein neuer voller 68-Test-/M2-Lauf
+  behauptet. Separater 15-s-N0-Smoke: acht Effekte/Erfolge, Traces 42/5/5 integral,
+  neue Cause-Felder ausgeübt, null Trace-/PCAP-Verlust. Keine N5-Qualifikation.
+- Evidenz evidence/m3-srt-n5-spsc-2026-11-06/ mit unveränderten Plänen/Manifesten,
+  Incident-Zeitpunkten, Read-only-Journalen, Source-/Binary-/Raw-Hashes, nativer
+  Reanalyse und Cgroup-Projektionen; spätere cause-trace/ Tests/Freeze/Smoke
+  getrennt. Rohcaptures/Prefixes/Journale/Clocks lokal, keine kompletten Inspect-/
+  Env-Dumps oder Credentials publiziert.
+
+**Weiter:** Live-N5-Reset mit Cause-Events gezielt reproduzieren und Initiator
+qualifizieren, bevor erneut eine vollständige Kohorte versucht wird. Alte
+UNKNOWNs/Recorderverluste erhalten. N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/
+Ressourcengates offen; M3 in Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
