@@ -1911,3 +1911,40 @@ Security-/Resource-Gates unverändert. PR #2 Draft, Intrinsic/M4 unberührt.
 Provider-Scheduling/Socket-Send und Post-Qdisc-CONTROL verfolgen. Historischer
 Initiator/UNKNOWNs, volle N5-/M3-Abnahme, N3/N4/Default-DDS-N5/Age-/Clock-/Security-/
 Ressourcengates offen. Alte Fehlläufe unverändert; PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: CONTROL-only Egress-Faultharness, Versuch fehlgeschlagen
+
+- Neuer opt-in Runner `--control-egress-fault operator|robot`, nur N0 >=45 s mit
+  Command-/Provider-/Native-Diagnostik. Dedizierter tc-egress-u32/gact-Drop auf
+  owned eth0, IPv4 UDP, Peer-/32 und CONTROL-Port 10080; SENSOR aus Selektor
+  ausgeschlossen. Nach einem Drittel der Dauer, sechs Hostsekunden bis Restore;
+  VM-Brackets um tc, Filtercounter und leeres Restore-Readback. Keine Default-/
+  Policy-/SDK-/ROS-/Provideränderung. Kein N4-Phasen-/Historischer-Ursachenbeweis.
+- Read-only-Analyzer für gepinntes Handle/Wire-ID-Mapping, alte Socket-/Tuple-
+  Identität, vollständiges Native-v2/Common-Clock-Fenster und nur benachbarte
+  verfügbare Providerdeltas mit beiden Reads komplett im aktiven VM-Intervall.
+  Reverse-CONTROL/SENSOR/Restore separat. Host-getestet, live nicht validiert.
+- Prospektiv genau ein 45-s-N0/Seed-1701-Versuch, b0e2204, alle 178 Sourcehashes
+  passend; acht Runtimehashes vorher/nachher identisch zum vorigen Testbuild.
+  Lokal .local/m3/20261106T203905001506Z. Filter erfolgreich installiert, aber
+  `tc ... filter show ... pref 49152` lässt `pref` im JSON aus. Validator nahm
+  fälschlich Pflichtfeld an: `unexpected CONTROL filter`, Abbruch vor verifiziertem
+  Sechssekundenintervall/Restore. Initialcounter 0, kein Lifetimecounterbeweis.
+- Originalmanifest FAILED erhalten, inklusive sekundärer fehlender Endpoint-
+  Measurements und finaler Command-/Providerstatus. Keine Rekonstruktion/Rescue.
+  Beide Container und Netzwerk erfolgreich entfernt. Kein zweiter Liveversuch.
+- Parser akzeptiert fehlendes pref nur im festen scoped Query; explizit falsches
+  pref/Protocol/Kind/Action/Counter weiter Fehler. Originalreadback als Fixture.
+  Install-Readbackfehler entfernt Filter vor Raise, Finalstatsfehler ebenfalls
+  im finally mit Restorecheck. Fehlerpfade getestet. 112 Hosttests vor Versuch,
+  115 nach Fix bestanden, Syntaxchecks bestanden. Keine frischen SDK-/ROS-/M2-
+  Tests behauptet; Runtime unverändert (vorherige 69 SDK/36 ROS gelten dafür).
+- Evidenz evidence/m3-control-egress-fault-2026-11-06/ mit Plan, Originalmanifest,
+  tc-/Fehler-/Diagnose-/Cleanup-Logs, Findings, Source-/Runtimeprovenienz und
+  Rohhashes. Payloads/Prefixes/Journale/WALs/Clocks lokal, keine Secrets/Inspect/
+  Env-Dumps. Kein erfolgreich validiertes Provider-vs-Egress-Signature behauptet.
+
+**Weiter:** Korrigierten Harness unter frischem prospektiv begrenztem Plan live
+validieren; alten Fehlversuch erhalten. Danach qualifiziertes Signature für N5-
+Triangulation nutzen. Historischer Initiator, volle N5-/M3-Abnahme und sonstige
+Gates offen; PR #2 Draft, Intrinsic/M4 unberührt.

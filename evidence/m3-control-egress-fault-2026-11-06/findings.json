@@ -1,0 +1,69 @@
+{
+  "status": "failed",
+  "qualification": false,
+  "source_commit": "b0e2204cf1fa67120d0ccc3bbf496cab4b46456e",
+  "source_hashes_match_commit": true,
+  "source_files": 178,
+  "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T203905001506Z",
+  "original_errors": {
+    "error": "unexpected CONTROL filter",
+    "capture_error": "'endpoint_measurements'",
+    "command_diagnostics_error": "missing or duplicate final command trace status",
+    "provider_diagnostics_error": "missing or duplicate provider final status"
+  },
+  "install": {
+    "begin_ns": 32845573971,
+    "end_ns": 32867358471,
+    "argv": [
+      "tc",
+      "filter",
+      "add",
+      "dev",
+      "eth0",
+      "egress",
+      "protocol",
+      "ip",
+      "pref",
+      "49152",
+      "u32",
+      "match",
+      "ip",
+      "protocol",
+      "17",
+      "0xff",
+      "match",
+      "ip",
+      "dst",
+      "172.19.0.3/32",
+      "match",
+      "ip",
+      "sport",
+      "10080",
+      "0xffff",
+      "action",
+      "drop"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "readback_has_pref": [
+    false,
+    false,
+    false
+  ],
+  "drop_count_at_initial_snapshot": 0,
+  "timed_restoration_verified": false,
+  "known_fault_signature_verified": false,
+  "cleanup_exit_codes": {
+    "robot-remove": 0,
+    "operator-remove": 0,
+    "network-remove": 0
+  },
+  "attempts": 1,
+  "reexecuted_after_fix": false,
+  "runtime_hashes_match": true,
+  "host_tests_before": 112,
+  "host_tests_after": 115,
+  "scope": "The installed filter was rejected by a parser requiring pref in a preference-scoped tc JSON response. No full fault, provider/capture triangulation, command outcome, restoration or qualification claim. Container/network teardown succeeded; final diagnostic accounting is incomplete and not reconstructed."
+}

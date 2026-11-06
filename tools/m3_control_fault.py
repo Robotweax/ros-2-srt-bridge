@@ -26,7 +26,8 @@ def counters(filters):
     actions = [a for rule in filters for a in rule.get('options', {}).get('actions', [])]
     if len(actions) != 1 or actions[0].get('kind') != 'gact' or actions[0].get('control_action', {}).get('type') != 'drop':
         raise ValueError('ambiguous CONTROL drop action')
-    if any(rule.get('pref') != int(PREF) or rule.get('kind') != 'u32' or rule.get('protocol') != 'ip' for rule in filters):
+    # The preference-scoped tc query can omit pref in its JSON output.
+    if any(rule.get('pref', int(PREF)) != int(PREF) or rule.get('kind') != 'u32' or rule.get('protocol') != 'ip' for rule in filters):
         raise ValueError('unexpected CONTROL filter')
     stats = actions[0]['stats']
     if any(type(stats.get(k)) is not int or stats[k] < 0 for k in ('packets', 'drops', 'bytes')):
@@ -53,17 +54,28 @@ def start(lab, role):
     if any(q['kind'] in ('clsact', 'ingress') for q in state): raise ValueError('refusing existing classifier hook')
     lab.inside(role, 'control-fault-hook', ['tc', 'qdisc', 'add', 'dev', 'eth0', 'clsact'])
     installed = bracket(lab, role, 'control-fault-install', selector(role, lab.addresses[peer]))
-    state = readback(lab, role, 'control-fault-filter-installed')
-    return dict(role=role, peer=peer, install=installed, initial_counters=counters(state), restored=False,
+    try:
+        state = readback(lab, role, 'control-fault-filter-installed')
+        initial = counters(state)
+    except Exception:
+        # A validation failure must not leave the fault active until outer teardown.
+        # The bracket/log remains evidence, including a failed removal.
+        bracket(lab, role, 'control-fault-abort-remove', ['tc', 'filter', 'del', 'dev', 'eth0', 'egress', 'protocol', 'ip', 'pref', PREF])
+        raise
+    return dict(role=role, peer=peer, install=installed, initial_counters=initial, restored=False,
                 scope='known CONTROL-only tc egress drop; owned IPv4 peers; SENSOR selector excluded; not historical cause or N4 phase qualification')
 
 
 def stop(lab, fault):
-    role = fault['role']; state = readback(lab, role, 'control-fault-filter-final')
-    fault['final_counters'] = counters(state)
-    fault['remove'] = bracket(lab, role, 'control-fault-remove', ['tc', 'filter', 'del', 'dev', 'eth0', 'egress', 'protocol', 'ip', 'pref', PREF])
-    if readback(lab, role, 'control-fault-filter-restored'): raise ValueError('CONTROL filter still present')
-    fault['restored'] = True
-    fault['guaranteed_active_ns'] = [fault['install']['end_ns'], fault['remove']['begin_ns']]
+    role = fault['role']
+    try:
+        state = readback(lab, role, 'control-fault-filter-final')
+        fault['final_counters'] = counters(state)
+    finally:
+        # Even a bad statistics readback must not prolong the installed fault.
+        fault['remove'] = bracket(lab, role, 'control-fault-remove', ['tc', 'filter', 'del', 'dev', 'eth0', 'egress', 'protocol', 'ip', 'pref', PREF])
+        if readback(lab, role, 'control-fault-filter-restored'): raise ValueError('CONTROL filter still present')
+        fault['restored'] = True
+        fault['guaranteed_active_ns'] = [fault['install']['end_ns'], fault['remove']['begin_ns']]
     if fault['final_counters']['drops'] <= 0: raise ValueError('CONTROL fault matched no packets')
     return fault

@@ -1360,3 +1360,27 @@ send counts reflect provider send accounting, not application execution or peer
 delivery. Flat counters do not prove UDP silence. A separately qualified egress
 capture is still required to locate an observed gap relative to the tap; neither
 observer alone identifies a historical initiating cause.
+
+### Experimental CONTROL-only fault harness
+
+`tools/run_m3.py --control-egress-fault operator|robot` is development-only,
+requires N0 >=45 s plus command/provider/native diagnostics, and does not run
+on a default invocation. After one third of the configured source window from
+host observation of its marker, it installs a dedicated tc egress u32 drop on
+an owned container's eth0: IPv4 UDP, exact peer destination /32 and CONTROL
+port 10080 (operator source / robot destination). It restores after a requested
+six host seconds without blocking the outer observation loop. VM monotonic
+brackets around tc commands define the guaranteed active interval; host/VM
+epochs are never subtracted. Filter statistics and empty post-delete readback
+are required. Existing classifier hooks are refused. Readback failures trigger
+filter removal; owned-container teardown is the fallback.
+
+`m3_control_fault_analysis.py` requires complete native capture coverage, the
+qualified pinned archive and provider logs. It maps old-flow routing IDs to
+pre-fault socket observations and compares adjacent available same-identity
+counter reads wholly inside active brackets. It retains reverse CONTROL,
+SENSOR and post-restoration observations independently. No payload decryption,
+physical delivery, command nonexecution or historical initiating-cause claim
+is implied. The first live attempt failed on a tc JSON omission and remains
+failed; the parser/cleanup fix has host regression tests but has not been
+reexecuted live. See evidence/m3-control-egress-fault-2026-11-06/.

@@ -865,3 +865,10 @@ brackets, socket generations, unavailable samples and queue/budget loss are
 explicit. Sampling adds SDK lock/bookkeeping work. Counters omit some UDP packet
 types and do not prove delivery. See the prospective
 [diagnostic plan](evidence/m3-provider-diagnostics-2026-11-06/diagnostic-plan.json).
+
+An experimental `--control-egress-fault operator|robot` runner option injects a
+six-second CONTROL-only egress drop in owned containers. It requires N0 >=45 s
+and command/provider/monotonic diagnostics. The first live attempt failed on a
+tc JSON validation assumption; the parser and error cleanup are fixed and host
+tested, with successful live validation still pending. See the
+[retained failure and plan](evidence/m3-control-egress-fault-2026-11-06/README.md).
