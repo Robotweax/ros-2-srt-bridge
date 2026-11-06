@@ -806,3 +806,12 @@ its third seed is unexecuted. The SRT runner now enforces competitor liveness an
 offered-load gates, with a deliberate competitor-stop negative test and 83 passing
 host tests. Failed recorder data and command uncertainty are retained, not retried
 or reclassified as success. Full SRT N5/M3 acceptance remains open.
+
+Recorder development diagnostics are available through `tools/run_m3.py
+--recorder-diagnostics` (opt-in; adds observer workload). Controlled pause/recovery
+and separate 60-/30-second N5 cases are recorded in
+[`evidence/m3-recorder-diagnostics-2026-11-06/`](evidence/m3-recorder-diagnostics-2026-11-06/).
+The 60-second case retained an unresolved command despite zero capture drops;
+the 30-second case verified bounded SRT poll histories with 12 successes.
+All 88 host tests pass. These development cases do not replace the failed frozen
+SRT N5 cohort or resolve historical intent 105; PR #2 remains draft and M3 incomplete.

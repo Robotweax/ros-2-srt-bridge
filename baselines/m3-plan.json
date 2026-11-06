@@ -924,5 +924,45 @@
     "host_python_tests": 83,
     "full_srt_n5_qualified": false,
     "complete_m3_acceptance": false
+  },
+  "recorder_command_diagnostics": {
+    "evidence": "evidence/m3-recorder-diagnostics-2026-11-06",
+    "source_commits": [
+      "013927f",
+      "56b7b8a"
+    ],
+    "opt_in_recorder_sampling_ms": 100,
+    "max_samples_per_endpoint": 75000,
+    "production_cpp_sdk_wire_policy_changed": false,
+    "host_python_tests": 88,
+    "pause_control": {
+      "status": "passed",
+      "kernel_drop_counter": 1612,
+      "stopped_state_samples": 14,
+      "recovery_marker_captured": true,
+      "network": "none; synthetic loopback"
+    },
+    "n5_60_seconds": {
+      "harness_status": "passed",
+      "confirmed_effects": 2,
+      "sender_unknown": 1,
+      "driver_unresolved": 1,
+      "pcap_kernel_drops": 0,
+      "status_history_available": false
+    },
+    "n5_30_seconds": {
+      "harness_status": "passed",
+      "confirmed_effects": 12,
+      "sender_unknown": 0,
+      "driver_unresolved": 0,
+      "pcap_kernel_drops": 0,
+      "bounded_status_history_verified": true
+    },
+    "tcpdump_io_counters": "permission denied on actual N5 endpoints; retained as unavailable",
+    "n5_qualification_replacement": false,
+    "historical_unknown_cause_established": false,
+    "historical_recorder_cause_established": false,
+    "full_srt_n5_qualified": false,
+    "complete_m3_acceptance": false
   }
 }

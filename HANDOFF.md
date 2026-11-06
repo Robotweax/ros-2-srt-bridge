@@ -1589,3 +1589,44 @@ Intent-105-Unsicherheit beibehalten und Kontextwechsel-/Lastverhalten gezielt
 qualifizieren. N3 deterministische DATA/FEC-Verluste, N4-Command-Phasen, Default-DDS-
 N5-Discovery, bestehende Age-/Realtime-Clock-Gaps und kontrollierte Semantik-/Security-/
 Ressourcenparität offen. M3 nicht abgeschlossen, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Recorder-/Command-Diagnostik
+
+- Optional `run_m3.py --recorder-diagnostics`: begrenzte 100-ms-/proc-Beobachtungen
+  von tcpdump mit PID/Startzeit, State, Scheduler-/Context-Switch-/verfügbaren
+  I/O-Zählern und monotonen Read-Brackets. Default aus, 75000-Sample-Grenze;
+  fehlende/gesperrte Felder explizit, keine Completeness-/Ursachenbehauptung.
+- Network-none/Loopback-Kontrollen: Baseline 2076 Datagrams/Receipts/PCAP-Records,
+  null Drops. Bekannte ca. 1,5-s-SIGSTOP-Pause: 2116 Receipts, 1310 PCAP-Records,
+  Kernel-Dropzähler 1612, 14 T-State-Samples; Zero-Drop-Gate verwirft und Recovery-
+  Marker nach SIGCONT erfasst. Loopback-Filterzähler doppelt, keine Datagramm-/
+  Frame-Äquivalenz oder Erklärung des früheren N5-Verlusts ableiten.
+- Separates N5-Development bei 013927f, 60 s: beide PCAPs ohne Drops, zwei
+  bestätigte Effekte, dritter Intent unresolved/Sender UNKNOWN, Receiver ohne
+  Record, 27 Skipped. Harness-passed erlaubt Development-Uncertainty und ist keine
+  N5-Command-Abnahme. Unsicherheit damit auch ohne Recorderverlust beobachtet;
+  keine eindeutige Transition/Ursache, kein Replay/Expiry/Erfolg erfunden.
+- SRT-Driver ab 56b7b8a nutzt bestehenden bounded Status-History-Helper: erste
+  32/letzte 32 Polls, Omission-Zähler, State/Reason/Revision/Found und Local-/Peer-
+  Errors. Admission/Cadence/Terminalklassifikation unverändert. Separates 30-s-
+  N5-Development: 12 Erfolge/Effekte, drei Skipped, null unresolved, null PCAP-Drops;
+  86 Statuspolls von LOCAL_QUEUED bis SUCCEEDED erhalten. Kein Ersatz für die
+  fehlgeschlagene Frozen-Kohorte oder deren nicht ausgeführten dritten Seed.
+- Echte N5-Endpunkte verweigern /proc-I/O-Counter nach tcpdump-Privilege-Drop
+  (PermissionError), wchan=0 nicht als verfügbare Waitsite interpretieren. Kein
+  zusätzliches Capability/anderer tcpdump-User in N5. Loopback-Kontrolle mit
+  explizitem -Z root ist nur eine Diagnosekontrolle, deren I/O-Sicht nicht auf N5
+  übertragen. Scheduler/States/Samplegaps verfügbar; ein D-State-Sample beweist
+  keine Storage-Ursache. Gegenüber früheren Kohorten zusätzlicher Observer-Workload.
+- 88 Host-Python-Tests bestanden; ROS/SRT-Development validiert Adapter. Keine
+  neuen ROS-GTests/volle M2-Ausführung; acht ausgewählte installierte Dateien
+  nach Läufen unverändert zur früheren N5-Freeze geprüft. Keine Production-C++-,
+  SDK-/Wire-/Deadline-/Lease-/Replay-Änderung. Evidenz mit unveränderten Manifesten,
+  Sample-Replay, Read-only-Journal-Audits/Raw-Hashes:
+  evidence/m3-recorder-diagnostics-2026-11-06/. Rohdaten bleiben lokal.
+
+**Weiter:** Command-Invalidation-/Transport-Handoff-Grenzen gezielt instrumentieren,
+Live-/Shutdown-/Recovery-Transitions unterscheidbar machen; Recorderverluste mit
+opt-in Beobachtungen korrelieren, falls erneut beobachtet. Original-Intent 105
+bleibt unsicher; SRT-N5-Gesamtqualifikation, Default-DDS-N5, N3/N4 und bestehende
+Age-/Clock-/Security-/Ressourcengates offen. M3 in Arbeit, PR #2 Draft; M4 unverändert.

@@ -1202,3 +1202,26 @@ reserve/copy loss; it does not rescue the failed recorder verdict. No unique
 scheduler/storage/root cause is established. Full SRT N5 acceptance remains open.
 Evidence is split under `evidence/m3-dds-paced-n5-v2-2026-11-06/` and
 `evidence/m3-srt-n5-v2-2026-11-06/`; no cross-transport advantage follows.
+
+### Optional recorder and command observations (2026-11-06)
+
+`run_m3.py --recorder-diagnostics` adds development-only bounded 100-ms tcpdump
+/proc observations with monotonic read brackets and stable PID/start identities.
+Unavailable I/O/wchan visibility is retained; scheduling/state/counter samples
+are not root-cause or completeness proof. Actual N5 I/O reads are denied after
+capture privilege dropping; no capability or credential change is introduced.
+A network-none loopback SIGSTOP/SIGCONT control verifies stopped-state visibility,
+strict drop rejection and resumed capture. Loopback filter counters differ from
+captured populations and are not physical/datagram loss counts.
+
+SRT command polling now retains the existing bounded first-32/latest-32 status
+history, explicit omission counts and optional peer error. Observations do not
+change deadline, admission, cadence, terminal classification or replay semantics.
+A separate 60-s N5 development case records one unresolved/Sender-UNKNOWN intent
+with zero PCAP drops; a subsequent 30-s case records 12 successes and complete
+bounded histories. Neither replaces the failed frozen N5 cohort or establishes
+the exact historical UNKNOWN transition. Harness development-passed is compatible
+with unresolved commands and is not a full command qualification verdict.
+See `evidence/m3-recorder-diagnostics-2026-11-06/`; all 88 host tests pass. M3 and
+Intrinsic/M4 status are unchanged. Next: observe command invalidation/handoff
+boundaries to distinguish live uncertainty from shutdown/recovery transitions.

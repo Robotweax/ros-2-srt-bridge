@@ -1,0 +1,99 @@
+{
+  "status": "passed",
+  "case": "baseline",
+  "capture_config": {
+    "mode": "immediate",
+    "buffer_kib": 32768,
+    "snapshot_option": 0,
+    "rotation": {
+      "file_megabytes": 16,
+      "file_count": 16,
+      "nominal_retention_bytes": 256000000
+    }
+  },
+  "sent_datagrams": 2076,
+  "received_datagrams": 2076,
+  "events": [],
+  "diagnostics": {
+    "samples": 36,
+    "processes": [
+      {
+        "pid": 15,
+        "start_ticks": 22384,
+        "observations": 35,
+        "states": {
+          "R": 16,
+          "S": 19
+        },
+        "first": {
+          "pid": 15,
+          "state": "S",
+          "start_ticks": 22384,
+          "cpu_ticks": 3,
+          "scheduler": {
+            "runtime_ns": 33567710,
+            "runqueue_wait_ns": 19927831,
+            "timeslices": 34
+          },
+          "io": {
+            "rchar": 15735,
+            "wchar": 108,
+            "syscr": 30,
+            "syscw": 5,
+            "read_bytes": 0,
+            "write_bytes": 108,
+            "cancelled_write_bytes": 0
+          },
+          "wchan": "poll_schedule_timeout.constprop.0",
+          "context_switches": {
+            "voluntary_ctxt_switches": 19,
+            "nonvoluntary_ctxt_switches": 15
+          }
+        },
+        "last": {
+          "pid": 15,
+          "state": "S",
+          "start_ticks": 22384,
+          "cpu_ticks": 19,
+          "scheduler": {
+            "runtime_ns": 192984355,
+            "runqueue_wait_ns": 74670520,
+            "timeslices": 4145
+          },
+          "io": {
+            "rchar": 15735,
+            "wchar": 2245334,
+            "syscr": 30,
+            "syscw": 2081,
+            "read_bytes": 0,
+            "write_bytes": 2245334,
+            "cancelled_write_bytes": 0
+          },
+          "wchan": "poll_schedule_timeout.constprop.0",
+          "context_switches": {
+            "voluntary_ctxt_switches": 4129,
+            "nonvoluntary_ctxt_switches": 16
+          }
+        }
+      }
+    ],
+    "missing_process_samples": 1,
+    "sample_errors": 0,
+    "unavailable_field_observations": {},
+    "maximum_sample_gap_ns": 111295458,
+    "maximum_read_span_ns": 3824666,
+    "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; wchan=0 can mean restricted/unavailable; scheduler counters depend on kernel configuration; no root-cause or capture-completeness inference"
+  },
+  "capture_gate": {
+    "tcpdump_reported_packets": 2076,
+    "tcpdump_reported_filtered_packets": 4152,
+    "tcpdump_kernel_drops": 0,
+    "tcpdump_file_integrity_valid": true,
+    "tcpdump_population_reconciled": false
+  },
+  "kernel_drops": 0,
+  "captured_records": 2076,
+  "stopped_state_observations": 0,
+  "recovery_marker_captured": true,
+  "capture_gate_rejected": false
+}
