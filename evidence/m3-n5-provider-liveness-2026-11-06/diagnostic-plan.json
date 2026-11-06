@@ -1,0 +1,12 @@
+{
+  "qualification": false,
+  "purpose": "Apply the known-fault-validated provider versus egress distinction to N5 without injecting a fault or changing policy",
+  "executions": 1,
+  "profile": "N5",
+  "seed": 1701,
+  "seconds": 300,
+  "observers": ["provider statistics", "command trace", "native monotonic v2 capture", "PCAP immediate", "recorder diagnostics"],
+  "prerequisites": ["120 host tests and syntax checks", "new analyzer reproduces retained known-fault receiver-loss signature", "eight runtime hashes match previously tested SDK/ROS build", "plan and analyzer committed before execution"],
+  "analysis": ["Retain original run verdict, all errors, command UNKNOWNs, skips and sensor deficits; no retry or replacement of old cohorts", "Retain every fully observed adjacent nonzero-destination CONTROL flow egress gap >=1000000000 ns with both packet endpoints in the active source window", "Retain active CONTROL loss/close events; for each provider-loss event correlate last observed incoming old flow to loss, or explicitly withhold mapping", "Require complete provider and command diagnostics plus native v2 capture and common VM clock; never silently omit gaps on incomplete input", "Map recent provider baselines by nonzero session and reciprocal UDP tuple/socket IDs, constrained to the pinned provider archive; withhold ambiguous/unmapped cases", "Compute only adjacent available same-identity provider deltas with both read brackets inside the selected interval", "If selected sends increase without old-flow source egress observations, report that distinction without uniquely attributing scheduling/socket/qdisc cause", "Flat selected counters do not prove UDP absence; keepalive, handshake and ACKACK are excluded", "If no reset or qualifying gap recurs, retain no-reproduction result without attributing or fixing historical N5 cause", "Audit closed immutable journals and exactly-once SDK handoffs without fabricating nonexecution or success"],
+  "limits": ["One diagnostic execution is not full three-seed N5/M3 acceptance", "Provider reads add mutex/bookkeeping observer work", "Routing socket/tuple association is not authenticated identity or delivery proof", "Window boundaries are censored; no cross-reconnect delta/gap", "No unique historical-cause, physical realtime, lossless delivery, security parity or performance claim", "No protocol, timeout, dependency, SDK/ROS runtime or default profile change"]
+}
