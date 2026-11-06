@@ -1,4 +1,3 @@
-import copy
 import json
 from pathlib import Path
 import sys
@@ -35,6 +34,8 @@ class ProviderStatsTest(unittest.TestCase):
         group = next(iter(result['connections'].values()))
         self.assertEqual(group['adjacent_deltas'][0]['counters']['data_sent'], 2)
         self.assertNotIn('rtt_ms', group['adjacent_deltas'][0]['counters'])
+        self.assertEqual(group['adjacent_deltas'][0]['previous_read_ns'], [100, 110])
+        self.assertEqual(group['adjacent_deltas'][0]['current_read_ns'], [200, 210])
 
     def test_connection_reset_is_not_counter_regression(self):
         for key, value in [('generation', 2), ('owner_epoch', '03'*16), ('socket', 43)]:

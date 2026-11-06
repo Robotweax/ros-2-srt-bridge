@@ -64,7 +64,7 @@ def summarize(path):
             if previous and previous['available'] and (previous['owner_epoch'], previous['generation'], previous['socket']) == identity:
                 delta = {key: row[key] - previous[key] for key in COUNTERS}
                 if any(value < 0 for value in delta.values()): raise ValueError('provider counter regressed within connection')
-                group['adjacent_deltas'].append(dict(begin_ns=previous['end_ns'], end_ns=row['begin_ns'], counters=delta))
+                group['adjacent_deltas'].append(dict(previous_read_ns=[previous['begin_ns'], previous['end_ns']], current_read_ns=[row['begin_ns'], row['end_ns']], counters=delta))
         else:
             reason = str(row['unavailable']); unavailable[reason] = unavailable.get(reason, 0) + 1
         previous = row
