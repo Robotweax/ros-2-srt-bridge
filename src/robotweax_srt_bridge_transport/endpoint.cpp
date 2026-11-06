@@ -76,6 +76,12 @@ struct CommandEndpoint::Impl {
         thread=std::thread([this]{run();});
     }
     ~Impl(){stopping=true;transport.request_stop();if(thread.joinable())thread.join();}
+    void trace(CommandTracePoint point,CommandTraceReason reason=CommandTraceReason::none,unsigned value=0,Identity session={},Identity entry_owner={}){
+        if(!options.transport.command_trace)return;
+        const auto c=transport.snapshot().context;
+        options.transport.command_trace->record({0,now(),point,reason,job.task.id,zero(session)?c.session:session,
+            options.transport.session.local_epoch,c.control_generation,c.sensor_generation,job.task.route,value,entry_owner});
+    }
     void fail(EndpointFault fault){if(current.fault==EndpointFault::none)current.fault=fault;stopping=true;transport.request_stop();}
     void publish(JournalWorker* worker){
         current.transport=transport.snapshot();
@@ -120,6 +126,7 @@ struct CommandEndpoint::Impl {
     void context_changes(){
         const auto session=transport.snapshot().context.session;
         if(!zero(last_session)&&last_session!=session){
+            trace(CommandTracePoint::session_changed,CommandTraceReason::session_changed,0,last_session);
             bool exists=false;for(std::size_t n=0;n<lost_count;++n)exists=exists||lost[(lost_head+n)%lost.size()]==last_session;
             if(!exists){if(lost_count==lost.size()){fail(EndpointFault::capacity);return;}lost[(lost_head+lost_count++)%lost.size()]=last_session;}
         }
@@ -132,6 +139,10 @@ struct CommandEndpoint::Impl {
         current.test_paused=false;job.worker_token=0;
         if(reply.journal.entry)job.entry=reply.journal.entry;
         const auto error=reply.journal.error;
+        if(reply.journal.entry&&reply.journal.entry->state==CommandState::unknown)
+            trace(CommandTracePoint::worker_unknown,CommandTraceReason::none,unsigned(reply.journal.entry->reason),{},reply.journal.entry->owner_epoch);
+        if(job.after==After::invalidate||job.after==After::abandoned)
+            trace(CommandTracePoint::invalidate_completed,job.after==After::invalidate?CommandTraceReason::session_changed:CommandTraceReason::abandoned_submit,unsigned(error),job.request.session);
         if(error==JournalError::storage||error==JournalError::corrupt){notify(error);fail(EndpointFault::worker);return;}
         if(job.after==After::peer_error_get){
             if(job.entry&&job.entry->route!=job.task.route)job.entry.reset();
@@ -143,6 +154,7 @@ struct CommandEndpoint::Impl {
         if(job.entry&&(job.after==After::local_get||job.after==After::peer_get||job.after==After::peer_observed_get)&&job.entry->route!=job.task.route){if(job.after==After::peer_get)send_error(JournalError::conflict);else notify(JournalError::conflict);return;}
         switch(job.after){
             case After::local_admit:
+                trace(CommandTracePoint::sender_admission,CommandTraceReason::none,job.entry?unsigned(job.entry->state):0,{},job.entry?job.entry->owner_epoch:Identity{});
                 if(!job.entry){fail(EndpointFault::protocol);break;}
                 if(!track(*job.entry,true)){notify(JournalError::busy);break;}
                 job.sender_ticket=std::move(reply.ticket);
@@ -181,7 +193,7 @@ struct CommandEndpoint::Impl {
         return false;
     }
     void idle(){
-        if(lost_count){auto q=request(WorkerOperation::invalidate_session);q.session=lost[lost_head];lost[lost_head]={};lost_head=(lost_head+1)%lost.size();--lost_count;rpc(q,After::invalidate);return;}
+        if(lost_count){auto q=request(WorkerOperation::invalidate_session);q.session=lost[lost_head];trace(CommandTracePoint::invalidate_requested,CommandTraceReason::session_changed,0,q.session);lost[lost_head]={};lost_head=(lost_head+1)%lost.size();--lost_count;rpc(q,After::invalidate);return;}
         TransportMessage message;
         if(transport.poll_control(message)){
             job.message=message;job.task.id=message.envelope.request_id;job.task.route=message.envelope.route_id;job.task.context=message.context;
@@ -213,8 +225,9 @@ struct CommandEndpoint::Impl {
             case Stage::send_command:{
                 const auto result=transport.submit_command(job.task.context,std::move(*job.sender_ticket));
                 if(result==SubmitResult::busy)break;
+                trace(CommandTracePoint::submit_result,CommandTraceReason::none,unsigned(result),job.task.context.session);
                 if(result==SubmitResult::queued){++current.commands_sent;notify();}
-                else{auto q=request(WorkerOperation::invalidate_session);q.session=job.task.context.session;rpc(q,After::abandoned);}break;}
+                else{auto q=request(WorkerOperation::invalidate_session);q.session=job.task.context.session;trace(CommandTracePoint::invalidate_requested,CommandTraceReason::abandoned_submit,unsigned(result),q.session);rpc(q,After::abandoned);}break;}
             case Stage::send_status:{
                 if(!job.entry){fail(EndpointFault::protocol);break;}
                 const bool withhold=options.test_withhold_final_status&&job.message.envelope.kind==Kind::command&&terminal(*job.entry);
@@ -255,7 +268,7 @@ struct CommandEndpoint::Impl {
     void run()noexcept{
         std::unique_ptr<JournalWorker> worker;
         try{
-            worker=std::make_unique<JournalWorker>(options.worker);current.running=true;const auto startup=now();bool seen_transport=false;
+            trace(CommandTracePoint::endpoint_started);worker=std::make_unique<JournalWorker>(options.worker);current.running=true;const auto startup=now();bool seen_transport=false;
             while(!stopping.load()){
                 context_changes();WorkerReply reply;for(unsigned n=0;n<8&&worker->poll(reply);++n)completion(std::move(reply));
                 if(worker->state()==WorkerState::failed){fail(EndpointFault::worker);break;}
@@ -266,6 +279,7 @@ struct CommandEndpoint::Impl {
                 publish(worker.get());std::this_thread::sleep_for(std::chrono::milliseconds(2));
             }
         }catch(...){fail(EndpointFault::internal);}
+        trace(CommandTracePoint::endpoint_stopping,CommandTraceReason::shutdown,unsigned(current.fault));
         transport.request_stop();
         if(worker){worker->request_stop();if(!worker->join())current.fault=EndpointFault::shutdown_timeout;}
         transport.join();
@@ -273,6 +287,7 @@ struct CommandEndpoint::Impl {
             if(job.entry&&terminal(*job.entry)&&job.error==JournalError::none)shutdown_event=CommandEvent{job.entry->request_id,job.entry->route,JournalError::none,job.entry};
             else shutdown_event=CommandEvent{job.task.id,job.task.route,job.error==JournalError::none?JournalError::context_lost:job.error,{},job.received_error,job.received_error?job.message.context:TransportContext{}};
         }}
+        trace(CommandTracePoint::endpoint_stopped,CommandTraceReason::shutdown,unsigned(current.fault));
         job={};current.running=false;publish(worker.get());
     }
     SubmitResult enqueue(Task task){

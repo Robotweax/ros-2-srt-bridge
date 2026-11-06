@@ -5,6 +5,7 @@
 #include <robotweax/srt_bridge/errors.hpp>
 #include <robotweax/srt_bridge/bandwidth.hpp>
 #include <robotweax/srt_bridge/reconnect.hpp>
+#include <robotweax/srt_bridge/command_trace.hpp>
 #include <robotweax/srt_bridge/session.hpp>
 #include <memory>
 
@@ -15,6 +16,7 @@ struct TransportConfig {
     Endpoint control,sensor; // Numeric IPv4/IPv6, same family. Listener may use port zero.
     std::string passphrase;
     BandwidthConfig bandwidth{1000000,128000,131072,16384,65536};
+    std::shared_ptr<CommandTrace> command_trace{}; // Opt-in, lossy diagnostics only.
 };
 struct TransportContext {
     Identity session{};

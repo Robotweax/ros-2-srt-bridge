@@ -1225,3 +1225,33 @@ with unresolved commands and is not a full command qualification verdict.
 See `evidence/m3-recorder-diagnostics-2026-11-06/`; all 88 host tests pass. M3 and
 Intrinsic/M4 status are unchanged. Next: observe command invalidation/handoff
 boundaries to distinguish live uncertainty from shutdown/recovery transitions.
+
+### Opt-in command handoff trace
+
+`run_m3.py --command-diagnostics` enables the bridge's `command_diagnostics`
+parameter. A shared 256-event fixed buffer accepts coordinator/transport
+observations with nonwaiting try-lock writes; contention/full-buffer drops are
+counted. The ROS pump drains it outside transport/coordinator ownership and emits
+JSON `COMMAND_TRACE` records, followed by final attempted/dropped accounting after
+endpoint join. No payload, credential or remote execution authority is emitted.
+The default parameter is false; no diagnostic buffer is allocated by default.
+
+Events distinguish session-change and abandoned-submit invalidation requests and
+completions, sender admission, volatile transport handoff, input/outbound expiry
+or revocation, context flushes, envelope/queue rejection, SDK send acceptance and
+shutdown boundaries. Worker UNKNOWN observations include current process and
+stored journal-entry owner epochs, allowing recovered records to be distinguished
+when the epochs differ. Matching epochs alone do not uniquely attribute UNKNOWN.
+The public enum/schema is `command_trace.hpp`; `tools/m3_command_trace.py` names
+points/reasons and validates final accounting and lifecycle coverage.
+
+Observations are lossy, optional and never consulted for admission, execution,
+expiry, reconciliation or replay. Concurrent sequence assignment is not a causal
+order. A provider-sent observation means SDK acceptance, not peer delivery or
+handler start. A session-wide invalidation event may have no request ID. Missing
+records, dropped diagnostics, incomplete lifecycle or absent remote entries never
+prove nonexecution. Native transport preconditions retain their short-circuit
+order; the trace records the evaluated rejection branch rather than re-reading
+revocable proof state. Header/config layout changes require rebuilding consumers;
+SRT wire and worker IPC formats are unchanged. Traced workloads add observer and
+logging cost and are separate development cases from frozen qualification runs.

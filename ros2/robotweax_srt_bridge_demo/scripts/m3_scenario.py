@@ -97,7 +97,8 @@ class Benchmark(Driver):
             'address': self.args.peer if self.args.role=='robot' else '0.0.0.0',
             'credential_file':'/run/bridge/passphrase',
             'journal_path':str(self.run/(self.args.role+'.sqlite')),
-            'max_clock_interval_ms': self.args.clock_width_ms})
+            'max_clock_interval_ms': self.args.clock_width_ms,
+            'command_diagnostics': str(self.args.command_diagnostics).lower()})
 
     def spin(self, seconds=.05):
         end=time.monotonic()+seconds
@@ -303,6 +304,7 @@ def main():
     parser.add_argument('--peer',default='')
     parser.add_argument('--seconds',type=float,default=300)
     parser.add_argument('--clock-width-ms',type=int,default=200)
+    parser.add_argument('--command-diagnostics',action='store_true')
     args=parser.parse_args()
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
     rclpy.init();driver=Benchmark(args)

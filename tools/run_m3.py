@@ -20,6 +20,7 @@ from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_opti
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 import m3_recorder_diagnostics as recorder_diagnostics
+import m3_command_trace
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -37,6 +38,7 @@ def main():
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
+    parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     duration=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
@@ -54,6 +56,7 @@ def main():
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
     processes=[];captures=[];recorder_processes=[];lab=None;competitor=None;competitor_alive_checks=0
     report['recorder_diagnostics_enabled']=args.recorder_diagnostics
+    report['command_diagnostics_enabled']=args.command_diagnostics
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
@@ -111,7 +114,7 @@ def main():
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
                 'ros2/robotweax_srt_bridge_demo/scripts/m3_scenario.py','--role',role,'--run',inside,
-                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200'])
+                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--command-diagnostics'] if args.command_diagnostics else []))
             log=(run/(role+'-scenario.log')).open('w')
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False
@@ -189,8 +192,13 @@ def main():
             try:p.wait(timeout=10)
             except subprocess.TimeoutExpired:p.terminate()
             log.close()
+        if args.command_diagnostics:
+            try:
+                report['command_diagnostics']={p.name:m3_command_trace.summarize(p) for p in sorted(run.glob('*-bridge-*.log'))}
+                if len(report['command_diagnostics'])!=2 or not all(c['complete'] for c in report['command_diagnostics'].values()):raise RuntimeError('command diagnostics incomplete')
+            except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
         credential.unlink(missing_ok=True);save();print(run,flush=True)
-    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('capture_error',report.get('error','M3 failed'))))
+    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('command_diagnostics_error',report.get('capture_error',report.get('error','M3 failed')))))
 
 
 if __name__=='__main__':main()
