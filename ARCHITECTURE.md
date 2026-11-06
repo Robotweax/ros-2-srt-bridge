@@ -1388,3 +1388,23 @@ positive filter drops/reverse CONTROL/SENSOR and post-removal CONTROL. One
 command's UNKNOWN state remains intact. This known injected-fault signature is
 not attribution of the historical N5 cause or full N4/M3 acceptance. See
 evidence/m3-control-egress-validation-2026-11-06/.
+
+### Closed-run provider/flow and exploratory ARP analysis
+
+`m3_control_provider_liveness.py` retains every fully observed adjacent nonzero-
+destination CONTROL egress gap >=1 s within the source window, plus active
+CONTROL-loss/close events. It requires complete command/provider diagnostics,
+native v2 hash/count/coverage and common-clock proof. Recent session and
+reciprocal tuple/socket association constrain same-identity provider deltas;
+unavailable mappings are explicit. Boundaries are censored. Counter growth
+without an old-flow observation identifies a difference between accounting and
+tap, not a unique cause; flat selected counters do not prove UDP absence.
+
+`m3_arp_gap_observations.py` decodes checked Ethernet/IPv4 ARP headers inside the
+already-selected gaps. It preserves packet type and non-outgoing duplicates,
+checks native hashes, and records offsets without inferring neighbor-table
+state, kernel drops or causality. The first 300-s N5 provider run retained four
+gaps, including 4.237 s with growing send counters and ARP reply ~20 us before
+CONTROL resumption. ARP extraction was exploratory after measurement; neighbor-
+state/fixture contrast is a future diagnostic, not a policy fix or attribution
+of the historical reset. See evidence/m3-n5-provider-liveness-2026-11-06/.

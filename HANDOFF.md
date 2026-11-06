@@ -1990,3 +1990,50 @@ Gates offen; PR #2 Draft, Intrinsic/M4 unberührt.
 **Weiter:** Validierte Unterscheidung in separatem prospektiv begrenztem N5-
 Diagnoseplan mit Providerdaten/Flowisolierung anwenden. Historischer Initiator,
 UNKNOWNs, volle N5-/M3- und sonstige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06 UTC: N5 Provider-vs-Egress mit ARP-Hinweis
+
+- Neuer Read-only-Analyzer m3_control_provider_liveness.py, vorab Plan/Code
+  e29412c, 120 Hosttests/Syntaxchecks und bekannte Filter-Signature gegengeprüft.
+  Genau ein N5/300s/Seed1701 ohne Inject-Fault, Runtime/Pin/Policy/Timeouts gleich.
+  Alle Sourcehashes und acht Runtimehashes passen. Keine neuen SDK/ROS/M2-Tests.
+- Lokal .local/m3/20261106T230052361493Z: 126 bestätigte Erfolge/Effekte, 24 Slots
+  übersprungen, keine UNKNOWNs/aktiven CONTROL-Loss-/Close-Events. Kein Reset
+  reproduziert, keine alten Kohorten ersetzt. Journale126/126 immutable gelesen,
+  Erfolgs-/Kontext-/Resultfelder passen, genau ein SDK-Handoff je Intent,
+  Dispatch jeweils vor konservativer Receiverdeadline, Deadlines nicht gleichgesetzt.
+- Alle vier vollständig beobachteten alten CONTROL-Egressgaps >=1s erhalten:
+  Operator1,000311417s DATA/ACK/NAKdelta0; Operator4,237048752s DATA364 inkl350
+  Retransmits, ACK68/NAK1; Robot1,099705168s DATA15 inkl14Retransmits; Robot
+  1,054902209s DATA35 inkl28Retransmits/ACK15. Source-CONTROL out aller Flows
+  jeweils0. Peer je eine Edge-Beobachtung19–24us nach Leading Edge, keine leeren
+  Peerfenster oder sichere Paketauthentifizierung behauptet. Größter Gap39
+  benachbarte verfügbare same-identity Readpaare komplett innerhalb des Gaps.
+- Aktuelle Beobachtung grenzt Unterschied zwischen Provider-Sendaccounting und
+  Tap ein, nicht eindeutig Socket/Neighbor/Qdisc. Flatcounter kein UDP-Abwesenheits-
+  beweis; Retransmits in DATA enthalten, fehlende Kontrolldatagrammtypen beachten.
+  Whole-run Rootdrops Operator184/Robot618355 ohne Flow-/Eventattribution,
+  überlappende Childcounter nicht addieren.
+- Explorativ NACH Messung neuer ARP-Extractor m3_arp_gap_observations.py mit
+  Header-/Repräsentations-/Hashchecks; alle vier vorher ausgewählten Gaps,
+  Duplikate retained. Vier neue Parsertests, insgesamt124 Hosttests bestanden.
+  Größter Operatorgap: fünf outgoing ARP-Requests zum Robot; Robot outgoing Reply
+  30,542us und Operator observed Reply19,792us vor CONTROL-Resume. Robotgap
+  1,0549s ebenfallsReply76,375us vor Resume. Hinweis auf Neighborresolution in
+  DIESEM Lauf, keine Neighborzustände/Kernelqueues/Dropstages beobachtet und
+  keine historische Initiatorzuschreibung. Explorative Analyse keine Gateänderung.
+- Provider2993/24/3054, Trace397/5/5 vollständig, zero Drops/Exhaustion. Max
+  Readspan0,623041ms/Startgap113,664291ms beobachtet, keine Bounds. PCAP121477
+  Records/Filter je Endpoint zero Kerneldrops, Native121569/121567 zero Reserve/
+  Copyverluste bei anderen Populationen. Realtimefenster withheld. Competitor
+  ~128023bits/s whole-run angeboten, 1235Alivechecks, kein Windowdeliverybeweis.
+  Source/Published/Observer75024/23032/23030, Conservationbalances0; Defizit erhalten.
+- Evidenz evidence/m3-n5-provider-liveness-2026-11-06/ mit Prospektivplan,
+  Originalmanifest/Logs, primärer Flow-/Provideranalyse, Edge-/All-Flow-Crosscheck,
+  explorativen ARP-/Interfacebeobachtungen, Journalaudit, Tests/Inventaren/Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal, keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Begrenzte read-only Neighborzustandsbeobachtung und prospektiver
+Fixture-Kontrast zur Neighborresolution in owned N5-Lab. Jede Neighbor-Konfig-
+Änderung separater Diagnosekandidat, kein Ersatzbaseline. Historischer Initiator/
+UNKNOWNs, volle N5/M3 und übrige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.

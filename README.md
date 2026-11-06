@@ -874,3 +874,10 @@ counters grew with zero outgoing CONTROL tap observations during the injected
 filter drop, and traffic resumed after removal. One command remains UNKNOWN;
 this is diagnostic validation, with historical N5 cause and M3 still open. See
 [validation and limits](evidence/m3-control-egress-validation-2026-11-06/README.md).
+
+A subsequent 300-second N5 diagnostic records 126 successful commands/effects,
+zero unresolved intents and four CONTROL egress gaps >=1 s. The longest is
+4.237 s with increasing provider send counters. Exploratory capture analysis
+finds an ARP reply about 20 microseconds before CONTROL resumes, suggesting
+neighbor-resolution involvement for further testing. No reset recurred; the
+historical cause remains open. [Evidence and limits](evidence/m3-n5-provider-liveness-2026-11-06/README.md).
