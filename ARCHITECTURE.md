@@ -1275,3 +1275,11 @@ later session invalidation during scenario teardown. Historical IDs without
 traces remain uncertain. The SRT checkpoint labels sender/receiver refer to
 sensor direction: the operator is the sensor receiver and command sender. Do
 not compare an operator journal owner epoch to the robot checkpoint by mistake.
+
+Validation for the clock-deferral fix is retained in
+`evidence/m3-command-handoff-2026-11-06/`: expected old-transport regression
+failure, IPv4/IPv6 deferral and revocation controls, 68 SDK CTests, 36 ROS-reported
+tests and 92 host tests passing. A separate post-fix 90-s N5 development case has
+32 confirmed successes/effects, two successful soft-clock deferrals and zero
+unresolved commands/recorder drops. Original failed manifests and old uncertainty
+remain retained; this does not close full SRT N5 or M3 qualification.

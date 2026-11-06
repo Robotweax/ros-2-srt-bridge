@@ -815,3 +815,14 @@ The 60-second case retained an unresolved command despite zero capture drops;
 the 30-second case verified bounded SRT poll histories with 12 successes.
 All 88 host tests pass. These development cases do not replace the failed frozen
 SRT N5 cohort or resolve historical intent 105; PR #2 remains draft and M3 incomplete.
+
+Command handoff diagnosis found and fixed an unsent command being discarded
+when clock qualification briefly failed. The transport now retains its reserved
+ingress slot and original proof/deadline until qualification recovers, with
+expiry/revocation/context guards preserved and no SDK-accepted command replay.
+Opt-in `--command-diagnostics` records bounded handoff/lifecycle observations.
+[Evidence and regression results](evidence/m3-command-handoff-2026-11-06/) retain
+the pre-fix failure and separate post-fix 90-second N5 case: 32 successes/effects,
+two recovered clock deferrals, zero unresolved commands or capture drops.
+68 SDK CTests, 36 ROS-reported tests and 92 host tests pass. Full SRT N5/M3
+qualification and historical uncertainties remain open; PR #2 stays draft.

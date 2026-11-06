@@ -1630,3 +1630,57 @@ Live-/Shutdown-/Recovery-Transitions unterscheidbar machen; Recorderverluste mit
 opt-in Beobachtungen korrelieren, falls erneut beobachtet. Original-Intent 105
 bleibt unsicher; SRT-N5-Gesamtqualifikation, Default-DDS-N5, N3/N4 und bestehende
 Age-/Clock-/Security-/Ressourcengates offen. M3 in Arbeit, PR #2 Draft; M4 unverändert.
+
+## Fortsetzung 2026-11-06: Command-Handoff-Ursache beobachtet und behoben
+
+- 381dfa8 ergänzt opt-in `--command-diagnostics` / ROS-Parameter
+  `command_diagnostics`: fester 256-Event-Trace, Producer schreiben mit Try-lock
+  ohne Wait/I/O/Callbacks, Loss-Zähler explizit. ROS-Pump drainiert JSON; nach
+  Endpoint-Join finale Attempted/Dropped-Bilanz. Events für Coordinator-Invalidation
+  (Sessionwechsel vs. Abandoned-Submit), Admission/Handoff, Transportdrops,
+  SDK-Acceptance und Lifecycle. Aktuelle und gespeicherte Owner-Epochen bei
+  UNKNOWN separat. Kein Wire-/Worker-IPC-Formatwechsel; Default aus.
+- Separates vorab fixiertes 90-s-N5-Development (Seed 2903) bei 381dfa8:
+  zehn Erfolge/Effekte, ein offener Intent 11, 34 Skipped, null PCAP-Drops.
+  Trace: Envelope-Erstellung für 11 verwirft `clock_unqualified` vor SDK-Handoff.
+  Letzter Driverpoll bleibt LOCAL_QUEUED; späterer Teardown-Sessionwechsel fordert
+  Invalidation an, geschlossenes Journal danach UNKNOWN/reconcile-required.
+  Keine nachträgliche Expiry/Erfolg/Nichtausführung oder Replay erfinden.
+- Originalmanifest bleibt failed: erster Tracevalidator erwartete fälschlich
+  exakt zwei Bridge-Logs. Tatsächlicher Setup-Linkreset erzeugt drei Inkarnationen;
+  alle drei Traces integral, 43/4/4 Events, null Drops. Reanalyse getrennt, kein
+  Umetikettieren des ursprünglichen Manifests. Validator ab 899a6eb prüft jede
+  Inkarnation und beide Rollen, statt die legitime Setup-Inkarnation abzulehnen.
+- 899a6eb hält noch nicht ans SDK übergebene Commands bei softem Clock-Ausfall in
+  einem reservierten Ingress-Slot. Dieser zählt innerhalb der bestehenden 64/
+  56-Grenzen, FIFO bleibt erhalten. Original-Proof/Origin/Deadline unverändert;
+  pro Versuch Liveness/Context/Deadline prüfen. Probe-/Socket-Owner laufen weiter.
+  Expiry/Revocation/Context-Loss/andere Envelopefehler weiterhin fail closed;
+  kein neuer Admit, keine Budgetverlängerung und kein SDK-Command-Replay.
+- Kontrollierter nativer Regressionstest mit 150-ms-Probe-Lifetime schlägt mit
+  altem Transport erwartungsgemäß fehl (Command discarded statt Clock-Wait).
+  Fix auf IPv4/IPv6: Deferred/Ingress-Charge, One-shot-Ticket, genau ein späterer
+  SDK-Handoff mit Original-Origin/5000-ms-Budget. Zweites gehaltenes Command wird
+  nach Worker-Revocation verworfen und auch nach Clock-Erholung nicht gesendet.
+- Separate neue 90-s-N5-Development-Ausführung bei 899a6eb: 32 Erfolge/Effekte,
+  13 Skipped, null unresolved/UNKNOWN/PCAP-Drops. Zwei Clock-Deferrals, beide
+  Intents erfolgreich; SDK-Accepts 32. Traces 108/4/4 Events, null diagnostische
+  Drops; 32 gemeinsame Journalrecords stimmen überein, Generation/Effekte 32.
+  Geänderte kompilierte Runtime plus Trace/Recorder-Observer; keine kausale
+  Leistungs-/Kostenvergleichsbehauptung und kein Ersatz für frühere Abnahme.
+- Finale neue Builds: 68 SDK-/Native-CTests, 36 ROS-reported (32 GTests plus
+  Wrapper) und 92 Host-Python-Tests bestanden. Kein neuer voller M2-Acceptance-
+  Lauf behauptet. Consumer wegen öffentlicher Config-Layout-Erweiterung neu gebaut.
+- Historische Intents 105 und 3: Immutable/read-only Journal-Owner-Checks stimmen
+  mit jeweiligem Operator-Checkpoint überein, belegen aber keine eindeutige alte
+  Transition. SRT-Checkpointlabels sender/receiver sind Sensor-Richtung; Command-
+  Sender ist Operator/Sensor-Receiver. Historische Unsicherheit bleibt erhalten.
+- Evidenz: evidence/m3-command-handoff-2026-11-06/ mit unveränderten Manifesten,
+  Freeze/Binding, Original-Trace-Logs, Reanalyse, Journal-/Source-/Raw-Hashes,
+  Expected-Failure/positiven Tests. Roh-PCAP/Prefixes/Journale/Clocks lokal;
+  keine kompletten Inspect-/Env-Dumps/Secrets.
+
+**Weiter:** Neue Runtime in eigenständiger langer SRT-N5-Kohorte qualifizieren;
+Original-Recorderverlust und alte UNKNOWNs bleiben offen. Danach N3/N4 und
+bestehende Default-DDS-N5-/Age-/Clock-/Security-/Ressourcengates. M3 weiterhin in
+Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
