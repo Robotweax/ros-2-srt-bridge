@@ -16,7 +16,8 @@ changed. No ROS/SRT peers or competing load run in these fixtures.
 - Plain UDP: all 16 datagrams appear at both taps and the receiving application.
 - Egress 100% netem loss: 16 known UDP datagrams pass a targeted u32/gact egress
   counter before the root queue; none appears at either packet tap or application.
-  The root drop total also includes background IPv6, retained separately. The
+  The aggregate root drop increment exceeds the targeted flow count; that excess
+  is retained separately without protocol attribution. The
   restored control succeeds. This places this egress tap after that tested drop.
 - Egress 200-ms netem delay: all 16 sender-tap timestamps include the queue delay
   (classification threshold 150 ms, separating an immediate tap from the requested

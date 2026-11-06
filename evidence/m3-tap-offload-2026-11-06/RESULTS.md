@@ -22,8 +22,8 @@ identities and lengths agree exactly in the final run; every recorder is loss-fr
 | shaped-only | 16 | 16 | 16 | 16 | plain UDP observation population matches delivery |
 
 The 200-ms delay case's actual sender deltas are retained per datagram; the final
-range is 200.02–206.94 ms. Root drop totals include background IPv6; targeted UDP
-flow counters establish the 16 test packets independently. Both GSO cases carry
+range is 200.02–206.94 ms. Aggregate root drop increments exceed the targeted flow count; the excess is
+not attributed by protocol. Targeted UDP counters establish the 16 test packets independently. Both GSO cases carry
 one 9,642-byte skb with eight segments at each endpoint, while the socket delivers
 eight 1,200-byte datagrams. Their skb accounting qualifies, while frame
 interpretation is false. This remains a virtual-device observation, not a

@@ -1218,7 +1218,7 @@ Intrinsic/M4 unverändert.
   positives Restoration-Control im selben offenen Observer zwingend.
 - Laufzeitbeleg: 16 normale Datagramme an beiden Taps/Empfänger. Egress-Drop:
   16 gezielte UDP-Matches vor Root, null Tap-/App-Beobachtungen; globale Rootdrops
-  enthalten zusätzlich IPv6-Hintergrund. Delay: Sender-Tap inklusive Queue-Delay,
+  enthalten zusätzliche, nicht nach Protokoll zugeordnete Inkremente. Delay: Sender-Tap inklusive Queue-Delay,
   finale Spanne 200,02–206,94 ms (Klassifikationsschwelle 150 ms, kein Präzisionsbound).
   Ingress-Drop: 16 an beiden Taps, 16 gezielte Drops, null App-Receipts.
   Historisches generisches `egress is pre-qdisc`-Label war für dieses Fixture
