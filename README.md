@@ -770,3 +770,11 @@ without dispatch, one BUSY admission rejection and 57 skipped slots, with no
 UNKNOWN or unresolved intents. All capture integrity gates pass. One seed's age
 estimates fail clock qualification, so the N2 age gate and full M3 acceptance
 remain open. Sources and installed binaries are unchanged from `eb46aba`.
+
+The [full-duration SRT N2 cohort](evidence/m3-srt-n2-full-2026-11-06/README.md)
+completes all three 600-second seeds with 900 confirmed commands/effects and no
+uncertain, expired or skipped intents. Six journals agree; source-fenced balances
+and twelve cgroup windows replay exactly. The largest measured publication-age
+upper bucket is 168 ms against the 250-ms gate (bridge-ingress origin). Capture
+recorder gates pass; realtime packet windows remain unqualified. Runtime code is
+unchanged. These separate SRT/DDS cohorts do not establish transport superiority.

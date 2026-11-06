@@ -1108,3 +1108,20 @@ estimates are unqualified after observed clock steps (up to 6.206431 ms), with
 their shared-VM age estimates; realtime packet windows remain withheld in all
 three cases. N2 age acceptance, SRT N2, other profiles and full M3 acceptance
 remain open. Evidence: `evidence/m3-dds-n2-full-2026-11-06/`.
+
+### SRT N2 full-duration execution
+
+The 2026-11-06 SRT cohort executes 600 seconds for each base seed 1701/2903/4211
+with the existing binaries/policies and fresh sequential endpoints. All 900
+commands confirm SUCCEEDED/revision 3 with 900 device effects; no expiry, UNKNOWN,
+unresolved, nonadmission or skipped slot occurs. Six closed journals agree, all
+three source-fenced summaries reproduce with six zero residuals each, and twelve
+cgroup endpoint/phase windows replay exactly. The maximum measured publication-age
+upper bucket is 168 ms against the unchanged 250-ms gate, using bridge-ingress
+origin and the existing conservative clock assumptions. This is not physical
+sensor-to-delivery age or DDS Header age equivalence. All capture recorder gates
+pass with zero reported loss; realtime packet windows remain withheld by clock
+qualification. Full N2 duration/seed execution is now recorded for both SRT and
+default DDS, but the DDS age gap and other M3 gates remain open. No performance
+advantage follows from these separate cohorts. Runtime sources/installed binaries
+are unchanged from fd23de6. Evidence: `evidence/m3-srt-n2-full-2026-11-06/`.

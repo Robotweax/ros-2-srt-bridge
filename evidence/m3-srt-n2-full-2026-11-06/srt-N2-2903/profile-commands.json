@@ -1,0 +1,60 @@
+[
+  {
+    "label": "profile-operator-0",
+    "argv": [
+      "docker",
+      "exec",
+      "ros2-srt-m3-1a4e7acff65f-operator",
+      "tc",
+      "qdisc",
+      "replace",
+      "dev",
+      "eth0",
+      "root",
+      "handle",
+      "1:",
+      "netem",
+      "limit",
+      "256",
+      "delay",
+      "60ms",
+      "15ms",
+      "distribution",
+      "normal",
+      "loss",
+      "random",
+      "3%",
+      "seed",
+      "2904"
+    ]
+  },
+  {
+    "label": "profile-robot-0",
+    "argv": [
+      "docker",
+      "exec",
+      "ros2-srt-m3-1a4e7acff65f-robot",
+      "tc",
+      "qdisc",
+      "replace",
+      "dev",
+      "eth0",
+      "root",
+      "handle",
+      "1:",
+      "netem",
+      "limit",
+      "256",
+      "delay",
+      "60ms",
+      "15ms",
+      "distribution",
+      "normal",
+      "loss",
+      "random",
+      "3%",
+      "seed",
+      "2903"
+    ]
+  }
+]

@@ -1388,3 +1388,44 @@ Echtzeit-Überlegenheitsbehauptungen. M3 in Arbeit, PR #2 bleibt Draft.
 Volle SRT-N2- und beide N1-Matrizen, V2/langes N5, deterministisches N3, N4-Phasen,
 andere Devices/Offloads, kontrollierte Ressourcen und Semantik-/Security-Parität.
 M3 in Arbeit, PR #2 bleibt Draft; keine Echtzeit-/Lossless-/Hardwarefreigabe.
+
+## Fortsetzung 2026-11-06: SRT N2 je 600 s/drei Seeds
+
+- Eingefrorener Plan vor erstem Lauf: SRT N2, Seeds 1701/2903/4211, je 600 s,
+  frische sequentielle eigene Endpoint-Paare. Bestehende Crypto-/Profile-/Deadline-/
+  Lease-/Journal-/Atomic-Start-/No-Replay-Policy, Native v2 und Immediate/Full-
+  Snapshot/32.768-KiB-PCAP unverändert. Keine Rebuilds, Retries oder Ersatzläufe.
+- Alle drei vollständigen Source-Fenster (600,149477/600,101959/600,140695 s)
+  bestanden. Je Seed 300 SUCCEEDED/Effekte, insgesamt 900; null EXPIRED/FAILED/
+  REJECTED/UNKNOWN/unaufgelöste/not-admitted/übersprungene Intents. Max. lokale
+  Invocation-bis-Terminalbeobachtung 1.106,214/1.309,764/1.110,049 ms; keine
+  Ausführungs-/Netzlaufzeitgrenze daraus ableiten. Sechs geschlossene Journale
+  integral, je Intent an beiden Seiten Revision 3/Result/Hash/Generation identisch.
+  Generation-Chains und Device-Effekte je 300, keine neue Intent-Wiederholung.
+- Alle sechs Conservation-Residuals je Source-Fenster null und exakt nachgerechnet.
+  Produced/Published/Observer je Seed: 150.036/64.233/64.176,
+  150.026/64.037/63.980, 150.036/64.183/64.125. Sämtliche lokalen Verlust-/Replace-/
+  Reject-Populationen behalten; Accept-to-Receiver-Gap nicht als isolierter WAN-
+  Verlust oder FEC-Nutzen auslegen. Nicht alle produzierten Samples werden zugestellt.
+- Source-fenced Publication-Age-Upper-Maxima (auf 1 ms aufgerundet) IMU/Joints:
+  143/168, 144/164, 141/163 ms; unter unverändertem 250-ms-Gate. Origin ist Bridge-
+  Ingress, kein physisches Sampling-to-Delivery und keine DDS-Header-Age-Parität.
+  Diagnostics-Hold-Dauern enthalten Startup/Tails/Gaps, keine exakte Window-Uptime.
+- PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null. Sechs PCAP-Populationen
+  hier reconciled, kein universeller Completeness-/Physical-Delivery-Nachweis.
+  Alle Realtime-PCAP-Fenster wegen Clock-Qualifikation unterdrückt; Native-Monotonic
+  separat qualifiziert. Zwölf Cgroup-Phasen aus archivierten Projektionen exakt
+  reproduziert. 161 Quellen und acht ausgewählte installierte Binär-/SDK-Hashes
+  sowie installierte Python-Bytes konstant; 56 Produktionsquellen unverändert seit
+  fd23de6. Ein VM-Boot in der Kohorte. Keine Runtime-Quelländerung; vorherige 83
+  Host-Python-Tests unverändert, keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+- Evidenz: evidence/m3-srt-n2-full-2026-11-06/ mit Plan, Manifesten, Journal-/Generation-
+  Belegen, Source-/Age-/Loss-Tabellen, PCAP-Populationen, Cgroup-Projektionen und
+  Raw-Hashes. Roh-PCAPs/Prefixes/Journale/Clocks lokal; keine vollen Inspect-/Env-Dumps.
+  Intrinsic/M4 unverändert. Kein kontrollierter Ressourcen-/Transportvorteil behauptet.
+
+**Weiter:** volle N2-Dauer/Seed-Ausführung für SRT und System-DDS dokumentiert;
+DDS-N2-Altersgate und Realtime-PCAP-Clockqualifikation bleiben offen. Volle N1-
+Matrizen, V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/
+Offloads, kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
+M3 in Arbeit, PR #2 bleibt Draft.
