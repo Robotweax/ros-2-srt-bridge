@@ -15,6 +15,7 @@ import shlex
 import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
+from m3_dds import summarize_competitor
 from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
@@ -49,7 +50,7 @@ def main():
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
-    processes=[];captures=[];lab=None
+    processes=[];captures=[];lab=None;competitor=None;competitor_alive_checks=0
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
@@ -111,6 +112,9 @@ def main():
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False
         while time.monotonic()<deadline:
+            if competitor is not None:
+                if competitor.poll() is not None:raise RuntimeError('N5 competitor exited before scenario completion')
+                competitor_alive_checks+=1
             if any(p.poll() not in (None,0) for p,_ in processes):raise RuntimeError('scenario failed; see '+str(run))
             if all(p.poll() is not None for p,_ in processes):break
             if args.profile=='N4' and not outage and (run/'measurement-start.json').exists():
@@ -167,13 +171,19 @@ def main():
 
             except Exception as error:
                 report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None);report.pop('monotonic_captures',None)
+            if competitor is not None:
+                try:
+                    report['competitor_check']=summarize_competitor(json.loads((run/'competing-traffic.json').read_text()))
+                    report['competitor_check']['alive_poll_checks']=competitor_alive_checks
+                    if not competitor_alive_checks:raise RuntimeError('competitor was never observed alive')
+                except Exception as error:report['status']='failed';report['competitor_error']=str(error)
             lab.cleanup()
         for p,log in processes:
             try:p.wait(timeout=10)
             except subprocess.TimeoutExpired:p.terminate()
             log.close()
         credential.unlink(missing_ok=True);save();print(run,flush=True)
-    if report['status']!='passed':raise RuntimeError(report.get('capture_error',report.get('error','M3 failed')))
+    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('capture_error',report.get('error','M3 failed'))))
 
 
 if __name__=='__main__':main()
