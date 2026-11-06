@@ -19,6 +19,7 @@ from m3_dds import summarize_competitor
 from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
+import m3_recorder_diagnostics as recorder_diagnostics
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -35,6 +36,7 @@ def main():
     parser.add_argument('--build-image',action='store_true')
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
+    parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     duration=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
@@ -50,7 +52,8 @@ def main():
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
-    processes=[];captures=[];lab=None;competitor=None;competitor_alive_checks=0
+    processes=[];captures=[];recorder_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    report['recorder_diagnostics_enabled']=args.recorder_diagnostics
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
@@ -94,6 +97,7 @@ def main():
             argv=['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
                   '-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
+        if args.recorder_diagnostics:recorder_diagnostics.start(lab,run,inside,recorder_processes)
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_before']=mono_capture.feature_snapshot(lab,'features-before')
             mono_capture.start(run,inside,lab,captures)
@@ -153,6 +157,9 @@ def main():
                 try:p.wait(timeout=5)
                 except subprocess.TimeoutExpired:p.terminate()
                 log.close()
+            if recorder_processes:
+                try:report['recorder_diagnostics']=recorder_diagnostics.stop(run,recorder_processes)
+                except Exception as error:report['status']='failed';report['recorder_diagnostics_error']=str(error)
             try:
                 report['captures']={role:summarize(sorted(run.glob(role+'.pcap*')),address) for role,address in lab.addresses.items()}
                 for role,capture in report['captures'].items():
