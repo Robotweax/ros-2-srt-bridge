@@ -797,3 +797,12 @@ The [execution matrix](evidence/m3-dds-n1-full-2026-11-06/execution-matrix.json)
 now covers all four SRT/DDS N1/N2 duration/seed cohorts. This closes execution
 coverage, not the age/security/comparison gates or full M3 acceptance. Runtime
 sources and binaries are unchanged from `e3c5c70`.
+
+Current-capture [paced DDS N5 repetitions](evidence/m3-dds-paced-n5-v2-2026-11-06/README.md)
+pass three 300-second runs with 450 confirmed effects. This is an explicit tuned
+profile; default DDS N5 discovery remains open. The [separate SRT N5 plan](evidence/m3-srt-n5-v2-2026-11-06/README.md)
+passes one run, then stops on real PCAP kernel drops and one unresolved intent;
+its third seed is unexecuted. The SRT runner now enforces competitor liveness and
+offered-load gates, with a deliberate competitor-stop negative test and 83 passing
+host tests. Failed recorder data and command uncertainty are retained, not retried
+or reclassified as success. Full SRT N5/M3 acceptance remains open.

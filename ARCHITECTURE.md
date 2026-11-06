@@ -1176,3 +1176,29 @@ age gaps, realtime clock qualification, long v2 N5, deterministic N3, N4 phase
 barriers, other devices/offloads and controlled semantic/security/resource
 comparison remain open. No runtime/capture tooling changes occur in this step;
 previous test results are not represented as newly rerun ROS/full M2 validation.
+
+### Current-capture N5: tuned DDS pass, SRT recorder failure
+
+Three 300-second paced-sensor DDS N5 repetitions pass with 450 confirmed effects,
+verified applied provider settings and whole-run 128-kbit/s competitor load plus
+process liveness. This is the explicit tuned candidate; default DDS N5 discovery
+remains open. Nine selected binaries include its native provider probe. The
+source/capture configuration is frozen at 1bf9bfe; shared-VM age estimates qualify,
+while realtime packet windows remain withheld.
+
+The SRT runner now uses the same offered-load validator and rejects an exited
+competitor during polling. A separate negative test terminates the competitor
+after measurement starts and observes the expected failure; deliberately aborted
+capture windows do not qualify. All 83 host tests pass. Compiled SDK/bridge,
+wire/IPC and command policy remain unchanged.
+
+The separate SRT N5 plan at 80c5590 passes seed 1701 (131 successes, 19 skipped
+slots), then fails seed 2903: PCAP reports 2672/2637 kernel drops and the driver
+retains intent 105 unresolved after 104 confirmed effects. Its sender journal is
+UNKNOWN/reconcile-required revision 0; the receiver has no record. Absence is not
+nonexecution and no replay/expiry/success is invented. Seed 4211 is unexecuted.
+Native reanalysis accounts exactly for the missing PCAP records with zero native
+reserve/copy loss; it does not rescue the failed recorder verdict. No unique
+scheduler/storage/root cause is established. Full SRT N5 acceptance remains open.
+Evidence is split under `evidence/m3-dds-paced-n5-v2-2026-11-06/` and
+`evidence/m3-srt-n5-v2-2026-11-06/`; no cross-transport advantage follows.

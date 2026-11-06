@@ -1531,3 +1531,61 @@ DDS-N1/N2-Altersgates und Realtime-PCAP-Clockqualifikation, weitere Devices/Offl
 kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
 N1/N2-Dauer/Seed-Ausführung komplett dokumentiert; M3 weiterhin in Arbeit,
 PR #2 Draft. Keine implizite Hardware-/Echtzeit-/Lossless-Freigabe.
+
+## Fortsetzung 2026-11-06: N5 mit aktueller Capture-Konfiguration
+
+- Separate, vor Start eingefrorene paced-DDS-N5-Kohorte: Seeds 1701/2903/4211
+  je 300 s, simultaner Start, private frische sequentielle Endpunkte. 512-kbit/s-
+  Root-TBF je Richtung, Burst 4096, Limit-Request 32768, Child-Netem-Queue 16;
+  kein stochastischer Delay/Loss, Seeds nur Wiederholungslabels. Pinned JSON zeigt
+  TBF Rate/Burst/normalisierte Latenz (448000), kein erfundenes Limit-Readback.
+- DDS-Kandidat explizit paced-sensors: nur Sensorwriter asynchron/KeepLast(1),
+  gemeinsamer 1600-Controller-Bytes/50-ms-Budget, 1200-Byte UDP/SHM. Control unverändert.
+  Native Provider-Preflight vor jedem Lab in network-none, dessen Binärhash als
+  neunter ausgewählter Hash eingefroren. XML/161 Sources/Install-Scripts konstant.
+  Quellen dieser Kohorte entsprechen 1bf9bfe vor dem späteren SRT-Tooling-Patch.
+- Alle drei paced-DDS-Läufe bestanden: je 150 SUCCEEDED/Effekte, gesamt 450;
+  null Expired/UNKNOWN/unresolved/not-admitted/Skipped. Source/Callback je Seed
+  75031/19216, 75027/19073, 75026/19188. Absichtliches Middleware-Pacing und andere
+  Stufen nicht als isolierten WAN-Loss deuten. Alle Shared-VM-Age-Estimates
+  qualifiziert, alle Realtime-PCAP-Fenster weiterhin unterdrückt. Sechs Journale
+  stimmen überein, zwölf Cgroup-Fenster exakt reproduziert. Recorderverluste null.
+- Iperf-Whole-Run-Offer ca. 128000,016/128019,300/128002,557 bit/s; Liveness-Polls
+  positiv. Intervall/Setup/Total-Projektionen und Raw-Hashes erhalten, keine
+  matched-window Delivery-/Loss-Garantie. Default/System-DDS-N5-Discovery bleibt offen.
+- SRT-Runner fehlten diese Competitor-Gates. Patch 80c5590 ergänzt Poll-Liveness
+  und denselben Offered-Load-Validator. 83 Host-Tests bestanden. Separater Negativtest
+  beendet ausschließlich den Client im eigenen Robot-Container nach echtem
+  Measurement-Marker: erwartetes failed/competitor-exited beobachtet. Zusätzlicher
+  Capture-Analysefehler wegen absichtlich fehlender Endpoint-Fenster; keine positive
+  N5-/Capture-/Journal-Abnahme aus diesem unterbrochenen Development-Fall behaupten.
+- Danach separater SRT-N5-Plan, Quellen bei 80c5590 eingefroren. Seed 1701 bestanden:
+  131 SUCCEEDED/Effekte, 19 Skipped, null unresolved. Seed 2903 **fehlgeschlagen**:
+  PCAP-Kerneldrops Robot 2672/Operator 2637. Application-Fenster endet mit 104
+  bestätigten Effekten, 105 Versuchen, 45 Skipped und einem offenen Intent 105.
+  Seed 4211 wegen Fail-fast nicht ausgeführt, kein Ersatzlauf/Retry/Gate-Waiver.
+- Intent 105: Senderjournal UNKNOWN/reconcile-required, Revision 0, ungültiges
+  Result; Receiver ohne Eintrag. 104 gemeinsame Erfolgsrecords stimmen überein,
+  final beobachtete Generation/Effekte 104. NOT_FOUND/Abwesenheit nicht als
+  Nichtausführung/Expiry/Erfolg auslegen. Reconcile-required bleibt
+  unsicher, obwohl die Verbindung später wieder ready ist; kein automatischer Replay.
+  Begin-/End-Session-IDs und Generationen sind identisch; daraus keinen belegten
+  Session-ID-Wechsel oder eindeutige UNKNOWN-Ursache behaupten.
+- Native UDP/PCAP-Multiset-Vergleich identifiziert exakt alle 2672/2637 fehlenden
+  Records eindeutig in drei späten Zeitclustern; große Cluster ca. 2,7/3,1 s.
+  Native Reserve-/Copy-Verluste null und beide Phasen unabhängig qualifiziert.
+  Das rettet keine fehlgeschlagene PCAP-/Gesamtabnahme. Sampler-Gaps beweisen keine
+  globale Pause; keine eindeutige Scheduler-/Storage-Ursache behaupten. Acht
+  Cgroup-Fenster und beide Source-Summaries der ausgeführten SRT-Fälle reproduziert,
+  fehlgeschlagenes App-Counter-Result nicht als vollständige Qualifikation verkaufen.
+- Evidenz getrennt: evidence/m3-dds-paced-n5-v2-2026-11-06/ und
+  evidence/m3-srt-n5-v2-2026-11-06/ inkl. Development-Negativfall, unverändertem
+  fehlgeschlagenem Plan, Raw-Hashes, Closed-Journal-Audit und Capture-Gap-Analyse.
+  Keine Runtime-C++-/SDK-/Wire-/IPC-/Deadline-/Lease-/Replay-Policy-Änderung,
+  keine neuen ROS-GTests/volle M2-Ausführung; Intrinsic/M4 unverändert.
+
+**Weiter:** SRT-N5-Recorderverlust untersuchen/qualifizierbare Aufnahme sicherstellen;
+Intent-105-Unsicherheit beibehalten und Kontextwechsel-/Lastverhalten gezielt
+qualifizieren. N3 deterministische DATA/FEC-Verluste, N4-Command-Phasen, Default-DDS-
+N5-Discovery, bestehende Age-/Realtime-Clock-Gaps und kontrollierte Semantik-/Security-/
+Ressourcenparität offen. M3 nicht abgeschlossen, PR #2 bleibt Draft.
