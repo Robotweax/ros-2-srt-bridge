@@ -1,0 +1,20 @@
+{
+  "test_commit": "32ccfc6635d4a60e6123c3d1bff4acc663c585b2",
+  "native_ctests": [
+    "command_endpoint_ipv4",
+    "command_endpoint_ipv6"
+  ],
+  "checks_each": 195,
+  "controlled_fault": "receiver journal admission_before_commit barrier; peer stopped/restarted with new epoch and session",
+  "assertions": [
+    "exactly one original sender SDK handoff",
+    "receiver barrier after transport receipt and before durable admission/effect",
+    "sender UNKNOWN/reconcile_required revision 0 invalid result after reconnect",
+    "peer NOT_FOUND observed without authoritative nonexecution inference",
+    "UNKNOWN remains after original 5000ms budget",
+    "no command replay, no new handler effect",
+    "control-link-loss and same-owner UNKNOWN provenance, no trace drops"
+  ],
+  "scope": "native simulated-handler admission-loss safety regression; not the initiating cause of the historical N5 reset; not full N4/ROS/hardware acceptance",
+  "production_behavior_changed": false
+}

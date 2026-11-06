@@ -1787,3 +1787,43 @@ Intrinsic/M4 unverändert.
 qualifizieren, bevor erneut eine vollständige Kohorte versucht wird. Alte
 UNKNOWNs/Recorderverluste erhalten. N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/
 Ressourcengates offen; M3 in Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Einmaliger Cause-Repro und Admission-Loss-Test
+
+- Vorab festgelegter einzelner 300-s-N5-Diagnoselauf (Label 1701) bei 4a49595,
+  getestete Cause-Event-Runtime fd0107e, native V2-Aufnahme und beide Observer an.
+  Source-/acht ausgewählte Binärinventare vor/nach Lauf konstant. Keine Wiederholung,
+  Ersatzfälle oder Tuning. Ergebnis **kein aktiver Reset beobachtet**; nicht als
+  Erklärung früherer Fehler oder komplette N5-/M3-Kohorte auslegen.
+- 133 Attempts/SUCCEEDED/Effekte, 17 Skipped, null unresolved/UNKNOWN/nonadmission;
+  Traces 417/5/5 integral und null Trace-/PCAP-Verlust. Setup-/Teardown-Close-
+  Events erhalten, aber vom aktiven Command-Fenster getrennt klassifiziert.
+  133 gemeinsame Journalrecords stimmen in Immutable-/Statusfeldern inkl. Result-
+  Rate/Generation überein, read-only/immutable mit Hashkontrolle.
+- Produced/Published/Observer 75041/2327/2327, Defizite explizit und nicht isolierter
+  WAN-Loss. Max. Publikations-Age-Upper-Buckets IMU 162 / Joint 159 ms innerhalb
+  250-ms-Modellgate. Source-Summary und vier Cgroup-Fenster exakt reproduziert,
+  sämtliche Realtime-PCAP-Fenster weiter clockbedingt unterdrückt. Keine Kosten-/
+  Performance-/Physical-Delivery-Behauptung aus diesem Einzellauf.
+- 32ccfc6 ergänzt ausschließlich einen nativen Admission-before-commit-Peer-Loss-
+  Regressionstest: Transportempfang/Receiver-Journalbarriere abwarten, Receiver
+  stoppen und neue Epoch/Session verbinden. UNKNOWN/reconcile-required Revision 0
+  ohne gültiges Result bleibt trotz Peer-NOT_FOUND und nach ursprünglichem
+  5000-ms-Budget erhalten; genau ein SDK-Handoff, kein Replay/Effekt. Kontrollierte
+  Barriere liefert bekanntes Faultmodell, keinen Initiatorbeweis für den alten
+  spontanen N5-Reset. Bestehender Worker-Hook, keine neue Produktionsschnittstelle.
+- Beide Command-Endpoint-CTests IPv4/IPv6 bestanden, jeweils 195 Checks inkl.
+  neuer Admission-Loss-Szene und bestehender Normal-/Result-Recovery-/Running-
+  UNKNOWN-/Timeout-/Shutdown-Szenen. Kein neuer kompletter SDK-/ROS-/Host-Testlauf
+  behauptet; Produktionscode/Binärinventare unverändert, nur Testquelle geändert.
+  Admission-Phasen-Faultcoverage, keine komplette N4-/ROS-/Hardware-Abnahme.
+- Evidenz evidence/m3-n5-close-cause-2026-11-06/ mit unveränderten Plänen/Manifesten,
+  aktivem Cause-Fenster (leer), ursprünglichen Trace-Logs, ausgewählten Journal-
+  Vergleichsfeldern, Cgroup-Replay und Raw-Hashes sowie separatem Native-Testlog.
+  Rohcaptures/Prefixes/Journale/Clocks lokal; keine Inspect-/Env-Dumps/Secrets.
+
+**Weiter:** Prospektiv begrenzten Diagnose-/Faultplan zur Unterscheidung Provider-
+Verlust vs. lokale Session-/Clock-Entscheidung verwenden; Initiator bleibt offen.
+Keine günstigen Läufe anstelle gescheiterter Kohorten einsetzen. Historische
+UNKNOWNs/Recorderverluste erhalten; vollständiges N5/M3, N3/N4, Default-DDS-N5 und
+Age-/Clock-/Security-/Ressourcengates offen. PR #2 Draft; Intrinsic/M4 unverändert.

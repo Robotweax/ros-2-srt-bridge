@@ -1116,5 +1116,50 @@
       "smoke_trace_pcap_losses": 0,
       "n5_cause_reproduction_completed": false
     }
+  },
+  "n5_cause_reproduction": {
+    "evidence": "evidence/m3-n5-close-cause-2026-11-06",
+    "source_commit": "4a49595",
+    "profile": "N5",
+    "seed": 1701,
+    "seconds": 300,
+    "planned_executions": 1,
+    "executed": 1,
+    "harness_status": "passed",
+    "active_window_reset_observed": false,
+    "successes_effects": 133,
+    "unresolved_unknown_nonadmitted": 0,
+    "skipped_slots": 17,
+    "trace_counts": [
+      417,
+      5,
+      5
+    ],
+    "trace_or_pcap_losses": 0,
+    "source_published_observer": [
+      75041,
+      2327,
+      2327
+    ],
+    "journal_records_matching": 133,
+    "cgroup_windows_replayed": 4,
+    "qualification_replacement": false,
+    "historical_reset_cause_established": false,
+    "complete_m3_acceptance": false,
+    "native_admission_loss_regression": {
+      "test_commit": "32ccfc6",
+      "ctests": [
+        "command_endpoint_ipv4",
+        "command_endpoint_ipv6"
+      ],
+      "checks_each": 195,
+      "known_fault": "receiver admission_before_commit barrier then peer stop/reconnect",
+      "retains_unknown_after_budget_and_not_found": true,
+      "sender_sdk_handoffs": 1,
+      "replay_or_effect": false,
+      "production_code_changed": false,
+      "historical_initiator_proven": false,
+      "complete_n4_acceptance": false
+    }
   }
 }

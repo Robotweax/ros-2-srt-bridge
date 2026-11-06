@@ -842,3 +842,10 @@ run. New opt-in events now distinguish provider link-loss causes from session-
 close decisions; controlled peer-close tests and a separate N0 smoke pass.
 Five focused native tests, 36 ROS-reported tests and 93 host tests pass. Next is
 cause-tagged reproduction of the reset; full N5 and M3 qualification remain open.
+
+The [single cause-reproduction run](evidence/m3-n5-close-cause-2026-11-06/)
+did not reproduce the live N5 reset: 133 successes/effects over 300 seconds,
+complete traces and zero capture loss. It does not replace the earlier failures.
+A new IPv4/IPv6 admission-loss regression confirms UNKNOWN is retained after the
+original budget and peer NOT_FOUND, with no replay or effect. The natural reset's
+initiator and full N5/M3 qualification remain open; production behavior is unchanged.
