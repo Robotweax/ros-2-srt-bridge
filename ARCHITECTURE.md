@@ -1049,3 +1049,25 @@ auftreten. Population-Reconciliation-Flag statt falscher universeller Gleichheit
 Invariante; unreconciled verwirft Realtime-PCAP-Fenster, nicht unabhängige native
 Counter. Frühere V1-/Buffered-Overhead-Studie nicht als V2-/Immediate-Kosten ausgeben.
 Evidenz `evidence/m3-tap-offload-2026-11-06/`. Ausführungsgates/SDK/Wire/IPC unverändert.
+
+
+M3-V2-Studienguard (2026-11-06): On/Off-Vergleich verlangt Immediate-PCAP und
+V2/168-Byte-Native-Records bei Opt-in, gleichen VM-Boot und passende bisherige
+Konfiguration/Limits. Ausgewählte installierte App-/Worker-/Capture-Binaries und
+SRT-Archiv vor/nach jedem Kind gegen präregistrierte Hashes prüfen. Kein Mischen
+alter V1-/Buffered-Werte mit V2-/Immediate-Kosten. Keine Hardware-/Scheduler-
+Isolation dadurch. Optionale Long-N5-Auslassung/kurze N1-/N2-Probes explizit im
+Plan, keine Retries/Glättung. Ausführungs-/Frische-/Journal-Gates unverändert.
+Evidenz `evidence/m3-v2-observer-impairments-2026-11-06/`.
+
+
+M3-PCAP-Puffer (2026-11-06): Immediate/Full-Snapshot bei aktivem Offload kann auf
+diesem libpcap/veth-Pfad nur 64 Fixed-Slots trotz 4.096-KiB-Request erhalten
+(8 MiB echte Allokation). Messverlust im ursprünglichen V2-Plan bleibt als
+Fehlschlag erhalten. Gemeinsame Capture-Optionen nun bounded 32.768 KiB,
+512 gemessene Slots/64 MiB Allokation; keine Snapshot-Kürzung/Offload-Deaktivierung.
+Kontrollierter Linux-SIGSTOP-Reader-Test: alt 336/400 Drops, neu 0/400; Native/App
+weiter vollständig, positives Recovery-Control. Diagnose-Shim nur Setup-Logging,
+nicht im normalen Workload. Null-Drop-Gate unverändert; Kapazität endlich.
+Buffer-/Snapshot-Konfiguration in Manifest/Studienvergleich festhalten, Kosten-
+Aussagen versionsabhängig. Alte fehlgeschlagene Pläne nicht post hoc überschreiben.

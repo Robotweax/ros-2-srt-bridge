@@ -14,7 +14,7 @@ import struct
 import subprocess
 import time
 from m3_network import NetworkLab
-from m3_capture import validate_tcpdump_footer,stop_captures
+from m3_capture import validate_tcpdump_footer,stop_captures,pcap_options
 import m3_monotonic_capture as mono
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -130,7 +130,7 @@ def run_case(run,image,case,number):
             lab.inside(filter_role,'flow-filter',['tc','filter','add','dev','eth0',direction,'protocol','ip','pref','1','u32','match','ip','protocol','17','0xff','match','ip','dport',str(PORT),'0xffff','action','pass' if case=='egress-drop' else 'drop'])
         lab.snapshot('before');before_filters=lab.inside(filter_role,'filters-before',['tc','-j','-s','filter','show','dev','eth0',direction])
         for role,name in lab.containers.items():
-            log=(run/(role+'-capture.log')).open('w');p=subprocess.Popen(['docker','exec',name,'tcpdump','--immediate-mode','-n','-i','eth0','-s','0','-U','-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT);captures.append((p,log))
+            log=(run/(role+'-capture.log')).open('w');p=subprocess.Popen(['docker','exec',name]+pcap_options()+['-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT);captures.append((p,log))
         mono.start(run,inside,lab,captures)
         log=(run/'receiver.log').open('w');server=subprocess.Popen(['docker','exec',lab.containers['operator'],'python3','tools/m3_tap_probe.py','receive','--out',inside+'/received.json','--ready',inside+'/receive-ready','--stop',inside+'/receive-stop'],stdout=log,stderr=subprocess.STDOUT)
         deadline=time.monotonic()+5

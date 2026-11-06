@@ -11,7 +11,7 @@ import subprocess
 import time
 from m3_dds import DdsLab,summarize_sensor_window,DDS_PROFILES,verify_profile,summarize_competitor
 from m3_network import SEEDS
-from m3_capture import summarize,validate_tcpdump_footer,stop_captures
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_results import summarize_commands
@@ -38,7 +38,7 @@ def main():
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/('.local/m3-dds-combined' if args.commands else '.local/m3-dds')/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
-    report=dict(status='running',pcap_dispatch_mode='immediate',milestone='M3 DDS combined development' if args.commands else 'M3 DDS sensor development',sensor_only=not args.commands,commands_qualified=False,
+    report=dict(status='running',pcap_dispatch_mode='immediate',pcap_capture_config=pcap_configuration(),milestone='M3 DDS combined development' if args.commands else 'M3 DDS sensor development',sensor_only=not args.commands,commands_qualified=False,
         configured_workload=dict(imu_hz=200,joint_hz=50,command_period_s=2 if args.commands else None),
         complete_m3_acceptance=False,startup_mode=args.startup if args.commands else 'sensor-only',dds_transport_profile=args.dds_profile,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
@@ -89,7 +89,7 @@ def main():
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
-            p=subprocess.Popen(['docker','exec',name,'tcpdump','--immediate-mode','-n','-i','eth0','-s','0','-B','4096','-U',
+            p=subprocess.Popen(['docker','exec',name]+pcap_options()+[
                 '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT)
             captures.append((p,log))
         if args.monotonic_capture:

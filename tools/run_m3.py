@@ -15,7 +15,7 @@ import shlex
 import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
-from m3_capture import summarize,validate_tcpdump_footer,stop_captures
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_accounting import summarize_window
@@ -41,7 +41,7 @@ def main():
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
-    report=dict(status='running',pcap_dispatch_mode='immediate',milestone='M3 development',complete_m3_acceptance=False,
+    report=dict(status='running',pcap_dispatch_mode='immediate',pcap_capture_config=pcap_configuration(),milestone='M3 development',complete_m3_acceptance=False,
         profile=args.profile,seed=args.seed,seconds=duration,smoke=args.smoke,skip_build=args.skip_build,
         max_clock_interval_ms=200,clock_assumptions=dict(relative_drift_ppm=1000,timestamp_error_ns=1000000,max_probe_age_ns=5000000000),
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
@@ -90,7 +90,7 @@ def main():
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
-            argv=['docker','exec',name,'tcpdump','--immediate-mode','-n','-i','eth0','-s','0','-B','4096','-U',
+            argv=['docker','exec',name]+pcap_options()+[
                   '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
         if args.monotonic_capture:

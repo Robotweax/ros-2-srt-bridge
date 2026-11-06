@@ -129,3 +129,15 @@ def stop_captures(lab):
         try:stop(role,role+'-capture-stop',('tcpdump','m3_mono_cap'))
         except Exception as error:errors.append(str(error))
     if errors:raise RuntimeError('; '.join(errors))
+
+
+PCAP_BUFFER_KIB=32768
+
+
+def pcap_configuration():
+    return dict(mode='immediate',buffer_kib=PCAP_BUFFER_KIB,snapshot_option=0)
+
+
+def pcap_options(interface='eth0',*,buffer_kib=PCAP_BUFFER_KIB):
+    if not 4096<=buffer_kib<=65536:raise ValueError('capture buffer outside bounded fixture range')
+    return ['tcpdump','--immediate-mode','-n','-i',interface,'-s','0','-B',str(buffer_kib),'-U']

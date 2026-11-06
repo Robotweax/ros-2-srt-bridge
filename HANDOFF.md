@@ -1262,3 +1262,41 @@ Studie gilt dafür nicht direkt. Weitere Device-/Offload-Pfade, kontrollierte
 Ressourcen, verbleibende Profile/Dauern und N3-/N4-Gates. Pacing/Reconciliation/
 Age/Crypto vor Transportkostenvergleich angleichen. M3 in Arbeit, PR #2 Draft,
 Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: V2-Observer und kurze N1/N2-Probes
+
+- Erste V2-/Immediate-Studie am achten N0-Lauf wegen echter PCAP-Kerneldrops
+  (315 Robot/322 Operator) gestoppt. Commands/Effekte und Native Recorder dort
+  bestanden. Fehlgeschlagener Plan und acht Manifeste separat archiviert;
+  kein Ersatzlauf im alten Plan, keine Lockerung des Zero-Drop-Gates.
+- Read-only setsockopt-Diagnose: libpcap 1.10.4 Immediate/TPACKET_V2 mit aktiven
+  Offloads und voller Snapshot-Länge hat beim 4.096-KiB-Request nur 64 Slots,
+  8 MiB tatsächlich alloziert. Neuer gemeinsamer 32.768-KiB-Request: 512 Slots,
+  64 MiB alloziert. Kontrollierter Reader-Stopp bei 400 Datagrammen: alt 336
+  Drops je Seite; neu alle 400 plus Recovery-Control, null Drops. Native/App
+  vollständig. Kein Offload-SET, kein Preload in normalen Läufen. Ein früher
+  OS-Signalnummern-Fehlversuch bleibt ausgeschlossenes Development.
+- Neuer eingefrorener Plan: acht N0-On/Off-Läufe je 45 s, vier SRT/DDS-N1/N2-
+  Probes je 60 s/Seed 1701, kein langes N5 in diesem Plan. Alle zwölf bestanden,
+  PCAP-Kerneldrops null, Native Reserve-/Copy-Verluste null. 299 SUCCEEDED/
+  Effekte, keine unaufgelösten Intents; 24 geschlossene Journale integral und
+  terminal identisch. DDS N2: 25 statt 30 Versuche, fünf übersprungene Slots;
+  max. Invocation-bis-Terminalbeobachtung 10.870,99 ms, kein Execution-Latency-
+  Nachweis. Keine TTL-/Lease-/Admission-/Replay-Änderung.
+- Studie bindet Immediate/Buffer/Snapshot/V2/Boot-ID sowie acht ausgewählte
+  installierte Binär-/SDK-Hashes. 159 Quellen je Manifest gleich, installierte
+  Python-Scripts bytegleich, 56 Produktionsquellen und Command-/Simulator-
+  Binaries unverändert. 75 Host-Python-Tests bestanden; 48 Cgroup-Phasen aus
+  archivierten Projektionen exakt reproduziert. CPU-Differenzen mit wechselndem
+  Vorzeichen: keine isolierte Overhead-Schätzung. Charged-Memory-Maxima On-minus-
+  Off ca. 20,56–24,19 MiB, kein RSS/PSS oder physischer Footprint.
+- Evidenz: `evidence/m3-v2-observer-impairments-2026-11-06/` inklusive fehlgeschlagener
+  Studie, Ring-Diagnose, Manifeste, Counter-Projektionen, Hashes und Journal-Audits.
+  Roh-PCAPs/Prefixes/Journale bleiben lokal; keine vollständigen Inspect-/Env-Dumps.
+  Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+
+**Weiter:** volle N1/N2-Dauern und drei Seeds, V2/langes N5, kontrollierte Ressourcen,
+weitere Device-/Offload-Pfade und N3-/N4-Spezialgates. DDS N2 zeigt weiter große
+Terminalbeobachtungs-Latenz trotz erfolgreicher Effekte; nicht als Echtzeitgarantie
+lesen. Pacing/Reconciliation/Age/Crypto vor Transportkostenvergleich angleichen.
+M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.

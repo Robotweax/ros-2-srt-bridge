@@ -730,3 +730,27 @@ summaries. The independent native observer retains its own loss/coverage gates.
 See [tap/offload evidence](evidence/m3-tap-offload-2026-11-06/README.md). The earlier
 observer-cost study applies to v1/buffered mode; v2/immediate costs need separate
 qualification.
+
+
+The observer-study helper now pins immediate PCAP mode, v2 records on opted-in
+runs, a common VM boot, and selected installed binary hashes. Mixed measurement
+variants are rejected. `--skip-long-n5` explicitly omits long N5 repetitions;
+`--impairment-seconds 60` appends short SRT/DDS N1/N2 development probes. See the
+[v2 study evidence](evidence/m3-v2-observer-impairments-2026-11-06/README.md).
+These shorter probes do not satisfy the full duration/three-seed matrix.
+
+
+The immediate PCAP fixture now requests a 32,768-KiB buffer while preserving full
+snapshots and enabled offloads. On the pinned veth/libpcap setup this yields 512
+fixed packet slots and a 64-MiB allocation per capture, versus 64 slots/8 MiB for
+the earlier 4,096-KiB request. A controlled reader-pause experiment verifies the
+capacity difference; kernel-drop rejection remains strict. Capture configuration
+is recorded and included in study comparisons. The failed smaller-buffer study
+is retained in the [v2 evidence](evidence/m3-v2-observer-impairments-2026-11-06/README.md).
+
+The [v2 observer and short impairment evidence](evidence/m3-v2-observer-impairments-2026-11-06/README.md)
+retains the failed smaller-buffer study and the controlled buffer diagnostic.
+A fresh twelve-case plan passed with zero PCAP kernel drops and native recorder
+losses: 299 confirmed commands/effects. DDS N2 skipped five command slots and
+observed a 10.87-second maximum terminal-status latency. These short probes do
+not complete the duration/seed matrix or establish isolated observer CPU cost.
