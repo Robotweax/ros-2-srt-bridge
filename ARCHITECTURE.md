@@ -977,3 +977,14 @@ Records und klassifizierte Framebytes; keine Per-Population-/Transport-Isolation
 Aktuelle Läufe verwerfen Clock-Mapping bei überschrittener Drift und geben dann
 keine Wire-Fenstersumme aus. Keine Lockerung für grüne Resultate. Ausführungs-
 semantik/SDK/Wire/IPC unverändert. Evidenz: `evidence/m3-window-measurement-2026-11-06/`.
+
+
+M3-Clock-Diagnose (2026-11-06): Clock-Reads von Prozessbaum-Scans getrennt.
+Scenario-Polls erzeugen dedizierte Clock-JSONL mit mindestens 25 ms Abstand;
+aktuelle Runner verlangen sie und verwerfen Lücken >100 ms. Prozess-CPU/RSS
+bleibt nominal 250 ms. 1000-ppm-Modell unverändert; kein Sampling beweist fehlende
+versteckte Steps. Legacy-Reanalyse kennzeichnet alte Prozess-Clock-Samples.
+Eigenständige Read-only-Native-/Python-Probe vergleicht libc und direkte
+clock_gettime-Syscalls, RAW/BOOTTIME sowie adjtimex(modes=0). Keine Uhränderung,
+keine Capabilities/Netzwerkverbindung. Neue Evidenz unter
+`evidence/m3-clock-diagnosis-2026-11-06/`; kein abgeleiteter Transportvorteil.

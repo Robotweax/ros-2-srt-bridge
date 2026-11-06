@@ -648,3 +648,18 @@ or source-population byte attribution.
 
 See [window evidence](evidence/m3-window-measurement-2026-11-06/README.md).
 M3 remains in progress; clock-qualified wire comparison is still open.
+
+
+Clock follow-up: calibration now runs independently on scenario polls (25-ms
+minimum spacing), while process scans remain at 250 ms. Current runners require
+the dedicated clock files and reject calibration gaps over 100 ms. The 1000 ppm
+model is unchanged; finite sampling still cannot rule out hidden clock steps.
+A regression demonstrates a 150-us step accepted by 250-ms samples but rejected
+by 50-ms samples. Legacy process-clock reanalysis remains explicitly labelled.
+
+A standalone read-only native/Python clock diagnostic is available; see its
+[recipe and evidence](evidence/m3-clock-diagnosis-2026-11-06/README.md). It compares
+libc/direct-syscall realtime with Python and checks raw/boottime offsets, without
+setting clocks or requiring network/capabilities. A finite diagnostic pass does
+not qualify a later workload. VM clock control and a monotonic packet-timestamp
+path remain possible follow-ups, subject to evidence.

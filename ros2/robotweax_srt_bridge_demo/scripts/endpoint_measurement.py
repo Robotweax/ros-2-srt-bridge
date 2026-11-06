@@ -13,10 +13,18 @@ def parse_stat(raw,page_size):
 class EndpointSampler:
     def __init__(self,path):
         self.file=Path(path).open('w');self.previous=0
+        clock_name=Path(path).name.replace('-endpoint-samples','-clock-samples')
+        if clock_name==Path(path).name:clock_name+='.clock.jsonl'
+        self.clock_file=Path(path).with_name(clock_name).open('w');self.previous_clock=0
         self.hz=os.sysconf('SC_CLK_TCK');self.page_size=os.sysconf('SC_PAGE_SIZE')
 
     def tick(self,roots):
         now=time.monotonic_ns()
+        if now-self.previous_clock>=25000000:
+            self.previous_clock=now
+            begin=time.monotonic_ns();wall=time.time_ns();end=time.monotonic_ns()
+            self.clock_file.write(json.dumps(dict(begin_ns=begin,end_ns=end,wall_ns=wall,offset_min_ns=wall-end,offset_max_ns=wall-begin))+'\n')
+            self.clock_file.flush()
         if now-self.previous<250000000:return
         self.previous=now;begin=time.monotonic_ns();wall=time.time_ns();clock_end=time.monotonic_ns()
         pending=list(roots);seen=set();rows=[];errors=[]
@@ -36,4 +44,4 @@ class EndpointSampler:
             offset_min_ns=wall-clock_end,offset_max_ns=wall-begin,hz=self.hz,page_size_bytes=self.page_size,processes=rows,errors=errors))+'\n')
         self.file.flush()
 
-    def close(self):self.file.close()
+    def close(self):self.file.close();self.clock_file.close()

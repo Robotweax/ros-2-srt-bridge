@@ -1,0 +1,11 @@
+{
+  "image": "sha256:53b49a94ab2e46600a0037c29e2b9d5f56a7c505d6d4a3308584c007b219d268",
+  "native_binary_sha256": "6e6fab72622396f18ee6dc86a6768dae072b7993efe68887f746be0cb247cd18",
+  "sources": {
+    "tools/clock_probe/main.cpp": "2e83a8803a960229b034a85f64b42b7b90e6f6d1d3ab2c4cce865b1b28111226",
+    "tools/m3_clock_probe.py": "2cab1e99808b67772d3cdc28705f96c99349436a42546ac55b8b78ef93e4a7ec"
+  },
+  "command": "docker run --rm --pull=never --platform linux/amd64 --network none --cap-drop ALL -v \"$PWD:/workspace\" -w /workspace ros2-srt-m3:20261105 bash -c 'g++ -std=c++20 -O2 -Wall -Wextra -Wpedantic -Werror tools/clock_probe/main.cpp -o .local/clock-diagnosis/clock_probe && python3 tools/m3_clock_probe.py --native .local/clock-diagnosis/clock_probe --seconds 95 --out .local/clock-diagnosis/idle'",
+  "exit_code": 2,
+  "scope": "read-only modes=0; no network/capabilities; amd64 emulation; diagnostic reports observed model failures, not clock-agent attribution"
+}

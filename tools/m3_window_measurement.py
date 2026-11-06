@@ -56,12 +56,13 @@ def summarize_cpu(samples,start,end):
     return result
 
 
-def capture_window(samples,start,end):
+def capture_window(samples,start,end,*,max_gap_ns=1000000000):
     """Realtime bounds conditional on no hidden step and <=1000ppm relative drift."""
     result=dict(qualified=False,window_monotonic_ns=[start,end],
-        assumptions='no undetected realtime step between <=1s calibration observations; <=1000ppm relative drift; 1ms maximum observed step/read width; pcap timestamp quantization retained as boundary uncertainty')
+        assumptions=f'no undetected realtime step between <={max_gap_ns/1000000:g}ms calibration observations; <=1000ppm relative drift; 1ms maximum observed step/read width; pcap timestamp quantization retained as boundary uncertainty')
     try:
         selected=select_window(samples,start,end)
+        result['maximum_allowed_calibration_gap_ns']=max_gap_ns
         for s in selected:
             if s['wall_ns']-s['offset_max_ns']!=s['begin_ns'] or s['wall_ns']-s['offset_min_ns']>s['end_ns']:raise ValueError('inconsistent clock bracket')
             if not 0<=s['offset_max_ns']-s['offset_min_ns']<=1000000:raise ValueError('clock read bracket too wide')
@@ -69,7 +70,7 @@ def capture_window(samples,start,end):
             distance=max(0,a['offset_min_ns']-b['offset_max_ns'],b['offset_min_ns']-a['offset_max_ns'])
             if distance>1000000:raise ValueError('observed realtime offset step')
             elapsed=b['wall_ns']-b['offset_min_ns']-a['begin_ns']
-            if elapsed>1000000000:raise ValueError('clock calibration gap over one second')
+            if elapsed>max_gap_ns:raise ValueError('clock calibration gap exceeds configured limit')
             if distance>(elapsed+999)//1000:raise ValueError('observed offset drift exceeds 1000ppm model')
         gap=max(b['wall_ns']-b['offset_min_ns']-a['begin_ns'] for a,b in zip(selected,selected[1:]))
         pad=(gap+999)//1000 # 1000ppm, rounded up
@@ -83,13 +84,18 @@ def capture_window(samples,start,end):
     return result
 
 
-def summarize_endpoints(run,windows):
+def summarize_endpoints(run,windows,*,require_dedicated=False):
     run=Path(run);samples={role:read_samples(run/(role+'-endpoint-samples.jsonl')) for role in ('robot','operator')}
     result={}
     for name,window in windows.items():
         start,end=window
         cpu={role:summarize_cpu(rows,start,end) for role,rows in samples.items()}
-        clocks={role:capture_window(rows,start,end) for role,rows in samples.items()}
+        clock_paths={role:run/(role+'-clock-samples.jsonl') for role in samples}
+        clocks={role:capture_window(read_samples(path) if path.exists() else samples[role],start,end,
+            max_gap_ns=100000000 if path.exists() else 1000000000) for role,path in clock_paths.items()}
+        for role,path in clock_paths.items():
+            clocks[role]['sample_source']='dedicated-clock' if path.exists() else 'legacy-process-clock'
+            if require_dedicated and not path.exists():clocks[role]=dict(qualified=False,reason='dedicated clock samples missing',sample_source='missing')
         wire=dict(qualified=all(c['qualified'] for c in clocks.values()),calibrations=clocks)
         if wire['qualified']:
             low=min(c['offset_envelope_ns'][0] for c in clocks.values());high=max(c['offset_envelope_ns'][1] for c in clocks.values())

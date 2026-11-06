@@ -1081,3 +1081,41 @@ explizit offen. M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
 kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen. Volle
 Matrix/Emission-Stages/Crypto/Cross-session-Unsicherheit bleiben offen. M3 in
 Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Clock-Diagnose und unabhängige Kalibrierung
+
+- Neue standalone Read-only-Probe `tools/clock_probe/main.cpp` plus
+  `tools/m3_clock_probe.py`: Python, libc und direkte clock_gettime-Syscalls,
+  RAW/BOOTTIME-Diagnose und adjtimex(modes=0). 95 s/910 Samples in network-none-
+  Container mit cap-drop ALL. Native Realtime-Offsets ändern sich mindestens
+  108/137 us über ca. 107/100 ms; RAW/BOOTTIME ohne Modellverletzung. Python sieht
+  die zweite Änderung. Exit 2 ist korrektes negatives Diagnoseresultat.
+  TIME_ERROR/STA_UNSYNC (5/64), freq/offset 0. Verursachender Agent nicht belegt;
+  kein Nachweis eines Kernel-Bugs, alle Aufrufe im emulierten Linux-Kontext.
+- 250-ms-Prozess-Sampling kann kurze Steps übersehen. Dedizierte Clock-Dateien
+  nun unabhängig bei Scenario-Polls, mindestens 25 ms Abstand, maximal erlaubte
+  Lücke 100 ms. CPU/RSS-Scans unverändert nominal 250 ms. Beide aktuellen Runner
+  verlangen Clock-Dateien ohne stillen Legacy-Fallback. Historische Reanalyse
+  bleibt als legacy-process-clock gekennzeichnet. 1000-ppm-Modell unverändert;
+  auch feinere endliche Samples beweisen keine Abwesenheit versteckter Steps.
+- 51 Python-Tests und Demo-Install bestanden. Neue Regression zeigt synthetischen
+  150-us-Step: grobe Serie akzeptiert, feinere Serie verwirft. Zusätzlich echter
+  finaler SRT-N0-Lauf zeigt in beiden Phasen/beiden Enden grobe Akzeptanz gegen
+  dedizierte Drift-Verwerfung. Alte Entwicklungs-Smokes nicht als qualifizierte
+  aktuelle Wire-Kosten ausgeben. Native Probe-Verwerfung lag vor dem ersten
+  Development-SRT-Sourcefenster, kein behauptetes überlappendes Gegenbeispiel.
+- Finale Live-Läufe: SRT N0 30 s/15 bestätigt, DDS system N0 30 s/15 bestätigt,
+  DDS paced N5 60 s/30 bestätigt. Alle funktional bestanden, CPU-Fenster beider
+  Enden qualifiziert, Wire-Fenster sämtlich verworfen. 149 Source-Dateien je
+  Manifest passen; installierte Python-Dateien bytegleich; 56 Produktions-
+  Quelldateien und Command-/Simulator-Binaries unverändert. Keine neue ROS-GTest-
+  oder volle M2-Ausführung. Drei vorherige Development-Reruns separat erhalten.
+- Evidenz `evidence/m3-clock-diagnosis-2026-11-06/`: Probe-Samples/Provenienz,
+  dedizierte/Legacy-Kalibrierungen, Clock-/Prozess-Samples und Raw-Hashes.
+  Historische Evidenz unverändert, PCAPs/Journale weiter lokal.
+
+**Weiter:** stabile geeignete Linux-Clock-Umgebung oder verifizierte monotone
+Packet-Timestamp-Erfassung entwickeln, ohne Driftmodell/Unsicherheit zu lockern.
+Danach kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen.
+M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.

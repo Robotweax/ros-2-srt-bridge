@@ -133,7 +133,7 @@ def main():
             report['command_audit']=result['command_audit']
             report['command_latency_scope']='includes terminal observations during the <=8s post-cutoff drain; rows flag observation phase'
         interval=result['publication_interval']
-        report['endpoint_measurements']=summarize_endpoints(run,dict(source_enabled=[interval['resume_monotonic_ns'],interval['pause_monotonic_ns']],fenced_observation=result['endpoint_fenced_interval_ns']))
+        report['endpoint_measurements']=summarize_endpoints(run,dict(source_enabled=[interval['resume_monotonic_ns'],interval['pause_monotonic_ns']],fenced_observation=result['endpoint_fenced_interval_ns']),require_dedicated=True)
         report['status']='passed'
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise
