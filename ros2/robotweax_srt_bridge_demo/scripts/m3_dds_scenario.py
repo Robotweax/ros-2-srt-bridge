@@ -23,6 +23,8 @@ from robotweax_srt_bridge_msgs.srv import SetPublishing
 from rosidl_runtime_py.convert import message_to_ordereddict
 from m2_scenario import write, read
 from dds_clock import clock_sample, ClockMonitor
+from endpoint_measurement import EndpointSampler
+import os
 
 
 def empty_route():
@@ -33,6 +35,7 @@ class DdsScenario(Node):
     def __init__(self,args):
         super().__init__('m3_dds_'+args.role)
         self.args=args;self.run=Path(args.run);self.process=None
+        self.endpoint_sampler=EndpointSampler(self.run/(args.role+'-endpoint-samples.jsonl'))
         self.counts={name:empty_route() for name in ('imu','joints')}
         self.markers=dict(imu=0,joints=0);self.boundary_errors=[];self.window_begin=None
         self.qos=QoSProfile(depth=1,reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -81,6 +84,10 @@ class DdsScenario(Node):
             rclpy.spin_once(self,timeout_sec=min(.025,max(0,end-time.monotonic())))
             if self.process and self.process.poll() is not None:raise RuntimeError('simulator exited')
             if self.load:self.load.check()
+            roots=[('observer',os.getpid())]
+            if self.process is not None and self.process.poll() is None:roots.append(('source',self.process.pid))
+            if self.load and self.load.process and self.load.process.poll() is None:roots.append(('control',self.load.process.pid))
+            self.endpoint_sampler.tick(roots)
 
     def wait(self,predicate,label,seconds=45):
         end=time.monotonic()+seconds
@@ -166,6 +173,7 @@ class DdsScenario(Node):
             begin['command_sender']=self.load.snapshot();begin['command_receiver']=begin_source['command_state']
             if begin['device']['effects'] or begin['device']['generation'] or begin['command_sender']['commands_sent'] or begin['command_receiver']['start_claims']:raise RuntimeError('command history before measurement window')
         self.window_begin=dict(imu=begin['device']['imu_published'],joints=begin['device']['joints_published'])
+        fenced_start=time.monotonic_ns()
         write(self.run/'resume-request.json',{})
         self.wait(lambda:(self.run/'resume-source.json').exists(),'resume source fence')
         resumed=read(self.run/'resume-source.json')
@@ -199,7 +207,8 @@ class DdsScenario(Node):
         if self.boundary_errors:raise RuntimeError(str(self.boundary_errors))
         for route,key in [('imu','imu_published'),('joints','joints_published')]:
             if self.markers[route]>end['device'][key]:raise RuntimeError('callback after end source fence')
-        write(self.run/'operator-result.json',dict(status='passed',sensor_only=not bool(self.load),commands_qualified=False,**command_report,
+        fenced_end=time.monotonic_ns();self.spin(.35)
+        write(self.run/'operator-result.json',dict(endpoint_fenced_interval_ns=[fenced_start,fenced_end],status='passed',sensor_only=not bool(self.load),commands_qualified=False,**command_report,
             checkpoints=dict(begin=begin,end=end),publication_interval=dict(resume_monotonic_ns=resumed['monotonic_ns'],pause_monotonic_ns=paused['monotonic_ns']),
             sensor_count_checks_passed=True,age_estimates_qualified=self.clock.qualified,clock_steps=self.clock.steps,
             clock_max_offset_step_ns=self.clock.max_step_ns,clock_max_offset_deviation_ns=self.clock.max_deviation_ns,clock_max_bracket_width_ns=self.clock.max_width_ns,qos_checked=True,publisher_qos=discovered,
@@ -223,7 +232,7 @@ def main():
     finally:
         try:
             if driver.load:driver.load.stop()
-        finally:driver.destroy_node();rclpy.shutdown()
+        finally:driver.endpoint_sampler.close();driver.destroy_node();rclpy.shutdown()
 
 
 if __name__=='__main__':main()

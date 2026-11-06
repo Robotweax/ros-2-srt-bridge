@@ -35,6 +35,9 @@ def histogram(values, maximum):
     return result
 
 
+from endpoint_measurement import EndpointSampler
+
+
 class Benchmark(Driver):
     def __init__(self, args):
         super().__init__(args)
@@ -43,6 +46,7 @@ class Benchmark(Driver):
         self.diagnostic_count = 0
         self.sessions=set()
         self.last_resource = 0
+        self.endpoint_sampler=EndpointSampler(self.run/(args.role+'-endpoint-samples.jsonl'))
         self.first_imu_marker=self.first_joint_marker=None
         self.metric_client=self.create_client(GetBridgeMetrics,'/bridge/get_metrics')
         self.publishing_client=self.create_client(SetPublishing,'/robot/set_publishing')
@@ -95,7 +99,13 @@ class Benchmark(Driver):
             'max_clock_interval_ms': self.args.clock_width_ms})
 
     def spin(self, seconds=.05):
-        super().spin(seconds)
+        end=time.monotonic()+seconds
+        while time.monotonic()<end:
+            super().spin(min(.05,max(0,end-time.monotonic())))
+            roots=[('observer',os.getpid())]
+            if self.sim and self.sim.poll() is None:roots.append(('source',self.sim.pid))
+            if self.bridge and self.bridge.poll() is None:roots.append(('control',self.bridge.pid))
+            self.endpoint_sampler.tick(roots)
         stamp = time.monotonic_ns()
         if stamp-self.last_resource<1000000000:return
         self.last_resource=stamp
@@ -183,6 +193,7 @@ class Benchmark(Driver):
         self.wait(lambda:self.state and self.state.ready and self.state.clock_qualified and bytes(self.state.session_id)!=old_session,'fresh measurement session',30)
         begin=self.checkpoint(paused_source)
         assert begin['sender']['samples_ingress']==begin['sender']['sensor_submitted']==begin['sender']['sensor_sent']==0
+        fenced_start=time.monotonic_ns()
         resumed=self.robot_command('resume')
         start=time.monotonic();next_command=start;next_poll=start
         beginning_counts=(self.remote_imu,self.remote_joints)
@@ -240,7 +251,8 @@ class Benchmark(Driver):
         for c in commands:
             if c.get('terminal')==CommandStatus.SUCCEEDED:assert c['result_generation']<=device['generation']
         from rosidl_runtime_py.convert import message_to_ordereddict
-        result=dict(status='passed',configured_workload=dict(imu_hz=200,joints_hz=50,command_period_s=2),session_ids=sorted(self.sessions),qualification='development; not the complete M3 matrix',
+        fenced_end=time.monotonic_ns();self.spin(.35)
+        result=dict(endpoint_fenced_interval_ns=[fenced_start,fenced_end],status='passed',configured_workload=dict(imu_hz=200,joints_hz=50,command_period_s=2),session_ids=sorted(self.sessions),qualification='development; not the complete M3 matrix',
             measured_seconds=measured_seconds,warmup_sensor_history_excluded=True,command_data_cutoff_monotonic_ns=cutoff_ns,command_result_drain_limit_s=8,checkpoints=dict(begin=begin,end=finish),
             publication_interval=dict(resume_monotonic_ns=resumed['monotonic_ns'],pause_monotonic_ns=pause_response['monotonic_ns']),remote_imu=self.remote_imu,remote_joints=self.remote_joints,
             steady_window_imu=end_counts[0]-beginning_counts[0],steady_window_joints=end_counts[1]-beginning_counts[1],
@@ -278,6 +290,7 @@ class Benchmark(Driver):
     def cleanup(self):
         super().cleanup()
         self.resources.close()
+        self.endpoint_sampler.close()
 
 
 def main():

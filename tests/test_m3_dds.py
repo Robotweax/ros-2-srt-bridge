@@ -92,6 +92,10 @@ class FragmentTests(unittest.TestCase):
             self.assertEqual(summarize([path],'10.0.0.1')['unaccounted'],{'fragmented':2})
             result=summarize([path],'10.0.0.1',allow_udp_fragments=True)
             self.assertFalse(result['unaccounted'])
+            sliced=summarize([path],'10.0.0.1',allow_udp_fragments=True,timestamp_window=[-2000,-1000,2000,3000])
+            self.assertEqual(sliced['time_window']['buckets']['inside']['records'],2)
+            self.assertEqual(sliced['time_window']['buckets']['inside']['classes']['out/ipv4_udp_fragment']['ethernet_bytes'],size)
+            self.assertIsNone(sliced['time_window']['buckets']['inside']['classes']['out/ipv4_udp_fragment']['udp_payload_bytes'])
             row=result['classes']['out/ipv4_udp_fragment']
             self.assertEqual(row['packets'],2);self.assertEqual(row['ethernet_bytes'],size)
             self.assertIsNone(row['udp_payload_bytes'])

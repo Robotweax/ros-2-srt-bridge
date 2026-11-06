@@ -957,3 +957,23 @@ System/UDP1200 scheitern weiterhin am Cold-Start. Variante ist ein DDS-Baseline-
 Kandidat, keine SRT-/DDS-Überlegenheits- oder M3-Abnahme. SDK, Frame-Protokoll v2,
 Wire 1, IPC 3 und alle Ausführungsgates unverändert. Evidenz:
 `evidence/m3-dds-paced-sensors-2026-11-05/`.
+
+
+M3-Messfenster (2026-11-06): SRT und DDS verwenden denselben Linux-Prozessbaum-
+Sampler (250 ms) und dieselben zwei Phasendefinitionen: Source enabled sowie
+Resume-Request bis Command-Drain/stabiler Sensor-Endcheckpoint. Beobachter und
+Sampler gehören zur CPU-/RSS-Summe; Capture/Konkurrent nicht. Innere/äußere
+beobachtete CPU-Tickdeltas ohne Interpolation, keine exakten physikalischen
+CPU-Grenzen. RSS ist beobachtete Summe mit möglichen Shared-Page-Doppelzählungen,
+kein PSS/absoluter Peak. Identitätswechsel, Read-Fehler, Regression, reaped-child-
+CPU oder >1-s-Lücken verwerfen CPU-Qualifikation; ungesehene kurzlebige Kinder
+bleiben unbewiesen. Alte SRT-Whole-run-Ressourcen haben weiterhin alten Scope.
+
+PCAP-Fenster verlangen eine gemeinsame Realtime/Monotonic-Hülle beider Enden,
+unter expliziten Annahmen: keine versteckten Steps, <=1000 ppm relative Drift,
+<=1 s Kalibrierlücke, <=1 ms Read-/beobachtete Step-Breite. Timestamp-Quantisierung
+bleibt als Boundary-Unsicherheit erhalten. Inside/Boundary/Outside partitionieren
+Records und klassifizierte Framebytes; keine Per-Population-/Transport-Isolation.
+Aktuelle Läufe verwerfen Clock-Mapping bei überschrittener Drift und geben dann
+keine Wire-Fenstersumme aus. Keine Lockerung für grüne Resultate. Ausführungs-
+semantik/SDK/Wire/IPC unverändert. Evidenz: `evidence/m3-window-measurement-2026-11-06/`.

@@ -1048,3 +1048,36 @@ Intrinsic/M4 unverändert.
 angleichen; DDS-Emissionsstufen, Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix
 qualifizieren. System-N5-Discovery und Context-wechselnde Unsicherheit bleiben
 explizit offen. M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: gemeinsame Endpoint-Messfenster
+
+- Beide Runner nutzen gemeinsamen Linux-Prozessbaum-Sampler, nominal 250 ms,
+  inklusive Observer/Sampler. Gleiche Source-enabled- und Resume-through-drain-
+  Phasen, ohne Startup/Shutdown. Innere/äußere CPU-Tickdeltas ohne Interpolation;
+  RSS-Summe nur beobachtet, mögliche Shared-Page-Doppelzählung, kein PSS/Peak.
+  Fehler/Identitätswechsel/Regression/reaped-child-CPU/Lücken verwerfen CPU.
+  Ungesehene kurzlebige Kinder nicht abgedeckt. Alte SRT-Ressourcen bleiben
+  Whole-run mit altem Scope und dürfen nicht direkt damit verglichen werden.
+- Konditionale PCAP-Zeitfenster: gemeinsame Realtime/Monotonic-Hülle beider Enden,
+  <=1000 ppm, keine versteckten Steps, <=1-s-Kalibrierlücken, <=1-ms-Read/Steps.
+  Inside/Boundary/Outside inklusive Timestamp-Quantisierung. Keine Fensterbytes
+  bei verworfener Kalibrierung; Whole-capture-Gates bleiben davor erforderlich.
+- 44 Python-Tests und Demo-Install bestanden. Fünf finale Live-Entwicklungsläufe:
+  SRT N0 30 s, DDS system N0 30 s, DDS paced N0 30 s, paced N5 60 s/30 bestätigte
+  Commands, sensor-only system N0 15 s. Alle funktional bestanden und alle CPU-
+  Fenster beider Enden qualifiziert. Alle Wire-Mappings wegen beobachteter Drift
+  über 1000 ppm verworfen, daher keine qualifizierten Wire-Fensterresultate.
+  Modell nicht lockern. Ursache noch nicht diagnostiziert.
+- Vier alte SRT/DDS-Whole-captures neu ausgewertet: alle bisherigen Felder exakt
+  identisch. Fünf Source-Inventare je 146 Dateien aktuell; installierte Scripts
+  bytegleich. 56 kompilierte Quelldateien unverändert, Command-/Simulator-Binaries
+  identisch zur historischen 02d40e6-Evidenz. Keine neuen ROS-GTest-/M2-Claims.
+- Evidenz: `evidence/m3-window-measurement-2026-11-06/`, inklusive Raw-Hashes,
+  Prozess-/Clock-Samples, Drift-Verwerfungen und Messscope. Zwei frühere Smokes
+  nur Development, vor strengerem Clock-Modell. PCAPs/Journale bleiben lokal.
+
+**Nächster Schritt:** Clock-Mapping ohne Modell-Lockerung qualifizieren; danach
+kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen. Volle
+Matrix/Emission-Stages/Crypto/Cross-session-Unsicherheit bleiben offen. M3 in
+Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.

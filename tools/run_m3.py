@@ -16,6 +16,7 @@ import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
 from m3_capture import summarize
+from m3_window_measurement import summarize_endpoints
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -80,6 +81,9 @@ def main():
                 '--install-base install/m3-ros --return-code-on-test-failure; colcon test-result --test-result-base build/m3-ros --verbose'))
         execute('versions',offline('dpkg-query -W; tc -V'))
         lab=NetworkLab(ROOT,run,image);lab.start(credential)
+        clocks={role:lab.inside(role,role+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for role in lab.containers}
+        if len(set(clocks.values()))!=1:raise RuntimeError('endpoint measurements require common VM clock namespaces')
+        report['clock_namespace_proof']=clocks
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
@@ -122,7 +126,10 @@ def main():
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
         lab.snapshot('after')
         result=json.loads((run/'operator-result.json').read_text());assert result['status']=='passed'
-        report['results']=result;report['measurement_window']=summarize_window(result['checkpoints']['begin'],result['checkpoints']['end'],result['publication_interval']);report['gap_attribution']=summarize_gaps(run,result);report['command_summary']=summarize_commands(result['commands']);report['resources']={role:summarize_resources(run/(role+'-resources.jsonl')) for role in ('robot','operator')};report['status']='passed'
+        report['results']=result;report['measurement_window']=summarize_window(result['checkpoints']['begin'],result['checkpoints']['end'],result['publication_interval']);report['gap_attribution']=summarize_gaps(run,result);report['command_summary']=summarize_commands(result['commands']);report['resources']={role:summarize_resources(run/(role+'-resources.jsonl')) for role in ('robot','operator')}
+        interval=result['publication_interval']
+        report['endpoint_measurements']=summarize_endpoints(run,dict(source_enabled=[interval['resume_monotonic_ns'],interval['pause_monotonic_ns']],fenced_observation=result['endpoint_fenced_interval_ns']))
+        report['status']='passed'
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise
     finally:
@@ -147,8 +154,15 @@ def main():
                         raise RuntimeError('incomplete packet capture for '+role)
                     if any(key.endswith('/dds_rtps') for key in capture['classes']):raise RuntimeError('DDS traffic leaked onto the SRT-only network')
                     if capture['unaccounted']:raise RuntimeError('capture contains unaccounted frames')
+                report['window_captures']={}
+                for window,measurement in report.get('endpoint_measurements',{}).get('windows',{}).items():
+                    clock=measurement['wire_clock']
+                    if clock['qualified']:
+                        report['window_captures'][window]={role:summarize(sorted(run.glob(role+'.pcap*')),address,
+                            allow_udp_fragments=False,timestamp_window=clock['timestamp_bounds_ns'])['time_window'] for role,address in lab.addresses.items()}
+
             except Exception as error:
-                report['status']='failed';report['capture_error']=str(error)
+                report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None)
             lab.cleanup()
         for p,log in processes:
             try:p.wait(timeout=10)

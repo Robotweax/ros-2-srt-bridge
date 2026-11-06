@@ -621,3 +621,30 @@ N0/sensor regressions pass. Production compiled sources and binaries are unchang
 See [paced-profile evidence](evidence/m3-dds-paced-sensors-2026-11-05/README.md).
 SRT pacing/reconciliation cost parity, clock/security and CPU/wire/matrix gates
 remain open; M3 stays in development.
+
+
+### Shared endpoint measurement windows (2026-11-06)
+
+Both M3 runners now sample Linux endpoint process trees every 250 ms, including
+source, bridge/control workers and the test observer/sampler. They report two
+common phase definitions: source-enabled publication and the broader resume
+request through command drain/stable final sensor checkpoint. Startup/shutdown
+are excluded. Existing SRT whole-run resource summaries retain their old scope.
+
+CPU uses observed inner/outer tick deltas without interpolation; sampled summed
+RSS can double-count shared pages and is neither PSS nor a hard peak. Process
+identity changes, read errors, regressed counters, reaped-child work or sampling
+gaps invalidate CPU qualification. Unobserved short-lived children remain outside
+this accounting. Capture/competitor processes are excluded, but their host load
+still affects the workload.
+
+Windowed Ethernet accounting requires a common realtime clock envelope from both
+endpoints. It is conditional on no hidden clock steps, at most 1000 ppm relative
+drift, bounded calibration gaps/read widths and capture timestamp quantization.
+Packets are separated into certain-inside, uncertain-boundary and outside bins.
+Rejected calibration produces no windowed wire totals; whole-run capture gates
+still apply. These are phase costs including coordination, not isolated transport
+or source-population byte attribution.
+
+See [window evidence](evidence/m3-window-measurement-2026-11-06/README.md).
+M3 remains in progress; clock-qualified wire comparison is still open.

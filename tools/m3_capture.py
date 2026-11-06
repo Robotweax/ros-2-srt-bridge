@@ -20,9 +20,17 @@ def classify(payload, source_port, destination_port):
     return channel+'_source_data'
 
 
-def summarize(paths, local_address, *, allow_udp_fragments=False):
+def summarize(paths, local_address, *, allow_udp_fragments=False, timestamp_window=None):
     counts=defaultdict(lambda:dict(packets=0,ethernet_bytes=0,udp_payload_bytes=0))
     issues=defaultdict(int);records=0;first=None;last=None
+    buckets={key:dict(records=0,classes=defaultdict(lambda:dict(packets=0,ethernet_bytes=0,udp_payload_bytes=0))) for key in ('inside','boundary','outside')}
+    if timestamp_window is not None:
+        a,b,c,d=timestamp_window
+        if not a<=b<c<=d:raise ValueError('invalid timestamp window envelope')
+    def class_rows(name):
+        rows=[counts[name]]
+        if timestamp_window is not None:rows.append(buckets[bucket]['classes'][name])
+        return rows
     for path in paths:
         with Path(path).open('rb') as file:
             header=file.read(24)
@@ -41,6 +49,10 @@ def summarize(paths, local_address, *, allow_udp_fragments=False):
                 frame=file.read(included)
                 if len(frame)!=included:raise ValueError('truncated capture frame')
                 records+=1;stamp=seconds*1000000000+fraction*multiplier
+                if timestamp_window is not None:
+                    a,b,c,d=timestamp_window
+                    bucket='inside' if stamp-multiplier>=b and stamp+multiplier<c else 'outside' if stamp+multiplier<a or stamp-multiplier>=d else 'boundary'
+                    buckets[bucket]['records']+=1
                 first=stamp if first is None else min(first,stamp);last=stamp if last is None else max(last,stamp)
                 if included<original:issues['snaplen_truncated']+=1;continue
                 if len(frame)<34 or frame[12:14]!=b'\x08\x00':issues['non_ipv4_or_short']+=1;continue
@@ -61,22 +73,28 @@ def summarize(paths, local_address, *, allow_udp_fragments=False):
                     if not fragment&0x1fff:
                         sp,dp=struct.unpack_from('!HH',ip,length)
                         if 10080 in (sp,dp) or 10081 in (sp,dp):issues['fragmented_srt']+=1
-                    row=counts[direction+'/ipv4_udp_fragment']
-                    row['packets']+=1;row['ethernet_bytes']+=original
-                    row['udp_payload_bytes']=None
-                    row['ip_fragment_payload_bytes']=row.get('ip_fragment_payload_bytes',0)+total-length
+                    for row in class_rows(direction+'/ipv4_udp_fragment'):
+                        row['packets']+=1;row['ethernet_bytes']+=original
+                        row['udp_payload_bytes']=None
+                        row['ip_fragment_payload_bytes']=row.get('ip_fragment_payload_bytes',0)+total-length
                     continue
                 if len(ip)<length+8:issues['invalid_udp_length']+=1;continue
                 udp=ip[length:];sp,dp,udp_length=struct.unpack_from('!HHH',udp)
                 if udp_length<8 or udp_length>len(udp):issues['invalid_udp_length']+=1;continue
                 payload=udp[8:udp_length];kind=classify(payload,sp,dp)
-                row=counts[direction+'/'+kind];row['packets']+=1;row['ethernet_bytes']+=original;row['udp_payload_bytes']+=len(payload)
+                for row in class_rows(direction+'/'+kind):
+                    row['packets']+=1;row['ethernet_bytes']+=original;row['udp_payload_bytes']+=len(payload)
     fec={}
     for direction in ('in','out'):
         source=counts.get(direction+'/sensor_source_data',{}).get('ethernet_bytes',0)
         parity=counts.get(direction+'/sensor_fec_parity',{}).get('ethernet_bytes',0)
         fec[direction]=dict(parity_to_source_frame_bytes=parity/source if source else None,
                            source_frame_bytes=source,parity_frame_bytes=parity)
-    return dict(records=records,first_timestamp_ns=first,last_timestamp_ns=last,
+    result=dict(records=records,first_timestamp_ns=first,last_timestamp_ns=last,
         classes=dict(counts),unaccounted=dict(issues),fec=fec,
         byte_scope='captured Ethernet frame lengths; excludes preamble, FCS and physical-link overhead; egress is pre-qdisc')
+
+    if timestamp_window is not None:
+        result['time_window']=dict(accounting_complete=not bool(issues),timestamp_bounds_ns=list(timestamp_window),buckets={key:dict(records=value['records'],classes=dict(value['classes'])) for key,value in buckets.items()},
+            scope='certain inside + boundary gives conditional upper frame-byte bound; all UDP traffic, not source-population attribution; timestamp quantization included')
+    return result

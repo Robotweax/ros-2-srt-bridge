@@ -12,6 +12,7 @@ import time
 from m3_dds import DdsLab,summarize_sensor_window,DDS_PROFILES,verify_profile,summarize_competitor
 from m3_network import SEEDS
 from m3_capture import summarize
+from m3_window_measurement import summarize_endpoints
 from m3_results import summarize_commands
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -131,6 +132,8 @@ def main():
             report['command_summary']=summarize_commands(result['commands'])
             report['command_audit']=result['command_audit']
             report['command_latency_scope']='includes terminal observations during the <=8s post-cutoff drain; rows flag observation phase'
+        interval=result['publication_interval']
+        report['endpoint_measurements']=summarize_endpoints(run,dict(source_enabled=[interval['resume_monotonic_ns'],interval['pause_monotonic_ns']],fenced_observation=result['endpoint_fenced_interval_ns']))
         report['status']='passed'
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise
@@ -154,8 +157,15 @@ def main():
                     if capture['unaccounted']:raise RuntimeError('unaccounted DDS capture frames')
                     if not any(key.endswith('/dds_rtps') for key in capture['classes']):raise RuntimeError('no RTPS observed on eth0')
                     if any('_srt_' in key or '_source_data' in key or '_fec_parity' in key for key in capture['classes']):raise RuntimeError('SRT traffic on DDS baseline')
+                report['window_captures']={}
+                for window,measurement in report.get('endpoint_measurements',{}).get('windows',{}).items():
+                    clock=measurement['wire_clock']
+                    if clock['qualified']:
+                        report['window_captures'][window]={role:summarize(sorted(run.glob(role+'.pcap*')),address,
+                            allow_udp_fragments=True,timestamp_window=clock['timestamp_bounds_ns'])['time_window'] for role,address in lab.addresses.items()}
+
                 report['capture_scope']='whole-run Ethernet frames including discovery, simulator diagnostics/services and N5 competitor; multicast ingress may be direction other; IP fragment frames counted separately without RTPS/payload attribution; not matched-window sensor bytes'
-            except Exception as error:report['status']='failed';report['capture_error']=str(error)
+            except Exception as error:report['status']='failed';report['capture_error']=str(error);report.pop('window_captures',None)
             if competitor is not None:
                 try:
                     report['competitor_check']=summarize_competitor(json.loads((run/'competing-traffic.json').read_text()))
