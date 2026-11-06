@@ -787,3 +787,13 @@ Python tests pass. Main M3 captures now retain sixteen 16-MB files (256 MB nomin
 and record this configuration; a controlled overwrite probe preserves the strict
 file-integrity gate. Compiled binaries/policies are unchanged. Realtime packet
 windows and full M3 acceptance remain unqualified; full DDS N1 is next.
+
+The [full-duration default DDS N1 cohort](evidence/m3-dds-n1-full-2026-11-06/README.md)
+completes three 600-second seeds: 890 successes/effects, two expiries without
+dispatch and eight skipped slots, with no UNKNOWN or unresolved intents. Six
+journals agree and twelve cgroup windows replay exactly. One seed fails age
+qualification on clock steps; realtime packet windows remain withheld.
+The [execution matrix](evidence/m3-dds-n1-full-2026-11-06/execution-matrix.json)
+now covers all four SRT/DDS N1/N2 duration/seed cohorts. This closes execution
+coverage, not the age/security/comparison gates or full M3 acceptance. Runtime
+sources and binaries are unchanged from `e3c5c70`.

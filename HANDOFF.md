@@ -1481,3 +1481,53 @@ V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/Offloads,
 kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität bleiben
 separat offen. SRT N1/N2 und DDS N2 sind als volle Dauer/Seed-Ausführung dokumentiert.
 M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: System-DDS N1 und N1/N2-Ausführungsmatrix
+
+- Eingefrorener Default/System-DDS-N1-Plan: Seeds 1701/2903/4211, je 600 s,
+  frische sequentielle eigene Endpunkte, Native v2/Immediate/Full-Snapshot/
+  32.768-KiB-Kernelbuffer und 16×16-MB-Retention wie e3c5c70. Keine Rebuilds,
+  Runtime-/Policy-/Capture-Änderungen, Retries oder Ersatzläufe.
+- Alle drei Source-Fenster vollständig (600,115900/600,118402/600,132039 s).
+  Pro Seed Attempts/SUCCEEDED/Effekte/Expired/Skipped: 297/296/296/1/3,
+  297/296/296/1/3, 298/298/298/0/2. Insgesamt 892 Versuche, 890 Erfolge/Effekte,
+  zwei Receiver-EXPIRED Revision 1 ohne Dispatch und acht übersprungene Slots.
+  Keine UNKNOWN/unaufgelösten/not-admitted/rejected/failed Intents. Max. lokale
+  Terminalbeobachtung 5.350,575/5.316,245/2.473,593 ms, kein Handler-/Netzlaufzeitbound.
+- Sechs geschlossene Journale integral und terminal/immutable identisch, ohne
+  fehlende/abweichende Records. Device-Generationen/Effekte 296/296/298; Expiry
+  erhöht Generation nicht, spätere neue Intents folgen dem gleichen erwarteten
+  Stand. Finale Timelines aus Original-Owner-Journalen exakt reproduziert;
+  keine DDS-Timingzerlegung für fehlende/unklare/Recovered-Records erfinden.
+- Alter: Seed 1701 **unqualifiziert**, vier beobachtete Clock-Steps, max.
+  25,965389 ms und max. Offset-Abweichung 34,616970 ms. 17.809 IMU-/6.403 Joint-
+  Callbacks clock-rejected (24.212 gesamt). Seeds 2903/4211 Shared-VM-Age-Estimates
+  qualifiziert. Vollständige Histogramme/Clock-Reject-/Missing-Populationen erhalten;
+  keine Gesamtaltersgrenze aus günstigem Teilset ableiten. N1-Altersgate bleibt offen.
+- Produced/Received je Seed 150.010/112.123, 150.024/112.928, 150.026/111.710;
+  Source-Raten und Callback-Defizite separat halten, kein isolierter WAN-Loss oder
+  Transportvorteil. Sämtliche Realtime-PCAP-Fenster wegen Clock-Qualifikation
+  unterdrückt. Native-Monotonic-Coverage separat qualifiziert. Alle PCAP-Kerneldrops/
+  Native Reserve-/Copy-Verluste null, sechs PCAP-Populationen reconciled; kein
+  universeller Completeness-/Physical-Delivery-Nachweis. Zwölf Cgroup-Phasen aus
+  Projektionen exakt reproduziert.
+- 161 Quellen entsprechen während aller Läufe und final e3c5c70. Acht ausgewählte
+  installierte Binär-/SDK-Hashes und installierte Python-Bytes konstant; 56
+  Produktions-C++/Header/Proto-Quellen unverändert. Ein VM-Boot in dieser Kohorte.
+  Vorige 83 Host-Tests unverändert, keine neuen ROS-GTests/volle M2-Ausführung
+  behaupten. Diese Fortsetzung ändert nur Evidenz/Planungsdokumentation.
+- Evidenz: evidence/m3-dds-n1-full-2026-11-06/ mit Plan, Manifesten, Journal-/Generation-
+  Audits, Original-Owner-Timelines, Source-/Age-/Clock-Populationen, Capture-Metadaten,
+  Cgroup-Projektionen und Raw-Hashes. Roh-PCAPs/Prefixes/Journale/Clocks lokal;
+  keine vollen Inspect-/Env-Dumps. Intrinsic/M4 unverändert.
+- execution-matrix.json in dieser Evidenz fasst SRT N1/N2 und System-DDS N1/N2
+  zusammen: alle vier Kohorten mit drei Seeds/je mindestens 600 s ausgeführt.
+  Nur die Dauer/Seed-Ausführung ist damit abgeschlossen. Capture-Retention,
+  Altersorigins/Modelle, Crypto, Pacing und Hostbedingungen unterscheiden sich;
+  keine kausale Kosten-/Überlegenheitsbehauptung aus getrennten Kohorten.
+
+**Weiter:** V2/langes N5, deterministisches N3 (DATA/FEC getrennt), N4-Command-Phasen,
+DDS-N1/N2-Altersgates und Realtime-PCAP-Clockqualifikation, weitere Devices/Offloads,
+kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
+N1/N2-Dauer/Seed-Ausführung komplett dokumentiert; M3 weiterhin in Arbeit,
+PR #2 Draft. Keine implizite Hardware-/Echtzeit-/Lossless-Freigabe.

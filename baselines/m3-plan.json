@@ -789,5 +789,91 @@
     "realtime_pcap_windows_qualified": false,
     "full_srt_n1_duration_seed_execution": true,
     "complete_m3_acceptance": false
+  },
+  "dds_n1_full_duration_followup": {
+    "status": "three execution/capture cases pass; N1 age gate remains open",
+    "evidence": "evidence/m3-dds-n1-full-2026-11-06",
+    "seconds_each": 600,
+    "seeds": [
+      1701,
+      2903,
+      4211
+    ],
+    "attempts": 892,
+    "successes": 890,
+    "effects": 890,
+    "expired": 2,
+    "expired_without_dispatch": 2,
+    "unknown": 0,
+    "unresolved": 0,
+    "not_admitted": 0,
+    "rejected": 0,
+    "failed": 0,
+    "skipped_slots": 8,
+    "maximum_terminal_observation_ms": [
+      5350.575044,
+      5316.244545,
+      2473.59296
+    ],
+    "source_enabled_seconds": [
+      600.115900483,
+      600.118401982,
+      600.132039314
+    ],
+    "age_estimates_qualified_by_seed": {
+      "1701": false,
+      "2903": true,
+      "4211": true
+    },
+    "clock_rejected_by_seed": {
+      "1701": 24212,
+      "2903": 0,
+      "4211": 0
+    },
+    "maximum_clock_step_ns": 25965389,
+    "source_files_each": 161,
+    "selected_installed_hashes": 8,
+    "closed_journals_audited": 6,
+    "cgroup_windows_replayed_exactly": 12,
+    "pcap_kernel_drops": 0,
+    "native_recorder_failures": 0,
+    "realtime_pcap_windows_qualified": false,
+    "runtime_sources_changed": false,
+    "previous_host_python_tests": 83,
+    "full_dds_n1_duration_seed_execution": true,
+    "n1_age_gate_complete": false,
+    "complete_m3_acceptance": false
+  },
+  "n1_n2_duration_seed_execution": {
+    "status": "all four cohorts executed; acceptance gates remain open",
+    "evidence": "evidence/m3-dds-n1-full-2026-11-06/execution-matrix.json",
+    "all_four_duration_seed_cohorts_executed": true,
+    "cohorts": [
+      {
+        "transport": "srt",
+        "profile": "N1",
+        "evidence": "m3-srt-n1-full-2026-11-06",
+        "full_duration_seed_execution": true
+      },
+      {
+        "transport": "srt",
+        "profile": "N2",
+        "evidence": "m3-srt-n2-full-2026-11-06",
+        "full_duration_seed_execution": true
+      },
+      {
+        "transport": "dds",
+        "profile": "N1",
+        "evidence": "m3-dds-n1-full-2026-11-06",
+        "full_duration_seed_execution": true
+      },
+      {
+        "transport": "dds",
+        "profile": "N2",
+        "evidence": "m3-dds-n2-full-2026-11-06",
+        "full_duration_seed_execution": true
+      }
+    ],
+    "complete_m3_acceptance": false
   }
 }

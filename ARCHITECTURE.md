@@ -1152,3 +1152,27 @@ pass, while realtime packet windows remain withheld for clock qualification.
 All 83 host Python tests pass, including the mixed-retention rejection case.
 Evidence: `evidence/m3-srt-n1-full-2026-11-06/`. Full DDS N1 and other M3 gates
 remain open; this does not establish transport superiority or physical delivery.
+
+### Default DDS N1 and completed N1/N2 duration/seed execution
+
+The default-DDS N1 cohort executes 600 seconds for seeds 1701/2903/4211 under
+unchanged e3c5c70 sources, installed binaries and capture settings. It observes
+892 attempts, 890 confirmed successes/effects, two receiver-backed revision-1
+expiries without dispatch and eight skipped slots, with no UNKNOWN, unresolved,
+nonadmitted, rejected or failed intents. Six closed journals agree, generations
+match the known outcome chains and twelve cgroup windows replay exactly. The
+maximum terminal-observation wait is 5.350575 s, not an execution/network bound.
+
+Seed 1701 age estimates fail after four clock steps (maximum 25.965389 ms) and
+24,212 callbacks are clock-rejected. Seeds 2903/4211 qualify their shared-VM
+estimates. Realtime packet windows remain withheld in all cases; native recorder
+coverage is independent. Zero kernel/native recorder losses and reconciled PCAP
+populations do not establish physical delivery or universal capture completeness.
+
+`evidence/m3-dds-n1-full-2026-11-06/execution-matrix.json` now records all four
+N1/N2 duration/seed cohorts: SRT and default DDS, three seeds and at least 600
+source-enabled seconds each. This closes execution coverage only. The DDS N1/N2
+age gaps, realtime clock qualification, long v2 N5, deterministic N3, N4 phase
+barriers, other devices/offloads and controlled semantic/security/resource
+comparison remain open. No runtime/capture tooling changes occur in this step;
+previous test results are not represented as newly rerun ROS/full M2 validation.
