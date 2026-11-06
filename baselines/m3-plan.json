@@ -1161,5 +1161,39 @@
       "historical_initiator_proven": false,
       "complete_n4_acceptance": false
     }
+  },
+  "control_silence_investigation": {
+    "evidence": "evidence/m3-control-silence-2026-11-06",
+    "analyzer_test_commit": "be70a6a",
+    "historical_run": ".local/m3/20261106T181823876229Z",
+    "robot_quiet_to_session_change_ns": 5008241503,
+    "operator_quiet_to_session_change_ns": 5001199460,
+    "flow_reconnects_separated": true,
+    "native_hashes_match_historical_archive": true,
+    "provider_default_idle_ms": 5000,
+    "historical_per_socket_readback": false,
+    "historical_initiator_uniquely_proven": false,
+    "whole_run_qdisc_drops": {
+      "robot": 1755730,
+      "operator": 331
+    },
+    "qdisc_drops_attributed_to_event_or_flow": false,
+    "native_one_way_silence": {
+      "ipv4": {
+        "blocked_ms": 5004,
+        "dropped_reply_datagrams": 631,
+        "forwarded_reverse_datagrams": 213
+      },
+      "ipv6": {
+        "blocked_ms": 5004,
+        "dropped_reply_datagrams": 619,
+        "forwarded_reverse_datagrams": 208
+      }
+    },
+    "native_transport_ctests_passed": 2,
+    "host_python_tests_passed": 98,
+    "production_behavior_changed": false,
+    "qualification_replacement": false,
+    "complete_m3_acceptance": false
   }
 }

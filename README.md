@@ -849,3 +849,11 @@ complete traces and zero capture loss. It does not replace the earlier failures.
 A new IPv4/IPv6 admission-loss regression confirms UNKNOWN is retained after the
 original budget and peer NOT_FOUND, with no replay or effect. The natural reset's
 initiator and full N5/M3 qualification remain open; production behavior is unchanged.
+
+[Flow-isolated CONTROL analysis](evidence/m3-control-silence-2026-11-06/) now
+shows roughly five seconds of missing old-flow traffic before each historical
+session change, consistent with the pinned provider's idle interval. A native
+one-way CONTROL silence test exercises provider loss followed by session close on
+IPv4/IPv6. Both native tests and 98 host tests pass. The original operator-side
+withholding mechanism remains unproven; no timeout, production behavior or failed
+qualification verdict was changed.

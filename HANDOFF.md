@@ -1827,3 +1827,47 @@ Verlust vs. lokale Session-/Clock-Entscheidung verwenden; Initiator bleibt offen
 Keine günstigen Läufe anstelle gescheiterter Kohorten einsetzen. Historische
 UNKNOWNs/Recorderverluste erhalten; vollständiges N5/M3, N3/N4, Default-DDS-N5 und
 Age-/Clock-/Security-/Ressourcengates offen. PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Flow-isolierte CONTROL-Stille und gerichteter Fault
+
+- Keine weitere Zufallswiederholung: Native V2-Rohdaten des gescheiterten SPSC-N5-
+  Falls read-only analysiert. Neuer Tooling-/Testcommit be70a6a:
+  tools/m3_control_liveness.py prüft Capture-/Clock-Proof, Version/Interface/
+  Counter/Hash und trennt UDP-4-Tuple plus SRT-Destination-Socket-ID. Keine
+  Payload-Entschlüsselung; ID 0 nicht etablierte Connection-Identität, Routing-
+  Identifier keine Authentizitätsgarantie. GSO/VLAN/über-MTU/kurze CONTROL-Header
+  werden verworfen, Fenstergrenzen/Zensierung explizit.
+- Alter operator→robot-Flow zuletzt an Robot bei 32,509061932 s beobachtet,
+  Robot SessionChange 37,517303435 s: 5,008241503 s beobachtete Stille.
+  Reverse-Flow zuletzt an Operator 37,468471351 s, SessionChange 42,469670811 s:
+  5,001199460 s. Voll beobachteter operator→robot-Interarrival-Gap ca. 5,127 s
+  an beiden Hooks. Neue Handshakes/Reconnect-IDs nicht dazugezählt. Native-Hashes
+  identisch zum alten Archiv, keine Rekonstruktion/Umklassifikation.
+- Passend zum Default-Peer-Idle 5000 ms im gepinnten Provider 52be7c86… . Relevante
+  Source-Dateien stimmen bytegenau mit Pin überein. Kein historischer Per-Socket-
+  Readback, keine eindeutig belegte interne Idle-Branch-/Initiatorursache.
+- Qdisc-Root-Delta über ganzen Lauf: Robot 1755730, Operator 331. Child-Counter
+  überlappen und werden nicht summiert; keine Flow-/Zeitfenster-Loss-Zuordnung.
+  Tap im qualifizierten Fixture hinter geprüftem Egress-Qdisc: SDK-Scheduling,
+  Socket-/Queue-Verhalten und Pre-Hook-Qdisc-Loss bleiben offen, nicht pauschal
+  WAN- oder Providerfehler behaupten.
+- Neuer nativer Loopback-UDP-Gate-Test: CONTROL-Handshake bidirektional, danach
+  nur listener→caller-Reply-Datagrams droppen; SENSOR direkt, beide Runtimeowner
+  bis Fault aktiv. Provider-Control-Loss vor Session-Close ohne lokale Protocol-/
+  Clock-Close-Ursache, Reverse-Forwarding bleibt positiv, Trace-Drops null.
+  IPv4/IPv6 nach jeweils beobachteten 5004 ms; 631/619 Replies gedroppt, 213/208
+  Reverse-Datagrams forwarded. Timeouts/Produktionscode/Dependency unverändert,
+  keine globalen Netzwerk-/Qdisc-Eingriffe. Bewiesener kontrollierter Mechanismus,
+  keine Gleichsetzung mit dem historischen Initiator/Pre-Hook-Ort.
+- Beide Transport-Owner-CTests bestanden inkl. bisheriger Lifecycle/Cadence/
+  Reconnect-Szenen (beobachtet 462/459 Checks); 98 Host-Python-Tests bestanden.
+  Kein neuer voller SDK-/ROS-/M2-Lauf behauptet. Nur Analyse-/Testquellen geändert.
+- Evidenz evidence/m3-control-silence-2026-11-06/ mit beidseitigen Flow-Fenstern,
+  selektierten Altflows, Quellen-/Rohhash-Prüfung, Native-/Python-Testlogs und
+  Grenzen. Keine PCAP-Payloads/Secrets/Inspect-/Env-Dumps publiziert.
+
+**Weiter:** Unter vorab begrenztem Diagnoseplan Provider-TX-/ACK-/Queue-Beobachtungen
+mit Operator-Egress korrelieren; Scheduling vs. Socket/Qdisc unterscheiden, bevor
+Verhalten geändert wird. Historischer Initiator und vollständige N5-/M3-Abnahme
+bleiben offen; alte UNKNOWNs/Fehler erhalten, N3/N4/Default-DDS-N5/Age-/Clock-/
+Security-/Resource-Gates unverändert. PR #2 Draft, Intrinsic/M4 unberührt.

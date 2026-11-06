@@ -1,0 +1,48 @@
+[1/2] Building CXX object tests/native/CMakeFiles/transport_tests.dir/transport_tests.cpp.o
+[2/2] Linking CXX executable tests/native/transport_tests
+Internal ctest changing into directory: /workspace/build/m3-sdk
+UpdateCTestConfiguration  from :/workspace/build/m3-sdk/DartConfiguration.tcl
+Parse Config file:/workspace/build/m3-sdk/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/build/m3-sdk/DartConfiguration.tcl
+Parse Config file:/workspace/build/m3-sdk/DartConfiguration.tcl
+Test project /workspace/build/m3-sdk
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 59
+    Start 59: transport_owner_ipv4
+
+59: Test command: /workspace/build/m3-sdk/tests/native/transport_tests "ipv4"
+59: Working Directory: /workspace/build/m3-sdk/tests/native
+59: Test timeout computed to be: 45
+59: cadence admitted=100 delivered=93
+59: PASS one-way CONTROL silence: provider loss before session close; blocked_ms=5004, dropped=631, reverse_forwarded=213
+59: PASS transport owner ipv4: 462 checks
+1/2 Test #59: transport_owner_ipv4 .............   Passed   15.32 sec
+test 60
+    Start 60: transport_owner_ipv6
+
+60: Test command: /workspace/build/m3-sdk/tests/native/transport_tests "ipv6"
+60: Working Directory: /workspace/build/m3-sdk/tests/native
+60: Test timeout computed to be: 45
+60: cadence admitted=98 delivered=92
+60: PASS one-way CONTROL silence: provider loss before session close; blocked_ms=5004, dropped=619, reverse_forwarded=208
+60: PASS transport owner ipv6: 459 checks
+2/2 Test #60: transport_owner_ipv6 .............   Passed   15.36 sec
+
+The following tests passed:
+	transport_owner_ipv4
+	transport_owner_ipv6
+
+100% tests passed, 0 tests failed out of 2
+
+Label Time Summary:
+lifecycle    =  30.67 sec*proc (2 tests)
+m1           =  30.67 sec*proc (2 tests)
+native       =  30.67 sec*proc (2 tests)
+transport    =  30.67 sec*proc (2 tests)
+
+Total Test time (real) =  30.72 sec
