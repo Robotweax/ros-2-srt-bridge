@@ -1684,3 +1684,58 @@ Age-/Clock-/Security-/Ressourcengates offen. M3 in Arbeit, PR #2 Draft; M4 unver
 Original-Recorderverlust und alte UNKNOWNs bleiben offen. Danach N3/N4 und
 bestehende Default-DDS-N5-/Age-/Clock-/Security-/Ressourcengates. M3 weiterhin in
 Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Lange N5-Kohorte und unabhängige Trace-Lanes
+
+- Neue eingefrorene Kohorte ffd4fb2 / Command-Fix 899a6eb: drei geplante 300-s-
+  SRT-N5-Fälle, Labels 1701/2903/4211, Command-/Recorder-Diagnostics und native
+  V2-Aufnahme explizit an. 168 Quellen, acht ausgewählte installierte Dateien
+  und installierte Scriptbytes bis Kohortenende konstant. Frische private Labs,
+  keine Retries/Ersatzfälle/Tuningänderungen. N5 ohne stochastischen Loss/Delay;
+  Labels keine unabhängigen Random-Loss-Samples.
+- 1701 bestanden: 115 SUCCEEDED/Effekte, 35 Skipped, keine Expiry/Uncertainty/
+  Nonadmission, keine PCAP-Drops. Traces 359/4/4 Records vollständig. Vier
+  Clock-Deferrals, alle entsprechenden Intents erfolgreich. Max. gemessener
+  Publikations-Age-Upper-Bucket 187 ms innerhalb 250-ms-Gate.
+- 2903 **fehlgeschlagen** wegen Diagnostic Completeness: Operatortrace 397 von
+  398 Attempts, Dropped=1, Sequenz 235 fehlt; keine Rekonstruktion. Dennoch
+  Application-Fenster vollständig: 129 SUCCEEDED/Effekte, 21 Skipped, keine
+  Expiry/Uncertainty/Nonadmission, null PCAP-Drops; ein Clock-Deferred-Intent
+  erfolgreich. Robot-Traces vollständig, je vier Records. Max. Age-Bucket 227 ms.
+- 4211 wegen Fail-fast nicht ausgeführt. 244 bestätigte Effekte, vier geschlossene
+  Journale identisch inkl. Result-Rate/Generation, acht Cgroup-Fenster und beide
+  Source-Summaries exakt reproduziert. Source/Published/Observer: 75032/26236/26236
+  und 75033/27637/27637. PCAP Captured/Filter/File je Endpoint 108712 / 109964,
+  Kerneldrops und native Reserve-/Copy-Verluste null. Realtime-PCAP-Fenster bleiben
+  clockbedingt unterdrückt. Keine Performance-/Physical-Delivery-Inferenz.
+- Archivierung erhält beide gemeldeten image_platform_id-Werte: einmal Manifest-
+  Digest, einmal Config-artig. Immutable Config.Image-Referenz und aufgezeichnete
+  Container.Image-Werte sind in beiden Fällen identisch, Boot ebenfalls. Keine
+  Rohfelder überschrieben/kanonische Config-ID erfunden; Ressourcenkosten nicht
+  unter Annahme identischer Roh-Platform-ID-Felder vergleichen. Inspect-/Env-Dumps
+  bleiben lokal, im Archiv nur selektierte Isolation-/Image-/Clock-Projektionen.
+- Alter Tracebuffer verlor bei Full ODER Mutex-Contention; kombinierter Zähler
+  belegt keinen eindeutigen Mechanismus. dc4131c entfernt den Contention-Pfad:
+  zwei feste SPSC-Lanes, jeweils 128 Records, total weiterhin 256. Je Owner genau
+  ein Producer, ein externer Consumer, Producerwechsel nur nach Join; Acquire/
+  Release-Indizes sichern Slots. Kein Producer-Mutex/Retry/Callback/I/O. Full-
+  Drops weiterhin explizit und Diagnostic-Gate unverändert strikt. Andere
+  Reservationsverteilung = neuer Observermodus, braucht eigene volle Kohorte.
+- Validiert: fünf fokussierte SDK-/Native-Tests (Trace/Overflow/Reservation,
+  IPv4/IPv6 Endpoint-Recovery und Clock-Deferral/Revocation), ergänzender Test
+  0a1c1b0 mit 2000 garantiert interleaved Observations bei maximal einem offenen
+  Event je Lane und null Loss; 36 ROS-reported Tests und 92 Hosttests bestanden.
+  Voriger voller SDK-Lauf 68 Tests gehört zum Kohortenruntime; kein erneuter
+  voller 68-Test-/M2-Acceptance-Lauf nach Trace-Patch behauptet. Consumer neu gebaut.
+- Getrennter 15-s-N0-Smoke des neuen Tracebuffers: acht Erfolge/Effekte, Traces
+  34/4/4 vollständig, null Trace-/PCAP-Drops. Keine N5-Qualifikation daraus.
+  Wire/Worker-IPC/Journal-/Command-/Deadline-/Lease-/Replay-Policy unverändert.
+- Evidenz: evidence/m3-srt-n5-fixed-2026-11-06/, Originalplan/-manifeste unverändert,
+  Raw-/Source-/Binary-Hashes, read-only Journale, Capture-/Trace-Reanalysen,
+  Cgroup-Projektionen, separater trace-buffer-fix/ mit Smoke/Tests/Freeze.
+
+**Weiter:** Neue vollständige N5-Kohorte für den unabhängigen Tracebuffer einfrieren.
+Bisherige Kohorte bleibt failed, dritter Fall unexecuted; nichts ersetzen/waiven.
+N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/Ressourcengates weiter offen.
+Historische Recorderverluste und UNKNOWNs erhalten; M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.

@@ -8,7 +8,7 @@ The later M4 adapter belongs in
 [intrinsic-core-srt-integration](https://github.com/Robotweax/intrinsic-core-srt-integration).
 SRT is a separately installed dependency; the enclosing SRT checkout is preserved.
 
-## Development status — 2026-11-05
+## Development status — 2026-11-06
 
 M0's selected local qualification checks pass on Ubuntu 24.04 Linux amd64 under
 Docker Desktop emulation. The installed C API probe covers CONTROL/SENSOR,
@@ -32,8 +32,8 @@ changing journal truth, and the CMake SDK has a relocated installed-consumer che
 M2 is complete for the recorded Linux amd64 ROS Jazzy simulator profile.
 The [M2 acceptance matrix](evidence/m2-ros-jazzy-2026-11-05/ACCEPTANCE.md) records
 typed sensors, actual measurement-rate changes, duplicate suppression and
-UNKNOWN recovery after lost replies and a two-second bridge outage. M3 performance
-comparisons and the M4 Intrinsic adapter remain later work. See [evidence](evidence/m0-2026-11-04/README.md)
+UNKNOWN recovery after lost replies and a two-second bridge outage. M3 qualification
+is in progress; performance comparisons remain unqualified and M4 has not started. See [evidence](evidence/m0-2026-11-04/README.md)
 and the [handoff](HANDOFF.md) for exact scope and next work.
 
 M1 is complete for the documented Linux amd64 baseline. The
@@ -826,3 +826,11 @@ the pre-fix failure and separate post-fix 90-second N5 case: 32 successes/effect
 two recovered clock deferrals, zero unresolved commands or capture drops.
 68 SDK CTests, 36 ROS-reported tests and 92 host tests pass. Full SRT N5/M3
 qualification and historical uncertainties remain open; PR #2 stays draft.
+
+The [subsequent full-duration N5 cohort](evidence/m3-srt-n5-fixed-2026-11-06/)
+passed its first case and stopped at its second on one missing diagnostic record;
+the third case was not run. Both executed 300-s cases completed all commands:
+244 successes/effects total, no unresolved intents and zero packet-recorder drops.
+The diagnostic gate remains strict. The trace buffer now uses independent bounded
+writer lanes; focused native/ROS tests and a separate N0 smoke pass. A fresh full
+N5 cohort is still required for that new trace configuration. M3 remains incomplete.
