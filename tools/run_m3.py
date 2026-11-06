@@ -22,6 +22,7 @@ import m3_monotonic_capture as mono_capture
 import m3_recorder_diagnostics as recorder_diagnostics
 import m3_command_trace
 import m3_provider_stats
+import m3_control_fault
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -39,12 +40,15 @@ def main():
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
+    parser.add_argument('--control-egress-fault',choices=['operator','robot'],help='development-only six-second CONTROL drop, N0 >=45s with all diagnostics; not qualification')
     parser.add_argument('--provider-diagnostics',action='store_true',help='development-only CONTROL non-clearing provider statistics; adds observer workload')
     parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     duration=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
     if not 10<=duration<=7200:parser.error('duration must be 10..7200 seconds')
+    if args.control_egress_fault and (args.profile!='N0' or duration<45 or not all((args.monotonic_capture,args.command_diagnostics,args.provider_diagnostics))):
+        parser.error('CONTROL fault requires N0 >=45s plus monotonic, command and provider diagnostics')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -57,6 +61,7 @@ def main():
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
     processes=[];captures=[];recorder_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    report['control_egress_fault_requested']=args.control_egress_fault
     report['recorder_diagnostics_enabled']=args.recorder_diagnostics
     report['provider_diagnostics_enabled']=args.provider_diagnostics
     report['command_diagnostics_enabled']=args.command_diagnostics
@@ -127,6 +132,13 @@ def main():
                 competitor_alive_checks+=1
             if any(p.poll() not in (None,0) for p,_ in processes):raise RuntimeError('scenario failed; see '+str(run))
             if all(p.poll() is not None for p,_ in processes):break
+            if args.control_egress_fault and (run/'measurement-start.json').exists():
+                if 'control_fault_due' not in report:report['control_fault_due']=time.monotonic()+duration/3;save()
+                if 'controlled_control_fault' not in report and time.monotonic()>=report['control_fault_due']:
+                    report['controlled_control_fault']=m3_control_fault.start(lab,args.control_egress_fault)
+                    report['control_fault_restore_due']=time.monotonic()+6;save()
+                if 'controlled_control_fault' in report and not report['controlled_control_fault']['restored'] and time.monotonic()>=report['control_fault_restore_due']:
+                    m3_control_fault.stop(lab,report['controlled_control_fault']);save()
             if args.profile=='N4' and not outage and (run/'measurement-start.json').exists():
                 started=json.loads((run/'measurement-start.json').read_text())
                 # Host/VM monotonic epochs differ. Wait a host interval after observing the phase marker.
@@ -144,6 +156,7 @@ def main():
             time.sleep(.25)
         else:raise RuntimeError('M3 scenario deadline exceeded')
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
+        if args.control_egress_fault and not report.get('controlled_control_fault',{}).get('restored'):raise RuntimeError('CONTROL fault not applied/restored')
         lab.snapshot('after')
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_after']=mono_capture.feature_snapshot(lab,'features-after')
