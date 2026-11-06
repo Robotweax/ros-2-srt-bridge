@@ -1429,3 +1429,55 @@ DDS-N2-Altersgate und Realtime-PCAP-Clockqualifikation bleiben offen. Volle N1-
 Matrizen, V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/
 Offloads, kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
 M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Capture-Retention und SRT N1 je 600 s/drei Seeds
+
+- Vor erster N1-Ausführung Retention-Preflight: SRT N2 hatte je Endpoint
+  125.447.816..125.572.581 Byte bei nominell 128.000.000 Byte rotierender Kapazität.
+  Normale SRT-/DDS-M3-Runner nutzen nun gemeinsam 16 statt 8 Dateien à 16 MB,
+  nominell 256.000.000 Byte. Rotation (Dateigröße/Anzahl/nominelle Bytes) im Manifest
+  und Vergleichsguard gebunden. Kein fehlgeschlagener N1-Lauf/Retry versteckt;
+  Kernelbuffer/Immediate/Snapshot/Offloads/Gates unverändert. Kein unbegrenzter
+  Volumennachweis; Tcpdump-Dateischwellen können um einen Record überschritten werden.
+- Separater UDP-Volumenprobe mit 1-MB-Schwellen: zwei Dateien behalten je Seite
+  1.206 von 2.001 bekannten Records, obwohl Footer 2.001 captured/null Kerneldrops
+  meldet. Bestehendes Captured/File-Gate lehnt korrekt ab. Vier Dateien behalten
+  alle 2.001 mit exakter Native-ID-/Längen-Gleichheit, null Drops; App in beiden
+  Fällen vollständig und Recovery-Control vorhanden. Kein Kernelverlust daraus
+  ableiten; kontrollierter Capture-Mechanismus-Test, keine Transportabnahme.
+- Eingefrorener SRT-N1-Plan: Seeds 1701/2903/4211 je 600 s, frische sequentielle
+  Endpunkte, keine Rebuilds/Retries/Ersatzläufe/Policy-Änderungen. Alle drei Source-
+  Fenster vollständig (600,093151/600,153512/600,141223 s). Je 300 SUCCEEDED/Effekte,
+  insgesamt 900; null Expired/Failed/Rejected/UNKNOWN/unaufgelöste/not-admitted/
+  übersprungene Intents. Max. lokale Terminalbeobachtung 923,544/264,239/467,177 ms.
+  Keine Ausführungs-/Netzlaufzeitgrenze daraus ableiten.
+- Sechs Journale integral/terminal identisch, Revision 3/Hash/Result/Generation
+  pro Intent passend; Device-Generationen/Effekte je 300. Drei Source-Zusammenfassungen
+  exakt reproduziert, alle sechs Conservation-Residuals je Fenster null. Produced/
+  Published/Observer je Seed: 149.484/110.267/110.064, 150.038/111.112/111.047,
+  150.036/111.381/111.300. Erste IMU-Quellrate 199,107 Hz, andere ca. 200 Hz;
+  Ratenvariation/Verluste behalten, nicht normalisieren oder als WAN-Loss/FEC-Nutzen
+  isoliert auslegen. Nicht alle produzierten Samples werden zugestellt.
+- Source-fenced Publication-Age-Upper-Maxima IMU/Joints: 87/119, 63/83, 63/85 ms,
+  unter unverändertem 250-ms-Gate. Origin Bridge-Ingress, keine DDS-Header-/Physical-
+  Sensor-Age-Parität. PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null;
+  sechs PCAP-Populationen reconciled, kein universeller Completeness-Nachweis.
+  Alle Realtime-PCAP-Fenster wegen Clock-Qualifikation unterdrückt, Native separat.
+  Zwölf Cgroup-Phasen aus Projektionen exakt reproduziert.
+- 161 Quellen während drei Läufen konstant; gegenüber d2912fc nur Capture-Helper,
+  zwei Haupt-Runner und ein Guard-Test geändert. Acht installierte Binär-/SDK-
+  Hashes und installierte Python-Bytes konstant; 56 Produktions-C++/Header/Proto-
+  Quellen unverändert. 83 Host-Python-Tests bestanden, Retention-Mischkonfiguration
+  negativ abgedeckt. Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+  Keine SDK-/Wire-/IPC-/Deadline-/Lease-/Atomic-Start-/Replay-Policy-Änderung.
+- Evidenz: evidence/m3-srt-n1-full-2026-11-06/ mit separatem Retention-Preflight/
+  Probe, Plan, Manifesten, vollständigen Source-/Loss-/Age- und Terminalpopulationen,
+  Journal-/Generationsbelegen, Cgroup-Projektionen und Raw-Hashes. Roh-PCAPs/
+  Prefixes/Journale/Clocks lokal; keine vollen Inspect-/Env-Dumps. Intrinsic/M4
+  unverändert; keine kausale Ressourcen-/Transportüberlegenheit behauptet.
+
+**Weiter:** volle System-DDS-N1-Matrix; DDS-N2-Altersgate/Realtime-PCAP-Clockqualifikation,
+V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/Offloads,
+kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität bleiben
+separat offen. SRT N1/N2 und DDS N2 sind als volle Dauer/Seed-Ausführung dokumentiert.
+M3 in Arbeit, PR #2 bleibt Draft.

@@ -778,3 +778,12 @@ and twelve cgroup windows replay exactly. The largest measured publication-age
 upper bucket is 168 ms against the 250-ms gate (bridge-ingress origin). Capture
 recorder gates pass; realtime packet windows remain unqualified. Runtime code is
 unchanged. These separate SRT/DDS cohorts do not establish transport superiority.
+
+The [full-duration SRT N1 cohort](evidence/m3-srt-n1-full-2026-11-06/README.md)
+completes all three 600-second seeds: 900 confirmed commands/effects, no uncertain
+or skipped intents, maximum measured publication-age upper bucket 119 ms against
+the 250-ms gate. Six journals and all source/cgroup replays agree. All 83 host
+Python tests pass. Main M3 captures now retain sixteen 16-MB files (256 MB nominal)
+and record this configuration; a controlled overwrite probe preserves the strict
+file-integrity gate. Compiled binaries/policies are unchanged. Realtime packet
+windows and full M3 acceptance remain unqualified; full DDS N1 is next.

@@ -15,7 +15,7 @@ import shlex
 import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
-from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_accounting import summarize_window
@@ -90,8 +90,8 @@ def main():
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
-            argv=['docker','exec',name]+pcap_options()+[
-                  '-C','16','-W','8','-w',inside+'/'+role+'.pcap','udp']
+            argv=['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
+                  '-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_before']=mono_capture.feature_snapshot(lab,'features-before')

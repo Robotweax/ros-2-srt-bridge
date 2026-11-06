@@ -132,10 +132,20 @@ def stop_captures(lab):
 
 
 PCAP_BUFFER_KIB=32768
+PCAP_FILE_MEGABYTES=16
+PCAP_FILE_COUNT=16
 
 
 def pcap_configuration():
-    return dict(mode='immediate',buffer_kib=PCAP_BUFFER_KIB,snapshot_option=0)
+    return dict(mode='immediate',buffer_kib=PCAP_BUFFER_KIB,snapshot_option=0,
+        rotation=dict(file_megabytes=PCAP_FILE_MEGABYTES,file_count=PCAP_FILE_COUNT,
+            nominal_retention_bytes=PCAP_FILE_MEGABYTES*1000000*PCAP_FILE_COUNT))
+
+
+def pcap_rotation_options():
+    # tcpdump -C uses decimal millions of bytes; rollover may exceed a file
+    # threshold by one record. This is bounded retention, not a volume guarantee.
+    return ['-C',str(PCAP_FILE_MEGABYTES),'-W',str(PCAP_FILE_COUNT)]
 
 
 def pcap_options(interface='eth0',*,buffer_kib=PCAP_BUFFER_KIB):

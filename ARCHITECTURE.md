@@ -1125,3 +1125,30 @@ qualification. Full N2 duration/seed execution is now recorded for both SRT and
 default DDS, but the DDS age gap and other M3 gates remain open. No performance
 advantage follows from these separate cohorts. Runtime sources/installed binaries
 are unchanged from fd23de6. Evidence: `evidence/m3-srt-n2-full-2026-11-06/`.
+
+### Bounded capture retention and SRT N1 full-duration execution
+
+Normal SRT/DDS M3 runners now share sixteen rotating 16-MB files per endpoint
+(256,000,000 nominal bytes). The previous eight-file budget was nearly full in
+SRT N2 (about 125.5 MB of 128 MB). The change occurs before the N1 frozen plan,
+not as an unreported retry. File size/count/nominal bytes are included in capture
+metadata and study comparison guards. Immediate mode, the 32,768-KiB kernel
+buffer request, snapshots, offloads and strict zero-drop/captured-file gates are
+unchanged. Rotation thresholds use decimal millions and may exceed a per-file
+threshold by one record; finite retention is not an arbitrary-volume guarantee.
+A controlled 1-MB-threshold probe shows overwrite independently of kernel drops:
+two files retain 1,206/2,001 known datagrams and the existing gate rejects; four
+files retain all 2,001 with matching native observations and application receipts.
+
+The SRT N1 cohort executes 600 seconds for seeds 1701/2903/4211 with unchanged
+compiled binaries and command/publication policy. All 900 commands confirm
+SUCCEEDED/revision 3 with 900 effects and no expiry, UNKNOWN, unresolved,
+nonadmission or skipped slot. Six journals agree; three source summaries and
+twelve cgroup windows replay exactly. Maximum measured publication-age upper
+bucket is 119 ms within the 250-ms gate, using bridge-ingress origin. Actual
+IMU source rate is 199.107 Hz for seed 1701 and approximately 200 Hz for the
+others; denominators and losses remain explicit. Recorder/file-integrity gates
+pass, while realtime packet windows remain withheld for clock qualification.
+All 83 host Python tests pass, including the mixed-retention rejection case.
+Evidence: `evidence/m3-srt-n1-full-2026-11-06/`. Full DDS N1 and other M3 gates
+remain open; this does not establish transport superiority or physical delivery.
