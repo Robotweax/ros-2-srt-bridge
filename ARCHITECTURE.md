@@ -1408,3 +1408,23 @@ gaps, including 4.237 s with growing send counters and ARP reply ~20 us before
 CONTROL resumption. ARP extraction was exploratory after measurement; neighbor-
 state/fixture contrast is a future diagnostic, not a policy fix or attribution
 of the historical reset. See evidence/m3-n5-provider-liveness-2026-11-06/.
+
+### Opt-in neighbor observation and L2 diagnostic candidate
+
+`run_m3.py --neighbor-diagnostics` polls peer-scoped `ip -j -s neigh show` at a
+100-ms target, with sequence/read brackets, absent/error rows, 75000-record cap,
+exclusive output and complete final accounting. Returned eth0/destination/MAC
+identities are checked. It requests no active probes but adds subprocess/netlink
+work; snapshots are not exact transitions or kernel queue/drop observations.
+Default invocations create no observer and perform no neighbor configuration.
+
+`--neighbor-mode permanent` requires the observer, N0/N5 and no CONTROL fault.
+Only owned disposable endpoint entries are set, using actual peer MACs. Sampled
+and final PERMANENT state/MAC are verified. It is a separate L2 diagnostic
+candidate; dynamic remains default and no host entry is changed.
+`m3_neighbor_gap_analysis.py` correlates already-selected gaps with wholly inside
+reads, preserves edge-crossing/context rows, and checks native/common-clock and
+neighbor-file provenance. One ordered N5 pair found INCOMPLETE samples in all
+three dynamic gaps but a remaining 1.315-s positive-counter gap with PERMANENT
+entries. Historical ARP timing strengthens neighbor involvement without proving
+an exact cause. See evidence/m3-neighbor-contrast-2026-11-07/.

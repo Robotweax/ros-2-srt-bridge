@@ -1248,5 +1248,32 @@
     "host_tests_after_arp_parser": 124,
     "evidence": "evidence/m3-n5-provider-liveness-2026-11-06/README.md",
     "qualification": false
+  },
+  "neighbor_diagnostics": {
+    "default_enabled": false,
+    "target_period_ms": 100,
+    "record_limit": 75000,
+    "default_neighbor_mode": "dynamic",
+    "permanent_mode": "explicit owned-lab L2 diagnostic candidate only",
+    "ordered_pair": {
+      "dynamic": {
+        "successes": 130,
+        "unresolved": 0,
+        "skipped": 20,
+        "gaps_at_least_1s": 3,
+        "sender_incomplete_samples_in_every_gap": true
+      },
+      "permanent": {
+        "successes": 132,
+        "unresolved": 0,
+        "skipped": 18,
+        "gaps_at_least_1s": 2,
+        "residual_positive_counter_gap_seconds": 1.314880584
+      }
+    },
+    "historical_arp_association": "six requests in 5.127s source gap; reply 5.25us before CONTROL resumes; no old neighbor-table state",
+    "host_tests_final": 138,
+    "qualification": false,
+    "evidence": "evidence/m3-neighbor-contrast-2026-11-07/README.md"
   }
 }

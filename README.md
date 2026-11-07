@@ -8,7 +8,7 @@ The later M4 adapter belongs in
 [intrinsic-core-srt-integration](https://github.com/Robotweax/intrinsic-core-srt-integration).
 SRT is a separately installed dependency; the enclosing SRT checkout is preserved.
 
-## Development status — 2026-11-06
+## Development status — 2026-11-07
 
 M0's selected local qualification checks pass on Ubuntu 24.04 Linux amd64 under
 Docker Desktop emulation. The installed C API probe covers CONTROL/SENSOR,
@@ -881,3 +881,10 @@ zero unresolved intents and four CONTROL egress gaps >=1 s. The longest is
 finds an ARP reply about 20 microseconds before CONTROL resumes, suggesting
 neighbor-resolution involvement for further testing. No reset recurred; the
 historical cause remains open. [Evidence and limits](evidence/m3-n5-provider-liveness-2026-11-06/README.md).
+
+Optional `--neighbor-diagnostics` and explicit `--neighbor-mode permanent` now
+support a separate L2 fixture contrast. Dynamic N5 gaps overlapped sampled
+INCOMPLETE states, while the permanent candidate still retained a 1.315-second
+positive-counter gap. Historical ARP timing supports neighbor involvement, with
+exact cause and remaining gaps open. Dynamic remains the default. [Comparison
+and limits](evidence/m3-neighbor-contrast-2026-11-07/README.md).

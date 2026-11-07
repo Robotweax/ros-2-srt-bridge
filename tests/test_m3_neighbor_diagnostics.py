@@ -74,3 +74,21 @@ class NeighborTests(unittest.TestCase):
         root=Path(__file__).resolve().parents[1]
         p=subprocess.run([sys.executable,str(root/'tools/run_m3.py'),'--neighbor-mode','permanent'],capture_output=True,text=True)
         self.assertEqual(p.returncode,2);self.assertIn('requires neighbor diagnostics',p.stderr)
+
+    def test_existing_outputs_are_refused_without_mutation(self):
+        for existing in ('out','status','ready'):
+            with tempfile.TemporaryDirectory() as tmp:
+                root=Path(tmp);out=root/'r.jsonl';ready=root/'ready';status=out.with_suffix('.status.json')
+                target={'out':out,'status':status,'ready':ready}[existing];target.write_text('retained')
+                with patch('m3_neighbor_diagnostics.observe',side_effect=RuntimeError('must not observe')):
+                    with self.assertRaises(FileExistsError):sample(out,ready,root/'stop',PEER)
+                self.assertEqual(target.read_text(),'retained')
+                if existing=='out':self.assertFalse(status.exists())
+                else:self.assertFalse(out.exists())
+    def test_sampler_budget_exhaustion_remains_explicit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);out=root/'r.jsonl'
+            with patch('m3_neighbor_diagnostics.LIMIT',1),patch('m3_neighbor_diagnostics.time.sleep'),patch('m3_neighbor_diagnostics.observe',return_value=self.rows()[0]):
+                with self.assertRaisesRegex(RuntimeError,'budget exhausted'):sample(out,root/'ready',root/'stop',PEER)
+            status=json.loads(out.with_suffix('.status.json').read_text())
+            self.assertFalse(status['complete']);self.assertEqual(status['records'],1);self.assertEqual(status['limit'],1)

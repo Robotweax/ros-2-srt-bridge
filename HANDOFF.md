@@ -2037,3 +2037,53 @@ UNKNOWNs, volle N5-/M3- und sonstige Gates offen. PR #2 Draft, Intrinsic/M4 unbe
 Fixture-Kontrast zur Neighborresolution in owned N5-Lab. Jede Neighbor-Konfig-
 Änderung separater Diagnosekandidat, kein Ersatzbaseline. Historischer Initiator/
 UNKNOWNs, volle N5/M3 und übrige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-07: Neighbor-State-Paar und historische ARP-Assoziation
+
+- Opt-in --neighbor-diagnostics, read-only peer-scoped ip-neigh-show, nominell
+  100ms, Read-Brackets/Sequenz/ABSENT/Fehler, Limit75000 und Finalstatus. Keine
+  aktiven Probes, aber Subprocess/Netlink-Overhead. --neighbor-mode permanent
+  separater L2-Diagnosekandidat nur owned N0/N5 mit echten Peer-MACs, State/MAC
+  über alle Samples/Finalreadback geprüft. Dynamic bleibt Default, Host unverändert.
+- Vorab Plan41e6f60, genau ein N0-15s-Preflight permanent:8Erfolge, vollständig.
+  Danach vorab Code035100b, genau ein geordnetes Paar N5/300s/Seed1701 dynamic,
+  dann permanent. Gleicher VM-Boot, Observermethoden/Image/Runtime/Shaping gleich;
+  Reihenfolge/Scheduling weiter Confounds. Acht Runtimehashes vorher/nachher
+  gleich; gemessene Sourcehashes gegen jeweilige gefrorene Commits geprüft.
+- Dynamic lokal .local/m3/20261107T074709774864Z:130Erfolge/Effekte,20Skips,
+  keine UNKNOWNs/aktiven CONTROL-Resets. Alle3alten Egressgaps>=1s mit wachsenden
+  Sendcountern und INCOMPLETE-Samples am Sender:Operator3,232864418s (31Samples),
+  Robot1,141203625s (10),Robot1,058229125s (10). Edge-Reads getrennt, keine
+  exakten Transitions-/Kernelqueue-/Dropursachen abgeleitet.
+- Permanent lokal .local/m3/20261107T075252504462Z:132Erfolge/Effekte,18Skips,
+  keine UNKNOWNs/aktiven CONTROL-Resets. State/MAC über3167/3170Samples stabil.
+  Trotzdem2Gaps:Operator1,000092084s flatselected (kein UDP-Abwesenheitsbeweis),
+  Robot1,314880584s DATA+17 inkl16Retransmits trotz PERMANENT. Neighborresolution
+  also kein Alleinerklärungs-/Fixbeweis; keine günstigeren Ersatzbaselines.
+- Nachträglicher historischer ARP-Check des alten Fehlfalls181823876229Z:
+  Rohhashes passen altem qualifiziertem Flowarchiv. Alter Operator-Sourcegap
+  5,127369086s enthält6 outgoingARPrequests, Reply am Operator5,250us vor
+  CONTROLresume bzw119,106083ms nach Robot-SessionChange. Stärkt Hypothese
+  Neighborbeteiligung, aber alte Neighborstates/Providercounter fehlen, keine
+  exakte Kernelpfad-/Ursachen-/Nonexecutionzuschreibung. Alter UNKNOWN unverändert.
+- Journale aller bestätigten Erfolge passen, je1SDK-Handoff/Dispatch vor
+  konservativer Receiverdeadline. Neighbor/Provider/Trace/Native vollständig,
+  keine Drops/Exhaustion/Reserve-/Copyverluste; PCAP125814(dynamic)/108233(permanent)
+  Records/Filter jeEndpoint mit zeroKerneldrops. Native125902/125900 bzw108254/
+  108257 bei anderen Populationen. Source/Published/Observer75023/19805/19805
+  bzw75036/27570/27565, alle Conservationbalances0, Defizite erhalten. Realtime-
+  fenster withheld, kein Performance-/Lossless-/Securityparitätsbeweis.
+- Neighborreads bis44,683084ms/Startgap111,184208ms im Paar beobachtet, keine
+  Bounds. 134Hosttests vorPreflight,136vorPaar,138final; Syntaxchecks bestanden.
+  NachMessung nur Errorpath gehärtet: existierende Sample/Status/Ready-Dateien
+  ohne Mutation verweigern, Budgetexhaustion getestet; nicht live wiederholt,
+  erfolgreicher Messpfad unverändert. Keine neuen SDK-/ROS-/M2-Tests behauptet.
+- Evidenz evidence/m3-neighbor-contrast-2026-11-07/ mit Plan/Originalmanifesten/
+  Nachbardaten/Analysen/Journalaudits, historischer ARP-Auswahl, Provenienzen/
+  Tests/Inventaren/Rohhashes. Payloads/Prefixes/Journale/Clocks lokal, keine
+  Secrets/Inspect-/Env-Dumps. Alte Fehlläufe nicht verändert, Intrinsic/M4 unberührt.
+
+**Weiter:** Verbleibenden Permanent-Neighbor-Gap vom Neighboranteil trennen und
+Pre-Tap-Queue-/Dropstage lokalisieren, bevor Defaultfixture geändert wird.
+Historischer exakter Initiator/UNKNOWNs und volle N5/M3/übrige Gates offen.
+PR #2 bleibt Draft; kein neuer Default-/Transport-/Timeout-/Dependencyfix.

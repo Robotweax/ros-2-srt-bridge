@@ -40,15 +40,19 @@ def observe(peer):
 def sample(out,ready,stop,peer):
     address=ipaddress.ip_address(peer)
     if address.version!=4 or address.is_loopback or address.is_unspecified:raise ValueError('requires peer IPv4')
+    status=out.with_suffix('.status.json')
+    if status.exists() or ready.exists():raise FileExistsError('neighbor observation output already exists')
     complete=False;count=0
+    file=out.open('x')  # Failed exclusive creation must not rewrite an old status.
     try:
-        with out.open('x') as file:
+        with file:
             for sequence in range(1,LIMIT+1):
                 row=observe(peer);row['sequence']=sequence;file.write(json.dumps(row)+'\n');file.flush();count=sequence
                 if not row['error'] and not ready.exists():ready.write_text(json.dumps(dict(ready_ns=row['end_ns'])))
                 if stop.exists():complete=True;break
                 time.sleep(max(0,(row['begin_ns']+PERIOD_NS-time.monotonic_ns())/1e9))
-    finally:out.with_suffix('.status.json').write_text(json.dumps(dict(complete=complete,records=count,limit=LIMIT,finished_ns=time.monotonic_ns()))+'\n')
+    finally:
+        with status.open('x') as final:final.write(json.dumps(dict(complete=complete,records=count,limit=LIMIT,finished_ns=time.monotonic_ns()))+'\n')
     if not complete:raise RuntimeError('neighbor observation budget exhausted')
 
 

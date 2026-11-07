@@ -1,0 +1,315 @@
+{
+  "executed": true,
+  "source_commit": "035100b",
+  "source_hashes_match": true,
+  "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T075252504462Z",
+  "original_status": "passed",
+  "neighbor_mode": "permanent",
+  "original_errors": {},
+  "analysis_error": null,
+  "journal_audit_error": null,
+  "command_summary": {
+    "attempts": 132,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 132,
+      "p50": 897.343417,
+      "p95": 2767.757585,
+      "p99": 3187.942251,
+      "maximum": 3405.111544
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 132,
+        "p50": 897.343417,
+        "p95": 2767.757585,
+        "p99": 3187.942251,
+        "maximum": 3405.111544
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "skipped_command_slots": 18,
+  "device": {
+    "sequence": 10,
+    "ok": true,
+    "rate": 200,
+    "generation": 132,
+    "effects": 132
+  },
+  "neighbor_summaries": {
+    "operator": {
+      "complete": true,
+      "records": 3167,
+      "states": {
+        "PERMANENT": 3167
+      },
+      "lladdrs": {
+        "b6:cf:1c:60:cf:3e": 3167
+      },
+      "max_read_span_ns": 34091001,
+      "max_sample_start_gap_ns": 110908209,
+      "status": {
+        "complete": true,
+        "records": 3167,
+        "limit": 75000,
+        "finished_ns": 802214449198
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.3",
+          "dev": "eth0",
+          "lladdr": "b6:cf:1c:60:cf:3e",
+          "used": 318,
+          "confirmed": 2,
+          "updated": 319,
+          "probes": 0,
+          "state": [
+            "PERMANENT"
+          ]
+        }
+      ]
+    },
+    "robot": {
+      "complete": true,
+      "records": 3170,
+      "states": {
+        "PERMANENT": 3170
+      },
+      "lladdrs": {
+        "7e:66:a8:b7:16:92": 3170
+      },
+      "max_read_span_ns": 44683084,
+      "max_sample_start_gap_ns": 111076334,
+      "status": {
+        "complete": true,
+        "records": 3170,
+        "limit": 75000,
+        "finished_ns": 802214464031
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.2",
+          "dev": "eth0",
+          "lladdr": "7e:66:a8:b7:16:92",
+          "used": 318,
+          "confirmed": 2,
+          "updated": 319,
+          "probes": 0,
+          "state": [
+            "PERMANENT"
+          ]
+        }
+      ]
+    }
+  },
+  "source_window_neighbor_states": {
+    "operator": {
+      "PERMANENT": 2984
+    },
+    "robot": {
+      "PERMANENT": 2986
+    }
+  },
+  "gaps": [
+    {
+      "sender": "operator",
+      "seconds": 1.000092084,
+      "classification": "selected_send_counters_flat_not_udp_absence_proof",
+      "neighbor_inside_states": {
+        "operator": {
+          "PERMANENT": 10
+        },
+        "robot": {
+          "PERMANENT": 10
+        }
+      }
+    },
+    {
+      "sender": "robot",
+      "seconds": 1.314880584,
+      "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+      "neighbor_inside_states": {
+        "operator": {
+          "PERMANENT": 13
+        },
+        "robot": {
+          "PERMANENT": 13
+        }
+      }
+    }
+  ],
+  "active_control_events": [],
+  "provider": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "status": {
+        "attempted": 2983,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 622542,
+      "max_sample_start_gap_ns": 112743041
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "status": {
+        "attempted": 23,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 625291,
+      "max_sample_start_gap_ns": 110006125
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "status": {
+        "attempted": 3046,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 6496833,
+      "max_sample_start_gap_ns": 113649958
+    }
+  },
+  "command_diagnostics": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "attempted": 416,
+      "dropped": 0
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    }
+  },
+  "pcap": {
+    "operator": {
+      "records": 108233,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    },
+    "robot": {
+      "records": 108233,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    }
+  },
+  "monotonic_statuses": {
+    "operator": {
+      "complete": true,
+      "records": 108254,
+      "seen": 108254,
+      "submitted": 108254,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 484018054511,
+      "stop_before_ns": 801496446906,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "robot": {
+      "complete": true,
+      "records": 108257,
+      "seen": 108257,
+      "submitted": 108257,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 484017734927,
+      "stop_before_ns": 801676639656,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "measurement_window": {
+    "source_produced": 75036,
+    "observer_received": 27565,
+    "missing": 47471,
+    "losses": {
+      "upstream_dds": 7,
+      "validation": 0,
+      "admission": 87,
+      "ingress_replaced": 7,
+      "ingress_flushed": 480,
+      "input_rejected": 3,
+      "outbound_replaced": 2560,
+      "outbound_expired": 0,
+      "outbound_flushed": 3,
+      "srt_accept_to_receiver_gap": 43714,
+      "receiver_rejected": 605,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 5
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 300.142899012,
+    "source_actual_hz": {
+      "imu": 199.99806824548605,
+      "joints": 50.00284880769399
+    },
+    "published": 27570,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 22855,
+        "rounding": "up to 1ms",
+        "maximum_ms": 173,
+        "p50_ms": 107,
+        "p95_ms": 135,
+        "p99_ms": 146
+      },
+      "joint": {
+        "count": 4715,
+        "rounding": "up to 1ms",
+        "maximum_ms": 170,
+        "p50_ms": 114,
+        "p95_ms": 144,
+        "p99_ms": 156
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "competitor_check": {
+    "protocol": "UDP",
+    "target_bitrate": 128000,
+    "block_bytes": 1024,
+    "bytes": 5054464,
+    "seconds": 315.900041,
+    "offered_bits_per_second": 128001.60415300485,
+    "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+    "alive_poll_checks": 1238
+  },
+  "boot_id": "43ce1c65-4dc6-465a-beb6-178c1d04400f"
+}
