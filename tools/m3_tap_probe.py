@@ -102,6 +102,7 @@ def send(args):
     rows=[]
     def payload(n):return MAGIC+struct.pack('!II',args.case,n)+bytes(1200-16)
     with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as client:
+        if getattr(args,'bind_port',0):client.bind(('0.0.0.0',args.bind_port))
         if args.gso:
             data=b''.join(payload(i) for i in range(args.count));before=time.monotonic_ns();n=client.sendmsg([data],[(socket.IPPROTO_UDP,103,struct.pack('H',1200))],0,(args.peer,PORT));after=time.monotonic_ns();assert n==len(data)
             rows=[dict(sequence=i,before_ns=before,after_ns=after) for i in range(args.count)]
@@ -188,7 +189,7 @@ def run_case(run,image,case,number):
 def main():
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
     p=sub.add_parser('receive');p.add_argument('--out',required=True);p.add_argument('--ready',required=True);p.add_argument('--stop',required=True)
-    p=sub.add_parser('send');p.add_argument('--peer',required=True);p.add_argument('--case',type=int,required=True);p.add_argument('--count',type=int,required=True);p.add_argument('--out',required=True);p.add_argument('--gso',action='store_true')
+    p=sub.add_parser('send');p.add_argument('--peer',required=True);p.add_argument('--case',type=int,required=True);p.add_argument('--count',type=int,required=True);p.add_argument('--out',required=True);p.add_argument('--gso',action='store_true');p.add_argument('--bind-port',type=int,default=0)
     p=sub.add_parser('run');p.add_argument('--out',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='receive':receive(args);return

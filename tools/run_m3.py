@@ -24,6 +24,7 @@ import m3_command_trace
 import m3_provider_stats
 import m3_control_fault
 import m3_neighbor_diagnostics as neighbor_diagnostics
+import m3_qdisc_diagnostics as qdisc_diagnostics
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -41,6 +42,7 @@ def main():
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
+    parser.add_argument('--control-qdisc-diagnostics',action='store_true',help='experimental CONTROL tc PASS counters plus root polling; N0/N5 only, observer intervention')
     parser.add_argument('--neighbor-diagnostics',action='store_true',help='bounded read-only neighbor-table polling; observer workload')
     parser.add_argument('--neighbor-mode',choices=['dynamic','permanent'],default='dynamic',help='permanent is a separate owned-lab L2 diagnostic candidate, not default baseline')
     parser.add_argument('--control-egress-fault',choices=['operator','robot'],help='development-only six-second CONTROL drop, N0 >=45s with all diagnostics; not qualification')
@@ -54,6 +56,8 @@ def main():
         parser.error('CONTROL fault requires N0 >=45s plus monotonic, command and provider diagnostics')
     if args.neighbor_mode=='permanent' and (not args.neighbor_diagnostics or args.profile not in ('N0','N5') or args.control_egress_fault):
         parser.error('permanent neighbor candidate requires neighbor diagnostics, N0/N5 and no injected CONTROL fault')
+    if args.control_qdisc_diagnostics and (args.profile not in ('N0','N5') or args.control_egress_fault):
+        parser.error('CONTROL qdisc diagnostics require N0/N5 and no injected classifier fault')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -65,7 +69,8 @@ def main():
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
-    processes=[];captures=[];recorder_processes=[];neighbor_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    processes=[];captures=[];recorder_processes=[];neighbor_processes=[];qdisc_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    report['control_qdisc_diagnostics_enabled']=args.control_qdisc_diagnostics
     report['neighbor_mode']=args.neighbor_mode
     report['neighbor_diagnostics_enabled']=args.neighbor_diagnostics
     report['control_egress_fault_requested']=args.control_egress_fault
@@ -111,11 +116,13 @@ def main():
         report['clock_namespace_proof']=clocks
         if args.neighbor_diagnostics:report['neighbor_configuration']=neighbor_diagnostics.configure(lab,args.neighbor_mode)
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
+        if args.control_qdisc_diagnostics:report['qdisc_observer_configuration']=qdisc_diagnostics.install(lab)
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
             argv=['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
                   '-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
+        if args.control_qdisc_diagnostics:qdisc_diagnostics.start(lab,run,inside,qdisc_processes)
         if args.neighbor_diagnostics:neighbor_diagnostics.start(lab,run,inside,neighbor_processes)
         if args.recorder_diagnostics:recorder_diagnostics.start(lab,run,inside,recorder_processes)
         if args.monotonic_capture:
@@ -185,6 +192,9 @@ def main():
                 try:p.wait(timeout=5)
                 except subprocess.TimeoutExpired:p.terminate()
                 log.close()
+            if qdisc_processes:
+                try:report['qdisc_diagnostics']=qdisc_diagnostics.stop(lab,run,qdisc_processes)
+                except Exception as error:report['status']='failed';report['qdisc_diagnostics_error']=str(error)
             if neighbor_processes:
                 try:report['neighbor_diagnostics']=neighbor_diagnostics.stop(lab,run,neighbor_processes,args.neighbor_mode,report['neighbor_configuration']['peer_macs'])
                 except Exception as error:report['status']='failed';report['neighbor_diagnostics_error']=str(error)
@@ -228,7 +238,7 @@ def main():
             try:report['provider_diagnostics']=m3_provider_stats.summarize_run(run)
             except Exception as error:report['status']='failed';report['provider_diagnostics_error']=str(error)
         credential.unlink(missing_ok=True);save();print(run,flush=True)
-    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('command_diagnostics_error',report.get('provider_diagnostics_error',report.get('neighbor_diagnostics_error',report.get('capture_error',report.get('error','M3 failed')))))))
+    if report['status']!='passed':raise RuntimeError(report.get('competitor_error',report.get('command_diagnostics_error',report.get('provider_diagnostics_error',report.get('qdisc_diagnostics_error',report.get('neighbor_diagnostics_error',report.get('capture_error',report.get('error','M3 failed'))))))))
 
 
 if __name__=='__main__':main()
