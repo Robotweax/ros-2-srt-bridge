@@ -25,6 +25,7 @@ import m3_provider_stats
 import m3_control_fault
 import m3_neighbor_diagnostics as neighbor_diagnostics
 import m3_qdisc_diagnostics as qdisc_diagnostics
+import m3_root_loss_burst
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
@@ -42,6 +43,8 @@ def main():
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
+    parser.add_argument('--root-loss-burst',choices=['operator','robot'],help='known two-second N5 child loss; requires permanent neighbors and all diagnostics, >=60s')
+    parser.add_argument('--capture-drain-check',action='store_true',help='experimental bounded stable-equal tcpdump snapshots before stop; final capture gate unchanged')
     parser.add_argument('--control-qdisc-diagnostics',action='store_true',help='experimental CONTROL tc PASS counters plus root polling; N0/N5 only, observer intervention')
     parser.add_argument('--neighbor-diagnostics',action='store_true',help='bounded read-only neighbor-table polling; observer workload')
     parser.add_argument('--neighbor-mode',choices=['dynamic','permanent'],default='dynamic',help='permanent is a separate owned-lab L2 diagnostic candidate, not default baseline')
@@ -58,6 +61,8 @@ def main():
         parser.error('permanent neighbor candidate requires neighbor diagnostics, N0/N5 and no injected CONTROL fault')
     if args.control_qdisc_diagnostics and (args.profile not in ('N0','N5') or args.control_egress_fault):
         parser.error('CONTROL qdisc diagnostics require N0/N5 and no injected classifier fault')
+    if args.root_loss_burst and (args.profile!='N5' or duration<60 or args.neighbor_mode!='permanent' or not all((args.neighbor_diagnostics,args.monotonic_capture,args.command_diagnostics,args.provider_diagnostics,args.control_qdisc_diagnostics,args.capture_drain_check)) or args.control_egress_fault):
+        parser.error('root loss burst requires N5 >=60s, permanent neighbors, drain check and all diagnostics')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -70,6 +75,8 @@ def main():
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
     processes=[];captures=[];recorder_processes=[];neighbor_processes=[];qdisc_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    report['root_loss_burst_requested']=args.root_loss_burst
+    report['capture_drain_check_enabled']=args.capture_drain_check
     report['control_qdisc_diagnostics_enabled']=args.control_qdisc_diagnostics
     report['neighbor_mode']=args.neighbor_mode
     report['neighbor_diagnostics_enabled']=args.neighbor_diagnostics
@@ -148,6 +155,13 @@ def main():
                 competitor_alive_checks+=1
             if any(p.poll() not in (None,0) for p,_ in processes):raise RuntimeError('scenario failed; see '+str(run))
             if all(p.poll() is not None for p,_ in processes):break
+            if args.root_loss_burst and (run/'measurement-start.json').exists():
+                if 'root_burst_due' not in report:report['root_burst_due']=time.monotonic()+duration/3;save()
+                if 'root_loss_burst' not in report and time.monotonic()>=report['root_burst_due']:
+                    report['root_loss_burst']=m3_root_loss_burst.start(lab,args.root_loss_burst,args.seed)
+                    report['root_burst_restore_due']=time.monotonic()+2;save()
+                if 'root_loss_burst' in report and not report['root_loss_burst']['restored'] and time.monotonic()>=report['root_burst_restore_due']:
+                    m3_root_loss_burst.stop(lab,report['root_loss_burst']);save()
             if args.control_egress_fault and (run/'measurement-start.json').exists():
                 if 'control_fault_due' not in report:report['control_fault_due']=time.monotonic()+duration/3;save()
                 if 'controlled_control_fault' not in report and time.monotonic()>=report['control_fault_due']:
@@ -171,6 +185,7 @@ def main():
                     outage=True;save()
             time.sleep(.25)
         else:raise RuntimeError('M3 scenario deadline exceeded')
+        if args.root_loss_burst and not report.get('root_loss_burst',{}).get('restored'):raise RuntimeError('root loss burst not applied/restored')
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
         if args.control_egress_fault and not report.get('controlled_control_fault',{}).get('restored'):raise RuntimeError('CONTROL fault not applied/restored')
         lab.snapshot('after')
@@ -186,7 +201,7 @@ def main():
         report['status']='failed';report['error']=str(error);raise
     finally:
         if lab:
-            try:stop_captures(lab)
+            try:stop_captures(lab,drain_check=args.capture_drain_check)
             except Exception as error:report['status']='failed';report['capture_stop_error']=str(error)
             for p,log in captures:
                 try:p.wait(timeout=5)

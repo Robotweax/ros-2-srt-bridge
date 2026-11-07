@@ -1,0 +1,5 @@
+{
+  "runtime_packages_observed": {"libpcap": "1.10.4-4.1ubuntu3.1", "tcpdump": "4.99.4-3ubuntu4.24.04.1"},
+  "primary_upstream_sources": [{"url": "https://github.com/the-tcpdump-group/libpcap/blob/libpcap-1.10.4/pcap-linux.c", "lines": "1300-1348", "paraphrase": "Linux statistics include kernel-accepted packets not yet read by the application; libpcap accumulates statistics across reads."}, {"url": "https://github.com/the-tcpdump-group/tcpdump/blob/tcpdump-4.99.4/tcpdump.c", "lines": "2580-2606,2640-2670,2938-2982", "paraphrase": "Interrupt cleanup uses breakloop; live statistics report callback count and libpcap counters, with requests deferred during callbacks."}],
+  "limits": "Upstream tags explain API behavior; distro patches are not asserted byte-identical. Installed behavior is tested in the owned fixture. This does not identify the historical two-record cause."
+}
