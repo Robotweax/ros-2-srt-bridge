@@ -888,3 +888,9 @@ INCOMPLETE states, while the permanent candidate still retained a 1.315-second
 positive-counter gap. Historical ARP timing supports neighbor involvement, with
 exact cause and remaining gaps open. Dynamic remains the default. [Comparison
 and limits](evidence/m3-neighbor-contrast-2026-11-07/README.md).
+
+Experimental `--control-qdisc-diagnostics` adds CONTROL tc PASS counters and
+root-qdisc polling. A known-count probe qualifies the counter before tested root
+loss and the native tap after it. The live N5 case recorded 129 successful
+commands but no >=1s gap recurrence; robot PCAP failed filter/file population
+reconciliation by two records. Defaults are unchanged. [Evidence and limits](evidence/m3-qdisc-stage-2026-11-07/README.md).

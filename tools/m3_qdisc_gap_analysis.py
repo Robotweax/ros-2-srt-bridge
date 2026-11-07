@@ -22,6 +22,13 @@ def inside_deltas(rows,start,end):
     return dict(totals=totals,pairs=pairs,first=inside[0] if inside else None,last=inside[-1] if inside else None,max_root_backlog_bytes=max((r['root']['backlog'] for r in inside),default=None),max_root_qlen=max((r['root']['qlen'] for r in inside),default=None))
 
 
+def aggregate_span(rows,ready,stop):
+    eligible=[r for r in rows if ready<=r['begin_ns']<=r['end_ns']<=stop]
+    if len(eligible)<2:raise ValueError('insufficient counter coverage inside native capture')
+    first,last=eligible[0],eligible[-1]
+    return dict(counter_first_read_ns=[first['begin_ns'],first['end_ns']],counter_last_read_ns=[last['begin_ns'],last['end_ns']],selected_pass_execution_delta=last['pass_counter']['packets']-first['pass_counter']['packets'],last_root_snapshot=last['root'])
+
+
 def classify(gap,delta,all_control_out,identity_stable):
     if not delta['pairs']:return 'insufficient_counter_pairs'
     if not identity_stable:return 'selector_socket_association_withheld'
@@ -51,8 +58,15 @@ def analyze(run,flow):
         observed=[r for name,result in providers.items() if name.startswith(role+'-') for r in result['records'] if r['begin_ns']<end and r['end_ns']>start]
         identity=gap.get('sender_identity');stable=bool(identity and observed and all(r['available'] and list(connection(r))==identity for r in observed))
         gaps.append(dict(sender=role,window_ns=[start,end],gap_ns=end-start,provider_classification=gap['classification'],identity_stable=stable,all_source_control_out=all_out,qdisc=delta,classification=classify(gap,delta,all_out,stable)))
+    populations={}
+    for role in ('operator','robot'):
+        status=report['monotonic_captures']['statuses'][role];peer='robot' if role=='operator' else 'operator';count=0
+        for row in records(run/(role+'.mono')):
+            value=parse_control(row,peers[role],status['mtu'])
+            if value and value['direction']=='out' and value['destination']==peers[peer] and ((role=='operator' and value['source_port']==10080) or (role=='robot' and value['destination_port']==10080)):count+=1
+        populations[role]=dict(aggregate_span(rows[role],status['ready_ns'],status['stop_before_ns']),selected_native_out_observations_over_entire_capture=count,native_coverage_ns=[status['ready_ns'],status['stop_before_ns']])
     if any(digest(run/(role+'.mono'))!=flow['native_sha256'][role] for role in ('operator','robot')):raise ValueError('native file changed during analysis')
-    return dict(summaries=summaries,qdisc_sha256=hashes,gaps=gaps,
+    return dict(summaries=summaries,qdisc_sha256=hashes,gaps=gaps,aggregate_populations=populations,aggregate_scope='post-hoc classifier-execution versus wider native-observation counts, not exact per-packet identity/loss; endpoints are inside native coverage, in-flight/edge/requeue semantics remain; no rescue of PCAP gate',analysis_source_sha256=digest(Path(__file__)),
                 scope='aggregate UDP CONTROL peer/port software PASS executions, not authenticated socket/per-packet identity; placement only qualified in recorded synthetic fixture; root counters whole-interface, backlog/qlen gauges; paired reads wholly inside gaps; observer changes processing path and adds work; no unique drop, physical delivery, nonexecution or performance proof')
 
 

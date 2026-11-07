@@ -2087,3 +2087,55 @@ UNKNOWNs, volle N5/M3 und übrige Gates offen. PR #2 Draft, Intrinsic/M4 unberü
 Pre-Tap-Queue-/Dropstage lokalisieren, bevor Defaultfixture geändert wird.
 Historischer exakter Initiator/UNKNOWNs und volle N5/M3/übrige Gates offen.
 PR #2 bleibt Draft; kein neuer Default-/Transport-/Timeout-/Dependencyfix.
+
+## Fortsetzung 2026-11-07: TC/Root-Stage qualifiziert, N5-PCAP-Population fehlgeschlagen
+
+- Opt-in --control-qdisc-diagnostics (N0/N5, kein Classifierfault): software
+  UDP-CONTROL/Peer-u32-gact-PASS pref49150, bestehende Hooks verweigert, Root-
+  Config unverändert geprüft. Verdict/Workloadintervention, nicht passive AF_PACKET.
+  Polling200ms/Limit37500, Filter-/Rootreads separat bracketed, Errors/Finalstatus,
+  monotone Counter/Rootidentität und Gauges, Remove/emptyreadback. Default aus.
+- Ursprungsplan708af1b synthetischer Probe FAILED beim netem->TBF-Wechsel gleichen
+  Handles; Originalartefakte unverändert, ursprünglicher ROS-/N5-Plan gestoppt.
+  Nur Fixturehelper gefixt: eigenen Root bei Kindwechsel explizit löschen, Generator
+  idle, Classifier behalten; Receiver bei Fehler kooperativ stoppen. Regression.
+  Frische Revisionf2010a1 einmal qualifiziert: baseline16counter/16tap/16receiver;
+  Sensornegative4sent/0counter/4tap/4receiver; Root100%Loss16counter/0tap/0receiver;
+  N5shaped16/16/16; Restore1/1/1. Native/PCAPidentitäten vollständig/gleich,
+  Features unverändert, Filterentfernung geprüft. Nur aufgezeichnete Vethfixture.
+- ROS N0-Smoke15s (f2010a1)8Erfolge vollständig. Danach genau1 N5/300s/Seed1701
+  ohne Fault (83e9dd5), permanentNeighbor-Diagnosekandidat:129Erfolge/Effekte,
+  21Skips, keine UNKNOWNs/aktiven CONTROL-Loss/Close-Events, kein vollständiger
+  alter Sourcegap>=1s. Kein Residual-/historischer Fix, keine günstige Ersatzkohorte.
+  Sourcehashes gegen gefrorene Commits und8Runtimehashes vorher/nachher passen;
+  SDK/ROS/Pin/Timeout/Policy/defaultDynamic unverändert, keine neuen SDK/ROS/M2tests.
+- WICHTIG N5-PCAPgate FAILED: Operator110671File/Captured/Filter, Robot110671
+  File/Captured vs110673receivedbyfilter, beidezeroKerneldrops. Fileintegrität
+  gültig, Robotpopulationfalse. OriginaldevmanifestPASSED mit populationfalse
+  bleibt unverändert, keine Capturequalification/Rescue/Rekonstruktion/Retry.
+  Realtimefenster ebenfalls withheld. Ursache der2fehlenden Records offen.
+- Native110690jeEndpoint zeroReserve/Copyfailures, vollständig unabhängig von
+  PCAPgate. TC1595jeEndpoint, Provider2995/24/3057, Trace405/5/5 vollständig,
+  zeroDrops/Exhaustion. MaxTCread63,643833ms inN5/68,819250ms inklSmoke,
+  Startgap210,192542ms beobachtet, keine Bounds/Zerooverheadbehauptung.
+- Post-hoc Aggregate-Check (nicht neuer Gapgate): Counterendpunkte ganz innerhalb
+  Nativecoverage, breitere volleNativepopulation. Operator6991PASSexecutions/
+  6991selectedout, Robot14771/5122. Differenz zwischen Classifier und Tap,
+  konsistent mit späterem Removal/Withholding; keine exakte Paketlosszahl,
+  Edge/In-flight/Requeue-Semantik vorbehalten. Rootrobot92564Wholeifdrops,
+  backlog/qlen0 am letzten Sample, keine CONTROL-Zuordnung. Residualgapnichtlokalisiert.
+- Journale129Erfolge/Kontexte/Resultate passen, je1SDK-Handoff/Dispatch vor
+  konservativer Receiverdeadline. SensorSource/Published/Observer75034/27873/
+  27873, Conservationbalances0; Defizit erhalten, keine Performance-/Losslessclaims.
+  144Hosttests vorProbe,145nachFix,148vorN5,149nachexplorativemAggregate-Boundarytest;
+  Syntaxchecks bestanden. Analyseextension nachMessung separatprovenanziert.
+- Evidenz evidence/m3-qdisc-stage-2026-11-07/ mit Original-/Revisionplan,
+  erstemFAILED-Probe, qualifiziertemProbe, Smoke/N5Originalmanifesten/Logs,
+  Zähler-/Neighbor-/Flowanalysen/Journalaudits/Tests/Inventaren/Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal; keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Zwei-Record-PCAP-Filter/File-Shutdown-Diskrepanz unter begrenztem
+Drain-Test prüfen und qualifizierten Stageobserver in deterministischem Queue/
+Lossintervall einsetzen, keine spontanenN5-Wiederholungen bis günstig.
+Defaultfixture/historischerexakterInitiator/volleN5-M3/übrigeGates offen,
+PR#2Draft, Intrinsic/M4 unberührt.

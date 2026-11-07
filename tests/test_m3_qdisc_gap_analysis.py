@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys,unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_qdisc_gap_analysis import inside_deltas,classify
+from m3_qdisc_gap_analysis import inside_deltas,classify,aggregate_span
 
 
 def row(n):return dict(begin_ns=n*10,end_ns=n*10+2,pass_counter=dict(packets=n,bytes=n*100),root=dict(packets=n,bytes=n*100,drops=n,overlimits=n,backlog=20-n,qlen=n))
@@ -23,3 +23,9 @@ class QdiscGapTests(unittest.TestCase):
     def test_counter_regression_rejects(self):
         rows=[row(1),row(2)];rows[1]['pass_counter']['packets']=0
         with self.assertRaises(ValueError):inside_deltas(rows,0,30)
+
+    def test_aggregate_counter_endpoints_are_inside_native_coverage(self):
+        r=aggregate_span([row(n) for n in range(6)],12,42)
+        self.assertEqual(r['selected_pass_execution_delta'],2)
+        self.assertEqual(r['counter_first_read_ns'],[20,22]);self.assertEqual(r['counter_last_read_ns'],[40,42])
+        with self.assertRaises(ValueError):aggregate_span([row(1)],0,30)

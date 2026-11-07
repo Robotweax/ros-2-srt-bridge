@@ -1,0 +1,423 @@
+{
+  "executed": true,
+  "source_commit": "f2010a1",
+  "source_hashes_match": true,
+  "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T081604716690Z",
+  "original_status": "passed",
+  "neighbor_mode": "permanent",
+  "original_errors": {},
+  "analysis_error": null,
+  "journal_audit_error": null,
+  "command_summary": {
+    "attempts": 8,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 8,
+      "p50": 102.637583,
+      "p95": 257.983958,
+      "p99": 257.983958,
+      "maximum": 257.983958
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 8,
+        "p50": 102.637583,
+        "p95": 257.983958,
+        "p99": 257.983958,
+        "maximum": 257.983958
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "skipped_command_slots": 0,
+  "device": {
+    "sequence": 10,
+    "ok": true,
+    "rate": 200,
+    "generation": 8,
+    "effects": 8
+  },
+  "neighbor_summaries": {
+    "operator": {
+      "complete": true,
+      "records": 346,
+      "states": {
+        "PERMANENT": 346
+      },
+      "lladdrs": {
+        "ae:4f:c7:21:7f:27": 346
+      },
+      "max_read_span_ns": 38096625,
+      "max_sample_start_gap_ns": 110162875,
+      "status": {
+        "complete": true,
+        "records": 346,
+        "limit": 75000,
+        "finished_ns": 243429452735
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.3",
+          "dev": "eth0",
+          "lladdr": "ae:4f:c7:21:7f:27",
+          "used": 29,
+          "confirmed": 36,
+          "updated": 36,
+          "probes": 0,
+          "state": [
+            "PERMANENT"
+          ]
+        }
+      ]
+    },
+    "robot": {
+      "complete": true,
+      "records": 346,
+      "states": {
+        "PERMANENT": 346
+      },
+      "lladdrs": {
+        "2e:80:de:0c:b6:92": 346
+      },
+      "max_read_span_ns": 49534750,
+      "max_sample_start_gap_ns": 110109875,
+      "status": {
+        "complete": true,
+        "records": 346,
+        "limit": 75000,
+        "finished_ns": 243429788443
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.2",
+          "dev": "eth0",
+          "lladdr": "2e:80:de:0c:b6:92",
+          "used": 29,
+          "confirmed": 36,
+          "updated": 36,
+          "probes": 0,
+          "state": [
+            "PERMANENT"
+          ]
+        }
+      ]
+    }
+  },
+  "qdisc_summaries": {
+    "operator": {
+      "complete": true,
+      "records": 174,
+      "first": {
+        "begin_ns": 208253514678,
+        "end_ns": 208301488386,
+        "error": null,
+        "pass_counter": {
+          "packets": 0,
+          "bytes": 0,
+          "drops": 0
+        },
+        "filter_read_ns": [
+          208253518303,
+          208278671886
+        ],
+        "root": {
+          "kind": "netem",
+          "handle": "1:",
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0,
+          "overlimits": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        "root_read_ns": [
+          208280072803,
+          208301344345
+        ],
+        "sequence": 1
+      },
+      "last": {
+        "begin_ns": 243005602068,
+        "end_ns": 243054169735,
+        "error": null,
+        "pass_counter": {
+          "packets": 241,
+          "bytes": 27568,
+          "drops": 0
+        },
+        "filter_read_ns": [
+          243005610526,
+          243034628610
+        ],
+        "root": {
+          "kind": "netem",
+          "handle": "1:",
+          "packets": 1734,
+          "bytes": 157194,
+          "drops": 0,
+          "overlimits": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        "root_read_ns": [
+          243034723068,
+          243054103068
+        ],
+        "sequence": 174
+      },
+      "max_read_span_ns": 68819250,
+      "max_sample_start_gap_ns": 207554500,
+      "status": {
+        "complete": true,
+        "records": 174,
+        "limit": 37500,
+        "finished_ns": 243055160818
+      },
+      "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+    },
+    "robot": {
+      "complete": true,
+      "records": 173,
+      "first": {
+        "begin_ns": 208250772095,
+        "end_ns": 208300180011,
+        "error": null,
+        "pass_counter": {
+          "packets": 0,
+          "bytes": 0,
+          "drops": 0
+        },
+        "filter_read_ns": [
+          208250775845,
+          208276197345
+        ],
+        "root": {
+          "kind": "netem",
+          "handle": "1:",
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0,
+          "overlimits": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        "root_read_ns": [
+          208276968553,
+          208300023886
+        ],
+        "sequence": 1
+      },
+      "last": {
+        "begin_ns": 242810349443,
+        "end_ns": 242873337860,
+        "error": null,
+        "pass_counter": {
+          "packets": 251,
+          "bytes": 29627,
+          "drops": 0
+        },
+        "filter_read_ns": [
+          242810353110,
+          242854217276
+        ],
+        "root": {
+          "kind": "netem",
+          "handle": "1:",
+          "packets": 6382,
+          "bytes": 2969793,
+          "drops": 0,
+          "overlimits": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        "root_read_ns": [
+          242854327068,
+          242873275860
+        ],
+        "sequence": 173
+      },
+      "max_read_span_ns": 62988417,
+      "max_sample_start_gap_ns": 210192542,
+      "status": {
+        "complete": true,
+        "records": 173,
+        "limit": 37500,
+        "finished_ns": 242874124443
+      },
+      "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+    }
+  },
+  "source_window_neighbor_states": {
+    "operator": {
+      "PERMANENT": 150
+    },
+    "robot": {
+      "PERMANENT": 151
+    }
+  },
+  "gaps": [],
+  "active_control_events": [],
+  "provider": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "status": {
+        "attempted": 268,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 702667,
+      "max_sample_start_gap_ns": 114552292
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "status": {
+        "attempted": 19,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 650833,
+      "max_sample_start_gap_ns": 109372626
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "status": {
+        "attempted": 227,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 6708291,
+      "max_sample_start_gap_ns": 112510459
+    }
+  },
+  "command_diagnostics": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "attempted": 42,
+      "dropped": 0
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    }
+  },
+  "pcap": {
+    "operator": {
+      "records": 8113,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    },
+    "robot": {
+      "records": 8113,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    }
+  },
+  "monotonic_statuses": {
+    "operator": {
+      "complete": true,
+      "records": 8113,
+      "seen": 8113,
+      "submitted": 8113,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 209157713137,
+      "stop_before_ns": 242176017776,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "robot": {
+      "complete": true,
+      "records": 8113,
+      "seen": 8113,
+      "submitted": 8113,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 209153542054,
+      "stop_before_ns": 242349041609,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "measurement_window": {
+    "source_produced": 3791,
+    "observer_received": 3669,
+    "missing": 122,
+    "losses": {
+      "upstream_dds": 0,
+      "validation": 0,
+      "admission": 6,
+      "ingress_replaced": 0,
+      "ingress_flushed": 0,
+      "input_rejected": 0,
+      "outbound_replaced": 116,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 0,
+      "receiver_rejected": 0,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 0
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 15.161740383,
+    "source_actual_hz": {
+      "imu": 199.97704243766168,
+      "joints": 50.060216098346054
+    },
+    "published": 3669,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 2917,
+        "rounding": "up to 1ms",
+        "maximum_ms": 14,
+        "p50_ms": 9,
+        "p95_ms": 12,
+        "p99_ms": 13
+      },
+      "joint": {
+        "count": 752,
+        "rounding": "up to 1ms",
+        "maximum_ms": 29,
+        "p50_ms": 17,
+        "p95_ms": 26,
+        "p99_ms": 28
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "competitor_check": null,
+  "boot_id": "24d704e6-fbe4-4975-a252-18d00b17ff74"
+}

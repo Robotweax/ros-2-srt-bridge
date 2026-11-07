@@ -1428,3 +1428,25 @@ neighbor-file provenance. One ordered N5 pair found INCOMPLETE samples in all
 three dynamic gaps but a remaining 1.315-s positive-counter gap with PERMANENT
 entries. Historical ARP timing strengthens neighbor involvement without proving
 an exact cause. See evidence/m3-neighbor-contrast-2026-11-07/.
+
+### Experimental CONTROL tc/root stage observation
+
+`--control-qdisc-diagnostics` is opt-in N0/N5 only and rejects the injected
+classifier fault. It installs software UDP CONTROL-to-owned-peer u32/gact PASS
+rules at preference49150, refusing existing classifier hooks and checking root
+configuration unchanged. This executes a verdict and changes the software path;
+it is not passive AF_PACKET observation. Default invocations install no hook.
+Snapshots target200ms, cap37500 records, and retain separate filter/root read
+brackets, errors, final accounting, root identity/counter monotonicity and gauges.
+Removal/readback is verified. Root counters cover the whole interface; selector
+counts aggregate CONTROL UDP executions rather than authenticated SRT identities.
+
+A synthetic probe qualifies selected counts under forwarding, SENSOR-port
+negative control, root100%loss, N5 shaping and restoration. Its first root-kind
+transition failed and remains failed; the explicit owned-root transition fix
+was validated under a fresh committed revision. `m3_qdisc_gap_analysis.py` pairs
+only wholly inside reads with identity/other-flow checks. A post-hoc aggregate
+extension records wider native versus internal counter populations without
+per-packet attribution. The live N5 case had no >=1s gap and failed robot PCAP
+population reconciliation by2 records; native/TC completeness does not rescue
+that gate. See evidence/m3-qdisc-stage-2026-11-07/.

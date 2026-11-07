@@ -1,0 +1,998 @@
+{
+  "qualification": false,
+  "plan": "diagnostic-plan-r2.json",
+  "results": {
+    "smoke": {
+      "executed": true,
+      "source_commit": "f2010a1",
+      "source_hashes_match": true,
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T081604716690Z",
+      "original_status": "passed",
+      "neighbor_mode": "permanent",
+      "original_errors": {},
+      "analysis_error": null,
+      "journal_audit_error": null,
+      "command_summary": {
+        "attempts": 8,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 8,
+          "p50": 102.637583,
+          "p95": 257.983958,
+          "p99": 257.983958,
+          "maximum": 257.983958
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 8,
+            "p50": 102.637583,
+            "p95": 257.983958,
+            "p99": 257.983958,
+            "maximum": 257.983958
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 0,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 8,
+        "effects": 8
+      },
+      "neighbor_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 346,
+          "states": {
+            "PERMANENT": 346
+          },
+          "lladdrs": {
+            "ae:4f:c7:21:7f:27": 346
+          },
+          "max_read_span_ns": 38096625,
+          "max_sample_start_gap_ns": 110162875,
+          "status": {
+            "complete": true,
+            "records": 346,
+            "limit": 75000,
+            "finished_ns": 243429452735
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.3",
+              "dev": "eth0",
+              "lladdr": "ae:4f:c7:21:7f:27",
+              "used": 29,
+              "confirmed": 36,
+              "updated": 36,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        },
+        "robot": {
+          "complete": true,
+          "records": 346,
+          "states": {
+            "PERMANENT": 346
+          },
+          "lladdrs": {
+            "2e:80:de:0c:b6:92": 346
+          },
+          "max_read_span_ns": 49534750,
+          "max_sample_start_gap_ns": 110109875,
+          "status": {
+            "complete": true,
+            "records": 346,
+            "limit": 75000,
+            "finished_ns": 243429788443
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.2",
+              "dev": "eth0",
+              "lladdr": "2e:80:de:0c:b6:92",
+              "used": 29,
+              "confirmed": 36,
+              "updated": 36,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        }
+      },
+      "qdisc_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 174,
+          "first": {
+            "begin_ns": 208253514678,
+            "end_ns": 208301488386,
+            "error": null,
+            "pass_counter": {
+              "packets": 0,
+              "bytes": 0,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              208253518303,
+              208278671886
+            ],
+            "root": {
+              "kind": "netem",
+              "handle": "1:",
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              208280072803,
+              208301344345
+            ],
+            "sequence": 1
+          },
+          "last": {
+            "begin_ns": 243005602068,
+            "end_ns": 243054169735,
+            "error": null,
+            "pass_counter": {
+              "packets": 241,
+              "bytes": 27568,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              243005610526,
+              243034628610
+            ],
+            "root": {
+              "kind": "netem",
+              "handle": "1:",
+              "packets": 1734,
+              "bytes": 157194,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              243034723068,
+              243054103068
+            ],
+            "sequence": 174
+          },
+          "max_read_span_ns": 68819250,
+          "max_sample_start_gap_ns": 207554500,
+          "status": {
+            "complete": true,
+            "records": 174,
+            "limit": 37500,
+            "finished_ns": 243055160818
+          },
+          "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+        },
+        "robot": {
+          "complete": true,
+          "records": 173,
+          "first": {
+            "begin_ns": 208250772095,
+            "end_ns": 208300180011,
+            "error": null,
+            "pass_counter": {
+              "packets": 0,
+              "bytes": 0,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              208250775845,
+              208276197345
+            ],
+            "root": {
+              "kind": "netem",
+              "handle": "1:",
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              208276968553,
+              208300023886
+            ],
+            "sequence": 1
+          },
+          "last": {
+            "begin_ns": 242810349443,
+            "end_ns": 242873337860,
+            "error": null,
+            "pass_counter": {
+              "packets": 251,
+              "bytes": 29627,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              242810353110,
+              242854217276
+            ],
+            "root": {
+              "kind": "netem",
+              "handle": "1:",
+              "packets": 6382,
+              "bytes": 2969793,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              242854327068,
+              242873275860
+            ],
+            "sequence": 173
+          },
+          "max_read_span_ns": 62988417,
+          "max_sample_start_gap_ns": 210192542,
+          "status": {
+            "complete": true,
+            "records": 173,
+            "limit": 37500,
+            "finished_ns": 242874124443
+          },
+          "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+        }
+      },
+      "source_window_neighbor_states": {
+        "operator": {
+          "PERMANENT": 150
+        },
+        "robot": {
+          "PERMANENT": 151
+        }
+      },
+      "gaps": [],
+      "active_control_events": [],
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 268,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 702667,
+          "max_sample_start_gap_ns": 114552292
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 19,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 650833,
+          "max_sample_start_gap_ns": 109372626
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 227,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 6708291,
+          "max_sample_start_gap_ns": 112510459
+        }
+      },
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 42,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "pcap": {
+        "operator": {
+          "records": 8113,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true,
+          "tcpdump_reported_filtered_packets": 8113,
+          "tcpdump_reported_packets": 8113
+        },
+        "robot": {
+          "records": 8113,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true,
+          "tcpdump_reported_filtered_packets": 8113,
+          "tcpdump_reported_packets": 8113
+        }
+      },
+      "monotonic_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 8113,
+          "seen": 8113,
+          "submitted": 8113,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 209157713137,
+          "stop_before_ns": 242176017776,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 8113,
+          "seen": 8113,
+          "submitted": 8113,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 209153542054,
+          "stop_before_ns": 242349041609,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 3791,
+        "observer_received": 3669,
+        "missing": 122,
+        "losses": {
+          "upstream_dds": 0,
+          "validation": 0,
+          "admission": 6,
+          "ingress_replaced": 0,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 116,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 0,
+          "receiver_rejected": 0,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 0
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 15.161740383,
+        "source_actual_hz": {
+          "imu": 199.97704243766168,
+          "joints": 50.060216098346054
+        },
+        "published": 3669,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 2917,
+            "rounding": "up to 1ms",
+            "maximum_ms": 14,
+            "p50_ms": 9,
+            "p95_ms": 12,
+            "p99_ms": 13
+          },
+          "joint": {
+            "count": 752,
+            "rounding": "up to 1ms",
+            "maximum_ms": 29,
+            "p50_ms": 17,
+            "p95_ms": 26,
+            "p99_ms": 28
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": null,
+      "boot_id": "24d704e6-fbe4-4975-a252-18d00b17ff74",
+      "pcap_population_reconciled": true,
+      "capture_acceptance": "PCAP_population_reconciled",
+      "realtime_windows_withheld": false
+    },
+    "n5": {
+      "executed": true,
+      "source_commit": "83e9dd5",
+      "source_hashes_match": true,
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T081815055090Z",
+      "original_status": "passed",
+      "neighbor_mode": "permanent",
+      "original_errors": {},
+      "analysis_error": null,
+      "journal_audit_error": null,
+      "command_summary": {
+        "attempts": 129,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 129,
+          "p50": 1097.449917,
+          "p95": 2980.488002,
+          "p99": 3571.187502,
+          "maximum": 5253.886669
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 129,
+            "p50": 1097.449917,
+            "p95": 2980.488002,
+            "p99": 3571.187502,
+            "maximum": 5253.886669
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 21,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 129,
+        "effects": 129
+      },
+      "neighbor_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 3181,
+          "states": {
+            "PERMANENT": 3181
+          },
+          "lladdrs": {
+            "82:69:7f:8a:0c:04": 3181
+          },
+          "max_read_span_ns": 37409041,
+          "max_sample_start_gap_ns": 110180959,
+          "status": {
+            "complete": true,
+            "records": 3181,
+            "limit": 75000,
+            "finished_ns": 658521072883
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.3",
+              "dev": "eth0",
+              "lladdr": "82:69:7f:8a:0c:04",
+              "used": 319,
+              "confirmed": 2,
+              "updated": 321,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        },
+        "robot": {
+          "complete": true,
+          "records": 3181,
+          "states": {
+            "PERMANENT": 3181
+          },
+          "lladdrs": {
+            "72:75:18:a6:39:99": 3181
+          },
+          "max_read_span_ns": 34222375,
+          "max_sample_start_gap_ns": 110139500,
+          "status": {
+            "complete": true,
+            "records": 3181,
+            "limit": 75000,
+            "finished_ns": 658535719383
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.2",
+              "dev": "eth0",
+              "lladdr": "72:75:18:a6:39:99",
+              "used": 319,
+              "confirmed": 2,
+              "updated": 321,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        }
+      },
+      "qdisc_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 1595,
+          "first": {
+            "begin_ns": 338636934612,
+            "end_ns": 338697136195,
+            "error": null,
+            "pass_counter": {
+              "packets": 0,
+              "bytes": 0,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              338636938737,
+              338664418570
+            ],
+            "root": {
+              "kind": "tbf",
+              "handle": "1:",
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              338665188862,
+              338696991028
+            ],
+            "sequence": 1
+          },
+          "last": {
+            "begin_ns": 658139886424,
+            "end_ns": 658183803299,
+            "error": null,
+            "pass_counter": {
+              "packets": 6991,
+              "bytes": 819771,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              658139889633,
+              658162053424
+            ],
+            "root": {
+              "kind": "tbf",
+              "handle": "1:",
+              "packets": 59713,
+              "bytes": 4876131,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              658162163966,
+              658183732758
+            ],
+            "sequence": 1595
+          },
+          "max_read_span_ns": 60201583,
+          "max_sample_start_gap_ns": 210170125,
+          "status": {
+            "complete": true,
+            "records": 1595,
+            "limit": 37500,
+            "finished_ns": 658184865424
+          },
+          "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+        },
+        "robot": {
+          "complete": true,
+          "records": 1595,
+          "first": {
+            "begin_ns": 338640381237,
+            "end_ns": 338698839320,
+            "error": null,
+            "pass_counter": {
+              "packets": 0,
+              "bytes": 0,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              338640386695,
+              338664920362
+            ],
+            "root": {
+              "kind": "tbf",
+              "handle": "1:",
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0,
+              "overlimits": 0,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              338665705987,
+              338698706320
+            ],
+            "sequence": 1
+          },
+          "last": {
+            "begin_ns": 658139895633,
+            "end_ns": 658183361716,
+            "error": null,
+            "pass_counter": {
+              "packets": 14771,
+              "bytes": 2312083,
+              "drops": 0
+            },
+            "filter_read_ns": [
+              658139900341,
+              658161638174
+            ],
+            "root": {
+              "kind": "tbf",
+              "handle": "1:",
+              "packets": 50979,
+              "bytes": 19563046,
+              "drops": 92564,
+              "overlimits": 240658,
+              "backlog": 0,
+              "qlen": 0
+            },
+            "root_read_ns": [
+              658161737049,
+              658183280133
+            ],
+            "sequence": 1595
+          },
+          "max_read_span_ns": 63643833,
+          "max_sample_start_gap_ns": 210168916,
+          "status": {
+            "complete": true,
+            "records": 1595,
+            "limit": 37500,
+            "finished_ns": 658184550841
+          },
+          "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+        }
+      },
+      "source_window_neighbor_states": {
+        "operator": {
+          "PERMANENT": 2989
+        },
+        "robot": {
+          "PERMANENT": 2989
+        }
+      },
+      "gaps": [],
+      "active_control_events": [],
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 2995,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 507083,
+          "max_sample_start_gap_ns": 113738625
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 24,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 622166,
+          "max_sample_start_gap_ns": 108997167
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 3057,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 1609542,
+          "max_sample_start_gap_ns": 109810375
+        }
+      },
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 405,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "pcap": {
+        "operator": {
+          "records": 110671,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true,
+          "tcpdump_reported_filtered_packets": 110671,
+          "tcpdump_reported_packets": 110671
+        },
+        "robot": {
+          "records": 110671,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": false,
+          "tcpdump_reported_filtered_packets": 110673,
+          "tcpdump_reported_packets": 110671
+        }
+      },
+      "monotonic_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 110690,
+          "seen": 110690,
+          "submitted": 110690,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 339430246862,
+          "stop_before_ns": 657525087549,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 110690,
+          "seen": 110690,
+          "submitted": 110690,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 339426627945,
+          "stop_before_ns": 657693378382,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 75034,
+        "observer_received": 27873,
+        "missing": 47161,
+        "losses": {
+          "upstream_dds": 1,
+          "validation": 0,
+          "admission": 75,
+          "ingress_replaced": 1,
+          "ingress_flushed": 277,
+          "input_rejected": 2,
+          "outbound_replaced": 2380,
+          "outbound_expired": 0,
+          "outbound_flushed": 2,
+          "srt_accept_to_receiver_gap": 44096,
+          "receiver_rejected": 326,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 1,
+          "observer_dds": 0
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 300.138416803,
+        "source_actual_hz": {
+          "imu": 199.99772318183298,
+          "joints": 50.00026374447778
+        },
+        "published": 27873,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 23116,
+            "rounding": "up to 1ms",
+            "maximum_ms": 173,
+            "p50_ms": 107,
+            "p95_ms": 134,
+            "p99_ms": 146
+          },
+          "joint": {
+            "count": 4757,
+            "rounding": "up to 1ms",
+            "maximum_ms": 178,
+            "p50_ms": 114,
+            "p95_ms": 142,
+            "p99_ms": 155
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": {
+        "protocol": "UDP",
+        "target_bitrate": 128000,
+        "block_bytes": 1024,
+        "bytes": 5065728,
+        "seconds": 316.547185,
+        "offered_bits_per_second": 128024.59134172997,
+        "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+        "alive_poll_checks": 1233
+      },
+      "boot_id": "24d704e6-fbe4-4975-a252-18d00b17ff74",
+      "pcap_population_reconciled": false,
+      "capture_acceptance": "failed_PCAP_population_gate",
+      "realtime_windows_withheld": true
+    }
+  },
+  "measurement_executions": 1,
+  "original_failed_plan_retained": true,
+  "limits": [
+    "Synthetic stage qualifier is distinct from live SRT performance/acceptance",
+    "PASS classifier and polling add processing/work; no passive/observer-free equivalence",
+    "Permanent remains separate L2 candidate, not default",
+    "Root counters cover whole interface, selector aggregates UDP CONTROL not authenticated socket/per-packet identity",
+    "No unique queue/drop, physical delivery/realtime, security parity, performance or full M3 acceptance proof",
+    "Earlier failed cohorts/UNKNOWNs unchanged"
+  ],
+  "qualified_probe": {
+    "source_commit": "f2010a1",
+    "stage": "selected tc pass action observes sends before tested root loss; AF_PACKET tap after tested root loss",
+    "phases": [
+      {
+        "label": "baseline",
+        "sent": 16,
+        "sender_tap": 16,
+        "receiver_tap": 16,
+        "received": 16,
+        "selected_counter_delta": 16
+      },
+      {
+        "label": "sensor-negative",
+        "sent": 4,
+        "sender_tap": 4,
+        "receiver_tap": 4,
+        "received": 4,
+        "selected_counter_delta": 0
+      },
+      {
+        "label": "root-drop",
+        "sent": 16,
+        "sender_tap": 0,
+        "receiver_tap": 0,
+        "received": 0,
+        "selected_counter_delta": 16
+      },
+      {
+        "label": "shaped",
+        "sent": 16,
+        "sender_tap": 16,
+        "receiver_tap": 16,
+        "received": 16,
+        "selected_counter_delta": 16
+      },
+      {
+        "label": "restored",
+        "sent": 1,
+        "sender_tap": 1,
+        "receiver_tap": 1,
+        "received": 1,
+        "selected_counter_delta": 1
+      }
+    ]
+  },
+  "host_tests": {
+    "original_probe": 144,
+    "root_kind_fix_and_r2_probe": 145,
+    "gap_analysis_and_N5": 148,
+    "post_hoc_aggregate_analysis": 149
+  },
+  "N5_capture_acceptance": "failed robot filter/file population mismatch:110673 versus110671; native/counter diagnostics remain independently complete, no rescue/retry",
+  "post_hoc_aggregate": {
+    "roles": {
+      "operator": {
+        "native_sha256": "63ffd282e3ed97911f299f70da604eac161b8fd4c996a64d4a8e17d3fa9aede2",
+        "native_coverage_ns": [
+          339430246862,
+          657525087549
+        ],
+        "counter_first_read_ns": [
+          339438207862,
+          339487369862
+        ],
+        "counter_last_read_ns": [
+          657336627341,
+          657385936591
+        ],
+        "selected_pass_execution_delta": 6991,
+        "selected_native_out_observations_over_entire_capture": 6991,
+        "last_root_snapshot": {
+          "kind": "tbf",
+          "handle": "1:",
+          "packets": 59713,
+          "bytes": 4876131,
+          "drops": 0,
+          "overlimits": 0,
+          "backlog": 0,
+          "qlen": 0
+        }
+      },
+      "robot": {
+        "native_sha256": "b7892ec97ea46080cd0a97f40ebad0ab533914f5a40d59e5cd16aa90ecd1bba6",
+        "native_coverage_ns": [
+          339426627945,
+          657693378382
+        ],
+        "counter_first_read_ns": [
+          339441358279,
+          339497603570
+        ],
+        "counter_last_read_ns": [
+          657537576007,
+          657584026466
+        ],
+        "selected_pass_execution_delta": 14771,
+        "selected_native_out_observations_over_entire_capture": 5122,
+        "last_root_snapshot": {
+          "kind": "tbf",
+          "handle": "1:",
+          "packets": 50979,
+          "bytes": 19563046,
+          "drops": 92564,
+          "overlimits": 240658,
+          "backlog": 0,
+          "qlen": 0
+        }
+      }
+    },
+    "post_hoc": true,
+    "scope": "counter endpoints wholly inside native coverage; tap count uses wider whole capture. Counts are aggregate classifier executions versus skb observations, not exact packet pairing or physical loss. Possible in-flight/edge/requeue semantics and whole-interface root metrics prevent unique per-packet drop attribution. No >=1s gap or historical cause localization; failed PCAP gate unchanged."
+  }
+}
