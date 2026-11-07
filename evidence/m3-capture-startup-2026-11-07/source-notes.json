@@ -1,0 +1,6 @@
+{
+  "primary_source": "https://github.com/the-tcpdump-group/libpcap/blob/libpcap-1.10.4/pcap-linux.c",
+  "observations": ["pcap_setfilter_linux retains temporary user-space filtering for ring blocks accepted under the prior kernel filter", "pcap_stats_linux accumulates kernel accepted packet statistics across reads, including queued unread packets", "set_kernel_filter drains previously queued socket packets during filter replacement"],
+  "source_version_limit": "upstream tag is explanatory source, not asserted byte-identical to installed Ubuntu package patches; probes exercise installed libpcap1.10.4-4.1ubuntu3.1",
+  "historical_limit": "known class reproduction cannot uniquely assign cause of the original8/10 or earlier two-record mismatch; no correction/subtraction/reconstruction of old captures"
+}
