@@ -19,6 +19,7 @@ from m3_monotonic_capture import start, records, decode, feature_snapshot
 from m3_dds_result_timeline import common_clock
 from m3_accounting import summarize_window
 import m3_sample_trace
+from m3_packet_capture import artifact_footer
 
 ROOT=Path(__file__).resolve().parents[1]
 # Finite fixture only: CONTROL/probe traffic stays live during the source fence.
@@ -121,8 +122,8 @@ def validate_capture_populations(path, addresses, identity, losses, phase):
         status,pairs=captured(path/(role+'.mono'),address)
         keys=Counter(frame_key(r['prefix'],flow) for r,h in pairs if frame_key(r['prefix'],flow) is not None)
         count,pcaps=pcap_count(path/(role+'.pcap'),flow)
-        footer=validate_tcpdump_footer((path/(role+'-capture.log')).read_text(),count)
-        if keys!=expected or pcaps!=expected or not footer['tcpdump_population_reconciled']:
+        footer=artifact_footer(path,role,count)
+        if keys!=expected or pcaps!=expected or not footer['population_reconciled']:
             raise ValueError('exact '+phase+' DATA/parity population differs')
         result[role]=dict(status=status,footer=footer,known_source_parity_records=sum(keys.values()))
     return result
@@ -230,8 +231,8 @@ def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0)
     for role,address in addresses.items():
         path=run/'measurement';status,pairs=captured(path/(role+'.mono'),address)
         actual=Counter(frame_key(r['prefix'],binding) for r,h in pairs if frame_key(r['prefix'],binding) is not None)
-        total,pcaps=pcap_count(path/(role+'.pcap'),binding);footer=validate_tcpdump_footer((path/(role+'-capture.log')).read_text(),total)
-        if actual!=pcaps or actual!=expected or not footer['tcpdump_population_reconciled']:
+        total,pcaps=pcap_count(path/(role+'.pcap'),binding);footer=artifact_footer(path,role,total)
+        if actual!=pcaps or actual!=expected or not footer['population_reconciled']:
             raise ValueError('SDK/native/PCAP source/parity identities differ')
         captures[role]=dict(status=status,footer=footer,source_records=len(mapped)-losses,parity_records=len(sdk)//4)
     return dict(sender_trace=trace,receiver_trace=remote,mapped=mapped,busy_source_ids=sorted(rejected),selected_sources=selected,expected_observed_ids=expected_ids,captures=captures,
@@ -239,28 +240,57 @@ def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0)
                 qualification=False,scope='finite traced ROS case; actual SDK identity to selected source and typed publication, with independent BUSY retained; not replacement baseline, physical delivery or full N3/M3 acceptance')
 
 
-def capture_start(lab, path):
-    path.mkdir(); lab.run=path; inside='/workspace/'+str(path.relative_to(ROOT)); result=[]
-    for role,name in lab.containers.items():
-        log=(path/(role+'-capture.log')).open('w')
-        result.append((subprocess.Popen(['docker','exec',name]+pcap_options()+['-w',inside+'/'+role+'.pcap',PCAP_FILTER],stdout=log,stderr=subprocess.STDOUT),log))
-    start(path,inside,lab,result)
-    deadline=time.monotonic()+5
-    while not all('listening on eth0' in (path/(r+'-capture.log')).read_text() for r in lab.containers):
-        if any(p.poll() is not None for p,_ in result) or time.monotonic()>deadline:
-            raise ValueError('capture readiness failed')
-        time.sleep(.05)
-    return result
+def capture_start(lab,path,backend='tcpdump'):
+    if backend not in ('tcpdump','packet-socket'):raise ValueError('unknown capture backend')
+    path.mkdir();lab.run=path;inside='/workspace/'+str(path.relative_to(ROOT));result=[]
+    try:
+        if backend=='packet-socket':start(path,inside,lab,result)
+        for role,name in lab.containers.items():
+            log=(path/(role+'-capture.log')).open('w')
+            argv=pcap_options()+['-w',inside+'/'+role+'.pcap',PCAP_FILTER] if backend=='tcpdump' else [
+                'python3','tools/m3_packet_capture.py','--output',inside+'/'+role+'.pcap',
+                '--ready',inside+'/'+role+'-packet-ready.json','--stop',inside+'/'+role+'-packet-stop',
+                '--status',inside+'/'+role+'-packet-status.json','--filter',PCAP_FILTER]
+            result.append((subprocess.Popen(['docker','exec',name]+argv,stdout=log,stderr=subprocess.STDOUT),log))
+        if backend=='tcpdump':start(path,inside,lab,result)
+        deadline=time.monotonic()+5
+        def ready():
+            return all((path/(r+'-packet-ready.json')).exists() for r in lab.containers) if backend=='packet-socket' else all('listening on eth0' in (path/(r+'-capture.log')).read_text() for r in lab.containers)
+        while not ready():
+            if any(p.poll() is not None for p,_ in result) or time.monotonic()>deadline:raise ValueError('capture readiness failed')
+            time.sleep(.05)
+        return result
+    except Exception:
+        # Startup failures also retain handles for bounded owned cleanup.
+        for role in lab.containers:(path/(role+'-packet-stop')).touch()
+        try:stop_captures(lab)
+        except Exception:pass
+        for p,log in result:
+            try:p.wait(timeout=6)
+            except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=5)
+            log.close()
+        raise
 
 
-def capture_stop(lab, processes):
-    # A failed drain has already attempted SIGINT. Never overwrite/recheck its
-    # immutable result on cleanup; the original exception still fails the case.
-    stop_captures(lab,drain_check=not (lab.run/'capture-drain.json').exists())
+def capture_stop(lab,processes):
+    packet=all((lab.run/(r+'-packet-ready.json')).exists() for r in lab.containers)
+    errors=[]
+    if packet:
+        for role in lab.containers:(lab.run/(role+'-packet-stop')).touch()
+        # Packet mode starts the two native observers first. Keep them attached
+        # until both PCAP sockets have closed, preserving coverage of that phase.
+        for p,log in processes[2:]:
+            try:
+                if p.wait(timeout=7)!=0:errors.append('packet recorder failed')
+            except subprocess.TimeoutExpired:errors.append('packet recorder stop timeout')
+    try:stop_captures(lab,drain_check=not packet and not (lab.run/'capture-drain.json').exists())
+    except Exception as error:errors.append(str(error))
     for p,log in processes:
-        if p.wait(timeout=5)!=0:
-            raise ValueError('capture exited unsuccessfully')
-        log.close()
+        try:
+            if p.wait(timeout=5)!=0:errors.append('capture exited unsuccessfully')
+        except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=5);errors.append('capture exit timeout')
+        if not log.closed:log.close()
+    if errors:raise ValueError('; '.join(errors))
 
 
 def wait_files(run,names,peers):
@@ -271,15 +301,15 @@ def wait_files(run,names,peers):
         time.sleep(.05)
 
 
-def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False):
+def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_backend='tcpdump'):
     traced=trace_diagnostic or trace_loss
     run.mkdir(); inside='/workspace/'+str(run.relative_to(ROOT));lab=NetworkLab(ROOT,run,image,monotonic_capture=True)
     captures=[];peers=[];fault=None;key=run/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
+    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,capture_backend=capture_backend,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
     try:
         lab.start(key);result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         configure(lab,'permanent');lab.apply('N0',1701);result['features_before']=feature_snapshot(lab,'features-before')
-        captures=capture_start(lab,run/'identity')
+        captures=capture_start(lab,run/'identity',capture_backend)
         for role,name in lab.containers.items():
             log=(run/(role+'-scenario.log')).open('w')
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_sensor_scenario.py --role '+role+' --run '+inside+' --peer '+lab.addresses['operator']+(' --sample-diagnostics' if traced else '')
@@ -288,7 +318,7 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False):
         capture_stop(lab,captures);captures=[]
         identity=identity_capture(run/'identity',lab.addresses);result['identity']=identity
         result['identity_captures']=validate_capture_populations(run/'identity',lab.addresses,identity,0,'identity')
-        captures=capture_start(lab,run/'measurement')
+        captures=capture_start(lab,run/'measurement',capture_backend)
         if losses:
             binding=identity['binding']; selection=Selection(identity['initial_sequence'],1,(3,) if losses==1 else (2,3),(8,) if losses==1 else (7,8),binding['socket_id'],binding['source_port'],binding['destination_port'])
             result['selection']=asdict(selection);fault=install(lab,selection);result['fault']=fault
@@ -333,10 +363,12 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');a=p.parse_args();run=a.out.resolve();run.mkdir(parents=True,exist_ok=False)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');p.add_argument('--capture-backend',choices=('tcpdump','packet-socket'),default='tcpdump');p.add_argument('--trace-loss-count',type=int,choices=(1,2),help='explicit separately planned traced fault only');a=p.parse_args();
+    if a.trace_loss_count is not None and not a.trace_losses:p.error('--trace-loss-count requires --trace-losses')
+    run=a.out.resolve();run.mkdir(parents=True,exist_ok=False)
     image=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64','ros2-srt-m3:20261105'],text=True))[0]['RepoDigests'][0];result=dict(status='running',image=image,cases=[])
     try:
-        for losses in ((0,) if a.trace_diagnostic else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses))
+        for losses in ((0,) if a.trace_diagnostic else (a.trace_loss_count,) if a.trace_loss_count is not None else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses,a.capture_backend))
         result['status']='passed'
     except Exception as error:result.update(status='failed',error=str(error));raise
     finally:write(run/'result.json',result)

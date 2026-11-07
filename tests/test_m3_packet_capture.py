@@ -35,3 +35,28 @@ class PacketCaptureTests(unittest.TestCase):
         for snapshots in ([],[dict(records=16,kernel_packets=16,kernel_drops=0)],[dict(records=15,kernel_packets=16,kernel_drops=0),dict(records=16,kernel_packets=16,kernel_drops=0)]):
             s=status();s['drain_snapshots']=snapshots
             with self.assertRaises(ValueError):validate_status(s,16)
+
+class ArtifactFooterTests(unittest.TestCase):
+    def test_packet_file_mutation_or_missing_status_is_not_rescued(self):
+        import hashlib,json,tempfile
+        from m3_packet_capture import artifact_footer
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);file=run/'robot.pcap';file.write_bytes(b'known immutable fixture bytes')
+            (run/'robot-packet-ready.json').write_text('{}')
+            s=status();s['file_bytes']=file.stat().st_size;s['file_sha256']=hashlib.sha256(file.read_bytes()).hexdigest()
+            (run/'robot-packet-status.json').write_text(json.dumps(s))
+            self.assertTrue(artifact_footer(run,'robot',16)['population_reconciled'])
+            file.write_bytes(b'mutated')
+            with self.assertRaises(ValueError):artifact_footer(run,'robot',16)
+            (run/'robot-packet-status.json').unlink()
+            with self.assertRaises(FileNotFoundError):artifact_footer(run,'robot',16)
+
+    def test_tcpdump_still_uses_standalone_footer_and_equality(self):
+        import tempfile
+        from m3_packet_capture import artifact_footer
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);log=run/'robot-capture.log'
+            log.write_text('8 packets captured\n10 packets received by filter\n0 packets dropped by kernel\n')
+            result=artifact_footer(run,'robot',8)
+            self.assertEqual(result['capture_backend'],'tcpdump')
+            self.assertFalse(result['population_reconciled'])

@@ -87,6 +87,19 @@ def validate_status(status,records):
     return dict(capture_backend='filtered_packet_socket',captured_records=records,filtered_records=status['kernel_packets'],kernel_drops=0,file_integrity_valid=True,population_reconciled=True)
 
 
+def artifact_footer(run,role,records):
+    run=Path(run);status_path=run/(role+'-packet-status.json')
+    if (run/(role+'-packet-ready.json')).exists():
+        status=json.loads(status_path.read_text());result=validate_status(status,records)
+        path=run/(role+'.pcap')
+        if records<=0 or status.get('file_bytes')!=path.stat().st_size or status.get('file_sha256')!=hashlib.sha256(path.read_bytes()).hexdigest():
+            raise ValueError('packet capture file changed or empty')
+        return result
+    from m3_capture import validate_tcpdump_footer
+    result=validate_tcpdump_footer((run/(role+'-capture.log')).read_text(),records)
+    return dict(result,capture_backend='tcpdump',population_reconciled=result['tcpdump_population_reconciled'])
+
+
 def capture(args):
     if sys.platform!='linux' or struct.calcsize('l')!=8:raise ValueError('requires pinned Linux64 fixture')
     paths=[Path(getattr(args,k)) for k in ('output','ready','stop','status')]
