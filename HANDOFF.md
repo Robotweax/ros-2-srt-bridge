@@ -2217,3 +2217,37 @@ Defaultfix. Volle M3-Abnahme offen, PR #2 bleibt Draft.
 Arming gewinnen, danach geplante ein/zwei DATA-Verluste mit authentisierter Parität,
 Receiverrepair/-reject und bestehenden Messguards prüfen. N4-Commandphasenbarrieren
 weiter offen; M3 nicht abgenommen, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: Authentisierte SENSOR-FEC finite Providerfixture
+
+- Neue isolierte tools/m3_sensor_peer/main.cpp gegen unverändertes installiertes
+  Providerarchiv gelinkt; öffentliche API, keine Bridge-/ROS-/SDK-Sourceänderung.
+  SENSOR/GCM/32Byte/EnforcedEncryption/SESSIONAUTH/secured keys/FEC4 arqnever
+  readbackgeprüft. Vor DATA SRTO_ISN an beiden Seiten gleich; accepted Handle ist
+  beim Pin protocol_socket_id (socket_registry.cpp), nicht allgemein portabel.
+  Source-/Message-/Socket-Identitäten und Origin per API plus Captures geprüft.
+- Vorab Code/Plan94f4ade,166 Hosttests: genau geordnete Baseline/1Loss/2Loss.
+  Baseline16Deliveries. 1Loss:15Source+4Parity je Tap, alle16Payloads vollständig,
+  genau1Providerrepair, keine Retransmits/Undecryptable. PCAP69/66jeEndpoint,
+  File/Captured/Filter gleich; Native vollständig, bounded Drain/Features passen.
+- Ursprüngliche2Loss bleibt FAILED:14Deliveries wie erwartet, aber geplanter
+  pktRcvFilterLossTotal=2 war falsch, tatsächlich0. Source: RowFecDecoder::expire_row
+  meldet irrecoverableRanges nur für arqonreq, SENSOR arqnever liefert keinen
+  generischen Unrecoverablecounter. Originalmanifest/Gate nicht umgeschrieben;
+  vor Drain/Analysepfad abgebrochen, daher keine Drainqualification dieses Falls.
+- Separat vorab Revisionplan/Code150eaf6,167Hosttests; genau1 frische2Lossfixture
+  .local/m3-sensor-live-r2/2:14Deliveries, IDs6/7 am endlichen Cutoff absent,
+  zweiTCdrops je1, 14Source+4Parity jeTap, keineRepair/Retx/Undecryptable,
+  FilterLossReport0 separat von MissingIDs. PCAP64File/Captured/FilterjeEndpoint,
+  Native/PCAP-Identitäten exakt, zeroCaptureverluste, stableDrain, Features gleich,
+  Filterremove geprüft. Kein unendlicher Nonarrival-/ROS-/Age-/Physicalclaim.
+- Original .local/m3-sensor-live/{0,1,2} bleibt unverändert. Evidenz unter
+  evidence/m3-sensor-live-2026-11-07/ mit Plänen/Originalfailed/Revision/Readbacks/
+  JournallosenPayloadresultaten/Counterlogs/Capturelogs/Provenienz/Rohhashes.
+  Provider-/Fixture-/Observer-Inventar vor/nach gleich. Keine frischen vollen
+  SDK-/ROS-/M2-Tests behauptet; Payloadcaptures/Secrets/Inspect-/Envdumps lokal.
+
+**Weiter:** Vertrauenswürdige Verbindungsidentität und Selector in ROS-N3-Fälle
+mit Windowaccounting, Publish-/Alters-/Orderingguards übernehmen. run_m3 N3 bleibt
+noch gesperrt. N4-Commandphasen, bisherige N5/Capturefehler und volle M3-Gates offen;
+PR #2 Draft, Intrinsic/M4 unverändert.

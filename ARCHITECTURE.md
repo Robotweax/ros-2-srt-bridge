@@ -1491,3 +1491,31 @@ send), with zero capture losses and unchanged features. These are synthetic publ
 headers, not authenticated FEC recovery or ROS qualification. All 163 host tests
 pass. Evidence: `evidence/m3-sensor-selector-2026-11-07/`. Trusted live row identity
 and actual one/two-loss repair/rejection qualification remain next; N3/M3 stay open.
+
+## Installed-provider SENSOR FEC cases (2026-11-07)
+
+A separate finite fixture now uses public installed-provider APIs to read the
+negotiated initial sequence before DATA and arm the explicit same-row selector.
+The pinned provider maps the accepted socket handle to its wire destination ID;
+returned message numbers and captured handshake/source/parity headers cross-check
+those identities. Sixteen complete distinct payloads traverse negotiated GCM /
+32-byte keys / enforced encryption / SESSIONAUTH / secured keys / SENSOR FEC4,
+with no bridge/SDK/ROS runtime-source changes. This provider-specific identity
+mapping must not be generalized to other SRT implementations.
+
+Original baseline and one-loss cases pass: 16/16 deliveries, one-loss source tap
+15 plus four parity packets and exactly one provider repair. Original two-loss
+case fails its planned counter gate and remains failed. The plan incorrectly
+expected a generic irrecoverable-loss count: this decoder emits loss ranges only
+for arq:onreq, while SENSOR uses arq:never. A separately planned fresh two-loss
+case with corrected counter semantics passes: two exact drops, 14 source plus four
+parity observations, 14 deliveries, IDs6/7 absent at the finite cutoff, zero repair,
+zero filter-loss reports. Neither missing IDs nor that report is relabeled as a
+generic irrecoverable-loss metric. No source retransmission or undecryptable packet
+is observed. Accepted cases reconcile exact native/PCAP identities and standalone
+final footers, with stable bounded drain, zero capture losses and unchanged features.
+
+Evidence `evidence/m3-sensor-live-2026-11-07/` retains both original failure and
+prospective revision. Host tests: 166 original / 167 revision. ROS publication,
+ordering/age authorization and window accounting under N3 remain unqualified;
+run_m3 N3 is still blocked, and N4 phases/full M3 remain open.

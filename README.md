@@ -902,3 +902,5 @@ live counters before shutdown while preserving the final capture gate. A separat
 PCAP; it does not repair historical failures or complete M3. [Evidence and limits](evidence/m3-drain-controlled-loss-2026-11-07/README.md).
 
 The explicit N3 source selector has passed [two finite synthetic probes](evidence/m3-sensor-selector-2026-11-07/README.md), including parity sharing a selected source sequence. Authenticated FEC recovery and ROS N3 qualification remain pending; PR #2 stays draft.
+
+[Finite authenticated SENSOR FEC cases](evidence/m3-sensor-live-2026-11-07/README.md) now demonstrate one-packet repair and a separately planned two-loss observation. The original two-loss counter-gate failure is retained; ROS N3 publication/age qualification remains open.

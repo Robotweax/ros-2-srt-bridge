@@ -51,6 +51,31 @@
         "host_tests": 163,
         "default_runner_enabled": false,
         "next": "trusted live sender initial sequence/row/message/socket identity before arming; actual one/two-loss repair/rejection cases"
+      },
+      "transport_followup": {
+        "status": "finite installed-provider baseline/one-loss pass; original two-loss counter gate failed and retained; separately planned two-loss revision passes",
+        "evidence": "evidence/m3-sensor-live-2026-11-07/README.md",
+        "one_loss": {
+          "delivered": 16,
+          "source_observed": 15,
+          "parity_observed": 4,
+          "provider_repaired": 1
+        },
+        "two_loss_revision": {
+          "delivered": 14,
+          "missing_ids_at_cutoff": [
+            6,
+            7
+          ],
+          "source_observed": 14,
+          "parity_observed": 4,
+          "provider_repaired": 0,
+          "filter_loss_reported": 0
+        },
+        "counter_contract": "SENSOR arqnever does not report generic irrecoverable-loss counts; missing IDs kept separate",
+        "host_tests": 167,
+        "ROS_publication_age_accounting_qualified": false,
+        "default_runner_enabled": false
       }
     },
     "N4": {
@@ -88,7 +113,7 @@
   ],
   "pending_gates": [
     "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
-    "N3 deterministic source-DATA fault selector",
+    "N3 ROS publication/age/accounting with trusted connection identity and validated source-DATA selector",
     "N4 admission/dispatch/result-commit barriers",
     "complete three-seed full-duration comparison matrix",
     "matched-window CPU and wire-byte measurements; controlled resource comparison",
