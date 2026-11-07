@@ -1,0 +1,493 @@
+{
+  "known_child_loss_signature_observed": true,
+  "fault": {
+    "role": "robot",
+    "seed": 1701,
+    "install": {
+      "begin_ns": 106614757214,
+      "end_ns": 106636800214,
+      "argv": [
+        "tc",
+        "qdisc",
+        "change",
+        "dev",
+        "eth0",
+        "parent",
+        "1:1",
+        "handle",
+        "10:",
+        "netem",
+        "limit",
+        "16",
+        "loss",
+        "random",
+        "100%",
+        "seed",
+        "1701"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "before": {
+      "root_config": {
+        "kind": "tbf",
+        "handle": "1:",
+        "options": {
+          "rate": 64000,
+          "burst": 4096,
+          "lat": 448000
+        }
+      },
+      "child": {
+        "kind": "netem",
+        "handle": "10:",
+        "parent": "1:1",
+        "options": {
+          "limit": 16,
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 1542012,
+        "packets": 3753,
+        "drops": 6218,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 7206,
+        "qlen": 16
+      }
+    },
+    "active": {
+      "root_config": {
+        "kind": "tbf",
+        "handle": "1:",
+        "options": {
+          "rate": 64000,
+          "burst": 4096,
+          "lat": 448000
+        }
+      },
+      "child": {
+        "kind": "netem",
+        "handle": "10:",
+        "parent": "1:1",
+        "options": {
+          "limit": 16,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 1559172,
+        "packets": 3792,
+        "drops": 6321,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 3680,
+        "qlen": 8
+      }
+    },
+    "restored": true,
+    "scope": "known whole-endpoint child loss, not command-phase/N4 qualification; root/classifier identity retained",
+    "final_active": {
+      "root_config": {
+        "kind": "tbf",
+        "handle": "1:",
+        "options": {
+          "rate": 64000,
+          "burst": 4096,
+          "lat": 448000
+        }
+      },
+      "child": {
+        "kind": "netem",
+        "handle": "10:",
+        "parent": "1:1",
+        "options": {
+          "limit": 16,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 1562414,
+        "packets": 3799,
+        "drops": 23680,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    },
+    "remove": {
+      "begin_ns": 109006879715,
+      "end_ns": 109029096340,
+      "argv": [
+        "tc",
+        "qdisc",
+        "change",
+        "dev",
+        "eth0",
+        "parent",
+        "1:1",
+        "handle",
+        "10:",
+        "netem",
+        "limit",
+        "16",
+        "loss",
+        "random",
+        "0%",
+        "seed",
+        "1701"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "after": {
+      "root_config": {
+        "kind": "tbf",
+        "handle": "1:",
+        "options": {
+          "rate": 64000,
+          "burst": 4096,
+          "lat": 448000
+        }
+      },
+      "child": {
+        "kind": "netem",
+        "handle": "10:",
+        "parent": "1:1",
+        "options": {
+          "limit": 16,
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 1571604,
+        "packets": 3884,
+        "drops": 25520,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 3881,
+        "qlen": 15
+      }
+    },
+    "guaranteed_active_ns": [
+      106636800214,
+      109006879715
+    ]
+  },
+  "settled_ns": [
+    107136800214,
+    108906879715
+  ],
+  "qdisc": {
+    "totals": {
+      "pass_packets": 217,
+      "pass_bytes": 42671,
+      "root_packets": 0,
+      "root_bytes": 0,
+      "root_drops": 15563,
+      "root_overlimits": 0
+    },
+    "pairs": [
+      {
+        "previous_read_ns": [
+          107197855423,
+          107243132673
+        ],
+        "current_read_ns": [
+          107398389256,
+          107442397048
+        ],
+        "delta": {
+          "pass_packets": 23,
+          "pass_bytes": 4448,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 1716,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          107398389256,
+          107442397048
+        ],
+        "current_read_ns": [
+          107598602840,
+          107643024215
+        ],
+        "delta": {
+          "pass_packets": 22,
+          "pass_bytes": 4298,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 1603,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          107598602840,
+          107643024215
+        ],
+        "current_read_ns": [
+          107799317423,
+          107844012257
+        ],
+        "delta": {
+          "pass_packets": 26,
+          "pass_bytes": 4984,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 2442,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          107799317423,
+          107844012257
+        ],
+        "current_read_ns": [
+          107999940132,
+          108044763173
+        ],
+        "delta": {
+          "pass_packets": 25,
+          "pass_bytes": 4973,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 1423,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          107999940132,
+          108044763173
+        ],
+        "current_read_ns": [
+          108200080632,
+          108244900423
+        ],
+        "delta": {
+          "pass_packets": 29,
+          "pass_bytes": 5520,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 2156,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          108200080632,
+          108244900423
+        ],
+        "current_read_ns": [
+          108400505965,
+          108445601090
+        ],
+        "delta": {
+          "pass_packets": 30,
+          "pass_bytes": 6155,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 1906,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          108400505965,
+          108445601090
+        ],
+        "current_read_ns": [
+          108600852674,
+          108646270840
+        ],
+        "delta": {
+          "pass_packets": 27,
+          "pass_bytes": 5152,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 1718,
+          "root_overlimits": 0
+        }
+      },
+      {
+        "previous_read_ns": [
+          108600852674,
+          108646270840
+        ],
+        "current_read_ns": [
+          108801092174,
+          108848817799
+        ],
+        "delta": {
+          "pass_packets": 35,
+          "pass_bytes": 7141,
+          "root_packets": 0,
+          "root_bytes": 0,
+          "root_drops": 2599,
+          "root_overlimits": 0
+        }
+      }
+    ],
+    "first": {
+      "begin_ns": 107197855423,
+      "end_ns": 107243132673,
+      "error": null,
+      "pass_counter": {
+        "packets": 1122,
+        "bytes": 181290,
+        "drops": 0
+      },
+      "filter_read_ns": [
+        107197860423,
+        107219829006
+      ],
+      "root": {
+        "kind": "tbf",
+        "handle": "1:",
+        "packets": 3799,
+        "bytes": 1562414,
+        "drops": 8154,
+        "overlimits": 16680,
+        "backlog": 0,
+        "qlen": 0
+      },
+      "root_read_ns": [
+        107219927631,
+        107243039840
+      ],
+      "sequence": 171
+    },
+    "last": {
+      "begin_ns": 108801092174,
+      "end_ns": 108848817799,
+      "error": null,
+      "pass_counter": {
+        "packets": 1339,
+        "bytes": 223961,
+        "drops": 0
+      },
+      "filter_read_ns": [
+        108801097424,
+        108824716924
+      ],
+      "root": {
+        "kind": "tbf",
+        "handle": "1:",
+        "packets": 3799,
+        "bytes": 1562414,
+        "drops": 23717,
+        "overlimits": 16680,
+        "backlog": 0,
+        "qlen": 0
+      },
+      "root_read_ns": [
+        108824831382,
+        108848713090
+      ],
+      "sequence": 179
+    },
+    "max_root_backlog_bytes": 0,
+    "max_root_qlen": 0
+  },
+  "captures": {
+    "robot": {
+      "outgoing_control_in_settled_window": 0,
+      "outgoing_control_after_restore": 106
+    },
+    "operator": {
+      "outgoing_control_in_settled_window": 167,
+      "outgoing_control_after_restore": 114
+    }
+  },
+  "qdisc_samples_sha256": "dfac64c7929b642b1cffbaab8f47b928c0263b1105bb892946527e6e058f0767",
+  "observer_summary": {
+    "complete": true,
+    "records": 404,
+    "first": {
+      "begin_ns": 73095221741,
+      "end_ns": 73146128783,
+      "error": null,
+      "pass_counter": {
+        "packets": 0,
+        "bytes": 0,
+        "drops": 0
+      },
+      "filter_read_ns": [
+        73095227033,
+        73119265408
+      ],
+      "root": {
+        "kind": "tbf",
+        "handle": "1:",
+        "packets": 1,
+        "bytes": 42,
+        "drops": 0,
+        "overlimits": 0,
+        "backlog": 0,
+        "qlen": 0
+      },
+      "root_read_ns": [
+        73120093283,
+        73145950116
+      ],
+      "sequence": 1
+    },
+    "last": {
+      "begin_ns": 153959857527,
+      "end_ns": 154016763485,
+      "error": null,
+      "pass_counter": {
+        "packets": 3786,
+        "bytes": 628081,
+        "drops": 0
+      },
+      "filter_read_ns": [
+        153959861193,
+        153986239902
+      ],
+      "root": {
+        "kind": "tbf",
+        "handle": "1:",
+        "packets": 16874,
+        "bytes": 4178629,
+        "drops": 405468,
+        "overlimits": 435339,
+        "backlog": 0,
+        "qlen": 0
+      },
+      "root_read_ns": [
+        153986327943,
+        154016691110
+      ],
+      "sequence": 404
+    },
+    "max_read_span_ns": 56905958,
+    "max_sample_start_gap_ns": 210175292,
+    "status": {
+      "complete": true,
+      "records": 404,
+      "limit": 37500,
+      "finished_ns": 154017546818
+    },
+    "scope": "non-atomic pass-action/root counter snapshots; root counters cover whole interface, backlog/qlen are gauges; no per-packet pairing, flow delivery or unique drop-cause proof"
+  },
+  "original_PCAP_population_reconciled": true,
+  "scope": "known configured whole-endpoint child loss, counter pairs inside predeclared settled interval; root counts whole interface, no exact per-packet identity/loss or physical delivery; not N4 command-phase/historical qualification; no PCAP gate rescue"
+}

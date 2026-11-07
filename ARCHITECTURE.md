@@ -1450,3 +1450,25 @@ extension records wider native versus internal counter populations without
 per-packet attribution. The live N5 case had no >=1s gap and failed robot PCAP
 population reconciliation by2 records; native/TC completeness does not rescue
 that gate. See evidence/m3-qdisc-stage-2026-11-07/.
+
+### Bounded drain guard and deterministic child-loss diagnostic
+
+`--capture-drain-check` is opt-in after the existing load-stop/quiet phase. Fresh
+SIGUSR1 snapshots from identity-checked owned tcpdump processes must be unchanged
+and captured==filter with zero kernel drops twice within a five-second controller
+budget. This cannot guarantee future silence; final standalone shutdown footer,
+file records and filter population still gate acceptance. Inline live statistics
+are explicitly rejected as substitutes for final completion. Known paused-abort
+and resume/drain fixtures reproduce incomplete versus complete finite capture
+without changing historical verdicts.
+
+`--root-loss-burst robot|operator` requires N5 >=60 s, permanent-neighbor and all
+observer/drain candidates, and no classifier fault. It changes only existing
+child netem loss100% for two requested host seconds then explicitly restores0%.
+Root/classifier identity stays fixed, configuration is read back, and failures
+attempt restoration. VM command brackets bound the active interval independently
+of host timing. `m3_root_loss_analysis.py` applies predeclared +500/-100-ms settled
+margins and requires selected PASS progress, zero source CONTROL tap observations
+and restored traffic. A live 60-s case observed the known signature with complete
+final capture, but this is not a spontaneous-gap explanation or N4 phase-barrier
+acceptance. See evidence/m3-drain-controlled-loss-2026-11-07/.

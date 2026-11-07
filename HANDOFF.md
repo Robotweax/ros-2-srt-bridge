@@ -2139,3 +2139,56 @@ Drain-Test prüfen und qualifizierten Stageobserver in deterministischem Queue/
 Lossintervall einsetzen, keine spontanenN5-Wiederholungen bis günstig.
 Defaultfixture/historischerexakterInitiator/volleN5-M3/übrigeGates offen,
 PR#2Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-07: Capture-Drain-Klasse und deterministischer Child-Loss
+
+- Vorab Plan/Code 23ffa00, 155 Hosttests und Syntaxchecks. Zwei frische finite
+  UDP-Probes: tcpdump pausiert, 16 bekannte Sends, Native/Receiver aktiv.
+  Abort vor Resume: File/Captured 0, Filter 16, Kernel-Drops 0, Native/Receiver 16.
+  Erwarteter negativer Population-Gate, keine Capture-Abnahme. Resume/Drain:
+  alle Populationen 16, keine Drops. Bekannte Klasse reproduziert, historische
+  Zwei-Record-Ursache und alleinige Wirkung des Zusatzguards nicht bewiesen.
+- Opt-in --capture-drain-check nach bisherigem Loadstop/1,25-s-Quiet: frische
+  SIGUSR1-Statistik, PID/Startidentität, zwei stabile captured==filter-Snapshots,
+  keine Kernel-Drops, fünf Hostsekunden Controllerbudget. VM-Signalbrackets und
+  Host-Read-Zeit getrennt. Keine zukünftige Stille garantiert; finaler File/
+  Footer/Population-Gate bleibt Pflicht. Default aus. Upstreamquellen und
+  Grenzen gegenüber Distro-Patches dokumentiert.
+- Genau ein N5/60-s/Seed-1701-Lauf, permanent-neighbor/TC/drain-Kandidaten:
+  .local/m3/20261107T090553068812Z. --root-loss-burst robot ändert nur den
+  bestehenden Child auf 100% Loss und explizit zurück auf 0%. Root/Classifier
+  bleiben erhalten. Finalread-Fehler versuchen Restore im finally (getestet).
+  Placement nach einem Drittel des Quellfensters, keine N4-Commandphasenbarriere.
+- Angefordert zwei Hostsekunden, garantiert aktiv 2,370079501 VM-Sekunden.
+  Vorab definierte +500/-100-ms-Margen ergeben 1,770079501 s Settled-Fenster.
+  Acht TC-Readpaare vollständig darin: 217 selected PASS, Root-Drops +15563
+  (ganze Schnittstelle), Robot CONTROL out 0, Operator CONTROL out 167.
+  Drei Sekunden nach Restore CONTROL out Robot/Operator 106/114. Bekannte
+  Signatur beobachtet. Der vollständige 2,578343668-s-Sourcegap umfasst auch
+  Ränder außerhalb der Konfiguration; diese nicht eindeutig zuordnen.
+  Permanent-State/MAC geprüft, keine aktiven CONTROL-Loss/Close-Events.
+- 22 Erfolge/Effekte, acht Skips, keine UNKNOWNs. Journale/Kontexte/Resultate
+  passen, je ein SDK-Handoff, Dispatch vor konservativer Receiverdeadline.
+  Source/Published/Observer 15033/1941/1941, Conservationbalances 0, Defizit
+  erhalten. Keine Physical-Delivery-/Performance-/Lossless-Behauptung.
+- Live-Drain: zwei stabile Snapshots 32118 je Endpoint; finale File/Captured/
+  Filter ebenfalls 32118, keine Kernel-Drops. Native 32144 je Endpoint ohne
+  Reserve-/Copyverlust; Populationen nicht gleichsetzen. Alte PCAP-Diskrepanz
+  110673/110671 bleibt FAILED, Realtimefenster weiter withheld. TC 404/404,
+  Provider 700/20/675, Trace 78/5/5 vollständig ohne Drops/Exhaustion.
+  Maximaler TC-Readspan 60,275959 ms/Startgap 210,175292 ms: Beobachtungen, keine Bounds.
+- Nach Messung Finalfooterparser gehärtet: Inline-SIGUSR1-Statistik kann fehlenden
+  finalen Footer nicht ersetzen. Alle Originalfooter mit strengem Parser
+  nachgeprüft, Ergebnisse gleich. 157 Tests nach Settled-Analyzer, 158 final
+  nach Footerregression, Syntaxchecks bestanden. Gemessene Sourcehashes gegen
+  23ffa00 und acht Runtimehashes vor/nach passen; spätere Analyse/Parseränderung
+  separat provenanziert. Keine frischen SDK-/ROS-/M2-Tests behauptet.
+- Evidenz evidence/m3-drain-controlled-loss-2026-11-07/: Plan, Quellnotizen,
+  Originalprobes/Livemanifeste und Logs, Pause/Signal/Readback/Drain, Analysen,
+  Journalaudits, Inventare, Testlogs und Rohhashes. Payloads/Prefixes/Journale/
+  Clocks lokal; keine Secrets/Inspect-/Env-Dumps. Intrinsic/M4 unverändert.
+
+**Weiter:** Validierte Messguards für deterministische N3-DATA/FEC-Selektion und
+N4-Commandphasenbarrieren verwenden. Spontaner Residualgap und exakte historische
+Capture-/Resetursachen bleiben offen; kein Ersatz alter Fehlkohorten und kein
+Defaultfix. Volle M3-Abnahme offen, PR #2 bleibt Draft.

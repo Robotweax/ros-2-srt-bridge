@@ -38,3 +38,9 @@ class DrainTests(unittest.TestCase):
         with patch('m3_root_loss_burst.readback',side_effect=[ValueError('read failed'),dict(root_config={'kind':'tbf'})]),patch('m3_root_loss_burst.bracket',return_value=dict(begin_ns=20,end_ns=21)) as restore:
             with self.assertRaises(ValueError):stop(object(),fault)
             self.assertTrue(fault['restored']);self.assertIn('0%',restore.call_args.args[-1])
+
+    def test_inline_live_statistics_cannot_substitute_for_shutdown_footer(self):
+        live='tcpdump: 16 packets captured, 16 packets received by filter, 0 packets dropped by kernel\n'
+        with self.assertRaisesRegex(ValueError,'missing tcpdump counter'):validate_tcpdump_footer(live,16)
+        final='16 packets captured\n16 packets received by filter\n0 packets dropped by kernel\n'
+        self.assertTrue(validate_tcpdump_footer(live+final,16)['tcpdump_population_reconciled'])

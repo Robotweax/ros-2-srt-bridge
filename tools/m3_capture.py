@@ -107,9 +107,10 @@ def validate_tcpdump_footer(footer,records,*,require_nonempty=True):
         matches=re.findall(pattern,footer)
         if not matches:raise ValueError('missing tcpdump counter')
         return int(matches[-1])
-    captured=counter(r'(\d+) packets? captured')
-    filtered=counter(r'(\d+) packets? received by filter')
-    dropped=counter(r'(\d+) packets? dropped by kernel')
+    # Live SIGUSR1 info is inline; only standalone shutdown-footer lines qualify.
+    captured=counter(r'(?m)^\s*(\d+) packets? captured[ \t]*$')
+    filtered=counter(r'(?m)^\s*(\d+) packets? received by filter[ \t]*$')
+    dropped=counter(r'(?m)^\s*(\d+) packets? dropped by kernel[ \t]*$')
     if dropped or captured!=records or (require_nonempty and not records):raise ValueError('unreconciled tcpdump counters: captured/filter/file counts differ or drops present')
     return dict(tcpdump_reported_packets=captured,tcpdump_reported_filtered_packets=filtered,tcpdump_kernel_drops=dropped,tcpdump_file_integrity_valid=True,tcpdump_population_reconciled=filtered==captured)
 

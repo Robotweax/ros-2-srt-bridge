@@ -894,3 +894,9 @@ root-qdisc polling. A known-count probe qualifies the counter before tested root
 loss and the native tap after it. The live N5 case recorded 129 successful
 commands but no >=1s gap recurrence; robot PCAP failed filter/file population
 reconciliation by two records. Defaults are unchanged. [Evidence and limits](evidence/m3-qdisc-stage-2026-11-07/README.md).
+
+A finite paused-recorder test now distinguishes accepted-but-unwritten packets
+from complete resume/drain capture. Optional `--capture-drain-check` checks stable
+live counters before shutdown while preserving the final capture gate. A separate
+60-second known child-loss test recovered with 22 successful commands and reconciled
+PCAP; it does not repair historical failures or complete M3. [Evidence and limits](evidence/m3-drain-controlled-loss-2026-11-07/README.md).
