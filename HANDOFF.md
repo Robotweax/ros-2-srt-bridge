@@ -2371,3 +2371,45 @@ PR #2 Draft, Intrinsic/M4 unverändert.
 bevor eine separat geplante Zwei-Loss-ROS-Fixture ausgeführt wird. Late-repair
 Ordering, volle200/50Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
 Ein-Loss-Recovery ist endliche Entwicklungsevidenz; PR #2 bleibt Draft.
+
+## Fortsetzung: Filter-Lifecycle-Klasse und ROS-Zwei-Loss mit Pre-Bind-Recorder
+
+- Vorab Probeplan/Code1b1610b,184 Hosttests: genau drei finite neue Fixtures.
+  Je zwei bekannte Negative nach UDP39782 und16 Positive nach39781; Receiver
+  bindet beide Ports, Native/Receiver sehen alle18 IDs. Installiertes libpcap:
+  broad Filter nimmt2 Negative ohne Dispatch an, Narrowing behält Stats2,
+  danach16 Positive -> File/Callbacks16 vs Receives18, zero Drops. Erwartete
+  NEGATIVE Captureklasse, keine Abnahme/Subtraktion/Zuordnung alter Ursache.
+  Final-filter-first Control und Pre-Bind-Kandidat jeweils16/16, Negative ausgeschlossen.
+- tools/m3_packet_capture.py: nur opt-in finite Linux64-Ethernet-Fixture. Finalen
+  BPF auf dead libpcap handle kompilieren, an AF_PACKET/SOCK_RAW protocol0
+  anhängen, initial kernel0 prüfen, erst dann eth0/ETH_P_ALL protocol3 binden.
+  VM-Brackets, Kernel-SO_TIMESTAMPNS, bounded128MiB/75000 Records, Truncation/
+  Budget/Drops explizit. Zwei stabile Records==Kernel-Snapshots binnen5s,
+  Schlusscheck, Filegröße/-hash und unabhängige Native-Identitäten sind Pflicht.
+  Buffer angefordert32MiB, tatsächlich8MiB beobachtet; keine Performanceparität.
+- Wahrheitsgemäße eigene Backend-Counter, alte tcpdump-Footer und Defaults
+  unverändert. Wrapper prüft alten8/10 weiter als failed. Keine neuen Statistiken
+  oder Rohdaten in alten Captureartefakten ersetzt. Historische Ursache unbewiesen.
+- Separat vorab ROS-Plan/Code6ba6562,186 Hosttests: genau eine neue Zwei-Loss-Fixture
+  .local/m3-capture-startup/ros-two-loss/2 PASSED mit explizitem packet-socket.
+  19 typed IMU bei angeforderten20Hz,19 admitted/SDK, kein BUSY. SDKmessages7/8
+  gehören IDs5/6; je ein TCdrop. Nur diese beiden IDs am endlichen Cutoff absent,
+  sonst17 Payloadhashes/Order korrekt. Kein Replay/Unrecoverablecounter-Claim.
+- Measurement je Endpoint17 Source+5Parity und22File/Dispatch/Kernel; Identity8/8.
+  Trace39/0 Records ohne Drops/Exhaustion. Sechs Bilanzen null, nur Transportgap2,
+  Age-Upper-Max8993897ns, Clock/QoS/Session/Features passen. Alle Recorder initial0,
+  BPF vor Bind, stabile gleiche Drains, zero Native/Kernelverluste. Native zuerst
+  starten, erst nach PCAP-Prozessende schließen. Getrennte Phasen, kein Continuousclaim.
+- SDK/Bridge/ROS-Binaries nicht geändert/neu gebaut; sechs Runtimehashes vor/nach
+  und zu vorheriger SDK70/ROS36-Tracevalidierung gleich. Keine neue volle SDK-/ROS-
+  oder M2-Suite behauptet. Andere Recorder-Workload, keine Ressourcenvergleichsbasis.
+- evidence/m3-capture-startup-2026-11-07/ enthält beide Vorabpläne, drei Probe-
+  Originale und ROS-Original, Counter/Lifecycle/Bytecode, Typedhash-Metriken,
+  Trace-/Capturelogs, Coverage, Tests, getrennte Provenienz, Inventare/Rohhashes.
+  Rawcaptures/Journale/Details lokal; Credentials entfernt, keine Inspect-/Envdumps.
+
+**Weiter:** Absichtlich verspätete Reparaturen und Ordering-/Reject-Grenzen prüfen,
+anschließend volle200/50Hz-Multiroute/Seeds für N3. N4-Commandphasen und übrige
+M3-Gates offen. Neue finite Zwei-Loss-Fixture ersetzt alten tcpdump-Fehlfall nicht.
+PR #2 Draft, Intrinsic/M4 unverändert.

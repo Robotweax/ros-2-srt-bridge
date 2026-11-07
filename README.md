@@ -910,3 +910,5 @@ The explicit N3 source selector has passed [two finite synthetic probes](evidenc
 [Bounded sample handoff diagnostics](evidence/m3-sample-handoff-2026-11-07/README.md) now correlate all 19 samples in one finite observer run across ROS admission, SDK metadata and captures. Earlier failed baselines remain unchanged; actual SDK identities can now guide the pending ROS loss cases.
 
 [Traced ROS one-loss recovery](evidence/m3-ros-traced-loss-2026-11-07/README.md) now passes with exact SDK-to-payload correlation. The second fixture stopped before arming on an8-captured/10-filter capture discrepancy; no two-packet ROS fault ran and the failed evidence is preserved.
+
+[A qualified filter-before-bind recorder candidate and finite ROS two-loss case](evidence/m3-capture-startup-2026-11-07/README.md) now pass:17 of19 admitted samples are observed, with exactly the two selected IDs absent. A controlled libpcap filter-transition probe reproduces a counter-offset class; historical failures and tcpdump defaults remain unchanged.

@@ -1603,3 +1603,31 @@ or historical-cause assignment follows. Evidence:
 `evidence/m3-ros-traced-loss-2026-11-07/`.179 host tests pass; installed runtime
 hashes match the prior SDK70/ROS36 validated trace build, with no fresh full SDK/
 ROS run. Recorder statistics scope, two-loss ROS, late ordering and N4/M3 stay open.
+
+## Filter lifecycle and finite ROS two-loss observation
+
+Three predeclared finite probes qualify a counter-scope class and an opt-in
+recorder. Installed libpcap with two packets admitted under a broad filter before
+narrowing produces16 positive file/callback records versus18 cumulative receives,
+zero drops. This is an expected negative population, not historical capture
+acceptance. A final-filter-first control and a protocol0/filter-before-bind packet
+socket both produce16/16, excluding two known negatives. Source and limits are in
+`evidence/m3-capture-startup-2026-11-07/`; historical8/10 remains unexplained/failed.
+
+The finite-only `packet-socket` backend compiles the final BPF on a dead handle,
+attaches it while protocol0 prevents reception, verifies initial accepted count0,
+then binds eth0/ETH_P_ALL. It retains kernel timestamps, bounds storage, requires
+stable file/dispatch/kernel equality, zero drops, intact file hashes and exact
+independent native identities. Native observers cover each separate PCAP phase.
+Default tcpdump remains unchanged; observer resource equivalence is not claimed.
+
+Exactly one separately planned finite ROS two-loss case passes at requested20Hz:
+19 source/admitted SDK samples, zero BUSY; selected messages7/8 map to IDs5/6 and
+have one classifier drop each. Only those IDs remain absent at the finite cutoff;
+17 complete typed payload hashes/order match. Measurement17source+5parity and
+22 file/dispatch/kernel records agree per endpoint; identity8/8 likewise. Trace
+39/0 has zero loss/exhaustion, six balances zero, only transport gap2, age-upper
+maximum8.994ms, same-session clock/QoS and features pass. This changed-backend case
+does not reclassify the prior failure or complete N3/M3. Host184 before probes /
+186 before ROS pass; SDK70/ROS36 runtime artifacts remain unchanged. Late repair
+ordering, full200/50Hz multiroute/seeds and N4 command phases remain next.
