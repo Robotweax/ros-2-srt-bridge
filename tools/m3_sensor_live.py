@@ -79,12 +79,15 @@ def validate_outcomes(sender, receiver, losses):
     ids = [r['id'] for r in receiver['entries']]
     if len(ids) != len(set(ids)) or set(ids) != expected or any(r['msgno'] != r['id']+1 for r in receiver['entries']):
         raise ValueError('receiver delivery/identity outcome differs')
+    # Pinned RowFecDecoder::expire_row reports irrecoverable ranges only for
+    # arq:onreq. SENSOR arq:never supplies no generic irrecoverable-loss count.
+    # Missing IDs are finite observation outcomes, not that provider counter.
     a = sender['final_stats']; b = receiver['final_stats']
-    if not sender['connected'] or not receiver['connected'] or a['retransmitted'] or b['undecryptable'] or a['filter_extra_sent'] != 4 or b['filter_extra_received'] != 4 or b['filter_supplied'] != (1 if losses == 1 else 0) or b['filter_loss'] != (2 if losses == 2 else 0):
+    if not sender['connected'] or not receiver['connected'] or a['retransmitted'] or b['undecryptable'] or a['filter_extra_sent'] != 4 or b['filter_extra_received'] != 4 or b['filter_supplied'] != (1 if losses == 1 else 0) or b['filter_loss'] != 0:
         raise ValueError('provider FEC/security counters differ')
     if any(sender['initial_stats'].values()) or any(receiver['initial_stats'].values()):
         raise ValueError('unexpected pre-arm DATA/FEC statistics')
-    return dict(delivered_ids=sorted(ids), repaired=b['filter_supplied'], unrecoverable=b['filter_loss'], retransmitted=a['retransmitted'], undecryptable=b['undecryptable'])
+    return dict(delivered_ids=sorted(ids), missing_ids=sorted(set(range(16))-set(ids)), repaired=b['filter_supplied'], filter_loss_reported=b['filter_loss'], retransmitted=a['retransmitted'], undecryptable=b['undecryptable'])
 
 
 def analyze_captures(run, lab, ready, losses):
@@ -212,12 +215,12 @@ def run_case(run, image, losses):
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--out', required=True, type=Path); args = p.parse_args()
+    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--out', required=True, type=Path); p.add_argument('--losses', type=int, choices=(0, 1, 2), nargs='+', default=[0, 1, 2]); args = p.parse_args()
     run = args.out.resolve(); run.mkdir(parents=True, exist_ok=False)
     image = json.loads(subprocess.check_output(['docker', 'image', 'inspect', '--platform', 'linux/amd64', 'ros2-srt-m3:20261105'], text=True))[0]['RepoDigests'][0]
     report = dict(status='running', image=image, cases=[])
     try:
-        for losses in (0, 1, 2):
+        for losses in args.losses:
             report['cases'].append(run_case(run/str(losses), image, losses))
         report['status'] = 'passed'
     except Exception as error:

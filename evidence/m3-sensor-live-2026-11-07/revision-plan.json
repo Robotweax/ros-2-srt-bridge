@@ -1,0 +1,14 @@
+{
+  "status": "prospective revision after original cohort stopped on its counter gate",
+  "original_case_status": "two-loss remains failed; no mutation or replacement",
+  "change": "RowFecDecoder::expire_row only appends irrecoverable ranges for arq:onreq, while SENSOR is arq:never. Report exact missing receiver IDs at observation cutoff separately from pktRcvFilterLossTotal; do not label counter as generic unrecoverable loss",
+  "executions": 1,
+  "case": "two losses at row1 positions2/3, messages7/8, sixteen total messages",
+  "expected_delivered_ids": [0,1,2,3,4,5,8,9,10,11,12,13,14,15],
+  "expected_filter_supply": 0,
+  "expected_filter_loss_reported": 0,
+  "all_capture_trace_identity_security_and_drop_gates": "unchanged; final drain mandatory",
+  "runtime_sdk_or_dependency_changes": false,
+  "scope": "finite installed-provider SENSOR case only; no ROS/M3 acceptance",
+  "no_further_retry_planned": true
+}
