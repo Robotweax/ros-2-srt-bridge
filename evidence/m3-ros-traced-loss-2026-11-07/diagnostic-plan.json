@@ -1,0 +1,19 @@
+{
+  "status": "prospective",
+  "cases_in_order": [1,2],
+  "executions_each": 1,
+  "stop_on_first_failure": true,
+  "no_retry_or_failed_case_replacement": true,
+  "scope": "finite19 IMU publications requested20Hz, existing traced bridge runtime, separate permanent-neighbor fixture; not full200/50Hz multiroute N3 or full M3",
+  "source_identity": "closed pre-arm SENSOR_BIND+handshake captures establish row origin and peer flow; original source header timestamp to ROS callback then original ingress/owner/session/generation/route to actual SDK assigned message number; source-ID is not inferred from ROS publication count",
+  "targeted_messages": [[8],[7,8]],
+  "row_positions": [[3],[2,3]],
+  "expected_one_loss": "all SDK-admitted source IDs are typed-published exactly once and in order, including target mapped by SDK message8 despite absent target native/PCAP source; all parity preserved",
+  "expected_two_loss": "only source IDs mapped to SDK messages7/8 are absent at finite cutoff; other SDK-admitted samples are typed-published exactly once and in order",
+  "BUSY": "independent rejected admissions remain explicit, have no SDK handoff, and occupy no SRT message number; admitted and rejected source populations reconcile all19 producer calls; no source or SDK-accepted sample replay",
+  "accounting": "six conservation equations zero; nonzero admission equals observed BUSY only, SRT-accept-to-receiver gap0 for one-loss or2 for two-loss; all other stage losses zero",
+  "gates": ["one classifier drop per target and removal verified", "all selected identities SDK-accepted exactly once", "complete sample traces, zero drops/exhaustion/errors", "exact native/PCAP populations from actual SDK source IDs minus targets, parity count from completed rows", "strict standalone footer/file/filter equality and zero kernel/native loss", "stable bounded drain both closed phases", "same qualified session/clock/QoS, complete payload hashes/order", "publication age-upper histogram population agrees and maximum <=250ms", "interface features and six selected runtime hashes unchanged"],
+  "first_source_message_cycle_only": true,
+  "preflight": "179 host tests; syntax checks; installed runtime equals previously validated sample-trace runtime (70 SDK and36 ROS tests), no fresh full SDK/ROS run claimed",
+  "remaining": "deliberate late repair/replay rejection, full200/50Hz multiroute/rate/seed comparison, N4 command barriers and remaining M3 gates"
+}

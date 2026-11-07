@@ -66,3 +66,37 @@ class TraceDiagnosticWindowTests(unittest.TestCase):
         with self.assertRaises(ValueError):outcomes(a,b,0)
         a['end']['bridge']['samples_submit_busy']=0
         with self.assertRaises(ValueError):diagnostic_window(a,b)
+
+class TracedFaultPopulationTests(unittest.TestCase):
+    def test_fault_identity_shifts_with_independent_busy_source(self):
+        from m3_ros_sensor import selected_sources
+        # Source ID2 never admitted. SDK message IDs remain consecutive, beginning
+        # at2 after the binding; the targeted message8 now belongs to source ID7.
+        admitted=[i for i in range(19) if i!=2]
+        mapped=[dict(source_id=i,message_number=j+2) for j,i in enumerate(admitted)]
+        selected,observed=selected_sources(mapped,1)
+        self.assertEqual([m['source_id'] for m in selected],[7])
+        self.assertEqual(observed,admitted)
+        selected,observed=selected_sources(mapped,2)
+        self.assertEqual([m['source_id'] for m in selected],[6,7])
+        self.assertEqual(observed,[i for i in admitted if i not in (6,7)])
+
+    def test_missing_duplicate_or_unaccepted_target_rejects(self):
+        from m3_ros_sensor import selected_sources
+        for mapped in ([],[dict(source_id=1,message_number=7)],
+                       [dict(source_id=1,message_number=7),dict(source_id=1,message_number=8)],
+                       [dict(source_id=1,message_number=7),dict(source_id=2,message_number=7),dict(source_id=3,message_number=8)]):
+            with self.assertRaises(ValueError):selected_sources(mapped,2)
+
+    def test_two_loss_gap_and_busy_are_separate_conservation_terms(self):
+        from m3_ros_sensor import diagnostic_window
+        a,b=results(2)
+        a['begin']['bridge']['samples_submit_busy']=0
+        a['end']['bridge'].update(samples_submit_busy=1,context_drops=1,sensor_submitted=18,sensor_inputs=18,sensor_sent=18)
+        b['rows']=[r for r in b['rows'] if r['id']!=10]
+        b['end']['bridge'].update(transport_samples_received=16,sensor_polled=16,samples_published=16)
+        b['end']['bridge']['imu_age_upper_histogram_ms'][10]=16
+        result=diagnostic_window(a,b,2)
+        self.assertEqual(result['losses']['admission'],1)
+        self.assertEqual(result['losses']['srt_accept_to_receiver_gap'],2)
+        with self.assertRaises(ValueError):diagnostic_window(a,b,1)
