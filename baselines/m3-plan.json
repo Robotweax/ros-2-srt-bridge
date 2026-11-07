@@ -109,6 +109,49 @@
         "old_BUSY_fixed": false,
         "ROS_loss_cases_executed": false,
         "next": "actual SDK identity based ROS one/two-loss correlation while retaining independent BUSY"
+      },
+      "traced_ROS_loss_cases": {
+        "status": "one-loss passed; cohort stopped at second fixture pre-arm capture failure; no two-packet ROS fault armed",
+        "evidence": "evidence/m3-ros-traced-loss-2026-11-07/README.md",
+        "one_loss": {
+          "source_calls_admitted_published_observed": [
+            19,
+            19,
+            19,
+            19
+          ],
+          "selected_SRT_message": 8,
+          "selected_source_ID": 6,
+          "classifier_drops": 1,
+          "captured_source_parity_each": [
+            18,
+            5
+          ],
+          "PCAP_file_captured_filter_each": [
+            23,
+            23,
+            23
+          ],
+          "BUSY": 0
+        },
+        "second_fixture": {
+          "armed": false,
+          "robot_file_captured_filter": [
+            8,
+            8,
+            10
+          ],
+          "kernel_drops": 0,
+          "native_selected_PCAP_prefix_counts_each": [
+            8,
+            8
+          ],
+          "capture_gate": "failed; no rescue or retry; exact excess counter source unknown"
+        },
+        "host_tests": 179,
+        "runtime_changed": false,
+        "full_N3_accepted": false,
+        "next": "qualify recorder startup/filter-statistics population scope before separately planned two-loss ROS attempt"
       }
     },
     "N4": {

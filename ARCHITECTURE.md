@@ -1574,3 +1574,32 @@ tests pass, including actual IPv4/IPv6 metadata, queue concurrency/overflow/budg
 and rejection/missing-observation checks. Evidence: `evidence/m3-sample-handoff-2026-11-07/`.
 Next: planned ROS loss/recovery cases based on actual SDK identities; late repair
 ordering, full200/50Hz matrix and N4/M3 remain open.
+
+## Traced ROS one-loss recovery (2026-11-07)
+
+The finite traced loss mode now selects actual SDK message8 (or messages7/8 in
+one row), then maps those messages back to admitted ROS callbacks. Independent
+BUSY admissions remain in their own conservation term and consume no SRT source
+index. Host regression fixtures cover shifted source-ID mapping, ambiguous or
+unaccepted targets, and distinct admission versus transport gaps. The original
+strict19-source baseline gate is unchanged.
+
+One predeclared ROS one-loss case passes at requested20Hz:19 source/admitted/
+published/observed payloads; one classifier drop for message8 maps to sourceID6.
+Both captures lack that source packet and retain five parity packets;18 source +
+5parity and23 PCAP file/captured/filter records agree per endpoint. Exact typed
+hashes/order match, all six balances are zero, trace39/0 records across sender/
+receiver have zero loss/exhaustion, and publication age-upper maximum is9.399ms.
+Same-sequence parity and typed recovery occur while the drop filter is still
+installed. This is finite ROS recovery evidence, not a measured ROS FEC-supply
+counter, physical age/latency or full200/50Hz N3 qualification.
+
+The cohort fails in its second fixture before arming: robot identity capture8file/
+captured versus10filter, zero kernel drops, persists through bounded drain;
+operator8/8. No sample or two-packet fault is emitted. A post-hoc fixed-IHL IPv4
+prefix comparison finds8 matching native/PCAP selected observations at both ends,
+but does not explain the excess statistic or rescue the failed capture. No retry
+or historical-cause assignment follows. Evidence:
+`evidence/m3-ros-traced-loss-2026-11-07/`.179 host tests pass; installed runtime
+hashes match the prior SDK70/ROS36 validated trace build, with no fresh full SDK/
+ROS run. Recorder statistics scope, two-loss ROS, late ordering and N4/M3 stay open.

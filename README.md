@@ -908,3 +908,5 @@ The explicit N3 source selector has passed [two finite synthetic probes](evidenc
 [Finite ROS N3 attempts](evidence/m3-ros-sensor-2026-11-07/README.md) retain two failed baselines: capture stability under live CONTROL, then one accounted sender BUSY drop. ROS injected-loss cases remain unexecuted; actual admission/handoff identity correlation is next.
 
 [Bounded sample handoff diagnostics](evidence/m3-sample-handoff-2026-11-07/README.md) now correlate all 19 samples in one finite observer run across ROS admission, SDK metadata and captures. Earlier failed baselines remain unchanged; actual SDK identities can now guide the pending ROS loss cases.
+
+[Traced ROS one-loss recovery](evidence/m3-ros-traced-loss-2026-11-07/README.md) now passes with exact SDK-to-payload correlation. The second fixture stopped before arming on an8-captured/10-filter capture discrepancy; no two-packet ROS fault ran and the failed evidence is preserved.

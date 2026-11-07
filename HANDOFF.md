@@ -2332,3 +2332,42 @@ SDK-Messageidentität korrelieren; fehlende/reparierte Samples zu angenommenen
 Callbacks mappen und unabhängige BUSY-Verluste erhalten. Late-repair Ordering,
 volle 200/50-Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
 PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: ROS-Ein-Loss-Recovery validiert, zweiter Pre-Arm-Capture fehlgeschlagen
+
+- Vorab Code/Plan38afa06,179 Hosttests und Syntaxchecks. Nur Hostharness/Tests
+  geändert; sechs Runtimehashes wie vorher und während Messung gleich. Bisherige
+  SDK70/ROS36-Validierung gilt für unveränderte Artefakte; keine neue volle Suite.
+- Traced Lossmode mappt tatsächliche SDK-Messageidentität zu ROS-Admission über
+  Original-Ingress/Route/Owner/Session/Generations und Source-Headerstamp. BUSY
+  bleibt separat, verschiebt Source-ID, verbraucht keine SRT-Message. Originaler
+  strikter19-Source-Gate unverändert. Shift-/Ambiguity-/Accounting-Regressionen.
+- Genau eine geordnete Ein-/Zwei-Loss-Fixturefolge, keine Retries. Ein-Loss
+  .local/m3-ros-traced-loss/1 PASSED:19 typed IMU bei angeforderten20Hz,19 SDK /
+  Publish / Observer, kein BUSY. Message8/Row1Position3 gehört Source-ID6,
+  Envelope7. Genau ein Classifierdrop, Wire-Source an beiden Taps absent;
+  Same-sequence-Parity bleibt erhalten und vollständiger typed Payload kommt an.
+- Measurement je Endpoint18 Source+5Parity,23 File/Captured/Filter, zero Native/
+  Kernelverluste, Stable-Drain, Features gleich. Sendertrace39/Receiver0 Records,
+  zero Drops/Exhaustion, Payloadhashes/Order passen, sechs Bilanzen null,
+  Age-Upper-Max9398555ns. Keine ROS-FEC-Supplycounter neu gemessen.
+  Post-hoc VM-Timing: SDK/Parity/ROS-Observation innerhalb garantiert aktivem
+  Filterintervall; Callback-Ingress bis Observer2587625ns. Kein Physicalclaim.
+- Zweite Fixture .local/m3-ros-traced-loss/2 FAILED VOR Arming: Robot-PCAP
+  Captured8/Filter10, Operator8/8, zero Kernel-Drops; neun frische Snapshots
+  unverändert ungleich bis Timeout. Kein armed-Marker, kein Measurementcapture,
+  keine Samples/kein Zwei-Paket-Fault. Finalfooter bleibt8/10, nicht abgenommen.
+- Post-hoc feste IPv4-Prefixpopulation: Native-selektiert8 und PCAP8 je Endpoint
+  stimmen byteprefix/length-genau. Native insgesamt155/154 vollständig. Das
+  erklärt zusätzliche Filtercounts nicht, beweist keine Abwesenheit vor Native-
+  Attachment und rettet keinen Gate. Keine Zuordnung historischer Zwei-Record-
+  Ursache, kein nachträgliches Passed/Retry/Subtrahieren/Rekonstruieren.
+- evidence/m3-ros-traced-loss-2026-11-07/ enthält Plan, beide Originalmanifeste,
+  Logs/Readbacks, Typedhash-Metriken, Timing/Capturevergleich, Provenienz,
+  Inventare und Rohhashes. Rawcaptures/Journale/Details lokal, keine Credentials/
+  Inspect-/Envdumps. Alte Fehlfälle erhalten, Intrinsic/M4 unverändert.
+
+**Weiter:** Recorder-Startup-/Filterstatistik-Populationsscope qualifizieren,
+bevor eine separat geplante Zwei-Loss-ROS-Fixture ausgeführt wird. Late-repair
+Ordering, volle200/50Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
+Ein-Loss-Recovery ist endliche Entwicklungsevidenz; PR #2 bleibt Draft.
