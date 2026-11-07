@@ -22,6 +22,11 @@ class Finite(Benchmark):
         super().__init__(args)
         self.rows = []; self.armed_session = None
 
+    def spin(self, seconds=.05):
+        super().spin(seconds)
+        if (self.run/'abort').exists():
+            raise RuntimeError('host aborted finite fixture')
+
     def imu(self, message):
         super().imu(message)
         self.rows.append(dict(id=int(message.angular_velocity.z)-1, payload_sha256=digest(message), observed_ns=time.monotonic_ns()))

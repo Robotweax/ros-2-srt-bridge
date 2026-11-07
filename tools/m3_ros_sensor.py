@@ -20,6 +20,9 @@ from m3_dds_result_timeline import common_clock
 from m3_accounting import summarize_window
 
 ROOT=Path(__file__).resolve().parents[1]
+# Finite fixture only: CONTROL/probe traffic stays live during the source fence.
+# Exclude ongoing keepalive/ACK chatter from the PCAP stability population.
+PCAP_FILTER='udp port 10081 and (udp[8] & 128 = 0 or udp[8:2] = 32768)'
 
 
 def write(path, value):
@@ -160,7 +163,7 @@ def capture_start(lab, path):
     path.mkdir(); lab.run=path; inside='/workspace/'+str(path.relative_to(ROOT)); result=[]
     for role,name in lab.containers.items():
         log=(path/(role+'-capture.log')).open('w')
-        result.append((subprocess.Popen(['docker','exec',name]+pcap_options()+['-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT),log))
+        result.append((subprocess.Popen(['docker','exec',name]+pcap_options()+['-w',inside+'/'+role+'.pcap',PCAP_FILTER],stdout=log,stderr=subprocess.STDOUT),log))
     start(path,inside,lab,result)
     deadline=time.monotonic()+5
     while not all('listening on eth0' in (path/(r+'-capture.log')).read_text() for r in lab.containers):
@@ -171,7 +174,9 @@ def capture_start(lab, path):
 
 
 def capture_stop(lab, processes):
-    stop_captures(lab,drain_check=True)
+    # A failed drain has already attempted SIGINT. Never overwrite/recheck its
+    # immutable result on cleanup; the original exception still fails the case.
+    stop_captures(lab,drain_check=not (lab.run/'capture-drain.json').exists())
     for p,log in processes:
         if p.wait(timeout=5)!=0:
             raise ValueError('capture exited unsuccessfully')
@@ -189,7 +194,7 @@ def wait_files(run,names,peers):
 def run_case(run,image,losses):
     run.mkdir(); inside='/workspace/'+str(run.relative_to(ROOT));lab=NetworkLab(ROOT,run,image,monotonic_capture=True)
     captures=[];peers=[];fault=None;key=run/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    result=dict(status='running',losses=losses,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
+    result=dict(status='running',losses=losses,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
     try:
         lab.start(key);result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         configure(lab,'permanent');lab.apply('N0',1701);result['features_before']=feature_snapshot(lab,'features-before')
@@ -235,6 +240,7 @@ def run_case(run,image,losses):
             try:capture_stop(lab,captures)
             except Exception as error:result['capture_stop_error']=str(error)
         (run/'release').touch()
+        if result['status']!='passed':(run/'abort').touch()
         for p,log in peers:
             try:p.wait(timeout=8)
             except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=5)
