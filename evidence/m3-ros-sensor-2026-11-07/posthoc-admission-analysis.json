@@ -1,0 +1,137 @@
+{
+  "status": "post-hoc diagnostic only; original case remains failed",
+  "source_publication_calls": 19,
+  "sender_ingress": 19,
+  "sender_busy": 1,
+  "sender_obsolete": 0,
+  "admitted": 18,
+  "srt_sent": 18,
+  "receiver_received": 18,
+  "published": 18,
+  "observer": 18,
+  "missing_source_ids": [
+    7
+  ],
+  "window": {
+    "source_produced": 19,
+    "observer_received": 18,
+    "missing": 1,
+    "losses": {
+      "upstream_dds": 0,
+      "validation": 0,
+      "admission": 1,
+      "ingress_replaced": 0,
+      "ingress_flushed": 0,
+      "input_rejected": 0,
+      "outbound_replaced": 0,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 0,
+      "receiver_rejected": 0,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 0
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 1.031504167,
+    "source_actual_hz": {
+      "imu": 18.419702612796133,
+      "joints": 0.0
+    },
+    "published": 18,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 18,
+        "rounding": "up to 1ms",
+        "maximum_ms": 10,
+        "p50_ms": 7,
+        "p95_ms": 10,
+        "p99_ms": 10
+      },
+      "joint": {
+        "count": 0,
+        "rounding": "up to 1ms",
+        "maximum_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "captures": {
+    "robot": {
+      "native_status": {
+        "complete": true,
+        "records": 188,
+        "seen": 188,
+        "submitted": 188,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 117665684136,
+        "stop_before_ns": 123803866597,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "footer": {
+        "tcpdump_reported_packets": 22,
+        "tcpdump_reported_filtered_packets": 22,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      },
+      "actual_admitted_source_records": 18,
+      "actual_parity_records": 4,
+      "populations_match_actual_admissions": true,
+      "scope": "post-hoc expected population from recorded18 SDK sends, not original planned19 population acceptance"
+    },
+    "operator": {
+      "native_status": {
+        "complete": true,
+        "records": 186,
+        "seen": 186,
+        "submitted": 186,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 117665684261,
+        "stop_before_ns": 123632847722,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "footer": {
+        "tcpdump_reported_packets": 22,
+        "tcpdump_reported_filtered_packets": 22,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      },
+      "actual_admitted_source_records": 18,
+      "actual_parity_records": 4,
+      "populations_match_actual_admissions": true,
+      "scope": "post-hoc expected population from recorded18 SDK sends, not original planned19 population acceptance"
+    }
+  },
+  "observed_typed_payload_hashes_match": true,
+  "cause_scope": "For sample inputs, BUSY in pinned/current TransportOwner::Impl::submit occurs only on failure of std::try_to_lock on its shared mutex. ROS metrics record one BUSY; no identity of contending owner or hold duration was recorded. No SDK retransmission or source republish introduced."
+}

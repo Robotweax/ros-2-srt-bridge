@@ -2251,3 +2251,43 @@ weiter offen; M3 nicht abgenommen, PR #2 Draft, Intrinsic/M4 unverändert.
 mit Windowaccounting, Publish-/Alters-/Orderingguards übernehmen. run_m3 N3 bleibt
 noch gesperrt. N4-Commandphasen, bisherige N5/Capturefehler und volle M3-Gates offen;
 PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: ROS-N3-Fixture, Baseline an Admission-BUSY gescheitert
+
+- Neue tools/m3_ros_sensor.py und m3_ros_sensor_scenario.py verwenden die
+  unveränderten installierten SDK-/Bridge-/ROS-Binaries. 19 finite IMU-Samples
+  bei angeforderten 20 Hz, mit Payloadhash-, ID-, Reihenfolge-, Alters-, QoS-,
+  Clock- und sechs Conservation-Gates. Closed-Identity-Phase vor Arming: genau
+  ein SENSOR_BIND/message1, Handshake-Origin und beide Taps stimmen überein.
+  Measurement-Capture startet separat; der Gap ist explizit, keine Continuousclaim.
+- Originalplan/Code 2f13689, 170 Hosttests: Baseline scheitert vor Arming am
+  fünfsekündigen Stable-Drain unter laufendem CONTROL-Traffic. Captured/Filter
+  jeweils gleich, aber fortlaufend steigend. Originalfehler und Cleanup bleiben
+  unverändert; keine Samples, keine Ein-/Zwei-Loss-Ausführung.
+- Separater Revisionsplan/Code f048464, 170 Tests: finite PCAP explizit nur SENSOR
+  DATA/Parity/Handshake, Native weiterhin alle Frames. Filter im Image geprüft;
+  Footer/File/Filter/Zero-Loss/Stable-Drain bleiben Pflicht für diese Population.
+  Cooperative Abort beendet Pre-Arm-Waits; Cleanup überschreibt failed Drain nicht.
+- Revision .local/m3-ros-sensor-r2/0 ebenfalls FAILED, diesmal Payloadgate:
+  19 ROS-Publishes/Ingress, ein submit BUSY, null obsolete, 18 admitted/SDK-sent/
+  decoded/published/observed. Source-ID 7 fehlt. Für Samples kommt BUSY in
+  Impl::submit nur vom Shared-Mutex-try_lock-Miss; Holder/Dauer nicht beobachtet.
+  Kein Network-Loss-, SDK-Retry- oder Republish-Fix eingeführt.
+- Post-hoc: alle sechs Bilanzen null, nur Admission=1; 18 Payloadhashes stimmen,
+  Age-Upper-Maximum 9643682 ns (Histogramm ceil10 ms). Identity-Capture geprüft;
+  tatsächliche 18 Source + vier Parity pro Measurement-Tap stimmen mit PCAP
+  überein. Zero Captureverluste, finale File/Captured/Filter gleich, Stable-Drain.
+  Das ersetzt nicht den geplanten 19-Source-Gate. Finaler Featurevergleich des
+  Successpfads wurde nicht erreicht und wird nicht behauptet.
+- Genau eine Baseline pro Plan, keine ROS-Lossfälle oder weiteren Retries.
+  evidence/m3-ros-sensor-2026-11-07/ enthält beide Originalfehler, Pläne, Logs,
+  Metriken, Analysen, Provenienz und Rohhashes. Sechs selektierte Runtimehashes
+  vor/nach gleich; keine neuen vollständigen SDK-/ROS-/M2-Tests behauptet.
+  Rawcaptures/Journale/Resource-/Clockdetails lokal, keine Credentials/Inspectdumps.
+
+**Weiter:** Bounded Sample-Admission-/SDK-Handoff-Identitäten korrelieren, damit
+N3 tatsächliche angenommene Sourcepakete trifft, ohne BUSY zu verbergen, Samples
+neu zu publizieren oder bis zu einer günstigen Baseline zu wiederholen.
+ROS-Recovery/late-repair Ordering, volle 200/50-Hz-Multiroute/Seeds und N4-Phasen
+bleiben offen. Provider-FEC-Evidenz separat, PR #2 Draft, M3 nicht abgenommen,
+Intrinsic/M4 unverändert.

@@ -1519,3 +1519,30 @@ Evidence `evidence/m3-sensor-live-2026-11-07/` retains both original failure and
 prospective revision. Host tests: 166 original / 167 revision. ROS publication,
 ordering/age authorization and window accounting under N3 remain unqualified;
 run_m3 N3 is still blocked, and N4 phases/full M3 remain open.
+
+## Finite ROS N3 baseline attempts (2026-11-07)
+
+The finite ROS fixture now accounts for the pre-sample SENSOR_BIND: it validates a
+closed pre-arm handshake/binding capture, starts a separate measurement capture,
+and only then permits19 typed IMU publications at requested20Hz. Exact typed
+payload hashes/order, configured clock qualification, publication age upper bounds
+and six pipeline balances are checked. There is an explicit capture-phase gap and
+no continuous-coverage claim. The existing SDK/bridge/ROS binaries are unchanged.
+
+Both attempted cohorts failed at their baseline; no ROS loss case ran. Original
+all-UDP capture stability timed out before arming under live CONTROL traffic. A
+separately planned finite-only SENSOR DATA/parity/handshake PCAP scope passed the
+identity phase but the strict source population failed:19 publisher calls and19
+typed ingress, one sender BUSY/context drop,18 admitted/sent/decoded/published/
+observed. Missing sourceID7 is accounted at admission. For samples, BUSY is the
+shared-mutex try-lock miss; the holder/duration was not observed. Six conservation
+balances are zero, all18 observed payload hashes match, age-upper maximum9.644ms.
+Post-hoc exact captures match actual18 sends+4parity, not planned19 acceptance.
+Neither failed manifest is rewritten; one/two-loss ROS cases remain unexecuted.
+
+Evidence `evidence/m3-ros-sensor-2026-11-07/` retains original/revision plans and
+failures,170host tests, source provenance, selected runtime inventories and raw
+hashes. Next: correlate actual sample admission/SDK handoff identity without
+hiding BUSY or republishing before further ROS recovery/late-ordering tests. N3,
+full200/50Hz comparison and N4/M3 acceptance remain open. Default captures/policy
+and prior provider-level FEC evidence are unchanged.
