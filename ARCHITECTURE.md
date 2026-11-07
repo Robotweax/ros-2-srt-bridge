@@ -1546,3 +1546,31 @@ hashes. Next: correlate actual sample admission/SDK handoff identity without
 hiding BUSY or republishing before further ROS recovery/late-ordering tests. N3,
 full200/50Hz comparison and N4/M3 acceptance remain open. Default captures/policy
 and prior provider-level FEC evidence are unchanged.
+
+## Bounded sample admission and SDK correlation (2026-11-07)
+
+Opt-in `sample_diagnostics` now records ROS submit results and SENSOR SDK handoffs
+in separate fixed128-slot SPSC lanes,75000-record budget, explicit overflow and
+exhaustion. One ROS executor and one transport owner produce; the ROS consumer
+formats logs. Default admission, mailbox, deadline, pacing, command and retry
+policies are unchanged. The opt-in send path uses the pinned wrapper-equivalent
+`srt_sendmsg2` metadata to retain assigned message number; `SRTO_ISN` is read after
+the send as static connection metadata. No payload storage, I/O or allocation is
+introduced into the trace record operation. The observer adds workload.
+
+Source header timestamps identify finite callbacks; original ingress, route,
+owner/session/generations identify their SDK results. Cross-lane sequence is not
+causal order. SDK acceptance is not delivery authority. Candidates from the first
+single-packet source-message cycle must agree with native/PCAP headers; missing
+queued handoffs remain unmatched, and BUSY is retained without replay.
+
+One predeclared19-message observer run passes:19 admission/handoff/publication
+joins,39 sender records (including one binding), zero trace loss/exhaustion,
+19 source+5parity and24 reconciled PCAP records per endpoint, six balances zero,
+matching typed hashes/order and publication age-upper maximum8.702ms. No BUSY
+occurred; this is not a replacement baseline or proof that the earlier BUSY is
+fixed. Original failed cohorts remain unchanged. SDK70, ROS36 reported and host176
+tests pass, including actual IPv4/IPv6 metadata, queue concurrency/overflow/budget
+and rejection/missing-observation checks. Evidence: `evidence/m3-sample-handoff-2026-11-07/`.
+Next: planned ROS loss/recovery cases based on actual SDK identities; late repair
+ordering, full200/50Hz matrix and N4/M3 remain open.

@@ -2291,3 +2291,44 @@ neu zu publizieren oder bis zu einer günstigen Baseline zu wiederholen.
 ROS-Recovery/late-repair Ordering, volle 200/50-Hz-Multiroute/Seeds und N4-Phasen
 bleiben offen. Provider-FEC-Evidenz separat, PR #2 Draft, M3 nicht abgenommen,
 Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: Bounded Sample-Admission-/SDK-Handoff-Trace validiert
+
+- Opt-in `sample_diagnostics`, Default aus. Zwei SPSC-Lanes mit je 128 Slots,
+  75000-Record-Budget, expliziten Drops/Exhaustion. Genau ein ROS-Executor-Producer
+  und ein Transport-Owner; Consumer formatiert JSON. Record ohne Allocation/I/O/
+  Mutex/Retry. Andere submit_sample-Caller schreiben die ROS-Lane nicht.
+- Admission: Original-Ingress, Headerstamp, Callbacksequenz, Route, Owner/Session/
+  Generations, Bodygröße und SubmitResult inklusive BUSY. SDK: zurückgelieferte
+  Message-Nummer, Envelope-Sequenz, Original-Ingress, Socket/Generation und
+  SRTO_ISN-Readback. Opt-in srt_sendmsg2 nutzt dieselben TTL/Ordering-Defaults wie
+  der gepinnte srt_sendmsg-Wrapper. ISN wird nach dem Send gelesen, statische
+  Verbindungsmetadaten. Keine Policy-/Wire-/Crypto-/Timeout-/Retryänderung.
+- Join über Source-Headerstamp zu Admission, dann Original-Ingress/Route/Owner/
+  Session/Generations zu SDK. Lane-Sequenz ist keine Kausalitätsordnung; SDK kann
+  vor ROS-Resultrecord fortschreiten. Kandidaten nur im ersten Single-Packet-
+  Messagezyklus und mit Native/PCAP gegenprüfen. Queued ohne beobachteten Handoff
+  bleibt unmatched; BUSY wird nicht wiederholt oder als SDK-Akzeptanz gewertet.
+- Vorab Commit/Plan125f86f, SDK70 + ROS36 reported + Host176 Tests bestanden.
+  Native IPv4/IPv6 prüft echte ISN/Message/Binding-/Sample-Metadaten und Original-
+  Ingress. Queue-/Budget-/Concurrent-FIFO-/Overflow-/Parser-/BUSY-Negativtests.
+- Genau eine neue Observervalidation .local/m3-sample-handoff/0, keine Lossfälle:
+  19 Source/Admission/SDK/Publish-Joins, kein BUSY beobachtet. Sender39 Records
+  (19 Admission +20 SDK inkl. Binding), Receiver0, keine Drops/Exhaustion.
+  Measurement je Endpoint19 Source+5Parity, PCAP24File/Captured/Filter; Native/
+  PCAP exakt, Stable-Drain, keine Captureverluste, Features vor/nach gleich.
+  Sechs Bilanzen null, Payloadhashes/Order passen, Age-Upper-Max8701792ns.
+- Nicht als Ersatz der früheren fehlgeschlagenen N3-Baseline oder BUSY-Fix werten.
+  BUSY-Zweig in kontrollierten Trace/Parserfixtures geprüft, nicht neu live
+  reproduziert. Admission-/Command-/Clock-/Pacing-/Retryvertrag unverändert.
+  Transport/ROS vor dieser Messung neu gebaut; sechs Runtimehashes während Lauf
+  gleich, nicht gleich zu altem Kohortenruntime behauptet. SRT-Archiv unverändert.
+- Evidenz evidence/m3-sample-handoff-2026-11-07/ mit Plan, Originalresultaten,
+  Trace-/Capturelogs, Build-/Testlogs, Provenienz, Inventaren und Rohhashes.
+  Rawcaptures/Journale/Resourcetraces lokal, keine Credentials/Inspect-/Envdumps.
+
+**Weiter:** Separat geplante ROS-Ein-/Zwei-Source-Lossfälle nach tatsächlicher
+SDK-Messageidentität korrelieren; fehlende/reparierte Samples zu angenommenen
+Callbacks mappen und unabhängige BUSY-Verluste erhalten. Late-repair Ordering,
+volle 200/50-Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
+PR #2 Draft, Intrinsic/M4 unverändert.
