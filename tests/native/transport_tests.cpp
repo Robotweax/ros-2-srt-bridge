@@ -11,6 +11,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <cerrno>
+#include <set>
 using namespace robotweax::srt_bridge;
 namespace {
 unsigned checks=0;
@@ -193,6 +194,26 @@ void lifecycle(bool ipv6){
     stop(refused);stop(refusing);
 }
 
+void sample_diagnostics(bool ipv6){
+    const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();auto lc=config(Role::listener,ip,key);
+    TransportOwner listener(lc);until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"diagnostic listener missing");
+    const auto bound=listener.snapshot();auto cc=config(Role::caller,ip,key);cc.control.port=bound.control_port;cc.sensor.port=bound.sensor_port;
+    cc.sample_trace=std::make_shared<SampleTrace>();TransportOwner caller(cc);ready(caller,listener);
+    const auto context=caller.snapshot().context;std::array<std::byte,8> payload{};const auto origin=TransportOwner::monotonic_ns();
+    until([&]{return caller.submit_sample(context,1,payload,origin)==SubmitResult::queued;},"diagnostic sample not admitted");
+    TransportMessage received;until([&]{return listener.poll_sample(received);},"diagnostic sample missing");
+    check(received.envelope.source_monotonic_ns==origin,"diagnostic changed source origin");
+    stop(caller);stop(listener);SampleTraceEvent e;unsigned count=0,samples=0,bindings=0;std::set<int> messages;
+    while(cc.sample_trace->poll(e)){
+        ++count;check(e.point==unsigned(SampleTracePoint::sdk_accepted)&&!e.result,"unexpected SDK handoff error");
+        check(e.begin_ns>0&&e.end_ns>=e.begin_ns&&e.initial_sequence_available&&e.initial_sequence>=0&&e.socket>=0&&e.message_number>0,"missing SDK metadata");
+        check(e.owner_epoch==cc.session.local_epoch&&e.session==context.session&&e.sensor_generation==context.sensor_generation,"wrong handoff owner/context");
+        check(messages.insert(e.message_number).second,"duplicate assigned source message");
+        if(e.kind==unsigned(Kind::sample)){++samples;check(e.origin_ns==origin&&e.route==1&&e.envelope_sequence==received.envelope.sequence,"sample admission/handoff mismatch");}
+        else ++bindings;
+    }
+    check(samples==1&&bindings==1&&count==cc.sample_trace->attempted()&&!cc.sample_trace->dropped()&&!cc.sample_trace->exhausted(),"incomplete sample trace");
+}
 void one_way_control_silence(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
     auto lc=config(Role::listener,ip,key);lc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();TransportOwner listener(lc);
@@ -242,4 +263,4 @@ void one_way_control_silence(bool ipv6){
 }
 
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");one_way_control_silence(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");sample_diagnostics(std::string(argv[1])=="ipv6");one_way_control_silence(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}

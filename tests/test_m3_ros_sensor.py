@@ -50,3 +50,19 @@ class RosSensorTests(unittest.TestCase):
             with self.assertRaises(ValueError):identity_capture(Path('/tmp'),{'robot':'10.0.0.1','operator':'10.0.0.2'})
             flow['message_number']=2
             with self.assertRaises(ValueError):identity_capture(Path('/tmp'),{'robot':'10.0.0.1','operator':'10.0.0.2'})
+
+class TraceDiagnosticWindowTests(unittest.TestCase):
+    def test_busy_is_accounted_in_separate_observer_validation(self):
+        from m3_ros_sensor import diagnostic_window
+        a,b=results(0)
+        a['end']['bridge']['samples_submit_busy']=1
+        a['begin']['bridge']['samples_submit_busy']=0
+        a['end']['bridge'].update(context_drops=1,sensor_submitted=18,sensor_inputs=18,sensor_sent=18)
+        b['rows']=[r for r in b['rows'] if r['id']!=7]
+        b['end']['bridge'].update(transport_samples_received=18,sensor_polled=18,samples_published=18)
+        b['end']['bridge']['imu_age_upper_histogram_ms'][10]=18
+        result=diagnostic_window(a,b)
+        self.assertEqual(result['losses']['admission'],1)
+        with self.assertRaises(ValueError):outcomes(a,b,0)
+        a['end']['bridge']['samples_submit_busy']=0
+        with self.assertRaises(ValueError):diagnostic_window(a,b)

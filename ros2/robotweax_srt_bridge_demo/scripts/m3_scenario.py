@@ -99,6 +99,7 @@ class Benchmark(Driver):
             'journal_path':str(self.run/(self.args.role+'.sqlite')),
             'max_clock_interval_ms': self.args.clock_width_ms,
             'provider_diagnostics': str(self.args.provider_diagnostics).lower(),
+            'sample_diagnostics': str(getattr(self.args,'sample_diagnostics',False)).lower(),
             'command_diagnostics': str(self.args.command_diagnostics).lower()})
 
     def spin(self, seconds=.05):

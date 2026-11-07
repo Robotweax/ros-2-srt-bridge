@@ -1,0 +1,14 @@
+{
+  "status": "prospective",
+  "purpose": "validate bounded sample admission/SDK-handoff identity observer; not replacement strict N3 baseline or loss qualification",
+  "executions": 1,
+  "source": "19 IMU publish calls at requested20Hz, no injected fault, explicit permanent-neighbor fixture",
+  "new_runtime": "rebuild SDK transport and ROS node with opt-in sample_diagnostics=false by default; pinned SRT dependency unchanged",
+  "trace": "two fixed128-record SPSC lanes (one ROS executor, one transport owner),75000 total record budget, explicit drops/exhaustion; no callbacks, I/O or allocations in record; only ROS consumer formats JSON",
+  "identity": "ROS source header timestamp to callback record; origin/route/owner/session/generations to SDK result; actual srt_sendmsg2 assigned msgno and SRTO_ISN readback to single-packet source candidates; verify candidates against closed native/PCAP captures",
+  "gates": ["final trace status exactly once, complete sequences, zero drops/exhaustion", "all19 source timestamps uniquely mapped to admissions", "all queued samples have exactly one observed SDK handoff", "BUSY admissions have no SDK handoff and are retained explicitly", "same owner/session/context and original ingress, sizes agree", "actual admitted payload hashes/order match receiver", "six stage equations balance; only observed BUSY admission loss permitted for observer validation", "age/QoS/clock/isolation remain qualified", "all capture final-footer/file/filter/zero-loss/stable-drain and feature gates retained", "native/PCAP exact source/parity population equals actual SDK handoff identities"],
+  "no_retry_or_favourable_baseline_selection": true,
+  "unchanged": "strict N3 outcomes() still requires all19 except planned losses; earlier failed cohorts remain unchanged; command/SENSOR admission/retry/clock/deadline/TTL/pacing policy unchanged",
+  "preflight": "70 SDK tests,36 ROS tests;176 host tests; SDK metadata native regression IPv4/IPv6 and bounded queue/overflow/budget/concurrency tests",
+  "remaining": "ROS injected one/two-loss cases with actual handoff identity, deliberate late repaired-sample ordering, full200/50Hz multiroute/seed matrix and N4/M3"
+}

@@ -429,8 +429,25 @@ struct TransportOwner::Impl {
             }
             auto permit=budget.reserve(channel(i),packet->size,time);if(!permit){if(permit.error!=BudgetError::rate_limited)throw std::runtime_error("invalid budget");return;}
             const auto ttl=i?(binding?200:sensor_ttl_ms(*packet,time)):-1;
-            const int count=srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
-            const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;require(budget.finish(permit.id,count!=SRT_ERROR));
+            const bool observing=i&&bool(config.sample_trace);
+            SRT_MSGCTRL metadata=srt_msgctrl_default;metadata.msgttl=ttl;metadata.inorder=0;
+            const auto trace_begin=observing?monotonic_ns():0;
+            const int count=observing?srt_sendmsg2(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,&metadata):
+                srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
+            const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;
+            const auto trace_end=observing?monotonic_ns():0;
+            require(budget.finish(permit.id,count!=SRT_ERROR));
+            if(observing){
+                SampleTraceEvent e;e.begin_ns=trace_begin;e.end_ns=trace_end;e.origin_ns=packet->envelope.source_monotonic_ns;
+                e.owner_epoch=config.session.local_epoch;e.session=packet->envelope.session_id;
+                e.control_generation=links[0].generation;e.sensor_generation=links[1].generation;
+                e.envelope_sequence=packet->envelope.sequence;e.route=packet->envelope.route_id;e.kind=unsigned(packet->envelope.kind);
+                e.bytes=packet->size;e.socket=links[i].fd;e.message_number=count==SRT_ERROR?0:metadata.msgno;
+                e.point=unsigned(count==SRT_ERROR?SampleTracePoint::sdk_error:SampleTracePoint::sdk_accepted);e.result=unsigned(error);
+                int size=sizeof(e.initial_sequence);
+                e.initial_sequence_available=srt_getsockflag(links[i].fd,SRTO_ISN,&e.initial_sequence,&size)!=SRT_ERROR&&size==sizeof(e.initial_sequence);
+                config.sample_trace->record(SampleTraceLane::transport,e);
+            }
             if(count==SRT_ERROR){if(packet->envelope.kind==Kind::command&&error!=SRT_EASYNCSND)trace(CommandTracePoint::provider_error,CommandTraceReason::provider_error,packet->envelope.request_id,packet->envelope.route_id,unsigned(error));if(error!=SRT_EASYNCSND)lost(i,CommandTraceReason::provider_error,unsigned(error));return;}
             require(count==static_cast<int>(packet->size));
             if(packet->envelope.kind==Kind::command)trace(CommandTracePoint::provider_sent,CommandTraceReason::none,packet->envelope.request_id,packet->envelope.route_id);

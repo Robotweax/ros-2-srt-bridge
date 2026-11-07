@@ -70,7 +70,7 @@ class Finite(Benchmark):
                 message.orientation.w = 1.; message.angular_velocity.x = 200.; message.angular_velocity.y = 17.25
                 message.angular_velocity.z = float(i+1); message.linear_acceleration.z = 9.81
                 before = time.monotonic_ns(); self.imu_pub.publish(message); after = time.monotonic_ns()
-                self.rows.append(dict(id=i, payload_sha256=digest(message), begin_ns=before, end_ns=after))
+                self.rows.append(dict(id=i, payload_sha256=digest(message), stamp_sec=message.header.stamp.sec, stamp_nanosec=message.header.stamp.nanosec, begin_ns=before, end_ns=after))
                 self.spin(.05)
             stop = time.monotonic_ns(); write(self.run/'finite-sent.json', dict(count=19, start_ns=start, stop_ns=stop))
         else:
@@ -86,7 +86,7 @@ class Finite(Benchmark):
 
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--role', choices=('robot','operator'), required=True); p.add_argument('--run', required=True); p.add_argument('--peer', required=True)
+    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--role', choices=('robot','operator'), required=True); p.add_argument('--run', required=True); p.add_argument('--peer', required=True); p.add_argument('--sample-diagnostics',action='store_true')
     args = p.parse_args(); args.clock_width_ms=200; args.provider_diagnostics=False; args.command_diagnostics=False; args.seconds=10
     rclpy.init(); driver=Finite(args)
     try:

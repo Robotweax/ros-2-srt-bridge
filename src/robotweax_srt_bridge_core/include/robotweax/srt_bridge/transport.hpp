@@ -7,6 +7,7 @@
 #include <robotweax/srt_bridge/reconnect.hpp>
 #include <robotweax/srt_bridge/command_trace.hpp>
 #include <robotweax/srt_bridge/provider_diagnostics.hpp>
+#include <robotweax/srt_bridge/sample_trace.hpp>
 #include <robotweax/srt_bridge/session.hpp>
 #include <memory>
 
@@ -19,6 +20,7 @@ struct TransportConfig {
     BandwidthConfig bandwidth{1000000,128000,131072,16384,65536};
     std::shared_ptr<CommandTrace> command_trace{}; // Opt-in, lossy diagnostics only.
     std::shared_ptr<ProviderDiagnostics> provider_diagnostics{}; // CONTROL only; non-clearing SDK reads add observer work.
+    std::shared_ptr<SampleTrace> sample_trace{}; // Opt-in ROS admission / SENSOR SDK handoff observations.
 };
 struct TransportContext {
     Identity session{};

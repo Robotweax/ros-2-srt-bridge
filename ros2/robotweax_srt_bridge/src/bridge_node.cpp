@@ -30,6 +30,7 @@ class BridgeNode final:public rclcpp::Node {
     bool caller_=false,sensor_qos_verified_=false;
     std::shared_ptr<core::CommandTrace> command_trace_;
     std::shared_ptr<core::ProviderDiagnostics> provider_diagnostics_;
+    std::shared_ptr<core::SampleTrace> sample_trace_;
     rclcpp::Subscription<Imu>::SharedPtr imu_in_;rclcpp::Subscription<Joints>::SharedPtr joints_in_;
     rclcpp::Publisher<Imu>::SharedPtr imu_out_;rclcpp::Publisher<Joints>::SharedPtr joints_out_;
     rclcpp::Publisher<msgs::msg::BridgeState>::SharedPtr diagnostics_;
@@ -47,7 +48,14 @@ class BridgeNode final:public rclcpp::Node {
         bool large=message.header.frame_id.size()>64;
         if constexpr(std::is_same_v<T,Joints>){large=large||message.name.size()>6||message.position.size()>6||message.velocity.size()>6||message.effort.size()>6;for(const auto& n:message.name)large=large||n.size()>64;}
         if(large){++oversize_;return;}if(!rb::valid(message)){++invalid_;return;}rb::SensorBytes encoded;if(!rb::encode(message,encoded)){++invalid_;return;}
-        const auto result=endpoint_->transport().submit_sample(endpoint_->transport().snapshot().context,route,std::span(encoded.bytes).first(encoded.size),origin);if(result!=core::SubmitResult::queued){++context_;if(result==core::SubmitResult::busy)++submit_busy_;if(result==core::SubmitResult::obsolete)++submit_obsolete_;}
+        const auto context=endpoint_->transport().snapshot().context;
+        const auto before=sample_trace_?core::TransportOwner::monotonic_ns():0;
+        const auto result=endpoint_->transport().submit_sample(context,route,std::span(encoded.bytes).first(encoded.size),origin);
+        if(sample_trace_){core::SampleTraceEvent e;e.point=unsigned(core::SampleTracePoint::admission);e.begin_ns=before;e.end_ns=core::TransportOwner::monotonic_ns();e.origin_ns=origin;
+            e.owner_epoch=local_epoch_;e.session=context.session;e.control_generation=context.control_generation;e.sensor_generation=context.sensor_generation;
+            e.route=route;e.callback_sequence=ingress_;e.bytes=encoded.size;e.result=unsigned(result);e.kind=unsigned(core::Kind::sample);
+            e.stamp_sec=message.header.stamp.sec;e.stamp_nanosec=message.header.stamp.nanosec;sample_trace_->record(core::SampleTraceLane::ros,e);}
+        if(result!=core::SubmitResult::queued){++context_;if(result==core::SubmitResult::busy)++submit_busy_;if(result==core::SubmitResult::obsolete)++submit_obsolete_;}
     }
     static std::string hex(core::Identity id){static constexpr char digits[]="0123456789abcdef";std::string out;for(auto b:id){const auto n=std::to_integer<unsigned>(b);out+=digits[n>>4];out+=digits[n&15];}return out;}
     void command_trace(){
@@ -100,11 +108,27 @@ class BridgeNode final:public rclcpp::Node {
             std::cout<<line.str()<<std::endl;
         }
     }
+    void sample_trace(){
+        if(!sample_trace_)return;
+        core::SampleTraceEvent e;
+        for(unsigned n=0;n<core::SampleTrace::capacity&&sample_trace_->poll(e);++n){
+            std::ostringstream out;out<<"SAMPLE_TRACE {\"sequence\":"<<e.sequence<<",\"point\":"<<e.point
+                <<",\"begin_ns\":"<<e.begin_ns<<",\"end_ns\":"<<e.end_ns<<",\"origin_ns\":"<<e.origin_ns
+                <<",\"owner_epoch\":\""<<hex(e.owner_epoch)<<"\",\"session\":\""<<hex(e.session)<<"\""
+                <<",\"control_generation\":"<<e.control_generation<<",\"sensor_generation\":"<<e.sensor_generation
+                <<",\"envelope_sequence\":"<<e.envelope_sequence<<",\"callback_sequence\":"<<e.callback_sequence
+                <<",\"route\":"<<e.route<<",\"bytes\":"<<e.bytes<<",\"kind\":"<<e.kind<<",\"result\":"<<e.result
+                <<",\"stamp_sec\":"<<e.stamp_sec<<",\"stamp_nanosec\":"<<e.stamp_nanosec
+                <<",\"socket\":"<<e.socket<<",\"message_number\":"<<e.message_number
+                <<",\"initial_sequence\":"<<e.initial_sequence<<",\"initial_sequence_available\":"<<e.initial_sequence_available<<"}";
+            std::cout<<out.str()<<std::endl;
+        }
+    }
     void events(){core::CommandEvent event;for(unsigned n=0;n<16&&endpoint_->poll(event);++n){std::array<std::uint8_t,16> id{};for(std::size_t i=0;i<16;++i)id[i]=std::to_integer<unsigned>(event.request_id[i]);auto& c=cache(id,event.route).status;
         c.query_queued=false;c.local_error=unsigned(event.error);c.peer_error=event.peer_error?unsigned(event.peer_error->code):0;
         if(event.entry){const auto& e=*event.entry;c.found=true;c.state=unsigned(e.state);c.reason=unsigned(e.reason);c.revision=e.revision;c.rate_hz=e.command.rate_hz;c.expected_generation=e.command.expected_generation;c.new_generation=e.command.new_generation;c.result_valid=e.result.valid;c.result_rate_hz=e.result.rate_hz;c.result_generation=e.result.generation;}
     }}
-    void pump(){command_trace();provider_diagnostics();events();if(caller_)return;core::TransportMessage packet;for(unsigned n=0;n<8&&endpoint_->transport().poll_sample(packet);++n){
+    void pump(){command_trace();provider_diagnostics();sample_trace();events();if(caller_)return;core::TransportMessage packet;for(unsigned n=0;n<8&&endpoint_->transport().poll_sample(packet);++n){
         if(packet.envelope.route_id==1){Imu message;if(!rb::decode(packet.body(),message)){++invalid_;continue;}if(core::TransportOwner::monotonic_ns()>=packet.deadline_ns){++stale_;continue;}if(!endpoint_->transport().authorize_sample(packet)){++context_;continue;}const auto age=250000000ULL-(packet.deadline_ns-core::TransportOwner::monotonic_ns());
             if(!imu_metrics_.observe(age)){++stale_;continue;}imu_out_->publish(message);imu_seq_=packet.envelope.sequence;imu_session_=packet.context.session;}
         else if(packet.envelope.route_id==2){Joints message;if(!rb::decode(packet.body(),message)){++invalid_;continue;}if(core::TransportOwner::monotonic_ns()>=packet.deadline_ns){++stale_;continue;}if(!endpoint_->transport().authorize_sample(packet)){++context_;continue;}const auto age=250000000ULL-(packet.deadline_ns-core::TransportOwner::monotonic_ns());
@@ -150,6 +174,7 @@ public:
         local_epoch_=session.local_epoch;
         if(declare_parameter<bool>("command_diagnostics",false)){command_trace_=std::make_shared<core::CommandTrace>();transport.command_trace=command_trace_;}
         if(declare_parameter<bool>("provider_diagnostics",false)){provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.provider_diagnostics=provider_diagnostics_;}
+        if(declare_parameter<bool>("sample_diagnostics",false)){sample_trace_=std::make_shared<core::SampleTrace>();transport.sample_trace=sample_trace_;}
         endpoint_=std::make_unique<core::CommandEndpoint>(core::EndpointOptions{transport,worker});
         const auto qos=rclcpp::SensorDataQoS().keep_last(1);
         if(caller_){imu_in_=create_subscription<Imu>(imu_input,qos,[this](Imu::ConstSharedPtr m){ingress(1,*m);});joints_in_=create_subscription<Joints>(joint_input,qos,[this](Joints::ConstSharedPtr m){ingress(2,*m);});}
@@ -165,7 +190,8 @@ public:
         metrics_=create_service<msgs::srv::GetBridgeMetrics>("/bridge/get_metrics",[this](msgs::srv::GetBridgeMetrics::Request::SharedPtr, msgs::srv::GetBridgeMetrics::Response::SharedPtr response){response->snapshot=metrics();response->monotonic_ns=core::TransportOwner::monotonic_ns();});
         diagnostics_=create_publisher<msgs::msg::BridgeState>("/bridge/state",rclcpp::QoS(1).reliable().durability_volatile());pump_=create_wall_timer(std::chrono::milliseconds(1),[this]{pump();});state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
     }
-    ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();
+    ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();sample_trace();
+            if(sample_trace_)std::cout<<"SAMPLE_TRACE_STATUS {\"attempted\":"<<sample_trace_->attempted()<<",\"dropped\":"<<sample_trace_->dropped()<<",\"exhausted\":"<<sample_trace_->exhausted()<<",\"limit\":"<<sample_trace_->limit()<<"}"<<std::endl;
             if(provider_diagnostics_)std::cout<<"PROVIDER_STATS_STATUS {\"attempted\":"<<provider_diagnostics_->attempted()<<",\"dropped\":"<<provider_diagnostics_->dropped()<<",\"exhausted\":"<<provider_diagnostics_->exhausted()<<",\"limit\":"<<provider_diagnostics_->limit()<<"}"<<std::endl;
             if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}}
 };
