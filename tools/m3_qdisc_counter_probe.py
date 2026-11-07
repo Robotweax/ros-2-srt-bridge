@@ -14,6 +14,16 @@ from m3_dds_result_timeline import common_clock
 ROOT=Path(__file__).resolve().parents[1]
 
 
+def apply_profile(lab,profile,label):
+    # tc replace cannot reuse handle1: for a different qdisc kind. Only this
+    # synthetic fixture transitions root kinds; its generator is idle here.
+    state=json.loads(lab.inside('operator',label+'-transition-before',['tc','-j','qdisc','show','dev','eth0']))
+    current=next(q for q in state if q.get('root'))
+    target='tbf' if profile=='N5' else 'netem'
+    if current['kind']!=target:lab.inside('operator',label+'-transition-remove',['tc','qdisc','del','dev','eth0','root'])
+    lab.apply(profile,1701,roles=('operator',),label=label)
+
+
 def run_probe(run):
     run=run.resolve();run.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(run.relative_to(ROOT))
     image=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64','ros2-srt-m3:20261105'],text=True))[0]['RepoDigests'][0]
@@ -33,7 +43,7 @@ def run_probe(run):
             if server.poll() is not None or time.monotonic()>deadline:raise ValueError('probe readiness failed')
             time.sleep(.05)
         for case,(label,profile,count,port) in enumerate([('baseline','N0',16,10080),('sensor-negative','N0',4,10081),('root-drop','N4',16,10080),('shaped','N5',16,10080),('restored','N0',1,10080)],1):
-            lab.apply(profile,1701,roles=('operator',),label=label)
+            apply_profile(lab,profile,label)
             def snapshot(suffix):
                 rules=json.loads(lab.inside('operator',label+'-filter-'+suffix,['tc','-j','-s','filter','show','dev','eth0','egress','pref',PREF]))
                 qs=json.loads(lab.inside('operator',label+'-root-'+suffix,['tc','-j','-s','qdisc','show','dev','eth0']))
@@ -51,7 +61,10 @@ def run_probe(run):
         result['features_after']=feature_snapshot(lab,'features-after');assert result['features_after']==result['features_before'];result['status']='captured'
     except Exception as error:result.update(status='failed',error=str(error));raise
     finally:
-        if server is not None and server.poll() is None:server.terminate();server.wait(timeout=5)
+        if server is not None and server.poll() is None:
+            (run/'receive-stop').touch()
+            try:server.wait(timeout=5)
+            except subprocess.TimeoutExpired:server.terminate();server.wait(timeout=5)
         if server_log is not None and not server_log.closed:server_log.close()
         try:
             stop_captures(lab)

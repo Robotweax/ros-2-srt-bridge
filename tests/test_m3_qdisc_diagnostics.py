@@ -54,3 +54,17 @@ class QdiscTests(unittest.TestCase):
     def test_runner_rejects_classifier_fault_combination(self):
         p=subprocess.run([sys.executable,str(Path(__file__).resolve().parents[1]/'tools/run_m3.py'),'--control-qdisc-diagnostics','--control-egress-fault','operator','--seconds','45','--monotonic-capture','--command-diagnostics','--provider-diagnostics'],capture_output=True,text=True)
         self.assertEqual(p.returncode,2);self.assertIn('qdisc diagnostics require',p.stderr)
+
+    def test_probe_root_kind_changes_explicitly_remove_only_owned_root(self):
+        from m3_qdisc_counter_probe import apply_profile
+        class Lab:
+            def __init__(self,kind):self.kind=kind;self.calls=[]
+            def inside(self,role,label,argv):
+                self.calls.append((role,argv))
+                return json.dumps([dict(kind=self.kind,root=True)]) if 'show' in argv else ''
+            def apply(self,*args,**kw):self.applied=(args,kw)
+        for current,target,remove in [('netem','N5',True),('tbf','N0',True),('netem','N4',False)]:
+            lab=Lab(current);apply_profile(lab,target,'phase')
+            self.assertEqual(any('del' in args for _,args in lab.calls),remove)
+            self.assertTrue(all(role=='operator' for role,_ in lab.calls))
+            self.assertEqual(lab.applied[1]['roles'],('operator',))

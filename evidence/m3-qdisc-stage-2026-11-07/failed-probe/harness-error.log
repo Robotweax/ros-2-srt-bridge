@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_qdisc_counter_probe.py", line 82, in <module>
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);args=p.parse_args();r=run_probe(args.out);print(r['stage'])
+                                                                                                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_qdisc_counter_probe.py", line 36, in run_probe
+    lab.apply(profile,1701,roles=('operator',),label=label)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_network.py", line 106, in apply
+    self.inside(role, label+'-'+role+'-'+str(index), command)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_network.py", line 79, in inside
+    return self.execute(label, ['docker', 'exec', self.containers[role]]+argv)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_network.py", line 73, in execute
+    raise RuntimeError(label+' failed: '+result.stderr.strip())
+RuntimeError: shaped-operator-0 failed: Error: Invalid qdisc name: must match existing qdisc.
