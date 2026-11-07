@@ -44,7 +44,14 @@
     },
     "N3": {
       "status": "pending",
-      "requirement": "deterministically remove one/two SENSOR source DATA packets in the same FEC group; preserve parity distinction"
+      "requirement": "deterministically remove one/two SENSOR source DATA packets in the same FEC group; preserve parity distinction",
+      "selector_followup": {
+        "status": "explicit source selector validated with two finite synthetic probes; actual authenticated FEC/ROS qualification pending",
+        "evidence": "evidence/m3-sensor-selector-2026-11-07/README.md",
+        "host_tests": 163,
+        "default_runner_enabled": false,
+        "next": "trusted live sender initial sequence/row/message/socket identity before arming; actual one/two-loss repair/rejection cases"
+      }
     },
     "N4": {
       "requested_outage_seconds": 2,

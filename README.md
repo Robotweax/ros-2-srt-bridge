@@ -900,3 +900,5 @@ from complete resume/drain capture. Optional `--capture-drain-check` checks stab
 live counters before shutdown while preserving the final capture gate. A separate
 60-second known child-loss test recovered with 22 successful commands and reconciled
 PCAP; it does not repair historical failures or complete M3. [Evidence and limits](evidence/m3-drain-controlled-loss-2026-11-07/README.md).
+
+The explicit N3 source selector has passed [two finite synthetic probes](evidence/m3-sensor-selector-2026-11-07/README.md), including parity sharing a selected source sequence. Authenticated FEC recovery and ROS N3 qualification remain pending; PR #2 stays draft.

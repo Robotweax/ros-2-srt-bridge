@@ -2192,3 +2192,28 @@ PR#2Draft, Intrinsic/M4 unberührt.
 N4-Commandphasenbarrieren verwenden. Spontaner Residualgap und exakte historische
 Capture-/Resetursachen bleiben offen; kein Ersatz alter Fehlkohorten und kein
 Defaultfix. Volle M3-Abnahme offen, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-07: Expliziter N3-Source-Selector synthetisch geprüft
+
+- Code/Plan vor Messung 6990da6, 163 Hosttests und Syntaxchecks bestanden.
+  tools/m3_sensor_fault.py: ein/zwei Source-Identitäten derselben Viererreihe,
+  explizite Initialsequence/Row/Positions/Message/Socket/IPv4-UDP-Peers. Keine
+  Origininferenz aus erster DATA-Beobachtung. Fixed IHL, keine Fragmente;
+  DATA-/Message-/Socket-Matches erhalten Parität mit gleicher Last-Source-Sequence.
+  Bestehende Classifierhooks verweigern, partielle Installation räumt eigenen Hook auf.
+- Genau zwei neue finite synthetische Fixtures .local/m3-sensor-selector/1 und /2:
+  je 12 Header plus Restore-Send. Eine Sourceposition droppt zwei Transmissions,
+  zwei Positionen drei, inklusive wiederholter Identität mit Retransmitbit.
+  Parität, SRT-CONTROL, andere Row/Socket/Message/Ports bleiben erhalten.
+  Receiver/Native/PCAP identisch 11 bzw10 bekannte IDs einschließlich Restore;
+  File/Captured/Filter ebenfalls11 bzw10 je Endpoint, zero Kernel-/Nativeverluste,
+  bounded Drain stable_equal, Features unverändert, Filterentfernung geprüft.
+- Keine authentisierte FEC-Recovery-/ROS-/Performance-Abnahme; run_m3 N3 bleibt
+  gesperrt. SDK/ROS/Dependency und bisherige Fehlfälle unverändert. Quellenhashes
+  gegen 6990da6 geprüft; Originalpläne/Readbacks/Logs/Resultate/Rohhashes unter
+  evidence/m3-sensor-selector-2026-11-07/. Payloadcaptures/Secrets bleiben lokal.
+
+**Weiter:** Vertrauenswürdige Live-Sender-Origin/Row/Message/Socket-Identität vor
+Arming gewinnen, danach geplante ein/zwei DATA-Verluste mit authentisierter Parität,
+Receiverrepair/-reject und bestehenden Messguards prüfen. N4-Commandphasenbarrieren
+weiter offen; M3 nicht abgenommen, PR #2 Draft, Intrinsic/M4 unverändert.

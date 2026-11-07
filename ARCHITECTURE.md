@@ -1472,3 +1472,22 @@ margins and requires selected PASS progress, zero source CONTROL tap observation
 and restored traffic. A live 60-s case observed the known signature with complete
 final capture, but this is not a spontaneous-gap explanation or N4 phase-barrier
 acceptance. See evidence/m3-drain-controlled-loss-2026-11-07/.
+
+## Explicit N3 source selector (2026-11-07)
+
+An opt-in development helper now selects one/two explicit source identities in a
+four-column SENSOR FEC row. It requires the sender initial sequence, row index,
+positions, nonzero message numbers, destination socket and exact IPv4 UDP peers;
+first observed DATA is not treated as a FEC origin. Fixed-IHL, unfragmented IPv4
+matches exclude SRT CONTROL and message-zero parity, even when parity shares the
+last selected source sequence. Existing classifier hooks are refused and partial
+installation attempts remove the newly owned hook. Default runners are unchanged.
+
+Two finite synthetic probes pass: one selected identity drops two transmissions;
+two selected identities drop three transmissions including a repeated identity
+with the retransmit bit. Parity and other row/socket/message/port controls forward.
+Receiver and both native/PCAP identity populations agree (11/10 including a restored
+send), with zero capture losses and unchanged features. These are synthetic public
+headers, not authenticated FEC recovery or ROS qualification. All 163 host tests
+pass. Evidence: `evidence/m3-sensor-selector-2026-11-07/`. Trusted live row identity
+and actual one/two-loss repair/rejection qualification remain next; N3/M3 stay open.
