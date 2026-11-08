@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_admission_diagnostics import correlate,successful_receiver_pairs,MATRIX_SLOTS,SLOTS,verify_expired
+from m3_admission_diagnostics import correlate,successful_receiver_pairs,MATRIX_SLOTS,SLOTS,verify_expired,ADDITIONAL_SLOTS
 
 
 class CorrelationTests(unittest.TestCase):
@@ -52,3 +52,7 @@ class MatrixEvidenceTests(unittest.TestCase):
             with self.subTest(field=field),self.assertRaises(ValueError):verify_expired(entry,[proof,dict(worker,**{field:value})])
         with self.assertRaises(ValueError):verify_expired(dict(entry,receiver=dict(b,dispatched_ns=2)),[proof,worker])
         with self.assertRaises(ValueError):verify_expired(dict(entry,sdk_handoffs=2),[proof,worker])
+
+    def test_additional_seeds_do_not_repeat_prior4211(self):
+        self.assertEqual([(s['profile'],s['seconds'],s['seed']) for s in ADDITIONAL_SLOTS],[('N0',15,1701),('N5',300,1701),('N5',300,2903)])
+        self.assertEqual({4211}|{s['seed'] for s in ADDITIONAL_SLOTS if s['profile']=='N5'},{1701,2903,4211})

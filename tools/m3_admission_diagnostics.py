@@ -11,6 +11,7 @@ from m3_command_trace import summarize_run
 
 SLOTS=[dict(label='srt-N0-control',profile='N0',seconds=15,seed=4211),
        dict(label='srt-N5-4211',profile='N5',seconds=300,seed=4211)]
+ADDITIONAL_SLOTS=[dict(label='srt-N0-control',profile='N0',seconds=15,seed=1701)]+[dict(label='srt-N5-'+str(seed),profile='N5',seconds=300,seed=seed) for seed in (1701,2903)]
 MATRIX_SLOTS=[SLOTS[0]]+[dict(label='srt-N5-'+str(seed),profile='N5',seconds=300,seed=seed) for seed in (4211,1701,2903)]
 
 
@@ -70,8 +71,8 @@ def analyze(report,run):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);parser.add_argument('--matrix',choices=('focused','three-seed'),default='focused');parser.add_argument('--progress-gate',choices=('all-success','durable-outcomes'),default='all-success');args=parser.parse_args()
-    slots=SLOTS if args.matrix=='focused' else MATRIX_SLOTS
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);parser.add_argument('--matrix',choices=('focused','three-seed','additional-seeds'),default='focused');parser.add_argument('--progress-gate',choices=('all-success','durable-outcomes'),default='all-success');args=parser.parse_args()
+    slots={'focused':SLOTS,'three-seed':MATRIX_SLOTS,'additional-seeds':ADDITIONAL_SLOTS}[args.matrix]
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
     runtime={p:sha(ROOT/p) for p in RUNTIMES}
     if runtime['install/srt-m0/lib/librobotweax-srt.a']!=json.loads((ROOT/'baselines/dependencies.json').read_text())['srt']['installed_library_sha256']:raise ValueError('provider pin mismatch')
