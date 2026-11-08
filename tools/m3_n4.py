@@ -30,11 +30,14 @@ def network(lab,role,drop,label):
     return dict(bracket=event,qdisc=q)
 
 
-def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record):
+def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initial,submitted):
     if set(a['entries'])!={ID} or set(b['entries'])!={ID}:raise ValueError('unexpected/missing journal identity')
     s=a['entries'][ID];r=b['entries'][ID]
     for key in ('route','payload_hash','source_epoch','source_ns','deadline_ns','session','state','reason','revision','result_valid','result_generation'):
         if s[key]!=r[key]:raise ValueError('sender/receiver durable proof mismatch: '+key)
+    expected_hash=hashlib.sha256(struct.pack('!IIIIQQ',0x52574331,100,100,5000,0,1)).hexdigest()
+    if s['owner_epoch']!=initial['operator']['owner'] or s['source_epoch']!=s['owner_epoch'] or r['owner_epoch']!=initial['robot']['owner'] or any(initial[role]['snapshot']['session']!=r['session'] for role in ('operator','robot')):raise ValueError('original command owner/session provenance mismatch')
+    if r['source_ns']!=submitted['origin_ns'] or r['deadline_ns']!=submitted['deadline_ns'] or r['payload_hash']!=expected_hash:raise ValueError('original ingress/deadline/payload changed')
     if r['deadline_ns']!=r['source_ns']+5_000_000_000:raise ValueError('original command deadline changed')
     if sender['commands_sent']!=1 or sender['fault'] or receiver['fault'] or sender['worker_fault'] or receiver['worker_fault']:raise ValueError('endpoint fault or replay')
     if r['state']==4:
@@ -104,7 +107,7 @@ def run_case(out,phase,direction):
             log.close()
         a=read_journal(out/'operator.sqlite',1);b=read_journal(out/'robot.sqlite',2)
         sender=json.loads((out/'operator-result.json').read_text());receiver=json.loads((out/'robot-result.json').read_text())
-        result['outcome']=check_outcome(phase,sender,receiver,a,b,barrier,json.loads((out/'resumed.json').read_text()),record)
+        result['outcome']=check_outcome(phase,sender,receiver,a,b,barrier,json.loads((out/'resumed.json').read_text()),record,{role:json.loads((out/(role+'-ready.json')).read_text()) for role in lab.containers},json.loads((out/'submitted.json').read_text()))
         result['stopped']={r:json.loads((out/(r+'-stopped.json')).read_text()) for r in lab.containers}
         result['journals']=dict(sender=a,receiver=b)
         if inventory!={p:sha(ROOT/p) for p in runtime}:raise ValueError('runtime changed')
