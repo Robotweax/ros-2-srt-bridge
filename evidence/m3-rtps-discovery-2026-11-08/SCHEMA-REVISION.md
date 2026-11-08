@@ -46,3 +46,17 @@ inputs were unaffected; relative ROS setup paths were unavailable. Record that
 setup failure and add explicit working-directory selection. Use a new typed
 validation output directory; require its four checks before payload inspection.
 No typed claim was accepted from the failed setup invocation.
+
+The generated-type self-test then correctly rejects the proposed raw-byte equality:
+serialization contains unspecified alignment bytes (observed306-byte message,
+roundtrip differences only in padding). Replace guessed equality with a mask
+computed from generated field declarations: compare every semantic byte after ROS
+deserialization/reserialization, require CDR1 little-endian header and exact schema
+length, and allow only zero outer RTPS end padding up to alignment4. Add six
+positive/negative generated-type checks, including altered alignment padding.
+No captured payload claim was accepted by the failed byte-equality self-test.
+
+Fragment reporting also must accept pinned PDML boolean show=True, not just1.
+A first fragment has offset0 plus MF=True; earlier intermediate counts omitted it.
+Add that regression, and reparse the same six PDML inputs to final fragment totals.
+This changes descriptive fragment metadata, not input population or original verdict.

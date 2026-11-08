@@ -52,6 +52,10 @@ class PdmlTests(unittest.TestCase):
         with patch('m3_rtps_discovery.MAX_RECORDS',0),self.assertRaisesRegex(ValueError,'budget'):self.read(packet())
         with patch('m3_rtps_discovery.MAX_BYTES',1),self.assertRaisesRegex(ValueError,'budget'):self.read(packet())
 
+    def test_first_ipv4_fragment_uses_pinned_boolean_show_value(self):
+        text=packet().replace('<proto name="rtps">','<field name="ip.frag_offset" show="0"/><field name="ip.flags.mf" show="True"/><proto name="rtps">')
+        result=self.read(text);self.assertEqual(result['fragment_frames'],1)
+
     def test_ambiguous_field_and_source_context_are_withheld(self):
         text=packet().replace('<field name="rtps.sm.seqNumber" show="1"/>','<field name="rtps.sm.seqNumber" show="1"/><field name="rtps.sm.seqNumber" show="2"/>')
         with self.assertRaisesRegex(ValueError,'ambiguous'):self.read(text)

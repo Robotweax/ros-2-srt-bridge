@@ -47,7 +47,7 @@ def parse(path):
             if any(p.get('name')=='_ws.malformed' for p in packet.iter('proto')):raise ValueError('malformed decoded packet')
             source=field(packet,'ip.src',required=True);destination=field(packet,'ip.dst',required=True)
             ipaddress.ip_address(source);ipaddress.ip_address(destination)
-            is_fragment=field(packet,'ip.frag_offset') not in (None,'0') or field(packet,'ip.flags.mf')=='1'
+            is_fragment=field(packet,'ip.frag_offset') not in (None,'0') or field(packet,'ip.flags.mf') in ('1','True')
             fragment_frames+=int(is_fragment)
             if is_fragment:fragments.append(dict(frame=number,source=source,destination=destination,ip_id=field(packet,'ip.id'),offset=field(packet,'ip.frag_offset'),more=field(packet,'ip.flags.mf'),reassembled_in=field(packet,'ip.reassembled_in'),reassembled_length=field(packet,'ip.reassembled.length')))
             for proto in packet.findall("proto[@name='rtps']"):
