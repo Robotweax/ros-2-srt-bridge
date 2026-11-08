@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: design/test bounded receiver command retention during temporary clock qualification gaps, preserving original context/deadline and one SDK handoff; cover expiry/context loss/capacity before production fix; investigate why clock expired; loaded ROS DDS discovery separate",
+  "current_priority": "N5: design durable receiver expiry status for a fully validated provably stale received command, with no dispatch/replay/renewed budget; preserve unknown when clock/context proof unavailable; separate terminal progress from all-success gate and investigate CONTROL delay/clock expiry",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2220,6 +2220,81 @@
     "new_sdk_ros_build": false,
     "all8_runtime_hashes_unchanged": true,
     "production_behavior_fix": false,
+    "complete_M3_acceptance": false
+  },
+  "receiver_clock_retention": {
+    "evidence": "evidence/m3-receiver-clock-retention-2026-11-08/",
+    "plan_source": "f9101a1",
+    "source": "4a510e75ad10e5e24a0786da227151a940ee8492",
+    "implementation": "bounded immutable receiver FIFO after consumed structural/identity/sequence validation, soft clock gaps only; fresh original-age recheck before one forwarding",
+    "logical_control_capacity": 64,
+    "logical_command_capacity": 56,
+    "max_revalidations_per_loop": 8,
+    "source_budget_renewed": false,
+    "future_hard_errors_retained": false,
+    "sdk_tests": 72,
+    "ros_tests": 41,
+    "host_tests": 271,
+    "native_families": [
+      "ipv4",
+      "ipv6"
+    ],
+    "native_modes_each": [
+      "recover with5000ms budget",
+      "expiry with original500ms fixture budget",
+      "control context loss",
+      "shutdown"
+    ],
+    "native_sdk_handoffs_each": 1,
+    "native_recovery_effects_each": 1,
+    "native_negative_effects_each": 0,
+    "native_closed_journal_pairs": 8,
+    "new_build": true,
+    "live_status": "failed_progress",
+    "live_cohort_exit": 1,
+    "live_n0": {
+      "seed": 4211,
+      "seconds": 15,
+      "successes": 8,
+      "attempts": 8,
+      "skipped": 0
+    },
+    "live_n5": {
+      "seed": 4211,
+      "seconds": 300,
+      "successes": 21,
+      "attempts": 22,
+      "unresolved": 1,
+      "skipped": 128,
+      "source_produced": 75030,
+      "observer_received": 17058
+    },
+    "live_unresolved_intent": 22,
+    "live_initial_age_error": 2,
+    "live_revalidated_session_error": 25,
+    "live_command_peer_error": 6,
+    "live_wire_sequence": 155,
+    "live_sdk_handoffs": 1,
+    "live_resumes": 0,
+    "live_receiver_journal_entry": false,
+    "shared_vm_source_to_initial_evaluation_ns": 10159390588,
+    "shared_vm_already_past_source_deadline_ns": 5159390588,
+    "defer_to_drop_trace_gap_ns": 274626125,
+    "live_last_state": "LOCAL_QUEUED",
+    "closed_sender_state": "UNKNOWN/reconcile_required",
+    "original_source_budget_ms": 5000,
+    "active_context_events": 0,
+    "all_capture_trace_provider_gates_pass": true,
+    "all8_rebuilt_hashes_unchanged_during_live": true,
+    "provider_pin_unchanged": true,
+    "changed_runtime_artifacts": [
+      "bridge_node",
+      "transport.a"
+    ],
+    "retries": 0,
+    "durable_expiry_outcome_implemented": false,
+    "underlying_delay_clock_cause_proven": false,
+    "historical_uncertainty_resolved": false,
     "complete_M3_acceptance": false
   }
 }

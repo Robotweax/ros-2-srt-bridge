@@ -1,0 +1,518 @@
+{
+  "cases": [
+    {
+      "mode": "recover",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 1,
+      "drops": 0,
+      "effects": 1
+    },
+    {
+      "mode": "expiry",
+      "original_budget_ms": 500,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "context",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "shutdown",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "recover",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 1,
+      "drops": 0,
+      "effects": 1
+    },
+    {
+      "mode": "expiry",
+      "original_budget_ms": 500,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "context",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "shutdown",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    }
+  ],
+  "queue": [
+    {
+      "capacity": 56,
+      "total_capacity": 64,
+      "fifo_original_bytes_context": true,
+      "resource_ceiling_not_renewed": true,
+      "sensor_only_context_preserved": true,
+      "future_hard_errors_excluded": true
+    }
+  ],
+  "late_stale": [
+    {
+      "case": "late_stale",
+      "session_error": 25,
+      "age_error": 0,
+      "original_budget_preserved": true
+    }
+  ],
+  "original_session_negatives": [
+    {
+      "case": "control",
+      "admitted": true
+    },
+    {
+      "case": "expired",
+      "session_error": 13,
+      "age_error": 2,
+      "clock_error": 2,
+      "query_admitted": true,
+      "duplicate_replay_rejected": true,
+      "reopened_unknown": true
+    },
+    {
+      "case": "future",
+      "session_error": 13,
+      "age_error": 9,
+      "clock_error": 0,
+      "query_admitted": true,
+      "duplicate_replay_rejected": true,
+      "reopened_unknown": true
+    }
+  ],
+  "closed_journals": {
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-context": {
+      "mode": "context",
+      "sender": {
+        "sha256": "8067c8c1a0e8873f97eda78a7cbee93f7177402085cca02e4e0b4d3c5be4b065",
+        "entries": {
+          "d0926deaa244af2c1ee1b9a9fd03aae3": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "1afd4e87e45b7bb4027586e966831b2d",
+            "session": "0afb09f4c4669683ce462c8380a6745b",
+            "owner_epoch": "1afd4e87e45b7bb4027586e966831b2d",
+            "source_ns": 385551399965,
+            "admitted_ns": 385555760340,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 390551399965,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-shutdown": {
+      "mode": "shutdown",
+      "sender": {
+        "sha256": "49a2fe35117c5d43c7da8f33b75fd506fdd86030be4c016b8182edd3fcf908cc",
+        "entries": {
+          "72e4ee5decf8533a2e28e555290a2dfa": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "1355767ebb9ab146bc683e3b59c4c251",
+            "session": "7dcf6b867f71b82f8c9360a3adb59aa5",
+            "owner_epoch": "1355767ebb9ab146bc683e3b59c4c251",
+            "source_ns": 386071039757,
+            "admitted_ns": 386076723132,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 391071039757,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-expiry": {
+      "mode": "expiry",
+      "sender": {
+        "sha256": "f5a159275e108c342af0138d09d2b8fea6f1485329c0472dac1ce8e451c0aede",
+        "entries": {
+          "f531b07a1fc59f5e48c337defda5df54": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "ac5495152382067a6df01d262e9fab3e",
+            "session": "46a53e99cfa17762959f20ab674d4284",
+            "owner_epoch": "ac5495152382067a6df01d262e9fab3e",
+            "source_ns": 384462404132,
+            "admitted_ns": 384466939215,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 384962404132,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-recover": {
+      "mode": "recover",
+      "sender": {
+        "sha256": "6170d5f92ae57c6af5a70f2e249a564d23f73be47e99a463f75f58090996ab06",
+        "entries": {
+          "cf0ff0181168037124f7162bd12d8049": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "34bb7ee870e5ae60a0920d2c5a4da90c",
+            "session": "0d5962a55075df6c5f2ba789bd084fc1",
+            "owner_epoch": "34bb7ee870e5ae60a0920d2c5a4da90c",
+            "source_ns": 383060247173,
+            "admitted_ns": 383065909673,
+            "dispatched_ns": 0,
+            "finished_ns": 383949026340,
+            "deadline_ns": 388060247173,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "d0f1a85a24fe48185c68b2765e9364db4e02391d8f830d042754c717eea09098",
+        "entries": {
+          "cf0ff0181168037124f7162bd12d8049": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "34bb7ee870e5ae60a0920d2c5a4da90c",
+            "session": "0d5962a55075df6c5f2ba789bd084fc1",
+            "owner_epoch": "f24977680a46ba95c2ff51a8b188c495",
+            "source_ns": 383060247173,
+            "admitted_ns": 383903650840,
+            "dispatched_ns": 383931113006,
+            "finished_ns": 383941725423,
+            "deadline_ns": 388054450659,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-context": {
+      "mode": "context",
+      "sender": {
+        "sha256": "a071725785000cf6654f4a36d63dd56b3fff623ed47f3fc3b5dd783487e16f9e",
+        "entries": {
+          "628004b06c22ef2943e03df1f7878f1e": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "1053d75a1f67bd963b120bb769c6de44",
+            "session": "8189900460473fd957f72c45436e62f9",
+            "owner_epoch": "1053d75a1f67bd963b120bb769c6de44",
+            "source_ns": 378293635004,
+            "admitted_ns": 378298877545,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 383293635004,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-shutdown": {
+      "mode": "shutdown",
+      "sender": {
+        "sha256": "1ce22a26b0b3c6765440552d4f7ad6857b13d63e507c34b9e7b5bc3e93f97d12",
+        "entries": {
+          "3b748ea3d69f9b223a1c7da09d8a7bed": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "a64b45b5a0172374f24f1dc284a75b6f",
+            "session": "bab7d9a435091dbb4f2d0af5de0364b8",
+            "owner_epoch": "a64b45b5a0172374f24f1dc284a75b6f",
+            "source_ns": 378844190796,
+            "admitted_ns": 378848066712,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 383844190796,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-expiry": {
+      "mode": "expiry",
+      "sender": {
+        "sha256": "748a3a4fa7f133a0b38473a92ade623d3518f006999a46b48b37a4d6457839f1",
+        "entries": {
+          "c3a5a7292b8e1bfbe612cc3596209727": {
+            "state": 8,
+            "reason": 2,
+            "revision": 0,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "e966332aebdbb801e3c116a1e090b523",
+            "session": "1968a2f9c086acbc147cfe395895c948",
+            "owner_epoch": "e966332aebdbb801e3c116a1e090b523",
+            "source_ns": 377239770670,
+            "admitted_ns": 377245393837,
+            "dispatched_ns": 0,
+            "finished_ns": 0,
+            "deadline_ns": 377739770670,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3",
+        "entries": {}
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-recover": {
+      "mode": "recover",
+      "sender": {
+        "sha256": "7ecd2ea38acfac95e74ec9b118b7ee6a741abb991cecc141b3879b1cd45e98ce",
+        "entries": {
+          "b7032cac01cad71ccbdf86dcda31a124": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "caff442c5d95eaac94286968ac4966db",
+            "session": "9bc64e99f67beddf0f0e48f1b5ca9e64",
+            "owner_epoch": "caff442c5d95eaac94286968ac4966db",
+            "source_ns": 375813646669,
+            "admitted_ns": 375818145419,
+            "dispatched_ns": 0,
+            "finished_ns": 376705754336,
+            "deadline_ns": 380813646669,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "4a4abaf9db43bc83cf4efc3929a1c3137011120a97f29fd11f26607a7a2957bf",
+        "entries": {
+          "b7032cac01cad71ccbdf86dcda31a124": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+            "source_epoch": "caff442c5d95eaac94286968ac4966db",
+            "session": "9bc64e99f67beddf0f0e48f1b5ca9e64",
+            "owner_epoch": "6e2a41c79453d7d33f1ea623d1ac20b3",
+            "source_ns": 375813646669,
+            "admitted_ns": 376652359086,
+            "dispatched_ns": 376682081753,
+            "finished_ns": 376694739836,
+            "deadline_ns": 380808342713,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "scope": "controlled closed fixture records; absence is not general nonexecution/replay authority"
+    }
+  },
+  "raw_hashes": {
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-context/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-context/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-context/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "8067c8c1a0e8873f97eda78a7cbee93f7177402085cca02e4e0b4d3c5be4b065"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-context/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-shutdown/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-shutdown/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-shutdown/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "49a2fe35117c5d43c7da8f33b75fd506fdd86030be4c016b8182edd3fcf908cc"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-shutdown/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-expiry/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-expiry/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-expiry/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "f5a159275e108c342af0138d09d2b8fea6f1485329c0472dac1ce8e451c0aede"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-expiry/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-recover/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-recover/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-recover/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "6170d5f92ae57c6af5a70f2e249a564d23f73be47e99a463f75f58090996ab06"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1115/retention-recover/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "d0f1a85a24fe48185c68b2765e9364db4e02391d8f830d042754c717eea09098"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-context/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-context/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-context/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "a071725785000cf6654f4a36d63dd56b3fff623ed47f3fc3b5dd783487e16f9e"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-context/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-shutdown/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-shutdown/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-shutdown/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "1ce22a26b0b3c6765440552d4f7ad6857b13d63e507c34b9e7b5bc3e93f97d12"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-shutdown/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-expiry/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-expiry/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-expiry/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "748a3a4fa7f133a0b38473a92ade623d3518f006999a46b48b37a4d6457839f1"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-expiry/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "617bf45633009f0c57e07c11d45bd36f16e6f15ddbdf9ecf857a3b75391e0ba3"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-recover/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-recover/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-recover/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "7ecd2ea38acfac95e74ec9b118b7ee6a741abb991cecc141b3879b1cd45e98ce"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1037/retention-recover/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "4a4abaf9db43bc83cf4efc3929a1c3137011120a97f29fd11f26607a7a2957bf"
+    }
+  }
+}

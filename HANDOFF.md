@@ -3045,3 +3045,54 @@ Forwarding ohne Sender-Replay. Spätes Expiry, Kontextverlust, Kapazität und Sh
 explizit abdecken; keine flüchtige Rejection zum dauerhaften Absence-Seal erklären.
 Underlying Clock-Ablauf und historische Ursachen bleiben getrennt. Loaded ROS/N5-
 Discovery separat; PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: begrenzte Receiver-Retention
+
+Plan f9101a1, Build-/Live-Source4a510e7. Der Transport hält jetzt nach struktureller,
+Identitäts-, Payload- und Sequenzprüfung soft-clock-unqualifizierte COMMANDs in
+festem FIFO. Originalframe/-kontext/-timestamp/-budget bleiben unverändert;
+Session::check_command revalidiert vor einmaligem Forwarding, kein SRT-Replay.
+Future-/Hard-Errors ausgeschlossen. Ready+retained <=64, COMMANDs <=56,8Slots für
+andere CONTROL-Nachrichten,8 Revalidierungen pro Loop. Kapazität wirft älteres
+Work nicht weg; Kontextverlust/Shutdown räumen auf. Lokales Hold-Ceiling ist nur
+Ressourcenschutz, kein neues Ausführungsbudget. Evidenz:
+[evidence/m3-receiver-clock-retention-2026-11-08/README.md](evidence/m3-receiver-clock-retention-2026-11-08/README.md).
+
+- Neue Tracepunkte35/36/37/38 unterscheiden Defer/Resume/Drop/Capacity. Audit bindet
+  frische Revalidation an Originalrequest/-kontext/-origin/-sequenz und zählt
+  initiales Gate nicht doppelt. control_received enthält Ready+Retained. Fester
+  zusätzlicher Speicher für56Frames; kein Overhead-Äquivalenzclaim.
+- Release/Werror SDK72/72, ROS41/41, Host271 vor/nach LivePASS. IPv4/IPv6 jeweils
+  Recovery mit originalem5sBudget:1SDKHandoff/1Forward/1Effect/ClosedSuccess.
+  Negative Original500ms-Fixtureexpiry, CONTROL-Verlust und Shutdown: je1Handoff,
+  0Forward/Effect, ClosedUNKNOWN ohne Result. Acht geschlossene Journalpaare und
+  Tracepopulationen ohne Drops geprüft. FIFO-/Kapazitäts-/Kontext-/Future-/Hard-
+  Grenzen und frische Requalification nach ursprünglichem Deadlineablauf geprüft.
+- Zwei vorab geplante Live-Slots genau einmal: N0/4211/15s8/8,0Skip; N5/4211/300s
+  21/22 bestätigt,1unaufgelöst,128Skip. CandidateProgressFAILED/Exit1; ursprünglicher
+  Safety/Accounting-HarnessPASS bleibt. Keine Zusatzseeds/Retry.
+- Intent22 kommt bei initialer Receiver-Evaluation10.159390588s nach Origin an,
+  schon5.159390588s nach originalem5sSenderdeadline (SharedVM-Vergleich, kein
+  reiner Wire-/Networkdelayclaim). Clockexpired2 führt zu Retention, frische
+  Requalification liefert stale_sample25; Drop nach274.626125ms Traceabstand,
+  matched COMMAND START_EXPIRED6/Originalsequenz155. Kein Resume/WorkerForwarding.
+  Das ist sicheres Nichtstarten eines verspäteten Frames, kein Beleg, dass ein
+  hypothetischer Fix in einem früheren Lauf funktioniert hätte.
+- START_EXPIRED bleibt flüchtige Diagnose, kein dauerhafter Terminalstatus. Live
+  zuletztLOCAL_QUEUED/rev0,1252Polls/135NOT_FOUND-Beobachtungen,1188 ausgelassen.
+  ClosedUNKNOWN kann Cleanup sein, Receiver leer; keine Replay-/negative Outcome-
+  Freigabe. Kein aktiver Kontextverlust. Sensor Source/Observer75030/17058 enthält
+  große Lücken; volle N5-/Sensor-/M3-Abnahme bleibt offen.
+- Capture/Drain/Trace/Provider-Gates PASS; jeder bestätigte Erfolg mit Original-
+  Budget-/Dispatch-/Journal-/einmaligemSDK-Beweis. Nur bridge_node/transport.a neu;
+  alle8 rebuilt Runtimehashes während/nach Live gleich, Providerpin unverändert.
+  Keine Builds/Tests während Live, eigene Namespaces entfernt. Rohdaten lokal
+  gehasht, öffentliche Selektionen und Auslassungen explizit dokumentiert.
+
+Weiter: Dauerhaften Receiver-Expiry-Status für vollständig validierte und mit
+qualifizierter Clock beweisbar veraltete Commands entwerfen, ohne Dispatch,
+Replay, Deadlineerneuerung oder Absence-Erfindung. Bei fehlendem Clock-/Kontext-
+Beweis UNKNOWN bewahren. Terminal-Progress getrennt von All-Success-Deadlinegate
+führen; ursprüngliche FAILED-Verdikte nicht umwerten. CONTROL-Verzögerung/Clock-
+Expiry-Ursache separat untersuchen. PR2 bleibt Draft, M3 offen, M4 unberührt.

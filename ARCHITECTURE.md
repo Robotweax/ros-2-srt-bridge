@@ -2029,3 +2029,52 @@ counts retain delivery gaps. Full N5/M3 and loaded ROS/N5 discovery remain open,
 PR2 draft, Intrinsic/M4 untouched. Original verdicts, selected traces, closed
 failure audit and later qualification sample:
 evidence/m3-instrumented-n5-matrix-2026-11-08/.
+
+
+### Bounded receiver clock-gap retention candidate (2026-11-08)
+
+Frozen plan f9101a1 and source4a510e7 add a fixed receiver FIFO after authenticated
+structural/identity/payload/sequence validation. Only soft unqualified/expired
+clock results qualify; future timestamps/hard errors do not. Original envelope,
+payload, CONTROL context, source timestamp and budget are immutable. Fresh
+Session::check_command gates one forwarding without readmission or SRT resend.
+Later commands preserve FIFO while clock probes/other CONTROL can continue.
+Ready+retained occupancy is64 maximum, COMMANDs56 maximum with8 other-message
+reservations. Overflow does not evict older work; CONTROL loss/shutdown clears
+retained entries, SENSOR-only changes preserve them. Up to8 revalidations per loop;
+local resource ceilings never renew source execution budgets and are checked when
+an entry reaches processing. Fixed storage for56 additional frames is explicit,
+without resource/overhead-equivalence claims. Existing inbox counters include held
+occupancy. New trace35..38 distinguishes deferral/resumption/drop/capacity;
+original-context success audits use the fresh resume gate without double counting.
+
+Full Release/Werror SDK72/ROS41 and host271 before/after live pass. Eight real native
+IPv4/IPv6 cases cover5s-budget recovery with one SDK handoff/forward/effect and
+negative500ms original-fixture expiry, context loss and shutdown with no forward/
+effect, retained UNKNOWN and no replay. Fixed FIFO/capacity/context/future/hard
+boundaries and stale age after requalification are checked independently.
+
+The prospectively fixed N0/4211/15s control passes8/8. N5/4211/300s fails progress:
+21/22 confirmed,1unresolved,128skips, original safety/accounting harnessPASS. No
+retry/additional seed. Intent22 is already10.159390588s old at initial receiver
+evaluation (5.159390588s beyond its original5s source deadline on the shared VM).
+It is retained through clock expiry, then fresh revalidation returns stale_sample25
+and drops it, yielding matched diagnostic COMMAND START_EXPIRED6/sequence155.
+The defer-to-drop trace gap274.626125ms is not exact clock recovery or pure network
+delay. No worker forwarding/resume occurs for this intent; it cannot safely start.
+
+The diagnostic still lacks a durable receiver terminal record, so live sender
+LOCAL_QUEUED and later closed UNKNOWN remain unresolved. No ephemeral error,
+absence or budget expiry authorizes replay or fabricated nonexecution. This
+candidate validates short-gap recovery and safe refusal, not complete N5 progress
+or historical resolution. Next design durable expiry status only when validated
+command identity and qualified stale-age proof support it; keep uncertainty when
+proof is unavailable and distinguish terminal progress from all-success gates.
+Underlying CONTROL delay/clock expiry and loaded ROS/N5 discovery remain separate.
+
+Capture/drain/provider/trace gates pass, zero drops/context changes, original
+success/journal/dispatch/budget/one-SDK proofs retained. Only bridge_node and
+transport.a rebuild; all8 runtime hashes fixed across live, provider unchanged,
+owned namespaces removed, no tests/builds overlap measurement. Sensor75030/17058
+source/observer counts retain delivery gaps. Full M3 open, PR2 draft, M4 untouched.
+Evidence: evidence/m3-receiver-clock-retention-2026-11-08/.
