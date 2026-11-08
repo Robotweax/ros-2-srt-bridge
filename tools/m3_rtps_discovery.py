@@ -120,7 +120,7 @@ def assess(decoded,addresses):
 
 def docker(tool,argv,path):
     name='ros2-srt-rtps-analysis-'+secrets.token_hex(5)
-    command=['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none','--cap-drop','ALL','--memory','1g','--name',name,'-v',str(ROOT)+':/workspace:ro',tool]+argv
+    command=['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none','--cap-drop','ALL','--memory','1g','--name',name,'-w','/workspace','-v',str(ROOT)+':/workspace:ro',tool]+argv
     try:
         with path.open('xb') as output,path.with_suffix(path.suffix+'.stderr').open('x') as error:
             subprocess.run(command,cwd=ROOT,stdout=output,stderr=error,check=True,timeout=180)

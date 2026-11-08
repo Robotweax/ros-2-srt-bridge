@@ -39,3 +39,10 @@ adjacent entity IDs, partial-layout byte cast or execution/replay is authorized.
 Run four positive/negative generated-type checks first, then inspect the failed
 robot source at both taps and both paced HELLO directions as positive controls.
 This is offline payload validation, not authentication or a subscription callback.
+
+The first generated-type self-test stops before Python because the isolated CLI
+container was not given /workspace as its working directory. Absolute tshark
+inputs were unaffected; relative ROS setup paths were unavailable. Record that
+setup failure and add explicit working-directory selection. Use a new typed
+validation output directory; require its four checks before payload inspection.
+No typed claim was accepted from the failed setup invocation.
