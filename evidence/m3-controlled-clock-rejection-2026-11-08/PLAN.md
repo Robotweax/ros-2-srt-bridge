@@ -39,3 +39,12 @@ Acceptance means controlled boundary and uncertainty contracts pass, not full N5
 clock-model validation on hardware, a historical root cause or production fix.
 If a failure requires implementation changes, archive that failed source/run
 before a separately frozen revision; never silently replace its verdict.
+
+Post-validation fixture-only revision: the first full71-test suite passed at
+deedc54. Its new protocol fixture initially used a PID-named output with a reuse
+guard; retained outputs plus later PID reuse could fail an unrelated repeat.
+Use an exclusively created mkdtemp directory, preserving all original evidence.
+Compile and run only the nonnetwork admission_rejection_contract once after this
+change. No native/WAN scenario is repeated and no failure is being replaced.
+Record its separate source/binary/log provenance; do not relabel the original
+full-suite source. Production/runtime artifacts remain unchanged.

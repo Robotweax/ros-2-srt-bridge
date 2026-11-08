@@ -1,6 +1,7 @@
 #include <robotweax/srt_bridge/session.hpp>
 #include <robotweax/srt_bridge/journal.hpp>
 #include <filesystem>
+#include <cstdlib>
 #include <iostream>
 #include <stdexcept>
 #include <unistd.h>
@@ -74,6 +75,8 @@ void run(const std::filesystem::path& root,const std::string& kind){
 }
 }
 int main(){try{
-    auto root=std::filesystem::current_path()/("admission-rejection-"+std::to_string(getpid()));check(!std::filesystem::exists(root),"fixture output reuse refused");
+    auto pattern=(std::filesystem::current_path()/"admission-rejection-XXXXXX").string();
+    const auto created=mkdtemp(pattern.data());check(created!=nullptr,"unique fixture directory creation failed");
+    const std::filesystem::path root(created);
     for(const auto& kind:{"control","expired","future"}){std::filesystem::create_directories(root/kind);run(root/kind,kind);}return 0;
 }catch(const std::exception& error){std::cerr<<"FAIL: "<<error.what()<<'\n';return 1;}}
