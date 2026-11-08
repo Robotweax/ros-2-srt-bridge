@@ -41,6 +41,11 @@ class PdmlTests(unittest.TestCase):
         tree.find('.//proto').append(sm)
         rows=self.read(E.tostring(tree,encoding='unicode'))['rows'];self.assertIsNone(rows[1]['topic']);self.assertIsNone(rows[1]['endpoint'])
 
+
+    def test_heartbeat_range_is_never_a_data_sample_sequence(self):
+        text=packet().replace('show="0x15"','show="0x07"').replace('<field name="rtps.sm.seqNumber" show="1"/>','<field name="rtps.sm.seqNumber" show="1"/><field name="rtps.sm.seqNumber" show="4"/>')
+        r=self.read(text);self.assertIsNone(r['rows'][0]['sequence'])
+
     def test_untrusted_schema_malformed_truncation_and_budget_are_rejected(self):
         for text in (packet().replace('wireshark/4.2.2','wireshark/9'),packet()[:-4],packet().replace('</packet>','<proto name="_ws.malformed"/></packet>'),packet().replace(PREFIX, 'ab',1)):
             with self.subTest(text=text[-40:]),self.assertRaises((ValueError,E.ParseError)):self.read(text)
@@ -70,6 +75,8 @@ class BindingTests(unittest.TestCase):
         decoded,addresses=self.fixture();decoded['robot']['rows'].pop(0)
         r=assess(decoded,addresses)
         self.assertEqual(r['topics'][TOPICS[0]]['advertisements']['robot']['observations'],0)
+        presence=r['cross_capture_advertisement_presence']['operator']
+        self.assertEqual(presence['present_both'],0);self.assertEqual(len(presence['source_only']),1)
         # Union directory can still label the observed DATA, but is explicitly
         # retrospective and cannot claim this peer processed the discovery.
         self.assertEqual(r['topics'][TOPICS[0]]['data']['robot']['observations'],1)

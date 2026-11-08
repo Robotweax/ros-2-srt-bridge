@@ -60,7 +60,9 @@ def parse(path):
                     w=field(sm,'rtps.sm.wrEntityId');r=field(sm,'rtps.sm.rdEntityId')
                     if w is None or r is None:raise ValueError('missing scoped endpoint ID')
                     writer=int(w,0).to_bytes(4,'big').hex();reader=int(r,0).to_bytes(4,'big').hex()
-                    seq=field(sm,'rtps.sm.seqNumber')
+                    # HEARTBEAT carries first/last sequence values; ACKNACK
+                    # carries a set. Neither is a DATA sample sequence.
+                    seq=field(sm,'rtps.sm.seqNumber',required=True) if kind in (0x15,0x16) else None
                     topic=field(sm,'rtps.param.topicName');endpoint=hex_value(field(sm,'rtps.param.endpoint_guid','value'),16)
                     if bool(topic)!=bool(endpoint):
                         # Non-endpoint built-in payloads can have topic/type without
@@ -99,7 +101,18 @@ def assess(decoded,addresses):
                     direction='own_source' if row['source']==local else 'peer_source' if row['source']==peer else 'other_source'
                     messages.append(dict(row,direction=direction))
             topics[topic]['data'][role]=dict(observations=len(messages),by_direction=dict(Counter(r['direction'] for r in messages)),unique_writer_sequences=len({(r['writer'],r['sequence']) for r in messages}),rows=messages)
-    return dict(topics=topics,binding_count=len(bindings),unbound_data_submessages={role:sum(r['kind'] in (0x15,0x16) and r['writer'] not in bindings for r in data['rows']) for role,data in decoded.items()},scope='retrospective decoded capture observations and union GUID directory; missing observations never prove middleware absence, execution outcome or unique kernel loss cause; DATA_FRAG counts are submessages, not reconstructed application callbacks')
+    # Presence by complete submessage identity, not a paired datagram loss count.
+    cross={}
+    for role in ('operator','robot'):
+        peer='robot' if role=='operator' else 'operator'
+        def relevant(row):
+            return row['source']==addresses[role] and (row['destination']==addresses[peer] or ipaddress.ip_address(row['destination']).is_multicast)
+        own=[r for r in adverts if r['capture']==role and relevant(r)]
+        other=[r for r in adverts if r['capture']==peer and relevant(r)]
+        key=lambda r:(r['writer'],r['sequence'],r['submessage_sha256'],r['topic'],r['endpoint'],r['side'])
+        a={key(r) for r in own};b={key(r) for r in other}
+        cross[role]=dict(source_unique=len(a),peer_unique=len(b),present_both=len(a&b),source_only=[dict(writer=k[0],sequence=k[1],submessage_sha256=k[2],topic=k[3],endpoint=k[4],side=k[5]) for k in sorted(a-b)],peer_only=[dict(writer=k[0],sequence=k[1],submessage_sha256=k[2],topic=k[3],endpoint=k[4],side=k[5]) for k in sorted(b-a)])
+    return dict(topics=topics,cross_capture_advertisement_presence=cross,binding_count=len(bindings),unbound_data_submessages={role:sum(r['kind'] in (0x15,0x16) and r['writer'] not in bindings for r in data['rows']) for role,data in decoded.items()},scope='retrospective decoded capture observations and union GUID directory; missing observations never prove middleware absence, execution outcome or unique kernel loss cause; DATA_FRAG counts are submessages, not reconstructed application callbacks')
 
 
 def docker(tool,argv,path):
