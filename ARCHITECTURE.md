@@ -1962,3 +1962,32 @@ and explicit public selections: evidence/m3-admission-diagnostics-2026-11-08/.
 Next freeze controlled receiver clock/future-age rejection coverage and a justified
 finite instrumented multi-seed plan. Loaded ROS/N5 discovery remains separate,
 PR2 draft, M3 open, Intrinsic/M4 untouched.
+
+
+### Controlled rejection and retained uncertainty (2026-11-08)
+
+Test-only coverage now distinguishes receiver qualification expiry (SessionError13,
+AgeError2, ClockState2) from a future origin under an otherwise qualified mapper
+(13/9/0). A direct production Session/CommandJournal contract uses explicit logical
+times, a normal handshake and a deliberate200ms sender logical advance; it is not
+an SRT wire or host-clock experiment. Both negatives preserve CONTROL, consume the
+command receive watermark, allow QUERY and retain original sender context/budget.
+Duplicate/elapsed-budget/NOT_FOUND cannot invent a result; reopened sender records
+remain UNKNOWN/reconcile_required and cannot mint transmit permission.
+
+Real native SRT IPv4/IPv6 receiver-expiry cases additionally query before/after
+the5s deadline, restart the receiver with normal qualification and reuse the old
+command ID. The live sender remains LOCAL_QUEUED through the deadline, becomes
+UNKNOWN on context replacement and reconciles without replay. Complete trace
+populations show one SDK handoff total; controlled simulated effects remain0.
+Closed journal audits preserve uncertainty, original5s deadline and no result;
+receiver absence is not general nonexecution authority.
+
+The full Release/Werror SDK suite passes71/71 at deedc54, host267 passes. A later
+fixture-only mkdtemp directory-allocation correction at9e174d5 passes its separate
+nonnetwork contract check; the original full-suite provenance remains distinct.
+All eight installed runtime hashes and provider pin stay unchanged, no production
+algorithm/install/ROS rebuild, prior ROS41 remains prior validation. Evidence and
+closed audits: evidence/m3-controlled-clock-rejection-2026-11-08/. The old4211 cause
+and progress fix remain open; next freeze finite instrumented multi-seed N5
+coverage. Loaded ROS/N5 discovery is separate. PR2 draft, M3 open, M4 untouched.

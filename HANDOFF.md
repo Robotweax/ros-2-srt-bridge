@@ -2965,3 +2965,39 @@ semantik vorab festlegen, danach eine begründete endliche instrumentierte
 Mehrseed-Cohort. Keine Deadlineverlängerung und keinen Nonrecurrence-PASS als Fix
 werten. Loaded ROS/N5-Discovery bleibt separat, N3/Clock/Security/Resources folgen.
 PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: kontrollierte Clock-Rejection und Ungewissheit
+
+Plan c9398eb, vollständige SDK-Validation deedc54:71/71 PASS, Host267/267 PASS.
+Nur Test-/Build-Testregistrierung geändert, keine Produktionsalgorithmen oder
+Runtime-Installation. Evidenz:
+[evidence/m3-controlled-clock-rejection-2026-11-08/README.md](evidence/m3-controlled-clock-rejection-2026-11-08/README.md).
+
+- Neuer direkter Session-/Journal-Vertrag: Fresh-Control akzeptiert; Receiver-
+  Clock-Expiry liefert SessionError13/AgeError2/ClockState2, Future-Age liefert
+  13/9/0. Future-Case nutzt explizite logische Zeiten mit200ms Sender-Vorsprung
+  nach Zero-Offset-Qualifikation; keine Hostclock-/SRT-/ROS-Manipulation. Beide
+  Negativfälle behalten CONTROL, konsumieren die Replay-Watermark und erlauben
+  QUERY. Budgetablauf/NOT_FOUND erzeugen kein negatives Ergebnis oder neues
+  Budget. Reopen bleibt UNKNOWN/reconcile_required ohne Senderecht.
+- Echte native SRT IPv4/IPv6 je einmal: Receiver-Testdeadline150ms bei1sProbes,
+  COMMAND-Rejection/PeerError mit originaler Sequenz korreliert. QUERY vor/nach
+  originalem5sBudget liefert lokal LOCAL_QUEUED und Peer NOT_FOUND ohne Result.
+  Receiver-Restart mit normaler Qualification lässt den lebenden Sender zu
+  UNKNOWN/reconcile_required wechseln. Existing-ID-Execute reconciliert nur;
+  genau1SDK-Handoff insgesamt, keine Trace-Drops, beobachtete Fixture-Effects0.
+- Vier geschlossene Journalpaare read-only geprüft: Sender UNKNOWN/rev0/kein
+  Result/originales5sBudget, Receiver leer. Kein Nichtausführungsbeweis aus
+  Abwesenheit und keine Replay-Freigabe. Historischer4211-Stall bleibt ungelöst.
+- Nach erfolgreicher Suite wurde nur die Ausgabeallokation des neuen direkten
+  Protokolltests von PID auf mkdtemp gehärtet (9e174d5). Dieser nichtnetzwerkende
+  Vertrag wurde einmal gezielt neu gebaut/geprüft. Ursprüngliche71er-Suite und
+  separate Revision behalten eigene Source-/Binary-/Log-Provenienz; keine native
+  Fehlersuche erneut ausgeführt. Alle8 Runtimehashes/Providerpin unverändert,
+  keine ROS-Neuvalidation (vorherige41), eigene Container entfernt.
+
+Weiter: Endliche instrumentierte Mehrseed-N5-Cohort vorab festlegen, um eine
+request-korrelierte Wiederkehr zu untersuchen; keine Deadlineänderung, kein
+Replay oder Retry bis PASS. Loaded ROS/N5-Discovery bleibt separat, ebenso die
+weiteren N3/Clock/Security/Resource-Gates. PR2 Draft, M3 offen, M4 unberührt.
