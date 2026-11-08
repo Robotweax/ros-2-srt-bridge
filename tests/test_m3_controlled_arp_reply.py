@@ -2,7 +2,7 @@ from pathlib import Path
 import copy,hashlib,json,socket,struct,sys,tempfile,unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_arp_reply_observer import selector,reply_words,parse_tc_json,counters
-from m3_arp_reply_analysis import phase_gate,frame_key,pcap_keys
+from m3_arp_reply_analysis import phase_gate,frame_key,pcap_keys,selected_key
 from m3_tap_probe import MAGIC
 
 SOURCE='10.0.0.3';TARGET='10.0.0.2';SM='02:00:00:00:00:03';TM='02:00:00:00:00:02'
@@ -78,3 +78,13 @@ class ArpReplyPhaseTests(unittest.TestCase):
             p=Path(tmp)/'a';p.write_bytes(struct.pack('<IHHIIII',0xa1b2c3d4,2,4,0,0,65535,1)+b'bad')
             with self.assertRaisesRegex(ValueError,'record'):pcap_keys(p)
         with self.assertRaises(ValueError):frame_key(b'short',5)
+
+
+class ArpReplyScopeTests(unittest.TestCase):
+    def test_gratuitous_arp_is_retained_background_not_cross_peer_exchange(self):
+        addresses=dict(operator=TARGET,robot=SOURCE)
+        key=('arp',42,1,SM,'ff:ff:ff:ff:ff:ff',SM,SOURCE,'00:00:00:00:00:00',TARGET)
+        self.assertTrue(selected_key(key,addresses))
+        self.assertFalse(selected_key(key[:8]+(SOURCE,),addresses))
+        self.assertTrue(selected_key(('udp',1242,2,0),addresses))
+        self.assertFalse(selected_key(key[:2]+(3,)+key[3:],addresses))

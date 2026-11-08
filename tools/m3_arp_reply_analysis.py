@@ -44,6 +44,11 @@ def pcap_keys(path):
     return Counter(keys),count
 
 
+def selected_key(key,addresses):
+    if key[0]=='udp':return True
+    return key[0]=='arp' and key[2] in (1,2) and (key[6],key[8]) in ((addresses['operator'],addresses['robot']),(addresses['robot'],addresses['operator']))
+
+
 def phase_gate(case,fault,installation,controller,sent,received,native):
     if controller['status']!='passed' or not received['complete']:raise ValueError('controller/receiver incomplete')
     start=installation['end_ns'];remove=controller['removal'];end=remove['begin_ns'];origin=sent['rows'][0]['before_ns']
@@ -94,8 +99,9 @@ def analyze_case(run,result):
                 a=parse_arp(r);a['identity_class']=arp_kind(a,addresses[role],addresses[peer],macs[role],macs[peer]);value['arp']=a
             selected.append(value)
         pcap,count=pcap_keys(run/(role+'.pcap'));footer=validate_tcpdump_footer((run/(role+'-capture.log')).read_text(),count)
-        if not footer['tcpdump_population_reconciled'] or pcap!=Counter(keys):raise ValueError('native/pcap full selected identity multiset mismatch')
-        captures[role]=dict(status=status,pcap=footer,selected_records=len(keys));native[role]=selected;arps[role]=[r for r in selected if 'arp' in r]
+        all_native=Counter(keys);native_selected=Counter({k:v for k,v in all_native.items() if selected_key(k,addresses)});pcap_selected=Counter({k:v for k,v in pcap.items() if selected_key(k,addresses)})
+        if not footer['tcpdump_population_reconciled'] or pcap_selected!=native_selected:raise ValueError('native/pcap owned-peer ARP and UDP identity multiset mismatch')
+        captures[role]=dict(status=status,pcap=footer,all_native_selected_link_records=len(keys),owned_peer_records=sum(native_selected.values()),background_native=[dict(key=list(k),count=v) for k,v in all_native.items() if not selected_key(k,addresses)],background_pcap=[dict(key=list(k),count=v) for k,v in pcap.items() if not selected_key(k,addresses)],background_identity_equal=Counter({k:v for k,v in all_native.items() if not selected_key(k,addresses)})==Counter({k:v for k,v in pcap.items() if not selected_key(k,addresses)}),scope='All native/file/filter populations retained; only predeclared cross-owned-peer ARP and labeled UDP identities compared across recorder spans. Background gratuitous/other ARP retained, not assigned to the controlled path.');native[role]=selected;arps[role]=[r for r in selected if 'arp' in r]
     sent=json.loads((run/'sent.json').read_text());received=json.loads((run/'received.json').read_text())
     result['phase_proof']=phase_gate(result['number'],result['fault'],result['installation'],result['controller'],sent,received,native)
     result['captures']=captures;result['arp_observations']=arps;result['udp_observations']={r:[x for x in v if 'probe' in x] for r,v in native.items()}
