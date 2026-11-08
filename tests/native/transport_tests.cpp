@@ -179,6 +179,40 @@ void sample_diagnostics(bool ipv6){
     }
     check(decisions==1&&lc.sample_trace->attempted()==1&&!lc.sample_trace->dropped()&&!lc.sample_trace->exhausted(),"receiver trace incomplete");
 }
+void sensor_provider_visibility(bool ipv6){
+    const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
+    auto lc=config(Role::listener,ip,key);lc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();
+    lc.sensor_provider_diagnostics=std::make_shared<ProviderDiagnostics>();TransportOwner listener(lc);
+    until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"visibility listener missing");
+    auto cc=config(Role::caller,ip,key);cc.control.port=listener.snapshot().control_port;cc.sensor.port=listener.snapshot().sensor_port;
+    cc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();cc.sensor_provider_diagnostics=std::make_shared<ProviderDiagnostics>();
+    TransportOwner caller(cc);ready(caller,listener);std::array<std::byte,16> payload{};TransportMessage message;
+    for(unsigned n=0;n<8;++n){
+        until([&]{return caller.submit_sample(caller.snapshot().context,1,payload,TransportOwner::monotonic_ns())==SubmitResult::queued;},"visibility sample enqueue");
+        until([&]{return listener.poll_sample(message);},"visibility sample delivery");
+    }
+    std::array<std::int64_t,2> unique{};std::array<unsigned,4> observed{},closed{};
+    auto collect=[&]{for(unsigned side=0;side<2;++side)for(unsigned channel=0;channel<2;++channel){
+        const auto& c=side?lc:cc;const auto& queue=channel?c.sensor_provider_diagnostics:c.provider_diagnostics;ProviderObservation row;
+        while(queue->poll(row)){
+            const auto slot=side*2+channel;check(row.channel==channel,"provider stream crossed channel");
+            check(row.end_ns>=row.begin_ns&&row.owner_epoch==c.session.local_epoch,"provider bracket/owner lost");
+            ++observed[slot];closed[slot]+=row.before_close;
+            if(row.available&&channel){
+                check(row.generation>0&&row.socket>=0&&row.state_before==5,"SENSOR provider identity/state missing");
+                check(row.unique_sent>=0&&row.unique_received>=0&&row.receiver_drop>=0&&row.undecrypt>=0,"SENSOR provider negative counters");
+                unique[side]=side?row.unique_received:row.unique_sent;
+            }
+        }
+    }};
+    until([&]{collect();return unique[0]>=8&&unique[1]>=8;},"SENSOR unique counters did not expose delivered traffic");
+    stop(caller);stop(listener);collect();
+    for(unsigned n=0;n<4;++n)check(observed[n]&&closed[n],"missing independent provider stream/close sample");
+    for(const auto* c:{&cc,&lc})for(const auto& q:{c->provider_diagnostics,c->sensor_provider_diagnostics})
+        check(q->dropped()==0&&!q->exhausted(),"provider visibility queue incomplete");
+    std::cout<<"PASS independent CONTROL/SENSOR provider visibility and unique DATA/close samples "<<(ipv6?"ipv6":"ipv4")<<"\n";
+}
+
 void one_way_control_silence(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
     auto lc=config(Role::listener,ip,key);lc.provider_diagnostics=std::make_shared<ProviderDiagnostics>();TransportOwner listener(lc);
@@ -228,4 +262,4 @@ void one_way_control_silence(bool ipv6){
 }
 
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");sample_diagnostics(std::string(argv[1])=="ipv6");one_way_control_silence(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+int main(int argc,char** argv){try{check(argc==2,"family required");lifecycle(std::string(argv[1])=="ipv6");sample_diagnostics(std::string(argv[1])=="ipv6");one_way_control_silence(std::string(argv[1])=="ipv6");sensor_provider_visibility(std::string(argv[1])=="ipv6");std::cout<<"PASS transport owner "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}

@@ -29,7 +29,7 @@ class BridgeNode final:public rclcpp::Node {
     std::unique_ptr<core::CommandEndpoint> endpoint_;
     bool caller_=false,sensor_qos_verified_=false;
     std::shared_ptr<core::CommandTrace> command_trace_;
-    std::shared_ptr<core::ProviderDiagnostics> provider_diagnostics_;
+    std::shared_ptr<core::ProviderDiagnostics> provider_diagnostics_,sensor_provider_diagnostics_;
     std::shared_ptr<core::SampleTrace> sample_trace_;
     rclcpp::Subscription<Imu>::SharedPtr imu_in_;rclcpp::Subscription<Joints>::SharedPtr joints_in_;
     rclcpp::Publisher<Imu>::SharedPtr imu_out_;rclcpp::Publisher<Joints>::SharedPtr joints_out_;
@@ -73,11 +73,11 @@ class BridgeNode final:public rclcpp::Node {
             std::cout<<line.str()<<std::endl;
         }
     }
-    void provider_diagnostics(){
-        if(!provider_diagnostics_)return;
+    void provider_diagnostics_stream(const std::shared_ptr<core::ProviderDiagnostics>& diagnostics,bool sensor){
+        if(!diagnostics)return;
         core::ProviderObservation o;
-        for(unsigned n=0;n<core::ProviderDiagnostics::capacity&&provider_diagnostics_->poll(o);++n){
-            std::ostringstream line;line.precision(17);line<<"PROVIDER_STATS {";
+        for(unsigned n=0;n<core::ProviderDiagnostics::capacity&&diagnostics->poll(o);++n){
+            std::ostringstream line;line.precision(17);line<<(sensor?"SENSOR_PROVIDER_STATS {":"PROVIDER_STATS {");
             line<<"\"sequence\":"<<o.sequence;
             line<<",\"begin_ns\":"<<o.begin_ns;
             line<<",\"end_ns\":"<<o.end_ns;
@@ -107,10 +107,30 @@ class BridgeNode final:public rclcpp::Node {
             line<<",\"receive_buffer_bytes\":"<<o.receive_buffer_bytes;
             line<<",\"flight_packets\":"<<o.flight_packets;
             line<<",\"rtt_ms\":"<<o.rtt_ms;
+            if(sensor){
+                line<<",\"schema_version\":1,\"channel\":"<<o.channel;
+                line<<",\"unique_sent\":"<<o.unique_sent;
+                line<<",\"unique_received\":"<<o.unique_received;
+                line<<",\"sender_loss\":"<<o.sender_loss;
+                line<<",\"receiver_loss\":"<<o.receiver_loss;
+                line<<",\"sender_drop\":"<<o.sender_drop;
+                line<<",\"receiver_drop\":"<<o.receiver_drop;
+                line<<",\"sender_filter_extra\":"<<o.sender_filter_extra;
+                line<<",\"receiver_filter_extra\":"<<o.receiver_filter_extra;
+                line<<",\"receiver_filter_supply\":"<<o.receiver_filter_supply;
+                line<<",\"receiver_filter_loss\":"<<o.receiver_filter_loss;
+                line<<",\"flow_window_packets\":"<<o.flow_window_packets;
+                line<<",\"congestion_window_packets\":"<<o.congestion_window_packets;
+            }
             line<<",\"owner_epoch\":\""<<hex(o.owner_epoch)<<"\",\"session\":\""<<hex(o.session)<<"\"}";
             std::cout<<line.str()<<std::endl;
         }
     }
+    void provider_diagnostics(){
+        provider_diagnostics_stream(provider_diagnostics_,false);
+        provider_diagnostics_stream(sensor_provider_diagnostics_,true);
+    }
+
     void sample_trace(){
         if(!sample_trace_)return;
         core::SampleTraceEvent e;
@@ -177,6 +197,7 @@ public:
         local_epoch_=session.local_epoch;
         if(declare_parameter<bool>("command_diagnostics",false)){command_trace_=std::make_shared<core::CommandTrace>();transport.command_trace=command_trace_;}
         if(declare_parameter<bool>("provider_diagnostics",false)){provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.provider_diagnostics=provider_diagnostics_;}
+        if(declare_parameter<bool>("sensor_provider_diagnostics",false)){sensor_provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.sensor_provider_diagnostics=sensor_provider_diagnostics_;}
         if(declare_parameter<bool>("sample_diagnostics",false)){sample_trace_=std::make_shared<core::SampleTrace>();transport.sample_trace=sample_trace_;}
         endpoint_=std::make_unique<core::CommandEndpoint>(core::EndpointOptions{transport,worker});
         const auto qos=rclcpp::SensorDataQoS().keep_last(1);
@@ -196,6 +217,7 @@ public:
     ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();sample_trace();
             if(sample_trace_)std::cout<<"SAMPLE_TRACE_STATUS {\"schema_version\":2,\"attempted\":"<<sample_trace_->attempted()<<",\"dropped\":"<<sample_trace_->dropped()<<",\"exhausted\":"<<sample_trace_->exhausted()<<",\"limit\":"<<sample_trace_->limit()<<"}"<<std::endl;
             if(provider_diagnostics_)std::cout<<"PROVIDER_STATS_STATUS {\"attempted\":"<<provider_diagnostics_->attempted()<<",\"dropped\":"<<provider_diagnostics_->dropped()<<",\"exhausted\":"<<provider_diagnostics_->exhausted()<<",\"limit\":"<<provider_diagnostics_->limit()<<"}"<<std::endl;
+            if(sensor_provider_diagnostics_)std::cout<<"SENSOR_PROVIDER_STATS_STATUS {\"schema_version\":1,\"channel\":1,\"attempted\":"<<sensor_provider_diagnostics_->attempted()<<",\"dropped\":"<<sensor_provider_diagnostics_->dropped()<<",\"exhausted\":"<<sensor_provider_diagnostics_->exhausted()<<",\"limit\":"<<sensor_provider_diagnostics_->limit()<<"}"<<std::endl;
             if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}}
 };
 }

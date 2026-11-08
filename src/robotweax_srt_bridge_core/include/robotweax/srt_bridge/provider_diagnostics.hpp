@@ -11,6 +11,7 @@ struct ProviderObservation {
     std::uint64_t sequence=0,begin_ns=0,end_ns=0,generation=0;
     Identity owner_epoch{},session{};
     std::int64_t socket=-1;
+    unsigned channel=0; // 0 CONTROL, 1 SENSOR; streams have independent budgets.
     unsigned state_before=0,state_after=0,unavailable=1;
     int error=0,idle_timeout_ms=0;
     bool available=false,idle_timeout_available=false,before_close=false;
@@ -19,6 +20,10 @@ struct ProviderObservation {
     std::uint64_t bytes_sent=0,bytes_received=0;
     int send_buffer_packets=0,send_buffer_bytes=0,receive_buffer_packets=0,receive_buffer_bytes=0,flight_packets=0;
     double rtt_ms=0;
+    // Pinned srt_bstats totals; aggregate drops are not reason-specific events.
+    std::int64_t unique_sent=0,unique_received=0,sender_loss=0,receiver_loss=0,sender_drop=0,receiver_drop=0;
+    std::int64_t sender_filter_extra=0,receiver_filter_extra=0,receiver_filter_supply=0,receiver_filter_loss=0;
+    int flow_window_packets=0,congestion_window_packets=0;
 };
 // One transport producer and one external consumer. Independent of command
 // trace storage. Full/record-budget losses remain explicit, never affect policy.

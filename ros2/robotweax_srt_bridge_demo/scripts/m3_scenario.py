@@ -99,6 +99,7 @@ class Benchmark(Driver):
             'journal_path':str(self.run/(self.args.role+'.sqlite')),
             'max_clock_interval_ms': self.args.clock_width_ms,
             'provider_diagnostics': str(self.args.provider_diagnostics).lower(),
+            'sensor_provider_diagnostics': str(getattr(self.args,'sensor_provider_diagnostics',False)).lower(),
             'sample_diagnostics': str(getattr(self.args,'sample_diagnostics',False)).lower(),
             'command_diagnostics': str(self.args.command_diagnostics).lower()})
 
@@ -308,6 +309,7 @@ def main():
     parser.add_argument('--clock-width-ms',type=int,default=200)
     parser.add_argument('--command-diagnostics',action='store_true')
     parser.add_argument('--provider-diagnostics',action='store_true')
+    parser.add_argument('--sensor-provider-diagnostics',action='store_true')
     args=parser.parse_args()
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
     rclpy.init();driver=Benchmark(args)

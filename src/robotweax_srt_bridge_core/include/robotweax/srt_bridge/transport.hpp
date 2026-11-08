@@ -21,6 +21,7 @@ struct TransportConfig {
     std::shared_ptr<CommandTrace> command_trace{}; // Opt-in, lossy diagnostics only.
     std::shared_ptr<ProviderDiagnostics> provider_diagnostics{}; // CONTROL only; non-clearing SDK reads add observer work.
     std::shared_ptr<SampleTrace> sample_trace{}; // Opt-in ROS admission / SENSOR SDK handoff observations.
+    std::shared_ptr<ProviderDiagnostics> sensor_provider_diagnostics{}; // Independent opt-in SENSOR SDK reads.
 };
 struct TransportContext {
     Identity session{};

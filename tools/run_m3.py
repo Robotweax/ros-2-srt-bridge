@@ -49,6 +49,7 @@ def main():
     parser.add_argument('--neighbor-diagnostics',action='store_true',help='bounded read-only neighbor-table polling; observer workload')
     parser.add_argument('--neighbor-mode',choices=['dynamic','permanent'],default='dynamic',help='permanent is a separate owned-lab L2 diagnostic candidate, not default baseline')
     parser.add_argument('--control-egress-fault',choices=['operator','robot'],help='development-only six-second CONTROL drop, N0 >=45s with all diagnostics; not qualification')
+    parser.add_argument('--sensor-provider-diagnostics',action='store_true',help='separate bounded SENSOR SDK statistics; adds observer work')
     parser.add_argument('--provider-diagnostics',action='store_true',help='development-only CONTROL non-clearing provider statistics; adds observer workload')
     parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
     args=parser.parse_args()
@@ -83,6 +84,7 @@ def main():
     report['control_egress_fault_requested']=args.control_egress_fault
     report['recorder_diagnostics_enabled']=args.recorder_diagnostics
     report['provider_diagnostics_enabled']=args.provider_diagnostics
+    report['sensor_provider_diagnostics_enabled']=args.sensor_provider_diagnostics
     report['command_diagnostics_enabled']=args.command_diagnostics
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
@@ -146,7 +148,7 @@ def main():
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
                 'ros2/robotweax_srt_bridge_demo/scripts/m3_scenario.py','--role',role,'--run',inside,
-                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else []))
+                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
             log=(run/(role+'-scenario.log')).open('w')
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False
@@ -250,6 +252,9 @@ def main():
             try:
                 report['command_diagnostics']=m3_command_trace.summarize_run(run)
             except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
+        if args.sensor_provider_diagnostics:
+            try:report['sensor_provider_diagnostics']=m3_provider_stats.summarize_run(run,sensor=True)
+            except Exception as error:report['status']='failed';report['sensor_provider_diagnostics_error']=str(error)
         if args.provider_diagnostics:
             try:report['provider_diagnostics']=m3_provider_stats.summarize_run(run)
             except Exception as error:report['status']='failed';report['provider_diagnostics_error']=str(error)
