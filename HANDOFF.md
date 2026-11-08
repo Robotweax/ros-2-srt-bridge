@@ -2661,3 +2661,65 @@ N0 ohne random impairment ist keine Random-Loss-Coverage/kausaler Vergleich.
 30s-Pilot nur Baseline, keine30sFault-/FullN3-Abnahme. Originaler fehlender
 Receiverfooter bleibt FAILED/UrsacheUNKNOWN, originale skippedCases bleiben
 unexecuted. PR #2 bleibt Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Failure Detection und native N4-Commandphasen
+
+- Userpriorität geändert: zuerst Failure Detection/N4, danach SRT-N5/DDS-Discovery,
+  erst dann übrige N3-Dauer/Faults und matched comparison. Kein weiterer N3-Run.
+- Vorab326c2c0: genau eine echte Failure-Control-Suite PASSED9 Klassifikationen,
+  echte installierte Bridge/Recorder statt nur Processmocks. Cleanbridge SIGINT0
+  mit Footer akzeptiert; Abort-6/Kill-9/Stall(deadline0.3s, forcedKill-9) verworfen;
+  preexited0 auch mit gültigemFooter als unerwarteter Exit verworfen. Cleanlog
+  bleibt erhalten, separate Kopie ohne Footer wird abgelehnt. Witness überall0.
+  Recorder6 synthetischeUDP-Sends clean0/strict6Records; Kill-9 und RLIMIT_FSIZE64
+  nachReady/Exit120 rejected, Parent protokolliert trotz fehlendemChildstatus.
+  Core Dumps aus; keine Hostressourcen geändert. Abrupt-child Descendants werden
+  spätestens durch Owned-PID-Namespace-Teardown entfernt. Kein historischerCauseclaim.
+- N4first40bf968/admission-both FAILED vorOutage: Childguard fand Worker nicht;
+  rest8 NOT EXECUTED. Separat30441d3 guardfix: eigeneThreadchildliste+exakteWorker/
+  IPC-Args+T-State+PID/startticks, bounded1s readiness; Metadata zeigt /proc/exe
+  /run/rosetta/rosetta stattWorkerbinary. Originalrejectmetadata fehlte, keine
+  eindeutige retrospektive Ursache erfinden. Guard vorSIGCONT nochmals prüfen.
+- Identity-cohort ersterCase FAILED nachOutage: falscheFixtureAssertion gleiches
+  Deadline-NS inbeidenJournals. Tatsächlich Receiver537595890394 <Sender537601704201,
+  um5813807ns konservativer. Rest8 NOT EXECUTED. ProduktionsClockMapper korrekt,
+  Testannahme geändert: Sender exactIngress+5s; Receiver mappedExpiry>originalOrigin
+  und<=Senderexpiry auf provenCommonVMClock. Owners/SourceSession/Ingress/Hash
+  bleibengebunden, freshresume/dispatch nutzenReceiverlimit, keinBudgetextend.
+- Separat d6c2cbb CLOCK-REVISION genau9 nativeCases PASSED:
+  admission_before_commit, after_atomic_handler_start_before_effect,
+  result_committed; je both/to-robot/to-operator. Dann90d3ae4 separat3 weitere
+  dispatch_committed_BEFORE_execution_grant/start Cases allePASSED. Insgesamt12.
+  ReadonlyWALBarrier: absent /DISPATCHING-effects0 /SUCCEEDED-validResult.
+  Strictere OfflinePhaseOrderPrüfung der alten9 zusätzlich archiviert, kein neuerRun.
+- Echte installierte CommandEndpoint/Transport/JournalWorker, expliziter simulierter
+  Ratehandler. Rootnetem100% nurOwnedContainer, seed/loss/dropsReadback; VMhold2s,
+  guaranteedgemeinsamerCut wegenSetupoverhead2.483631168..2.597214710s, keine
+  Exact2.000s-Aussage. RestoreN0 vorWorkerResume. Ursprüngliche5sCommandbudget
+  unverändert;20sCoordinatorwatchdog nurTestallowance fürabsichtlichgehaltenen
+  Worker (keine Änderung anProduktionsdefaults). SDK/ROS-C++/Provider/API unverändert.
+- Alle12 SUCCEEDEDmitmatching durableproof100Hz/gen1, je1Effect/1executeSDKHandoff,
+  keineakzeptierteCommandwiederholung. SourceID/route/hash/epoch/originalsession/
+  ingress/deadline/finalstate/reason/revision/result audit; Senderdeadlineexact5s,
+  Receiver~5..6ms früher. QUERYs beobachtet; einzelneFinalProof kannSTATUS oder
+  QUERYresponse sein, kein isolierterQuerykausalitätsclaim. Zwei weitereSettlesekunden
+  ohnezweitenEffect/Handoff; restoredReady/Clock, leereOwnerfaults, boundedjoin/
+  alleTransporte/Workerstopped. Tracesattempted==recorded,dropped0. Native9StopMax
+  24.845042ms<5s, weitere3auch<5s. PositiveKürzeralsBudget-Cuts dürfenerfolgreichsein;
+  safeReject/Expiry/0Effects und deadline/proofnegative Gaten sindhostgetestet.
+- Host231/Syntax/diff und StandaloneC++Release/WerrorBuilds bestanden. KeineSDK/
+  ROS/ProviderProduktionsänderung oderRebuild: SDK70/ROS41 früherevolleValidation,
+  nichtneu ausgeführt, keinevolleM2Abnahme. FixtureELFzwischenfehlerhaftenRevs/
+  Dispatchphase neugebaut, getrennteSource/Runtimeprovenienz; installierte4
+  ProduktionArtifacts überalle12gleich. AlleOwnedNetze/Container/Secretsentfernt.
+- evidence/m3-failure-n4-2026-11-08/ enthält5vorabPlan/Gatefreeze/Revisionsdateien,
+  FailureControls/2FAILED-Cohorts samtunexecutedRest und12PASS, Journal-/Barrier-
+  Proofmetadata, Netzwerk/VMBrackets/kernelcounts, nativeEvents/Trace/Stopped,
+  Builds/Tests/Inventare/Rohhashes. KeineRawJournals/PCAPs/Core/Inspect-/Envdumps/
+  Credentials veröffentlicht. baselines/m3-plan.json N4phase_followuppartial.
+
+**Weiter:** N4 ROS-Sensorfrische, expliziterDeadlineOverrun, withheldResult/Query-
+Recovery isolieren, Crash/Restart/UNKNOWN ohneacceptedCommandReplay. DannN5-
+CONTROLProgress undDDSColdDiscovery entsprechendUserreihenfolge; N3später.
+Native12Cases sindkeinevolleN4/M3-/DDS-/Hardware-/PhysicalAge-Abnahme. Historische
+FooterursachebleibtUNKNOWN/alteFailedundSkippedCasesbleiben. PR2Draft, M4unberührt.

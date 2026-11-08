@@ -341,7 +341,87 @@
     "N4": {
       "requested_outage_seconds": 2,
       "implemented": "mid-window kernel outage, both directions or one endpoint egress",
-      "pending": "barriers before admission, after dispatch, after result commit; precise VM-clock transition timing"
+      "pending": "barriers before admission, after dispatch, after result commit; precise VM-clock transition timing",
+      "phase_followup": {
+        "status": "native command phase matrix passes; complete ROS/crash/deadline N4 gates remain open",
+        "evidence": "evidence/m3-failure-n4-2026-11-08/README.md",
+        "execution_matrix": "evidence/m3-failure-n4-2026-11-08/execution-matrix.json",
+        "failure_controls": {
+          "source_commit": "326c2c0",
+          "real_bridge_and_recorder": true,
+          "positive_controls": 2,
+          "negative_controls_correctly_rejected": 7,
+          "historical_footer_cause_resolved": false
+        },
+        "preserved_fixture_failures": [
+          {
+            "source": "40bf968",
+            "case": "admission-both",
+            "issue": "owned stopped worker lookup; no outage installed",
+            "remaining_cases": "not_executed"
+          },
+          {
+            "source": "30441d3",
+            "case": "admission-both",
+            "issue": "fixture incorrectly equated conservative receiver and sender deadlines",
+            "remaining_cases": "not_executed"
+          }
+        ],
+        "corrected_cohorts": [
+          {
+            "source": "d6c2cbb",
+            "phases": [
+              "admission-before-commit",
+              "handler-started-before-effect",
+              "result-committed"
+            ],
+            "directions": [
+              "both",
+              "to-robot",
+              "to-operator"
+            ],
+            "cases_passed": 9
+          },
+          {
+            "source": "90d3ae4",
+            "phases": [
+              "dispatch-committed-before-start"
+            ],
+            "directions": [
+              "both",
+              "to-robot",
+              "to-operator"
+            ],
+            "cases_passed": 3
+          }
+        ],
+        "all_twelve": {
+          "sdk_command_handoffs_each": 1,
+          "effects_each": 1,
+          "durable_result": "matching SUCCEEDED100Hz/generation1",
+          "original_sender_budget_ms": 5000,
+          "receiver_deadline": "conservatively earlier, never extends sender on proven common VM clock",
+          "guaranteed_outage_seconds": [
+            2.483631168,
+            2.59721471
+          ],
+          "restored_qualification": true,
+          "trace_drops": 0,
+          "bounded_workers_and_transports_stopped": true
+        },
+        "scope": "native installed endpoint/provider and simulated handler; no ROS SENSOR or hardware acceptance",
+        "host_tests": 231,
+        "previous_full_sdk_tests": 70,
+        "previous_ros_reported_tests": 41,
+        "production_source_or_binary_changed": false,
+        "remaining": [
+          "ROS sensor freshness during/after interruption",
+          "explicit deadline overrun",
+          "withheld result and query-only recovery isolation",
+          "crash/restart and retained UNKNOWN with no accepted-command replay"
+        ],
+        "full_N4_acceptance": false
+      }
     },
     "N5": {
       "seconds": 300,
@@ -374,7 +454,7 @@
   "pending_gates": [
     "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
     "N3 ROS publication/age/accounting with trusted connection identity and validated source-DATA selector",
-    "N4 admission/dispatch/result-commit barriers",
+    "N4 ROS sensor freshness, deadline overrun, withheld-result and crash/restart/UNKNOWN boundaries; native phase cuts passed",
     "complete three-seed full-duration comparison matrix",
     "matched-window CPU and wire-byte measurements; controlled resource comparison",
     "further reduce and qualify strict-pacing replacements at actual 200/50 Hz; N5 command outcome qualification"
@@ -1610,5 +1690,11 @@
     "host_tests_final": 158,
     "qualification": false,
     "evidence": "evidence/m3-drain-controlled-loss-2026-11-07/README.md"
-  }
+  },
+  "agreed_priority_order": [
+    "failure detection and N4 interruption semantics",
+    "SRT N5 command progress and DDS cold discovery",
+    "remaining N3 duration/fault coverage and delivery targets",
+    "matched clock/security/resource comparison"
+  ]
 }

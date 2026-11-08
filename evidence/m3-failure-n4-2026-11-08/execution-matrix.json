@@ -1,0 +1,414 @@
+{
+  "native_N4_only": true,
+  "full_N4_qualification": false,
+  "cases": [
+    {
+      "cohort": "original",
+      "phase": "admission",
+      "direction": "both",
+      "status": "failed",
+      "error": "ROS phase barrier failed: robot-barrier.json,submitted.json",
+      "source_commit": "40bf96886d7b3f588c3c8b85e700e0e4a11e8e79",
+      "outcome": null,
+      "guaranteed_outage_ns": null
+    },
+    {
+      "cohort": "original",
+      "phase": "admission",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "admission",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "started",
+      "direction": "both",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "started",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "started",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "committed",
+      "direction": "both",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "committed",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "original",
+      "phase": "committed",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "admission",
+      "direction": "both",
+      "status": "failed",
+      "error": "ROS phase barrier failed: operator-result.json,robot-result.json",
+      "source_commit": "30441d3c08b7655103c969786c4bd663c3b716e3",
+      "outcome": null,
+      "guaranteed_outage_ns": [
+        533344102577,
+        535895238495
+      ]
+    },
+    {
+      "cohort": "identity",
+      "phase": "admission",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "admission",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "started",
+      "direction": "both",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "started",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "started",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "committed",
+      "direction": "both",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "committed",
+      "direction": "to-robot",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "identity",
+      "phase": "committed",
+      "direction": "to-operator",
+      "status": "not_executed",
+      "reason": "prior first case failed; no replacement"
+    },
+    {
+      "cohort": "clock",
+      "phase": "admission",
+      "direction": "both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 721201471617,
+        "receiver_deadline_ns": 721196042790,
+        "deadline_conservative_margin_ns": 5428827,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        716895931701,
+        719480147202
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "admission",
+      "direction": "to-robot",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 729605809788,
+        "receiver_deadline_ns": 729600562678,
+        "deadline_conservative_margin_ns": 5247110,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        725037914246,
+        727521545414
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "admission",
+      "direction": "to-operator",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 737339142291,
+        "receiver_deadline_ns": 737333729011,
+        "deadline_conservative_margin_ns": 5413280,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        732829557542,
+        735334265251
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "started",
+      "direction": "both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 745142693212,
+        "receiver_deadline_ns": 745137414886,
+        "deadline_conservative_margin_ns": 5278326,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        740900195004,
+        743442540130
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "started",
+      "direction": "to-robot",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 753407188841,
+        "receiver_deadline_ns": 753401790062,
+        "deadline_conservative_margin_ns": 5398779,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        748891928674,
+        751408019925
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "started",
+      "direction": "to-operator",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 761140618760,
+        "receiver_deadline_ns": 761135286487,
+        "deadline_conservative_margin_ns": 5332273,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        756620810011,
+        759115309595
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "committed",
+      "direction": "both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 768859578764,
+        "receiver_deadline_ns": 768854343634,
+        "deadline_conservative_margin_ns": 5235130,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        764601749973,
+        767155502557
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "committed",
+      "direction": "to-robot",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 777127294851,
+        "receiver_deadline_ns": 777121955902,
+        "deadline_conservative_margin_ns": 5338949,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        772607767268,
+        775116549770
+      ]
+    },
+    {
+      "cohort": "clock",
+      "phase": "committed",
+      "direction": "to-operator",
+      "status": "passed",
+      "error": null,
+      "source_commit": "d6c2cbbed2110c77658396183f7ba2eb0c9aa85b",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 784905440980,
+        "receiver_deadline_ns": 784900022273,
+        "deadline_conservative_margin_ns": 5418707,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        780384503230,
+        782918011689
+      ]
+    },
+    {
+      "cohort": "dispatch",
+      "phase": "dispatch",
+      "direction": "both",
+      "status": "passed",
+      "source_commit": "90d3ae4d30f71e41eb0760eb04e808765e006d57",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 1078579079030,
+        "receiver_deadline_ns": 1078573243005,
+        "deadline_conservative_margin_ns": 5836025,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        1074361885489,
+        1076959100199
+      ]
+    },
+    {
+      "cohort": "dispatch",
+      "phase": "dispatch",
+      "direction": "to-robot",
+      "status": "passed",
+      "source_commit": "90d3ae4d30f71e41eb0760eb04e808765e006d57",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 1087242283076,
+        "receiver_deadline_ns": 1087236537893,
+        "deadline_conservative_margin_ns": 5745183,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        1082761059659,
+        1085283915077
+      ]
+    },
+    {
+      "cohort": "dispatch",
+      "phase": "dispatch",
+      "direction": "to-operator",
+      "status": "passed",
+      "source_commit": "90d3ae4d30f71e41eb0760eb04e808765e006d57",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 1095187310788,
+        "receiver_deadline_ns": 1095181656433,
+        "deadline_conservative_margin_ns": 5654355,
+        "journal_proof_match": true,
+        "scope": "pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "guaranteed_outage_ns": [
+        1090695305413,
+        1093217438539
+      ]
+    }
+  ]
+}

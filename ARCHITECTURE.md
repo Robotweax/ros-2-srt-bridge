@@ -1734,3 +1734,34 @@ messages7/8 missing at cutoff. The30s baseline records7514 source publications a
 200.007/50.010Hz and7241 typed observations, with273 local DDS/admission/mailbox
 losses fully balanced and no source skips or receiver gaps. This does not qualify
 30s faults or full N3 durations/comparison; see evidence/m3-multiroute-matrix-2026-11-08/.
+
+### Failure detection and native N4 phase controls (2026-11-08)
+
+Real installed bridge and recorder negative controls now verify deliberate abort,
+kill, premature clean exit, stalled shutdown, removed-footer copy and recorder
+write failure, alongside accepted clean controls. Independent parent outcomes and
+witness cleanup remain recorded even when a failed child cannot emit its own status.
+Historical missing-footer cause remains unknown; these controls establish forward
+failure detection, not a retrospective cause or repaired old verdict.
+
+Twelve native command interruption cases pass: before receiver admission commit,
+after durable DISPATCHING before execution start, after atomic handler start before
+effect, and after durable result commit; each with both and either one-way egress
+cut. Existing test-only worker barriers and owned stopped-child identity control
+use the installed production endpoint/transport/worker with an explicit simulated
+handler. Root100% loss is held2s on the VM clock; measured guaranteed intervals
+are2.484..2.598s including setup overhead. Every case reconciles one durable100Hz/
+generation1 success and one effect/SDK handoff, with restored ready/clock and bounded
+full worker/transport stop. Query requests do not replay accepted commands.
+
+The test distinguishes exact original sender ingress+5s from the receiver's earlier
+conservative mapped expiry on the proven shared VM clock. It verifies no extension,
+original owner/session/hash/ingress proof, proper phase order and matching closed
+journals. Two earlier fixture failures (kernel executable identity under Rosetta and
+incorrect cross-domain deadline equality) are preserved separately with skipped
+cases and frozen corrective plans. No production clock/deadline/API change was made.
+The20s coordinator watchdog is a test allowance for the deliberately paused worker;
+production defaults are unchanged. These cases do not qualify ROS sensor freshness,
+deadline overrun, crash/UNKNOWN recovery, DDS parity or full N4/M3. Those N4 gates
+precede N5 and further N3 work under the user's agreed priority order. See
+evidence/m3-failure-n4-2026-11-08/.
