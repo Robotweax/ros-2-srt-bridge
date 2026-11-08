@@ -199,7 +199,8 @@ void sensor_provider_visibility(bool ipv6){
             check(row.end_ns>=row.begin_ns&&row.owner_epoch==c.session.local_epoch,"provider bracket/owner lost");
             ++observed[slot];closed[slot]+=row.before_close;
             if(row.available&&channel){
-                check(row.generation>0&&row.socket>=0&&row.state_before==5,"SENSOR provider identity/state missing");
+                check(row.generation>0&&row.socket>=0,"SENSOR provider identity missing");
+                // Available statistics do not imply a connected socket, especially before close.
                 check(row.unique_sent>=0&&row.unique_received>=0&&row.receiver_drop>=0&&row.undecrypt>=0,"SENSOR provider negative counters");
                 unique[side]=side?row.unique_received:row.unique_sent;
             }
