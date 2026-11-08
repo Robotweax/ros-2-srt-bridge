@@ -3149,3 +3149,43 @@ All-Success-/Verified-Expiry-Completion-Verdikten. Sensorverfügbarkeit separat
 untersuchen. Historische UNKNOWNs nicht rückwirkend ablaufen lassen; keine
 Budgetlockerung, kein Retry bis PASS. FullM3/LoadedROSDiscovery/Hardware-/Clock-/
 Security-/Resource-Gates bleiben offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Weitere N5-Seeds und Telemetrie-Diagnose
+
+- Evidenz: `evidence/m3-broader-seeds-telemetry-2026-11-08/README.md`.
+  Vorab fixierte Slots einmalig: N0/1701/15s8/8; N5/1701/300s125/125,25Skip;
+  N5/2903/300s97/98,52Skip,1unaufgelöst. Beide Command-Gates FAIL für2903,
+  CohortExit1,0verifiedExpiry. Separate vorherige4211-Kohorte bleibt136/136,
+  14Skip. Kein Retry/Umwerten/Defaultwechsel; Runtime8Hashes gleich der4211-Kohorte.
+- Intent98: genau1SDK-Handoff, Senderstate8/reason2/rev0, kein Receiverrecord und
+  kein originaler COMMAND-Admission-/Retention-/Expiry-Trace. Danach CONTROL-
+  Linkverlust/Sessioninvalidierung, neue Session/QUERY mit NOT_FOUND. Keine
+  Nichtausführung oder nachträgliche Expiry daraus ableiten, keinen Replay.
+- Geschlossene Originalcaptures aller5Vergleichsfälle: alle Rotationen/Footer/
+  Populationen vollständig, exakt gleiche UDPtuple+Payloadhash-Multimengen in
+  beiden Richtungen. Kein Beweis gegen Pretaploss. Root/Child-Drops spiegeln
+  sich: nie summieren. Robotrootdrops4211/1701/2903=2716297/116533/166531;
+  Operator0/0/396. Konkurrent tatsächlich128Kbit/s UDP, TBF512kbit/s, Childlimit16.
+- Source/Observer N5: vorher4211=75022/871, neu1701=75037/27890,
+  neu2903=75023/26465. Accept-to-Receiver-Gap71187/43674/42255, alle6Residuen0,
+  Source~200/50Hz. Observerwerte sind keine Provider- oder Sensorabnahme.
+- Wholecapture SENSOR-DROP_REQUEST39761/670/3201, davon7837/346/2211Repeats.
+  Keine DATA nach vorherigem Retirement derselben Sequenz im Capture-Dateiorder;
+  Overtakinghypothese nicht beobachtet. Später benannte DATA9673/122/317,
+  ohne Beweis für angewandte Retirements/unread-buffer-Verlust. Provider52be7c8
+  read-only: bounded10ms/32Prefix-Retrymechanismus plausibel für Feedbackdruck,
+  nicht eindeutig nachgewiesene Ursache. SENSOR-Insertion/Delivery-/Decrypt-/
+  Retirement-Innenzustände und verschlüsselte SAMPLE-Zuordnung fehlen weiterhin.
+- FrozenLiveSourceabc0ebb; nach geschlossenem Archiv separater PosthocAnalyzer
+  04c163b,4Tests. Host278 vor Live/282 nachherPASS; SDK72/ROS41 bleiben vorherige
+  Validierung, kein neuer Build. Keine Tests/Analyse/Builds während Live. Eigene
+  Namespaces/Passphrase entfernt, Rawhashes/selektierte öffentliche Artefakte und
+  Auslassungen dokumentiert. Fehlender falscher N0-Analyserpfad als failed erhalten,
+  nur read-only mit korrektem Pfad korrigiert, kein Livererun.
+
+Weiter: Separaten begrenzten Diagnoseplan einfrieren: zuerst2903 CONTROL/Session
+mit Kernelmonotonic-/Providercorrelation, separat SENSOR-Provider-Insertion,
+Delivery/Retirement/Decrypt sichtbar machen. Erst danach kontrollierte Pacing/
+Latestdata-Gegenprobe, keine Kausalbehauptung aus Packetcounts. Originalbudgets,
+beide Gates und historische Unsicherheit erhalten. FullM3/N5/LoadedROSDiscovery/
+Clock/Security/Resource/Hardware weiter offen, PR2 Draft, Intrinsic/M4 unberührt.

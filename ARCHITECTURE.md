@@ -2122,3 +2122,38 @@ Evidence: evidence/m3-durable-receiver-expiry-2026-11-08/. Next freeze broader
 multi-seed command coverage with both metrics, investigate telemetry availability
 separately; historical uncertainty, loaded ROS discovery and hardware/clock/security/
 resource gates remain distinct. PR2 draft, Intrinsic/M4 untouched.
+
+### Closed telemetry diagnosis and remaining base seeds (2026-11-08)
+
+The additional-seeds matrix preserves the runtime and separates command outcomes
+from sensor availability. New N0/1701 passes8/8; N5/1701 passes125/125 with25skips;
+N5/2903 has97/98 successes,52skips, one unresolved intent98 and fails both strict
+success and success-or-qualified-durable-expiry completion. Zero verified expiry;
+no retries or retroactive expiry. Prior4211 remains a separate136/136 observation.
+Intent98 has one original SDK handoff and no receiver journal/COMMAND trace;
+later session loss and new-session NOT_FOUND cannot establish nonexecution.
+
+The closed analyzer compares exact UDP tuple/payload-hash multisets across every
+rotation, distinguishes source DATA/parity/control/retransmission/socket groups,
+and keeps hierarchical qdisc deltas separate. All five N0/N5 comparisons reconcile
+both tap directions. This only describes observed datagrams; root shaping can
+drop before the tap, and no encrypted typed SAMPLE mapping is available. SENSOR
+SDK acceptance, source DATA at a tap, decoded SAMPLE and observer delivery remain
+different stages. Provider retirement ordering is a posthoc read-only analyzer,
+committed after frozen cohort closure, not a changed live runtime.
+
+The severe4211 case has39761 SENSOR DROP_REQUESTs versus670/3201 in1701/2903,
+with mirrored robot-root drops2716297 versus116533/166531. No DATA was observed
+after prior same-sequence retirement in capture file order; eventual retirement
+of observed DATA does not prove applied provider discard. Pinned provider bounded
+retirement retry/window semantics suggest targeted internal observability but
+prove no unique mechanism. No budget/profile/provider/production change follows.
+Actual competitor128Kbit/s and TBF512kbit/s are retained. Source~200/50Hz, all six
+conservation balances zero, telemetry still unqualified in every N5 seed.
+
+Evidence/provenance: `evidence/m3-broader-seeds-telemetry-2026-11-08/`.
+Host278 before live,282 after posthoc analysis tests; no new SDK/ROS build. All8
+runtime hashes equal prior4211 and fixed throughout; owned namespaces removed.
+Next separately freeze CONTROL/session monotonic correlation and bounded SENSOR
+provider delivery/retirement observability before any mitigation experiment.
+PR2 draft, M3 incomplete, Intrinsic/M4 untouched.

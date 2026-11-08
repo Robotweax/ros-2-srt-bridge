@@ -8,7 +8,7 @@ The later M4 adapter belongs in
 [intrinsic-core-srt-integration](https://github.com/Robotweax/intrinsic-core-srt-integration).
 SRT is a separately installed dependency; the enclosing SRT checkout is preserved.
 
-## Development status — 2026-11-07
+## Development status — 2026-11-08
 
 M0's selected local qualification checks pass on Ubuntu 24.04 Linux amd64 under
 Docker Desktop emulation. The installed C API probe covers CONTROL/SENSOR,
@@ -39,6 +39,13 @@ and the [handoff](HANDOFF.md) for exact scope and next work.
 M1 is complete for the documented Linux amd64 baseline. The
 [M1 acceptance matrix](evidence/m1-errors-sdk-2026-11-05/ACCEPTANCE.md) maps each
 requirement to retained checks and states the qualification limits.
+
+The latest [remaining N5 seeds and telemetry diagnosis](evidence/m3-broader-seeds-telemetry-2026-11-08/README.md)
+records125/125 command successes for1701 and97/98 for2903, with one unresolved
+intent and both command gates failed for2903. Prior4211 remains136/136 in its
+separate cohort. Telemetry remains poor and varies by seed; identical closed-tap
+packet multisets and qdisc/retirement observations narrow investigation without
+proving a unique provider cause. Runtime/provider unchanged, host282 PASS; PR2 draft.
 
 ## Run M0
 
