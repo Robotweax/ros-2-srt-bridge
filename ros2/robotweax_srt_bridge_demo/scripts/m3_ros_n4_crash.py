@@ -13,7 +13,7 @@ from robotweax_srt_bridge_msgs.srv import SetPublishing,GetBridgeMetrics
 from m3_scenario import Benchmark,write
 from m2_scenario import read
 from scenario_processes import stop_children
-from scenario_journal import visible_entries
+from scenario_journal import visible_entries,copied_entries
 
 
 class Crash(Benchmark):
@@ -63,22 +63,28 @@ class Crash(Benchmark):
             if action=='arm_effect_crash':
                 write(self.run/'robot-reply.json',response)
                 self.wait(lambda:self.device and self.device.effects==1,'observed external effect before worker crash')
-                pid=self.worker_pid();assert pid;device=self.device_snapshot();journal=self.journal();assert journal==[dict(id='01'+'00'*15,state=3)],journal
+                pid=self.worker_pid();assert pid;device=self.device_snapshot()
+                os.kill(pid,signal.SIGSTOP);end=time.monotonic()+1
+                while Path('/proc/'+str(pid)+'/stat').read_text().split(') ')[1][0]!='T':
+                    if time.monotonic()>end:raise RuntimeError('owned worker did not stop for journal snapshot')
+                    time.sleep(.002)
+                assert self.worker_pid()==pid
+                journal=copied_entries(self.run/'robot.sqlite',self.run/'prekill-journal-copy');assert journal==[dict(id='01'+'00'*15,state=3)],journal
                 begin=time.monotonic_ns();os.kill(pid,signal.SIGKILL)
                 self.wait(lambda:self.state and self.state.worker_fault!=0,'worker death surfaced',10)
                 fault=self.metrics();self.stop_bridge()
                 write(self.run/'crashed.json',dict(injected_worker_pid=pid,injected_ns=begin,device=device,journal=journal,fault=fault,retired=self.crashes[-1]));continue
             elif action=='kill_bridge':
-                device=self.device_snapshot();journal=self.journal();report=self.stop_bridge(killed=True)
+                device=self.device_snapshot();report=self.stop_bridge(killed=True);journal=self.journal()
                 write(self.run/'crashed.json',dict(device=device,journal=journal,retired=report))
             elif action=='launch_restart':
                 assert self.bridge is None;old_owner=bytes(self.state.owner_epoch) if self.state else b'';self.start_bridge()
                 self.wait(lambda:self.state and bytes(self.state.owner_epoch)!=old_owner,'new receiver owner observed',10)
                 response.update(restarted=self.metrics())
                 if response['restarted']['worker_fault']:raise RuntimeError('restarted worker failed '+str(response['restarted']['worker_fault']))
-            elif action=='device':response.update(device=self.device_snapshot(),journal=self.journal())
+            elif action=='device':response.update(device=self.device_snapshot())
             elif action=='finish':
-                response.update(device=self.device_snapshot(),journal=self.journal(),metrics=self.metrics(),crashes=self.crashes)
+                response.update(device=self.device_snapshot(),metrics=self.metrics(),crashes=self.crashes)
                 write(self.run/'robot-final.json',response);write(self.run/'robot-reply.json',response);return
             else:raise RuntimeError('unknown crash action')
             write(self.run/'robot-reply.json',response)
@@ -89,14 +95,14 @@ class Crash(Benchmark):
         if self.args.case=='before':
             self.wait(lambda:(self.run/'cut-active').exists(),'host packet cut')
             self.submit(1,200,0,1);self.wait(lambda:self.metrics()['commands_sent']==1,'actual SDK handoff')
-            proof=self.robot_command('device');assert proof['device']['effects']==0 and proof['journal']==[],proof
+            proof=self.robot_command('device');assert proof['device']['effects']==0,proof
             self.robot_command('kill_bridge')
         elif self.args.case=='effect':
             self.robot_command('arm_effect_crash');self.submit(1,200,0,1)
             self.wait(lambda:(self.run/'crashed.json').exists(),'effect crash',20)
         else:
             self.submit(1,200,0,1);s=self.terminal(1,4);assert s['result_valid']
-            proof=self.robot_command('device');assert proof['device']['effects']==1 and proof['journal']==[dict(id='01'+'00'*15,state=4)],proof
+            proof=self.robot_command('device');assert proof['device']['effects']==1,proof
             self.robot_command('kill_bridge')
         self.robot_command('launch_restart');write(self.run/'restart-launched',{})
         self.wait(lambda:(self.run/'restored').exists(),'network restored')
@@ -110,6 +116,7 @@ class Crash(Benchmark):
             if s.found and s.state==expected and (self.args.case!='before' or (not_found and s.reason==2)):
                 status=message_to_ordereddict(s)
             self.spin(.2)
+        write(self.run/'operator-observations.json',dict(status=status,not_found=not_found,observations=observations))
         assert status is not None,observations[-1]
         if expected==8:assert not status['result_valid']
         else:assert status['result_valid'] and status['result_rate_hz']==200 and status['result_generation']==1

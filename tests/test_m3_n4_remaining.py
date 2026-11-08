@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
 from m3_sample_trace import summarize
 from m3_n4_sensor_check import assess
 from m3_n4 import check_outcome
@@ -83,3 +84,14 @@ class JournalInspectionTests(unittest.TestCase):
             with patch('scenario_journal.sqlite3.connect',side_effect=connect):
                 self.assertEqual(visible_entries(path),[dict(id='01'*16,state=3)])
             with self.assertRaises(sqlite3.ProgrammingError):kept[0].execute('SELECT 1')
+
+    def test_private_copy_inspection_does_not_modify_original_journal(self):
+        import sqlite3
+        import hashlib
+        from scenario_journal import copied_entries
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'journal.sqlite'
+            db=sqlite3.connect(path);db.execute('CREATE TABLE entries(id BLOB,state INTEGER)');db.execute('INSERT INTO entries VALUES(?,?)',(bytes([1])*16,13));db.commit();db.close()
+            before=hashlib.sha256(path.read_bytes()).hexdigest()
+            self.assertEqual(copied_entries(path,Path(d)/'copy'),[dict(id='01'*16,state=3)])
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),before)
