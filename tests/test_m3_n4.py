@@ -15,8 +15,10 @@ def fixture(phase='admission',state=4):
     a=dict(entries={ID:copy.deepcopy(record)});b=copy.deepcopy(a);b['entries'][ID]['owner_epoch']='03'*16
     sender=dict(commands_sent=1,fault=0,worker_fault=0,ready=1,clock=1)
     receiver=dict(ready=1,clock=1,fault=0,worker_fault=0,effects=int(state==4),generation=int(state==4),rate_hz=100 if state==4 else 200)
-    barrier=dict(ns=3000,effects=0);resumed=dict(begin_ns=500)
-    visible=None if phase=='admission' else dict(state=3,result_valid=False,finished_ns=0) if phase=='started' else dict(state=4,result_valid=True,finished_ns=2000)
+    barrier=dict(ns=300 if phase=='admission' else 3000,effects=0);resumed=dict(begin_ns=500 if phase=='admission' else 4000)
+    if phase in ('started','dispatch'):
+        for journal in (a,b):journal['entries'][ID]['finished_ns']=5000
+    visible=None if phase=='admission' else dict(state=3,result_valid=False,finished_ns=0) if phase in ('started','dispatch') else dict(state=4,result_valid=True,finished_ns=2000)
     initial={'operator':dict(owner='01'*16,snapshot=dict(session='02'*16)),'robot':dict(owner='03'*16,snapshot=dict(session='02'*16))}
     submitted=dict(origin_ns=100,deadline_ns=5_000_000_100)
     return [phase,sender,receiver,a,b,barrier,resumed,visible,initial,submitted]
@@ -24,7 +26,7 @@ def fixture(phase='admission',state=4):
 
 class N4OutcomeTests(unittest.TestCase):
     def test_durable_success_or_safe_decline_and_commit_recovery(self):
-        for phase,state in (('admission',4),('admission',6),('started',4),('started',6),('committed',4)):
+        for phase,state in (('admission',4),('admission',6),('started',4),('started',6),('committed',4),('dispatch',4),('dispatch',6)):
             result=check_outcome(*fixture(phase,state));self.assertEqual(result['state'],state)
 
     def test_replay_deadline_changed_proof_or_false_success_fails(self):
@@ -49,6 +51,12 @@ class N4OutcomeTests(unittest.TestCase):
             if fault=='stale':a[6]['begin_ns']=6_000_000_000
             if fault=='started':a[5]['effects']=1
             with self.assertRaises(ValueError):check_outcome(*a)
+
+    def test_dispatch_committed_barrier_precedes_resume_and_handler(self):
+        a=fixture('dispatch');a[5]['ns']=500
+        with self.assertRaises(ValueError):check_outcome(*a)
+        a=fixture('dispatch');a[6]['begin_ns']=2000
+        with self.assertRaises(ValueError):check_outcome(*a)
 
     def test_receiver_mapping_can_shorten_but_never_extend_sender_budget(self):
         a=fixture();a[4]['entries'][ID]['deadline_ns']-=10_000_000

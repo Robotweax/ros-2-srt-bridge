@@ -41,6 +41,8 @@ def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initi
     if s['deadline_ns']!=s['source_ns']+5_000_000_000 or not r['source_ns']<r['deadline_ns']<=s['deadline_ns']:raise ValueError('sender deadline changed or conservative receiver deadline extended')
     if not all(endpoint['ready'] and endpoint['clock'] for endpoint in (sender,receiver)):raise ValueError('restored endpoints not qualified')
     if sender['commands_sent']!=1 or sender['fault'] or receiver['fault'] or sender['worker_fault'] or receiver['worker_fault']:raise ValueError('endpoint fault or replay')
+    if not 0<barrier['ns']<resumed['begin_ns']:raise ValueError('phase barrier did not precede resumed worker')
+    if phase!='committed' and r['finished_ns']<resumed['begin_ns']:raise ValueError('pre-effect phase result predates resume')
     if r['state']==4:
         if not r['result_valid'] or r['revision']!=3 or r['result_generation']!=1 or receiver['effects']!=1 or receiver['generation']!=1 or receiver['rate_hz']!=100:raise ValueError('unsupported success or duplicate effect')
         if phase!='committed' and resumed['begin_ns']>=r['deadline_ns']:raise ValueError('effect resumed after original deadline')
@@ -56,6 +58,7 @@ def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initi
         if barrier_record is not None:raise ValueError('receiver admission already visible before commit barrier')
     elif not barrier_record or barrier_record['state']!=3 or barrier['effects']!=0 or barrier['ns']>=r['deadline_ns']:
         raise ValueError('after-start barrier not before effect within original deadline')
+    if phase=='dispatch' and not 0<r['dispatched_ns']<=barrier['ns']<resumed['begin_ns']:raise ValueError('durable dispatch barrier/order mismatch')
     return dict(state=r['state'],reason=r['reason'],effects=receiver['effects'],command_sends=sender['commands_sent'],sender_deadline_ns=s['deadline_ns'],receiver_deadline_ns=r['deadline_ns'],deadline_conservative_margin_ns=s['deadline_ns']-r['deadline_ns'],journal_proof_match=True,scope='pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification')
 
 
@@ -144,12 +147,12 @@ def failure_suite(out):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');a=p.parse_args();root=a.output.resolve()
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');p.add_argument('--dispatch-only',action='store_true');a=p.parse_args();root=a.output.resolve()
     if a.failure_controls:result=failure_suite(root)
     else:
         root.mkdir(parents=True,exist_ok=False);rows=[];result=dict(status='running',cases=rows,qualification=False)
         try:
-            for phase in PHASES:
+            for phase in (('dispatch',) if a.dispatch_only else PHASES):
                 for direction in DIRECTIONS:
                     print('START '+phase+' '+direction,flush=True);case=run_case(root/(phase+'-'+direction),phase,direction);rows.append(dict(phase=phase,direction=direction,status=case['status'],error=case.get('error')));write(root/'cohort.json',result)
                     print(json.dumps(rows[-1]),flush=True)
