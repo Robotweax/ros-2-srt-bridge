@@ -9,7 +9,8 @@ enum class CommandTracePoint : unsigned {
     sender_admission,submit_result,worker_unknown,endpoint_stopping,endpoint_stopped,
     mailbox_flushed=20,input_dropped,make_rejected,queue_rejected,outbound_dropped,
     provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred,session_action,link_lost,
-    control_admission,peer_error_received,receiver_worker_result
+    control_admission,peer_error_received,receiver_worker_result,
+    receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
@@ -26,8 +27,9 @@ struct CommandTraceEvent {
     unsigned value=0;
     Identity entry_owner_epoch{}; // Populated for worker-record observations only.
     unsigned detail=0; // session_action: close-control/close-sensor/flush bits 1/2/4; link_lost: channel 0/1.
-    // Points32..34: detail=original request Kind (COMMAND6/QUERY8),
-    // value=SessionError/ControlErrorCode/JournalError respectively.
+    // Points32..38: detail=original request Kind (COMMAND6/QUERY8),
+    // value=SessionError/ControlErrorCode/JournalError for32/33/34;
+    //35..37=SessionError,38=ControlErrorCode.
     std::uint64_t request_sequence=0,origin_ns=0,evaluated_ns=0,clock_deadline_ns=0;
     unsigned clock_error=0,age_error=0; // Point32: post-admission clock state and returned AgeResult error.
     // age_error is meaningful for COMMAND freshness decisions, not QUERY/identity rejection.

@@ -29,13 +29,16 @@ def successful_receiver_pairs(entry,events):
     sender=entry['sender']
     matching=[e for e in events if e['detail']==6 and e['value']==0 and
               e['session']==sender['session'] and e['route']==sender['route'] and e['origin_ns']==sender['source_ns']]
-    return [dict(admission=a,worker=w) for a in matching if a['point']==32 for w in matching
+    # Initial admission may pass while queued behind an earlier deferred frame.
+    # A recorded resume is the later forwarding gate and supersedes that sample.
+    gate=36 if any(e['point']==36 for e in matching) else 32
+    return [dict(admission=a,worker=w) for a in matching if a['point']==gate for w in matching
             if w['point']==34 and a['request_sequence']==w['request_sequence']]
 
 
 def analyze(report,run):
     progress=command_progress(report,run);traces=summarize_run(run)
-    receivers=[dict(file=n,**e) for n,t in traces.items() if n.startswith('robot-') for e in t['events'] if e['point'] in (32,34)]
+    receivers=[dict(file=n,**e) for n,t in traces.items() if n.startswith('robot-') for e in t['events'] if e['point'] in (32,34,35,36,37,38)]
     attempts=[]
     for entry in progress['entries']:
         identity=entry['number'].to_bytes(16,'little').hex()

@@ -72,6 +72,14 @@ void run(const std::filesystem::path& root,const std::string& kind){
     check(retained.entry->context.deadline_ns==context.deadline_ns&&!reopened.sender_may_transmit(request,context.session,source+1),"recovered uncertainty authorized transmit");
     std::cout<<"CLOCK_REJECTION_CONTRACT {\"case\":\""<<kind<<"\",\"session_error\":13,\"age_error\":"<<unsigned(expected)
         <<",\"clock_error\":"<<unsigned(pair.receiver.clock_state())<<",\"query_admitted\":true,\"duplicate_replay_rejected\":true,\"reopened_unknown\":true}\n";
+    if(kind=="expired"){
+        pair.time=context.deadline_ns+10000000;
+        auto reply=pair.deliver(pair.sender,pair.receiver.begin_probe(pair.next()),11);pair.deliver(pair.receiver,reply,1);
+        const auto stale=pair.receiver.check_command(*made.envelope,pair.next());
+        check(!stale.envelope&&stale.action.error==SessionError::stale_sample&&stale.age.error==ClockError::none&&pair.receiver.clock_state()==ClockError::none,"late requalification extended original command budget");
+        std::cout<<"RECEIVER_RETENTION_PROTOCOL {\"case\":\"late_stale\",\"session_error\":25,\"age_error\":0,\"original_budget_preserved\":true}\n";
+    }
+
 }
 }
 int main(){try{

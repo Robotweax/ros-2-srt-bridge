@@ -1,6 +1,7 @@
 #include <robotweax/srt_bridge/transport.hpp>
 #include <robotweax/srt_bridge/queues.hpp>
 #include "../worker/execution_pool.hpp"
+#include "receiver_retention.hpp"
 #include <srt/srt.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -85,7 +86,8 @@ struct TransportOwner::Impl {
     std::optional<Input> pending_command{};bool pending_clock_reported=false;
     std::array<std::shared_ptr<DurableCommandTicket::Proof>,64> command_proofs{};
     std::array<TransportMessage,64> incoming{};
-    std::size_t output_head=0,output_count=0,sample_cursor=0;
+    std::size_t output_head=0,output_count=0,received_commands=0,sample_cursor=0;
+    ReceiverRetention retained;
     std::array<TransportMessage,8> incoming_samples{};
     std::uint64_t publication_epoch=1;bool publication_allowed=false;bool shutting_down=false;
     struct CheckSlot {unsigned state=0;TransportContext context{};Envelope envelope{};CommandCheck result{};std::shared_ptr<execution_detail::Record> proof{};};
@@ -143,12 +145,17 @@ struct TransportOwner::Impl {
             for(std::size_t n=0;n<input_count;++n){const auto& item=controls[(input_head+n)%controls.size()];
                 if(item.kind==Kind::command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,item.request,item.route);}
             if(pending_command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+            while(retained.size()){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,retained.front().message,unsigned(SessionError::obsolete_connection),current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);
+                retained.pop();++current.stale_work;
+            }
+            received_commands=0;
             current.stale_work+=input_count+output_count+(pending_command?1:0);pending_command.reset();receipts={};receipt_cursor=0;
             for(auto& slot:checks)if(slot.state){if(slot.proof)slot.proof->pool->revoke(*slot.proof);slot.result.error=SessionError::obsolete_connection;slot.result.start_granted=false;slot.state=2;}
             input_head=input_count=input_commands=output_head=output_count=0;
         }
         publication_allowed=current.running&&current.state==SessionState::active&&current.clock_qualified&&publication_epoch!=UINT64_MAX;
-        current.control_ingress=input_count+(pending_command?1:0);current.control_received=output_count;
+        current.control_ingress=input_count+(pending_command?1:0);current.control_received=output_count+retained.size();
         current.sensor_submitted=mailbox_counts.sensor_submitted;
         current.sensor_ingress_replaced=mailbox_counts.sensor_ingress_replaced;
         current.sensor_ingress_flushed=mailbox_counts.sensor_ingress_flushed;
@@ -293,7 +300,41 @@ struct TransportOwner::Impl {
         apply(i?session.sensor_connected(link.generation,security,monotonic_ns(),config.session.role==Role::caller?random_identity():Identity{}):
             session.control_connected(link.generation,security,monotonic_ns(),config.session.role==Role::listener?random_identity():Identity{}));
     }
-    bool control_space(){std::lock_guard lock(mutex);return output_count<incoming.size()&&queues.control_count()<64;}
+    void trace_receiver(CommandTracePoint point,const TransportMessage& message,unsigned value,CommandTraceReason reason=CommandTraceReason::none,const SampleResult* result=nullptr){
+        if(!config.command_trace)return;
+        CommandTraceEvent e{0,monotonic_ns(),point,reason,message.envelope.request_id,message.context.session,config.session.local_epoch,
+            message.context.control_generation,message.context.sensor_generation,message.envelope.route_id,value,{},unsigned(Kind::command)};
+        e.request_sequence=message.envelope.sequence;e.origin_ns=message.envelope.source_monotonic_ns;e.evaluated_ns=result?result->evaluated_ns:message.evaluated_ns;
+        e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_error=unsigned(session.clock_state());e.age_error=result?unsigned(result->age.error):0;
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
+    void process_retained(){
+        for(unsigned n=0;n<8&&retained.size();++n){
+            const auto time=monotonic_ns();const auto message=retained.front().message;
+            if(!retained.matches(context())||!control_ready(session.state())){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::obsolete_connection),CommandTraceReason::context_mismatch);retained.pop();++current.stale_work;continue;
+            }
+            if(retained.expired(time)){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::clock_unqualified),CommandTraceReason::deadline);
+                retained.pop();queue_error(message.envelope,ControlErrorCode::clock_unqualified);++current.rejected;continue;
+            }
+            const auto result=session.check_command(message.envelope,time);apply(result.action);
+            if(!result.envelope){
+                if(ReceiverRetention::soft_gap(result))break;
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(result.action.error),CommandTraceReason::session_rejected,&result);retained.pop();++current.rejected;
+                if(result.action.error==SessionError::stale_sample)queue_error(message.envelope,ControlErrorCode::start_expired);
+                else if(result.action.error==SessionError::clock_unqualified)queue_error(message.envelope,ControlErrorCode::clock_unqualified);
+                continue;
+            }
+            auto ready=message;const auto maximum=std::uint64_t(message.envelope.valid_for_ms)*1000000;
+            require(result.age.age_ns&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=maximum);
+            ready.evaluated_ns=result.evaluated_ns;ready.deadline_ns=result.evaluated_ns+maximum-std::uint64_t(result.age.age_ns->upper);
+            {std::lock_guard lock(mutex);require(output_count<incoming.size()&&received_commands<ReceiverRetention::command_capacity);
+                retained.pop();incoming[(output_head+output_count++)%incoming.size()]=ready;++received_commands;}
+            ++current.received;trace_receiver(CommandTracePoint::receiver_resumed,ready,unsigned(SessionError::none),CommandTraceReason::none,&result);
+        }
+    }
+    bool control_space(){std::lock_guard lock(mutex);return output_count+retained.size()<incoming.size()&&queues.control_count()<64;}
     void receive(unsigned i){
         auto& link=links[i];
         for(unsigned n=0;n<8&&link.ready&&link.fd!=SRT_INVALID_SOCK;++n){
@@ -327,7 +368,17 @@ struct TransportOwner::Impl {
                 e.kind=unsigned(kind);e.result=unsigned(result.action.error);e.bytes=count;e.socket=link.fd;e.message_number=metadata.msgno;
                 config.sample_trace->record(SampleTraceLane::transport,e);
             }
-            apply(result.action);if(!result.envelope){
+            apply(result.action);
+            const bool soft_command_gap=kind==Kind::command&&ReceiverRetention::soft_gap(result);
+            if(kind==Kind::command&&(soft_command_gap||(result.envelope&&retained.size()))){
+                TransportMessage pending;pending.context=context();pending.envelope=view.envelope;pending.size=view.payload.size();pending.evaluated_ns=admission_ns;
+                std::copy(view.payload.begin(),view.payload.end(),pending.payload.begin());
+                bool saved;{std::lock_guard lock(mutex);saved=retained.push(pending,admission_ns,output_count,received_commands);}
+                if(saved)trace_receiver(CommandTracePoint::receiver_deferred,pending,unsigned(result.action.error));
+                else{trace_receiver(CommandTracePoint::receiver_capacity_rejected,pending,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;}
+                continue;
+            }
+            if(!result.envelope){
                 ++current.rejected;
                 if(kind==Kind::sample){
                     ++current.samples_rejected;
@@ -350,9 +401,13 @@ struct TransportOwner::Impl {
                 require(result.age.age_ns.has_value()&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=max_age);
                 message.deadline_ns=result.evaluated_ns+max_age-std::uint64_t(result.age.age_ns->upper);
             }
+            if(kind==Kind::command){
+                bool room;{std::lock_guard lock(mutex);room=retained.room(output_count,received_commands);}
+                if(!room){trace_receiver(CommandTracePoint::receiver_capacity_rejected,message,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;continue;}
+            }
             std::lock_guard lock(mutex);
             if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at]){++current.sensor_replaced;++mailbox_counts.sensor_receive_replaced;}incoming_samples[at]=message;sample_received[at]=true;}
-            else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;}
+            else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;if(kind==Kind::command)++received_commands;}
             ++current.received;
         }
     }
@@ -504,7 +559,7 @@ struct TransportOwner::Impl {
                 if(config.session.role==Role::listener){listen(0);listen(1);}
                 current.running=true;publish();
                 while(!stopping.load(std::memory_order_relaxed)){
-                    timers();provider_sample();publish();process_checks();inputs();send(0);send(1);
+                    timers();provider_sample();publish();process_retained();process_checks();inputs();send(0);send(1);
                     if(links[0].ready){int events=SRT_EPOLL_ERR|(control_space()?SRT_EPOLL_IN:0);require(srt_epoll_update_usock(epoll,links[0].fd,&events)!=SRT_ERROR);}
                     // Keep the active sender's maximum requested wait at 1ms.
                     // If a paced sample becomes eligible sooner, poll SRT first,
@@ -627,7 +682,7 @@ bool TransportOwner::poll_command_check(CommandCheck& check){
 }
 bool TransportOwner::poll_control(TransportMessage& message){
     std::lock_guard lock(impl_->mutex);if(!impl_->output_count)return false;
-    message=impl_->incoming[impl_->output_head];impl_->incoming[impl_->output_head]={};impl_->output_head=(impl_->output_head+1)%impl_->incoming.size();--impl_->output_count;return true;
+    message=impl_->incoming[impl_->output_head];if(message.envelope.kind==Kind::command)--impl_->received_commands;impl_->incoming[impl_->output_head]={};impl_->output_head=(impl_->output_head+1)%impl_->incoming.size();--impl_->output_count;return true;
 }
 bool TransportOwner::poll_sample(TransportMessage& message){
     std::lock_guard lock(impl_->mutex);const auto time=monotonic_ns();

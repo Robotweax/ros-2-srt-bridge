@@ -32,3 +32,11 @@ class MatrixEvidenceTests(unittest.TestCase):
         for field,value in [('session','other'),('route',101),('origin_ns',43),('request_sequence',8),('detail',8),('value',2)]:
             with self.subTest(field=field):self.assertEqual(successful_receiver_pairs(entry,[a,dict(w,**{field:value})]),[])
         self.assertEqual(len(successful_receiver_pairs(entry,[a,a,w])),2)
+
+    def test_resumed_original_frame_uses_fresh_gate_without_double_counting(self):
+        entry=dict(sender=dict(session='original',route=100,source_ns=42))
+        first=dict(point=32,detail=6,value=0,session='original',route=100,origin_ns=42,request_sequence=7)
+        resumed=dict(first,point=36);worker=dict(first,point=34)
+        pairs=successful_receiver_pairs(entry,[first,resumed,worker])
+        self.assertEqual(len(pairs),1);self.assertEqual(pairs[0]['admission']['point'],36)
+        self.assertEqual(len(successful_receiver_pairs(entry,[dict(first,value=13),resumed,worker])),1)

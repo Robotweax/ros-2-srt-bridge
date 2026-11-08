@@ -49,6 +49,14 @@ class CommandTraceTests(unittest.TestCase):
             invalid=[dict(e) for e in events];invalid[0][key]=value
             with self.subTest(key=key),self.assertRaises(ValueError):self.parse(invalid,dict(attempted=3,dropped=0))
 
+    def test_receiver_retention_schema_and_fresh_revalidation(self):
+        events=[self.event(1,35),self.event(2,36),self.event(3,37),self.event(4,38)]
+        for e in events:e.update(detail=6,value=0,request_sequence=7,origin_ns=1,evaluated_ns=1,clock_deadline_ns=10,clock_error=0,age_error=0)
+        events[0]['value']=13;events[2]['value']=13;events[3]['value']=1
+        self.assertEqual(self.parse(events,dict(attempted=4,dropped=0))['counts']['receiver_resumed'],1)
+        events[1]['detail']=8
+        with self.assertRaisesRegex(ValueError,'COMMAND'):self.parse(events,dict(attempted=4,dropped=0))
+
     def test_loss_is_explicit_and_never_complete(self):
         events=[self.event(1,1),self.event(3,9)]
         self.assertFalse(self.parse(events,dict(attempted=4,dropped=2))['complete'])
