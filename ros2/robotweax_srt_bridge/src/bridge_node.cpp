@@ -52,7 +52,7 @@ class BridgeNode final:public rclcpp::Node {
         const auto before=sample_trace_?core::TransportOwner::monotonic_ns():0;
         const auto result=endpoint_->transport().submit_sample(context,route,std::span(encoded.bytes).first(encoded.size),origin);
         if(sample_trace_){core::SampleTraceEvent e;e.point=unsigned(core::SampleTracePoint::admission);e.begin_ns=before;e.end_ns=core::TransportOwner::monotonic_ns();e.origin_ns=origin;
-            e.owner_epoch=local_epoch_;e.session=context.session;e.control_generation=context.control_generation;e.sensor_generation=context.sensor_generation;
+            e.owner_epoch=local_epoch_;e.source_epoch=local_epoch_;e.session=context.session;e.control_generation=context.control_generation;e.sensor_generation=context.sensor_generation;
             e.route=route;e.callback_sequence=ingress_;e.bytes=encoded.size;e.result=unsigned(result);e.kind=unsigned(core::Kind::sample);
             e.stamp_sec=message.header.stamp.sec;e.stamp_nanosec=message.header.stamp.nanosec;sample_trace_->record(core::SampleTraceLane::ros,e);}
         if(result!=core::SubmitResult::queued){++context_;if(result==core::SubmitResult::busy)++submit_busy_;if(result==core::SubmitResult::obsolete)++submit_obsolete_;}
@@ -116,7 +116,7 @@ class BridgeNode final:public rclcpp::Node {
                 <<",\"begin_ns\":"<<e.begin_ns<<",\"end_ns\":"<<e.end_ns<<",\"origin_ns\":"<<e.origin_ns
                 <<",\"owner_epoch\":\""<<hex(e.owner_epoch)<<"\",\"session\":\""<<hex(e.session)<<"\""
                 <<",\"control_generation\":"<<e.control_generation<<",\"sensor_generation\":"<<e.sensor_generation
-                <<",\"envelope_sequence\":"<<e.envelope_sequence<<",\"callback_sequence\":"<<e.callback_sequence
+                <<",\"source_epoch\":\""<<hex(e.source_epoch)<<"\",\"envelope_sequence\":"<<e.envelope_sequence<<",\"callback_sequence\":"<<e.callback_sequence
                 <<",\"route\":"<<e.route<<",\"bytes\":"<<e.bytes<<",\"kind\":"<<e.kind<<",\"result\":"<<e.result
                 <<",\"stamp_sec\":"<<e.stamp_sec<<",\"stamp_nanosec\":"<<e.stamp_nanosec
                 <<",\"socket\":"<<e.socket<<",\"message_number\":"<<e.message_number
@@ -191,7 +191,7 @@ public:
         diagnostics_=create_publisher<msgs::msg::BridgeState>("/bridge/state",rclcpp::QoS(1).reliable().durability_volatile());pump_=create_wall_timer(std::chrono::milliseconds(1),[this]{pump();});state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
     }
     ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();sample_trace();
-            if(sample_trace_)std::cout<<"SAMPLE_TRACE_STATUS {\"attempted\":"<<sample_trace_->attempted()<<",\"dropped\":"<<sample_trace_->dropped()<<",\"exhausted\":"<<sample_trace_->exhausted()<<",\"limit\":"<<sample_trace_->limit()<<"}"<<std::endl;
+            if(sample_trace_)std::cout<<"SAMPLE_TRACE_STATUS {\"schema_version\":2,\"attempted\":"<<sample_trace_->attempted()<<",\"dropped\":"<<sample_trace_->dropped()<<",\"exhausted\":"<<sample_trace_->exhausted()<<",\"limit\":"<<sample_trace_->limit()<<"}"<<std::endl;
             if(provider_diagnostics_)std::cout<<"PROVIDER_STATS_STATUS {\"attempted\":"<<provider_diagnostics_->attempted()<<",\"dropped\":"<<provider_diagnostics_->dropped()<<",\"exhausted\":"<<provider_diagnostics_->exhausted()<<",\"limit\":"<<provider_diagnostics_->limit()<<"}"<<std::endl;
             if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}}
 };

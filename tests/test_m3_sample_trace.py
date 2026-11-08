@@ -52,3 +52,17 @@ class SampleTraceTests(unittest.TestCase):
 
     def test_missing_queued_handoff_is_explicit_unknown(self):
         r=correlate(dict(events=[event()]));self.assertEqual(len(r['queued_without_observed_handoff']),1);self.assertFalse(r['joined'])
+
+class ReceiverSchemaTests(unittest.TestCase):
+    def test_receiver_decision_needs_schema2_and_original_source_epoch(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'trace';row=event(2);row.update(point=4,sequence=1,result=12,source_epoch='03'*16,initial_sequence=-1,initial_sequence_available=False)
+            def save(version,epoch):
+                row['source_epoch']=epoch
+                p.write_text('SAMPLE_TRACE '+json.dumps(row)+'\nSAMPLE_TRACE_STATUS '+json.dumps(dict(schema_version=version,attempted=1,dropped=0,exhausted=0,limit=75000))+'\n')
+            save(2,'03'*16);trace=summarize(p)
+            self.assertEqual(len(correlate(trace)['receiver_decisions']),1)
+            self.assertFalse(correlate(trace)['sdk_errors'])
+            for version,epoch in ((1,'03'*16),(2,'00'*16),(2,'bad')):
+                save(version,epoch)
+                with self.assertRaises(ValueError):summarize(p)

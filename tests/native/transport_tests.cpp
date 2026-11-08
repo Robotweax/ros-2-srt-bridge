@@ -196,23 +196,29 @@ void lifecycle(bool ipv6){
 
 void sample_diagnostics(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();auto lc=config(Role::listener,ip,key);
-    TransportOwner listener(lc);until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"diagnostic listener missing");
+    lc.sample_trace=std::make_shared<SampleTrace>();TransportOwner listener(lc);until([&]{return listener.snapshot().control_port&&listener.snapshot().sensor_port;},"diagnostic listener missing");
     const auto bound=listener.snapshot();auto cc=config(Role::caller,ip,key);cc.control.port=bound.control_port;cc.sensor.port=bound.sensor_port;
     cc.sample_trace=std::make_shared<SampleTrace>();TransportOwner caller(cc);ready(caller,listener);
     const auto context=caller.snapshot().context;std::array<std::byte,8> payload{};const auto origin=TransportOwner::monotonic_ns();
     until([&]{return caller.submit_sample(context,1,payload,origin)==SubmitResult::queued;},"diagnostic sample not admitted");
     TransportMessage received;until([&]{return listener.poll_sample(received);},"diagnostic sample missing");
     check(received.envelope.source_monotonic_ns==origin,"diagnostic changed source origin");
-    stop(caller);stop(listener);SampleTraceEvent e;unsigned count=0,samples=0,bindings=0;std::set<int> messages;
+    stop(caller);stop(listener);SampleTraceEvent e;unsigned count=0,samples=0,bindings=0;int sample_message=0;std::set<int> messages;
     while(cc.sample_trace->poll(e)){
         ++count;check(e.point==unsigned(SampleTracePoint::sdk_accepted)&&!e.result,"unexpected SDK handoff error");
         check(e.begin_ns>0&&e.end_ns>=e.begin_ns&&e.initial_sequence_available&&e.initial_sequence>=0&&e.socket>=0&&e.message_number>0,"missing SDK metadata");
         check(e.owner_epoch==cc.session.local_epoch&&e.session==context.session&&e.sensor_generation==context.sensor_generation,"wrong handoff owner/context");
         check(messages.insert(e.message_number).second,"duplicate assigned source message");
-        if(e.kind==unsigned(Kind::sample)){++samples;check(e.origin_ns==origin&&e.route==1&&e.envelope_sequence==received.envelope.sequence,"sample admission/handoff mismatch");}
+        if(e.kind==unsigned(Kind::sample)){++samples;sample_message=e.message_number;check(e.origin_ns==origin&&e.route==1&&e.envelope_sequence==received.envelope.sequence,"sample admission/handoff mismatch");}
         else ++bindings;
     }
     check(samples==1&&bindings==1&&count==cc.sample_trace->attempted()&&!cc.sample_trace->dropped()&&!cc.sample_trace->exhausted(),"incomplete sample trace");
+    unsigned decisions=0;while(lc.sample_trace->poll(e)){
+        ++decisions;check(e.point==unsigned(SampleTracePoint::receiver_decision)&&e.result==unsigned(SessionError::none),"wrong receiver decision");
+        check(e.message_number==sample_message&&e.origin_ns==origin&&e.envelope_sequence==received.envelope.sequence&&e.route==1,"receiver/source SDK identity mismatch");
+        check(e.owner_epoch==lc.session.local_epoch&&e.source_epoch==cc.session.local_epoch&&e.session==context.session&&e.begin_ns<=e.end_ns,"receiver decision provenance missing");
+    }
+    check(decisions==1&&lc.sample_trace->attempted()==1&&!lc.sample_trace->dropped()&&!lc.sample_trace->exhausted(),"receiver trace incomplete");
 }
 void one_way_control_silence(bool ipv6){
     const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();

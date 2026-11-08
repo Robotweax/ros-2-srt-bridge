@@ -1,0 +1,17 @@
+{
+  "status": "prospective",
+  "executions": 1,
+  "no_retry_or_failed_case_replacement": true,
+  "purpose": "finite ROS first-row-position source loss repaired after newer samples; require explicit SessionError::replay receiver decision and unchanged publication order",
+  "source": "19 IMU publications requested20Hz, explicit permanent-neighbor fixture, traced runtime, filter-before-bind packet-socket recorder",
+  "fault": "row1 position0, SDK message5, one exact source classifier drop; preserve all parity",
+  "identity": "closed handshake/binding origin and exact native/PCAP flow, source timestamp/admission/original ingress to SDK message mapping, receiver SDK msgno plus original source epoch/session/route/ingress/envelope sequence",
+  "receiver_trace": "schema2 point4 receiver_decision, actual srt_recvmsg2 metadata and Session admission result before applying action; default off, existing admission/age/retry/wire policies unchanged",
+  "expected": "all admitted source messages decoded by transport including repaired selected message; exactly selected message rejected by receiver as replay12; all others accepted and typed observed in order with matching payload hashes; BUSY independent and retained",
+  "ordering_gates": ["same-row SDK successor message6/7/8 typed observed before incoming row parity", "exact selected receiver result replay12, not accepted/stale/clock result", "receiver decision identities match actual SDK source", "row parity precedes receiver decision end", "callback-ingress-to-parity VM elapsed under250ms", "receiver stale/unknown-age classification deltas zero", "no sequence regression, poisoning of subsequent samples or session change"],
+  "age_limit": "Session ordering is checked before age. Actual VM elapsed under250ms is NOT an evaluated conservative age bound for the rejected packet; accepted-publication age histogram remains independently <=250ms",
+  "accounting": "six balances zero; only BUSY admission if any plus receiver_rejected1; SDK-accept-to-receiver gap0, no other stage loss",
+  "capture_and_trace_gates": "unchanged complete trace/no loss/exhaustion, exact selected drop/removal, one missing wire source and completed-row parity, strict file/dispatch/kernel equality/hash, stable bounded drain, native cross-check, features unchanged",
+  "preflight": "70 SDK tests,36 ROS-reported tests,190 host tests and syntax checks pass; receiver metadata IPv4/IPv6 and core reordered-source replay regression included",
+  "scope": "finite20Hz IMU only; no full200/50Hz multiroute/seed N3 or N4/M3 acceptance"
+}

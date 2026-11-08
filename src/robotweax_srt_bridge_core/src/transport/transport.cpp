@@ -299,7 +299,10 @@ struct TransportOwner::Impl {
         for(unsigned n=0;n<8&&link.ready&&link.fd!=SRT_INVALID_SOCK;++n){
             if(!i&&!control_space())return; // Backpressure before consuming any CONTROL frame.
             std::array<std::byte,control_message_bytes+1> bytes{};
-            const int count=srt_recvmsg(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size());
+            const bool observing=i&&bool(config.sample_trace);SRT_MSGCTRL metadata=srt_msgctrl_default;
+            const auto receive_begin=observing?monotonic_ns():0;
+            const int count=observing?srt_recvmsg2(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size(),&metadata):
+                srt_recvmsg(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size());
             if(count==SRT_ERROR){const auto error=srt_getlasterror(nullptr);if(error!=SRT_EASYNCRCV)lost(i,CommandTraceReason::receive_error,unsigned(error));return;}
             const auto decoded=decode(std::span(bytes).first(count),channel(i),std::span(route_ids).first(route_count));
             if(!decoded){++current.rejected;lost(i,CommandTraceReason::wire_decode,unsigned(decoded.error));return;}
@@ -307,6 +310,13 @@ struct TransportOwner::Impl {
             if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
             if(kind==Kind::sample)++current.samples_received;
             const auto result=i?session.admit_sample(connection,view,monotonic_ns()):session.admit_control(connection,view,monotonic_ns());
+            if(observing&&kind==Kind::sample){
+                SampleTraceEvent e;e.point=unsigned(SampleTracePoint::receiver_decision);e.begin_ns=receive_begin;e.end_ns=monotonic_ns();
+                e.origin_ns=view.envelope.source_monotonic_ns;e.owner_epoch=config.session.local_epoch;e.session=view.envelope.session_id;e.source_epoch=view.envelope.source_epoch;
+                e.control_generation=links[0].generation;e.sensor_generation=link.generation;e.envelope_sequence=view.envelope.sequence;e.route=view.envelope.route_id;
+                e.kind=unsigned(kind);e.result=unsigned(result.action.error);e.bytes=count;e.socket=link.fd;e.message_number=metadata.msgno;
+                config.sample_trace->record(SampleTraceLane::transport,e);
+            }
             apply(result.action);if(!result.envelope){
                 ++current.rejected;
                 if(kind==Kind::sample){
@@ -439,7 +449,7 @@ struct TransportOwner::Impl {
             require(budget.finish(permit.id,count!=SRT_ERROR));
             if(observing){
                 SampleTraceEvent e;e.begin_ns=trace_begin;e.end_ns=trace_end;e.origin_ns=packet->envelope.source_monotonic_ns;
-                e.owner_epoch=config.session.local_epoch;e.session=packet->envelope.session_id;
+                e.owner_epoch=config.session.local_epoch;e.session=packet->envelope.session_id;e.source_epoch=packet->envelope.source_epoch;
                 e.control_generation=links[0].generation;e.sensor_generation=links[1].generation;
                 e.envelope_sequence=packet->envelope.sequence;e.route=packet->envelope.route_id;e.kind=unsigned(packet->envelope.kind);
                 e.bytes=packet->size;e.socket=links[i].fd;e.message_number=count==SRT_ERROR?0:metadata.msgno;

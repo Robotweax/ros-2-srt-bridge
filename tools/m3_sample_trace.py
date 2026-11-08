@@ -18,7 +18,7 @@ def summarize(path):
     for e in events:
         for k in ('sequence','point','begin_ns','end_ns','origin_ns','control_generation','sensor_generation','envelope_sequence','callback_sequence','route','bytes','kind','result','stamp_sec','stamp_nanosec','socket','message_number','initial_sequence'):
             if type(e.get(k)) is not int:raise ValueError('invalid sample event integer')
-        if not 1<=e['sequence']<=status['attempted'] or e['point'] not in (1,2,3) or not 0<e['begin_ns']<=e['end_ns'] or e['bytes']<=0:
+        if not 1<=e['sequence']<=status['attempted'] or e['point'] not in (1,2,3,4) or not 0<e['begin_ns']<=e['end_ns'] or e['bytes']<=0:
             raise ValueError('invalid sample bracket/event')
         for key in ('owner_epoch','session'):
             if len(e[key])!=32 or len(bytes.fromhex(e[key]))!=16 or not any(bytes.fromhex(e[key])):raise ValueError('invalid sample owner/session')
@@ -29,13 +29,17 @@ def summarize(path):
         if e['point']==2 and (e['result'] or not 1<=e['message_number']<=0x03ffffff or not e['initial_sequence_available'] or not 0<=e['initial_sequence']<=0x7fffffff or e['bytes']>1024):
             raise ValueError('unqualified single-packet SENSOR SDK metadata')
         if e['point']==3 and (e['result']<=0 or e['message_number']):raise ValueError('invalid SDK error observation')
+        if e['point']==4:
+            epoch=e.get('source_epoch','')
+            if status.get('schema_version')!=2 or len(epoch)!=32 or len(bytes.fromhex(epoch))!=16 or not any(bytes.fromhex(epoch)) or e['kind']!=5 or e['socket']<0 or not 1<=e['message_number']<=0x03ffffff or not 0<=e['result']<=26 or e['origin_ns']<=0 or e['envelope_sequence']<=0 or e['bytes']>1024:
+                raise ValueError('invalid receiver decision metadata/schema')
         ids.append(e['sequence'])
     if len(set(ids))!=len(ids):raise ValueError('duplicate sample event sequence')
     return dict(complete=True,status=status,events=events,scope='loss-checked local observation; origin/route/owner/context joins; no delivery/absence or cryptographic identity authority, no cross-lane sequence causality; one ROS executor and one transport producer')
 
 
 def correlate(trace):
-    admissions={};handoffs={};errors=[];binding=[];messages=set()
+    admissions={};handoffs={};errors=[];binding=[];messages=set();decisions=[]
     def key(e):return tuple(e[k] for k in ('owner_epoch','session','control_generation','sensor_generation','route','origin_ns'))
     for e in trace['events']:
         k=key(e)
@@ -49,6 +53,7 @@ def correlate(trace):
             if e['kind']==4:binding.append(e);continue
             if k in handoffs:raise ValueError('sample accepted more than once')
             handoffs[k]=e
+        elif e['point']==4:decisions.append(e)
         else:errors.append(e)
     joined=[]
     for k,e in handoffs.items():
@@ -61,5 +66,5 @@ def correlate(trace):
         joined.append(dict(admission=a,handoff=e,wire_sequence_candidate=(e['initial_sequence']+e['message_number']-1)&0x7fffffff))
     rejected=[e for e in admissions.values() if e['result']!=0]
     unmatched=[e for k,e in admissions.items() if e['result']==0 and k not in handoffs]
-    return dict(joined=joined,rejected=rejected,queued_without_observed_handoff=unmatched,sdk_errors=errors,bindings=binding,
+    return dict(joined=joined,rejected=rejected,queued_without_observed_handoff=unmatched,sdk_errors=errors,bindings=binding,receiver_decisions=decisions,
                 scope='candidate sequence assumes pinned one-packet-per-message SENSOR and must be checked against native/PCAP headers; rejected admissions are retained, not retried; unmatched queued input has no absence/delivery conclusion')

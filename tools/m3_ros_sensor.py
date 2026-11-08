@@ -161,7 +161,7 @@ def outcomes(sender, receiver, losses):
     return dict(window=summary,missing_ids_at_cutoff=sorted(missing),received_ids=[r['id'] for r in seen],typed_payload_hashes_match=True,publication_age_upper_max_ns=b['imu_age_upper_max_ns'])
 
 
-def diagnostic_window(sender, receiver, losses=0):
+def diagnostic_window(sender, receiver, losses=0, late_repair=False):
     # Separate traced finite cases; the original strict19-source outcomes gate
     # is unchanged. Preserve BUSY separately from the two-loss transport gap.
     def point(side):
@@ -169,7 +169,8 @@ def diagnostic_window(sender, receiver, losses=0):
     window=summarize_window(point('begin'),point('end'),dict(resume_monotonic_ns=sender['start_ns'],pause_monotonic_ns=sender['stop_ns']))
     busy=sender['end']['bridge']['samples_submit_busy']-sender['begin']['bridge']['samples_submit_busy']
     expected_gap=2 if losses==2 else 0
-    if window['source_produced']!=19 or window['published']!=19-busy-expected_gap or any(v for k,v in window['losses'].items() if k not in ('admission','srt_accept_to_receiver_gap')) or window['losses']['admission']!=busy or window['losses']['srt_accept_to_receiver_gap']!=expected_gap:
+    expected_rejected=1 if late_repair else 0
+    if window['source_produced']!=19 or window['published']!=19-busy-expected_gap-expected_rejected or any(v for k,v in window['losses'].items() if k not in ('admission','srt_accept_to_receiver_gap','receiver_rejected')) or window['losses']['admission']!=busy or window['losses']['srt_accept_to_receiver_gap']!=expected_gap or window['losses']['receiver_rejected']!=expected_rejected:
         raise ValueError('trace diagnostic has unexplained stage loss')
     for role in (sender,receiver):
         if role['bad'] or role['direct'] or role['begin']['bridge']['session_id']!=role['end']['bridge']['session_id']:
@@ -184,20 +185,45 @@ def diagnostic_window(sender, receiver, losses=0):
     return window
 
 
-def selected_sources(mapped, losses):
+def selected_sources(mapped, losses, late_repair=False):
     if losses not in (0,1,2):raise ValueError('invalid finite fault count')
-    messages=set() if not losses else {8} if losses==1 else {7,8}
+    if late_repair and losses!=1:raise ValueError('late repair requires exactly one source loss')
+    messages={5} if late_repair else set() if not losses else {8} if losses==1 else {7,8}
     selected=[m for m in mapped if m['message_number'] in messages]
     if len(selected)!=len(messages) or {m['message_number'] for m in selected}!=messages:
         raise ValueError('selected row identities were not each SDK-accepted once')
     if len({m['source_id'] for m in mapped})!=len(mapped):
         raise ValueError('ambiguous admitted source identity')
-    absent={m['source_id'] for m in selected} if losses==2 else set()
+    absent={m['source_id'] for m in selected} if losses==2 or late_repair else set()
     observed=sorted(m['source_id'] for m in mapped if m['source_id'] not in absent)
     return selected,observed
 
 
-def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0):
+def verify_late_receiver(mapped,remote,receiver,source_epoch,selected,parity_ns):
+    by_message={m['message_number']:m for m in mapped};decisions={}
+    state=receiver['begin']['bridge'];session=bytes(state['session_id']).hex();owner=bytes(state['owner_epoch']).hex()
+    for e in remote['events']:
+        if e['point']!=4:raise ValueError('unexpected late-test receiver trace event')
+        m=by_message.get(e['message_number'])
+        if not m or e['message_number'] in decisions or e['origin_ns']!=m['origin_ns'] or e['envelope_sequence']!=m['envelope_sequence'] or e['route']!=1 or e['source_epoch']!=source_epoch or e['session']!=session or e['owner_epoch']!=owner or any(e[k]!=state[k] for k in ('control_generation','sensor_generation')):
+            raise ValueError('receiver decision/source/context identity mismatch')
+        decisions[e['message_number']]=e
+    if set(decisions)!=set(by_message) or len(selected)!=1:raise ValueError('receiver decisions incomplete')
+    target=selected[0];target_message=target['message_number']
+    if target_message!=5 or any(e['result']!=(12 if number==target_message else 0) for number,e in decisions.items()):
+        raise ValueError('late source must be rejected specifically as SessionError::replay')
+    decision=decisions[target_message]
+    if not target['origin_ns']<parity_ns<=decision['end_ns'] or parity_ns-target['origin_ns']>=250000000:
+        raise ValueError('repair timing outside predeclared VM interval')
+    newer=[r for r in receiver['rows'] if any(m['source_id']==r['id'] and m['message_number'] in (6,7,8) and m['envelope_sequence']>target['envelope_sequence'] for m in mapped) and r['observed_ns']<parity_ns]
+    if not newer:raise ValueError('no newer same-row typed publication before repair parity')
+    for key in ('transport_samples_unknown_age','transport_samples_stale'):
+        if receiver['end']['bridge'][key]!=state[key]:raise ValueError('unexpected clock/stale receiver classification')
+    return dict(selected_source=target,receiver_decision=decision,newer_observed_before_parity=[r['id'] for r in newer],parity_incoming_ns=parity_ns,callback_ingress_to_parity_VM_ns=parity_ns-target['origin_ns'],
+                scope='direct replay classification before Session age evaluation; actual VM elapsed under250ms is not an evaluated conservative age bound or physical sensor age')
+
+
+def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0, late_repair=False):
     trace=m3_sample_trace.summarize(run/'robot-bridge-0.log');joined=m3_sample_trace.correlate(trace)
     remote=m3_sample_trace.summarize(run/'operator-bridge-0.log')
     if joined['queued_without_observed_handoff'] or joined['sdk_errors']:
@@ -219,7 +245,7 @@ def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0)
     if sorted([m['source_id'] for m in mapped]+rejected)!=list(range(19)) or len(mapped)!=sender['end']['bridge']['sensor_sent'] or len(rejected)!=sender['end']['bridge']['samples_submit_busy']:
         raise ValueError('trace/source/counter reconciliation differs')
     observed=receiver['rows'];hashes={r['id']:r['payload_sha256'] for r in sender['rows']}
-    selected,expected_ids=selected_sources(mapped,losses)
+    selected,expected_ids=selected_sources(mapped,losses,late_repair)
     if [r['id'] for r in observed]!=expected_ids or any(r['payload_sha256']!=hashes[r['id']] for r in observed):
         raise ValueError('admitted/observed typed payloads differ')
     binding=identity['binding'];origin=identity['initial_sequence'];sdk=[e for e in trace['events'] if e['point']==2]
@@ -235,8 +261,15 @@ def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0)
         if actual!=pcaps or actual!=expected or not footer['population_reconciled']:
             raise ValueError('SDK/native/PCAP source/parity identities differ')
         captures[role]=dict(status=status,footer=footer,source_records=len(mapped)-losses,parity_records=len(sdk)//4)
-    return dict(sender_trace=trace,receiver_trace=remote,mapped=mapped,busy_source_ids=sorted(rejected),selected_sources=selected,expected_observed_ids=expected_ids,captures=captures,
-                selected_source_delivery='all selected IDs observed after absent wire source' if losses==1 else 'selected IDs absent at finite cutoff' if losses==2 else 'no injected loss',
+    late=None
+    if late_repair:
+        _,incoming=captured(run/'measurement/operator.mono',addresses['operator'])
+        parity=((origin+7)&0x7fffffff,0,binding['socket_id'],False)
+        times=[row['monotonic_ns'] for row,h in incoming if frame_key(row['prefix'],binding)==parity]
+        if len(times)!=1:raise ValueError('late-row parity observation ambiguous')
+        late=verify_late_receiver(mapped,remote,receiver,bytes(sender['begin']['bridge']['owner_epoch']).hex(),selected,times[0])
+    return dict(late_repair=late,sender_trace=trace,receiver_trace=remote,mapped=mapped,busy_source_ids=sorted(rejected),selected_sources=selected,expected_observed_ids=expected_ids,captures=captures,
+                selected_source_delivery='reconstructed source explicitly rejected as replay after newer publications' if late_repair else 'all selected IDs observed after absent wire source' if losses==1 else 'selected IDs absent at finite cutoff' if losses==2 else 'no injected loss',
                 qualification=False,scope='finite traced ROS case; actual SDK identity to selected source and typed publication, with independent BUSY retained; not replacement baseline, physical delivery or full N3/M3 acceptance')
 
 
@@ -301,11 +334,11 @@ def wait_files(run,names,peers):
         time.sleep(.05)
 
 
-def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_backend='tcpdump'):
-    traced=trace_diagnostic or trace_loss
+def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_backend='tcpdump',late_repair=False):
+    traced=trace_diagnostic or trace_loss or late_repair
     run.mkdir(); inside='/workspace/'+str(run.relative_to(ROOT));lab=NetworkLab(ROOT,run,image,monotonic_capture=True)
     captures=[];peers=[];fault=None;key=run/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,capture_backend=capture_backend,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
+    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,late_repair=late_repair,capture_backend=capture_backend,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
     try:
         lab.start(key);result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         configure(lab,'permanent');lab.apply('N0',1701);result['features_before']=feature_snapshot(lab,'features-before')
@@ -320,7 +353,7 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_ba
         result['identity_captures']=validate_capture_populations(run/'identity',lab.addresses,identity,0,'identity')
         captures=capture_start(lab,run/'measurement',capture_backend)
         if losses:
-            binding=identity['binding']; selection=Selection(identity['initial_sequence'],1,(3,) if losses==1 else (2,3),(8,) if losses==1 else (7,8),binding['socket_id'],binding['source_port'],binding['destination_port'])
+            binding=identity['binding']; selection=Selection(identity['initial_sequence'],1,(0,) if late_repair else (3,) if losses==1 else (2,3),(5,) if late_repair else (8,) if losses==1 else (7,8),binding['socket_id'],binding['source_port'],binding['destination_port'])
             result['selection']=asdict(selection);fault=install(lab,selection);result['fault']=fault
         (run/'armed').touch()
         wait_files(run,[r+'-finite-result.json' for r in lab.containers],peers)
@@ -330,7 +363,7 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_ba
                 raise ValueError('exact selected drop count differs')
             remove(lab,fault)
         sender=json.loads((run/'robot-finite-result.json').read_text());receiver=json.loads((run/'operator-finite-result.json').read_text())
-        result['outcome']=dict(diagnostic_window=diagnostic_window(sender,receiver,losses)) if traced else outcomes(sender,receiver,losses)
+        result['outcome']=dict(diagnostic_window=diagnostic_window(sender,receiver,losses,late_repair)) if traced else outcomes(sender,receiver,losses)
         capture_stop(lab,captures);captures=[]
         if not traced:result['measurement_captures']=validate_capture_populations(run/'measurement',lab.addresses,identity,losses,'measurement')
         result['features_after']=feature_snapshot(lab,'features-after')
@@ -341,7 +374,7 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_ba
             if p.wait(timeout=8)!=0:
                 raise ValueError('ROS scenario exit failed')
             log.close()
-        if traced:result['sample_correlation']=diagnostic_correlation(run,sender,receiver,identity,lab.addresses,losses)
+        if traced:result['sample_correlation']=diagnostic_correlation(run,sender,receiver,identity,lab.addresses,losses,late_repair)
         result['status']='passed'
     except Exception as error:
         result.update(status='failed',error=str(error));raise
@@ -363,12 +396,12 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_ba
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');p.add_argument('--capture-backend',choices=('tcpdump','packet-socket'),default='tcpdump');p.add_argument('--trace-loss-count',type=int,choices=(1,2),help='explicit separately planned traced fault only');a=p.parse_args();
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');modes.add_argument('--trace-late-repair',action='store_true',help='one first-position source loss; require explicit receiver replay rejection after newer publication');p.add_argument('--capture-backend',choices=('tcpdump','packet-socket'),default='tcpdump');p.add_argument('--trace-loss-count',type=int,choices=(1,2),help='explicit separately planned traced fault only');a=p.parse_args();
     if a.trace_loss_count is not None and not a.trace_losses:p.error('--trace-loss-count requires --trace-losses')
     run=a.out.resolve();run.mkdir(parents=True,exist_ok=False)
     image=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64','ros2-srt-m3:20261105'],text=True))[0]['RepoDigests'][0];result=dict(status='running',image=image,cases=[])
     try:
-        for losses in ((0,) if a.trace_diagnostic else (a.trace_loss_count,) if a.trace_loss_count is not None else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses,a.capture_backend))
+        for losses in ((0,) if a.trace_diagnostic else (1,) if a.trace_late_repair else (a.trace_loss_count,) if a.trace_loss_count is not None else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses,a.capture_backend,a.trace_late_repair))
         result['status']='passed'
     except Exception as error:result.update(status='failed',error=str(error));raise
     finally:write(run/'result.json',result)

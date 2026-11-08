@@ -100,3 +100,46 @@ class TracedFaultPopulationTests(unittest.TestCase):
         self.assertEqual(result['losses']['admission'],1)
         self.assertEqual(result['losses']['srt_accept_to_receiver_gap'],2)
         with self.assertRaises(ValueError):diagnostic_window(a,b,1)
+
+class LateReceiverTests(unittest.TestCase):
+    def fixture(self):
+        from m3_ros_sensor import selected_sources
+        mapped=[dict(source_id=i,message_number=i+2,origin_ns=100+i,envelope_sequence=i+1) for i in range(3,9)]
+        selected,_=selected_sources(mapped,1,True)
+        state=dict(session_id=[2]*16,owner_epoch=[3]*16,control_generation=1,sensor_generation=1,transport_samples_unknown_age=0,transport_samples_stale=0)
+        rows=[dict(id=i,observed_ns=(100000000 if i in (4,5) else 210000000)) for i in range(4,9)]
+        receiver=dict(begin=dict(bridge=copy.deepcopy(state)),end=dict(bridge=copy.deepcopy(state)),rows=rows)
+        events=[dict(point=4,message_number=m['message_number'],origin_ns=m['origin_ns'],envelope_sequence=m['envelope_sequence'],route=1,source_epoch='01'*16,owner_epoch='03'*16,session='02'*16,control_generation=1,sensor_generation=1,result=12 if m['message_number']==5 else 0,end_ns=200000100) for m in mapped]
+        return mapped,dict(events=events),receiver,'01'*16,selected,200000000
+
+    def test_direct_replay_after_newer_publication(self):
+        from m3_ros_sensor import verify_late_receiver
+        result=verify_late_receiver(*self.fixture())
+        self.assertEqual(result['receiver_decision']['result'],12)
+        self.assertEqual(result['newer_observed_before_parity'],[4,5])
+
+    def test_stale_unknown_missing_wrong_origin_or_early_repair_not_accepted(self):
+        from m3_ros_sensor import verify_late_receiver
+        for kind in ('stale','accepted','epoch','missing','duplicate','no-newer','timing','clock'):
+            args=list(self.fixture());events=args[1]['events'];receiver=args[2]
+            if kind=='stale':events[0]['result']=25
+            elif kind=='accepted':events[0]['result']=0
+            elif kind=='epoch':events[0]['source_epoch']='04'*16
+            elif kind=='missing':events.pop()
+            elif kind=='duplicate':events.append(copy.deepcopy(events[0]))
+            elif kind=='no-newer':
+                for row in receiver['rows']:row['observed_ns']=300000000
+            elif kind=='timing':args[-1]=300000000
+            else:receiver['end']['bridge']['transport_samples_unknown_age']=1
+            with self.subTest(kind=kind),self.assertRaises(ValueError):verify_late_receiver(*args)
+
+    def test_repaired_but_rejected_is_receiver_loss_not_transport_gap(self):
+        from m3_ros_sensor import diagnostic_window
+        a,b=results(0);a['begin']['bridge']['samples_submit_busy']=0;a['end']['bridge']['samples_submit_busy']=0
+        b['rows']=[r for r in b['rows'] if r['id']!=3]
+        b['end']['bridge'].update(transport_samples_rejected=1,sensor_polled=18,samples_published=18)
+        b['end']['bridge']['imu_age_upper_histogram_ms'][10]=18
+        value=diagnostic_window(a,b,1,True)
+        self.assertEqual(value['losses']['receiver_rejected'],1)
+        self.assertEqual(value['losses']['srt_accept_to_receiver_gap'],0)
+        with self.assertRaises(ValueError):diagnostic_window(a,b,1)

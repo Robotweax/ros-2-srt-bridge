@@ -6,10 +6,10 @@
 
 namespace robotweax::srt_bridge {
 enum class SampleTraceLane : unsigned { ros=0,transport=1 };
-enum class SampleTracePoint : unsigned { admission=1,sdk_accepted=2,sdk_error=3 };
+enum class SampleTracePoint : unsigned { admission=1,sdk_accepted=2,sdk_error=3,receiver_decision=4 };
 struct SampleTraceEvent {
     std::uint64_t sequence=0,begin_ns=0,end_ns=0,origin_ns=0;
-    Identity owner_epoch{},session{};
+    Identity owner_epoch{},session{},source_epoch{};
     std::uint64_t control_generation=0,sensor_generation=0,envelope_sequence=0,callback_sequence=0;
     std::uint32_t route=0,bytes=0,stamp_nanosec=0;
     std::int32_t stamp_sec=0,message_number=0,initial_sequence=-1;

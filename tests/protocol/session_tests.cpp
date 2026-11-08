@@ -73,6 +73,18 @@ void happy_and_data() {
     e=old;
     check(p.l.admit_sample({Channel::sensor,p.ls},p.sample(e),p.now+300000000).action.error==SessionError::stale_sample,"stale sample");
 }
+static_assert(unsigned(SessionError::replay)==12,"sample trace schema2 replay reason changed");
+void reordered_samples() {
+    Pair p;p.activate();auto old=p.c.make_sample(1,4,p.next());auto newer=p.c.make_sample(1,4,p.next());
+    check(old.envelope&&newer.envelope,"ordered sample creation");
+    auto early=*old.envelope;auto late=*newer.envelope;
+    check(p.l.admit_sample({Channel::sensor,p.ls},p.sample(late),p.next()).envelope.has_value(),"newer sample rejected");
+    auto rejected=p.l.admit_sample({Channel::sensor,p.ls},p.sample(early),p.next());
+    check(!rejected.envelope&&rejected.action.error==SessionError::replay,"late repair did not preserve receive watermark");
+    check(!rejected.action.close_control&&!rejected.action.close_sensor&&p.l.state()==SessionState::active,"late repair closed session");
+    auto fresh=p.c.make_sample(1,4,p.next());auto next=*fresh.envelope;
+    check(p.l.admit_sample({Channel::sensor,p.ls},p.sample(next),p.next()).envelope.has_value(),"late repair poisoned next fresh sample");
+}
 void rebind_and_disconnect() {
     Pair p; p.handshake(); auto old_ack=p.bind();
     const auto c_loss=p.c.sensor_lost(p.cs), l_loss=p.l.sensor_lost(p.ls);
@@ -193,6 +205,6 @@ void clock_invalidation_and_wrap() {
     check(limits.c.tick(0).error==SessionError::invalid_time && limits.c.state()==SessionState::disconnected,"local clock regression");
 }
 }
-int main() { try { happy_and_data(); rebind_and_disconnect(); bad_peers_and_timeouts(); cross_channel_reorder(); peer_restart(); clock_invalidation_and_wrap();
+int main() { try { happy_and_data(); reordered_samples(); rebind_and_disconnect(); bad_peers_and_timeouts(); cross_channel_reorder(); peer_restart(); clock_invalidation_and_wrap();
     std::cout<<"PASS session contract: "<<checks<<" checks\n"; }
     catch(const std::exception& e) { std::cerr<<"FAIL: "<<e.what()<<'\n'; return 1; } }
