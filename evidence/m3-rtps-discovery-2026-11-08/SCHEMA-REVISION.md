@@ -60,3 +60,14 @@ Fragment reporting also must accept pinned PDML boolean show=True, not just1.
 A first fragment has offset0 plus MF=True; earlier intermediate counts omitted it.
 Add that regression, and reparse the same six PDML inputs to final fragment totals.
 This changes descriptive fragment metadata, not input population or original verdict.
+
+After corrected reassembly metadata, inspect only default-run first fragments
+explicitly lacking a reassembly reference in the original full-capture decode.
+A separate header-only adapter uses a new tshark pass with IPv4 defragmentation
+disabled for those preselected frame numbers. Its output never establishes a
+complete advertisement or GUID binding, including when a partial topic parameter
+is visible. Truncated-body expert errors are expected here. Inspect all4 operator
+and7 robot incomplete first fragments, not a selected favorable topic. Preserve
+the distinction between source-tap fragment, peer-tap observation, complete DDS
+advertisement and actual application callback. This is retrospective localization,
+not a new live known-loss intervention or a unique kernel drop-stage proof.
