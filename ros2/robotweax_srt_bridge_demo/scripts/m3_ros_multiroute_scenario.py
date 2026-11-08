@@ -8,9 +8,19 @@ from robotweax_srt_bridge_msgs.srv import SetPublishing
 from m3_ros_sensor_scenario import Finite
 from m3_scenario import Benchmark, write
 from source_payload import fingerprint
+from scenario_processes import stop_children
 
 
 class Multiroute(Finite):
+    def cleanup(self):
+        report=stop_children(self.processes)
+        try:
+            self.resources.close();self.endpoint_sampler.close()
+        except Exception as error:
+            report.update(passed=False,observer_cleanup_error=str(error))
+        write(self.run/(self.args.role+'-child-shutdown.json'),report)
+        if not report['passed']:raise RuntimeError('abnormal child shutdown; see '+self.args.role+'-child-shutdown.json')
+
     def received(self,route,m):
         counter=round(m.angular_velocity.z) if route==1 else round(m.position[0]*1000)
         self.rows.append(dict(route=route,counter=counter,stamp_sec=m.header.stamp.sec,stamp_nanosec=m.header.stamp.nanosec,payload_sha256=fingerprint(m,route),observed_ns=time.monotonic_ns()))
@@ -62,7 +72,9 @@ def main():
     try:driver.measure()
     except BaseException:
         write(driver.run/(a.role+'-multiroute-failure.json'),dict(traceback=traceback.format_exc()));raise
-    finally:driver.cleanup();driver.destroy_node();rclpy.shutdown()
+    finally:
+        try:driver.cleanup()
+        finally:driver.destroy_node();rclpy.shutdown()
 
 
 if __name__=='__main__':main()

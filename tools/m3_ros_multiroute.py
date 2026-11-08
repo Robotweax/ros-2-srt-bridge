@@ -65,8 +65,10 @@ def run(out,capture=False,losses=0,seed=1701):
             if result['features_after']!=result['features_before']:raise ValueError('interface features changed')
         (out/'release').touch()
         for p,log in peers:
-            if p.wait(timeout=12)!=0:raise ValueError('multiroute scenario exit failed')
+            if p.wait(timeout=25)!=0:raise ValueError('multiroute scenario exit failed; inspect child-shutdown/scenario logs')
             log.close()
+        result['child_shutdown']={role:json.loads((out/(role+'-child-shutdown.json')).read_text()) for role in lab.containers}
+        if not all(report['passed'] for report in result['child_shutdown'].values()):raise ValueError('unqualified child shutdown')
         if {p:sha(ROOT/p) for p in paths}!=inventory:raise ValueError('runtime changed during measurement')
         sender=json.loads((out/'robot-multiroute-result.json').read_text());receiver=json.loads((out/'operator-multiroute-result.json').read_text())
         source=source_trace(out/'robot-source.log');local=sample_trace(out/'robot-bridge-0.log');remote=sample_trace(out/'operator-bridge-0.log')
@@ -92,7 +94,7 @@ def run(out,capture=False,losses=0,seed=1701):
         (out/'release').touch()
         if result['status']!='passed':(out/'abort').touch()
         for p,log in peers:
-            try:p.wait(timeout=12)
+            try:p.wait(timeout=25)
             except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=5)
             if not log.closed:log.close()
         try:lab.cleanup()
