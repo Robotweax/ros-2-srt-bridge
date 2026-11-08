@@ -66,7 +66,9 @@ class BridgeNode final:public rclcpp::Node {
                 <<",\"point\":"<<unsigned(e.point)<<",\"reason\":"<<unsigned(e.reason)<<",\"request\":\""<<hex(e.request)
                 <<"\",\"session\":\""<<hex(e.session)<<"\",\"owner_epoch\":\""<<hex(e.owner_epoch)
                 <<"\",\"control_generation\":"<<e.control_generation<<",\"sensor_generation\":"<<e.sensor_generation
-                <<",\"route\":"<<e.route<<",\"detail\":"<<e.detail<<",\"value\":"<<e.value<<",\"entry_owner_epoch\":\""<<hex(e.entry_owner_epoch)<<"\"}";
+                <<",\"route\":"<<e.route<<",\"detail\":"<<e.detail<<",\"value\":"<<e.value<<",\"entry_owner_epoch\":\""<<hex(e.entry_owner_epoch)
+                <<"\",\"request_sequence\":"<<e.request_sequence<<",\"origin_ns\":"<<e.origin_ns<<",\"evaluated_ns\":"<<e.evaluated_ns
+                <<",\"clock_deadline_ns\":"<<e.clock_deadline_ns<<",\"clock_error\":"<<e.clock_error<<",\"age_error\":"<<e.age_error<<"}";
             std::cout<<line.str()<<std::endl;
         }
     }

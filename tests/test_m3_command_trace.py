@@ -35,6 +35,20 @@ class CommandTraceTests(unittest.TestCase):
         events[1]['detail']=0;events[2]['detail']=8
         with self.assertRaisesRegex(ValueError,'flags'):self.parse(events,dict(attempted=6,dropped=0))
 
+    def test_admission_errors_keep_request_kind_and_clock_boundary(self):
+        events=[self.event(1,32),self.event(2,33),self.event(3,34)]
+        for event in events:event.update(detail=6,value=0,request_sequence=14,origin_ns=1,evaluated_ns=1,clock_deadline_ns=9,clock_error=0,age_error=0)
+        events[0].update(value=13,clock_error=2,clock_deadline_ns=1)
+        events[1].update(value=5)
+        events[2].update(detail=8,value=2)
+        parsed=self.parse(events,dict(attempted=3,dropped=0))
+        self.assertEqual(parsed['counts']['control_admission'],1)
+        self.assertEqual(parsed['events'][1]['detail'],6)
+        self.assertEqual(parsed['events'][2]['detail'],8)
+        for key,value in [('detail',7),('request_sequence',0),('value',27),('clock_error',10),('evaluated_ns',2)]:
+            invalid=[dict(e) for e in events];invalid[0][key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):self.parse(invalid,dict(attempted=3,dropped=0))
+
     def test_loss_is_explicit_and_never_complete(self):
         events=[self.event(1,1),self.event(3,9)]
         self.assertFalse(self.parse(events,dict(attempted=4,dropped=2))['complete'])

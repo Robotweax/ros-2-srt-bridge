@@ -22,7 +22,7 @@ CommandEvent peer_error(CommandEndpoint& endpoint,Identity id,ControlErrorCode c
 void stop(CommandEndpoint& endpoint){const auto begin=now();endpoint.request_stop();endpoint.join();check(now()-begin<5000000000ULL&&!endpoint.snapshot().running&&endpoint.snapshot().worker==WorkerState::stopped,"endpoint stop failed");}
 void receiver_errors(const std::string& ip,const std::filesystem::path& directory){
     const auto key=secret();auto oc=config(Role::listener,ip,key);TransportOwner op(oc);until([&]{return op.snapshot().control_port!=0;},"operator bind failed");
-    auto rc=config(Role::caller,ip,key);rc.control.port=op.snapshot().control_port;rc.sensor.port=op.snapshot().sensor_port;auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);rw.journal.max_entries=1;CommandEndpoint robot({rc,rw});
+    auto rc=config(Role::caller,ip,key);rc.control.port=op.snapshot().control_port;rc.sensor.port=op.snapshot().sensor_port;rc.command_trace=std::make_shared<CommandTrace>();auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);rw.journal.max_entries=1;CommandEndpoint robot({rc,rw});
     until([&]{return robot.snapshot().ready&&op.snapshot().state==SessionState::active;},"receiver endpoint not ready");
     auto sw=worker_options(oc,directory/"sender.sqlite",JournalSide::sender);JournalWorker sender(sw);worker_ready(sender);
     const auto id=random_identity();const RateCommand original{100,5000,0,1};send(op,sender,oc.session.local_epoch,id,original);
@@ -35,9 +35,18 @@ void receiver_errors(const std::string& ip,const std::filesystem::path& director
     sw.journal.path=(directory/"conflicting-sender.sqlite").string();JournalWorker conflicting(sw);worker_ready(conflicting);send(op,conflicting,oc.session.local_epoch,id,{500,5000,0,1});message=receive(op,Kind::error,id);value=decode_control_error(message.body());check(value&&value->code==ControlErrorCode::conflict&&value->request_kind==Kind::command,"payload conflict got a success response");
     until([&]{return op.submit_query(op.snapshot().context,100,id)==SubmitResult::queued;},"stored query submit failed");message=receive(op,Kind::status,id);auto stored=decode_command_status(100,message.body());check(stored&&stored->state==CommandState::succeeded&&stored->result==RateResult{100,1,true}&&robot.snapshot().effects==1,"errors changed stored result or device effect");
     check(robot.snapshot().transport.errors_sent>=4,"wire errors not counted");check(sender.join()&&conflicting.join(),"sender worker stop failed");op.request_stop();op.join();stop(robot);
+    bool admitted=false,missing=false,capacity=false;CommandTraceEvent event;
+    while(rc.command_trace->poll(event)){
+        if(event.point==CommandTracePoint::control_admission&&event.request==id&&event.detail==unsigned(Kind::command)){
+            check(event.value==unsigned(SessionError::none)&&event.request_sequence>0&&event.origin_ns>0&&event.evaluated_ns<=event.monotonic_ns,"admission trace lost envelope/clock provenance");admitted=true;
+        }
+        if(event.point==CommandTracePoint::receiver_worker_result&&event.request==absent&&event.detail==unsigned(Kind::query))missing=event.value==unsigned(JournalError::not_found)&&event.request_sequence>0;
+        if(event.point==CommandTracePoint::receiver_worker_result&&event.request==full&&event.detail==unsigned(Kind::command))capacity=event.value==unsigned(JournalError::capacity)&&event.request_sequence>0;
+    }
+    check(admitted&&missing&&capacity&&rc.command_trace->dropped()==0,"receiver admission/worker errors not observed separately");
 }
 void sender_errors(const std::string& ip,const std::filesystem::path& directory){
-    const auto key=secret();auto oc=config(Role::listener,ip,key);auto sw=worker_options(oc,directory/"sender.sqlite",JournalSide::sender);CommandEndpoint op({oc,sw});until([&]{return op.snapshot().transport.control_port!=0;},"sender bind failed");
+    const auto key=secret();auto oc=config(Role::listener,ip,key);oc.command_trace=std::make_shared<CommandTrace>();auto sw=worker_options(oc,directory/"sender.sqlite",JournalSide::sender);CommandEndpoint op({oc,sw});until([&]{return op.snapshot().transport.control_port!=0;},"sender bind failed");
     auto rc=config(Role::caller,ip,key);rc.control.port=op.snapshot().transport.control_port;rc.sensor.port=op.snapshot().transport.sensor_port;auto robot=std::make_unique<TransportOwner>(rc);until([&]{return op.snapshot().ready&&robot->snapshot().state==SessionState::active;},"sender endpoint not ready");
     const auto id=random_identity();const RateCommand command{100,5000,0,1};until([&]{return op.execute(100,id,command,now())==SubmitResult::queued;},"sender execution submit failed");auto original=receive(*robot,Kind::command,id);
     check(op.transport().submit_error(op.transport().snapshot().context,100,id,{ControlErrorCode::not_found,Kind::query,1,0})==SubmitResult::invalid,"operator could send ERROR");
@@ -63,6 +72,37 @@ void sender_errors(const std::string& ip,const std::filesystem::path& directory)
     const auto errors=op.snapshot().peer_errors;error(*robot,query,ControlErrorCode::not_found);until([&]{return op.snapshot().peer_errors>errors;},"late ERROR not processed");
     until([&]{return op.query(100,id)==SubmitResult::queued;},"terminal query not submitted");until([&]{while(op.poll(success)){check(!success.peer_error,"late ERROR displaced known result");if(success.request_id==id&&success.entry&&success.entry->state==CommandState::succeeded)return true;}return false;},"terminal result downgraded by ERROR");check(op.snapshot().tracked==0&&op.snapshot().commands_sent==1,"terminal tracking or send count wrong");
     stop(op);robot->request_stop();robot->join();
+    bool command_busy=false,query_missing=false;CommandTraceEvent event;
+    while(oc.command_trace->poll(event))if(event.point==CommandTracePoint::peer_error_received&&event.request==id){
+        if(event.detail==unsigned(Kind::command)&&event.value==unsigned(ControlErrorCode::busy))command_busy=event.request_sequence==original.envelope.sequence;
+        if(event.detail==unsigned(Kind::query)&&event.value==unsigned(ControlErrorCode::not_found))query_missing=event.request_sequence>0;
+    }
+    check(command_busy&&query_missing&&oc.command_trace->dropped()==0,"peer error trace lost COMMAND versus QUERY correlation");
 }
+void receiver_clock_diagnostics(const std::string& ip,const std::filesystem::path& directory){
+    const auto key=secret();auto oc=config(Role::listener,ip,key);oc.command_trace=std::make_shared<CommandTrace>();
+    auto sw=worker_options(oc,directory/"sender.sqlite",JournalSide::sender);CommandEndpoint op({oc,sw});
+    until([&]{return op.snapshot().transport.control_port!=0;},"clock diagnostic sender bind failed");
+    auto rc=config(Role::caller,ip,key);rc.control.port=op.snapshot().transport.control_port;rc.sensor.port=op.snapshot().transport.sensor_port;
+    // Existing one-second probe cadence leaves a deliberate receiver-only
+    // qualification gap. No packet loss, retry or production policy change.
+    rc.session.clock.max_probe_age_ns=150000000;rc.command_trace=std::make_shared<CommandTrace>();
+    auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);CommandEndpoint robot({rc,rw});
+    until([&]{return op.snapshot().ready&&robot.snapshot().ready&&robot.snapshot().transport.clock_qualified;},"clock diagnostic endpoints not ready");
+    until([&]{return !robot.snapshot().transport.clock_qualified;},"receiver clock gap missing");
+    const auto id=random_identity();until([&]{return op.execute(100,id,{100,5000,0,1},now())==SubmitResult::queued;},"clock diagnostic execute not queued");
+    const auto observed=peer_error(op,id,ControlErrorCode::clock_unqualified);
+    check(observed.peer_error->request_kind==Kind::command,"clock diagnostic did not reject COMMAND");
+    check(op.snapshot().commands_sent==1&&robot.snapshot().effects==0,"clock diagnostic changed send/effect policy");
+    stop(op);stop(robot);
+    bool rejection=false,correlated=false;std::uint64_t sequence=0;CommandTraceEvent e;
+    while(rc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::control_admission&&e.detail==unsigned(Kind::command)){
+        check(e.value==unsigned(SessionError::clock_unqualified)&&e.clock_error==unsigned(ClockError::expired)&&e.age_error==unsigned(ClockError::expired)&&e.clock_deadline_ns<=e.evaluated_ns&&e.origin_ns>0,"receiver clock rejection provenance missing");sequence=e.request_sequence;rejection=true;
+    }
+    while(oc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::peer_error_received&&e.detail==unsigned(Kind::command))
+        correlated=e.value==unsigned(ControlErrorCode::clock_unqualified)&&e.request_sequence==sequence;
+    check(rejection&&correlated&&!oc.command_trace->dropped()&&!rc.command_trace->dropped(),"clock rejection/error correlation missing");
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");auto directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(directory);++n)directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(directory);const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";receiver_errors(ip,directory/"receiver");sender_errors(ip,directory/"sender");std::cout<<"PASS wire errors "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}
+
+}
+int main(int argc,char** argv){try{check(argc==2,"family required");auto directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(directory);++n)directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(directory);const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";receiver_errors(ip,directory/"receiver");sender_errors(ip,directory/"sender");receiver_clock_diagnostics(ip,directory/"receiver-clock");std::cout<<"PASS wire errors "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}

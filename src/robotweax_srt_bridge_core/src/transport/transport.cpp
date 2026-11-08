@@ -309,7 +309,17 @@ struct TransportOwner::Impl {
             const auto& view=decoded.message;const auto kind=view.envelope.kind;const Connection connection{channel(i),link.generation};
             if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
             if(kind==Kind::sample)++current.samples_received;
-            const auto result=i?session.admit_sample(connection,view,monotonic_ns()):session.admit_control(connection,view,monotonic_ns());
+            const auto admission_ns=monotonic_ns();
+            const auto result=i?session.admit_sample(connection,view,admission_ns):session.admit_control(connection,view,admission_ns);
+            if(config.command_trace&&(kind==Kind::command||kind==Kind::query)){
+                const auto c=context();
+                CommandTraceEvent e{0,monotonic_ns(),CommandTracePoint::control_admission,CommandTraceReason::none,
+                    view.envelope.request_id,view.envelope.session_id,config.session.local_epoch,c.control_generation,c.sensor_generation,
+                    view.envelope.route_id,unsigned(result.action.error),{},unsigned(kind)};
+                e.request_sequence=view.envelope.sequence;e.origin_ns=view.envelope.source_monotonic_ns;e.evaluated_ns=admission_ns;
+                e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_error=unsigned(session.clock_state());e.age_error=unsigned(result.age.error);
+                config.command_trace->record(CommandTraceProducer::transport,e);
+            }
             if(observing&&kind==Kind::sample){
                 SampleTraceEvent e;e.point=unsigned(SampleTracePoint::receiver_decision);e.begin_ns=receive_begin;e.end_ns=monotonic_ns();
                 e.origin_ns=view.envelope.source_monotonic_ns;e.owner_epoch=config.session.local_epoch;e.session=view.envelope.session_id;e.source_epoch=view.envelope.source_epoch;

@@ -76,11 +76,11 @@ struct CommandEndpoint::Impl {
         thread=std::thread([this]{run();});
     }
     ~Impl(){stopping=true;transport.request_stop();if(thread.joinable())thread.join();}
-    void trace(CommandTracePoint point,CommandTraceReason reason=CommandTraceReason::none,unsigned value=0,Identity session={},Identity entry_owner={}){
+    void trace(CommandTracePoint point,CommandTraceReason reason=CommandTraceReason::none,unsigned value=0,Identity session={},Identity entry_owner={},unsigned detail=0,std::uint64_t request_sequence=0,std::uint64_t origin_ns=0){
         if(!options.transport.command_trace)return;
         const auto c=transport.snapshot().context;
         options.transport.command_trace->record(CommandTraceProducer::coordinator,{0,now(),point,reason,job.task.id,zero(session)?c.session:session,
-            options.transport.session.local_epoch,c.control_generation,c.sensor_generation,job.task.route,value,entry_owner});
+            options.transport.session.local_epoch,c.control_generation,c.sensor_generation,job.task.route,value,entry_owner,detail,request_sequence,origin_ns});
     }
     void fail(EndpointFault fault){if(current.fault==EndpointFault::none)current.fault=fault;stopping=true;transport.request_stop();}
     void publish(JournalWorker* worker){
@@ -139,6 +139,9 @@ struct CommandEndpoint::Impl {
         current.test_paused=false;job.worker_token=0;
         if(reply.journal.entry)job.entry=reply.journal.entry;
         const auto error=reply.journal.error;
+        if(job.after==After::peer_admit||job.after==After::peer_get)
+            trace(CommandTracePoint::receiver_worker_result,CommandTraceReason::none,unsigned(error),job.message.context.session,
+                job.entry?job.entry->owner_epoch:Identity{},unsigned(job.message.envelope.kind),job.message.envelope.sequence,job.message.envelope.source_monotonic_ns);
         if(reply.journal.entry&&reply.journal.entry->state==CommandState::unknown)
             trace(CommandTracePoint::worker_unknown,CommandTraceReason::none,unsigned(reply.journal.entry->reason),{},reply.journal.entry->owner_epoch);
         if(job.after==After::invalidate||job.after==After::abandoned)
@@ -198,7 +201,9 @@ struct CommandEndpoint::Impl {
         if(transport.poll_control(message)){
             job.message=message;job.task.id=message.envelope.request_id;job.task.route=message.envelope.route_id;job.task.context=message.context;
             if(sender&&message.envelope.kind==Kind::status){auto decoded=decode_command_status(message.envelope.route_id,message.body());if(!decoded){fail(EndpointFault::protocol);return;}auto q=request(WorkerOperation::observe_remote);q.remote_status=*decoded;rpc(q,After::peer_observe);}
-            else if(sender&&message.envelope.kind==Kind::error){auto decoded=decode_control_error(message.body());if(!decoded){fail(EndpointFault::protocol);return;}job.received_error=*decoded;++current.peer_errors;rpc(request(WorkerOperation::get),After::peer_error_get);}
+            else if(sender&&message.envelope.kind==Kind::error){auto decoded=decode_control_error(message.body());if(!decoded){fail(EndpointFault::protocol);return;}job.received_error=*decoded;++current.peer_errors;
+                trace(CommandTracePoint::peer_error_received,CommandTraceReason::none,unsigned(decoded->code),message.context.session,{},unsigned(decoded->request_kind),decoded->request_sequence);
+                rpc(request(WorkerOperation::get),After::peer_error_get);}
             else if(!sender&&message.envelope.kind==Kind::query)rpc(request(WorkerOperation::get),After::peer_get);
             else if(!sender&&message.envelope.kind==Kind::command){auto decoded=decode_rate_command(message.body());if(!decoded){fail(EndpointFault::protocol);return;}
                 auto q=request(WorkerOperation::admit);q.command=*decoded;q.context={message.context.session,message.envelope.source_epoch,message.envelope.source_monotonic_ns,message.deadline_ns};rpc(q,After::peer_admit);}
