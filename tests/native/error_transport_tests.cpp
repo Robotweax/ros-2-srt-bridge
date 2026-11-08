@@ -87,21 +87,56 @@ void receiver_clock_diagnostics(const std::string& ip,const std::filesystem::pat
     // Existing one-second probe cadence leaves a deliberate receiver-only
     // qualification gap. No packet loss, retry or production policy change.
     rc.session.clock.max_probe_age_ns=150000000;rc.command_trace=std::make_shared<CommandTrace>();
-    auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);CommandEndpoint robot({rc,rw});
-    until([&]{return op.snapshot().ready&&robot.snapshot().ready&&robot.snapshot().transport.clock_qualified;},"clock diagnostic endpoints not ready");
-    until([&]{return !robot.snapshot().transport.clock_qualified;},"receiver clock gap missing");
-    const auto id=random_identity();until([&]{return op.execute(100,id,{100,5000,0,1},now())==SubmitResult::queued;},"clock diagnostic execute not queued");
+    auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);auto robot=std::make_unique<CommandEndpoint>(EndpointOptions{rc,rw});
+    until([&]{return op.snapshot().ready&&robot->snapshot().ready&&robot->snapshot().transport.clock_qualified;},"clock diagnostic endpoints not ready");
+    const auto original_session=op.snapshot().transport.context.session;
+    until([&]{return !robot->snapshot().transport.clock_qualified;},"receiver clock gap missing");
+    const auto id=random_identity();const RateCommand command{100,5000,0,1};
+    until([&]{return op.execute(100,id,command,now())==SubmitResult::queued;},"clock diagnostic execute not queued");
     const auto observed=peer_error(op,id,ControlErrorCode::clock_unqualified);
     check(observed.peer_error->request_kind==Kind::command,"clock diagnostic did not reject COMMAND");
-    check(op.snapshot().commands_sent==1&&robot.snapshot().effects==0,"clock diagnostic changed send/effect policy");
-    stop(op);stop(robot);
-    bool rejection=false,correlated=false;std::uint64_t sequence=0;CommandTraceEvent e;
-    while(rc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::control_admission&&e.detail==unsigned(Kind::command)){
+    auto query_state=[&](CommandState state){
+        until([&]{return op.query(100,id)==SubmitResult::queued;},"uncertainty query not queued");
+        std::optional<JournalEntry> local;bool missing=false;CommandEvent event;
+        until([&]{while(op.poll(event))if(event.request_id==id){
+            if(event.entry&&event.error==JournalError::none)local=event.entry;
+            if(event.peer_error){check(event.peer_error->request_kind==Kind::query&&event.peer_error->code==ControlErrorCode::not_found&&!event.entry,"QUERY invented a receiver result");missing=true;}
+        }return local.has_value()&&missing;},"missing local uncertainty/peer NOT_FOUND pair");
+        check(local->state==state&&!local->result.valid&&local->revision==0,"query changed uncertain outcome");
+        return *local;
+    };
+    const auto before=query_state(CommandState::local_queued);
+    check(before.context.session==original_session&&before.context.deadline_ns==before.context.source_monotonic_ns+5000000000ULL,"clock rejection changed original budget");
+    until([&]{return now()>before.context.deadline_ns;},"original start deadline did not elapse");
+    const auto after=query_state(CommandState::local_queued);
+    check(after.context.deadline_ns==before.context.deadline_ns&&op.snapshot().commands_sent==1&&robot->snapshot().effects==0,"deadline/NOT_FOUND changed send/effect policy");
+    const auto rejected_trace=rc.command_trace;
+    stop(*robot);robot.reset();
+    rc.session.local_epoch=random_identity();rc.session.clock.max_probe_age_ns=5000000000ULL;rc.command_trace=std::make_shared<CommandTrace>();
+    rw.journal.process_epoch=rc.session.local_epoch;robot=std::make_unique<CommandEndpoint>(EndpointOptions{rc,rw});
+    until([&]{return op.snapshot().ready&&robot->snapshot().ready&&op.snapshot().transport.context.session!=original_session;},"normal receiver restart did not replace session");
+    auto recovered=query_state(CommandState::unknown);
+    check(recovered.reason==CommandReason::reconcile_required&&recovered.context.session==original_session,"reconnect rebound uncertainty to new session");
+    until([&]{return op.execute(100,id,command,now())==SubmitResult::queued;},"existing intent reconciliation not queued");
+    recovered=query_state(CommandState::unknown);
+    check(op.snapshot().commands_sent==1&&robot->snapshot().effects==0&&recovered.context.deadline_ns==before.context.deadline_ns,"existing ID was replayed or renewed");
+    stop(op);stop(*robot);
+    bool rejection=false,correlated=false;unsigned sdk_sends=0;std::uint64_t sequence=0;CommandTraceEvent e;
+    while(rejected_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::control_admission&&e.detail==unsigned(Kind::command)){
         check(e.value==unsigned(SessionError::clock_unqualified)&&e.clock_error==unsigned(ClockError::expired)&&e.age_error==unsigned(ClockError::expired)&&e.clock_deadline_ns<=e.evaluated_ns&&e.origin_ns>0,"receiver clock rejection provenance missing");sequence=e.request_sequence;rejection=true;
     }
-    while(oc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::peer_error_received&&e.detail==unsigned(Kind::command))
-        correlated=e.value==unsigned(ControlErrorCode::clock_unqualified)&&e.request_sequence==sequence;
-    check(rejection&&correlated&&!oc.command_trace->dropped()&&!rc.command_trace->dropped(),"clock rejection/error correlation missing");
+    while(rc.command_trace->poll(e))check(e.request!=id||e.point!=CommandTracePoint::control_admission||e.detail!=unsigned(Kind::command),"restarted receiver observed command replay");
+    while(oc.command_trace->poll(e))if(e.request==id){
+        if(e.point==CommandTracePoint::provider_sent)++sdk_sends;
+        if(e.point==CommandTracePoint::peer_error_received&&e.detail==unsigned(Kind::command))correlated=e.value==unsigned(ControlErrorCode::clock_unqualified)&&e.request_sequence==sequence;
+    }
+    check(rejection&&correlated&&sdk_sends==1&&!oc.command_trace->dropped()&&!rc.command_trace->dropped()&&!rejected_trace->dropped(),"clock rejection/error correlation or no-replay proof missing");
+    sw.journal.process_epoch=random_identity();CommandJournal closed_sender(sw.journal),closed_receiver(rw.journal);
+    const auto saved=closed_sender.get(id);
+    check(saved.entry&&saved.entry->state==CommandState::unknown&&saved.entry->reason==CommandReason::reconcile_required&&!saved.entry->result.valid&&saved.entry->context.source_monotonic_ns==before.context.source_monotonic_ns&&saved.entry->context.deadline_ns==before.context.deadline_ns,"closed sender lost original uncertainty/context");
+    check(closed_receiver.get(id).error==JournalError::not_found&&!closed_sender.sender_may_transmit(id,original_session,now()),"closed absence authorized retransmission");
+    std::cout<<"CLOCK_REJECTION_NATIVE {\"age_error\":2,\"clock_error\":2,\"local_before_after_deadline\":1,\"live_after_restart\":8,\"reason\":2,\"sdk_handoffs\":1,\"effects\":0,\"original_budget_ms\":5000,\"query_not_found\":true,\"closed_unknown\":true}\n";
+
 }
 
 }
