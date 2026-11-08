@@ -54,3 +54,28 @@ def verify_recovery(source,local,remote,receiver,identity,parity_ns,installed_ns
     if len(observed)!=1 or observed[0]['payload_sha256']!=src['payload_sha256']:raise ValueError('selected repaired source not observed with exact typed hash')
     if not installed_ns<=h['begin_ns'] or not a['origin_ns']<parity_ns<=decisions[0]['end_ns']<=observed[0]['observed_ns']<remove_ns:raise ValueError('repair/parity/classifier ordering mismatch')
     return dict(parity_incoming_ns=parity_ns,install_end_ns=installed_ns,remove_begin_ns=remove_ns,message_number=8,source_route=src['route'],source_counter=src['counter'],source_payload_sha256=src['payload_sha256'],row_messages=[dict(message_number=p['handoff']['message_number'],route=p['admission']['route']) for p in row],receiver_decision=decisions[0],typed_observation=observed[0],scope='SDK-accepted source selected before traffic; absent at both native/PCAP taps, accepted and typed-observed while classifier still installed; no physical-wire/cryptographic-FEC or full N3 qualification')
+
+
+def verify_two_loss(source,local,remote,receiver,identity,parity_ns,installed_ns,remove_ns):
+    """Row1 messages7/8 absent at a drained cutoff; no permanent nonexecution claim."""
+    pairs=correlate(local)['joined'];by_message={p['handoff']['message_number']:p for p in pairs}
+    row=[by_message.get(n) for n in range(5,9)]
+    if any(p is None for p in row) or {by_message[n]['admission']['route'] for n in (7,8)}!={1,2}:
+        raise ValueError('selected two sources do not span both routes in a complete row')
+    decisions={e['message_number']:e for e in remote['events']}
+    if any(e['point']!=4 or e['result']!=0 for e in remote['events']) or len(decisions)!=len(remote['events']) or set(by_message)-set(decisions)!={7,8} or set(decisions)-set(by_message):
+        raise ValueError('two-loss receiver gap is not exactly selected messages7/8')
+    cutoff=receiver['end']['monotonic_ns']
+    if not installed_ns<parity_ns<cutoff<remove_ns:raise ValueError('two-loss parity/cutoff/classifier ordering mismatch')
+    mapped=[]
+    for n in (7,8):
+        p=by_message[n];a=p['admission'];h=p['handoff']
+        if h['initial_sequence']!=identity['initial_sequence'] or not installed_ns<=h['begin_ns']<cutoff or not a['origin_ns']<parity_ns:raise ValueError('selected two-loss source origin/bracket mismatch')
+        sources=[e for e in source['events'] if (e['route'],e['stamp_sec'],e['stamp_nanosec'])==(a['route'],a['stamp_sec'],a['stamp_nanosec'])]
+        if len(sources)!=1:raise ValueError('selected two-loss source mapping ambiguous')
+        src=sources[0]
+        if any((e['route'],e['counter'])==(src['route'],src['counter']) for e in receiver['rows']):raise ValueError('selected missing source unexpectedly typed-observed')
+        subsequent=[e for e in receiver['rows'] if e['route']==src['route'] and e['counter']>src['counter'] and e['observed_ns']<cutoff]
+        if not subsequent:raise ValueError('no subsequent typed progress on selected route')
+        mapped.append(dict(message_number=n,source_route=src['route'],source_counter=src['counter'],source_payload_sha256=src['payload_sha256'],envelope_sequence=h['envelope_sequence'],subsequent_observations=len(subsequent)))
+    return dict(selected_sources=mapped,parity_incoming_ns=parity_ns,receiver_cutoff_ns=cutoff,install_end_ns=installed_ns,remove_begin_ns=remove_ns,row_messages=[dict(message_number=p['handoff']['message_number'],route=p['admission']['route']) for p in row],scope='two selected SDK-accepted sources absent at native/full-PCAP taps and drained receiver/typed cutoff with parity present and later progress on both routes; no permanent absence, internal provider expiry or generic irrecoverable-loss counter claim')
