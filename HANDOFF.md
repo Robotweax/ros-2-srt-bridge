@@ -2495,3 +2495,48 @@ Row-Faults mit BUSY/Replacement-Zuordnung prüfen, danach geplante Seeds. Aktuel
 Source-Traces auf10000 Records begrenzt; längere Läufe brauchen vorab deklarierte
 bounded Fenster/Budgets. N4, übrige M3-Gates und historische Unsicherheiten offen.
 PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Captured200/50Hz und Mixed-Route-One-Loss
+
+- Vorab517a940: optional --capture / --losses1 im Multiroute-Runner. Bestehender
+  packet-socket Recorder, getrennte geschlossene Identity-/Measurementphasen,
+  Native zuerst starten/zuletzt schließen. Neue Prüfung actualSDK -> exakte
+  Native-/Full-PCAP-Source/Parity-Multimengen, Bindingoffset/Partialrow/Wrap.
+  Neue Mixedrow-/Repair-/Classifier-Zeitordnungsgates. Python-only, keine
+  Produktions-/SDK-/ROS-/Provider-/Admission-/Mailbox-/Retryänderung.
+- PLAN evidence/m3-multiroute-capture-2026-11-08/: genau ein Baseline-Run;
+  nur nach dessen PASS genau ein One-Loss-Run. Beide PASSED, keine Retries.
+  .local/m3-multiroute-capture/{baseline,one-loss}. Je Source2011IMU/503joints,
+  keine skipped slots. Gemessen200.003710/50.025791Hz bzw200.001139/50.025148Hz.
+- Baseline: Typed2426 (1928/498), Source2514 -> DDSgap2 +BUSY2 +outbound_replaced84
+  =88 missing. SDK2426/receiver2426. Measurement je2426Source+606Parity,
+  File/Dispatch/Kernel3032 gleich. Source-/Sender-/Receivertrace2514/4939/2426.
+- One-Loss: Typed2431 (1933/498), BUSY6 +outbound_replaced77 =83 missing;
+  sonstige Losses0. SDK2431/receiver2431; Measurement je2430Source+608Parity,
+  File/Dispatch/Kernel3038 gleich. Traces2514/4946/2431. Unterschiede lokaler
+  Admission/Replacement-Populationen sind keine kausale Performancevergleichsbasis.
+- Vor Source-Arming selektierte Message8/Row1Position3 genau einmal gedroppt,
+  Parity ausgenommen. Tatsächliche Row5/6/7 IMU,8 joints. Message8 mappt auf
+  Jointcounter2/Envelopeseq2: Sourcepacket an beiden Taps absent, Rowparity da,
+  explizit Session-accepted und exakter Typedhash/Stamp einmal beobachtet, während
+  Classifier noch installiert. Native parity47375327895ns -> EntscheidungEnd
+  47377568728ns -> Typed47378953561ns -> HookremoveBegin60051112984ns.
+- Sechs Bilanzen jeweils0, leere stabile Checkpoints, sämtliche Typedhashes/Order,
+  Clock/QoS/Session/Owner/Generations/Isolation passen. Alle Traces vollständig,
+  keine Drops/Exhaustion. Unmatched IDs bleiben separat; Aggregate liefern keine
+  genaue individuelle Stage. Keine lossless/PhysicalAge/Crypto-FEC-Abnahme.
+- Identity je8/8, alle Recorder initialkernel0/finalfilter-before-bind/stabile
+  gleiche Drains/Hash/Größe; keine Kernel-/Nativeverluste/Truncation/Exhaustion,
+  Features unverändert. Separate Phasen, kein Continuouscaptureclaim. PCAP-
+  Realtime nicht als qualifizierte Zeitbasis nutzen. Native ist skb, nicht Wire.
+  AgeUpperMax Baseline IMU14011182ns/joints27148919ns, OneLoss14179458/29336477ns.
+- Host210/Syntax/diff bestanden; letzte volle SDK70/ROS41 unverändert, nicht
+  neu ausgeführt. Sieben Runtimehashes über beide Fixtures gleich. Owned Netz/
+  Container entfernt, Passphrase gelöscht. Evidence enthält Pläne/Originale,
+  Hashtraces/Metriken, Capturestatus/Lifecycle/Fault/Clock/Qdisc, Tests, Inventar
+  und Rohhashes; keine Rawcaptures/Prefixes/Journale/Resources/Inspect-/Envdumps.
+
+**Weiter:** Sustained Mixedrow-Two-Loss mit tatsächlicher Source/SDK-Zuordnung,
+anschließend vorab geplante Seed-Repetitionen/übrige N3-Gates. Sourcebudget10000
+Records bei längeren Läufen vorab beachten. N4 und übrige M3-Gates/historische
+Unsicherheiten offen. PR #2 bleibt Draft, Intrinsic/M4 unberührt.

@@ -1684,3 +1684,17 @@ claiming a per-ID loss stage where no corresponding event exists. Both200/50Hz
 cadence gates and all balances passed, with87 explicitly accounted missing samples.
 This short instrumented fixture has no packet capture, FEC/seed qualification or
 lossless/physical-age/resource claim. See evidence/m3-source-preflight-2026-11-08/.
+
+The subsequent instrumented sustained fixture can opt into two closed packet
+capture phases and one exact row fault. Handshake/binding capture establishes the
+ISN and flow before source arming; measurement source/parity keys must agree exactly
+with SDK-accepted indices at both native and full-PCAP taps. Parity numbering
+includes binding1 and excludes incomplete final rows. Strict packet recorder
+file/dispatch/kernel reconciliation and native lifecycle/metadata gates remain
+mandatory. The optional classifier drops message8 in row1 before publishing;
+validation requires both route IDs in that actual SDK row, selected-source absence
+at both taps, accepted receiver decision and exact typed repair before classifier
+removal. The recorded baseline and mixed IMU/joint one-loss case pass at actual
+200/50Hz with explicit BUSY/DDS/replacement losses. This adds short controlled
+N3 evidence, not the full seed matrix or lossless/physical-age/resource qualification.
+See evidence/m3-multiroute-capture-2026-11-08/.
