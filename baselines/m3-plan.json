@@ -509,7 +509,7 @@
       "tbf_burst_bytes": 4096,
       "tbf_limit_bytes": 32768,
       "child_netem_queue_packets": 16,
-      "competing_iperf3_bitrate": "128K (131072 bits/s target)"
+      "competing_iperf3_bitrate": "128K (128000 bits/s configured and runtime-verified)"
     }
   },
   "clock_assumptions": {
@@ -1776,5 +1776,74 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "SRT N5 command progress and DDS cold discovery, after bounded N4 development gates; no N5 run in latest change"
+  "current_priority": "N5: localize default DDS asymmetric cold discovery; prospectively define longer SRT command progress evidence; keep paced candidate separate",
+  "n5_progress_cold_start_followup": {
+    "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
+    "source_commit": "57f415b",
+    "plan": "five independent/preflight-gated fresh slots, once each, no retry or default changes",
+    "host_tests": 245,
+    "srt_N0": {
+      "seconds": 15,
+      "successes_effects": 8,
+      "unresolved": 0,
+      "skipped": 0
+    },
+    "srt_N5": {
+      "seconds": 60,
+      "neighbor_mode": "default dynamic",
+      "successes_effects": 23,
+      "unresolved": 0,
+      "skipped": 7,
+      "max_terminal_observation_ms": 3421.882377,
+      "max_adjacent_intent_gap_ms": 4023.803085,
+      "active_window_session_events_observed": 0,
+      "source_produced": 15024,
+      "observer_received": 5543,
+      "all_six_balances_zero": true,
+      "full_N5_qualified": false
+    },
+    "dds_system_simultaneous": {
+      "status": "failed before measurement",
+      "sender": "no complete endpoint match observed",
+      "receiver": "matches observed, zero received HELLOs",
+      "local_journal_handler_qos_eligible": true,
+      "timeline_records": [
+        46,
+        46
+      ],
+      "all_owned_children_clean": true,
+      "retry": false
+    },
+    "dds_system_control_first": {
+      "status": "passed bounded harness/proof gates, progress limited",
+      "seconds": 15,
+      "successes_effects": 2,
+      "unresolved": 0,
+      "skipped": 6,
+      "max_terminal_observation_ms": 16087.948466,
+      "sender_final_lease_expirations": 2,
+      "sampled_not_ready_inside_source_window_each_peer": 1,
+      "source_produced": 3772,
+      "observer_received": 1718
+    },
+    "dds_paced_simultaneous": {
+      "status": "passed separate existing candidate",
+      "seconds": 15,
+      "successes_effects": 8,
+      "unresolved": 0,
+      "skipped": 0,
+      "lease_expirations_each_peer": 0,
+      "source_produced": 3785,
+      "observer_received": 967,
+      "max_terminal_observation_ms": 229.215041,
+      "default_changed": false
+    },
+    "all_five_pcap_populations_reconciled": true,
+    "all_eight_runtime_hashes_unchanged": true,
+    "all_source_manifests_match_frozen_commit": true,
+    "historical_failures_replaced": false,
+    "validation_scope": "Python observer/lifecycle/analysis only; no production SDK/ROS/provider rebuild; previous SDK70/ROS41 remain last full validations",
+    "next": "packet-level DDS asymmetric discovery localization with independently qualified capture; define prospective SRT N5 longer progress cohort, preserve original unknowns; no repeated spontaneous run selection",
+    "complete_M3_acceptance": false
+  }
 }

@@ -2755,3 +2755,46 @@ Frische +3 korrigierte ROS-Restart-Cases PASS. Nachweise und Scope stehen in
 **Nächster Schritt:** SRT N5-CONTROL-Progress und DDS-ColdDiscovery. In dieser
 Änderung kein N5-Run. Breite N4/DDS-/kombinierteLast-/Hardware-/M3-Abnahme bleibt
 separat offen; PR2 bleibt Draft, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: N5-Progress und DDS-Coldstart
+
+Vorab gefrorener Plan/Implementierung57f415b, genau5 frische sequenzielle Slots,
+keine Wiederholung, alle ausgeführt. Siehe
+[evidence/m3-n5-progress-2026-11-08/README.md](evidence/m3-n5-progress-2026-11-08/README.md).
+
+- SRT N0/15s8Successes/Effects,0unresolved/0skipped; N5/60s23Successes/Effects,
+  0unresolved/7skipped. Default dynamische Nachbarn,512kbit/s,16Packet-ChildQueue,
+  128000bit/sCompetitor. Original5sStartbudgets und genau1SDK-Handoff jeIntent,
+  passende geschlossene Journals, komplette Traces allerBridge-Inkarnationen.
+  Keine Session-/LinkLost-Events im aktivenFenster beobachtet. Kein historischer
+  Resetfix oder vollständigeN5Abnahme. Sensor15024produziert/5543beobachtet,
+  alle6Bilanzen0, Defizite explizit. MaxTerminalObservation3421.882377ms,
+  MaxAbstandzwischenIntents4023.803085ms, kein ZweiSekunden-Erfolgsgarantieclaim.
+- DDS system/simultaneous FAILED vorMessfenster: Sender keine vollständigen
+  EndpointMatches beobachtet; Receiver Matches, aber0empfangeneHELLOs. Lokales
+  Journal/Handler/QoS bereit, keineCoordinatorFailure. Je46TimelineSnapshots.
+  Ursache inDDS-/Kernelpfad nicht eindeutig lokalisiert; keineProtokoll-Reparatur.
+- DDS system/control-first boundedPASS:2Successes/Effects,6skipped,0unresolved.
+  Sender2LeaseExpirations, beidePeers imSourceFenster einmalnotReadygesampelt;
+  eineFinalbeobachtung erst16087.948466ms nachAufruf im erlaubtenResultDrain.
+  Original5s betrifftStart, nichtFinalresultzeit. Startreihenfolge allein löst
+  kontinuierlichenProgress nicht.3772Source/1718CallbackSamples.
+- Separater bestehender paced-sensors/simultaneous Kandidat8/8Successes/Effects,
+  0skipped/unresolved/LeaseExpirations.3785Source/967Callbacks, deutliche
+  Sensorreduktion bleibt Teil desResultats. Defaultsystem bleibt unverändert.
+- Neue begrenzteDDS-Timeline2048Records:1Hz innerhalb gleicherPhase/Readiness,
+  plusTransitionen, harteExhaustion-/Footer-/Populationgates. Nur lokaleSamples,
+  keinRTPS-Decoder oderWireCauseproof. Peer/ParentAbort führt zu kontrolliertem
+  Cleanup vorNamespaceTeardown; alleDDSChildreports clean0, auchFailedStartup.
+  Der Elternprozess beendet denFailedStartup trotzdem alsFAILED.
+- Alle5PCAPpopulationen file/filter/captured konsistent; keineRT-PCAPZeitautorität.
+  Alle8Produktionshashes vorher/nachher/unabhängig gleich; Quellenmatch57f415b.
+  Host245PASS/Syntax/diff; keinSDK/ROS-C++/Provider-Rebuild, SDK70/ROS41 frühere
+  volleValidation. AlleOwnedContainer/Netze/Passphrasesentfernt. AlteFehler/UNKNOWNs
+  bleibenunverändert; neueKontrolldaten ersetzenkeinenhistorischenRun.
+
+**Weiter:** AsymmetrischeDefaultDDS-Discovery packetbezogen mit qualifizierter
+Capture und vorabdefinierterGegenprobe lokalisieren; längereSRT-N5Progress-Cohort
+vorabfestlegen. PacedKandidat separatführen, keineWiederholungbisgünstigesResultat.
+N3/Clock/Security/Resources weiterhinnachgeordnet. PR2Draft, M3offen, M4unberührt.

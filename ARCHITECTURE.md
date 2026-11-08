@@ -1793,3 +1793,35 @@ These results close the requested bounded development gates, not full N4/DDS,
 combined-load, physical-age, cross-host, hardware or M3 acceptance. Next priority
 is SRT N5 progress and default DDS cold discovery; no N5 execution in this follow-up.
 PR2 remains draft and Intrinsic/M4 untouched.
+
+
+### N5 progress and DDS cold-start observations (2026-11-08)
+
+A prospectively frozen five-slot diagnostic set (57f415b) retains one default DDS
+simultaneous-start failure and four passing bounded runs, without retries or
+transport-default changes. SRT N0 confirms8/8 intents; SRT N5/60s confirms23/23,
+with7 skipped slots, original5s start budgets, one SDK handoff per ID and matching
+closed journal proofs. No active-window session/link-loss events are observed;
+this does not explain historical silence/resets or qualify full N5. Sensor deficits
+remain explicit (15024 produced/5543 observed, six balances0).
+
+The default DDS failure now has bounded startup history: sender lacks a complete
+endpoint match, receiver observes matches but receives no HELLOs, with eligible
+local journals/handlers/QoS. These are sampled diagnostics, not packet-level cause
+proof. Control-first startup completes2 intents but skips6, records sender lease
+expirations/readiness loss, and observes one result after16.088s within the bounded
+result drain. The five-second deadline constrains receiver start, not terminal
+observation. The existing paced-sensor candidate completes8/8 with0 skipped slots
+and0 lease expirations while delivering only967 of3785 source samples. It remains
+separate from the default and does not establish equivalent sensor service.
+
+The Python fixture adds bounded timeline/footer/exhaustion gates and explicit DDS
+child pre-signal/SIGINT/exit/forced-kill reporting. Peer/parent abort permits audited
+cleanup before namespace removal, including failed discovery. All five capture
+populations reconcile; realtime PCAP age authority remains withheld. Eight runtime
+hashes stay unchanged; host245 tests and syntax/diff checks pass. Prior SDK70/ROS41
+remain last full validations. See evidence/m3-n5-progress-2026-11-08/ for frozen
+plan, original outcomes, source/runtime provenance and limits. Next localize default
+DDS asymmetric discovery with qualified packet evidence and prospectively plan
+longer SRT progress coverage. Full M3/semantic-clock-security-resource comparison
+remains open, PR2 stays draft and Intrinsic/M4 untouched.
