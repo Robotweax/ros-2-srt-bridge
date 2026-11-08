@@ -109,6 +109,10 @@ with separate source/binary provenance and post-run inventories.
 
 ## Validation and remaining work
 
+The archived initial CMake configure/build text strips trailing whitespace only;
+its original local byte count/hash and archive hash are preserved in
+validation/build-log-provenance.json. Measurement logs/verdicts are untouched.
+
 231 host tests pass, including original/mapped deadline guards, owner/session/
 command/ingress proof, success vs safe decline, phase placement, restored
 qualification, replay/effect negatives and truncated artifact detection. Standalone
