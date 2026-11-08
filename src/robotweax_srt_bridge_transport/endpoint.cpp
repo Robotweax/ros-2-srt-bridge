@@ -28,7 +28,7 @@ JournalError local_error(ControlErrorCode error){switch(error){
 }
 struct CommandEndpoint::Impl {
     enum class Stage { idle,rpc_submit,rpc_wait,send_command,send_status,send_error,precheck_submit,precheck_wait,start_submit,start_wait,execute_submit,event };
-    enum class After { local_admit,local_get,peer_admit,peer_get,peer_observe,peer_observed_get,peer_error_get,dispatch,finish,decline,invalidate,abandoned };
+    enum class After { local_admit,local_get,peer_admit,peer_expire,peer_get,peer_observe,peer_observed_get,peer_error_get,dispatch,finish,decline,invalidate,abandoned };
     struct Task {bool execute=false;Identity id{};std::uint32_t route=0;RateCommand command{};std::uint64_t origin=0;TransportContext context{};};
     struct Track {bool used=false;Identity id{};std::uint32_t route=0;Identity queried_session{},suspended_session{};std::uint64_t next=0;};
     struct Job {
@@ -139,7 +139,7 @@ struct CommandEndpoint::Impl {
         current.test_paused=false;job.worker_token=0;
         if(reply.journal.entry)job.entry=reply.journal.entry;
         const auto error=reply.journal.error;
-        if(job.after==After::peer_admit||job.after==After::peer_get)
+        if(job.after==After::peer_admit||job.after==After::peer_expire||job.after==After::peer_get)
             trace(CommandTracePoint::receiver_worker_result,CommandTraceReason::none,unsigned(error),job.message.context.session,
                 job.entry?job.entry->owner_epoch:Identity{},unsigned(job.message.envelope.kind),job.message.envelope.sequence,job.message.envelope.source_monotonic_ns);
         if(reply.journal.entry&&reply.journal.entry->state==CommandState::unknown)
@@ -153,7 +153,7 @@ struct CommandEndpoint::Impl {
             for(auto& track:tracks)if(track.used&&track.id==job.task.id&&track.route==job.task.route)track.suspended_session=job.message.context.session;
             job.entry.reset();notify(local_error(job.received_error->code));return;
         }
-        if(error!=JournalError::none){if(job.after==After::peer_admit||job.after==After::peer_get)send_error(error);else notify(error);return;}
+        if(error!=JournalError::none){if(job.after==After::peer_admit||job.after==After::peer_expire||job.after==After::peer_get)send_error(error);else notify(error);return;}
         if(job.entry&&(job.after==After::local_get||job.after==After::peer_get||job.after==After::peer_observed_get)&&job.entry->route!=job.task.route){if(job.after==After::peer_get)send_error(JournalError::conflict);else notify(JournalError::conflict);return;}
         switch(job.after){
             case After::local_admit:
@@ -173,6 +173,9 @@ struct CommandEndpoint::Impl {
             case After::peer_admit:
                 if(!job.entry){fail(EndpointFault::protocol);break;}
                 send_status(reply.journal.inserted&&job.entry->state==CommandState::accepted,terminal(*job.entry));break;
+            case After::peer_expire:
+                if(!job.entry||(reply.journal.inserted&&(job.entry->state!=CommandState::expired||job.entry->reason!=CommandReason::start_deadline||job.entry->result.valid||job.entry->dispatched_ns))){fail(EndpointFault::protocol);break;}
+                send_status(false,terminal(*job.entry));break; // Existing records remain authoritative; never dispatch.
             case After::peer_get:if(job.entry)send_status(false,false);else notify(JournalError::not_found);break;
             case After::dispatch:
                 if(job.entry&&job.entry->state==CommandState::dispatching&&reply.dispatch){job.dispatch_ticket=std::move(reply.dispatch);check_stage(true);}
@@ -206,7 +209,8 @@ struct CommandEndpoint::Impl {
                 rpc(request(WorkerOperation::get),After::peer_error_get);}
             else if(!sender&&message.envelope.kind==Kind::query)rpc(request(WorkerOperation::get),After::peer_get);
             else if(!sender&&message.envelope.kind==Kind::command){auto decoded=decode_rate_command(message.body());if(!decoded){fail(EndpointFault::protocol);return;}
-                auto q=request(WorkerOperation::admit);q.command=*decoded;q.context={message.context.session,message.envelope.source_epoch,message.envelope.source_monotonic_ns,message.deadline_ns};rpc(q,After::peer_admit);}
+                auto q=request(WorkerOperation::admit);q.command=*decoded;q.context={message.context.session,message.envelope.source_epoch,message.envelope.source_monotonic_ns,message.deadline_ns};if(message.expiry_only&&(!message.deadline_ns||message.deadline_ns>=message.evaluated_ns||message.deadline_ns>=now())){fail(EndpointFault::protocol);return;}
+                rpc(q,message.expiry_only?After::peer_expire:After::peer_admit);}
             else fail(EndpointFault::protocol);
             return;
         }

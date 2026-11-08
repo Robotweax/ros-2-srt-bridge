@@ -270,7 +270,7 @@ SampleResult Session::check_command(const Envelope& e,std::uint64_t now){
     if(e.valid_for_ms!=route->budget_ms)return {{SessionError::malformed},{},{}};
     const auto age=clock_.age_of_remote(e.source_monotonic_ns,now);
     if(age.error!=ClockError::none)return {soft_clock(age.error)||age.error==ClockError::future_sample?SessionAction{SessionError::clock_unqualified}:terminate(SessionError::clock_invalid,false),{},age};
-    if(!age.within_budget(static_cast<std::uint64_t>(route->budget_ms)*1000000))return {{SessionError::stale_sample},{},age};
+    if(!age.within_budget(static_cast<std::uint64_t>(route->budget_ms)*1000000))return {{SessionError::stale_sample},{},age,now};
     return {{},e,age,now};
 }
 SampleResult Session::admit_control(Connection source,const MessageView& m,std::uint64_t now){

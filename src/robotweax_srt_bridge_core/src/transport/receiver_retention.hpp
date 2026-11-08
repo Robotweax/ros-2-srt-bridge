@@ -11,6 +11,20 @@ public:
     struct Held {TransportMessage message{};std::uint64_t until_ns=0;};
     static bool soft_gap(const SampleResult& result){return !result.envelope&&result.action.error==SessionError::clock_unqualified&&
         (result.age.error==ClockError::expired||result.age.error==ClockError::unqualified);}
+    static std::optional<std::uint64_t> expiry_deadline(const Envelope& envelope,const SampleResult& result){
+        if(envelope.kind!=Kind::command||!envelope.valid_for_ms||result.envelope||result.action.error!=SessionError::stale_sample||
+           result.age.error!=ClockError::none||!result.age.age_ns||!result.evaluated_ns)return {};
+        const auto age=*result.age.age_ns;const auto budget=std::uint64_t(envelope.valid_for_ms)*1000000;
+        if(age.lower<0||age.lower>age.upper||std::uint64_t(age.lower)<=budget)return {};
+        const auto over=std::uint64_t(age.lower)-budget;
+        if(over>=result.evaluated_ns)return {};
+        return result.evaluated_ns-over; // Latest possible past deadline; expiry-only, never execution.
+    }
+    static bool ambiguous(const Envelope& envelope,const SampleResult& result){
+        if(envelope.kind!=Kind::command||result.envelope||result.action.error!=SessionError::stale_sample||result.age.error!=ClockError::none||!result.age.age_ns)return false;
+        const auto age=*result.age.age_ns;const auto budget=std::uint64_t(envelope.valid_for_ms)*1000000;
+        return age.lower<=age.upper&&age.upper>=0&&age.lower<=std::int64_t(budget)&&std::uint64_t(age.upper)>budget;
+    }
     bool room(std::size_t ready,std::size_t commands)const{
         return ready<control_capacity&&commands<=ready&&commands<command_capacity&&size_<command_capacity&&
             ready+size_<control_capacity&&commands+size_<command_capacity;

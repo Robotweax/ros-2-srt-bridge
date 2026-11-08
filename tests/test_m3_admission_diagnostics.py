@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_admission_diagnostics import correlate,successful_receiver_pairs,MATRIX_SLOTS,SLOTS
+from m3_admission_diagnostics import correlate,successful_receiver_pairs,MATRIX_SLOTS,SLOTS,verify_expired
 
 
 class CorrelationTests(unittest.TestCase):
@@ -40,3 +40,15 @@ class MatrixEvidenceTests(unittest.TestCase):
         pairs=successful_receiver_pairs(entry,[first,resumed,worker])
         self.assertEqual(len(pairs),1);self.assertEqual(pairs[0]['admission']['point'],36)
         self.assertEqual(len(successful_receiver_pairs(entry,[dict(first,value=13),resumed,worker])),1)
+
+    def test_expiry_audit_requires_original_journal_and_matching_worker(self):
+        a=dict(state=7,reason=3,revision=1,route=100,payload_hash='hash',source_epoch='epoch',source_ns=1,session='original',result_valid=False,result_generation=0,deadline_ns=5000000001,dispatched_ns=0,admitted_ns=1)
+        b=dict(a,deadline_ns=6000000000,admitted_ns=7000000000)
+        entry=dict(sender=a,receiver=b,sdk_handoffs=1)
+        proof=dict(point=39,detail=6,value=25,session='original',route=100,origin_ns=1,request_sequence=7,expiry_deadline_ns=6000000000,age_lower_ns=6000000000)
+        worker=dict(proof,point=34,value=0)
+        verify_expired(entry,[proof,worker])
+        for field,value in [('session','other'),('route',101),('origin_ns',2),('request_sequence',8)]:
+            with self.subTest(field=field),self.assertRaises(ValueError):verify_expired(entry,[proof,dict(worker,**{field:value})])
+        with self.assertRaises(ValueError):verify_expired(dict(entry,receiver=dict(b,dispatched_ns=2)),[proof,worker])
+        with self.assertRaises(ValueError):verify_expired(dict(entry,sdk_handoffs=2),[proof,worker])

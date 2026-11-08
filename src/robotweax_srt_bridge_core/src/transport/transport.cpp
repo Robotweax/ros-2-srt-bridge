@@ -306,6 +306,8 @@ struct TransportOwner::Impl {
             message.context.control_generation,message.context.sensor_generation,message.envelope.route_id,value,{},unsigned(Kind::command)};
         e.request_sequence=message.envelope.sequence;e.origin_ns=message.envelope.source_monotonic_ns;e.evaluated_ns=result?result->evaluated_ns:message.evaluated_ns;
         e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_error=unsigned(session.clock_state());e.age_error=result?unsigned(result->age.error):0;
+        if(result&&result->age.age_ns){e.age_lower_ns=result->age.age_ns->lower;e.age_upper_ns=result->age.age_ns->upper;}
+        if(point==CommandTracePoint::receiver_expiry_admission){e.expiry_deadline_ns=message.deadline_ns;e.budget_ms=message.envelope.valid_for_ms;}
         config.command_trace->record(CommandTraceProducer::transport,e);
     }
     void process_retained(){
@@ -314,24 +316,29 @@ struct TransportOwner::Impl {
             if(!retained.matches(context())||!control_ready(session.state())){
                 trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::obsolete_connection),CommandTraceReason::context_mismatch);retained.pop();++current.stale_work;continue;
             }
-            if(retained.expired(time)){
+            const auto result=session.check_command(message.envelope,time);apply(result.action);
+            const auto expired=ReceiverRetention::expiry_deadline(message.envelope,result);
+            if(!expired&&retained.expired(time)){
                 trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::clock_unqualified),CommandTraceReason::deadline);
                 retained.pop();queue_error(message.envelope,ControlErrorCode::clock_unqualified);++current.rejected;continue;
             }
-            const auto result=session.check_command(message.envelope,time);apply(result.action);
-            if(!result.envelope){
-                if(ReceiverRetention::soft_gap(result))break;
+            if(!result.envelope&&!expired){
+                if(ReceiverRetention::soft_gap(result)||ReceiverRetention::ambiguous(message.envelope,result))break;
                 trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(result.action.error),CommandTraceReason::session_rejected,&result);retained.pop();++current.rejected;
                 if(result.action.error==SessionError::stale_sample)queue_error(message.envelope,ControlErrorCode::start_expired);
                 else if(result.action.error==SessionError::clock_unqualified)queue_error(message.envelope,ControlErrorCode::clock_unqualified);
                 continue;
             }
             auto ready=message;const auto maximum=std::uint64_t(message.envelope.valid_for_ms)*1000000;
-            require(result.age.age_ns&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=maximum);
-            ready.evaluated_ns=result.evaluated_ns;ready.deadline_ns=result.evaluated_ns+maximum-std::uint64_t(result.age.age_ns->upper);
+            ready.evaluated_ns=result.evaluated_ns;ready.expiry_only=expired.has_value();
+            if(expired)ready.deadline_ns=*expired;
+            else{
+                require(result.age.age_ns&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=maximum);
+                ready.deadline_ns=result.evaluated_ns+maximum-std::uint64_t(result.age.age_ns->upper);
+            }
             {std::lock_guard lock(mutex);require(output_count<incoming.size()&&received_commands<ReceiverRetention::command_capacity);
                 retained.pop();incoming[(output_head+output_count++)%incoming.size()]=ready;++received_commands;}
-            ++current.received;trace_receiver(CommandTracePoint::receiver_resumed,ready,unsigned(SessionError::none),CommandTraceReason::none,&result);
+            ++current.received;trace_receiver(expired?CommandTracePoint::receiver_expiry_admission:CommandTracePoint::receiver_resumed,ready,unsigned(expired?SessionError::stale_sample:SessionError::none),CommandTraceReason::none,&result);
         }
     }
     bool control_space(){std::lock_guard lock(mutex);return output_count+retained.size()<incoming.size()&&queues.control_count()<64;}
@@ -369,8 +376,9 @@ struct TransportOwner::Impl {
                 config.sample_trace->record(SampleTraceLane::transport,e);
             }
             apply(result.action);
-            const bool soft_command_gap=kind==Kind::command&&ReceiverRetention::soft_gap(result);
-            if(kind==Kind::command&&(soft_command_gap||(result.envelope&&retained.size()))){
+            const auto expired=kind==Kind::command?ReceiverRetention::expiry_deadline(view.envelope,result):std::optional<std::uint64_t>{};
+            const bool wait_command=kind==Kind::command&&(ReceiverRetention::soft_gap(result)||ReceiverRetention::ambiguous(view.envelope,result));
+            if(kind==Kind::command&&(wait_command||((result.envelope||expired)&&retained.size()))){
                 TransportMessage pending;pending.context=context();pending.envelope=view.envelope;pending.size=view.payload.size();pending.evaluated_ns=admission_ns;
                 std::copy(view.payload.begin(),view.payload.end(),pending.payload.begin());
                 bool saved;{std::lock_guard lock(mutex);saved=retained.push(pending,admission_ns,output_count,received_commands);}
@@ -378,7 +386,7 @@ struct TransportOwner::Impl {
                 else{trace_receiver(CommandTracePoint::receiver_capacity_rejected,pending,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;}
                 continue;
             }
-            if(!result.envelope){
+            if(!result.envelope&&!expired){
                 ++current.rejected;
                 if(kind==Kind::sample){
                     ++current.samples_rejected;
@@ -394,9 +402,10 @@ struct TransportOwner::Impl {
                 continue;
             }
             if(kind==Kind::error){const auto error=decode_control_error(view.payload);require(error.has_value());if(!match_error(view.envelope,*error)){++current.unmatched_errors;++current.rejected;continue;}++current.errors_received;}
-            TransportMessage message;message.context=context();message.envelope=*result.envelope;message.size=view.payload.size();
+            TransportMessage message;message.context=context();message.envelope=expired?view.envelope:*result.envelope;message.expiry_only=expired.has_value();message.size=view.payload.size();
             std::copy(view.payload.begin(),view.payload.end(),message.payload.begin());message.evaluated_ns=result.evaluated_ns;
-            if(kind==Kind::sample||kind==Kind::command){
+            if(expired)message.deadline_ns=*expired;
+            else if(kind==Kind::sample||kind==Kind::command){
                 const auto max_age=std::uint64_t(message.envelope.valid_for_ms)*1000000;
                 require(result.age.age_ns.has_value()&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=max_age);
                 message.deadline_ns=result.evaluated_ns+max_age-std::uint64_t(result.age.age_ns->upper);
@@ -405,6 +414,7 @@ struct TransportOwner::Impl {
                 bool room;{std::lock_guard lock(mutex);room=retained.room(output_count,received_commands);}
                 if(!room){trace_receiver(CommandTracePoint::receiver_capacity_rejected,message,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;continue;}
             }
+            if(expired)trace_receiver(CommandTracePoint::receiver_expiry_admission,message,unsigned(SessionError::stale_sample),CommandTraceReason::none,&result);
             std::lock_guard lock(mutex);
             if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at]){++current.sensor_replaced;++mailbox_counts.sensor_receive_replaced;}incoming_samples[at]=message;sample_received[at]=true;}
             else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;if(kind==Kind::command)++received_commands;}

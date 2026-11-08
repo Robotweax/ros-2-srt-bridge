@@ -18,5 +18,14 @@ int main(){try{
     gap.age.error=ClockError::future_sample;check(!ReceiverRetention::soft_gap(gap));
     gap.age.error=ClockError::clock_regressed;check(!ReceiverRetention::soft_gap(gap));
     gap.action.error=SessionError::stale_sample;check(!ReceiverRetention::soft_gap(gap));
+    m.envelope.valid_for_ms=500;SampleResult stale;stale.action.error=SessionError::stale_sample;stale.age.error=ClockError::none;stale.evaluated_ns=1000000000;
+    stale.age.age_ns=Interval{600000000,700000000};check(ReceiverRetention::expiry_deadline(m.envelope,stale)==900000000);
+    stale.age.age_ns=Interval{499000000,501000000};check(!ReceiverRetention::expiry_deadline(m.envelope,stale)&&ReceiverRetention::ambiguous(m.envelope,stale));
+    stale.age.age_ns=Interval{500000000,501000000};check(!ReceiverRetention::expiry_deadline(m.envelope,stale));
+    stale.age.age_ns=Interval{600000000,700000000};stale.age.error=ClockError::expired;check(!ReceiverRetention::expiry_deadline(m.envelope,stale));
+    stale.age.error=ClockError::future_sample;check(!ReceiverRetention::expiry_deadline(m.envelope,stale));
+    stale.age.error=ClockError::none;stale.evaluated_ns=100000000;check(!ReceiverRetention::expiry_deadline(m.envelope,stale));
+    stale.evaluated_ns=1000000000;stale.age.age_ns=Interval{700000000,600000000};check(!ReceiverRetention::expiry_deadline(m.envelope,stale));
+    std::cout<<"DURABLE_EXPIRY_PROOF {\"lower_bound_required\":true,\"straddle_equality_unknown\":true,\"invalid_future_underflow_refused\":true}\n";
     std::cout<<"RECEIVER_RETENTION_CONTRACT {\"capacity\":56,\"total_capacity\":64,\"fifo_original_bytes_context\":true,\"resource_ceiling_not_renewed\":true,\"sensor_only_context_preserved\":true,\"future_hard_errors_excluded\":true}\n";
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

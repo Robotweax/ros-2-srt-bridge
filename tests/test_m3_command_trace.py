@@ -57,6 +57,12 @@ class CommandTraceTests(unittest.TestCase):
         events[1]['detail']=8
         with self.assertRaisesRegex(ValueError,'COMMAND'):self.parse(events,dict(attempted=4,dropped=0))
 
+    def test_durable_expiry_requires_qualified_lower_bound_and_past_deadline(self):
+        e=self.event(1,39);e.update(monotonic_ns=10000000000,detail=6,value=25,request_sequence=7,origin_ns=1,evaluated_ns=10000000000,clock_deadline_ns=11000000000,clock_error=0,age_error=0,age_lower_ns=6000000000,age_upper_ns=6100000000,expiry_deadline_ns=9000000000,budget_ms=5000)
+        self.assertEqual(self.parse([e],dict(attempted=1,dropped=0))['counts']['receiver_expiry_admission'],1)
+        for key,value in [('age_lower_ns',5000000000),('age_upper_ns',5999999999),('clock_error',2),('age_error',2),('expiry_deadline_ns',9000000001)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):self.parse([dict(e,**{key:value})],dict(attempted=1,dropped=0))
+
     def test_loss_is_explicit_and_never_complete(self):
         events=[self.event(1,1),self.event(3,9)]
         self.assertFalse(self.parse(events,dict(attempted=4,dropped=2))['complete'])

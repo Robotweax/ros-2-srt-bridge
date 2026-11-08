@@ -5,6 +5,8 @@
 #include <thread>
 #include <unistd.h>
 #include <vector>
+#include <algorithm>
+#include "control_gate.hpp"
 using namespace robotweax::srt_bridge;
 namespace {
 unsigned checks=0;
@@ -123,6 +125,45 @@ void receiver_clock_diagnostics(const std::string& ip,const std::filesystem::pat
     std::cout<<"RECEIVER_RETENTION_NATIVE {\"mode\":\""<<mode<<"\",\"original_budget_ms\":"<<budget<<",\"sdk_handoffs\":"<<sends<<",\"resumes\":"<<resumes<<",\"drops\":"<<drops<<",\"effects\":"<<robot.snapshot().effects<<"}\n";
 }
 
+void durable_expiry(const std::string& ip,const std::filesystem::path& directory,bool retained){
+    const auto key=secret();auto oc=config(Role::listener,ip,key,500);oc.command_trace=std::make_shared<CommandTrace>();
+    auto sw=worker_options(oc,directory/"sender.sqlite",JournalSide::sender);CommandEndpoint op({oc,sw});
+    until([&]{return op.snapshot().transport.control_port!=0;},"expiry sender bind missing");
+    ControlGate gate(ip=="::1",op.snapshot().transport.control_port);
+    auto rc=config(Role::caller,ip,key,500);rc.control.port=gate.listen_port();rc.sensor.port=op.snapshot().transport.sensor_port;rc.command_trace=std::make_shared<CommandTrace>();
+    if(retained)rc.session.clock.max_probe_age_ns=150000000;
+    auto rw=worker_options(rc,directory/"receiver.sqlite",JournalSide::receiver);auto robot=std::make_unique<CommandEndpoint>(EndpointOptions{rc,rw});
+    until([&]{return op.snapshot().ready&&robot->snapshot().ready&&robot->snapshot().transport.clock_qualified;},"expiry endpoints not ready");
+    gate.drop_reply=true;
+    if(retained)until([&]{return !robot->snapshot().transport.clock_qualified;},"retained expiry clock did not lapse");
+    const auto id=random_identity();const RateCommand command{100,500,0,1};const auto origin=now();
+    until([&]{return op.execute(100,id,command,origin)==SubmitResult::queued;},"expiry execute not queued");
+    until([&]{return now()>origin+650000000;},"expiry gate interval missing");gate.drop_reply=false;
+    CommandEvent event;until([&]{while(op.poll(event))if(event.request_id==id&&event.entry&&event.entry->state==CommandState::expired){check(event.entry->reason==CommandReason::start_deadline&&!event.entry->result.valid,"expiry status not authoritative negative");return true;}return false;},"durable expiry result missing");
+    check(robot->snapshot().effects==0&&op.snapshot().commands_sent==1&&!gate.failed&&gate.dropped>0,"expiry executed/replayed or gate unproved");
+    const auto original_session=op.snapshot().transport.context.session;stop(*robot);robot.reset();rc.session.local_epoch=random_identity();rc.session.clock.max_probe_age_ns=5000000000ULL;rw.journal.process_epoch=rc.session.local_epoch;
+    const auto first_trace=rc.command_trace;rc.command_trace=std::make_shared<CommandTrace>();robot=std::make_unique<CommandEndpoint>(EndpointOptions{rc,rw});
+    until([&]{return op.snapshot().ready&&robot->snapshot().ready&&op.snapshot().transport.context.session!=original_session;},"expiry receiver restart not ready");
+    until([&]{return op.transport().submit_query(op.transport().snapshot().context,100,id)==SubmitResult::queued;},"expiry recovery wire query failed");
+    until([&]{while(op.poll(event))if(event.request_id==id&&event.entry&&event.entry->state==CommandState::expired)return true;return false;},"query lost durable expiry");
+    until([&]{return op.execute(100,id,command,now())==SubmitResult::queued;},"expiry duplicate reconciliation failed");
+    until([&]{while(op.poll(event))if(event.request_id==id&&event.entry&&event.entry->state==CommandState::expired)return true;return false;},"duplicate expiry lost record");
+    const auto fresh=random_identity();until([&]{return op.execute(100,fresh,command,now())==SubmitResult::queued;},"later fresh command not queued");
+    until([&]{while(op.poll(event))if(event.request_id==fresh&&event.entry&&event.entry->state==CommandState::succeeded)return true;return false;},"expired intent blocked later fresh work");
+    check(op.snapshot().commands_sent==2&&robot->snapshot().effects==1,"expiry replay or fresh generation failed");stop(op);stop(*robot);
+    CommandTraceEvent e;unsigned sdk=0,proofs=0,held=0;
+    while(oc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::provider_sent)++sdk;
+    while(first_trace->poll(e))if(e.request==id){
+        if(e.point==CommandTracePoint::receiver_deferred)++held;
+        if(e.point==CommandTracePoint::receiver_expiry_admission){++proofs;check(e.age_error==0&&e.clock_error==0&&e.age_lower_ns>500000000&&e.age_lower_ns<=e.age_upper_ns&&e.expiry_deadline_ns<e.evaluated_ns,"expiry lower-bound proof missing");}
+    }
+    bool restarted_query=false;while(rc.command_trace->poll(e))if(e.request==id&&e.point==CommandTracePoint::receiver_worker_result&&e.detail==unsigned(Kind::query)&&e.value==0)restarted_query=true;
+    check(restarted_query&&sdk==1&&proofs==1&&(!retained||held==1)&&!oc.command_trace->dropped()&&!first_trace->dropped()&&!rc.command_trace->dropped(),"expiry evidence/replay accounting failed");
+    sw.journal.process_epoch=random_identity();CommandJournal sender(sw.journal),target(rw.journal);const auto a=sender.get(id),b=target.get(id);
+    check(a.entry&&b.entry&&a.entry->state==CommandState::expired&&b.entry->state==CommandState::expired&&a.entry->revision==b.entry->revision&&!a.entry->result.valid&&!b.entry->result.valid&&!b.entry->dispatched_ns&&a.entry->context.source_monotonic_ns==origin&&a.entry->context.deadline_ns==origin+500000000&&b.entry->context.deadline_ns<b.entry->admitted_ns,"closed expiry/journal-only invariant failed");
+    std::cout<<"DURABLE_EXPIRY_NATIVE {\"retained\":"<<(retained?"true":"false")<<",\"sdk_handoffs\":1,\"expired_dispatches\":0,\"expired_effects\":0,\"restart_query_duplicate\":true,\"later_fresh_success\":true}\n";
+}
+
 
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");auto directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(directory);++n)directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(directory);const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";receiver_errors(ip,directory/"receiver");sender_errors(ip,directory/"sender");for(const auto& mode:{"recover","expiry","context","shutdown"})receiver_clock_diagnostics(ip,directory/(std::string("retention-")+mode),mode);std::cout<<"PASS wire errors "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}
+int main(int argc,char** argv){try{check(argc==2,"family required");auto directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(directory);++n)directory=std::filesystem::current_path()/("wire-errors-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(directory);const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";receiver_errors(ip,directory/"receiver");sender_errors(ip,directory/"sender");for(const auto& mode:{"recover","expiry","context","shutdown"})receiver_clock_diagnostics(ip,directory/(std::string("retention-")+mode),mode);for(bool retained:{false,true})durable_expiry(ip,directory/(retained?"durable-retained":"durable-direct"),retained);std::cout<<"PASS wire errors "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}

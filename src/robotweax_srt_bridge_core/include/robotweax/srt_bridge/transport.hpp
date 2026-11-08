@@ -49,6 +49,7 @@ struct TransportMessage {
     std::array<std::byte,control_message_bytes-envelope_bytes> payload{};
     std::size_t size=0;
     std::uint64_t evaluated_ns=0,deadline_ns=0,publication_epoch=0;
+    bool expiry_only=false; // Verified stale COMMAND: journal/status only, never dispatch.
     std::span<const std::byte> body() const noexcept { return {payload.data(),size}; }
 };
 struct CommandCheck {

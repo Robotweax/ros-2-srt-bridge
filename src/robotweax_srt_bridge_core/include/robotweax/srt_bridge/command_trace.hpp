@@ -10,7 +10,7 @@ enum class CommandTracePoint : unsigned {
     mailbox_flushed=20,input_dropped,make_rejected,queue_rejected,outbound_dropped,
     provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred,session_action,link_lost,
     control_admission,peer_error_received,receiver_worker_result,
-    receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected
+    receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected,receiver_expiry_admission
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
@@ -31,6 +31,8 @@ struct CommandTraceEvent {
     // value=SessionError/ControlErrorCode/JournalError for32/33/34;
     //35..37=SessionError,38=ControlErrorCode.
     std::uint64_t request_sequence=0,origin_ns=0,evaluated_ns=0,clock_deadline_ns=0;
+    std::int64_t age_lower_ns=0,age_upper_ns=0;
+    std::uint64_t expiry_deadline_ns=0;unsigned budget_ms=0; // Point39 qualified expiry proof.
     unsigned clock_error=0,age_error=0; // Point32: post-admission clock state and returned AgeResult error.
     // age_error is meaningful for COMMAND freshness decisions, not QUERY/identity rejection.
 };

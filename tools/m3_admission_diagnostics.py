@@ -36,9 +36,19 @@ def successful_receiver_pairs(entry,events):
             if w['point']==34 and a['request_sequence']==w['request_sequence']]
 
 
+def verify_expired(entry,events):
+    a=entry['sender'];b=entry['receiver']
+    if not a or not b or any(a[k]!=b[k] for k in ('state','reason','revision','route','payload_hash','source_epoch','source_ns','session','result_valid','result_generation')):raise ValueError('durable expiry journal mismatch')
+    if a['state']!=7 or a['reason']!=3 or a['result_valid'] or b['dispatched_ns'] or not 0<b['deadline_ns']<b['admitted_ns']:raise ValueError('invalid journal-only expiry')
+    if a['deadline_ns']!=a['source_ns']+5_000_000_000 or entry['sdk_handoffs']!=1:raise ValueError('expiry source budget/replay mismatch')
+    proofs=[e for e in events if e['point']==39 and e['session']==a['session'] and e['route']==a['route'] and e['origin_ns']==a['source_ns'] and e['expiry_deadline_ns']==b['deadline_ns']]
+    if len(proofs)!=1 or proofs[0]['age_lower_ns']<=5_000_000_000:raise ValueError('missing unique lower-bound expiry proof')
+    if not any(e['point']==34 and e['value']==0 and e['session']==a['session'] and e['route']==a['route'] and e['origin_ns']==a['source_ns'] and e['request_sequence']==proofs[0]['request_sequence'] for e in events):raise ValueError('expiry worker proof missing')
+
+
 def analyze(report,run):
     progress=command_progress(report,run);traces=summarize_run(run)
-    receivers=[dict(file=n,**e) for n,t in traces.items() if n.startswith('robot-') for e in t['events'] if e['point'] in (32,34,35,36,37,38)]
+    receivers=[dict(file=n,**e) for n,t in traces.items() if n.startswith('robot-') for e in t['events'] if e['point'] in (32,34,35,36,37,38,39)]
     attempts=[]
     for entry in progress['entries']:
         identity=entry['number'].to_bytes(16,'little').hex()
@@ -47,21 +57,25 @@ def analyze(report,run):
         events=[e for e in receivers if e['request']==identity and e['detail']==6]
         if entry['terminal']==4 and len(successful_receiver_pairs(entry,events))!=1:
             raise ValueError('confirmed result lacks unique original-context admission/worker diagnostic coverage')
+        if entry['terminal']==7:
+            verify_expired(entry,events)
         attempts.append(dict(number=entry['number'],terminal=entry['terminal'],sdk_handoffs=entry['sdk_handoffs'],receiver_command_events=events))
     begin=report['results']['publication_interval']['resume_monotonic_ns'];end=report['results']['command_data_cutoff_monotonic_ns']
     context=[dict(file=n,**e) for n,t in traces.items() for e in t['events'] if begin<=e['monotonic_ns']<=end and e['point'] in (2,3,4,30,31)]
-    return dict(progress=progress,attempts=attempts,clock_rejection_correlations=correlate(traces),active_context_events=context,
+    expired=sum(e['terminal']==7 for e in progress['entries'])
+    outcomes=bool(progress['entries']) and all(e['terminal'] in (4,7) for e in progress['entries']) and progress['audit']['effects']==progress['audit']['confirmed_successes']
+    return dict(progress=progress,durable_outcomes=dict(complete=outcomes,verified_expired=expired,all_success=progress['audit']['all_succeeded'],scope='success or qualified durable expiry only; not all-success deadline qualification'),attempts=attempts,clock_rejection_correlations=correlate(traces),active_context_events=context,
                 trace_population={n:dict(records=t['records'],complete=t['complete'],counts=t['counts']) for n,t in traces.items()},
                 scope='local observed admission/error correlations, not durable absence, root-cause uniqueness, execution or replay authority')
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);parser.add_argument('--matrix',choices=('focused','three-seed'),default='focused');args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);parser.add_argument('--matrix',choices=('focused','three-seed'),default='focused');parser.add_argument('--progress-gate',choices=('all-success','durable-outcomes'),default='all-success');args=parser.parse_args()
     slots=SLOTS if args.matrix=='focused' else MATRIX_SLOTS
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
     runtime={p:sha(ROOT/p) for p in RUNTIMES}
     if runtime['install/srt-m0/lib/librobotweax-srt.a']!=json.loads((ROOT/'baselines/dependencies.json').read_text())['srt']['installed_library_sha256']:raise ValueError('provider pin mismatch')
-    report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),matrix=args.matrix,slots=slots,
+    report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),matrix=args.matrix,progress_gate=args.progress_gate,slots=slots,
                 runtime_before=runtime,rows=[],qualification=False);write(out/'execution.json',report);failed=False
     for slot in slots:
         row=dict(slot=slot,status='not_executed');report['rows'].append(row)
@@ -88,7 +102,8 @@ def main():
             if not all(sha(ROOT/p)==h for p,h in data['source_sha256'].items()):raise ValueError('run source changed')
             row['analysis']=analyze(data,run)
             if runtime!={p:sha(ROOT/p) for p in runtime}:raise ValueError('runtime changed during cohort')
-            if not row['analysis']['progress']['no_unresolved_attempts']:raise ValueError('command progress failed; uncertainty retained')
+            gate=row['analysis']['progress']['no_unresolved_attempts'] if args.progress_gate=='all-success' else row['analysis']['durable_outcomes']['complete']
+            if not gate:raise ValueError('command progress failed; uncertainty retained')
             row['status']='passed'
         except Exception as error:row.update(status='failed',error=str(error));failed=True
         write(out/'execution.json',report);print(slot['label'],row['status'],row.get('error',''),flush=True)
