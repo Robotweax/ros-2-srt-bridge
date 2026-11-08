@@ -2201,3 +2201,43 @@ throughout/post-live, provider unchanged, owned cleanup complete. No heavy analy
 tests or builds overlap live. Next isolate the local UDP/neighbor/qdisc path with
 bounded observations before tuning and review an upstream reason-specific SENSOR
 surface separately. PR2 draft, M3 incomplete, Intrinsic/M4 untouched.
+
+### UDP/neighbor/PASS stage isolation without tuning (2026-11-08)
+
+The native recorder already observes ETH_P_ALL. Closed ARP decoding now retains
+Ethernet/ARP MACs and separates outgoing owned requests, reflected local copies
+and incoming peer replies. A new hash-guarded join selects all primary >=1s
+CONTROL gaps and all active loss windows, including windows without a later
+source packet. It combines strict provider/wire/clock/native identities with
+sampled neighbor read brackets and wholly-contained CONTROL software-PASS/root
+counter pairs. Changed mappings remain withheld. Root counters are interface-wide,
+child drops can mirror root, and ARP tuples are not nonce/authentication authority.
+
+The frozen b9aaf03 cohort adds existing100ms neighbor polls and200ms PASS/root
+polls while keeping dynamic neighbors and all runtime/provider/profile/budget/
+idle/queue settings unchanged. N0/2903 passes8/8; N5/2903 passes126/126 with24skips,
+zero expiry/unresolved/context events. Added observer work prevents treating this
+as a fix, baseline performance comparison or resolution of earlier intents98/12.
+
+Four source gaps show distinct stages. One1.528s operator gap has provider growth,
+reported flat PASS and PROBE/INCOMPLETE neighbor samples, with peer ARP reply just
+before resumed egress. A posthoc common-interval witness restricts provider reads
+to between filter-read brackets:75DATA/59retrans/20ACK with PASS packets/bytes0 and
+no selected source hook observations. Two robot gaps have PASS30/20,root drop
+increments1390/9491 and peak qlen16 without selected source hooks; the latter has
+DELAY samples and no ARP in the window. An operator1.002s quiet gap has no selected
+provider increments and is not a packet-loss case. These localize both pre-PASS
+and post-PASS associations, not exact packet drops or unique kernel causes.
+
+Evidence: `evidence/m3-udp-neighbor-qdisc-2026-11-08/`. Host301 before live,306 after
+posthoc witness guards; initial fixture path-alias failure retained. No SDK/ROS/
+observer rebuild;72/41 remain prior validations. All8runtime+2observer hashes fixed
+and equal the preceding visibility cohort, provider unchanged, owned cleanup and
+all population gates pass. Sensor75033/8640 and accept-to-receiver gap61602 remain
+unqualified despite zero conservation residuals. Public raw-file disposition and
+selection hashes preserve local-only streams/binaries/journals explicitly.
+
+Next separately qualify ARP pre-qdisc observation and controlled reply loss,
+without tuning defaults, to distinguish reply generation from root queue/drop.
+Historical exact cause, fullM3/loadedDDSDiscovery/clock/security/resources/hardware
+and superiority remain open. PR2 draft, Intrinsic/M4 untouched.

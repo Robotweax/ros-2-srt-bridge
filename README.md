@@ -54,6 +54,13 @@ CONTROL-flow silence despite successful sender send accounting, then late egress
 SENSOR counters narrow a separate acceptance/window gap. Exact local-path/provider
 reasons remain unproved; SDK72/ROS41/host296 pass, PR2 stays draft.
 
+The [UDP/neighbor/qdisc isolation cohort](evidence/m3-udp-neighbor-qdisc-2026-11-08/README.md)
+passes N0 8/8 and N5/2903 126/126 with24 skipped slots. It distinguishes a
+pre-PASS stall with PROBE/INCOMPLETE neighbor samples from post-PASS stalls with
+root queue pressure; an idle gap with no sender activity stays a negative control.
+No tuning or runtime/provider rebuild; host306 PASS. The earlier failure remains
+unresolved and M3/PR2 remain incomplete/draft.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

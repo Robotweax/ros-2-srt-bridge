@@ -1,0 +1,21 @@
+.....................................................................................baseline failed
+baseline passed
+fragment-cut passed
+....................................................................................................................................................................................................F...................
+======================================================================
+FAIL: test_changed_raw_metadata_is_rejected_before_primary_analysis (test_m3_udp_path_analysis.UdpPathTests.test_changed_raw_metadata_is_rejected_before_primary_analysis)
+----------------------------------------------------------------------
+ValueError: '/private/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpx9_x2_zk/run/run.json' is not in the subpath of '/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpx9_x2_zk'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_m3_udp_path_analysis.py", line 47, in test_changed_raw_metadata_is_rejected_before_primary_analysis
+    with self.assertRaisesRegex(ValueError,'hash mismatch'):analyze(run,{},True)
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "hash mismatch" does not match "'/private/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpx9_x2_zk/run/run.json' is not in the subpath of '/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpx9_x2_zk'"
+
+----------------------------------------------------------------------
+Ran 301 tests in 2.519s
+
+FAILED (failures=1)

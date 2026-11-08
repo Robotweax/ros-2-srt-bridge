@@ -1,0 +1,604 @@
+{
+  "status": "passed",
+  "analysis": {
+    "run": ".local/m3/20261108T202136276725Z",
+    "original_status": "passed",
+    "profile": "N5",
+    "seed": 2903,
+    "measurement_seconds": 300,
+    "application": {
+      "source_produced": 75033,
+      "observer_received": 8640,
+      "missing": 66393,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 73,
+        "ingress_replaced": 1,
+        "ingress_flushed": 1371,
+        "input_rejected": 17,
+        "outbound_replaced": 2244,
+        "outbound_expired": 0,
+        "outbound_flushed": 16,
+        "srt_accept_to_receiver_gap": 61602,
+        "receiver_rejected": 1067,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 1,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 300.131730178,
+      "source_actual_hz": {
+        "imu": 199.99884705425916,
+        "joints": 50.00137769871834
+      },
+      "published": 8640,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 7172,
+          "rounding": "up to 1ms",
+          "maximum_ms": 166,
+          "p50_ms": 109,
+          "p95_ms": 136,
+          "p99_ms": 148
+        },
+        "joint": {
+          "count": 1468,
+          "rounding": "up to 1ms",
+          "maximum_ms": 164,
+          "p50_ms": 115,
+          "p95_ms": 143,
+          "p99_ms": 156
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_rejections": {
+      "transport_samples_received": 9708,
+      "transport_samples_rejected": 1067,
+      "transport_samples_unknown_age": 1042,
+      "transport_samples_stale": 0
+    },
+    "captures": {
+      "robot": {
+        "records": 140880,
+        "classes": {
+          "out/other_udp": {
+            "packets": 1743,
+            "ethernet_bytes": 1857018,
+            "udp_payload_bytes": 1783812
+          },
+          "in/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "out/control_srt_control": {
+            "packets": 2196,
+            "ethernet_bytes": 162716,
+            "udp_payload_bytes": 70484
+          },
+          "in/control_srt_control": {
+            "packets": 3796,
+            "ethernet_bytes": 295184,
+            "udp_payload_bytes": 135752
+          },
+          "out/control_source_data": {
+            "packets": 2340,
+            "ethernet_bytes": 501190,
+            "udp_payload_bytes": 402910
+          },
+          "in/control_source_data": {
+            "packets": 3058,
+            "ethernet_bytes": 536267,
+            "udp_payload_bytes": 407831
+          },
+          "out/sensor_srt_control": {
+            "packets": 42203,
+            "ethernet_bytes": 2731266,
+            "udp_payload_bytes": 958740
+          },
+          "in/sensor_srt_control": {
+            "packets": 59276,
+            "ethernet_bytes": 4276048,
+            "udp_payload_bytes": 1786456
+          },
+          "out/sensor_source_data": {
+            "packets": 23863,
+            "ethernet_bytes": 11549894,
+            "udp_payload_bytes": 10547648
+          },
+          "out/sensor_fec_parity": {
+            "packets": 2404,
+            "ethernet_bytes": 2745368,
+            "udp_payload_bytes": 2644400
+          }
+        },
+        "footer": {
+          "tcpdump_reported_packets": 140880,
+          "tcpdump_reported_filtered_packets": 140880,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "operator": {
+        "records": 140880,
+        "classes": {
+          "in/other_udp": {
+            "packets": 1743,
+            "ethernet_bytes": 1857018,
+            "udp_payload_bytes": 1783812
+          },
+          "out/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "in/control_srt_control": {
+            "packets": 2196,
+            "ethernet_bytes": 162716,
+            "udp_payload_bytes": 70484
+          },
+          "out/control_srt_control": {
+            "packets": 3796,
+            "ethernet_bytes": 295184,
+            "udp_payload_bytes": 135752
+          },
+          "in/control_source_data": {
+            "packets": 2340,
+            "ethernet_bytes": 501190,
+            "udp_payload_bytes": 402910
+          },
+          "out/control_source_data": {
+            "packets": 3058,
+            "ethernet_bytes": 536267,
+            "udp_payload_bytes": 407831
+          },
+          "in/sensor_srt_control": {
+            "packets": 42203,
+            "ethernet_bytes": 2731266,
+            "udp_payload_bytes": 958740
+          },
+          "out/sensor_srt_control": {
+            "packets": 59276,
+            "ethernet_bytes": 4276048,
+            "udp_payload_bytes": 1786456
+          },
+          "in/sensor_source_data": {
+            "packets": 23863,
+            "ethernet_bytes": 11549894,
+            "udp_payload_bytes": 10547648
+          },
+          "in/sensor_fec_parity": {
+            "packets": 2404,
+            "ethernet_bytes": 2745368,
+            "udp_payload_bytes": 2644400
+          }
+        },
+        "footer": {
+          "tcpdump_reported_packets": 140880,
+          "tcpdump_reported_filtered_packets": 140880,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        }
+      }
+    },
+    "identity_comparison": {
+      "robot_to_operator": {
+        "source_records": 74749,
+        "sink_records": 74749,
+        "matched_records": 74749,
+        "source_not_at_sink": 0,
+        "sink_not_at_source": 0,
+        "equal_multisets": true,
+        "scope": "exact UDP tuple+payload-hash MULTISETS over closed captures; not pre-tap emission/delivery, application mapping or latency"
+      },
+      "operator_to_robot": {
+        "source_records": 66131,
+        "sink_records": 66131,
+        "matched_records": 66131,
+        "source_not_at_sink": 0,
+        "sink_not_at_source": 0,
+        "equal_multisets": true,
+        "scope": "exact UDP tuple+payload-hash MULTISETS over closed captures; not pre-tap emission/delivery, application mapping or latency"
+      }
+    },
+    "outer_headers": {
+      "robot": {
+        "classes": {
+          "out/other_udp": 1743,
+          "in/other_udp": 1,
+          "out/control_srt_control": 2196,
+          "in/control_srt_control": 3796,
+          "out/control_source_data": 2340,
+          "in/control_source_data": 3058,
+          "out/sensor_srt_control": 42203,
+          "in/sensor_srt_control": 59276,
+          "out/sensor_source_data": 23863,
+          "out/sensor_fec_parity": 2404
+        },
+        "control_types": {
+          "out/control_srt_control/handshake": 8,
+          "in/control_srt_control/handshake": 6,
+          "out/control_srt_control/user_defined": 4,
+          "in/control_srt_control/user_defined": 4,
+          "in/control_srt_control/ack": 2401,
+          "out/control_srt_control/ackack": 1141,
+          "out/control_srt_control/ack": 1039,
+          "in/control_srt_control/ackack": 1038,
+          "out/sensor_srt_control/handshake": 8,
+          "in/sensor_srt_control/handshake": 6,
+          "out/sensor_srt_control/user_defined": 4,
+          "in/sensor_srt_control/user_defined": 4,
+          "in/sensor_srt_control/ack": 59262,
+          "out/sensor_srt_control/ackack": 13935,
+          "in/sensor_srt_control/keepalive": 4,
+          "out/sensor_srt_control/keepalive": 4,
+          "out/sensor_srt_control/shutdown": 2,
+          "out/control_srt_control/shutdown": 2,
+          "in/control_srt_control/nak": 346,
+          "out/sensor_srt_control/drop_request": 28250,
+          "out/control_srt_control/nak": 2,
+          "in/control_srt_control/keepalive": 1
+        },
+        "sensor_connections": [
+          {
+            "direction": "out",
+            "category": "sensor_source_data",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 53328,
+            "destination_port": 10081,
+            "destination_socket": 259364116,
+            "packets": 43,
+            "udp_payload_bytes": 18774,
+            "unique_sequences": 43,
+            "unique_message_numbers": 43,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 43
+            },
+            "numeric_message_span": 78,
+            "unobserved_numbers_inside_span": 35,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "out",
+            "category": "sensor_fec_parity",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 53328,
+            "destination_port": 10081,
+            "destination_socket": 259364116,
+            "packets": 5,
+            "udp_payload_bytes": 5500,
+            "unique_sequences": 5,
+            "unique_message_numbers": 1,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 5
+            },
+            "numeric_message_span": 1,
+            "unobserved_numbers_inside_span": 0,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "out",
+            "category": "sensor_source_data",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 52189,
+            "destination_port": 10081,
+            "destination_socket": 840849121,
+            "packets": 23820,
+            "udp_payload_bytes": 10528874,
+            "unique_sequences": 23820,
+            "unique_message_numbers": 23820,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 23820
+            },
+            "numeric_message_span": 71306,
+            "unobserved_numbers_inside_span": 47486,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "out",
+            "category": "sensor_fec_parity",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 52189,
+            "destination_port": 10081,
+            "destination_socket": 840849121,
+            "packets": 2399,
+            "udp_payload_bytes": 2638900,
+            "unique_sequences": 2399,
+            "unique_message_numbers": 1,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 2399
+            },
+            "numeric_message_span": 1,
+            "unobserved_numbers_inside_span": 0,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          }
+        ]
+      },
+      "operator": {
+        "classes": {
+          "in/other_udp": 1743,
+          "out/other_udp": 1,
+          "in/control_srt_control": 2196,
+          "out/control_srt_control": 3796,
+          "in/control_source_data": 2340,
+          "out/control_source_data": 3058,
+          "in/sensor_srt_control": 42203,
+          "out/sensor_srt_control": 59276,
+          "in/sensor_source_data": 23863,
+          "in/sensor_fec_parity": 2404
+        },
+        "control_types": {
+          "in/control_srt_control/handshake": 8,
+          "out/control_srt_control/handshake": 6,
+          "in/control_srt_control/user_defined": 4,
+          "out/control_srt_control/user_defined": 4,
+          "out/control_srt_control/ack": 2401,
+          "in/control_srt_control/ackack": 1141,
+          "in/control_srt_control/ack": 1039,
+          "out/control_srt_control/ackack": 1038,
+          "in/sensor_srt_control/handshake": 8,
+          "out/sensor_srt_control/handshake": 6,
+          "in/sensor_srt_control/user_defined": 4,
+          "out/sensor_srt_control/user_defined": 4,
+          "out/sensor_srt_control/ack": 59262,
+          "in/sensor_srt_control/ackack": 13935,
+          "out/sensor_srt_control/keepalive": 4,
+          "in/sensor_srt_control/keepalive": 4,
+          "in/sensor_srt_control/shutdown": 2,
+          "in/control_srt_control/shutdown": 2,
+          "out/control_srt_control/nak": 346,
+          "in/sensor_srt_control/drop_request": 28250,
+          "in/control_srt_control/nak": 2,
+          "out/control_srt_control/keepalive": 1
+        },
+        "sensor_connections": [
+          {
+            "direction": "in",
+            "category": "sensor_source_data",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 53328,
+            "destination_port": 10081,
+            "destination_socket": 259364116,
+            "packets": 43,
+            "udp_payload_bytes": 18774,
+            "unique_sequences": 43,
+            "unique_message_numbers": 43,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 43
+            },
+            "numeric_message_span": 78,
+            "unobserved_numbers_inside_span": 35,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "in",
+            "category": "sensor_fec_parity",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 53328,
+            "destination_port": 10081,
+            "destination_socket": 259364116,
+            "packets": 5,
+            "udp_payload_bytes": 5500,
+            "unique_sequences": 5,
+            "unique_message_numbers": 1,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 5
+            },
+            "numeric_message_span": 1,
+            "unobserved_numbers_inside_span": 0,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "in",
+            "category": "sensor_source_data",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 52189,
+            "destination_port": 10081,
+            "destination_socket": 840849121,
+            "packets": 23820,
+            "udp_payload_bytes": 10528874,
+            "unique_sequences": 23820,
+            "unique_message_numbers": 23820,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 23820
+            },
+            "numeric_message_span": 71306,
+            "unobserved_numbers_inside_span": 47486,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          },
+          {
+            "direction": "in",
+            "category": "sensor_fec_parity",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 52189,
+            "destination_port": 10081,
+            "destination_socket": 840849121,
+            "packets": 2399,
+            "udp_payload_bytes": 2638900,
+            "unique_sequences": 2399,
+            "unique_message_numbers": 1,
+            "retransmitted_packets": 0,
+            "boundaries": {
+              "3": 2399
+            },
+            "numeric_message_span": 1,
+            "unobserved_numbers_inside_span": 0,
+            "scope": "outer-header observations per socket/flow, not typed SAMPLE counts or proof of packet/message loss"
+          }
+        ]
+      }
+    },
+    "qdisc": {
+      "robot": {
+        "layers": [
+          {
+            "kind": "tbf",
+            "handle": "1:",
+            "parent": null,
+            "options": {
+              "rate": 64000,
+              "burst": 4096,
+              "lat": 448000
+            },
+            "delta": {
+              "bytes": 19537018,
+              "packets": 74762,
+              "drops": 1885392,
+              "overlimits": 2102027,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          },
+          {
+            "kind": "netem",
+            "handle": "10:",
+            "parent": "1:1",
+            "options": {
+              "limit": 16,
+              "seed": 2903,
+              "ecn": false,
+              "gap": 0
+            },
+            "delta": {
+              "bytes": 19537018,
+              "packets": 74762,
+              "drops": 1885392,
+              "overlimits": 0,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          },
+          {
+            "kind": "clsact",
+            "handle": "ffff:",
+            "parent": "ffff:fff1",
+            "options": {},
+            "delta": {
+              "bytes": 184787446,
+              "packets": 1960154,
+              "drops": 0,
+              "overlimits": 0,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          }
+        ],
+        "scope": "hierarchical counters; root/child may mirror same drops, NEVER sum; different snapshot tails from captures/app window; no per-flow loss allocation"
+      },
+      "operator": {
+        "layers": [
+          {
+            "kind": "tbf",
+            "handle": "1:",
+            "parent": null,
+            "options": {
+              "rate": 64000,
+              "burst": 4096,
+              "lat": 448000
+            },
+            "delta": {
+              "bytes": 5109531,
+              "packets": 66174,
+              "drops": 186,
+              "overlimits": 268,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          },
+          {
+            "kind": "netem",
+            "handle": "10:",
+            "parent": "1:1",
+            "options": {
+              "limit": 16,
+              "seed": 2904,
+              "ecn": false,
+              "gap": 0
+            },
+            "delta": {
+              "bytes": 5109531,
+              "packets": 66174,
+              "drops": 186,
+              "overlimits": 0,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          },
+          {
+            "kind": "clsact",
+            "handle": "ffff:",
+            "parent": "ffff:fff1",
+            "options": {},
+            "delta": {
+              "bytes": 5124700,
+              "packets": 66360,
+              "drops": 0,
+              "overlimits": 0,
+              "requeues": 0
+            },
+            "end_backlog": 0,
+            "end_qlen": 0
+          }
+        ],
+        "scope": "hierarchical counters; root/child may mirror same drops, NEVER sum; different snapshot tails from captures/app window; no per-flow loss allocation"
+      }
+    },
+    "raw_capture_hashes": {
+      ".local/m3/20261108T202136276725Z/robot.pcap00": {
+        "bytes": 16000237,
+        "sha256": "912e156f76658876ab821a6cb7c7e2cf7a92c2a833b633d26f938e223a07584c"
+      },
+      ".local/m3/20261108T202136276725Z/robot.pcap01": {
+        "bytes": 10908888,
+        "sha256": "f261cd4aebf16074ac1dbf9ac95b7a1e9d427f5a7a3a05675218aa55e51255be"
+      },
+      ".local/m3/20261108T202136276725Z/operator.pcap00": {
+        "bytes": 16000237,
+        "sha256": "cd6c835b85b03ed6811828812e3e510762f0e6b44357b09f252a351bb521db7d"
+      },
+      ".local/m3/20261108T202136276725Z/operator.pcap01": {
+        "bytes": 10908888,
+        "sha256": "774116d2f988f4b6b7a15c4f9fef901e5d8a4e75e9a59a65a28e74cb04358897"
+      }
+    },
+    "limitations": [
+      "Whole closed capture includes setup/teardown, not application measurement window; no PCAP timing/age authority.",
+      "SDK acceptance != packet emission or decoded application delivery; source/parity/fragment/retransmission counts are not one-to-one SAMPLEs.",
+      "Equal tap identities cannot exclude loss before source tap; qdisc layers cannot be summed/assigned to individual flows.",
+      "No SENSOR provider internals or encrypted typed-source mapping observed; packet counts do not uniquely establish an internal cause."
+    ]
+  }
+}

@@ -3234,3 +3234,49 @@ Originalbudgets/Idlewerte nicht lockern. Danach Review einer upstreamfähigen
 SENSOR-Insertion-/Retirement-Reasonoberfläche; .deps nicht direkt ändern. Kein
 FullM3/N5/DefaultDDSDiscovery-/Clock/Security/Resource/Hardware-/Superioritätsgate
 geschlossen. PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — UDP/Neighbor/Qdisc-Stufen getrennt, kein Tuning
+
+- Evidenz: `evidence/m3-udp-neighbor-qdisc-2026-11-08/README.md`.
+  Plan68d7297, Livefreeze b9aaf03. Einmalig N0/2903/15s8/8,0Skip;
+  N5/2903/300s126/126,24Skip,0expired/unaufgelöst, beide GatesPASS,Exit0,
+  0aktive Kontext-/Linkereignisse. Zusätzliche Beobachterlast: keine Fehlerbehebung
+  bewiesen, alte Intents98/12 bleiben unaufgelöst. Kein Retry oder Tuning.
+- Bestehender ETH_P_ALL-Nativrecorder enthielt bereits ARP. Vorherige Fehlerkohorte
+  hash-guarded reanalysiert:5Requests/5reflektierte lokale Kopien,0Peerreply im
+  5.0046s-Lossfenster; im einschließenden5.2636s-Gap6Requests+1späteAntwort,
+  gefolgt von alter Flowegress5.416us später. Keine damaligen Neighbor-/TC-Samples
+  nachträglich erfinden. MAC/IP-Richtung verhindert das Zählen lokaler Spiegel
+  als Peerreply; ARPpräsenz ist keine authentifizierte Neighborannahme.
+- Neue Beobachtung dynamischer Neighbor100ms und CONTROL SoftwarePASS/Root200ms,
+  beide Providerstreams/Commandtrace/Nativev2/PCAPdrain. N0positiv240/250PASS-
+  Increments und vollständige Populationen; Rootoptionen bleiben erhalten.
+- 4prospektive>=1s-Sourcegaps, keine Losswindows. Operator1.528s: DATA+91/retrans75,
+  PASS0, Rootdrops0/qlen0, NeighborPROBE4/INCOMPLETE11. Common-read-Witness zwischen
+  Filterbrackets mit12vollständig enthaltenen Providerpaaren:75DATA/59retrans/
+  20ACK, weiterPASS0/Bytes0 und0SourceCONTROLhooks. PeerARP-Antwort vor erneutem
+  Egress53.541us. Lokalisation vor gewählter PASS-Ausführung mit Neighborlead,
+  kein eindeutiger Kernelgrund oder exakter Zustandsübergang.
+- Robot1.332s:PASS30,Rootdrops1390,qlen16, gemischtePROBE/INCOMPLETE/REACHABLE-
+  Samples. Robot1.349s:PASS20,Rootdrops9491,qlen16,DELAY14,keinARPimFenster,
+  kein ausgewählter SourceCONTROLhook. Damit auch Stufe nach PASS/Rootdruck;
+  nicht alle Gaps sind Neighborauflösung. Operator1.002s ohne Providerincrement
+  bleibt ausdrücklich kein Lossbeweis. Rootstats betreffen ganzes Interface,
+  Spiegel-Child nicht summieren; keine individuelle Paketdropzuordnung.
+- N5 Source75033/SDKaccepted71310/Decoded9708/Observer8640,Gap61602,Reject1067,
+ 6Residuen0,~200/50Hz. Keine Sensor-/FullN5/M3-Abnahme. PCAPmultisets74749/66131
+  beide Richtungen identisch, Native/Provider/Neighbor/TC/TracepopulationenPASS.
+- Host301 vor Live; erste Fixturealias-Verwechslung /var vs/private/var als1Fehler
+  erhalten, vor Live korrigiert. Nach geschlossenem Sourcearchiv Posthoc-Witness
+ 4c1e113 mit5Grenz-/Unavailable-/Identity-/Regressionsguards, Host306PASS.
+  Kein neuer SDK/ROS/Recorderbuild:72/41 frühere Validierung.8Runtime+2Observer-
+  Hashes gleich vorher/fest, Provider unverändert, keine Tests/Builds/heavyAnalyse
+  während Live. Rule/eigene Namespaces/Credentials entfernt. Vollständige öffentliche
+  Rawfile-Disposition plus Selektionsfelder/Hashes dokumentiert.
+
+Weiter: Separat qualifizierter ARP-PASS-/Preqdisc-Beobachter und kontrollierter
+ARP-Replylossfall, getrennt vom bekannten CONTROL-Rootlosskontrollfall. So erst
+ARP-Replygenerierung gegen Rootqueue/Drop abgrenzen; dynamische Defaults,Original-
+Budget/Idle unverändert lassen. Bisher nur Stufenassoziation, keine eindeutige
+historische Ursache. Alle übrigen M3/DDSDiscovery/Clock/Security/Resource/Hardware-
+und Vergleichsgates offen, PR2 Draft, Intrinsic/M4 unberührt.
