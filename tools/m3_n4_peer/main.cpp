@@ -4,9 +4,11 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <set>
 #include <sstream>
 #include <thread>
+#include <vector>
 #include <csignal>
 #include <unistd.h>
 using namespace robotweax::srt_bridge;
@@ -18,7 +20,26 @@ template<class T> std::string hex(const T& b){std::string s;constexpr char h[]="
 void write(const fs::path& path,const std::string& value){auto tmp=path;tmp+=".tmp";{std::ofstream o(tmp);o<<value<<'\n';o.flush();require(bool(o),"file write failed");}fs::rename(tmp,path);}
 std::string snapshot(CommandEndpoint& e){auto s=e.snapshot();std::ostringstream o;o<<"{\"ns\":"<<now()<<",\"session\":\""<<hex(s.transport.context.session)<<"\",\"ready\":"<<s.ready<<",\"clock\":"<<s.transport.clock_qualified<<",\"paused\":"<<s.test_paused<<",\"effects\":"<<s.effects<<",\"generation\":"<<s.device.generation<<",\"rate_hz\":"<<s.device.rate_hz<<",\"commands_sent\":"<<s.commands_sent<<",\"queries_sent\":"<<s.queries_sent<<",\"fault\":"<<unsigned(s.fault)<<",\"worker_fault\":"<<unsigned(s.worker_fault)<<",\"running\":"<<s.running<<",\"worker\":"<<unsigned(s.worker)<<",\"transport_running\":"<<s.transport.running<<"}";return o.str();}
 std::string entry(const CommandEvent& ev){std::ostringstream o;o<<"{\"ns\":"<<now()<<",\"error\":"<<unsigned(ev.error)<<",\"request\":\""<<hex(ev.request_id)<<'"';if(ev.entry){const auto& e=*ev.entry;o<<",\"state\":"<<unsigned(e.state)<<",\"reason\":"<<unsigned(e.reason)<<",\"revision\":"<<e.revision<<",\"result_valid\":"<<e.result.valid<<",\"result_generation\":"<<e.result.generation<<",\"origin_ns\":"<<e.context.source_monotonic_ns<<",\"deadline_ns\":"<<e.context.deadline_ns<<",\"payload_hash\":\""<<hex(e.payload_hash)<<'"';}o<<'}';return o.str();}
-pid_t paused_worker(const std::string& executable){std::set<pid_t> children;for(const auto& task:fs::directory_iterator("/proc/self/task")){std::ifstream in(task.path()/"children");pid_t p;while(in>>p)children.insert(p);}std::set<pid_t> matches;for(auto p:children){const auto root=fs::path("/proc")/std::to_string(p);std::error_code ec;auto exe=fs::read_symlink(root/"exe",ec);if(!ec&&exe==fs::path(executable)){std::ifstream in(root/"stat");std::string line;std::getline(in,line);auto at=line.rfind(") ");if(at!=std::string::npos&&line[at+2]=='T')matches.insert(p);}}require(matches.size()==1,"expected exactly one owned stopped journal worker");return *matches.begin();}
+struct WorkerIdentity {pid_t pid;std::string start;bool operator==(const WorkerIdentity&)const=default;};
+WorkerIdentity paused_worker(const std::string& executable){
+ const auto deadline=now()+1000000000ULL;bool logged=false;
+ while(now()<deadline){
+  std::set<pid_t> children;for(const auto& task:fs::directory_iterator("/proc/self/task")){std::ifstream in(task.path()/"children");pid_t p;while(in>>p)children.insert(p);}
+  std::vector<WorkerIdentity> matches;
+  for(auto p:children){
+   const auto root=fs::path("/proc")/std::to_string(p);std::ifstream args(root/"cmdline",std::ios::binary);std::vector<std::string> words;std::string word;while(std::getline(args,word,'\0'))words.push_back(word);
+   bool worker=false;for(std::size_t i=0;i+1<words.size();++i)if(words[i]==executable&&words[i+1]=="--worker-ipc-v3")worker=true;
+   std::ifstream in(root/"stat");std::string line;std::getline(in,line);const auto at=line.rfind(") ");if(at==std::string::npos)continue;
+   std::istringstream fields(line.substr(at+2));char state;fields>>state;std::string start;for(unsigned i=1;i<=19;++i)fields>>start;
+   std::error_code ec;const auto exe=fs::read_symlink(root/"exe",ec);
+   if(!logged)std::cout<<"N4_CHILD {\"pid\":"<<p<<",\"worker_argv\":"<<worker<<",\"stopped\":"<<(state=='T')<<",\"exe_matches\":"<<(!ec&&exe==fs::path(executable))<<",\"kernel_exe\":"<<std::quoted(exe.string())<<",\"start_ticks\":\""<<start<<"\"}"<<std::endl;
+   if(worker&&state=='T')matches.push_back({p,start});
+  }
+  logged=true;require(matches.size()<=1,"ambiguous owned stopped worker");if(matches.size()==1)return matches[0];
+  std::this_thread::sleep_for(std::chrono::milliseconds(2));
+ }
+ throw std::runtime_error("no uniquely owned stopped worker after bounded readiness wait");
+}
 }
 int main(int argc,char** argv){try{
  require(argc==6,"role run peer phase credential required");const std::string role=argv[1],phase=argv[4];const fs::path run=argv[2];const bool sender=role=="operator";require(sender||role=="robot","role");require(phase=="admission"||phase=="started"||phase=="committed","phase");
@@ -36,7 +57,7 @@ int main(int argc,char** argv){try{
  if(sender){wait([&]{return fs::exists(run/"go");},"go timeout");const auto origin=now();wait([&]{auto s=endpoint.execute(100,id,{100,5000,0,1},origin);require(s==SubmitResult::queued||s==SubmitResult::busy,"execute rejected");return s==SubmitResult::queued;},"local submit busy",3);write(run/"submitted.json","{\"origin_ns\":"+std::to_string(origin)+",\"deadline_ns\":"+std::to_string(origin+5000000000ULL)+"}");
   wait([&]{return fs::exists(run/"restored");},"network restoration timeout");std::uint64_t next=0;wait([&]{if(!final&&now()>=next&&endpoint.snapshot().ready){if(endpoint.query(100,id)==SubmitResult::queued)next=now()+500000000ULL;}return final;},"query reconciliation timeout",25);
   write(run/"operator-outcome.json","{\"state\":"+std::to_string(unsigned(state))+",\"snapshot\":"+snapshot(endpoint)+"}");
- }else{wait([&]{return endpoint.snapshot().test_paused;},"phase barrier timeout");auto pid=paused_worker(worker.executable);write(run/"robot-barrier.json","{\"worker_pid\":"+std::to_string(pid)+",\"snapshot\":"+snapshot(endpoint)+"}");wait([&]{return fs::exists(run/"resume");},"worker resume timeout",15);require(endpoint.snapshot().test_paused&&paused_worker(worker.executable)==pid,"worker barrier identity changed");const auto begin=now();require(kill(pid,SIGCONT)==0,"owned worker resume failed");write(run/"resumed.json","{\"begin_ns\":"+std::to_string(begin)+",\"end_ns\":"+std::to_string(now())+"}");wait([&]{return fs::exists(run/"operator-outcome.json");},"sender outcome timeout",30);}
+ }else{wait([&]{return endpoint.snapshot().test_paused;},"phase barrier timeout");auto pid=paused_worker(worker.executable);write(run/"robot-barrier.json","{\"worker_pid\":"+std::to_string(pid.pid)+",\"snapshot\":"+snapshot(endpoint)+"}");wait([&]{return fs::exists(run/"resume");},"worker resume timeout",15);require(endpoint.snapshot().test_paused&&paused_worker(worker.executable)==pid,"worker barrier identity changed");const auto begin=now();require(kill(pid.pid,SIGCONT)==0,"owned worker resume failed");write(run/"resumed.json","{\"begin_ns\":"+std::to_string(begin)+",\"end_ns\":"+std::to_string(now())+"}");wait([&]{return fs::exists(run/"operator-outcome.json");},"sender outcome timeout",30);}
  wait([&]{return fs::exists(run/"settle");},"settle timeout");auto end=now()+2000000000ULL;wait([&]{return now()>=end;},"settle observation timeout",4);write(run/(role+"-result.json"),snapshot(endpoint));wait([&]{return fs::exists(run/"release");},"release timeout");
  const auto stop_begin=now();endpoint.request_stop();endpoint.join();pump();auto stopped=endpoint.snapshot();require(now()-stop_begin<5000000000ULL&&!stopped.running&&!stopped.transport.running&&stopped.worker==WorkerState::stopped,"unclean endpoint/worker stop");
  require(options.transport.command_trace->dropped()==0&&trace_count==options.transport.command_trace->attempted(),"trace loss");if(sender)require(stopped.commands_sent==1&&provider_sends==1,"accepted command replayed or missing SDK handoff");
