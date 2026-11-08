@@ -89,9 +89,10 @@ def assess(result,traces):
         origin=result['remove']['end_ns']
         if any(not origin<=s['monotonic_ns']<=origin+45_000_000_000 for s in result['qualified'].values()):raise ValueError('recovery outside declared bound')
     else:origin=max(v['monotonic_ns'] for v in result['qualified'].values())
-    counts={role:sum(row['event']=='hello_received' and row['valid'] and row['sent_ns']>origin for row in trace['rows']) for role,trace in traces.items()}
+    fence=result['steady']['end_ns']
+    counts={role:sum(row['event']=='hello_received' and row['valid'] and row['sent_ns']>origin and row['monotonic_ns']<=fence for row in trace['rows']) for role,trace in traces.items()}
     if any(n<20 for n in counts.values()):raise ValueError('insufficient fresh bidirectional callback progress')
-    return dict(fresh_callbacks=counts,original_endpoints_preserved=True,scope='real native DDS endpoints and callbacks with deliberately enlarged discovery metadata; controlled N0 fixture, not ROS bridge/N5/historical cause acceptance')
+    return dict(fresh_callbacks=counts,callback_fence_ns=fence,original_endpoints_preserved=True,scope='real native DDS endpoints and callbacks with deliberately enlarged discovery metadata; controlled N0 fixture, not ROS bridge/N5/historical cause acceptance')
 
 
 def run(out,case):

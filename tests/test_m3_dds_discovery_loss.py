@@ -11,7 +11,7 @@ from m3_dds_discovery_loss import selector,counters,assess,trace
 def fixture():
     def state(role):return dict(peer_discovered=True,writer_matches=1,reader_matches=1,received=25,invalid=0,pid=1,started_ns=1,participant=role+'part',writer=role+'write',reader=role+'read',writer_metadata_bytes=4096 if role=='robot' else 0,reader_metadata_bytes=4096 if role=='robot' else 0,sent=60,monotonic_ns=10_000_000_000)
     states={r:state(r) for r in ('operator','robot')};blocked=copy.deepcopy(states);blocked['operator'].update(writer_matches=0,reader_matches=0,received=0)
-    result=dict(case='fragment-cut',initial=copy.deepcopy(states),final=copy.deepcopy(states),blocked=blocked,hold=dict(begin_ns=1,end_ns=8_000_000_001),drops=[dict(drops=3)],remove=dict(begin_ns=9_000_000_000,end_ns=9_000_000_001),qualified=copy.deepcopy(states))
+    result=dict(case='fragment-cut',initial=copy.deepcopy(states),final=copy.deepcopy(states),blocked=blocked,hold=dict(begin_ns=1,end_ns=8_000_000_001),drops=[dict(drops=3)],remove=dict(begin_ns=9_000_000_000,end_ns=9_000_000_001),qualified=copy.deepcopy(states),steady=dict(end_ns=10_000_000_000))
     traces={role:dict(rows=[dict(event='hello_received',valid=True,sent_ns=9_000_000_010,monotonic_ns=10_000_000_000) for _ in range(20)]) for role in states}
     return result,traces
 
@@ -35,14 +35,15 @@ class DiscoveryLossTests(unittest.TestCase):
 
     def test_recovery_needs_original_endpoints_fresh_callbacks_and_preserved_participant_discovery(self):
         result,traces=fixture();self.assertEqual(assess(result,traces)['fresh_callbacks'],dict(operator=20,robot=20))
-        for defect in ('restart','stale','participant','early_match','metadata','deadline'):
+        for defect in ('restart','stale','participant','early_match','metadata','deadline','late_callback'):
             r=copy.deepcopy(result);t=copy.deepcopy(traces)
             if defect=='restart':r['final']['robot']['writer']='replacement'
             elif defect=='stale':t['robot']['rows'][0]['sent_ns']=1
             elif defect=='participant':r['blocked']['operator']['peer_discovered']=False
             elif defect=='early_match':t['operator']['rows'].append(dict(event='writer_match',current=1,monotonic_ns=1))
             elif defect=='metadata':r['initial']['robot']['writer_metadata_bytes']=1
-            else:r['qualified']['robot']['monotonic_ns']=60_000_000_000
+            elif defect=='deadline':r['qualified']['robot']['monotonic_ns']=60_000_000_000
+            else:t['robot']['rows'][0]['monotonic_ns']=10_000_000_001
             with self.subTest(defect=defect),self.assertRaises(ValueError):assess(r,t)
 
     def test_trace_refuses_missing_footer_exhaustion_and_unclean_teardown(self):
