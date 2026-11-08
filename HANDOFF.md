@@ -2600,3 +2600,64 @@ Unsicherheiten offen. PR #2 bleibt Draft, Intrinsic/M4 unberührt.
 vorab längere bounded N3-Fenster/Budgets (Source10000), übrige N4-/M3-Gates.
 Ursache originaler Footer fehlt weiterhin, historische Unsicherheiten offen.
 PR #2 bleibt Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Short-Baseline/One-Loss-Repetitionen und30s-Baseline
+
+- Vorab81a39e0, Host223: ein sechs Cases umfassender Stop-on-first-failure-Cohort
+  mit beobachtetem Child-Shutdown, Reihenfolge B1701/B2903/B4211/O1701/O2903/O4211,
+  je nominal10s. Alle sechs PASSED; nur danach genau ein vorab geplanter30s-
+  Baselinepilot PASSED. Keine Retries/Selectoränderungen/alten Verdictänderungen.
+- tools/m3_multiroute_cohort.py bewahrt Originalresultate, stoppt bei Fehler/
+  Exception und markiert Rest NOT EXECUTED. Neue explizite10/30s-Fenster:
+  sourcefence[nominal,nominal+1]s, Sourceallowance2750/7750, Sender5501/15501.
+  Hardlimits Source10000/Sample75000/PCAP75000+128MiB unverändert. Kein größerer
+  Buffer/Truncation oder heimliches Windowstitching. Nur Sourcepause-/Hostbarrier-
+  Waits folgen deklarierter Dauer; Produktionsdeadlines unverändert.
+- Fensterprüfung fordert Baseline/OneLoss SDKgap0/receiver_rejected0; TwoLoss
+  bleibt exakt{7,8}/gap2. Alle bisherigen Source/Cadence/Hash/Context/Capture/
+  Lifecycle-/Age-/Conservationgates bleiben. Python-only, keine SDK/ROS-C++/
+  Provider/Admission/Mailbox/TTL/Retry-/Sourcescheduleränderung oder Runtimebuild.
+- ShortcaseActualHz IMU/joints: B1701 200.017542/50.029251,
+  B2903 200.067455/50.016864, B4211 200.030360/50.032457,
+  O1701 200.010030/50.027372, O2903 200.054263/50.013566,
+  O4211 200.037539/50.034253. Keine Sourceskips, alle Typedhashes/Stamp/Order passen.
+- Source totals2514/2515/2514/2514/2515/2514. SDK/Receiver2432/2423/2431/
+  2435/2434/2424, Publikationen2432/2423/2430/2435/2434/2424,
+  Typedobserver2432/2423/2430/2435/2434/2423. Missing82/92/84/79/81/91 separat:
+  B1701 BUSY2/outbound80; B2903 DDS10/BUSY5/ingress1/outbound76;
+  B4211 BUSY4/outbound79/receive1; O1701 BUSY1/ingress1/outbound77;
+  O2903 BUSY3/outbound78; O4211 BUSY2/outbound88/observerDDS1. Sonst0,
+  sechs Bilanzen je0; Aggregate keine exakte individuelle Lossstage.
+- OneLoss jeSDK8 =Jointcounter2, Row5/6/7IMU/8Joint, initial0/final1drop.
+  Ausgewählte Source an beiden Native/FullPCAP-Taps absent, Parity da, explizit
+  Sessionaccepted/exakter Typedhash noch vor Classifierremove; SDKbegin nach
+  Install, Parity <=decisionEnd <=typed <remove. Keine Publishindexannahme.
+- Capture source/parity jeB:2432+608=3040,2423+606=3029,2431+608=3039;
+  jeO:2434+609=3043,2433+608=3041,2423+606=3029. AlleSDKkeys/Bindingoffset/
+  Partialrows passen. Identity je8/8 separatgeschlossen, Native zuerst/zuletzt,
+  volleSourcewindowdeckung; Recorderinitialkernel0/finalfilter-before-bind/
+  stableequalDrain/hash/size, keine Native/Kernelverluste/Truncation/Exhaustion,
+  Features gleich. Keine Continuouscapture-/PCAP-Realtime-/PhysicalWire-Aussage.
+-30s-Pilot:30.053896430s, Source6011IMU/1503joints=7514,
+  measured200.007344/50.010154Hz, Skips0. Sender14754Records<15501,
+  Source7514<7750; Status/Traces vollständig. SDK/receiver7242, published/
+  typed7241, missing273 =DDS3/BUSY9/ingress2/outbound258/receive1, sonst0,
+  sechs Bilanzen0. Capture je7242Source+1810Parity=9052 File/Dispatch/Kernel.
+  AgeUpperMax IMU23610879ns/joints28470853ns, Shortmax40929297ns (B2903 IMU).
+- Alle7 Clock/QoS/Session/Owner/Generations/Isolation/stableempty/Payload-/Age-
+  gates passend; je3Children vorherlive ->SIGINTexit0 ohne Deadline/Kill,
+  alle finalen Tracefooter vollständig. SiebenRuntimehashes über7Runs gleich.
+  SDK70/ROS41 frühere volle Validierung, nicht neu ausgeführt, keine volle M2-
+  Abnahme. Host223/Syntax/diff passen. Owned Container/Netze/Passphrasen entfernt.
+- Evidence evidence/m3-multiroute-matrix-2026-11-08/: Vorabplan, Cohort/Originale,
+  Matrix, Tracemetadata/Typedhashmetriken, Capture/Fault/Clock/Qdisc/Lifecycle/
+  Childstatus, Tests, Inventar/Rohhashes. Keine Rawcaptures/Prefixes/Journale/
+  Detailresources/Inspect-/Envdumps veröffentlicht. baselines/m3-plan.json aktualisiert.
+
+**Weiter:**30s-One/Two-Loss und vorab deklarierte längere Fenster/Budgets,
+übrige N4- und M3-Vergleichs-/Age-/Security-/Resourcegates. Kurze B/O/TwoLoss-
+Repetitionen jetzt für alle3 Basewerte aus getrennten Vorabplänen vorhanden;
+N0 ohne random impairment ist keine Random-Loss-Coverage/kausaler Vergleich.
+30s-Pilot nur Baseline, keine30sFault-/FullN3-Abnahme. Originaler fehlender
+Receiverfooter bleibt FAILED/UrsacheUNKNOWN, originale skippedCases bleiben
+unexecuted. PR #2 bleibt Draft, Intrinsic/M4 unverändert.

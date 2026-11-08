@@ -1716,3 +1716,21 @@ gaps, complete trace footers and clean controlled exits. They do not replace the
 failed original cohort. Underlying N0 qdisc seeds have no random impairment, so
 these are independent-start repeatability checks. Full seed/duration/comparison
 qualification remains pending; see evidence/m3-multiroute-two-loss-2026-11-08/.
+
+The observed-cleanup short baseline/one-loss cohort now records six fresh passing
+cases across base values1701/2903/4211, followed by one conditional30s baseline
+pilot. The cohort preserves original verdicts and marks all remaining cases
+unexecuted after any failure/exception. These complement separately planned short
+two-loss cases, not the stopped original cohort. N0 seeds introduce no random
+impairment; this is independent-start repeatability rather than random-loss coverage.
+
+Multiroute diagnostic windows are explicitly limited to10/30 nominal seconds.
+The measured fenced interval must fall within[nominal,nominal+1]s; fixed source/
+sender record allowances are2750/5501 or7750/15501, within unchanged hard diagnostic
+budgets. Actual cadence, complete zero-loss statuses, capture populations and
+child shutdown remain separate mandatory gates. Baseline/one-loss now explicitly
+requires zero SDK-receiver gap and zero receiver rejection; two-loss retains exactly
+messages7/8 missing at cutoff. The30s baseline records7514 source publications at
+200.007/50.010Hz and7241 typed observations, with273 local DDS/admission/mailbox
+losses fully balanced and no source skips or receiver gaps. This does not qualify
+30s faults or full N3 durations/comparison; see evidence/m3-multiroute-matrix-2026-11-08/.
