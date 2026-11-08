@@ -67,6 +67,8 @@ struct Trace {
 struct ParticipantListener final:native_dds::DomainParticipantListener {
     Trace& trace;std::atomic<bool> peer=false;
     explicit ParticipantListener(Trace& t):trace(t){}
+    // Discovery is a vendor extension independent of the DDS status mask.
+    // Keep DATA_ON_READERS disabled here so the reader listener receives DATA.
     void on_participant_discovery(native_dds::DomainParticipant*,rtps::ParticipantDiscoveryInfo&& info) override {
         if(info.status==rtps::ParticipantDiscoveryInfo::DISCOVERED_PARTICIPANT)peer=true;
         else if(info.status==rtps::ParticipantDiscoveryInfo::REMOVED_PARTICIPANT||info.status==rtps::ParticipantDiscoveryInfo::DROPPED_PARTICIPANT)peer=false;
@@ -113,7 +115,7 @@ int main(int argc,char** argv){
         auto transport=std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();transport->maxMessageSize=65000;transport->interfaceWhiteList.push_back(argv[2]);qos.transport().user_transports.push_back(transport);
         rtps::Locator_t meta,user,peer;meta.kind=LOCATOR_KIND_UDPv4;eprosima::fastrtps::rtps::IPLocator::setIPv4(meta,argv[2]);meta.port=26010;user=meta;user.port=26011;peer=meta;eprosima::fastrtps::rtps::IPLocator::setIPv4(peer,argv[3]);
         qos.wire_protocol().builtin.metatrafficUnicastLocatorList.push_back(meta);qos.wire_protocol().builtin.initialPeersList.push_back(peer);qos.wire_protocol().default_unicast_locator_list.push_back(user);
-        guard.p=native_dds::DomainParticipantFactory::get_instance()->create_participant(60,qos,&participant_listener);require(guard.p,"participant creation failed");
+        guard.p=native_dds::DomainParticipantFactory::get_instance()->create_participant(60,qos,&participant_listener,native_dds::StatusMask::none());require(guard.p,"participant creation failed");
         native_dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK,"type registration failed");
         auto* publisher=guard.p->create_publisher(native_dds::PUBLISHER_QOS_DEFAULT);auto* subscriber=guard.p->create_subscriber(native_dds::SUBSCRIBER_QOS_DEFAULT);require(publisher&&subscriber,"owner creation failed");
         auto* out=guard.p->create_topic(number==1?"M3FragmentHelloOperator":"M3FragmentHelloRobot",type.get_type_name(),native_dds::TOPIC_QOS_DEFAULT);
