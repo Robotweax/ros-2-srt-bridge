@@ -11,6 +11,7 @@ from m3_command_trace import summarize_run
 
 SLOTS=[dict(label='srt-N0-control',profile='N0',seconds=15,seed=4211),
        dict(label='srt-N5-4211',profile='N5',seconds=300,seed=4211)]
+MATRIX_SLOTS=[SLOTS[0]]+[dict(label='srt-N5-'+str(seed),profile='N5',seconds=300,seed=seed) for seed in (4211,1701,2903)]
 
 
 def correlate(traces):
@@ -23,6 +24,15 @@ def correlate(traces):
     return [dict(receiver=r,sender=s) for r in rejections for s in errors if key(r)==key(s)]
 
 
+def successful_receiver_pairs(entry,events):
+    """Bind admission/worker observations to the original durable intent."""
+    sender=entry['sender']
+    matching=[e for e in events if e['detail']==6 and e['value']==0 and
+              e['session']==sender['session'] and e['route']==sender['route'] and e['origin_ns']==sender['source_ns']]
+    return [dict(admission=a,worker=w) for a in matching if a['point']==32 for w in matching
+            if w['point']==34 and a['request_sequence']==w['request_sequence']]
+
+
 def analyze(report,run):
     progress=command_progress(report,run);traces=summarize_run(run)
     receivers=[dict(file=n,**e) for n,t in traces.items() if n.startswith('robot-') for e in t['events'] if e['point'] in (32,34)]
@@ -32,8 +42,8 @@ def analyze(report,run):
         # Original closed journal audits independently validate confirmed results.
         # These additional observations cannot authorize a command outcome.
         events=[e for e in receivers if e['request']==identity and e['detail']==6]
-        if entry['terminal']==4 and not all(any(e['point']==p and e['value']==0 for e in events) for p in (32,34)):
-            raise ValueError('confirmed result lacks new admission/worker diagnostic coverage')
+        if entry['terminal']==4 and len(successful_receiver_pairs(entry,events))!=1:
+            raise ValueError('confirmed result lacks unique original-context admission/worker diagnostic coverage')
         attempts.append(dict(number=entry['number'],terminal=entry['terminal'],sdk_handoffs=entry['sdk_handoffs'],receiver_command_events=events))
     begin=report['results']['publication_interval']['resume_monotonic_ns'];end=report['results']['command_data_cutoff_monotonic_ns']
     context=[dict(file=n,**e) for n,t in traces.items() for e in t['events'] if begin<=e['monotonic_ns']<=end and e['point'] in (2,3,4,30,31)]
@@ -43,13 +53,14 @@ def analyze(report,run):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',required=True,type=Path);parser.add_argument('--matrix',choices=('focused','three-seed'),default='focused');args=parser.parse_args()
+    slots=SLOTS if args.matrix=='focused' else MATRIX_SLOTS
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
     runtime={p:sha(ROOT/p) for p in RUNTIMES}
     if runtime['install/srt-m0/lib/librobotweax-srt.a']!=json.loads((ROOT/'baselines/dependencies.json').read_text())['srt']['installed_library_sha256']:raise ValueError('provider pin mismatch')
-    report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),slots=SLOTS,
+    report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),matrix=args.matrix,slots=slots,
                 runtime_before=runtime,rows=[],qualification=False);write(out/'execution.json',report);failed=False
-    for slot in SLOTS:
+    for slot in slots:
         row=dict(slot=slot,status='not_executed');report['rows'].append(row)
         if failed:row['why']='prior cohort failure; no retries';write(out/'execution.json',report);continue
         base=ROOT/'.local/m3';before=set(base.glob('*'))
