@@ -1991,3 +1991,41 @@ algorithm/install/ROS rebuild, prior ROS41 remains prior validation. Evidence an
 closed audits: evidence/m3-controlled-clock-rejection-2026-11-08/. The old4211 cause
 and progress fix remain open; next freeze finite instrumented multi-seed N5
 coverage. Loaded ROS/N5 discovery is separate. PR2 draft, M3 open, M4 untouched.
+
+
+### Instrumented N5 recurrence at receiver clock admission (2026-11-08)
+
+A prospectively frozen matrix at a2425d0 runs N0/4211/15s then N5/4211/300s once;
+the first N5 progress failure stops the matrix and leaves1701/2903 NOT_EXECUTED.
+The control passes8/8; N5 confirms18/19, leaves intent19 unresolved and skips131
+later offered slots. Cohort exit1 and original safety/accounting harnessPASS remain
+separate. No production behavior, runtime, budget, observer or provider change.
+
+Complete request-correlated observations establish receiver COMMAND rejection13
+with ClockError/AgeResult expired2, followed by matched sender COMMAND peer error5
+on the same request/session/route100/wire sequence152. One SDK handoff, no receiver
+COMMAND worker observation and subsequent QUERY/NOT_FOUND locate the rejection
+before journal-worker forwarding. Why qualification expired is not established.
+The sender remains live LOCAL_QUEUED/revision0; closed UNKNOWN/reconcile_required
+may be cleanup invalidation. Ephemeral traces/absence/elapsed budget do not
+constitute a durable negative outcome or authorize replay. No active-window
+context-change/invalidation/session-action/link-loss event is recorded.
+
+Shared-VM clock comparisons show rejection2.807178502s after original origin with
+2.192821498s of the original5s budget left. A later QUERY samples a qualified
+receiver192.868500ms after rejection with1.999952998s remaining. This is neither
+an exact recovery time, general cross-host age guarantee nor counterfactual fix
+proof. It motivates separately planned bounded receiver retention with immutable
+command/context/deadline and fresh revalidation/one forwarding; late expiry,
+context loss, capacity and shutdown must retain uncertainty without sender replay.
+The clock's expired snapshot reports unavailable deadline0, not its prior deadline.
+
+Capture/drain/provider/trace populations pass with zero trace drops; every success
+also has a unique receiver admission/worker pair matching original context, origin
+and sequence. Host269 tests before/after live and syntax/diff pass. All eight
+runtime hashes match the prior focused cohort and remain fixed; no SDK/ROS build
+(prior SDK71/ROS41), owned namespaces removed. Sensor75032/24417 source/observer
+counts retain delivery gaps. Full N5/M3 and loaded ROS/N5 discovery remain open,
+PR2 draft, Intrinsic/M4 untouched. Original verdicts, selected traces, closed
+failure audit and later qualification sample:
+evidence/m3-instrumented-n5-matrix-2026-11-08/.

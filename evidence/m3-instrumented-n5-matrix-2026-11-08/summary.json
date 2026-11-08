@@ -1,0 +1,375 @@
+[
+  {
+    "label": "srt-N0-control",
+    "status": "passed",
+    "error": null,
+    "slot": {
+      "label": "srt-N0-control",
+      "profile": "N0",
+      "seconds": 15,
+      "seed": 4211
+    },
+    "harness_status": "passed",
+    "capture_population_reconciled": true,
+    "command_audit": {
+      "attempts": 8,
+      "confirmed_successes": 8,
+      "unknown": 0,
+      "effects": 8,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped_slots": 0,
+    "clock_rejection_correlations": [],
+    "active_context_events": 0,
+    "trace_population": {
+      "operator-bridge-0.log": {
+        "records": 42,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 2,
+          "invalidate_requested": 2,
+          "invalidate_completed": 2,
+          "sender_admission": 8,
+          "submit_result": 8,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 8,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 0,
+          "session_action": 4,
+          "link_lost": 4,
+          "control_admission": 0,
+          "peer_error_received": 0,
+          "receiver_worker_result": 0
+        }
+      },
+      "robot-bridge-1.log": {
+        "records": 5,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 0,
+          "invalidate_requested": 0,
+          "invalidate_completed": 0,
+          "sender_admission": 0,
+          "submit_result": 0,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 0,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 0,
+          "session_action": 1,
+          "link_lost": 0,
+          "control_admission": 0,
+          "peer_error_received": 0,
+          "receiver_worker_result": 0
+        }
+      },
+      "robot-bridge-2.log": {
+        "records": 39,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 0,
+          "invalidate_requested": 0,
+          "invalidate_completed": 0,
+          "sender_admission": 0,
+          "submit_result": 0,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 0,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 0,
+          "session_action": 1,
+          "link_lost": 0,
+          "control_admission": 17,
+          "peer_error_received": 0,
+          "receiver_worker_result": 17
+        }
+      }
+    },
+    "sensors": {
+      "source_produced": 3787,
+      "observer_received": 3666,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 5,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 114,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_actual_hz": {
+        "imu": 199.95339967527218,
+        "joints": 50.03785967443259
+      }
+    }
+  },
+  {
+    "label": "srt-N5-4211",
+    "status": "failed",
+    "error": "command progress failed; uncertainty retained",
+    "slot": {
+      "label": "srt-N5-4211",
+      "profile": "N5",
+      "seconds": 300,
+      "seed": 4211
+    },
+    "harness_status": "passed",
+    "capture_population_reconciled": true,
+    "command_audit": {
+      "attempts": 19,
+      "confirmed_successes": 18,
+      "unknown": 0,
+      "effects": 18,
+      "unresolved": 1,
+      "not_admitted": 0,
+      "all_succeeded": false,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped_slots": 131,
+    "clock_rejection_correlations": [
+      {
+        "receiver": {
+          "file": "robot-bridge-2.log",
+          "sequence": 302,
+          "monotonic_ns": 103410120005,
+          "point": 32,
+          "reason": 0,
+          "request": "13000000000000000000000000000000",
+          "session": "870cc3691d096ff7cf5d3829e31ef24e",
+          "owner_epoch": "bdbb9bad8895b7e46dfff1bc9e571b09",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "route": 100,
+          "detail": 6,
+          "value": 13,
+          "entry_owner_epoch": "00000000000000000000000000000000",
+          "request_sequence": 152,
+          "origin_ns": 100602934087,
+          "evaluated_ns": 103410112589,
+          "clock_deadline_ns": 0,
+          "clock_error": 2,
+          "age_error": 2
+        },
+        "sender": {
+          "file": "operator-bridge-0.log",
+          "sequence": 67,
+          "monotonic_ns": 103473609505,
+          "point": 33,
+          "reason": 0,
+          "request": "13000000000000000000000000000000",
+          "session": "870cc3691d096ff7cf5d3829e31ef24e",
+          "owner_epoch": "d40c4f92788fd5ebdd086d5ae273c9a8",
+          "control_generation": 2,
+          "sensor_generation": 2,
+          "route": 100,
+          "detail": 6,
+          "value": 5,
+          "entry_owner_epoch": "00000000000000000000000000000000",
+          "request_sequence": 152,
+          "origin_ns": 0,
+          "evaluated_ns": 0,
+          "clock_deadline_ns": 0,
+          "clock_error": 0,
+          "age_error": 0
+        }
+      }
+    ],
+    "active_context_events": 0,
+    "trace_population": {
+      "operator-bridge-0.log": {
+        "records": 235,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 2,
+          "invalidate_requested": 2,
+          "invalidate_completed": 2,
+          "sender_admission": 19,
+          "submit_result": 19,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 19,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 1,
+          "session_action": 4,
+          "link_lost": 4,
+          "control_admission": 0,
+          "peer_error_received": 159,
+          "receiver_worker_result": 0
+        }
+      },
+      "robot-bridge-1.log": {
+        "records": 5,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 0,
+          "invalidate_requested": 0,
+          "invalidate_completed": 0,
+          "sender_admission": 0,
+          "submit_result": 0,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 0,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 0,
+          "session_action": 1,
+          "link_lost": 0,
+          "control_admission": 0,
+          "peer_error_received": 0,
+          "receiver_worker_result": 0
+        }
+      },
+      "robot-bridge-2.log": {
+        "records": 2824,
+        "complete": true,
+        "counts": {
+          "endpoint_started": 1,
+          "session_changed": 0,
+          "invalidate_requested": 0,
+          "invalidate_completed": 0,
+          "sender_admission": 0,
+          "submit_result": 0,
+          "worker_unknown": 0,
+          "endpoint_stopping": 1,
+          "endpoint_stopped": 1,
+          "mailbox_flushed": 0,
+          "input_dropped": 0,
+          "make_rejected": 0,
+          "queue_rejected": 0,
+          "outbound_dropped": 0,
+          "provider_sent": 0,
+          "provider_error": 0,
+          "outbound_flushed": 0,
+          "transport_stopping": 1,
+          "clock_deferred": 0,
+          "session_action": 1,
+          "link_lost": 0,
+          "control_admission": 1410,
+          "peer_error_received": 0,
+          "receiver_worker_result": 1409
+        }
+      }
+    },
+    "sensors": {
+      "source_produced": 75032,
+      "observer_received": 24417,
+      "losses": {
+        "upstream_dds": 10,
+        "validation": 0,
+        "admission": 91,
+        "ingress_replaced": 1,
+        "ingress_flushed": 1354,
+        "input_rejected": 10,
+        "outbound_replaced": 2366,
+        "outbound_expired": 0,
+        "outbound_flushed": 9,
+        "srt_accept_to_receiver_gap": 45955,
+        "receiver_rejected": 815,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_actual_hz": {
+        "imu": 199.9992541395579,
+        "joints": 50.00231248433728
+      }
+    }
+  },
+  {
+    "label": "srt-N5-1701",
+    "status": "not_executed",
+    "error": null,
+    "slot": {
+      "label": "srt-N5-1701",
+      "profile": "N5",
+      "seconds": 300,
+      "seed": 1701
+    }
+  },
+  {
+    "label": "srt-N5-2903",
+    "status": "not_executed",
+    "error": null,
+    "slot": {
+      "label": "srt-N5-2903",
+      "profile": "N5",
+      "seconds": 300,
+      "seed": 2903
+    }
+  }
+]

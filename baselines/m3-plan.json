@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: freeze finite instrumented multi-seed cohort seeking request-correlated recurrence after controlled expiry/future-age and uncertainty contracts pass; historical4211 cause unresolved, no replay; loaded ROS DDS discovery separate",
+  "current_priority": "N5: design/test bounded receiver command retention during temporary clock qualification gaps, preserving original context/deadline and one SDK handoff; cover expiry/context loss/capacity before production fix; investigate why clock expired; loaded ROS DDS discovery separate",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2162,6 +2162,64 @@
     "production_behavior_fix": false,
     "historical4211_cause_proven": false,
     "new_n5_runs": 0,
+    "complete_M3_acceptance": false
+  },
+  "instrumented_n5_matrix": {
+    "evidence": "evidence/m3-instrumented-n5-matrix-2026-11-08/",
+    "frozen_source": "a2425d0da77a116e875f2465f12c0f46e039e7da",
+    "status": "failed",
+    "cohort_exit": 1,
+    "executed_slots": 2,
+    "not_executed_seeds": [
+      1701,
+      2903
+    ],
+    "retries": 0,
+    "n0": {
+      "seed": 4211,
+      "seconds": 15,
+      "confirmed": 8,
+      "attempts": 8,
+      "skipped": 0
+    },
+    "n5": {
+      "seed": 4211,
+      "seconds": 300,
+      "original_harness_status": "passed",
+      "progress_status": "failed",
+      "confirmed": 18,
+      "attempts": 19,
+      "effects": 18,
+      "unresolved": 1,
+      "skipped": 131,
+      "source_produced": 75032,
+      "observer_received": 24417
+    },
+    "unresolved_intent": 19,
+    "sdk_handoffs": 1,
+    "receiver_command_sequence": 152,
+    "receiver_session_error": 13,
+    "receiver_clock_error": 2,
+    "receiver_age_error": 2,
+    "sender_matched_command_peer_error": 5,
+    "original_start_budget_ms": 5000,
+    "shared_vm_source_to_receiver_evaluation_ns": 2807178502,
+    "shared_vm_budget_remaining_at_rejection_ns": 2192821498,
+    "live_last_state": "LOCAL_QUEUED",
+    "closed_sender_state": "UNKNOWN/reconcile_required",
+    "closed_receiver_entry_present": false,
+    "active_context_change_events": 0,
+    "later_qualified_query_observation_ns_after_rejection": 192868500,
+    "budget_remaining_at_later_qualified_observation_ns": 1999952998,
+    "later_observation_is_exact_clock_recovery_time": false,
+    "hypothetical_receiver_retention_success_proven": false,
+    "clock_expiry_underlying_cause_proven": false,
+    "unique_historical_cause_proven": false,
+    "all_capture_trace_provider_gates_pass": true,
+    "host_tests": 269,
+    "new_sdk_ros_build": false,
+    "all8_runtime_hashes_unchanged": true,
+    "production_behavior_fix": false,
     "complete_M3_acceptance": false
   }
 }

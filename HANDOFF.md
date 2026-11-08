@@ -3001,3 +3001,47 @@ Weiter: Endliche instrumentierte Mehrseed-N5-Cohort vorab festlegen, um eine
 request-korrelierte Wiederkehr zu untersuchen; keine Deadlineänderung, kein
 Replay oder Retry bis PASS. Loaded ROS/N5-Discovery bleibt separat, ebenso die
 weiteren N3/Clock/Security/Resource-Gates. PR2 Draft, M3 offen, M4 unberührt.
+
+
+## Ergänzung 2026-11-08: request-korrelierte N5-Wiederkehr
+
+Matrix/Source a2425d0 vorab eingefroren: N0/4211/15s, dann N5 je300s mit Seeds
+4211,1701,2903; Stop nach erstem Fehler, keine Retries. N0 bestätigt8/8. N5/4211
+bestätigt18/19,1unaufgelöst,131Skip; Progress-GateFAILED/Exit1, ursprünglicher
+Safety/Accounting-HarnessPASS unverändert. Seeds1701/2903 NOT_EXECUTED. Evidenz:
+[evidence/m3-instrumented-n5-matrix-2026-11-08/README.md](evidence/m3-instrumented-n5-matrix-2026-11-08/README.md).
+
+- Intent19 genau1SDK-Handoff. Receiver COMMAND-Rejection13 mit ClockError2 und
+  AgeResult2 (expired), Sender COMMAND-PeerError5; Request/Session/Route100 und
+  Originalsequenz152 passen exakt. Keine QUERY-Verwechslung oder Future-Age-
+  Rejection in diesem beobachteten Fall. Transport verwirft vor Worker-Forwarding;
+  kein COMMAND-WorkerResult, spätere QUERYs liefern NOT_FOUND. Warum die Clock-
+  Qualification unter dieser Last abläuft, ist weiterhin nicht lokalisiert.
+- Shared-VM-Vergleich:2.807178502s von Originalorigin bis Receiver-Evaluation,
+  dabei2.192821498s des originalen5sBudgets übrig. Keine PCAP-/Crosshost-Age-
+  Garantie. Clockdeadline0 im expired-Snapshot bedeutet nicht verfügbar, nicht
+  den tatsächlichen Ablaufzeitpunkt. Keine aktiven Kontextwechsel-Traceevents.
+- Ein späterer QUERY-Snapshot zeigt Qualification192.868500ms nach Rejection und
+  noch1.999952998s Budget. Das ist eine Stichprobe, keine genaue Recovery-Latenz
+  und kein Beweis für hypothetischen Fix-Erfolg; QUERY-AgeError1 ist ungenutzt.
+- Live zuletzt LOCAL_QUEUED/rev0,1263Polls/150NOT_FOUND-Beobachtungen,1199
+  historische Polls ausgelassen. Closed senderUNKNOWN/reconcile_required kann
+  Cleanup-Invaliderung sein; kein Live-UNKNOWN daraus abgeleitet. Receiver leer,
+  kein Result. Keine Replay-/Nichtausführungsfreigabe aus Logs/NOT_FOUND/Deadline.
+- Capture-/Drain-/Trace-/Provider-Populationen PASS, Drops0. Jeder bestätigte
+  Erfolg hat genau ein originalkontextgebundenes Admission-/Worker-Paar zusätzlich
+  zu den Journal-/Dispatch-/Budget-/SDK-Beweisen. Neue negative Hosttests prüfen
+  falsche Session/Route/Origin/Sequenz und doppelte Beweispopulationen.
+- Host269 vor/nach LivePASS, Syntax/diffPASS. Alle8 Runtimehashes entsprechen der
+  vorherigen Diagnostic-Runtime und bleiben unverändert; Providerpin gleich.
+  Kein SDK-/ROS-Build (vorher SDK71/ROS41), keine Tests während Live, eigene
+  Namespaces entfernt. Sensor Source/Observer75032/24417 mit expliziten Lücken;
+  keine volle N5-/Sensor-/M3-Abnahme. Rohdaten lokal gehasht, Selektionen mit
+  dokumentierten Auslassungen und Original-/Ableitungshashes archiviert.
+
+Weiter: Begrenzte Receiver-Retention während temporärer Clock-Gaps entwerfen und
+separat vorab testen, gebunden an Originalcommand/-kontext/-deadline, einmaliges
+Forwarding ohne Sender-Replay. Spätes Expiry, Kontextverlust, Kapazität und Shutdown
+explizit abdecken; keine flüchtige Rejection zum dauerhaften Absence-Seal erklären.
+Underlying Clock-Ablauf und historische Ursachen bleiben getrennt. Loaded ROS/N5-
+Discovery separat; PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.
