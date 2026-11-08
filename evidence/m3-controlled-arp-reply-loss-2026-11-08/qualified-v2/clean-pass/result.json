@@ -1,0 +1,2594 @@
+{
+  "status": "passed",
+  "number": 1,
+  "fault": false,
+  "child_outcomes": {
+    "controller": {
+      "exit_code": 0,
+      "forced": false
+    },
+    "receiver": {
+      "exit_code": 0,
+      "forced": false
+    }
+  },
+  "scope": "synthetic UDP and kernel ARP only, fresh owned namespaces, no SRT/ROS peer or tuning",
+  "addresses": {
+    "operator": "172.19.0.2",
+    "robot": "172.19.0.3"
+  },
+  "clock_proof": {
+    "operator": "59b36a49-2414-440e-9dc4-d5142f2c25dd\nmonotonic           0         0\nboottime            0         0\n",
+    "robot": "59b36a49-2414-440e-9dc4-d5142f2c25dd\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "neighbor_configuration": {
+    "mode": "dynamic",
+    "peer_macs": {
+      "operator": "12:42:56:87:35:4e",
+      "robot": "22:38:f6:99:c1:0f"
+    },
+    "before": {
+      "operator": [],
+      "robot": []
+    },
+    "scope": "permanent mode is a separate L2 diagnostic candidate; dynamic mode does not write neighbor entries"
+  },
+  "features_before": {
+    "operator": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    },
+    "robot": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    }
+  },
+  "roots_before": {
+    "operator": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 2904,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 42,
+        "packets": 1,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ],
+    "robot": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 2903,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 42,
+        "packets": 1,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ]
+  },
+  "installation": {
+    "begin_ns": 170898183452,
+    "end_ns": 170925719285,
+    "argv": [
+      "tc",
+      "filter",
+      "add",
+      "dev",
+      "eth0",
+      "egress",
+      "protocol",
+      "arp",
+      "pref",
+      "49140",
+      "u32",
+      "skip_hw",
+      "match",
+      "u32",
+      "0x10800",
+      "0xffffffff",
+      "at",
+      "0",
+      "match",
+      "u32",
+      "0x6040002",
+      "0xffffffff",
+      "at",
+      "4",
+      "match",
+      "u32",
+      "0x2238f699",
+      "0xffffffff",
+      "at",
+      "8",
+      "match",
+      "u32",
+      "0xc10fac13",
+      "0xffffffff",
+      "at",
+      "12",
+      "match",
+      "u32",
+      "0x31242",
+      "0xffffffff",
+      "at",
+      "16",
+      "match",
+      "u32",
+      "0x5687354e",
+      "0xffffffff",
+      "at",
+      "20",
+      "match",
+      "u32",
+      "0xac130002",
+      "0xffffffff",
+      "at",
+      "24",
+      "action",
+      "gact",
+      "pipe",
+      "action",
+      "gact",
+      "pass"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "controller": {
+    "status": "passed",
+    "nominal_offsets_ns": [
+      1150000000,
+      1250000000,
+      1350000000
+    ],
+    "snapshots": [
+      {
+        "filter_read": {
+          "begin_ns": 172572151578,
+          "end_ns": 172593024828,
+          "argv": [
+            "tc",
+            "-j",
+            "-s",
+            "filter",
+            "show",
+            "dev",
+            "eth0",
+            "egress",
+            "pref",
+            "49140"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":1,\"success\":1,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":1,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":1,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":1,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":1,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":1,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":1,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":1,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+          "stderr": ""
+        },
+        "root_read": {
+          "begin_ns": 172593036994,
+          "end_ns": 172613964828,
+          "argv": [
+            "tc",
+            "-j",
+            "-s",
+            "qdisc",
+            "show",
+            "dev",
+            "eth0"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":126,\"packets\":3,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+          "stderr": ""
+        },
+        "neighbor_read": {
+          "begin_ns": 172613977536,
+          "end_ns": 172632466078,
+          "argv": [
+            "ip",
+            "-j",
+            "-s",
+            "neigh",
+            "show",
+            "to",
+            "172.19.0.2"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"dst\":\"172.19.0.2\",\"dev\":\"eth0\",\"lladdr\":\"12:42:56:87:35:4e\",\"used\":1,\"confirmed\":61,\"updated\":1,\"probes\":0,\"state\":[\"STALE\"]}]\n",
+          "stderr": ""
+        },
+        "counters": {
+          "eligible": {
+            "index": 1,
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "index": 2,
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict_type": "pass"
+        }
+      },
+      {
+        "filter_read": {
+          "begin_ns": 172672344744,
+          "end_ns": 172694200078,
+          "argv": [
+            "tc",
+            "-j",
+            "-s",
+            "filter",
+            "show",
+            "dev",
+            "eth0",
+            "egress",
+            "pref",
+            "49140"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":1,\"success\":1,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":1,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":1,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":1,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":1,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":1,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":1,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":1,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+          "stderr": ""
+        },
+        "root_read": {
+          "begin_ns": 172694210994,
+          "end_ns": 172714834036,
+          "argv": [
+            "tc",
+            "-j",
+            "-s",
+            "qdisc",
+            "show",
+            "dev",
+            "eth0"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":126,\"packets\":3,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+          "stderr": ""
+        },
+        "neighbor_read": {
+          "begin_ns": 172714843411,
+          "end_ns": 172733948786,
+          "argv": [
+            "ip",
+            "-j",
+            "-s",
+            "neigh",
+            "show",
+            "to",
+            "172.19.0.2"
+          ],
+          "exit_code": 0,
+          "stdout": "[{\"dst\":\"172.19.0.2\",\"dev\":\"eth0\",\"lladdr\":\"12:42:56:87:35:4e\",\"used\":1,\"confirmed\":61,\"updated\":1,\"probes\":0,\"state\":[\"STALE\"]}]\n",
+          "stderr": ""
+        },
+        "counters": {
+          "eligible": {
+            "index": 1,
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "index": 2,
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict_type": "pass"
+        }
+      }
+    ],
+    "initial": {
+      "filter_read": {
+        "begin_ns": 171133099202,
+        "end_ns": 171155893077,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "filter",
+          "show",
+          "dev",
+          "eth0",
+          "egress",
+          "pref",
+          "49140"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":0,\"success\":0,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":0,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":0,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":0,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":0,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":0,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":0,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":0,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":0,\"last_used\":0,\"stats\":{\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":0,\"last_used\":0,\"stats\":{\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+        "stderr": ""
+      },
+      "root_read": {
+        "begin_ns": 171155907577,
+        "end_ns": 171177313827,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "qdisc",
+          "show",
+          "dev",
+          "eth0"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":84,\"packets\":2,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+        "stderr": ""
+      },
+      "neighbor_read": {
+        "begin_ns": 171177322285,
+        "end_ns": 171193679244,
+        "argv": [
+          "ip",
+          "-j",
+          "-s",
+          "neigh",
+          "show",
+          "to",
+          "172.19.0.2"
+        ],
+        "exit_code": 0,
+        "stdout": "[]\n",
+        "stderr": ""
+      },
+      "counters": {
+        "eligible": {
+          "index": 1,
+          "packets": 0,
+          "bytes": 0,
+          "drops": 0
+        },
+        "verdict": {
+          "index": 2,
+          "packets": 0,
+          "bytes": 0,
+          "drops": 0
+        },
+        "verdict_type": "pass"
+      }
+    },
+    "origin_ns": 171420283827,
+    "removal": {
+      "begin_ns": 172771497870,
+      "end_ns": 172788643536,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "after": {
+      "begin_ns": 172788654703,
+      "end_ns": 172806288286,
+      "argv": [
+        "tc",
+        "-j",
+        "-s",
+        "filter",
+        "show",
+        "dev",
+        "eth0",
+        "egress",
+        "pref",
+        "49140"
+      ],
+      "exit_code": 0,
+      "stdout": "[]\n",
+      "stderr": ""
+    }
+  },
+  "neighbor_diagnostics": {
+    "operator": {
+      "complete": true,
+      "records": 29,
+      "states": {
+        "ABSENT": 10,
+        "REACHABLE": 19
+      },
+      "lladdrs": {
+        "22:38:f6:99:c1:0f": 19
+      },
+      "max_read_span_ns": 25959333,
+      "max_sample_start_gap_ns": 110152708,
+      "status": {
+        "complete": true,
+        "records": 29,
+        "limit": 75000,
+        "finished_ns": 173279506411
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.3",
+          "dev": "eth0",
+          "lladdr": "22:38:f6:99:c1:0f",
+          "refcnt": 1,
+          "used": 1,
+          "confirmed": 1,
+          "updated": 1,
+          "probes": 4,
+          "state": [
+            "REACHABLE"
+          ]
+        }
+      ]
+    },
+    "robot": {
+      "complete": true,
+      "records": 29,
+      "states": {
+        "ABSENT": 10,
+        "STALE": 19
+      },
+      "lladdrs": {
+        "12:42:56:87:35:4e": 19
+      },
+      "max_read_span_ns": 30555000,
+      "max_sample_start_gap_ns": 110145875,
+      "status": {
+        "complete": true,
+        "records": 29,
+        "limit": 75000,
+        "finished_ns": 173282978620
+      },
+      "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+      "after": [
+        {
+          "dst": "172.19.0.2",
+          "dev": "eth0",
+          "lladdr": "12:42:56:87:35:4e",
+          "used": 2,
+          "confirmed": 62,
+          "updated": 2,
+          "probes": 0,
+          "state": [
+            "STALE"
+          ]
+        }
+      ]
+    }
+  },
+  "features_after": {
+    "operator": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    },
+    "robot": {
+      "interface": "eth0",
+      "mtu": 1500,
+      "read_only": true,
+      "features": {
+        "tx-scatter-gather": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv4": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-ip-generic": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-ipv6": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "highdma": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-scatter-gather-fraglist": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-vlan-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "vlan-challenged": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": true
+        },
+        "tx-generic-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-gro": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-lro": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-robust": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tcp-ecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-mangleid-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-fcoe-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-gre-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gre-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip4-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-ipxip6-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-udp_tnl-csum-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-partial": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-tunnel-remcsum-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-sctp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-esp-segmentation": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-udp-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-gso-list": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-tcp-accecn-segmentation": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-checksum-fcoe-crc": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-checksum-sctp": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-ntuple-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-hashing": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-checksum": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "tx-nocache-copy": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "loopback": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-fcs": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-all": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tx-vlan-stag-hw-insert": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-hw-parse": {
+          "active": true,
+          "available": true,
+          "requested": true,
+          "fixed": false
+        },
+        "rx-vlan-stag-filter": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "l2-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hw-tc-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "esp-tx-csum-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp_tunnel-port-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-tx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-rx-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-hw": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "tls-hw-record": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-gro-list": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "macsec-hw-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "rx-udp-gro-forwarding": {
+          "active": false,
+          "available": true,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-ins-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-tag-rm-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-fwd-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        },
+        "hsr-dup-offload": {
+          "active": false,
+          "available": false,
+          "requested": false,
+          "fixed": false
+        }
+      }
+    }
+  },
+  "roots_after": {
+    "operator": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 2904,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 5094,
+        "packets": 7,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ],
+    "robot": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 2903,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 126,
+        "packets": 3,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      },
+      {
+        "kind": "clsact",
+        "handle": "ffff:",
+        "parent": "ffff:fff1",
+        "options": {},
+        "bytes": 42,
+        "packets": 1,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ]
+  },
+  "drain": {
+    "status": "stable_equal",
+    "snapshots": [
+      {
+        "operator": {
+          "counts": {
+            "captured": 10,
+            "filtered": 10,
+            "kernel_drops": 0
+          },
+          "identities": [
+            [
+              75,
+              17002
+            ]
+          ],
+          "signal": {
+            "begin_ns": 174073703453,
+            "end_ns": 174076797328,
+            "signal": "SIGUSR1",
+            "identities": [
+              [
+                75,
+                17002
+              ]
+            ]
+          },
+          "host_read_ns": [
+            5314221086964958,
+            5314221274326708
+          ]
+        },
+        "robot": {
+          "counts": {
+            "captured": 9,
+            "filtered": 9,
+            "kernel_drops": 0
+          },
+          "identities": [
+            [
+              75,
+              17002
+            ]
+          ],
+          "signal": {
+            "begin_ns": 174252519870,
+            "end_ns": 174255207287,
+            "signal": "SIGUSR1",
+            "identities": [
+              [
+                75,
+                17002
+              ]
+            ]
+          },
+          "host_read_ns": [
+            5314221274372750,
+            5314221453425166
+          ]
+        }
+      },
+      {
+        "operator": {
+          "counts": {
+            "captured": 10,
+            "filtered": 10,
+            "kernel_drops": 0
+          },
+          "identities": [
+            [
+              75,
+              17002
+            ]
+          ],
+          "signal": {
+            "begin_ns": 174644129704,
+            "end_ns": 174646448829,
+            "signal": "SIGUSR1",
+            "identities": [
+              [
+                75,
+                17002
+              ]
+            ]
+          },
+          "host_read_ns": [
+            5314221663682250,
+            5314221844148541
+          ]
+        },
+        "robot": {
+          "counts": {
+            "captured": 9,
+            "filtered": 9,
+            "kernel_drops": 0
+          },
+          "identities": [
+            [
+              75,
+              17002
+            ]
+          ],
+          "signal": {
+            "begin_ns": 174820246954,
+            "end_ns": 174822476871,
+            "signal": "SIGUSR1",
+            "identities": [
+              [
+                75,
+                17002
+              ]
+            ]
+          },
+          "host_read_ns": [
+            5314221844187833,
+            5314222018855333
+          ]
+        }
+      }
+    ],
+    "clock": "host monotonic for controller reads; nested signal brackets are VM monotonic",
+    "scope": "two unchanged equal captured/filter snapshots before stop; finite timeout, not proof of future silence; final footer/file gate still required"
+  },
+  "remaining_rule": [],
+  "phase_proof": {
+    "guaranteed_rule_active_ns": [
+      170925719285,
+      172771497870
+    ],
+    "source_origin_ns": 171420283827,
+    "removal": {
+      "begin_ns": 172771497870,
+      "end_ns": 172788643536,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "eligible_replies": 1,
+    "dropped_replies": 0,
+    "native": {
+      "operator": {
+        "original_udp": 3,
+        "fresh_udp": 1,
+        "replies_in_active": 1,
+        "replies_after_remove": 0
+      },
+      "robot": {
+        "original_udp": 3,
+        "fresh_udp": 1,
+        "replies_in_active": 1,
+        "replies_after_remove": 0
+      }
+    },
+    "original_udp_delivered_once": 3,
+    "fresh_udp_delivered_once": 1,
+    "scope": "Synthetic kernel ARP reply eligibility/verdict counter versus post-classifier hooks and exact UDP identities; not N5 or SRT command execution proof."
+  },
+  "captures": {
+    "operator": {
+      "status": {
+        "complete": true,
+        "records": 14,
+        "seen": 14,
+        "submitted": 14,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 170212294868,
+        "stop_before_ns": 176546064455,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "pcap": {
+        "tcpdump_reported_packets": 10,
+        "tcpdump_reported_filtered_packets": 10,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      },
+      "all_native_selected_link_records": 10,
+      "owned_peer_records": 7,
+      "background_native": [
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "12:42:56:87:35:4e",
+            "ff:ff:ff:ff:ff:ff",
+            "12:42:56:87:35:4e",
+            "172.19.0.2",
+            "00:00:00:00:00:00",
+            "172.19.0.2"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "22:38:f6:99:c1:0f",
+            "ff:ff:ff:ff:ff:ff",
+            "22:38:f6:99:c1:0f",
+            "172.19.0.3",
+            "00:00:00:00:00:00",
+            "172.19.0.3"
+          ],
+          "count": 1
+        }
+      ],
+      "background_pcap": [
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "12:42:56:87:35:4e",
+            "ff:ff:ff:ff:ff:ff",
+            "12:42:56:87:35:4e",
+            "172.19.0.2",
+            "00:00:00:00:00:00",
+            "172.19.0.2"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "22:38:f6:99:c1:0f",
+            "ff:ff:ff:ff:ff:ff",
+            "22:38:f6:99:c1:0f",
+            "172.19.0.3",
+            "00:00:00:00:00:00",
+            "172.19.0.3"
+          ],
+          "count": 1
+        }
+      ],
+      "background_identity_equal": true,
+      "scope": "All native/file/filter populations retained; only predeclared cross-owned-peer ARP and labeled UDP identities compared across recorder spans. Background gratuitous/other ARP retained, not assigned to the controlled path."
+    },
+    "robot": {
+      "status": {
+        "complete": true,
+        "records": 12,
+        "seen": 12,
+        "submitted": 12,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 170212551368,
+        "stop_before_ns": 176710045205,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "pcap": {
+        "tcpdump_reported_packets": 9,
+        "tcpdump_reported_filtered_packets": 9,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      },
+      "all_native_selected_link_records": 9,
+      "owned_peer_records": 6,
+      "background_native": [
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "12:42:56:87:35:4e",
+            "ff:ff:ff:ff:ff:ff",
+            "12:42:56:87:35:4e",
+            "172.19.0.2",
+            "00:00:00:00:00:00",
+            "172.19.0.2"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "22:38:f6:99:c1:0f",
+            "ff:ff:ff:ff:ff:ff",
+            "22:38:f6:99:c1:0f",
+            "172.19.0.3",
+            "00:00:00:00:00:00",
+            "172.19.0.3"
+          ],
+          "count": 2
+        }
+      ],
+      "background_pcap": [
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "12:42:56:87:35:4e",
+            "ff:ff:ff:ff:ff:ff",
+            "12:42:56:87:35:4e",
+            "172.19.0.2",
+            "00:00:00:00:00:00",
+            "172.19.0.2"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "arp",
+            42,
+            1,
+            "22:38:f6:99:c1:0f",
+            "ff:ff:ff:ff:ff:ff",
+            "22:38:f6:99:c1:0f",
+            "172.19.0.3",
+            "00:00:00:00:00:00",
+            "172.19.0.3"
+          ],
+          "count": 2
+        }
+      ],
+      "background_identity_equal": true,
+      "scope": "All native/file/filter populations retained; only predeclared cross-owned-peer ARP and labeled UDP identities compared across recorder spans. Background gratuitous/other ARP retained, not assigned to the controlled path."
+    }
+  },
+  "arp_observations": {
+    "operator": [
+      {
+        "monotonic_ns": 170240498243,
+        "packet_type": 4,
+        "arp": {
+          "monotonic_ns": 170240498243,
+          "packet_type": 4,
+          "outgoing": true,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.2",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 170240626118,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 170240626118,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.2",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 170592433702,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 170592433702,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "22:38:f6:99:c1:0f",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "22:38:f6:99:c1:0f",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.3",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 171420452369,
+        "packet_type": 4,
+        "arp": {
+          "monotonic_ns": 171420452369,
+          "packet_type": 4,
+          "outgoing": true,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "outgoing_local_request"
+        }
+      },
+      {
+        "monotonic_ns": 171420530161,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 171420530161,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "reflected_local_request"
+        }
+      },
+      {
+        "monotonic_ns": 171420540827,
+        "packet_type": 0,
+        "arp": {
+          "monotonic_ns": 171420540827,
+          "packet_type": 0,
+          "outgoing": false,
+          "operation": 2,
+          "ethernet_source_mac": "22:38:f6:99:c1:0f",
+          "ethernet_destination_mac": "12:42:56:87:35:4e",
+          "sender_mac": "22:38:f6:99:c1:0f",
+          "target_mac": "12:42:56:87:35:4e",
+          "sender_ipv4": "172.19.0.3",
+          "target_ipv4": "172.19.0.2",
+          "identity_class": "incoming_peer_reply"
+        }
+      }
+    ],
+    "robot": [
+      {
+        "monotonic_ns": 170240575243,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 170240575243,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.2",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 170592385827,
+        "packet_type": 4,
+        "arp": {
+          "monotonic_ns": 170592385827,
+          "packet_type": 4,
+          "outgoing": true,
+          "operation": 1,
+          "ethernet_source_mac": "22:38:f6:99:c1:0f",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "22:38:f6:99:c1:0f",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.3",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 170592428952,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 170592428952,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "22:38:f6:99:c1:0f",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "22:38:f6:99:c1:0f",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.3",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "unrelated_or_unexpected_identity"
+        }
+      },
+      {
+        "monotonic_ns": 171420497869,
+        "packet_type": 1,
+        "arp": {
+          "monotonic_ns": 171420497869,
+          "packet_type": 1,
+          "outgoing": false,
+          "operation": 1,
+          "ethernet_source_mac": "12:42:56:87:35:4e",
+          "ethernet_destination_mac": "ff:ff:ff:ff:ff:ff",
+          "sender_mac": "12:42:56:87:35:4e",
+          "target_mac": "00:00:00:00:00:00",
+          "sender_ipv4": "172.19.0.2",
+          "target_ipv4": "172.19.0.3",
+          "identity_class": "incoming_peer_request"
+        }
+      },
+      {
+        "monotonic_ns": 171420528911,
+        "packet_type": 4,
+        "arp": {
+          "monotonic_ns": 171420528911,
+          "packet_type": 4,
+          "outgoing": true,
+          "operation": 2,
+          "ethernet_source_mac": "22:38:f6:99:c1:0f",
+          "ethernet_destination_mac": "12:42:56:87:35:4e",
+          "sender_mac": "22:38:f6:99:c1:0f",
+          "target_mac": "12:42:56:87:35:4e",
+          "sender_ipv4": "172.19.0.3",
+          "target_ipv4": "172.19.0.2",
+          "identity_class": "outgoing_local_reply"
+        }
+      }
+    ]
+  },
+  "udp_observations": {
+    "operator": [
+      {
+        "monotonic_ns": 171420542911,
+        "packet_type": 4,
+        "probe": [
+          1,
+          0
+        ]
+      },
+      {
+        "monotonic_ns": 171425895119,
+        "packet_type": 4,
+        "probe": [
+          1,
+          1
+        ]
+      },
+      {
+        "monotonic_ns": 171431288786,
+        "packet_type": 4,
+        "probe": [
+          1,
+          2
+        ]
+      },
+      {
+        "monotonic_ns": 173088316536,
+        "packet_type": 4,
+        "probe": [
+          1001,
+          0
+        ]
+      }
+    ],
+    "robot": [
+      {
+        "monotonic_ns": 171420555869,
+        "packet_type": 0,
+        "probe": [
+          1,
+          0
+        ]
+      },
+      {
+        "monotonic_ns": 171425926036,
+        "packet_type": 0,
+        "probe": [
+          1,
+          1
+        ]
+      },
+      {
+        "monotonic_ns": 171431319119,
+        "packet_type": 0,
+        "probe": [
+          1,
+          2
+        ]
+      },
+      {
+        "monotonic_ns": 173088369120,
+        "packet_type": 0,
+        "probe": [
+          1001,
+          0
+        ]
+      }
+    ]
+  }
+}

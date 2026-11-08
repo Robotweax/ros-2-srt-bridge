@@ -2241,3 +2241,42 @@ Next separately qualify ARP pre-qdisc observation and controlled reply loss,
 without tuning defaults, to distinguish reply generation from root queue/drop.
 Historical exact cause, fullM3/loadedDDSDiscovery/clock/security/resources/hardware
 and superiority remain open. PR2 draft, Intrinsic/M4 untouched.
+
+### Controlled ARP reply eligibility and downstream-loss fixture
+
+New synthetic UDP/kernel-ARP tooling qualifies a software u32 reply selector and
+counted gact PIPE→PASS/DROP chain in fresh owned internal namespaces. The selector
+matches all seven ARP payload words (Ethernet/IPv4 shape, operation2 and owned
+SHA/SPA/THA/TPA); native-v2 frames separately validate Ethernet ownership/direction.
+Pinned tc JSON repeats match keys, so a guarded object-pairs parser retains every
+word instead of accepting the last. PIPE must precede a separate terminal verdict.
+No user-space ARP generator, neighbor mutation, production/default tuning, runtime
+rebuild or ROS/SRT/N5 workload is involved. N0 roots stay fixed with zero root drops.
+
+V1 retains its failed full-ARP recorder-identity gate and unexecuted loss slot;
+a one-recorder gratuitous ARP presence is not retrospectively repaired. A new
+prospective V2 compares only cross-owned-peer operation1/2 ARP and all known UDP,
+keeping every unrelated/background ARP and full native/file/filter/kernel gate.
+Its two cases each execute once: clean1eligible/PASS/0drop and fault2eligible/
+DROP2/0post-verdict reply or originalUDP during guaranteed active interval.
+Both action snapshots match. After timed removal, a genuine reply and the three
+original queued UDP identities are observed/delivered once, without source resend,
+plus a separately labeled fresh control. Dynamic peers initially ABSENT become
+sampled INCOMPLETE during loss and REACHABLE after recovery; exact transitions
+and authenticated acceptance are not implied by snapshots/ARP association.
+
+This demonstrates kernel reply eligibility despite zero outgoing tap replies under
+the injected action loss, and restoration of pending UDP after peer resolution.
+It qualifies the tested pre-tap counter/verdict stage, not organic N5 root drops,
+a unique historical cause, durable SRT command execution or a mitigation. Local
+hook timing is not physical-wire or general latency authority. Previous uncertain
+intents and all failed evidence remain unchanged.
+
+Evidence: `evidence/m3-controlled-arp-reply-loss-2026-11-08/`. Preparation preserves
+unsupported flower and duplicate-JSON readback failures before successful u32
+zero-traffic check. Host316 before V1/317 before V2; no new SDK/ROS/observer build,
+72/41 prior validation. Eight runtime/two observer hashes fixed, provider unchanged,
+no tests/builds/heavy analysis overlap live, six owned namespaces/credentials clean.
+Exact public/local raw-file disposition and hashes retained. Next separately use
+the qualified ARP counter under loaded N5 without tuning to distinguish generation
+from later queue/drop behavior. PR2 draft, M3 incomplete, Intrinsic/M4 untouched.

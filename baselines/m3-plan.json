@@ -2578,5 +2578,48 @@
     "old_intents_resolved": false,
     "complete_M3_acceptance": false,
     "next_work": "Qualify ARP pre-qdisc observation and controlled reply-loss fixture; preserve dynamic neighbors, budgets and idle timeouts before mitigation"
+  },
+  "controlled_arp_reply_loss_2026_11_08": {
+    "evidence": "evidence/m3-controlled-arp-reply-loss-2026-11-08",
+    "source": "770632ac9c9fe4b16572bf4c7bb022cad9f2ccba",
+    "preparation_statuses": [
+      "failed unsupported flower",
+      "failed duplicate-key selector readback",
+      "passed exact u32/PIPE DROP removal"
+    ],
+    "original_v1_failed": true,
+    "original_v1_fault_not_executed": true,
+    "new_v2_cases_pass": 2,
+    "clean_eligible_dropped": [
+      1,
+      0
+    ],
+    "fault_eligible_dropped": [
+      2,
+      2
+    ],
+    "fault_native_replies_original_udp_during_active": [
+      0,
+      0
+    ],
+    "original_queued_udp_delivered_once": 3,
+    "fresh_udp_delivered_once": 1,
+    "root_profile": "N0 unchanged per fresh fixture",
+    "root_drops": 0,
+    "dynamic_peers_initially_absent": true,
+    "neighbor_flush_or_permanent": false,
+    "source_arp_sender": false,
+    "source_udp_resend": false,
+    "runtime8_observers2_unchanged": true,
+    "host_v1": 316,
+    "host_v2": 317,
+    "prior_sdk_tests": 72,
+    "prior_ros_tests": 41,
+    "new_build": false,
+    "no_tuning": true,
+    "n5_organic_cause_proved": false,
+    "historical_intents_resolved": false,
+    "complete_M3_acceptance": false,
+    "next_work": "Separately freeze loaded N5 ARP pre-tap eligibility/verdict observation without tuning"
   }
 }

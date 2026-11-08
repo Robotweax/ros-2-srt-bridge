@@ -61,6 +61,12 @@ root queue pressure; an idle gap with no sender activity stays a negative contro
 No tuning or runtime/provider rebuild; host306 PASS. The earlier failure remains
 unresolved and M3/PR2 remain incomplete/draft.
 
+The [controlled ARP reply-loss fixture](evidence/m3-controlled-arp-reply-loss-2026-11-08/README.md)
+qualifies a counted PIPE→DROP path:2 generated peer replies drop before the taps;
+restoration delivers all3 originally queued UDP identities once and a distinct
+fresh control. Clean and scoped loss cases pass; the first broader capture fixture
+remains failed. Host317 PASS, runtime/provider unchanged, no tuning or new N5 claim.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

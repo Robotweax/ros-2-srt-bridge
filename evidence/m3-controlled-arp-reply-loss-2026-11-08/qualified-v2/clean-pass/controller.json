@@ -1,0 +1,241 @@
+{
+  "status": "passed",
+  "nominal_offsets_ns": [
+    1150000000,
+    1250000000,
+    1350000000
+  ],
+  "snapshots": [
+    {
+      "filter_read": {
+        "begin_ns": 172572151578,
+        "end_ns": 172593024828,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "filter",
+          "show",
+          "dev",
+          "eth0",
+          "egress",
+          "pref",
+          "49140"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":1,\"success\":1,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":1,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":1,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":1,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":1,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":1,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":1,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":1,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+        "stderr": ""
+      },
+      "root_read": {
+        "begin_ns": 172593036994,
+        "end_ns": 172613964828,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "qdisc",
+          "show",
+          "dev",
+          "eth0"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":126,\"packets\":3,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+        "stderr": ""
+      },
+      "neighbor_read": {
+        "begin_ns": 172613977536,
+        "end_ns": 172632466078,
+        "argv": [
+          "ip",
+          "-j",
+          "-s",
+          "neigh",
+          "show",
+          "to",
+          "172.19.0.2"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"dst\":\"172.19.0.2\",\"dev\":\"eth0\",\"lladdr\":\"12:42:56:87:35:4e\",\"used\":1,\"confirmed\":61,\"updated\":1,\"probes\":0,\"state\":[\"STALE\"]}]\n",
+        "stderr": ""
+      },
+      "counters": {
+        "eligible": {
+          "index": 1,
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0
+        },
+        "verdict": {
+          "index": 2,
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0
+        },
+        "verdict_type": "pass"
+      }
+    },
+    {
+      "filter_read": {
+        "begin_ns": 172672344744,
+        "end_ns": 172694200078,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "filter",
+          "show",
+          "dev",
+          "eth0",
+          "egress",
+          "pref",
+          "49140"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":1,\"success\":1,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":1,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":1,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":1,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":1,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":1,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":1,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":1,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":1,\"last_used\":1,\"first_used\":1,\"stats\":{\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+        "stderr": ""
+      },
+      "root_read": {
+        "begin_ns": 172694210994,
+        "end_ns": 172714834036,
+        "argv": [
+          "tc",
+          "-j",
+          "-s",
+          "qdisc",
+          "show",
+          "dev",
+          "eth0"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":126,\"packets\":3,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":42,\"packets\":1,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+        "stderr": ""
+      },
+      "neighbor_read": {
+        "begin_ns": 172714843411,
+        "end_ns": 172733948786,
+        "argv": [
+          "ip",
+          "-j",
+          "-s",
+          "neigh",
+          "show",
+          "to",
+          "172.19.0.2"
+        ],
+        "exit_code": 0,
+        "stdout": "[{\"dst\":\"172.19.0.2\",\"dev\":\"eth0\",\"lladdr\":\"12:42:56:87:35:4e\",\"used\":1,\"confirmed\":61,\"updated\":1,\"probes\":0,\"state\":[\"STALE\"]}]\n",
+        "stderr": ""
+      },
+      "counters": {
+        "eligible": {
+          "index": 1,
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0
+        },
+        "verdict": {
+          "index": 2,
+          "packets": 1,
+          "bytes": 42,
+          "drops": 0
+        },
+        "verdict_type": "pass"
+      }
+    }
+  ],
+  "initial": {
+    "filter_read": {
+      "begin_ns": 171133099202,
+      "end_ns": 171155893077,
+      "argv": [
+        "tc",
+        "-j",
+        "-s",
+        "filter",
+        "show",
+        "dev",
+        "eth0",
+        "egress",
+        "pref",
+        "49140"
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800:\",\"ht_divisor\":1}},{\"protocol\":\"arp\",\"kind\":\"u32\",\"chain\":0,\"options\":{\"fh\":\"800::800\",\"order\":2048,\"key_ht\":\"800\",\"bkt\":\"0\",\"skip_hw\":true,\"not_in_hw\":true,\"rule_hit\":0,\"success\":0,\"match\":{\"value\":\"10800\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":0},\"success\":0,\"match\":{\"value\":\"6040002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":4},\"success\":0,\"match\":{\"value\":\"2238f699\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":8},\"success\":0,\"match\":{\"value\":\"c10fac13\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":12},\"success\":0,\"match\":{\"value\":\"31242\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":16},\"success\":0,\"match\":{\"value\":\"5687354e\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":20},\"success\":0,\"match\":{\"value\":\"ac130002\",\"mask\":\"ffffffff\",\"offmask\":\"\",\"off\":24},\"success\":0,\"actions\":[{\"order\":1,\"kind\":\"gact\",\"control_action\":{\"type\":\"pipe\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":1,\"ref\":1,\"bind\":1,\"installed\":0,\"last_used\":0,\"stats\":{\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}},{\"order\":2,\"kind\":\"gact\",\"control_action\":{\"type\":\"pass\"},\"prob\":{\"random_type\":\"none\",\"control_action\":{\"type\":\"pass\"},\"val\":0},\"index\":2,\"ref\":1,\"bind\":1,\"installed\":0,\"last_used\":0,\"stats\":{\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}}]}}]\n",
+      "stderr": ""
+    },
+    "root_read": {
+      "begin_ns": 171155907577,
+      "end_ns": 171177313827,
+      "argv": [
+        "tc",
+        "-j",
+        "-s",
+        "qdisc",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"kind\":\"netem\",\"handle\":\"1:\",\"root\":true,\"refcnt\":21,\"options\":{\"limit\":256,\"seed\":2903,\"ecn\":false,\"gap\":0},\"bytes\":84,\"packets\":2,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0},{\"kind\":\"clsact\",\"handle\":\"ffff:\",\"parent\":\"ffff:fff1\",\"options\":{},\"bytes\":0,\"packets\":0,\"drops\":0,\"overlimits\":0,\"requeues\":0,\"backlog\":0,\"qlen\":0}]\n",
+      "stderr": ""
+    },
+    "neighbor_read": {
+      "begin_ns": 171177322285,
+      "end_ns": 171193679244,
+      "argv": [
+        "ip",
+        "-j",
+        "-s",
+        "neigh",
+        "show",
+        "to",
+        "172.19.0.2"
+      ],
+      "exit_code": 0,
+      "stdout": "[]\n",
+      "stderr": ""
+    },
+    "counters": {
+      "eligible": {
+        "index": 1,
+        "packets": 0,
+        "bytes": 0,
+        "drops": 0
+      },
+      "verdict": {
+        "index": 2,
+        "packets": 0,
+        "bytes": 0,
+        "drops": 0
+      },
+      "verdict_type": "pass"
+    }
+  },
+  "origin_ns": 171420283827,
+  "removal": {
+    "begin_ns": 172771497870,
+    "end_ns": 172788643536,
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "after": {
+    "begin_ns": 172788654703,
+    "end_ns": 172806288286,
+    "argv": [
+      "tc",
+      "-j",
+      "-s",
+      "filter",
+      "show",
+      "dev",
+      "eth0",
+      "egress",
+      "pref",
+      "49140"
+    ],
+    "exit_code": 0,
+    "stdout": "[]\n",
+    "stderr": ""
+  }
+}

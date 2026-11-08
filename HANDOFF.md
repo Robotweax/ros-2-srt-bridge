@@ -3280,3 +3280,48 @@ ARP-Replygenerierung gegen Rootqueue/Drop abgrenzen; dynamische Defaults,Origina
 Budget/Idle unverändert lassen. Bisher nur Stufenassoziation, keine eindeutige
 historische Ursache. Alle übrigen M3/DDSDiscovery/Clock/Security/Resource/Hardware-
 und Vergleichsgates offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Kontrollierter Kernel-ARP-Replyloss, kein Tuning
+
+- Evidenz: `evidence/m3-controlled-arp-reply-loss-2026-11-08/README.md`.
+  Plan20d8a38, V1Source38a6f0a; neue scoped V2Source770632a. Reine synthetische
+  UDP-/KernelARP-Fälle in frischen eigenen Namespaces, kein ROS/SRT/N5-Lauf.
+- 3Zero-Traffic-Vorbereitungen erhalten: flower nicht vorhanden→FAILED; u32install
+  klappt, JSONreadback verliert wiederholte match-Keys→FAILED; korrigierter
+  object-pairs-Parser erhält7ARP-Payloadwörter, exakter Software-u32/PIPE→DROP-
+  Readback undRemovalPASS. Keine ARP-/UDP-Probes in diesen3Namespaces.
+- V1Clean einmal ausgeführt, FAILED wegen breiter Native/PCAP-ARP-Identitätsgate:
+  extraPCAP-GARP mitSenderIP==TargetIP; eindeutiger One-recorder-Grund nicht
+  bewiesen. V1Replyloss NOT_EXECUTED. Source/Rawhashes vor Revision verifiziert;
+  nichts rückwirkend reparieren oder als akzeptierten Control ausgeben.
+- PLAN-V2 vor neuen Slots: Identitäten zwischenownedPeerIPs (ARP1/2) plus alle
+  gelabeltenUDP prüfen; kompletteNative/File/Filter/Kernel-Populationen weiter
+  strikt. Alle anderen ARPs separat mitBackgroundtabellen/Equality erhalten.
+  V2 beideSlots einmaligPASS: Clean1eligible/0drop,1Reply an beidenTaps;
+  Fault2eligible/2drop (84bytes),0Reply und0originalUDP während aktivemFault.
+- gactPIPE zählt vor gactPASS/DROP derselbenRule, kein terminalerPASS vorDROP.
+  Exact7-wordARPselectorOp2/SHA/SPA/THA/TPA; EthernetMAC/IP/Richtung separatnative
+  verifiziert. Kernel erzeugt Replies; kein UserspaceARPsender. BeideController-
+  Snapshots stabil, Rule danachleer. N0Roots identisch,Rootdrops0; keineRate/
+  Queue/Sysctl/Idle/Budget/Neighbordefaultänderung, keinPing/Flush/Permanententry.
+- FaultRemoval beginnt1.350737001s und endet1.368607751s nacherstemSend. Nächster
+  echterPeerreply danach;3originale1200ByteUDP-IDs treten erst~2.0633s nachSend
+  auf und kommen jeweils1x an, ohneSourceResend. ExtraCase1002/Seq0 alsfrischer
+  Control1x. Sourcehook4.083us nachPeerreplyhook: lokalerFixturebezug, keine
+  generelleLatenz-/Physical-Wire-Garantie oder SRTCommandauthority.
+- Operator20INCOMPLETE-Samples, später4REACHABLE; frischePeers initialABSENT,
+  Robot nachLearningSTALE. BekannteRepliesgenerierung gegen kontrolliertenDrop
+  vorAF_PACKET qualifiziert; organischeN5Rootqueue-/ARP-Ursache bleibtunbewiesen.
+- V2PCAPPopulationenClean10/9,Fault14/11,alleCaptured/File/Filtergleich0Kernel-
+  Drops; Nativevollständig0Reserve/Copyloss, ownedPeerMultisets/PayloadhashesPASS.
+  Host316vorV1/317vorV2.8Runtime+2ObserverHashes gleichvorher/fest; Provider
+  unverändert, keinSDK/ROS/Recorderbuild (72/41 frühereValidierung). KeineTests/
+  Builds/heavyAnalysewährendLive. Controller/Receiverexit0,keineForcedkills,
+  alle6eigenenNetze/Container/Credentials entfernt,309Rawfiles gehasht/Selektion
+  explizit. EinfalscherFooterkey in read-onlyConsolekorrektur ändertekeinenLauf.
+
+Weiter: Separaten geladenenN5-ARP-Preqdisc-Counterplan einfrieren; qualifizierten
+PIPE-Zähler nutzen, um Replyeligibilität gegen spätereQueue/Drop-Assoziation unter
+Last zu trennen. NochkeineDefault-Tunings oderhistorischeAuflösung. AlteIntents98/
+12, FullM3/N5/DDSDiscovery/Clock/Security/Resource/Hardware-/Vergleichsgates offen,
+PR2 Draft, Intrinsic/M4 unberührt.
