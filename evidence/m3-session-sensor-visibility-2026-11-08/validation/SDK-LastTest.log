@@ -1,0 +1,1351 @@
+Start testing: Nov 08 19:51 UTC
+----------------------------------------------------------
+63/72 Testing: transport_owner_ipv4
+63/72 Test: transport_owner_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/transport_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"transport_owner_ipv4" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+cadence admitted=100 delivered=96
+PASS provider observations: caller=54, listener=51, idle_readback_ms=5000
+PASS one-way CONTROL silence: provider loss before session close; blocked_ms=5001, dropped=637, reverse_forwarded=206
+PASS independent CONTROL/SENSOR provider visibility and unique DATA/close samples ipv4
+PASS transport owner ipv4: 919 checks
+<end of output>
+Test time =  16.61 sec
+----------------------------------------------------------
+Test Passed.
+"transport_owner_ipv4" end time: Nov 08 19:51 UTC
+"transport_owner_ipv4" time elapsed: 00:00:16
+----------------------------------------------------------
+
+64/72 Testing: transport_owner_ipv6
+64/72 Test: transport_owner_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/transport_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"transport_owner_ipv6" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+cadence admitted=100 delivered=96
+PASS provider observations: caller=54, listener=51, idle_readback_ms=5000
+PASS one-way CONTROL silence: provider loss before session close; blocked_ms=5003, dropped=728, reverse_forwarded=283
+PASS independent CONTROL/SENSOR provider visibility and unique DATA/close samples ipv6
+PASS transport owner ipv6: 923 checks
+<end of output>
+Test time =  16.62 sec
+----------------------------------------------------------
+Test Passed.
+"transport_owner_ipv6" end time: Nov 08 19:51 UTC
+"transport_owner_ipv6" time elapsed: 00:00:16
+----------------------------------------------------------
+
+67/72 Testing: command_endpoint_ipv4
+67/72 Test: command_endpoint_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/endpoint_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"command_endpoint_ipv4" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+PASS admission-before-commit peer loss: UNKNOWN retained after budget/NOT_FOUND, no replay/effect
+PASS command endpoint ipv4: 195 checks
+<end of output>
+Test time =  20.43 sec
+----------------------------------------------------------
+Test Passed.
+"command_endpoint_ipv4" end time: Nov 08 19:51 UTC
+"command_endpoint_ipv4" time elapsed: 00:00:20
+----------------------------------------------------------
+
+69/72 Testing: execution_start_ipv4
+69/72 Test: execution_start_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/execution_start_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"execution_start_ipv4" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+PASS execution start ipv4: 324 checks
+<end of output>
+Test time =  13.59 sec
+----------------------------------------------------------
+Test Passed.
+"execution_start_ipv4" end time: Nov 08 19:52 UTC
+"execution_start_ipv4" time elapsed: 00:00:13
+----------------------------------------------------------
+
+70/72 Testing: execution_start_ipv6
+70/72 Test: execution_start_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/execution_start_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"execution_start_ipv6" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+PASS execution start ipv6: 324 checks
+<end of output>
+Test time =  13.63 sec
+----------------------------------------------------------
+Test Passed.
+"execution_start_ipv6" end time: Nov 08 19:52 UTC
+"execution_start_ipv6" time elapsed: 00:00:13
+----------------------------------------------------------
+
+68/72 Testing: command_endpoint_ipv6
+68/72 Test: command_endpoint_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/endpoint_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"command_endpoint_ipv6" start time: Nov 08 19:51 UTC
+Output:
+----------------------------------------------------------
+PASS admission-before-commit peer loss: UNKNOWN retained after budget/NOT_FOUND, no replay/effect
+PASS command endpoint ipv6: 195 checks
+<end of output>
+Test time =  20.56 sec
+----------------------------------------------------------
+Test Passed.
+"command_endpoint_ipv6" end time: Nov 08 19:52 UTC
+"command_endpoint_ipv6" time elapsed: 00:00:20
+----------------------------------------------------------
+
+6/72 Testing: worker_contract
+6/72 Test: worker_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/worker_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"worker_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS process journal worker: 5483 checks
+<end of output>
+Test time =  11.53 sec
+----------------------------------------------------------
+Test Passed.
+"worker_contract" end time: Nov 08 19:52 UTC
+"worker_contract" time elapsed: 00:00:11
+----------------------------------------------------------
+
+71/72 Testing: wire_errors_ipv4
+71/72 Test: wire_errors_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/error_transport_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"wire_errors_ipv4" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+RECEIVER_RETENTION_NATIVE {"mode":"recover","original_budget_ms":5000,"sdk_handoffs":1,"resumes":1,"drops":0,"effects":1}
+RECEIVER_RETENTION_NATIVE {"mode":"expiry","original_budget_ms":500,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+RECEIVER_RETENTION_NATIVE {"mode":"context","original_budget_ms":5000,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+RECEIVER_RETENTION_NATIVE {"mode":"shutdown","original_budget_ms":5000,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+DURABLE_EXPIRY_NATIVE {"retained":false,"sdk_handoffs":1,"expired_dispatches":0,"expired_effects":0,"restart_query_duplicate":true,"later_fresh_success":true}
+DURABLE_EXPIRY_NATIVE {"retained":true,"sdk_handoffs":1,"expired_dispatches":0,"expired_effects":0,"restart_query_duplicate":true,"later_fresh_success":true}
+PASS wire errors ipv4: 192 checks
+<end of output>
+Test time =  10.45 sec
+----------------------------------------------------------
+Test Passed.
+"wire_errors_ipv4" end time: Nov 08 19:52 UTC
+"wire_errors_ipv4" time elapsed: 00:00:10
+----------------------------------------------------------
+
+72/72 Testing: wire_errors_ipv6
+72/72 Test: wire_errors_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/error_transport_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"wire_errors_ipv6" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+RECEIVER_RETENTION_NATIVE {"mode":"recover","original_budget_ms":5000,"sdk_handoffs":1,"resumes":1,"drops":0,"effects":1}
+RECEIVER_RETENTION_NATIVE {"mode":"expiry","original_budget_ms":500,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+RECEIVER_RETENTION_NATIVE {"mode":"context","original_budget_ms":5000,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+RECEIVER_RETENTION_NATIVE {"mode":"shutdown","original_budget_ms":5000,"sdk_handoffs":1,"resumes":0,"drops":1,"effects":0}
+DURABLE_EXPIRY_NATIVE {"retained":false,"sdk_handoffs":1,"expired_dispatches":0,"expired_effects":0,"restart_query_duplicate":true,"later_fresh_success":true}
+DURABLE_EXPIRY_NATIVE {"retained":true,"sdk_handoffs":1,"expired_dispatches":0,"expired_effects":0,"restart_query_duplicate":true,"later_fresh_success":true}
+PASS wire errors ipv6: 192 checks
+<end of output>
+Test time =  10.49 sec
+----------------------------------------------------------
+Test Passed.
+"wire_errors_ipv6" end time: Nov 08 19:52 UTC
+"wire_errors_ipv6" time elapsed: 00:00:10
+----------------------------------------------------------
+
+61/72 Testing: session_sockets_ipv6
+61/72 Test: session_sockets_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/session_socket_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"session_sockets_ipv6" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS native session ipv6: mutual READY, correlated probes, delayed binding ACK, SENSOR/full reconnect, samples=3, queued sample expired, old session rejected, durable command effect=1, expired-budget QUERY recovered result
+<end of output>
+Test time =   5.76 sec
+----------------------------------------------------------
+Test Passed.
+"session_sockets_ipv6" end time: Nov 08 19:52 UTC
+"session_sockets_ipv6" time elapsed: 00:00:05
+----------------------------------------------------------
+
+66/72 Testing: worker_transport_ipv6
+66/72 Test: worker_transport_ipv6
+Command: "/workspace/build/m3-sdk/tests/native/worker_transport_tests" "ipv6"
+Directory: /workspace/build/m3-sdk/tests/native
+"worker_transport_ipv6" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS worker transport ipv6: 1392 checks
+<end of output>
+Test time =  11.93 sec
+----------------------------------------------------------
+Test Passed.
+"worker_transport_ipv6" end time: Nov 08 19:52 UTC
+"worker_transport_ipv6" time elapsed: 00:00:11
+----------------------------------------------------------
+
+10/72 Testing: journal_contract
+10/72 Test: journal_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/journal_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"journal_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS journal contract: 373 checks, WAL/FULL, quota and storage faults
+<end of output>
+Test time =   0.40 sec
+----------------------------------------------------------
+Test Passed.
+"journal_contract" end time: Nov 08 19:52 UTC
+"journal_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/72 Testing: admission_rejection_contract
+9/72 Test: admission_rejection_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/admission_rejection_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"admission_rejection_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+CLOCK_REJECTION_CONTRACT {"case":"control","admitted":true}
+CLOCK_REJECTION_CONTRACT {"case":"expired","session_error":13,"age_error":2,"clock_error":2,"query_admitted":true,"duplicate_replay_rejected":true,"reopened_unknown":true}
+RECEIVER_RETENTION_PROTOCOL {"case":"late_stale","session_error":25,"age_error":0,"original_budget_preserved":true}
+CLOCK_REJECTION_CONTRACT {"case":"future","session_error":13,"age_error":9,"clock_error":0,"query_admitted":true,"duplicate_replay_rejected":true,"reopened_unknown":true}
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"admission_rejection_contract" end time: Nov 08 19:52 UTC
+"admission_rejection_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/72 Testing: execution_contract
+5/72 Test: execution_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/execution_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"execution_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS execution fence: 5146 checks
+<end of output>
+Test time =   0.31 sec
+----------------------------------------------------------
+Test Passed.
+"execution_contract" end time: Nov 08 19:52 UTC
+"execution_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/72 Testing: journal_crash_contract
+8/72 Test: journal_crash_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/journal_crash_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"journal_crash_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS journal crash contract: 33 checks, five SIGKILL boundaries
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"journal_crash_contract" end time: Nov 08 19:52 UTC
+"journal_crash_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/72 Testing: profile_control_ipv6_backpressure
+31/72 Test: profile_control_ipv6_backpressure
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "backpressure"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_backpressure" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv6 backpressure
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_backpressure" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_backpressure" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/72 Testing: profile_sensor_ipv4_positive
+40/72 Test: profile_sensor_ipv4_positive
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "positive"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_positive" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv4 positive
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_positive" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_positive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/72 Testing: profile_control_ipv4_backpressure
+21/72 Test: profile_control_ipv4_backpressure
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "backpressure"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_backpressure" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv4 backpressure
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_backpressure" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_backpressure" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/72 Testing: profile_control_ipv4_positive
+20/72 Test: profile_control_ipv4_positive
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "positive"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_positive" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv4 positive
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_positive" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_positive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/72 Testing: profile_sensor_ipv4_backpressure
+41/72 Test: profile_sensor_ipv4_backpressure
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "backpressure"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_backpressure" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1500 srt_sndbuf=262016 srt_rcvbuf=262016 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv4 backpressure
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_backpressure" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_backpressure" time elapsed: 00:00:00
+----------------------------------------------------------
+
+50/72 Testing: profile_sensor_ipv6_positive
+50/72 Test: profile_sensor_ipv6_positive
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "positive"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_positive" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv6 positive
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_positive" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_positive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/72 Testing: profile_control_ipv6_positive
+30/72 Test: profile_control_ipv6_positive
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "positive"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_positive" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=4096 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS control ipv6 positive
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_positive" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_positive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+51/72 Testing: profile_sensor_ipv6_backpressure
+51/72 Test: profile_sensor_ipv6_backpressure
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "backpressure"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_backpressure" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+mss=1280 srt_sndbuf=261668 srt_rcvbuf=261668 udp_sndbuf=262144 udp_rcvbuf=262144 flow_window=256
+bytes_per_message=1024 messages=16 crypto=gcm sessionauth=on close_ms=3
+PASS sensor ipv6 backpressure
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_backpressure" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_backpressure" time elapsed: 00:00:00
+----------------------------------------------------------
+
+52/72 Testing: profile_sensor_ipv6_wrong-profile
+52/72 Test: profile_sensor_ipv6_wrong-profile
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "wrong-profile"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_wrong-profile" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551309468/140737424848576W:connection: handshake rejected socket=1052399277 peer=[0:0:0:0:0:0:0:1%0]:44832 peer_socket=741446203 reason=13 name=CONGESTION wire=1013
+1794167551310999/140737459152576W:connection: connection setup failed socket=741446203 peer=[0:0:0:0:0:0:0:1%0]:50738 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS sensor ipv6 wrong-profile
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_wrong-profile" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_wrong-profile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/72 Testing: profile_sensor_ipv4_wrong-profile
+42/72 Test: profile_sensor_ipv4_wrong-profile
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "wrong-profile"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_wrong-profile" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551426279/140737424848576W:connection: handshake rejected socket=535529179 peer=127.0.0.1:53189 peer_socket=674215794 reason=13 name=CONGESTION wire=1013
+1794167551428242/140737467545280W:connection: connection setup failed socket=674215794 peer=127.0.0.1:54197 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS sensor ipv4 wrong-profile
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_wrong-profile" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_wrong-profile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+65/72 Testing: worker_transport_ipv4
+65/72 Test: worker_transport_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/worker_transport_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"worker_transport_ipv4" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS worker transport ipv4: 1390 checks
+<end of output>
+Test time =  11.87 sec
+----------------------------------------------------------
+Test Passed.
+"worker_transport_ipv4" end time: Nov 08 19:52 UTC
+"worker_transport_ipv4" time elapsed: 00:00:11
+----------------------------------------------------------
+
+23/72 Testing: profile_control_ipv4_wrong-secret
+23/72 Test: profile_control_ipv4_wrong-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "wrong-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_wrong-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551541924/140737416455872W:connection: handshake rejected socket=169894506 peer=127.0.0.1:55088 peer_socket=717931320 reason=10 name=BADSECRET wire=1010
+1794167551543990/140737467545280W:connection: connection setup failed socket=717931320 peer=127.0.0.1:56042 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS control ipv4 wrong-secret
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_wrong-secret" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_wrong-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+43/72 Testing: profile_sensor_ipv4_wrong-secret
+43/72 Test: profile_sensor_ipv4_wrong-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "wrong-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_wrong-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551573434/140737416455872W:connection: handshake rejected socket=184469815 peer=127.0.0.1:54892 peer_socket=128493565 reason=10 name=BADSECRET wire=1010
+1794167551575005/140737459152576W:connection: connection setup failed socket=128493565 peer=127.0.0.1:48605 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS sensor ipv4 wrong-secret
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_wrong-secret" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_wrong-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+53/72 Testing: profile_sensor_ipv6_wrong-secret
+53/72 Test: profile_sensor_ipv6_wrong-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "wrong-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_wrong-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551655904/140737416455872W:connection: handshake rejected socket=543948697 peer=[0:0:0:0:0:0:0:1%0]:43753 peer_socket=778497846 reason=10 name=BADSECRET wire=1010
+1794167551657509/140737467545280W:connection: connection setup failed socket=778497846 peer=[0:0:0:0:0:0:0:1%0]:48383 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS sensor ipv6 wrong-secret
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_wrong-secret" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_wrong-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/72 Testing: profile_control_ipv6_wrong-profile_reverse
+37/72 Test: profile_control_ipv6_wrong-profile_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "wrong-profile" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_wrong-profile_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551692975/140737416455872W:connection: handshake rejected socket=451219650 peer=[0:0:0:0:0:0:0:1%0]:50413 peer_socket=124623217 reason=13 name=CONGESTION wire=1013
+1794167551695323/140737459152576W:connection: connection setup failed socket=124623217 peer=[0:0:0:0:0:0:0:1%0]:49135 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS control ipv6 wrong-profile reverse
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_wrong-profile_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_wrong-profile_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/72 Testing: profile_control_ipv4_wrong-profile_reverse
+27/72 Test: profile_control_ipv4_wrong-profile_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "wrong-profile" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_wrong-profile_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551777547/140737424848576W:connection: handshake rejected socket=372861742 peer=127.0.0.1:33018 peer_socket=452594270 reason=13 name=CONGESTION wire=1013
+1794167551779115/140737467545280W:connection: connection setup failed socket=452594270 peer=127.0.0.1:46115 peer_socket=0 reason=13 name=CONGESTION wire=1013
+rejection_reason=13 events=12
+PASS control ipv4 wrong-profile reverse
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_wrong-profile_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_wrong-profile_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/72 Testing: profile_sensor_ipv4_wrong-profile_reverse
+47/72 Test: profile_sensor_ipv4_wrong-profile_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "wrong-profile" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_wrong-profile_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551800876/140737424848576W:connection: handshake rejected socket=318971931 peer=127.0.0.1:45192 peer_socket=227170271 reason=14 name=FILTER wire=1014
+1794167551802413/140737459152576W:connection: connection setup failed socket=227170271 peer=127.0.0.1:45346 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS sensor ipv4 wrong-profile reverse
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_wrong-profile_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_wrong-profile_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+57/72 Testing: profile_sensor_ipv6_wrong-profile_reverse
+57/72 Test: profile_sensor_ipv6_wrong-profile_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "wrong-profile" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_wrong-profile_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551890536/140737416455872W:connection: handshake rejected socket=521683599 peer=[0:0:0:0:0:0:0:1%0]:34220 peer_socket=1050101906 reason=14 name=FILTER wire=1014
+1794167551892492/140737467545280W:connection: connection setup failed socket=1050101906 peer=[0:0:0:0:0:0:0:1%0]:45245 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS sensor ipv6 wrong-profile reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_wrong-profile_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_wrong-profile_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+46/72 Testing: profile_sensor_ipv4_missing-sessionauth
+46/72 Test: profile_sensor_ipv4_missing-sessionauth
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "missing-sessionauth"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_missing-sessionauth" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167551910575/140737424848576W:connection: handshake rejected socket=777141991 peer=127.0.0.1:56438 peer_socket=930928726 reason=11 name=UNSECURE wire=1011
+1794167551912094/140737467545280W:connection: connection setup failed socket=930928726 peer=127.0.0.1:42124 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv4 missing-sessionauth
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_missing-sessionauth" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_missing-sessionauth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/72 Testing: profile_control_ipv6_wrong-secret
+33/72 Test: profile_control_ipv6_wrong-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "wrong-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_wrong-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552004083/140737416455872W:connection: handshake rejected socket=1052412390 peer=[0:0:0:0:0:0:0:1%0]:51626 peer_socket=792644100 reason=10 name=BADSECRET wire=1010
+1794167552005640/140737467545280W:connection: connection setup failed socket=792644100 peer=[0:0:0:0:0:0:0:1%0]:35097 peer_socket=0 reason=10 name=BADSECRET wire=1010
+rejection_reason=10 events=12
+PASS control ipv6 wrong-secret
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_wrong-secret" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_wrong-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/72 Testing: profile_control_ipv6_missing-gcm_reverse
+38/72 Test: profile_control_ipv6_missing-gcm_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "missing-gcm" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_missing-gcm_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552018312/140737416455872W:connection: handshake rejected socket=720917241 peer=[0:0:0:0:0:0:0:1%0]:53387 peer_socket=165049811 reason=17 name=CRYPTO wire=1017
+1794167552019586/140737459152576W:connection: connection setup failed socket=165049811 peer=[0:0:0:0:0:0:0:1%0]:55392 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv6 missing-gcm reverse
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_missing-gcm_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_missing-gcm_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+55/72 Testing: profile_sensor_ipv6_missing-gcm
+55/72 Test: profile_sensor_ipv6_missing-gcm
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "missing-gcm"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_missing-gcm" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552110460/140737424848576W:connection: handshake rejected socket=375351207 peer=[0:0:0:0:0:0:0:1%0]:60624 peer_socket=387883739 reason=17 name=CRYPTO wire=1017
+1794167552112030/140737459152576W:connection: connection setup failed socket=387883739 peer=[0:0:0:0:0:0:0:1%0]:32837 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv6 missing-gcm
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_missing-gcm" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_missing-gcm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/72 Testing: profile_sensor_ipv4_missing-gcm
+45/72 Test: profile_sensor_ipv4_missing-gcm
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "missing-gcm"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_missing-gcm" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552127510/140737416455872W:connection: handshake rejected socket=880287805 peer=127.0.0.1:34056 peer_socket=827921947 reason=17 name=CRYPTO wire=1017
+1794167552129371/140737459152576W:connection: connection setup failed socket=827921947 peer=127.0.0.1:54193 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv4 missing-gcm
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_missing-gcm" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_missing-gcm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/72 Testing: profile_control_ipv6_missing-gcm
+35/72 Test: profile_control_ipv6_missing-gcm
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "missing-gcm"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_missing-gcm" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552218695/140737416455872W:connection: handshake rejected socket=320389503 peer=[0:0:0:0:0:0:0:1%0]:33177 peer_socket=838946957 reason=17 name=CRYPTO wire=1017
+1794167552220314/140737459152576W:connection: connection setup failed socket=838946957 peer=[0:0:0:0:0:0:0:1%0]:42401 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv6 missing-gcm
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_missing-gcm" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_missing-gcm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/72 Testing: profile_control_ipv6_missing-sessionauth
+36/72 Test: profile_control_ipv6_missing-sessionauth
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "missing-sessionauth"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_missing-sessionauth" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552235773/140737416455872W:connection: handshake rejected socket=820139499 peer=[0:0:0:0:0:0:0:1%0]:50774 peer_socket=809266174 reason=11 name=UNSECURE wire=1011
+1794167552237277/140737467545280W:connection: connection setup failed socket=809266174 peer=[0:0:0:0:0:0:0:1%0]:57822 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv6 missing-sessionauth
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_missing-sessionauth" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_missing-sessionauth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+58/72 Testing: profile_sensor_ipv6_missing-gcm_reverse
+58/72 Test: profile_sensor_ipv6_missing-gcm_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "missing-gcm" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_missing-gcm_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552330078/140737416455872W:connection: handshake rejected socket=297438733 peer=[0:0:0:0:0:0:0:1%0]:34320 peer_socket=696057497 reason=17 name=CRYPTO wire=1017
+1794167552331833/140737459152576W:connection: connection setup failed socket=696057497 peer=[0:0:0:0:0:0:0:1%0]:35568 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv6 missing-gcm reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_missing-gcm_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_missing-gcm_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/72 Testing: profile_control_ipv4_missing-gcm_reverse
+28/72 Test: profile_control_ipv4_missing-gcm_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "missing-gcm" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_missing-gcm_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552349669/140737424848576W:connection: handshake rejected socket=297582606 peer=127.0.0.1:52967 peer_socket=455849456 reason=17 name=CRYPTO wire=1017
+1794167552351223/140737467545280W:connection: connection setup failed socket=455849456 peer=127.0.0.1:41296 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv4 missing-gcm reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_missing-gcm_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_missing-gcm_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+59/72 Testing: profile_sensor_ipv6_missing-sessionauth_reverse
+59/72 Test: profile_sensor_ipv6_missing-sessionauth_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "missing-sessionauth" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_missing-sessionauth_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552440245/140737416455872W:connection: handshake rejected socket=444927572 peer=[0:0:0:0:0:0:0:1%0]:44056 peer_socket=349417641 reason=11 name=UNSECURE wire=1011
+1794167552441714/140737459152576W:connection: connection setup failed socket=349417641 peer=[0:0:0:0:0:0:0:1%0]:33706 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv6 missing-sessionauth reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_missing-sessionauth_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_missing-sessionauth_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+56/72 Testing: profile_sensor_ipv6_missing-sessionauth
+56/72 Test: profile_sensor_ipv6_missing-sessionauth
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "missing-sessionauth"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_missing-sessionauth" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552460241/140737433241280W:connection: handshake rejected socket=184741064 peer=[0:0:0:0:0:0:0:1%0]:46011 peer_socket=557689512 reason=11 name=UNSECURE wire=1011
+1794167552461824/140737467545280W:connection: connection setup failed socket=557689512 peer=[0:0:0:0:0:0:0:1%0]:41916 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv6 missing-sessionauth
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_missing-sessionauth" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_missing-sessionauth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+48/72 Testing: profile_sensor_ipv4_missing-gcm_reverse
+48/72 Test: profile_sensor_ipv4_missing-gcm_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "missing-gcm" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_missing-gcm_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552550205/140737416455872W:connection: handshake rejected socket=979255857 peer=127.0.0.1:60472 peer_socket=29763036 reason=17 name=CRYPTO wire=1017
+1794167552551921/140737467545280W:connection: connection setup failed socket=29763036 peer=127.0.0.1:52128 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS sensor ipv4 missing-gcm reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_missing-gcm_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_missing-gcm_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/72 Testing: profile_control_ipv6_missing-sessionauth_reverse
+39/72 Test: profile_control_ipv6_missing-sessionauth_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "missing-sessionauth" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_missing-sessionauth_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552570286/140737424848576W:connection: handshake rejected socket=965180792 peer=[0:0:0:0:0:0:0:1%0]:60499 peer_socket=1036786123 reason=11 name=UNSECURE wire=1011
+1794167552571708/140737459152576W:connection: connection setup failed socket=1036786123 peer=[0:0:0:0:0:0:0:1%0]:48823 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv6 missing-sessionauth reverse
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_missing-sessionauth_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_missing-sessionauth_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+49/72 Testing: profile_sensor_ipv4_missing-sessionauth_reverse
+49/72 Test: profile_sensor_ipv4_missing-sessionauth_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "missing-sessionauth" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_missing-sessionauth_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552660047/140737424848576W:connection: handshake rejected socket=1018112580 peer=127.0.0.1:38521 peer_socket=641372950 reason=11 name=UNSECURE wire=1011
+1794167552661619/140737467545280W:connection: connection setup failed socket=641372950 peer=127.0.0.1:43656 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS sensor ipv4 missing-sessionauth reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_missing-sessionauth_reverse" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_missing-sessionauth_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/72 Testing: profile_control_ipv4_missing-sessionauth
+26/72 Test: profile_control_ipv4_missing-sessionauth
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "missing-sessionauth"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_missing-sessionauth" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552680154/140737416455872W:connection: handshake rejected socket=380055548 peer=127.0.0.1:57528 peer_socket=273725224 reason=11 name=UNSECURE wire=1011
+1794167552681713/140737467545280W:connection: connection setup failed socket=273725224 peer=127.0.0.1:56321 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv4 missing-sessionauth
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_missing-sessionauth" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_missing-sessionauth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/72 Testing: profile_control_ipv4_missing-gcm
+25/72 Test: profile_control_ipv4_missing-gcm
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "missing-gcm"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_missing-gcm" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552772187/140737416455872W:connection: handshake rejected socket=679087739 peer=127.0.0.1:47428 peer_socket=511009812 reason=17 name=CRYPTO wire=1017
+1794167552774057/140737467545280W:connection: connection setup failed socket=511009812 peer=127.0.0.1:45160 peer_socket=0 reason=17 name=CRYPTO wire=1017
+rejection_reason=17 events=12
+PASS control ipv4 missing-gcm
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_missing-gcm" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_missing-gcm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/72 Testing: profile_control_ipv4_missing-sessionauth_reverse
+29/72 Test: profile_control_ipv4_missing-sessionauth_reverse
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "missing-sessionauth" "reverse"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_missing-sessionauth_reverse" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552788662/140737416455872W:connection: handshake rejected socket=290004007 peer=127.0.0.1:53649 peer_socket=931974181 reason=11 name=UNSECURE wire=1011
+1794167552790316/140737459152576W:connection: connection setup failed socket=931974181 peer=127.0.0.1:40772 peer_socket=0 reason=11 name=UNSECURE wire=1011
+rejection_reason=11 events=12
+PASS control ipv4 missing-sessionauth reverse
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_missing-sessionauth_reverse" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_missing-sessionauth_reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/72 Testing: profile_control_ipv4_wrong-profile
+22/72 Test: profile_control_ipv4_wrong-profile
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "wrong-profile"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_wrong-profile" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552878470/140737424848576W:connection: handshake rejected socket=336328012 peer=127.0.0.1:37672 peer_socket=985908956 reason=14 name=FILTER wire=1014
+1794167552880393/140737467545280W:connection: connection setup failed socket=985908956 peer=127.0.0.1:49532 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS control ipv4 wrong-profile
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_wrong-profile" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_wrong-profile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/72 Testing: profile_control_ipv6_wrong-profile
+32/72 Test: profile_control_ipv6_wrong-profile
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "wrong-profile"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_wrong-profile" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+1794167552898909/140737416455872W:connection: handshake rejected socket=318892748 peer=[0:0:0:0:0:0:0:1%0]:39136 peer_socket=152753292 reason=14 name=FILTER wire=1014
+1794167552900534/140737467545280W:connection: connection setup failed socket=152753292 peer=[0:0:0:0:0:0:0:1%0]:48080 peer_socket=0 reason=14 name=FILTER wire=1014
+rejection_reason=14 events=12
+PASS control ipv6 wrong-profile
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_wrong-profile" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_wrong-profile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/72 Testing: profile_control_ipv6_missing-secret
+34/72 Test: profile_control_ipv6_missing-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv6" "missing-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv6_missing-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+rejection_reason=0 events=0
+PASS control ipv6 missing-secret
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv6_missing-secret" end time: Nov 08 19:52 UTC
+"profile_control_ipv6_missing-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+54/72 Testing: profile_sensor_ipv6_missing-secret
+54/72 Test: profile_sensor_ipv6_missing-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv6" "missing-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv6_missing-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+rejection_reason=0 events=0
+PASS sensor ipv6 missing-secret
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv6_missing-secret" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv6_missing-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/72 Testing: profile_sensor_ipv4_missing-secret
+44/72 Test: profile_sensor_ipv4_missing-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "sensor" "ipv4" "missing-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_sensor_ipv4_missing-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+rejection_reason=0 events=0
+PASS sensor ipv4 missing-secret
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"profile_sensor_ipv4_missing-secret" end time: Nov 08 19:52 UTC
+"profile_sensor_ipv4_missing-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/72 Testing: profile_control_ipv4_missing-secret
+24/72 Test: profile_control_ipv4_missing-secret
+Command: "/workspace/build/m3-sdk/tests/profile/profile_probe" "control" "ipv4" "missing-secret"
+Directory: /workspace/build/m3-sdk/tests/profile
+"profile_control_ipv4_missing-secret" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+rejection_reason=0 events=0
+PASS control ipv4 missing-secret
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"profile_control_ipv4_missing-secret" end time: Nov 08 19:52 UTC
+"profile_control_ipv4_missing-secret" time elapsed: 00:00:00
+----------------------------------------------------------
+
+62/72 Testing: receiver_retention_contract
+62/72 Test: receiver_retention_contract
+Command: "/workspace/build/m3-sdk/tests/native/receiver_retention_tests"
+Directory: /workspace/build/m3-sdk/tests/native
+"receiver_retention_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+DURABLE_EXPIRY_PROOF {"lower_bound_required":true,"straddle_equality_unknown":true,"invalid_future_underflow_refused":true}
+RECEIVER_RETENTION_CONTRACT {"capacity":56,"total_capacity":64,"fifo_original_bytes_context":true,"resource_ceiling_not_renewed":true,"sensor_only_context_preserved":true,"future_hard_errors_excluded":true}
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"receiver_retention_contract" end time: Nov 08 19:52 UTC
+"receiver_retention_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/72 Testing: queues_contract
+13/72 Test: queues_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/queues_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"queues_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS queues contract: 200164 checks, fixed storage=307520 bytes
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"queues_contract" end time: Nov 08 19:52 UTC
+"queues_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/72 Testing: journal_quota_contract
+7/72 Test: journal_quota_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/journal_quota_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"journal_quota_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS journal quota contract: 10 checks, WAL FULL, guarded preallocation/write
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"journal_quota_contract" end time: Nov 08 19:52 UTC
+"journal_quota_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/72 Testing: error_contract
+15/72 Test: error_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/error_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"error_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS error contract: 22562 checks
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"error_contract" end time: Nov 08 19:52 UTC
+"error_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/72 Testing: sample_trace_contract
+18/72 Test: sample_trace_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/sample_trace_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"sample_trace_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS sample trace two SPSC lanes, overflow, budget and concurrent FIFO
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"sample_trace_contract" end time: Nov 08 19:52 UTC
+"sample_trace_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/72 Testing: provider_diagnostics_contract
+17/72 Test: provider_diagnostics_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/provider_diagnostics_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"provider_diagnostics_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS provider bounded SPSC FIFO, overflow, budget and concurrent drain
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"provider_diagnostics_contract" end time: Nov 08 19:52 UTC
+"provider_diagnostics_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/72 Testing: session_contract
+12/72 Test: session_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/session_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"session_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS session contract: 770 checks
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"session_contract" end time: Nov 08 19:52 UTC
+"session_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/72 Testing: command_contract
+14/72 Test: command_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/command_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"command_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS command contract: 2851 checks
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"command_contract" end time: Nov 08 19:52 UTC
+"command_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/72 Testing: management_contract
+19/72 Test: management_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/management_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"management_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS management contract: 30065 assertions, 20000 mutations
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"management_contract" end time: Nov 08 19:52 UTC
+"management_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/72 Testing: wire_contract
+4/72 Test: wire_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/wire_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"wire_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS wire contract: 22577 assertions, 20000 deterministic mutations
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"wire_contract" end time: Nov 08 19:52 UTC
+"wire_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/72 Testing: routes_contract
+11/72 Test: routes_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/routes_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"routes_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS routes contract: 24 checks
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"routes_contract" end time: Nov 08 19:52 UTC
+"routes_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/72 Testing: bandwidth_contract
+1/72 Test: bandwidth_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/bandwidth_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"bandwidth_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS bandwidth contract: 20027 checks, 10s synthetic overload
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"bandwidth_contract" end time: Nov 08 19:52 UTC
+"bandwidth_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/72 Testing: clock_contract
+3/72 Test: clock_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/clock_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"clock_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS clock contract: 35107 assertions, 5000 drift scenarios
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"clock_contract" end time: Nov 08 19:52 UTC
+"clock_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/72 Testing: command_trace_contract
+16/72 Test: command_trace_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/command_trace_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"command_trace_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+bounded SPSC lanes, FIFO/overflow/concurrent drain accounting passed
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"command_trace_contract" end time: Nov 08 19:52 UTC
+"command_trace_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/72 Testing: reconnect_contract
+2/72 Test: reconnect_contract
+Command: "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/reconnect_tests"
+Directory: /workspace/build/m3-sdk/src/robotweax_srt_bridge_core
+"reconnect_contract" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS reconnect contract: 51139 checks, 1000 seeded campaigns
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"reconnect_contract" end time: Nov 08 19:52 UTC
+"reconnect_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+60/72 Testing: session_sockets_ipv4
+60/72 Test: session_sockets_ipv4
+Command: "/workspace/build/m3-sdk/tests/native/session_socket_tests" "ipv4"
+Directory: /workspace/build/m3-sdk/tests/native
+"session_sockets_ipv4" start time: Nov 08 19:52 UTC
+Output:
+----------------------------------------------------------
+PASS native session ipv4: mutual READY, correlated probes, delayed binding ACK, SENSOR/full reconnect, samples=3, queued sample expired, old session rejected, durable command effect=1, expired-budget QUERY recovered result
+<end of output>
+Test time =   5.77 sec
+----------------------------------------------------------
+Test Passed.
+"session_sockets_ipv4" end time: Nov 08 19:52 UTC
+"session_sockets_ipv4" time elapsed: 00:00:05
+----------------------------------------------------------
+
+End testing: Nov 08 19:52 UTC
+
+bandwidth =   0.02 sec*proc
+
+bounded =   0.02 sec*proc
+
+clock =   0.18 sec*proc
+
+command =   0.05 sec*proc
+
+command_trace =   0.03 sec*proc
+
+crash =  11.79 sec*proc
+
+endpoint =  40.98 sec*proc
+
+error =  21.01 sec*proc
+
+execution =  27.53 sec*proc
+
+journal =   0.86 sec*proc
+
+lifecycle = 112.97 sec*proc
+
+m0 =   4.73 sec*proc
+
+m1 = 170.92 sec*proc
+
+m3 =   0.02 sec*proc
+
+management =   0.04 sec*proc
+
+native = 157.72 sec*proc
+
+process =  11.85 sec*proc
+
+profile =   4.73 sec*proc
+
+protocol =   0.03 sec*proc
+
+provider_diagnostics =   0.03 sec*proc
+
+queues =   0.07 sec*proc
+
+quota =   0.07 sec*proc
+
+race =  27.53 sec*proc
+
+receiver =   0.02 sec*proc
+
+reconciliation =  20.94 sec*proc
+
+reconnect =   0.02 sec*proc
+
+routes =   0.04 sec*proc
+
+sample_trace =   0.03 sec*proc
+
+session =  11.58 sec*proc
+
+socket =  16.27 sec*proc
+
+transport =  57.04 sec*proc
+
+uncertainty =   0.13 sec*proc
+
+worker =  35.33 sec*proc

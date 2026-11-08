@@ -1,0 +1,18 @@
+[
+  "docker",
+  "run",
+  "--rm",
+  "--pull=never",
+  "--platform",
+  "linux/amd64",
+  "--network",
+  "none",
+  "-v",
+  "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+  "-w",
+  "/workspace",
+  "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+  "bash",
+  "-c",
+  "set -e\ncmake -S . -B build/m3-sdk -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/workspace/install/srt-m0 -DBUILD_MANAGEMENT_CODEC=ON -DBUILD_SRT_TRANSPORT=ON -DBUILD_TESTING=ON -DBUILD_SHARED_LIBS=OFF\ncmake --build build/m3-sdk --parallel 3\nctest --test-dir build/m3-sdk --output-on-failure --parallel 3\ncmake --install build/m3-sdk --prefix /workspace/install/bridge-m3\nsource /opt/ros/jazzy/setup.bash\ncolcon --log-base .local/m3-session-sensor-build/colcon-build build --cmake-clean-first --base-paths ros2 --build-base build/m3-ros --install-base install/m3-ros --cmake-args -DCMAKE_BUILD_TYPE=Release '-DCMAKE_PREFIX_PATH=/workspace/install/bridge-m3;/workspace/install/srt-m0'\nsource install/m3-ros/setup.bash\ncolcon --log-base .local/m3-session-sensor-build/colcon-test test --base-paths ros2 --build-base build/m3-ros --install-base install/m3-ros --return-code-on-test-failure\ncolcon test-result --test-result-base build/m3-ros --verbose\n"
+]

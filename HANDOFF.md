@@ -3189,3 +3189,48 @@ Delivery/Retirement/Decrypt sichtbar machen. Erst danach kontrollierte Pacing/
 Latestdata-Gegenprobe, keine Kausalbehauptung aus Packetcounts. Originalbudgets,
 beide Gates und historische Unsicherheit erhalten. FullM3/N5/LoadedROSDiscovery/
 Clock/Security/Resource/Hardware weiter offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Session2903 reproduziert, SENSOR-Provider sichtbar
+
+- Evidenz: `evidence/m3-session-sensor-visibility-2026-11-08/README.md`.
+  Plan830e427, Implementierung2810996, Fixturekorrektur/Analysea20f1ce,
+  finaler Python-Driver/Livefreeze03ffa03. Einmalig N0/2903/15s8/8,0Skip;
+  instrumentiertes N5/2903/300s11/12,138Skip,1unaufgelöst, beide GatesFAIL,
+  CohortExit1. Kein Retry/Expiry/Replay; Originalintent98 weiter unaufgelöst.
+- Neuer Intent12 genau1SDK-Handoff, Senderstate8/reason2/rev0, kein Receiverrecord
+  oder originaler COMMAND-Admission-/Retention-/Expiry-Trace. Neue Beobachterlast
+  und andere Intentnummer: gleiche Fehlerklasse, keine eindeutige historische Ursache.
+- Matched CONTROL operator→robot: nativequiet5004643627ns bis Robotlinkverlust,
+  tatsächliches Peeridle5000ms. In47vollständig enthaltenen Providermesspaaren
+  SenderDATA+309/retrans+292/ACK+42/NAK+1, aber0Source-/0Peertapbeobachtungen
+  dieser alten Flowidentität. Erfolgreiche UDP-Submission liegt laut Providercode
+  vor dem Counterincrement. Lokalisation daher Sendercompletion→Sourcehook,
+  nicht eindeutiger Provider-/Kernel-/Qdisc-/Neighborgrund. Gesamter Sourcegap
+  5.263612877s. Operatorloss15.736125ms später, vorher Shutdown; zweite Mapping-
+  Assoziation korrekt withheld, kein unabhängiger Idlebeweis.
+- Nach Sender-BROKEN-Beforeclose und No-socket-Sample weitere4DATA/2ACK der alten
+  Flowidentität an beiden Hooks. Kein neuer SDKCOMMAND-Handoff/Replaybeweis;
+  genaue Close-Drain-/Kernelqueue-/Neighbor-/Qdiscursache noch offen.
+- Separate default-off SENSOR-Stats:128SPSC/75000Cap/100ms/Beforeclose, eigene
+  Footer/Channel/Schema/Unavailable-/Saturation-/Reset-Gates. Bestehendes bstats
+  liefert DATA/Unique/Loss/Drop/Undecrypt/FEC und geglättete Buffer/Flowgauges.
+  Kein Dependencyedit. Fehlende Insertion-/Retirement-/Delivery-Reasonfelder
+  explizit unavailable, Counter überlappen und sind keine exklusiven Lossklassen.
+- N5 Source75036/SDKaccepted70889/Decoded8265/Observer7704; Gap62624,Reject559,
+  UnknownAge530/Stale0,6Residuen0,~200/50Hz. Nach Reconnect SENSORflow:20471
+  eindeutige DATA an Operator,0Retrans, ProviderDATA20832/FilterExtra361,
+  Unique5421inkl.FEC,Drop8272/Undecrypt0. Provider-Akzeptanz/Window statt nur
+  Bridgefreshness weiter eingrenzen; kein genauer Ablehnungsgrund oder SDKbugbeweis.
+- Initiale native Fixtureverwechslung available=connected:70/72,2Fehler erhalten,
+  kein Install/ROS/Live danach. Korrigiert SDK72/ROS41/Host296PASS. Verfügbare
+  Stats können BROKEN sein; Status unverändert erhalten. Rebuilt bridge_node,
+  endpoint.a,transport.a;8Runtime+2ObserverHashes fest, Provider unverändert.
+  Keine Builds/Tests/heavyAnalyse während Live; Cleanup/Rawhashes/SelektionenPASS.
+  Ein Syntaxfehler in ad-hoc Posthocimport als Vorbereitung erhalten, kein Livererun.
+
+Weiter: Separaten begrenzten UDP-/Neighbor-/CONTROL-Qdisc-Beobachterplan mit
+Monotonic und ARP-/Neighbornachweis einfrieren, dynamische Nachbarn beibehalten,
+Originalbudgets/Idlewerte nicht lockern. Danach Review einer upstreamfähigen
+SENSOR-Insertion-/Retirement-Reasonoberfläche; .deps nicht direkt ändern. Kein
+FullM3/N5/DefaultDDSDiscovery-/Clock/Security/Resource/Hardware-/Superioritätsgate
+geschlossen. PR2 Draft, Intrinsic/M4 unberührt.

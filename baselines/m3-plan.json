@@ -2420,5 +2420,84 @@
     "provider_unchanged": true,
     "complete_M3_acceptance": false,
     "next_work": "Freeze separate CONTROL/session kernel-monotonic correlation and SENSOR provider delivery/retirement observability plan before mitigation; no tuning in this cohort"
+  },
+  "session_sensor_visibility_2026_11_08": {
+    "evidence": "evidence/m3-session-sensor-visibility-2026-11-08",
+    "source": "03ffa03f777db060fe2b63c18cc6b3a9d51d7443",
+    "sdk_tests": 72,
+    "ros_tests": 41,
+    "host_tests": 296,
+    "initial_native_fixture_failure_preserved": true,
+    "new_default_off_sensor_provider_stream": true,
+    "provider_unchanged": true,
+    "source_runtime_and_observers_fixed": true,
+    "slots": [
+      {
+        "label": "srt-N0-2903",
+        "status": "passed",
+        "audit": {
+          "attempts": 8,
+          "confirmed_successes": 8,
+          "unknown": 0,
+          "effects": 8,
+          "unresolved": 0,
+          "not_admitted": 0,
+          "all_succeeded": true,
+          "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+        },
+        "skipped": 0,
+        "durable": {
+          "complete": true,
+          "verified_expired": 0,
+          "all_success": true,
+          "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+        }
+      },
+      {
+        "label": "srt-N5-2903",
+        "status": "failed",
+        "audit": {
+          "attempts": 12,
+          "confirmed_successes": 11,
+          "unknown": 0,
+          "effects": 11,
+          "unresolved": 1,
+          "not_admitted": 0,
+          "all_succeeded": false,
+          "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+        },
+        "skipped": 138,
+        "durable": {
+          "complete": false,
+          "verified_expired": 0,
+          "all_success": false,
+          "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+        }
+      }
+    ],
+    "cohort_exit": 1,
+    "retries": 0,
+    "original_intent_98_resolved": false,
+    "new_unresolved_intent": 12,
+    "matched_robot_control_quiet_ns": 5004643627,
+    "sender_data_retransmit_increments": [
+      309,
+      292
+    ],
+    "source_peer_old_flow_observations_during_quiet": [
+      0,
+      0
+    ],
+    "late_old_flow_data_ack_after_no_socket": [
+      4,
+      2
+    ],
+    "sensor_later_connection_source_data_unique_accepts": [
+      20471,
+      5421
+    ],
+    "unique_kernel_or_provider_cause_proved": false,
+    "complete_M3_acceptance": false,
+    "next_target": "Bounded UDP/neighbor/qdisc correlation, then reviewed upstream SENSOR insertion/retirement reason visibility; no tuning"
   }
 }

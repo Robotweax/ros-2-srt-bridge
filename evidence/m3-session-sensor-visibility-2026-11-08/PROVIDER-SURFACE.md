@@ -43,3 +43,7 @@ per-insertion rejection/window-boundary reasons, applied retirement vs gap-expir
 reasons, per-message application delivery, encrypted typed mapping or exact terminal
 break reason/last peer activity. Those dimensions remain explicitly unavailable;
 aggregate zeroes or captured cleartext DROP_REQUEST cannot fill them in.
+
+Drop counters can retire packets already transmitted or observed. Sender/receiver
+drops are overlapping provider accounting, not exclusive path-loss categories;
+never subtract them from unique sent or add them to the application gap.

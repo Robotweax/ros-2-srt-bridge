@@ -1,0 +1,19 @@
+{
+  "provider_commit": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "tracked_source_clean": true,
+  "read_only": true,
+  "files": {
+    "src/compat/statistics.cpp": "2ea32f27b703c4b166fe00f001709491ccde6ca57cbc88af8a7faef49cd64bfd",
+    "src/compat/transport_runtime.cpp": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440",
+    "src/session.cpp": "abf40fdcd7adbbf6ab4bffcaafd7a9290c4abb22af9ce759213b8d22a3c18802",
+    "src/receive_buffer.cpp": "695290806f0ba74922c89d84eb8d254c2a273dee4f33aab0b7744af19aa20e92",
+    "src/udp.cpp": "64c133ecdeecc2d41b11ad89a8298d75258da05cab206c4012d14f6e41446245",
+    "src/compat/srt_api.cpp": "e9038e9d3aed4c856c3c15b1dd419797b44561a70a115ac4a94ccd6f4c5da90b"
+  },
+  "semantics": [
+    "complete_datagram notes DATA sent after full successful UDP send; success is kernel acceptance, not observed egress/delivery",
+    "unique_received counts accepted in-order/out-of-order receive insertion plus accepted FEC supply; nonunique source observations can still increment data_received",
+    "aggregate drop paths overlap sent/received and undecrypt counters; never sum or subtract as exclusive path losses",
+    "close/broken state and later old-flow hook observations alone do not uniquely identify qdisc/neighbor/provider-close-drain cause"
+  ]
+}

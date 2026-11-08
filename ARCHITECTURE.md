@@ -2157,3 +2157,47 @@ runtime hashes equal prior4211 and fixed throughout; owned namespaces removed.
 Next separately freeze CONTROL/session monotonic correlation and bounded SENSOR
 provider delivery/retirement observability before any mitigation experiment.
 PR2 draft, M3 incomplete, Intrinsic/M4 untouched.
+
+### Independent SENSOR provider stream and session-loss correlation
+
+The default-off sensor_provider_diagnostics configuration/ROS parameter and
+--sensor-provider-diagnostics workload flag add an independent bounded stream.
+It reuses the pinned non-clearing srt_bstats API with SENSOR fd/generation,
+owner/current-session label, read brackets, state/availability and before-close
+observations. Capacity128, record cap75000 and100ms cadence are independent of
+CONTROL. Logging/decoding checks schema/channel, footer/population, overflow,
+exhaustion, counter reset and saturation; unavailable is never zero evidence.
+Provider availability does not imply a connected socket. No wire/provider/journal/
+queue/clock/budget policy change. New fields expose unique DATA, aggregate loss/
+drop/undecrypt/FEC and smoothed buffer/flow gauges; they do not expose exact
+insertion/retirement reasons or per-message delivery. Drop counts overlap other
+counters and cannot be exclusive path-loss buckets.
+
+The separately frozen03ffa03 cohort passes N0/2903 8/8 but fails N5/2903 11/12,
+138skips, unresolved intent12, zero verified expiry and both progress gatesFAIL.
+Original intent98 remains uncertain. Strictly mapped native CONTROL observations
+show5.004643627s robot quiet to loss against5000ms peer-idle readback, while47
+contained same-identity provider pairs grow309 DATA/292retrans/42ACK/1NAK without
+source or peer old-flow observations. The pinned DATA-sent path records full UDP
+submission success before these increments; successful enqueue is not tap egress.
+Later4DATA/2ACK appear after sender no-socket sampling. This localizes the new
+event to sender-completion→source-hook behavior, but not a unique neighbor/qdisc/
+UDP/provider-close mechanism. Operator loss follows a shutdown observation;
+its changed-session mapping remains withheld. No command replay or negative
+outcome is inferred from encrypted packet presence or receiver absence.
+
+The later SENSOR connection has20471 distinct source DATA at the receiver tap,
+provider DATA20832/filter-extra361 versus unique-received5421 including FEC.
+Together with aggregate drop8272 and zero undecrypt this narrows toward provider
+receive acceptance/window handling; reason branches and typed mappings remain
+unobserved. Source75036/observer7704, accept-to-receiver gap62624, six accounting
+balances zero, sources~200/50Hz; no sensor/fullM3 qualification. Partial adjacent
+provider increments and lifetime/whole-capture totals remain separate scopes.
+
+Evidence: `evidence/m3-session-sensor-visibility-2026-11-08/`. Initial fixture
+health assertion fails70/72; correction passes SDK72/ROS41/host296 before live.
+Three runtime artifacts rebuild for visibility; all8runtime+2observer hashes fixed
+throughout/post-live, provider unchanged, owned cleanup complete. No heavy analysis,
+tests or builds overlap live. Next isolate the local UDP/neighbor/qdisc path with
+bounded observations before tuning and review an upstream reason-specific SENSOR
+surface separately. PR2 draft, M3 incomplete, Intrinsic/M4 untouched.

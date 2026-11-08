@@ -40,12 +40,19 @@ M1 is complete for the documented Linux amd64 baseline. The
 [M1 acceptance matrix](evidence/m1-errors-sdk-2026-11-05/ACCEPTANCE.md) maps each
 requirement to retained checks and states the qualification limits.
 
-The latest [remaining N5 seeds and telemetry diagnosis](evidence/m3-broader-seeds-telemetry-2026-11-08/README.md)
+The earlier [remaining N5 seeds and telemetry diagnosis](evidence/m3-broader-seeds-telemetry-2026-11-08/README.md)
 records125/125 command successes for1701 and97/98 for2903, with one unresolved
 intent and both command gates failed for2903. Prior4211 remains136/136 in its
 separate cohort. Telemetry remains poor and varies by seed; identical closed-tap
 packet multisets and qdisc/retirement observations narrow investigation without
 proving a unique provider cause. Runtime/provider unchanged, host282 PASS; PR2 draft.
+
+The [session2903 reproduction and SENSOR visibility](evidence/m3-session-sensor-visibility-2026-11-08/README.md)
+adds a separate default-off provider stream. N0 passes8/8; instrumented N5 fails
+11/12 with intent12 unresolved. Matched monotonic observations show5.0046s old-
+CONTROL-flow silence despite successful sender send accounting, then late egress.
+SENSOR counters narrow a separate acceptance/window gap. Exact local-path/provider
+reasons remain unproved; SDK72/ROS41/host296 pass, PR2 stays draft.
 
 ## Run M0
 
