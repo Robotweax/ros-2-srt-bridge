@@ -1698,3 +1698,21 @@ removal. The recorded baseline and mixed IMU/joint one-loss case pass at actual
 200/50Hz with explicit BUSY/DDS/replacement losses. This adds short controlled
 N3 evidence, not the full seed matrix or lossless/physical-age/resource qualification.
 See evidence/m3-multiroute-capture-2026-11-08/.
+
+The sustained two-loss variant preselects source messages7/8 in row1, requiring
+those actual admitted SDK identities to span both routes. Strict capture keys
+exclude only those sources while retaining parity. A passing cutoff result has
+exactly those two missing receiver decisions, neither typed source observed and
+fresh subsequent typed progress on both routes. This is finite drained-cutoff
+evidence, not a permanent-absence or internal provider-retirement guarantee.
+
+An original two-loss run failed because its receiver final sample status was
+missing. Legacy test cleanup discarded child exit/kill outcomes, so its shutdown
+cause remains unknown. The multiroute scenario now records owned-child pre-signal
+status, SIGINT time bracket, final exit code and forced-kill outcome; premature or
+abnormal exits fail the fixture while remaining children are cleaned. A separately
+frozen diagnostic and two fresh repetitions pass at200/50Hz with exact two-source
+gaps, complete trace footers and clean controlled exits. They do not replace the
+failed original cohort. Underlying N0 qdisc seeds have no random impairment, so
+these are independent-start repeatability checks. Full seed/duration/comparison
+qualification remains pending; see evidence/m3-multiroute-two-loss-2026-11-08/.

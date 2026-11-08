@@ -2540,3 +2540,63 @@ PR #2 Draft, Intrinsic/M4 unverändert.
 anschließend vorab geplante Seed-Repetitionen/übrige N3-Gates. Sourcebudget10000
 Records bei längeren Läufen vorab beachten. N4 und übrige M3-Gates/historische
 Unsicherheiten offen. PR #2 bleibt Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-08: Fullrate-Two-Loss und beobachtetes Child-Shutdown
+
+- Vorabcb2468b, Host215: originale Three-Seed-Two-Loss-Planung stoppt beim ersten
+  Run .local/m3-multiroute-two-loss/1701 FAILED. Sendertrace4944 vollständig,
+  Receiverprefix2427 Events OHNE final SAMPLE_TRACE_STATUS. Original2903/4211
+  NOT EXECUTED, keine spätere Fixture ersetzt diese Cases/verändert das Verdict.
+- Legacy Driver.cleanup ignoriert Exitcodes und Forced-Kill-Ausgang nach5s.
+  Kein ursprünglicher Childstatus vorhanden; kein Beweis für Crash/Kill/Timeout
+  oder konkrete Footerverlustursache. Ursache UNKNOWN lassen. Post-hoc nur:
+  source2514,SDK2429,metrics receiver2427,typed2426; BUSY3/outbound_replaced82/
+  SDKgap2/observerDDS1, sechs Bilanzen0. Capture je2427Source+607Parity3034 gleich.
+  Diese Diagnostik ersetzt NICHT fehlende Trace-Vollständigkeit.
+- Source5d9b9f3/Host218: scenario_processes.stop_children protokolliert eigenen
+  Childstatus vor SIGINT, VM-Bracket, Exitcode, ForcedKill, Endzeit. Preexisting
+  Exit auch0/nonzero/deadline/kill ->failed; andere eigene Children weiteraufräumen.
+  Fünfsekündige SIGINT-Grenze gleich, Killwait bounded5, Hostwait25 für zwei
+  Children. Python-only nach Messfenster, keine Produktions-/SDK-/ROS-C++/
+  Provider-/Source-Schedule-/Admission-/Retryänderung, kein Runtime-Rebuild.
+- Separat DIAGNOSTIC-PLAN einmal lifecycle-1701 PASSED. Danach separat vorab
+  053c9bf REPETITIONS-PLAN, je einmal lifecycle-2903/4211 beide PASSED. Keine
+  sonstigen Messungen/Retry/Selectoränderungen. Alle3 Children vorher live,
+  kontrolliert SIGINT ->exit0, keine Kills, alle finalen Tracefooter vollständig.
+  Passing erklärt/heilt den ursprünglichen unbekannten Fehler nicht.
+- Alle3 je2011IMU/503joints produziert, keine skipped slots; actualHz
+  200.011802/50.027815,200.012079/50.027885,200.016820/50.029070. N0-base/base+1
+  seeds ohne random impairment: Independent-start-Repetitionen, keine Random-
+  Loss-Abdeckung/kausale Performancevergleichsbasis aus verschiedenen Losszahlen.
+- Vor Source-Arming Message7/8 Row1Position2/3 selektiert, beide initial0/final
+  genau1drop. Tatsächliche Row5/6/7 IMU,8joint. Msg7 mappt je auf IMUcounter6/5/5,
+  Msg8 auf Jointcounter2. Beide Sourcekeys an Native/FullPCAP-Taps absent, Parity
+  da, genau receiver-gap{7,8} am drained cutoff, keine ausgewählten Typedoutputs,
+  danach beide Routen frisch beobachtet. Keine permanente Absenz/interne Expiry/
+  generischer Irrecoverablecounter-Behauptung. Alte One-Loss-Reparatur unabhängig.
+- Lifecycle1701: SDK2428/recv2426/pub2426/observer2426. DDS2/BUSY5/outbound79/
+  SDKgap2, sonst0;88 missing. Measurement je2426Source+607Parity=3033.
+  2903: SDK2432/recv2430/pub2429/observer2428. DDS1/BUSY2/outbound79/SDKgap2/
+  receive_replaced1/observerDDS1;86missing. Capture2430+608=3038.
+  4211: SDK2433/recv2431/pub2431/observer2431. DDS1/BUSY1/ingress_replaced1/
+  outbound78/SDKgap2;83missing. Capture2431+608=3039. Sechs Bilanzen je0.
+- Source/Sender/Receivertrace2514/4941/2426,2514/4946/2430,2514/4947/2431,
+  keine Drops/Exhaustion; Typedhashes/Stamp/Order, Clock/QoS/Session/Owner/
+  Generations/Isolation/leere stabile Checkpoints passen. AgeUpperMaxIMU/joints
+  21441943/32156726,14827528/28653399,15522998/30660836ns; keine PhysicalAge-Aussage.
+- Identity jeweils8/8; Native zuerst/zuletzt, Sourcewindowdeckung, Recorderinitial0/
+  finalfilter-before-bind/strictstableDrain/Hash/Size, keine Native-/Kernelverluste/
+  Truncation/Exhaustion, Features unverändert. Separate Capturephasen/PCAP-Realtime
+  keine qualifizierte Zeitbasis, Native ist skb. Sieben Runtimehashes aller4 Runs
+  gleich; Owned Container/Netze/Passphrasen entfernt. SDK70/ROS41 frühere volle
+  Validierung, nicht neu ausgeführt. Host218/Syntax/diff passen.
+- evidence/m3-multiroute-two-loss-2026-11-08/ enthält drei getrennte Pläne,
+  Originalfailed + Post-hoc separat, Diagnostic/Repetitionen, Executionmatrix,
+  Status/Lifecycle/Tracehash/Metriken, Inventare/Rohhashes und Tests. Keine
+  Rawcaptures/Prefixes/Journale/Resources/Inspect-/Envdumps veröffentlicht.
+  baselines/m3-plan.json führt neuen partial full_rate_followup, kein N3-Accept.
+
+**Weiter:** Baseline/One-Loss-Seed-Repetitionen unter beobachtetem Cleanup,
+vorab längere bounded N3-Fenster/Budgets (Source10000), übrige N4-/M3-Gates.
+Ursache originaler Footer fehlt weiterhin, historische Unsicherheiten offen.
+PR #2 bleibt Draft, Intrinsic/M4 unverändert.
