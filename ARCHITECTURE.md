@@ -1662,3 +1662,25 @@ outputs,190/191 host tests, runtime/source hashes and cadence observations. The
 finite requested200Hz burst actually spans about154.94Hz of source calls, so this
 is row-timing/ordering evidence, not sustained-rate or full N3/M3 acceptance.
 Full200/50Hz multiroute/seeds, N4 phases and historical failures remain open.
+
+### Instrumented sustained-source preflight (2026-11-08)
+
+The demo simulator optionally records up to10000 source publications with route,
+source counter/stamp, monotonic publish bracket, original due slot, period and
+skipped slots. The existing phase-preserving source scheduler is unchanged.
+Storage is fixed and enabled only with source_diagnostics; canonical logical ROS
+fields are buffered, while SHA256 and JSON are deferred until the serialized
+publishing-disabled fence (or executor-joined destruction). No trace error suppresses
+publication. Default operation emits no source trace and allocates no trace buffer.
+Canonical fields use little-endian scalars and length-prefixed UTF8/arrays, excluding
+CDR padding; C++ and Python goldens cover IMU/joints independently.
+
+The ten-second N0 multiroute preflight joins source route/stamp to ROS admission,
+actual SDK message metadata and receiver Session decisions, then verifies remote
+typed hashes/order. Source cadence is measured from simulator resume/pause fences.
+It preserves rejected admissions and unmatched source/queued/SDK/accepted inputs;
+aggregate mailbox and DDS counters supply six conservation equations, without
+claiming a per-ID loss stage where no corresponding event exists. Both200/50Hz
+cadence gates and all balances passed, with87 explicitly accounted missing samples.
+This short instrumented fixture has no packet capture, FEC/seed qualification or
+lossless/physical-age/resource claim. See evidence/m3-source-preflight-2026-11-08/.

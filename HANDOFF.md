@@ -2456,3 +2456,42 @@ PR #2 Draft, Intrinsic/M4 unverändert.
 Admission-/SDK-Zuordnung und tatsächlicher Sourcekadenz; danach übrige N4-
 Admission/Dispatch/Result-Commit-Barrieren. Historische Capture/Reset/UNKNOWN-
 Fälle und übrige M3-Gates bleiben offen, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Phasentreue200/50Hz-Source und N0-Multiroute-Bilanzen
+
+- Source2edfe3c: default-off source_diagnostics im bestehenden C++-Simulator.
+  Bounded10000 logische Payload-/Timingrecords; Hashing/JSON erst nach serialized
+  Pause-Fence, keine Rate-/Admission-/Mailbox-/Retry-/Provideränderung. C++/Python
+  kanonische Feldhashes ohne CDR-Padding, explizite skipped slots und Due-Phasen.
+- Ein isolierter10s-Run .local/m3-source-preflight/1 PASSED:10.001907129s,
+  IMU2001/joints501, gemessen200.061846/50.090447Hz. Keine Skips/Traceverluste/
+  Observerlücken, alle Typedhashes passen. Keine Bridge/Transportaussage.
+- Separat geplant99c4d1d, ein Run .local/m3-ros-multiroute/1 PASSED:
+ 10.057059463s,2012/503 produziert,200.058477/50.014619Hz, Skips0.
+  N0, permanente Nachbarn als explizite Fixture, getrennte ROS-Domänen/LOCALHOST,
+  gemeinsamer Boot/Time-Namespace, keine Commands/Faults/PCAP/Native-Captures.
+- Source2515 -> typed ingress2515 -> SDK2429 -> receiver2429 accepted ->
+  Typedobserver2428 (IMU1930/joints498). Fehlende87: BUSY1, ingress_replaced1,
+  outbound_replaced84, receive_replaced1; sonstige Losses0, sechs Bilanzen0,
+  leere stabile Checkpoints. BUSY IMU379 bekommt keinen SDK-Index.85 queued
+  Inputs ohne Handoff bleiben individuell unmatched; keine genaue Stage pro ID
+  aus Aggregaten erfinden. Akzeptierte IMU18 ohne Typedbeobachtung separat behalten.
+- Source-/Sender-/Receiver-Traces2515/4945/2429 vollständig, keine Drops/Exhaustion.
+  Source route/stamp -> Admission -> SDKMessage -> tatsächliche Sessionentscheidung
+  -> Typedhashes geprüft. Eine Bindingmessage, zusammenhängende SDK-Nummern/ISN;
+  keine unabhängige Paketidentitätsprüfung in diesem N0-Preflight behaupten.
+- Accepted-Publish-AgeUpperMax IMU17576587ns/joints27740143ns. Routehistogramme
+  passen zur Publikation, Clock/QoS/Session/Owner/Generations/Isolation passen.
+  Kein Physical-Age-/Lossless-/Overhead-/Transportvorteil-/N3-Abnahmeclaim.
+- Host206 Tests, ROS41 reported ohne Fehler/Skips, Syntax/diff sauber. SDK70 bleibt
+  frühere volle Validierung; keine SDKänderung/Neusuite oder volle M2-Abnahme.
+  Fünf Runtimehashes über Multiroute gleich. Owned Container/Netz entfernt,
+  Passphrase gelöscht. evidence/m3-source-preflight-2026-11-08/ enthält beide
+  Vorabpläne/Originale, Hashtraces, Metriken, Tests/Build, Inventar/Rohhashes;
+  keine Inspect-/Envdumps/Journale oder Rawresources veröffentlicht.
+
+**Weiter:** Sustained mixed-route SDK-Identitäten unabhängig capturen und N3-
+Row-Faults mit BUSY/Replacement-Zuordnung prüfen, danach geplante Seeds. Aktuelle
+Source-Traces auf10000 Records begrenzt; längere Läufe brauchen vorab deklarierte
+bounded Fenster/Budgets. N4, übrige M3-Gates und historische Unsicherheiten offen.
+PR #2 Draft, Intrinsic/M4 unverändert.
