@@ -33,7 +33,7 @@ def hex_value(value,length):
 
 def parse(path):
     if path.stat().st_size>MAX_BYTES:raise ValueError('PDML byte budget exceeded')
-    rows=[];packets=0;submessages=Counter();fragment_frames=0;last_frame=0
+    rows=[];packets=0;submessages=Counter();fragment_frames=0;last_frame=0;fragments=[]
     with path.open('rb') as stream:
         events=ET.iterparse(stream,events=('start','end'));_,root=next(events)
         if root.tag!='pdml' or root.get('creator')!='wireshark/4.2.2':raise ValueError('unexpected PDML decoder/schema')
@@ -47,7 +47,9 @@ def parse(path):
             if any(p.get('name')=='_ws.malformed' for p in packet.iter('proto')):raise ValueError('malformed decoded packet')
             source=field(packet,'ip.src',required=True);destination=field(packet,'ip.dst',required=True)
             ipaddress.ip_address(source);ipaddress.ip_address(destination)
-            fragment_frames+=int(field(packet,'ip.frag_offset') not in (None,'0') or field(packet,'ip.flags.mf')=='1')
+            is_fragment=field(packet,'ip.frag_offset') not in (None,'0') or field(packet,'ip.flags.mf')=='1'
+            fragment_frames+=int(is_fragment)
+            if is_fragment:fragments.append(dict(frame=number,source=source,destination=destination,ip_id=field(packet,'ip.id'),offset=field(packet,'ip.frag_offset'),more=field(packet,'ip.flags.mf'),reassembled_in=field(packet,'ip.reassembled_in'),reassembled_length=field(packet,'ip.reassembled.length')))
             for proto in packet.findall("proto[@name='rtps']"):
                 prefix=hex_value(field(proto,'rtps.guidPrefix.src','value',required=True),12)
                 destination_prefix=None
@@ -73,7 +75,7 @@ def parse(path):
                     rows.append(dict(frame=number,source=source,destination=destination,source_prefix=prefix,destination_prefix=destination_prefix,kind=kind,writer=prefix+writer,reader_entity=reader,sequence=int(seq) if seq else None,topic=topic,endpoint=endpoint,submessage_sha256=hashlib.sha256(bytes.fromhex(raw)).hexdigest()))
                     if len(rows)>MAX_RECORDS:raise ValueError('submessage budget exceeded')
             packet.clear();root.clear()
-    return dict(packets=packets,fragment_frames=fragment_frames,submessages=dict(submessages),rows=rows)
+    return dict(packets=packets,fragment_frames=fragment_frames,fragments=fragments,submessages=dict(submessages),rows=rows)
 
 
 def assess(decoded,addresses):
@@ -100,7 +102,8 @@ def assess(decoded,addresses):
                 if binding=={(topic,'publication')} and row['kind'] in (0x15,0x16):
                     direction='own_source' if row['source']==local else 'peer_source' if row['source']==peer else 'other_source'
                     messages.append(dict(row,direction=direction))
-            topics[topic]['data'][role]=dict(observations=len(messages),by_direction=dict(Counter(r['direction'] for r in messages)),unique_writer_sequences=len({(r['writer'],r['sequence']) for r in messages}),rows=messages)
+            available=any(v=={(topic,'publication')} for v in bindings.values())
+            topics[topic]['data'][role]=dict(publication_binding_available=available,observations=len(messages) if available else None,by_direction=dict(Counter(r['direction'] for r in messages)),unique_writer_sequences=len({(r['writer'],r['sequence']) for r in messages}) if available else None,rows=messages)
     # Presence by complete submessage identity, not a paired datagram loss count.
     cross={}
     for role in ('operator','robot'):

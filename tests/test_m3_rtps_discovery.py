@@ -60,7 +60,7 @@ class PdmlTests(unittest.TestCase):
 
 class BindingTests(unittest.TestCase):
     def fixture(self):
-        ad=dict(source='10.0.0.1',destination='10.0.0.2',source_prefix=PREFIX,kind=0x15,writer=PREFIX+'000003c2',sequence=1,topic=TOPICS[0],endpoint=GUID)
+        ad=dict(source='10.0.0.1',destination='10.0.0.2',source_prefix=PREFIX,kind=0x15,writer=PREFIX+'000003c2',sequence=1,topic=TOPICS[0],endpoint=GUID,submessage_sha256='ab'*32)
         data=dict(ad,writer=GUID,sequence=9,topic=None,endpoint=None)
         return dict(operator=dict(rows=[ad,data]),robot=dict(rows=[copy.deepcopy(ad),copy.deepcopy(data)])),dict(operator='10.0.0.1',robot='10.0.0.2')
 
@@ -82,7 +82,8 @@ class BindingTests(unittest.TestCase):
         self.assertEqual(r['topics'][TOPICS[0]]['data']['robot']['observations'],1)
         decoded['operator']['rows'].pop(0)
         r=assess(decoded,addresses);self.assertEqual(r['binding_count'],0)
-        self.assertEqual(r['topics'][TOPICS[0]]['data']['robot']['observations'],0)
+        self.assertIsNone(r['topics'][TOPICS[0]]['data']['robot']['observations'])
+        self.assertFalse(r['topics'][TOPICS[0]]['data']['robot']['publication_binding_available'])
 
     def test_conflicting_or_relayed_endpoint_identity_is_rejected(self):
         decoded,addresses=self.fixture();bad=copy.deepcopy(decoded['robot']['rows'][0]);bad['topic']=TOPICS[1];decoded['robot']['rows'].append(bad)
