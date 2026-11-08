@@ -2920,3 +2920,48 @@ Grenzen rein diagnostisch instrumentieren, gezieltenPlan einfrieren und die
 Loaded ROS/N5-Discovery separat bestätigen; keineErfolgsretry-/Replay-/Expiryseal-
 oderTimeoutänderung. N3/Clock/Security/Resources bleiben nachgeordnet.
 PR2 bleibtDraft, M3offen, Intrinsic/M4unberührt.
+
+
+## Ergänzung 2026-11-08: SRT-Admission-/Clock-Diagnostik
+
+Source und Plan sind in b8f5418 eingefroren. Neue opt-in Beobachtungen erfassen
+Transport-Admission (32), korrelierte Peer-Errors (33) und Receiver-Worker-Ergebnisse
+(34), jeweils mit originalem COMMAND/QUERY-Kind und Sequenz. Admission erfasst
+zusätzlich Origin, Evaluation, Clock-State/Deadline und AgeResult-Fehler. Die
+bestehenden begrenzten SPSC-Lanes und Drop-Footer bleiben erhalten. Keine Änderung
+an Replay, Clock-Policy, Budgets, Journal, Wire-Format oder Provider. Evidenz:
+[evidence/m3-admission-diagnostics-2026-11-08/README.md](evidence/m3-admission-diagnostics-2026-11-08/README.md).
+
+- Finaler Release-Build und vollständige Tests: SDK70/70, ROS41/41, Host267/267
+  vor/nach Live PASS. Native IPv4/IPv6 prüfen erfolgreiche und negative Pfade,
+  COMMAND-vs-QUERY-Fehler und kontrollierte Receiver-Clock-Expiry: Rejection13,
+  Clock/Age expired2, Peer-Error5 mit derselben originalen COMMAND-Sequenz. Das
+  validiert die Diagnose, nicht die historische N5-Ursache. Der erste Build wurde
+  für die AgeResult-Ergänzung abgebrochen (137); sein Partiallog zählt nicht als
+  erfolgreiche Validation. Der finale Source wurde neu gebaut und voll getestet.
+- Zwei Slots genau einmal: N0/4211/15s bestätigt8/8,0Skip; N5/4211/300s
+  bestätigt124/124,26Skip,0unaufgelöst. Jeder Erfolg hat passende geschlossene
+  Journals, originales5sBudget, rechtzeitigen Dispatch, genau einen SDK-Handoff
+  und neue Receiver-Admission-/Worker-Beobachtungen. Receiver32/34 zählen19/19
+  bzw1006/1006 inklusive QUERY. Keine Drops, Peer-Errors, Receiver-Clock-Rejections
+  oder aktiven Kontextwechsel-Ereignisse.
+- Neuer Intent7 wurde vor dem SDK wegen Clock-Qualification gehalten:957.679ms
+  bis zu genau einem SDK-Handoff, danach qualifizierte Receiver-Admission und
+  dauerhafter Erfolg mit originalem Budget. Das übt bestehende Unsent-Retention
+  aus; kein Replay und keine Recovery des alten Intent12.
+- Der historische4211-Stall wurde nicht reproduziert und bleibt ungelöst. Alte
+  FAILED-Matrix und UNKNOWN-/NOT_FOUND-Ungewissheit bleiben unverändert; keine
+  Nichtausführungsbehauptung. Sensor Source/Observer75036/19012 enthält weiterhin
+  explizite Lücken; keine volle Sensor-/N5-Abnahme.
+- Capture-Populationen, Drain und Trace-/Provider-Footer PASS. Nur bridge_node,
+  endpoint.a und transport.a änderten sich gegenüber der alten Runtime. Alle acht
+  Hashes bleiben während/nach Live gleich, Provider-Pin unverändert. Keine Tests
+  oder Builds während Live; eigene Namespaces entfernt. Rohdaten bleiben lokal
+  gehasht; öffentliche Selektionen und normalisierte Host-Displaylogs haben
+  explizite Provenienz.
+
+Weiter: Gezielte Receiver-Clock-/Future-Age-Rejection-Coverage samt Unsicherheits-
+semantik vorab festlegen, danach eine begründete endliche instrumentierte
+Mehrseed-Cohort. Keine Deadlineverlängerung und keinen Nonrecurrence-PASS als Fix
+werten. Loaded ROS/N5-Discovery bleibt separat, N3/Clock/Security/Resources folgen.
+PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.

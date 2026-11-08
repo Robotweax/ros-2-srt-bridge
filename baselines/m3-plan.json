@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: identify seed4211 SRT unresolved admission/proof gap with request-kind and receiver/clock diagnostics; separately confirm loaded ROS DDS discovery; preserve UNKNOWN and no replay",
+  "current_priority": "N5: controlled receiver clock/future-age rejection coverage using new admission diagnostics, then separately frozen finite instrumented multi-seed cohort; historical4211 failure unresolved; loaded ROS DDS discovery separate",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2075,6 +2075,57 @@
     "new_full_sdk_ros_validation": false,
     "production_defaults_changed": false,
     "complete_n5_acceptance": false,
+    "complete_M3_acceptance": false
+  },
+  "srt_admission_diagnostics": {
+    "evidence": "evidence/m3-admission-diagnostics-2026-11-08/",
+    "frozen_source": "b8f5418db0d68322220c9c6e38165c6d955ee1f9",
+    "status": "passed_bounded_diagnostics",
+    "production_behavior_fix": false,
+    "new_trace_points": {
+      "32": "transport control_admission / SessionError, clock and age metadata",
+      "33": "matched peer_error_received / original Kind and ControlErrorCode",
+      "34": "receiver_worker_result / original Kind and JournalError"
+    },
+    "sdk_tests": 70,
+    "ros_tests": 41,
+    "host_tests": 267,
+    "native_controlled_clock_gap_ipv4_ipv6": "passed: receiver expiry2, COMMAND rejection13, correlated peer error5",
+    "slots": [
+      {
+        "profile": "N0",
+        "seed": 4211,
+        "seconds": 15,
+        "successes": 8,
+        "attempts": 8,
+        "skipped": 0
+      },
+      {
+        "profile": "N5",
+        "seed": 4211,
+        "seconds": 300,
+        "successes": 124,
+        "attempts": 124,
+        "skipped": 26,
+        "source_produced": 75036,
+        "observer_received": 19012
+      }
+    ],
+    "n5_new_intent7_pre_sdk_deferral_ns": 957679000,
+    "n5_receiver_admission_worker_observations_each": 1006,
+    "n5_peer_errors": 0,
+    "n5_receiver_clock_rejection_pairs": 0,
+    "historical_unresolved_intent_reproduced": false,
+    "historical_unresolved_intent_resolved": false,
+    "retries": 0,
+    "changed_runtime_from_previous": [
+      "bridge_node",
+      "endpoint.a",
+      "transport.a"
+    ],
+    "all_eight_hashes_unchanged_during_live": true,
+    "provider_pin_unchanged": true,
+    "full_n5_acceptance": false,
     "complete_M3_acceptance": false
   }
 }

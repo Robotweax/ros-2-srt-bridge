@@ -1923,3 +1923,42 @@ closed audits and compact public selections with original/derived hashes.
 Next instrument request-kind and receiver/clock rejection boundaries, freeze a
 focused diagnostic plan, and separately confirm loaded ROS/N5 discovery. M3 stays
 open, PR2 draft, Intrinsic/M4 untouched.
+
+
+### Request-kind and receiver admission diagnostics (2026-11-08)
+
+Frozen b8f5418 adds three default-off bounded command observations: transport
+COMMAND/QUERY admission with original sequence/origin, local evaluation time,
+clock state/deadline and returned age error; sender matched peer error with its
+original request kind/sequence; receiver admission/query worker completion with
+JournalError. They use existing producer lanes and explicit drop footers. They
+never alter admission, journal outcomes, budgets, clock policy, wire format,
+expiry seals, provider or accepted-command replay rules. The new schema correlates
+only identical session/route/request/original sequence/kind and rejects malformed
+metadata; legacy trace points remain readable. Larger event records and opted-in
+observation workload are not claimed overhead-equivalent to older cohorts.
+
+Final validation passes SDK70, ROS41 and host267 before/after live. IPv4/IPv6
+native controls exercise a receiver-only clock-expiry gap and matching COMMAND
+rejection/error sequences, plus successful and negative worker/error paths. A
+separate first build was interrupted to add age-error metadata and is retained as
+partial history; final source was rebuilt and fully tested before measurement.
+
+The prospectively fixed two-slot cohort passes once: N0/4211/15s8/8 commands and
+N5/4211/300s124/124, with0/26 skips. New receiver transport/worker observations and
+closed sender/receiver journals validate every success and original5s budgets;
+all trace/capture/provider populations are complete. No receiver rejection/peer
+error or active context-loss event occurs. New intent7 defers before SDK acceptance
+for957.679ms, then has one handoff, qualified receiver admission and durable
+success. This exercises existing unsent retention, not replay or recovery of the
+historical unresolved intent12. Sensor75036/19012 source/observer counts preserve
+large delivery gaps. The earlier4211 failure did not recur and remains unresolved;
+this is diagnostic validation, not a behavior fix or full N5/M3 acceptance.
+
+Only bridge_node and endpoint/transport libraries change from the previous runtime;
+all eight runtime hashes stay fixed during live, provider pin unchanged, owned
+namespaces removed. Detailed sources, tests, original verdicts, raw-input hashes
+and explicit public selections: evidence/m3-admission-diagnostics-2026-11-08/.
+Next freeze controlled receiver clock/future-age rejection coverage and a justified
+finite instrumented multi-seed plan. Loaded ROS/N5 discovery remains separate,
+PR2 draft, M3 open, Intrinsic/M4 untouched.
