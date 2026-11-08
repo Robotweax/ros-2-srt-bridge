@@ -1631,3 +1631,34 @@ maximum8.994ms, same-session clock/QoS and features pass. This changed-backend c
 does not reclassify the prior failure or complete N3/M3. Host184 before probes /
 186 before ROS pass; SDK70/ROS36 runtime artifacts remain unchanged. Late repair
 ordering, full200/50Hz multiroute/seeds and N4 command phases remain next.
+
+## Explicit receiver decision and late repair ordering (2026-11-08)
+
+Sample trace schema2 adds receiver decisions in the existing bounded transport
+lane. Actual SDK receive message number and original source epoch/session/route/
+ingress/envelope sequence join back to accepted source identities; local receiver
+ownership remains distinct. The event records SessionError before applying the
+Session action. Default-off metadata observation changes no admission, clock,
+TTL, crypto, wire or retry policy. Native IPv4/IPv6 metadata checks and a core
+Session old-after-new replay regression pass in the70 SDK /36 ROS suites.
+
+An original finite20Hz late-repair attempt remains FAILED:19 admitted,18 decoded/
+published, selected message5 absent before bridge admission, no replay event.
+Parity arrives103.248ms after the first successor, outside the pinned provider's
+20ms gap-repair horizon. This is consistent with expiry but no internal expiry
+counter was measured. The failed manifest and gap1 are not reclassified.
+
+A separately planned5ms-requested burst passes:19 admitted/decoded, one exact
+source drop, selected message5/sourceID3 explicitly rejected as replay12 after
+newer IDs4/5 were observed. Successor-to-parity11.620ms,18 complete typed payloads
+published in order, sender/receiver traces39/19 complete, native18source+5parity
+and23 file/dispatch/kernel records each. Six balances zero, only receiver_rejected1,
+no SDK-to-receiver gap, same clock/QoS/session and features. Accepted-publication
+age upper maximum10.429ms. Ordering precedes age evaluation, so no conservative
+age result is claimed for the rejected sample. Original ingress/budget is retained.
+
+Evidence `evidence/m3-ros-late-repair-2026-11-08/` retains both frozen plans and
+outputs,190/191 host tests, runtime/source hashes and cadence observations. The
+finite requested200Hz burst actually spans about154.94Hz of source calls, so this
+is row-timing/ordering evidence, not sustained-rate or full N3/M3 acceptance.
+Full200/50Hz multiroute/seeds, N4 phases and historical failures remain open.

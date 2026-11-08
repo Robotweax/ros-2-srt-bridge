@@ -912,3 +912,5 @@ The explicit N3 source selector has passed [two finite synthetic probes](evidenc
 [Traced ROS one-loss recovery](evidence/m3-ros-traced-loss-2026-11-07/README.md) now passes with exact SDK-to-payload correlation. The second fixture stopped before arming on an8-captured/10-filter capture discrepancy; no two-packet ROS fault ran and the failed evidence is preserved.
 
 [A qualified filter-before-bind recorder candidate and finite ROS two-loss case](evidence/m3-capture-startup-2026-11-07/README.md) now pass:17 of19 admitted samples are observed, with exactly the two selected IDs absent. A controlled libpcap filter-transition probe reproduces a counter-offset class; historical failures and tcpdump defaults remain unchanged.
+
+[Late-repair ordering](evidence/m3-ros-late-repair-2026-11-08/README.md) now records an explicit receiver replay rejection after newer samples were published. The original slow-source attempt remains failed; the passing finite burst verifies ordering, with full-rate multiroute N3 still open.

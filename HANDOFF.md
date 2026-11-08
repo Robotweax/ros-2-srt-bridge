@@ -2413,3 +2413,46 @@ Ein-Loss-Recovery ist endliche Entwicklungsevidenz; PR #2 bleibt Draft.
 anschließend volle200/50Hz-Multiroute/Seeds für N3. N4-Commandphasen und übrige
 M3-Gates offen. Neue finite Zwei-Loss-Fixture ersetzt alten tcpdump-Fehlfall nicht.
 PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Receiverentscheidung und Late-Repair-Replay geprüft
+
+- SampleTrace Schema2, Punkt4 receiver_decision: tatsächliche recvmsg2-Message,
+  ursprünglicher Source-Epoch/Session/Route/Ingress/Envelope-Sequenz, lokaler
+  Receiver-Owner/Socket/Generations und SessionError vor apply. Bestehende bounded
+  SPSC-Lane/Budget/Lossgates, Default aus. Alte Schema1-Source-Traces lesbar.
+  Keine Admission-/Clock-/TTL-/Retry-/Wire-/Provideränderung.
+- Vor erster Messung SDK70, ROS36 und Host190 bestanden. Native IPv4/IPv6 prüfen
+  echte Receiver-Metadaten. Sessionregression: neueres Sample akzeptieren, älteres
+  same-session Sample als replay12 ablehnen, Session aktiv und nächstes Sample
+  akzeptiert. Source-Epoch-/Schema-/Vollständigkeits-/Timing-Negativtests.
+- Vorab01db3b8: genau eine20Hz-Fixture .local/m3-ros-late-repair/1 FAILED.
+  19 admitted,18 decoded/published, kein Receiver-Event für Message5, alle anderen
+  akzeptiert. Sechs Bilanzen null, nur SDK-to-receiver gap1 statt erwartetem Reject.
+  Native successor6->Parity103247708ns. Gepinnter Provider repariert Lücken mit
+  20ms Deadline ab späterer Source; Befund konsistent mit Expiry, kein interner
+  Expirycounter/keine exakte Retirementursache gemessen. Originalfailed erhalten.
+- Separat vorab87922c3, Host191: genau eine5ms-requested Revision
+  .local/m3-ros-late-repair-r2/1 PASSED. Gleicher Receiver-Trace-Runtime, nur Python-
+  Scheduling/Harness geändert. Keine Deadlineänderung oder weitere Retries.
+  Native successor->Parity11619584ns; ursprünglicher Callback->Parity18880709ns.
+- 19 Source/admitted/decoded, kein BUSY; Message5/SourceID3/Envelope4 wird exakt
+  als replay12 abgelehnt, nachdem IDs4/5 typed beobachtet wurden. Sonstige18
+  Payloadhashes/Order korrekt, spätere Publikationen laufen weiter. Nur
+  receiver_rejected1, SDK-to-receiver gap0, alle sechs Bilanzen null.
+- Trace39/19 vollständig ohne Drops/Exhaustion, Measurement je18 Source+5Parity,
+  23File/Dispatch/Kernel; beide Capturephasen initial0/filter-before-bind/stableDrain/
+  Hash/Native-Gates bestanden. Features/Clock/QoS/Session passen. Accepted-Publish-
+  AgeUpperMax10428575ns. Ordering wird vor Age ausgewertet: keine konservative
+  Altersentscheidung für den abgelehnten Repair behaupten; Ursprung/Budget gleich.
+- 5ms requested ist keine200Hz-Abnahme:19 Calls,18 Intervalle in116171459ns,
+  etwa154,94Hz; Median6040146ns, Max12303750ns. Nur endliche Row-/Ordering-Evidenz.
+- evidence/m3-ros-late-repair-2026-11-08/ enthält beide Pläne/Originale,
+  Post-hoc-Analyse des Fehlfalls, Cadence, Trace-/Capture-/Build-/Testlogs,
+  Inventare/Rohhashes und getrennte Provenienz. Sechs Runtimehashes über beide
+  Messungen gleich; SRT-Pin/Quellen unverändert. Rawcaptures/Journale/Details lokal,
+  Credentials entfernt, keine Inspect-/Envdumps. Kein neuer voller M2-Run.
+
+**Weiter:** Phasentreue volle200/50Hz-Multiroute-/Seed-N3-Qualifikation mit
+Admission-/SDK-Zuordnung und tatsächlicher Sourcekadenz; danach übrige N4-
+Admission/Dispatch/Result-Commit-Barrieren. Historische Capture/Reset/UNKNOWN-
+Fälle und übrige M3-Gates bleiben offen, PR #2 Draft, Intrinsic/M4 unverändert.
