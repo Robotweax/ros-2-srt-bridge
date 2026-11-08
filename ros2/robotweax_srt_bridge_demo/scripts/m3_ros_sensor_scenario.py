@@ -71,7 +71,7 @@ class Finite(Benchmark):
                 message.angular_velocity.z = float(i+1); message.linear_acceleration.z = 9.81
                 before = time.monotonic_ns(); self.imu_pub.publish(message); after = time.monotonic_ns()
                 self.rows.append(dict(id=i, payload_sha256=digest(message), stamp_sec=message.header.stamp.sec, stamp_nanosec=message.header.stamp.nanosec, begin_ns=before, end_ns=after))
-                self.spin(.05)
+                self.spin(self.args.sample_period_ms/1000)
             stop = time.monotonic_ns(); write(self.run/'finite-sent.json', dict(count=19, start_ns=start, stop_ns=stop))
         else:
             self.wait(lambda:(self.run/'finite-sent.json').exists(), 'finite source complete', 10)
@@ -81,12 +81,12 @@ class Finite(Benchmark):
         assert end['bridge']['session_id'] == begin['bridge']['session_id']
         assert end['bridge']['ready'] and end['bridge']['clock_qualified']
         assert self.direct == 0
-        write(self.run/(self.args.role+'-finite-result.json'), dict(status='passed', begin=begin, end=end, rows=self.rows, start_ns=start, stop_ns=stop, direct=self.direct, bad=self.bad))
+        write(self.run/(self.args.role+'-finite-result.json'), dict(status='passed', begin=begin, end=end, rows=self.rows, start_ns=start, stop_ns=stop, requested_sample_period_ms=self.args.sample_period_ms, direct=self.direct, bad=self.bad))
         self.wait(lambda:(self.run/'release').exists(), 'host evidence collected', 30)
 
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--role', choices=('robot','operator'), required=True); p.add_argument('--run', required=True); p.add_argument('--peer', required=True); p.add_argument('--sample-diagnostics',action='store_true')
+    p = argparse.ArgumentParser(description=__doc__); p.add_argument('--role', choices=('robot','operator'), required=True); p.add_argument('--run', required=True); p.add_argument('--peer', required=True); p.add_argument('--sample-diagnostics',action='store_true'); p.add_argument('--sample-period-ms',type=int,choices=(5,50),default=50)
     args = p.parse_args(); args.clock_width_ms=200; args.provider_diagnostics=False; args.command_diagnostics=False; args.seconds=10
     rclpy.init(); driver=Finite(args)
     try:

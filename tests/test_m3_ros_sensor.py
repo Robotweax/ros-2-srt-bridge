@@ -143,3 +143,10 @@ class LateReceiverTests(unittest.TestCase):
         self.assertEqual(value['losses']['receiver_rejected'],1)
         self.assertEqual(value['losses']['srt_accept_to_receiver_gap'],0)
         with self.assertRaises(ValueError):diagnostic_window(a,b,1)
+
+class RepairHorizonTests(unittest.TestCase):
+    def test_native_gap_interval_strictly_below_pinned20ms(self):
+        from m3_ros_sensor import repair_horizon
+        self.assertEqual(repair_horizon(100,19999999),19999899)
+        for first,parity in ((0,1),(100,99),(100,20000100),(100,100000100)):
+            with self.assertRaises(ValueError):repair_horizon(first,parity)

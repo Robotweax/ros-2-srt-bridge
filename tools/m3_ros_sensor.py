@@ -199,6 +199,15 @@ def selected_sources(mapped, losses, late_repair=False):
     return selected,observed
 
 
+def repair_horizon(first_successor_ns,parity_ns):
+    # Pinned SENSOR repair gaps are marked with20ms deadline. These native
+    # arrivals bracket wire observation, not provider processing or physical age.
+    elapsed=parity_ns-first_successor_ns
+    if first_successor_ns<=0 or not 0<=elapsed<20000000:
+        raise ValueError('row parity outside predeclared native20ms gap horizon')
+    return elapsed
+
+
 def verify_late_receiver(mapped,remote,receiver,source_epoch,selected,parity_ns):
     by_message={m['message_number']:m for m in mapped};decisions={}
     state=receiver['begin']['bridge'];session=bytes(state['session_id']).hex();owner=bytes(state['owner_epoch']).hex()
@@ -267,7 +276,12 @@ def diagnostic_correlation(run, sender, receiver, identity, addresses, losses=0,
         parity=((origin+7)&0x7fffffff,0,binding['socket_id'],False)
         times=[row['monotonic_ns'] for row,h in incoming if frame_key(row['prefix'],binding)==parity]
         if len(times)!=1:raise ValueError('late-row parity observation ambiguous')
+        successor=((origin+5)&0x7fffffff,6,binding['socket_id'],False)
+        first=[row['monotonic_ns'] for row,h in incoming if frame_key(row['prefix'],binding)==successor]
+        if len(first)!=1:raise ValueError('first successor observation ambiguous')
+        horizon=repair_horizon(first[0],times[0])
         late=verify_late_receiver(mapped,remote,receiver,bytes(sender['begin']['bridge']['owner_epoch']).hex(),selected,times[0])
+        late.update(first_successor_incoming_ns=first[0],successor_to_parity_native_ns=horizon)
     return dict(late_repair=late,sender_trace=trace,receiver_trace=remote,mapped=mapped,busy_source_ids=sorted(rejected),selected_sources=selected,expected_observed_ids=expected_ids,captures=captures,
                 selected_source_delivery='reconstructed source explicitly rejected as replay after newer publications' if late_repair else 'all selected IDs observed after absent wire source' if losses==1 else 'selected IDs absent at finite cutoff' if losses==2 else 'no injected loss',
                 qualification=False,scope='finite traced ROS case; actual SDK identity to selected source and typed publication, with independent BUSY retained; not replacement baseline, physical delivery or full N3/M3 acceptance')
@@ -334,18 +348,19 @@ def wait_files(run,names,peers):
         time.sleep(.05)
 
 
-def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_backend='tcpdump',late_repair=False):
+def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_backend='tcpdump',late_repair=False,sample_period_ms=50):
+    if sample_period_ms not in (5,50):raise ValueError('unsupported finite source period')
     traced=trace_diagnostic or trace_loss or late_repair
     run.mkdir(); inside='/workspace/'+str(run.relative_to(ROOT));lab=NetworkLab(ROOT,run,image,monotonic_capture=True)
     captures=[];peers=[];fault=None;key=run/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,late_repair=late_repair,capture_backend=capture_backend,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested20Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
+    result=dict(status='running',losses=losses,trace_diagnostic=trace_diagnostic,trace_loss=trace_loss,late_repair=late_repair,sample_period_ms=sample_period_ms,capture_backend=capture_backend,pcap_filter=PCAP_FILTER,qualification=False,scope='finite IMU at requested'+str(1000/sample_period_ms)+'Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance')
     try:
         lab.start(key);result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         configure(lab,'permanent');lab.apply('N0',1701);result['features_before']=feature_snapshot(lab,'features-before')
         captures=capture_start(lab,run/'identity',capture_backend)
         for role,name in lab.containers.items():
             log=(run/(role+'-scenario.log')).open('w')
-            command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_sensor_scenario.py --role '+role+' --run '+inside+' --peer '+lab.addresses['operator']+(' --sample-diagnostics' if traced else '')
+            command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_sensor_scenario.py --role '+role+' --run '+inside+' --peer '+lab.addresses['operator']+(' --sample-diagnostics' if traced else '')+' --sample-period-ms '+str(sample_period_ms)
             peers.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT),log))
         wait_files(run,[r+'-finite-ready.json' for r in lab.containers],peers)
         capture_stop(lab,captures);captures=[]
@@ -396,12 +411,13 @@ def run_case(run,image,losses,trace_diagnostic=False,trace_loss=False,capture_ba
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');modes.add_argument('--trace-late-repair',action='store_true',help='one first-position source loss; require explicit receiver replay rejection after newer publication');p.add_argument('--capture-backend',choices=('tcpdump','packet-socket'),default='tcpdump');p.add_argument('--trace-loss-count',type=int,choices=(1,2),help='explicit separately planned traced fault only');a=p.parse_args();
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);modes=p.add_mutually_exclusive_group();modes.add_argument('--trace-diagnostic',action='store_true',help='one observer validation with explicit BUSY accounting; no injected-loss cohort');modes.add_argument('--trace-losses',action='store_true',help='one/two finite row faults using actual SDK source identities; independent BUSY retained');modes.add_argument('--trace-late-repair',action='store_true',help='one first-position source loss; require explicit receiver replay rejection after newer publication');p.add_argument('--capture-backend',choices=('tcpdump','packet-socket'),default='tcpdump');p.add_argument('--trace-loss-count',type=int,choices=(1,2),help='explicit separately planned traced fault only');p.add_argument('--sample-period-ms',type=int,choices=(5,50),default=50);a=p.parse_args();
+    if a.trace_late_repair and a.sample_period_ms!=5:p.error('late repair requires --sample-period-ms 5; observed parity must also fit the pinned20ms gap horizon')
     if a.trace_loss_count is not None and not a.trace_losses:p.error('--trace-loss-count requires --trace-losses')
     run=a.out.resolve();run.mkdir(parents=True,exist_ok=False)
     image=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64','ros2-srt-m3:20261105'],text=True))[0]['RepoDigests'][0];result=dict(status='running',image=image,cases=[])
     try:
-        for losses in ((0,) if a.trace_diagnostic else (1,) if a.trace_late_repair else (a.trace_loss_count,) if a.trace_loss_count is not None else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses,a.capture_backend,a.trace_late_repair))
+        for losses in ((0,) if a.trace_diagnostic else (1,) if a.trace_late_repair else (a.trace_loss_count,) if a.trace_loss_count is not None else (1,2) if a.trace_losses else (0,1,2)):result['cases'].append(run_case(run/str(losses),image,losses,a.trace_diagnostic,a.trace_losses,a.capture_backend,a.trace_late_repair,a.sample_period_ms))
         result['status']='passed'
     except Exception as error:result.update(status='failed',error=str(error));raise
     finally:write(run/'result.json',result)
