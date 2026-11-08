@@ -5,7 +5,6 @@ import json
 import os
 from pathlib import Path
 import signal
-import sqlite3
 import time
 import traceback
 import rclpy
@@ -14,10 +13,16 @@ from robotweax_srt_bridge_msgs.srv import SetPublishing,GetBridgeMetrics
 from m3_scenario import Benchmark,write
 from m2_scenario import read
 from scenario_processes import stop_children
+from scenario_journal import visible_entries
 
 
 class Crash(Benchmark):
     def __init__(self,args):super().__init__(args);self.crashes=[]
+    def bridge_state(self,m):
+        super().bridge_state(m)
+        with (self.run/(self.args.role+'-contexts.jsonl')).open('a') as out:
+            out.write(json.dumps(dict(ns=time.monotonic_ns(),owner=bytes(m.owner_epoch).hex(),session=bytes(m.session_id).hex(),ready=m.ready,clock=m.clock_qualified,fault=m.fault,worker_fault=m.worker_fault,commands_sent=m.commands_sent))+'\n')
+
     def cleanup(self):
         report=stop_children([p for p in self.processes if p[0] not in self.retired])
         self.resources.close();self.endpoint_sampler.close();write(self.run/(self.args.role+'-shutdown.json'),report)
@@ -27,14 +32,21 @@ class Crash(Benchmark):
     def metrics(self):return message_to_ordereddict(self.rpc(self.metric_client,GetBridgeMetrics.Request()).snapshot)
     def stop_bridge(self,killed=False):
         p=self.bridge;item=next(i for i in self.processes if i[0] is p);before=p.poll();assert before is None
-        begin=time.monotonic_ns()
+        worker=self.worker_pid();begin=time.monotonic_ns()
         if killed:p.kill();code=p.wait(timeout=5);assert code==-signal.SIGKILL;item[2].close();report=dict(injected='SIGKILL',exit=code,begin_ns=begin,end_ns=time.monotonic_ns(),pid=p.pid)
         else:
             report=stop_children([item]);assert report['passed']
+        if killed and worker:
+            def gone():
+                stat=Path('/proc/'+str(worker)+'/stat')
+                return not stat.exists() or stat.read_text().split(') ')[1][0]=='Z'
+            deadline=time.monotonic()+5
+            while not gone():
+                if time.monotonic()>=deadline:raise RuntimeError('owned worker still running after killed bridge')
+                time.sleep(.01)
+            report.update(old_worker_pid=worker,old_worker_gone_or_zombie_ns=time.monotonic_ns())
         self.retired.add(p);self.bridge=None;self.crashes.append(report);return report
-    def journal(self):
-        with sqlite3.connect('file:'+str(self.run/'robot.sqlite')+'?mode=ro',uri=True) as db:
-            return [dict(id=i.hex(),state=s-10) for i,s in db.execute('SELECT id,state FROM entries')]
+    def journal(self):return visible_entries(self.run/'robot.sqlite')
     def robot(self):
         self.sim=self.start('rate_simulator','robot-source',dict(publishing_enabled='false',response_delay_ms=2500 if self.args.case=='effect' else 0))
         self.wait(lambda:self.device is not None,'external device');self.start_bridge()
@@ -42,7 +54,10 @@ class Crash(Benchmark):
         write(self.run/'robot-ready.json',dict(owner=bytes(self.state.owner_epoch).hex(),session=bytes(self.state.session_id).hex(),device=self.device_snapshot()))
         sequence=0
         while True:
-            self.spin(.02);self.check_processes();q=read(self.run/'control.json')
+            self.spin(.02);self.check_processes()
+            if (self.run/'release').exists():raise RuntimeError('host aborted crash fixture')
+            if self.bridge and self.state and self.state.worker_fault:raise RuntimeError('unexpected receiver worker fault '+str(self.state.worker_fault))
+            q=read(self.run/'control.json')
             if q.get('sequence',0)<=sequence:continue
             sequence=q['sequence'];action=q['action'];response=dict(sequence=sequence,ok=True)
             if action=='arm_effect_crash':
@@ -57,7 +72,10 @@ class Crash(Benchmark):
                 device=self.device_snapshot();journal=self.journal();report=self.stop_bridge(killed=True)
                 write(self.run/'crashed.json',dict(device=device,journal=journal,retired=report))
             elif action=='launch_restart':
-                assert self.bridge is None;self.start_bridge()
+                assert self.bridge is None;old_owner=bytes(self.state.owner_epoch) if self.state else b'';self.start_bridge()
+                self.wait(lambda:self.state and bytes(self.state.owner_epoch)!=old_owner,'new receiver owner observed',10)
+                response.update(restarted=self.metrics())
+                if response['restarted']['worker_fault']:raise RuntimeError('restarted worker failed '+str(response['restarted']['worker_fault']))
             elif action=='device':response.update(device=self.device_snapshot(),journal=self.journal())
             elif action=='finish':
                 response.update(device=self.device_snapshot(),journal=self.journal(),metrics=self.metrics(),crashes=self.crashes)

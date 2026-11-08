@@ -67,3 +67,19 @@ class RemainingN4Tests(unittest.TestCase):
         source,sender,receiver,local,remote=setup()
         sender['contexts']=receiver['contexts']=[]
         with self.assertRaisesRegex(ValueError,'duration'):assess(source,sender,receiver,local,remote,[2e9,4e9],4e9,'both')
+
+class JournalInspectionTests(unittest.TestCase):
+    def test_live_read_closes_connection_even_when_an_external_reference_survives(self):
+        import sqlite3
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'))
+        from scenario_journal import visible_entries
+        original=sqlite3.connect
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'journal.sqlite'
+            db=original(path);db.execute('CREATE TABLE entries(id BLOB,state INTEGER)');db.execute('INSERT INTO entries VALUES(?,?)',(bytes([1])*16,13));db.commit();db.close()
+            kept=[]
+            def connect(*args,**kwargs):
+                db=original(*args,**kwargs);kept.append(db);return db
+            with patch('scenario_journal.sqlite3.connect',side_effect=connect):
+                self.assertEqual(visible_entries(path),[dict(id='01'*16,state=3)])
+            with self.assertRaises(sqlite3.ProgrammingError):kept[0].execute('SELECT 1')
