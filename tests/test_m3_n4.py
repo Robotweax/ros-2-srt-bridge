@@ -13,8 +13,8 @@ from m3_failure_detection import record_count
 def fixture(phase='admission',state=4):
     record=dict(route=100,payload_hash=hashlib.sha256(struct.pack('!IIIIQQ',0x52574331,100,100,5000,0,1)).hexdigest(),owner_epoch='01'*16,source_epoch='01'*16,source_ns=100,deadline_ns=5_000_000_100,session='02'*16,state=state,reason=0 if state==4 else 1,revision=3 if state==4 else 2,result_valid=state==4,result_generation=1 if state==4 else 0,dispatched_ns=1000,finished_ns=2000)
     a=dict(entries={ID:copy.deepcopy(record)});b=copy.deepcopy(a);b['entries'][ID]['owner_epoch']='03'*16
-    sender=dict(commands_sent=1,fault=0,worker_fault=0)
-    receiver=dict(fault=0,worker_fault=0,effects=int(state==4),generation=int(state==4),rate_hz=100 if state==4 else 200)
+    sender=dict(commands_sent=1,fault=0,worker_fault=0,ready=1,clock=1)
+    receiver=dict(ready=1,clock=1,fault=0,worker_fault=0,effects=int(state==4),generation=int(state==4),rate_hz=100 if state==4 else 200)
     barrier=dict(ns=3000,effects=0);resumed=dict(begin_ns=500)
     visible=None if phase=='admission' else dict(state=3,result_valid=False,finished_ns=0) if phase=='started' else dict(state=4,result_valid=True,finished_ns=2000)
     initial={'operator':dict(owner='01'*16,snapshot=dict(session='02'*16)),'robot':dict(owner='03'*16,snapshot=dict(session='02'*16))}
@@ -28,7 +28,7 @@ class N4OutcomeTests(unittest.TestCase):
             result=check_outcome(*fixture(phase,state));self.assertEqual(result['state'],state)
 
     def test_replay_deadline_changed_proof_or_false_success_fails(self):
-        for fault in ('replay','deadline','proof','effects','rate'):
+        for fault in ('replay','deadline','proof','effects','rate','qualification'):
             a=fixture()
             if fault=='replay':a[1]['commands_sent']=2
             if fault=='deadline':
@@ -36,6 +36,7 @@ class N4OutcomeTests(unittest.TestCase):
             if fault=='proof':a[4]['entries'][ID]['payload_hash']='cd'*32
             if fault=='effects':a[2]['effects']=2
             if fault=='rate':a[2]['rate_hz']=200
+            if fault=='qualification':a[2]['clock']=0
             with self.assertRaises(ValueError):check_outcome(*a)
 
     def test_phase_placement_uncertainty_and_stale_start_fail(self):
@@ -48,6 +49,12 @@ class N4OutcomeTests(unittest.TestCase):
             if fault=='stale':a[6]['begin_ns']=6_000_000_000
             if fault=='started':a[5]['effects']=1
             with self.assertRaises(ValueError):check_outcome(*a)
+
+    def test_receiver_mapping_can_shorten_but_never_extend_sender_budget(self):
+        a=fixture();a[4]['entries'][ID]['deadline_ns']-=10_000_000
+        result=check_outcome(*a);self.assertEqual(result['deadline_conservative_margin_ns'],10_000_000)
+        a=fixture();a[4]['entries'][ID]['deadline_ns']+=1
+        with self.assertRaises(ValueError):check_outcome(*a)
 
     def test_owner_ingress_and_payload_provenance_are_not_rebound(self):
         for fault in ('owner','session','origin','payload'):

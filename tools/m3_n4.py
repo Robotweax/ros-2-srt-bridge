@@ -33,12 +33,13 @@ def network(lab,role,drop,label):
 def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initial,submitted):
     if set(a['entries'])!={ID} or set(b['entries'])!={ID}:raise ValueError('unexpected/missing journal identity')
     s=a['entries'][ID];r=b['entries'][ID]
-    for key in ('route','payload_hash','source_epoch','source_ns','deadline_ns','session','state','reason','revision','result_valid','result_generation'):
+    for key in ('route','payload_hash','source_epoch','source_ns','session','state','reason','revision','result_valid','result_generation'):
         if s[key]!=r[key]:raise ValueError('sender/receiver durable proof mismatch: '+key)
     expected_hash=hashlib.sha256(struct.pack('!IIIIQQ',0x52574331,100,100,5000,0,1)).hexdigest()
     if s['owner_epoch']!=initial['operator']['owner'] or s['source_epoch']!=s['owner_epoch'] or r['owner_epoch']!=initial['robot']['owner'] or any(initial[role]['snapshot']['session']!=r['session'] for role in ('operator','robot')):raise ValueError('original command owner/session provenance mismatch')
-    if r['source_ns']!=submitted['origin_ns'] or r['deadline_ns']!=submitted['deadline_ns'] or r['payload_hash']!=expected_hash:raise ValueError('original ingress/deadline/payload changed')
-    if r['deadline_ns']!=r['source_ns']+5_000_000_000:raise ValueError('original command deadline changed')
+    if r['source_ns']!=submitted['origin_ns'] or s['deadline_ns']!=submitted['deadline_ns'] or r['payload_hash']!=expected_hash:raise ValueError('original ingress/deadline/payload changed')
+    if s['deadline_ns']!=s['source_ns']+5_000_000_000 or not r['source_ns']<r['deadline_ns']<=s['deadline_ns']:raise ValueError('sender deadline changed or conservative receiver deadline extended')
+    if not all(endpoint['ready'] and endpoint['clock'] for endpoint in (sender,receiver)):raise ValueError('restored endpoints not qualified')
     if sender['commands_sent']!=1 or sender['fault'] or receiver['fault'] or sender['worker_fault'] or receiver['worker_fault']:raise ValueError('endpoint fault or replay')
     if r['state']==4:
         if not r['result_valid'] or r['revision']!=3 or r['result_generation']!=1 or receiver['effects']!=1 or receiver['generation']!=1 or receiver['rate_hz']!=100:raise ValueError('unsupported success or duplicate effect')
@@ -55,7 +56,7 @@ def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initi
         if barrier_record is not None:raise ValueError('receiver admission already visible before commit barrier')
     elif not barrier_record or barrier_record['state']!=3 or barrier['effects']!=0 or barrier['ns']>=r['deadline_ns']:
         raise ValueError('after-start barrier not before effect within original deadline')
-    return dict(state=r['state'],reason=r['reason'],effects=receiver['effects'],command_sends=sender['commands_sent'],deadline_ns=r['deadline_ns'],journal_proof_match=True,scope='pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification')
+    return dict(state=r['state'],reason=r['reason'],effects=receiver['effects'],command_sends=sender['commands_sent'],sender_deadline_ns=s['deadline_ns'],receiver_deadline_ns=r['deadline_ns'],deadline_conservative_margin_ns=s['deadline_ns']-r['deadline_ns'],journal_proof_match=True,scope='pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification')
 
 
 LIVE_READ='''import sqlite3,json,sys
