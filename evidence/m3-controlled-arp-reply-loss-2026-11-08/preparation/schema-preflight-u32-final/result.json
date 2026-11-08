@@ -1,0 +1,173 @@
+{
+  "status": "passed",
+  "no_probe_sent": true,
+  "neighbors": {
+    "mode": "dynamic",
+    "peer_macs": {
+      "operator": "4a:93:29:29:6c:e9",
+      "robot": "32:2b:c3:2b:e0:14"
+    },
+    "before": {
+      "operator": [],
+      "robot": []
+    },
+    "scope": "permanent mode is a separate L2 diagnostic candidate; dynamic mode does not write neighbor entries"
+  },
+  "raw_rule": [
+    {
+      "protocol": "arp",
+      "kind": "u32",
+      "chain": 0
+    },
+    {
+      "protocol": "arp",
+      "kind": "u32",
+      "chain": 0,
+      "options": {
+        "fh": "800:",
+        "ht_divisor": 1
+      }
+    },
+    {
+      "protocol": "arp",
+      "kind": "u32",
+      "chain": 0,
+      "options": {
+        "fh": "800::800",
+        "order": 2048,
+        "key_ht": "800",
+        "bkt": "0",
+        "skip_hw": true,
+        "not_in_hw": true,
+        "rule_hit": 0,
+        "_repeated_success": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "_repeated_match": [
+          {
+            "value": "10800",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 0
+          },
+          {
+            "value": "6040002",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 4
+          },
+          {
+            "value": "322bc32b",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 8
+          },
+          {
+            "value": "e014ac13",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 12
+          },
+          {
+            "value": "34a93",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 16
+          },
+          {
+            "value": "29296ce9",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 20
+          },
+          {
+            "value": "ac130002",
+            "mask": "ffffffff",
+            "offmask": "",
+            "off": 24
+          }
+        ],
+        "actions": [
+          {
+            "order": 1,
+            "kind": "gact",
+            "control_action": {
+              "type": "pipe"
+            },
+            "prob": {
+              "random_type": "none",
+              "control_action": {
+                "type": "pass"
+              },
+              "val": 0
+            },
+            "index": 1,
+            "ref": 1,
+            "bind": 1,
+            "installed": 0,
+            "last_used": 0,
+            "stats": {
+              "bytes": 0,
+              "packets": 0,
+              "drops": 0,
+              "overlimits": 0,
+              "requeues": 0,
+              "backlog": 0,
+              "qlen": 0
+            }
+          },
+          {
+            "order": 2,
+            "kind": "gact",
+            "control_action": {
+              "type": "drop"
+            },
+            "prob": {
+              "random_type": "none",
+              "control_action": {
+                "type": "pass"
+              },
+              "val": 0
+            },
+            "index": 2,
+            "ref": 1,
+            "bind": 1,
+            "installed": 0,
+            "last_used": 0,
+            "stats": {
+              "bytes": 0,
+              "packets": 0,
+              "drops": 0,
+              "overlimits": 0,
+              "requeues": 0,
+              "backlog": 0,
+              "qlen": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "counters": {
+    "eligible": {
+      "index": 1,
+      "packets": 0,
+      "bytes": 0,
+      "drops": 0
+    },
+    "verdict": {
+      "index": 2,
+      "packets": 0,
+      "bytes": 0,
+      "drops": 0
+    },
+    "verdict_type": "drop"
+  }
+}

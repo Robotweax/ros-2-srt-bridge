@@ -56,3 +56,26 @@ Archive selected metadata and exact raw/derived/local-only disposition. Host par
 selector/action-chain, packet/reflection and phase/population/timing negative guards
 before live; prior SDK72/ROS41 remain prior validation. No tuning follows merely
 from this fixture; any N5 ARP pre-qdisc observation/mitigation needs a separate plan.
+
+
+Preparation amendment before any traffic: the zero-traffic flower install is
+unsupported (TC classifier not found), retained as failed preparation with cleanup.
+Use the already-supported software u32 classifier instead: exact seven-word ARP
+Ethernet/IPv4 payload matches operation2, SHA/SPA/THA/TPA at fixed network-header
+offsets; native captures separately validate actual Ethernet source/destination
+MACs. Preserve the same PIPE→PASS/DROP chain and all prospective phase gates.
+A second zero-traffic u32 schema/readback/removal check is separate preparation;
+no live case or source packet was repeated by this compatibility correction.
+
+Second preparation installs u32 successfully but strict selector validation rejects
+iproute2 JSON because it serializes repeated 'match' object keys; ordinary JSON
+loading retains only the last word. Preserve all seven match words with a guarded
+object-pairs parser, retaining the raw failed readback and cleanup. Final separate
+zero-traffic preparation verifies the normalized exact selector and removal before
+freezing live source. No traffic/case retry is hidden by this parser correction.
+
+Per-case integrity/behavioral gates run only after every child/capture for that
+case has stopped, before advancing to the next case; consolidated provenance is
+archived after the cohort. No closed analysis overlaps another live case. Final
+zero-traffic u32 preparation passes exact seven-word selector/PIPE→DROP readback
+and removal. Host316 passes before live; all runtime/observer binaries unchanged.
