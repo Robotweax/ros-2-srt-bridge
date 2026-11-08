@@ -37,7 +37,7 @@ def assess(source,sender,receiver,local,remote):
         admissions[key]=e
     if len(admissions)!=delta(sender,'samples_ingress'):raise ValueError('admission trace population mismatch')
     rejected=Counter(e['result'] for e in joined['rejected'])
-    if set(rejected)-{1,2} or rejected[1]!=delta(sender,'samples_submit_busy') or rejected[2]!=delta(sender,'samples_submit_obsolete') or sum(rejected.values())!=window['losses']['admission']:raise ValueError('rejected admission counters mismatch')
+    if set(rejected)-{1,4} or rejected[1]!=delta(sender,'samples_submit_busy') or rejected[4]!=delta(sender,'samples_submit_obsolete') or sum(rejected.values())!=window['losses']['admission']:raise ValueError('rejected admission counters mismatch')
     for pair in joined['joined']:
         e=pair['admission'];src=by_stamp[(e['route'],e['stamp_sec'],e['stamp_nanosec'])];key=(src['route'],src['counter']);h=pair['handoff']
         handoffs[key]=h

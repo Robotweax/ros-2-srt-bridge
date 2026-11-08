@@ -59,7 +59,7 @@ def check_outcome(phase,sender,receiver,a,b,barrier,resumed,barrier_record,initi
     elif not barrier_record or barrier_record['state']!=3 or barrier['effects']!=0 or barrier['ns']>=r['deadline_ns']:
         raise ValueError('after-start barrier not before effect within original deadline')
     if phase=='dispatch' and not 0<r['dispatched_ns']<=barrier['ns']<resumed['begin_ns']:raise ValueError('durable dispatch barrier/order mismatch')
-    return dict(state=r['state'],reason=r['reason'],effects=receiver['effects'],command_sends=sender['commands_sent'],sender_deadline_ns=s['deadline_ns'],receiver_deadline_ns=r['deadline_ns'],deadline_conservative_margin_ns=s['deadline_ns']-r['deadline_ns'],journal_proof_match=True,scope='pure two-second packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification')
+    return dict(state=r['state'],reason=r['reason'],effects=receiver['effects'],command_sends=sender['commands_sent'],sender_deadline_ns=s['deadline_ns'],receiver_deadline_ns=r['deadline_ns'],deadline_conservative_margin_ns=s['deadline_ns']-r['deadline_ns'],journal_proof_match=True,scope='controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification')
 
 
 LIVE_READ='''import sqlite3,json,sys
@@ -73,8 +73,9 @@ with sqlite3.connect('file:'+sys.argv[1]+'?mode=ro',uri=True,timeout=1) as db:
 '''
 
 
-def run_case(out,phase,direction):
-    out.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(out.relative_to(ROOT));lab=NetworkLab(ROOT,out,IMAGE);peers=[];result=dict(status='running',phase=phase,direction=direction,qualification=False)
+def run_case(out,phase,direction,hold_seconds=2):
+    if hold_seconds not in (2,6):raise ValueError("only declared2/6-second holds")
+    out.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(out.relative_to(ROOT));lab=NetworkLab(ROOT,out,IMAGE);peers=[];result=dict(status='running',phase=phase,direction=direction,hold_seconds=hold_seconds,qualification=False)
     key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
     runtime=['build/m3-n4-peer/m3_n4_peer','install/bridge-m3/bin/robotweax-journal-worker','install/bridge-m3/lib/librobotweax_srt_bridge_endpoint.a','install/bridge-m3/lib/librobotweax_srt_bridge_transport.a','install/srt-m0/lib/librobotweax-srt.a']
     inventory={p:sha(ROOT/p) for p in runtime};write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory,simulated_handler=True,source_load=False,operation_watchdog_seconds=20,command_budget_seconds=5))
@@ -95,12 +96,12 @@ def run_case(out,phase,direction):
         roles=DIRECTIONS[direction];result['outage_install']={r:network(lab,r,True,'outage-'+r) for r in roles}
         last=max(v['bracket']['end_ns'] for v in result['outage_install'].values())
         # The wait itself runs in the VM, sharing the clock proof with the peers.
-        result['hold']=json.loads(lab.inside('robot','outage-hold',['python3','-c','import time,json;b=time.monotonic_ns();time.sleep(2);print(json.dumps(dict(begin_ns=b,end_ns=time.monotonic_ns())))']))
+        result['hold']=json.loads(lab.inside('robot','outage-hold',['python3','-c','import time,json;b=time.monotonic_ns();time.sleep('+str(hold_seconds)+');print(json.dumps(dict(begin_ns=b,end_ns=time.monotonic_ns())))']))
         result['outage_final']={r:json.loads(lab.inside(r,'outage-final-'+r,['tc','-j','-s','qdisc','show','dev','eth0'])) for r in roles}
         if any(next(q for q in qs if q['kind']=='netem').get('drops',0)<=0 for qs in result['outage_final'].values()):raise ValueError('outage matched no traffic')
         result['outage_restore']={r:network(lab,r,False,'restore-'+r) for r in roles}
         first=min(v['bracket']['begin_ns'] for v in result['outage_restore'].values())
-        if first-last<2_000_000_000:raise ValueError('guaranteed interruption shorter than two seconds')
+        if first-last<hold_seconds*1_000_000_000:raise ValueError('guaranteed interruption shorter than declared hold')
         result['guaranteed_outage_ns']=[last,first]
         (out/'restored').touch();(out/'resume').touch()
         wait_files(out,['operator-outcome.json','resumed.json'],peers,timeout=35)
@@ -111,7 +112,10 @@ def run_case(out,phase,direction):
             log.close()
         a=read_journal(out/'operator.sqlite',1);b=read_journal(out/'robot.sqlite',2)
         sender=json.loads((out/'operator-result.json').read_text());receiver=json.loads((out/'robot-result.json').read_text())
-        result['outcome']=check_outcome(phase,sender,receiver,a,b,barrier,json.loads((out/'resumed.json').read_text()),record,{role:json.loads((out/(role+'-ready.json')).read_text()) for role in lab.containers},json.loads((out/'submitted.json').read_text()))
+        result['outcome']=check_outcome('committed' if phase=='query' else phase,sender,receiver,a,b,barrier,json.loads((out/'resumed.json').read_text()),record,{role:json.loads((out/(role+'-ready.json')).read_text()) for role in lab.containers},json.loads((out/'submitted.json').read_text()))
+        if hold_seconds==6 and (result['outcome']['state'] not in (6,7) or result['outcome']['effects']!=0 or json.loads((out/'resumed.json').read_text())['begin_ns']<=result['outcome']['sender_deadline_ns']):raise ValueError('deadline overrun was executed or not checked beyond expiry')
+        if phase=='query' and sender['queries_sent']<=0:raise ValueError('withheld result did not recover by query')
+        result['withheld_direct_result']=phase=='query'
         result['stopped']={r:json.loads((out/(r+'-stopped.json')).read_text()) for r in lab.containers}
         result['journals']=dict(sender=a,receiver=b)
         if inventory!={p:sha(ROOT/p) for p in runtime}:raise ValueError('runtime changed')
@@ -147,14 +151,15 @@ def failure_suite(out):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');p.add_argument('--dispatch-only',action='store_true');a=p.parse_args();root=a.output.resolve()
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');p.add_argument('--dispatch-only',action='store_true');p.add_argument('--remaining-native',action='store_true');a=p.parse_args();root=a.output.resolve()
     if a.failure_controls:result=failure_suite(root)
     else:
         root.mkdir(parents=True,exist_ok=False);rows=[];result=dict(status='running',cases=rows,qualification=False)
         try:
-            for phase in (('dispatch',) if a.dispatch_only else PHASES):
-                for direction in DIRECTIONS:
-                    print('START '+phase+' '+direction,flush=True);case=run_case(root/(phase+'-'+direction),phase,direction);rows.append(dict(phase=phase,direction=direction,status=case['status'],error=case.get('error')));write(root/'cohort.json',result)
+            phases=(('admission','dispatch','started','query') if a.remaining_native else ('dispatch',) if a.dispatch_only else PHASES)
+            for phase in phases:
+                for direction in (('both',) if a.remaining_native else DIRECTIONS):
+                    print('START '+phase+' '+direction,flush=True);case=run_case(root/(phase+'-'+direction),phase,direction,6 if a.remaining_native and phase!='query' else 2);rows.append(dict(phase=phase,direction=direction,status=case['status'],error=case.get('error')));write(root/'cohort.json',result)
                     print(json.dumps(rows[-1]),flush=True)
                     if case['status']!='passed':raise RuntimeError('N4 phase case failed; remaining cases not executed')
             result['status']='passed'

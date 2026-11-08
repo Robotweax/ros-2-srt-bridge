@@ -2,7 +2,7 @@
 import json
 
 
-def summarize(path):
+def summarize(path,*,allow_inactive_admissions=False):
     events=[];statuses=[]
     for line in path.read_text().splitlines():
         if line.startswith('SAMPLE_TRACE '):events.append(json.loads(line[len('SAMPLE_TRACE '):]))
@@ -21,7 +21,7 @@ def summarize(path):
         if not 1<=e['sequence']<=status['attempted'] or e['point'] not in (1,2,3,4) or not 0<e['begin_ns']<=e['end_ns'] or e['bytes']<=0:
             raise ValueError('invalid sample bracket/event')
         for key in ('owner_epoch','session'):
-            if len(e[key])!=32 or len(bytes.fromhex(e[key]))!=16 or not any(bytes.fromhex(e[key])):raise ValueError('invalid sample owner/session')
+            if len(e[key])!=32 or len(bytes.fromhex(e[key]))!=16 or (not any(bytes.fromhex(e[key])) and not (allow_inactive_admissions and key=='session' and e['point']==1 and e['result'] in (2,4))):raise ValueError('invalid sample owner/session')
         if e['point']==1 and (e['kind']!=5 or e['result'] not in range(5) or not 0<e['origin_ns']<=e['begin_ns'] or not e['callback_sequence'] or not 0<=e['stamp_nanosec']<1000000000):
             raise ValueError('invalid ROS admission observation')
         if e['point'] in (2,3) and (e['kind'] not in (4,5) or e['socket']<0 or e['initial_sequence_available'] not in (0,1)):
