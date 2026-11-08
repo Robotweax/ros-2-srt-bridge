@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: localize default DDS asymmetric cold discovery; prospectively define longer SRT command progress evidence; keep paced candidate separate",
+  "current_priority": "N5: freeze controlled DDS discovery-fragment/reliability loss-and-recovery test with real endpoint/callback observations; prospectively define longer SRT progress coverage",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -1844,6 +1844,72 @@
     "historical_failures_replaced": false,
     "validation_scope": "Python observer/lifecycle/analysis only; no production SDK/ROS/provider rebuild; previous SDK70/ROS41 remain last full validations",
     "next": "packet-level DDS asymmetric discovery localization with independently qualified capture; define prospective SRT N5 longer progress cohort, preserve original unknowns; no repeated spontaneous run selection",
+    "complete_M3_acceptance": false
+  },
+  "dds_rtps_discovery_localization": {
+    "evidence": "evidence/m3-rtps-discovery-2026-11-08/README.md",
+    "method": "retrospective six original captures; no new live run or changed original verdict",
+    "full_adapter_commit": "438ae9d",
+    "partial_adapter_commit": "34d06a4",
+    "decoder": "tshark4.2.2, isolated immutable tool image, offline read-only inputs",
+    "host_tests": 255,
+    "generated_cdr_checks": 6,
+    "independently_encoded_rtps_fixture": "passed",
+    "default_simultaneous": {
+      "original_status": "failed",
+      "complete_command_bindings": 6,
+      "expected_bindings": 8,
+      "missing_complete_advertisements": [
+        "robot operator_hello subscription",
+        "robot robot_hello publication"
+      ],
+      "validated_robot_hellos_at_each_tap": 154,
+      "all_typed_identities_match": true,
+      "application_sequence_range": [
+        19,
+        441
+      ],
+      "archived_hellos_received_each_peer": 0,
+      "fragment_frames": [
+        106,
+        109
+      ],
+      "without_decoder_reassembly_reference": [
+        4,
+        7
+      ]
+    },
+    "control_first": {
+      "complete_bindings": 8,
+      "fragment_frames": [
+        158,
+        212
+      ],
+      "without_decoder_reassembly_reference": [
+        3,
+        57
+      ],
+      "original_limited_progress_unchanged": true
+    },
+    "paced_simultaneous": {
+      "complete_bindings": 8,
+      "fragment_frames": [
+        0,
+        0
+      ],
+      "separate_candidate": true,
+      "validated_robot_and_operator_hello_controls": [
+        235,
+        209
+      ]
+    },
+    "complete_advertisement_presence": "all observed complete identities occur at both taps; no datagram-loss inference",
+    "unbound_topic_data_counts": "withheld as null, independent generated-type route kept separate",
+    "partial_headers": "all11 default non-reassembled first fragments inspected; never promoted to complete bindings",
+    "interpretation": "narrows toward DDS discovery/reader acceptance despite identifiable HELLO DATA at taps; unique middleware/kernel/fragment-drop cause unproven",
+    "adapter_failures_and_intermediate_reports_preserved": true,
+    "production_runtime_and_generated_libraries_unchanged": true,
+    "new_full_sdk_or_ros_validation": false,
     "complete_M3_acceptance": false
   }
 }

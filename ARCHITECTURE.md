@@ -1825,3 +1825,32 @@ plan, original outcomes, source/runtime provenance and limits. Next localize def
 DDS asymmetric discovery with qualified packet evidence and prospectively plan
 longer SRT progress coverage. Full M3/semantic-clock-security-resource comparison
 remains open, PR2 stays draft and Intrinsic/M4 untouched.
+
+
+### RTPS discovery localization (2026-11-08)
+
+Offline analysis of all six original N5 DDS captures narrows the default startup
+failure toward discovery/reader acceptance. Complete decoded command endpoint
+bindings are6 for default/simultaneous versus8 for control-first and paced. The
+missing default bindings are the robot HELLO publication and operator-HELLO
+subscription. Every observed complete command advertisement identity occurs at
+both taps, without implying that live middleware processed it.
+
+A separate generated ROS type check identifies the same154 robot HELLO samples at
+both taps by original process UUID/protocol/kind and semantic CDR reserialization,
+while archived coordinator diagnostics retain0 received HELLOs. Padding is derived
+from generated field declarations; unknown publication bindings otherwise yield
+withheld/null topic-DATA counts. This is payload validation, not authentication,
+callback delivery, command execution or a unique middleware/kernel cause.
+
+Final fragment totals match original counters: default106/109, control-first
+158/212, paced0/0. Strict header-only inspection of all11 non-reassembled default
+first fragments never promotes partial topic text to a complete advertisement.
+The missing robot HELLO advertisements are not tied to a unique lost fragment.
+A live controlled discovery-fragment/reliability loss-and-recovery test remains
+necessary before changing defaults. No new live scenarios or original verdicts
+changed. Host255 tests, six generated-type checks and an independently encoded
+RTPS fixture pass; production/message-library hashes stay unchanged. Prior full
+SDK70/ROS41 remain earlier validations. Detailed adapter corrections and provenance
+are in evidence/m3-rtps-discovery-2026-11-08/. Full N5/M3 remains open, PR2 draft,
+Intrinsic/M4 untouched; longer SRT progress coverage is still prospective work.

@@ -1,0 +1,16 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 292B done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a206b88ff1f9bb52ee4451207369426eebab results in empty or invalid base image name (line 1)
+#1 DONE 0.1s
+
+ [33m1 warning found (use docker --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a206b88ff1f9bb52ee4451207369426eebab results in empty or invalid base image name (line 1)
+Dockerfile:1
+--------------------
+   1 | >>> FROM ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a206b88ff1f9bb52ee4451207369426eebab
+   2 |     RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark && rm -rf /var/lib/apt/lists/*
+   3 |
+--------------------
+ERROR: failed to build: failed to solve: failed to parse stage name "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a206b88ff1f9bb52ee4451207369426eebab": invalid checksum digest length

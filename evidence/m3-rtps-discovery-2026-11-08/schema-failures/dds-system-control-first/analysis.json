@@ -1,0 +1,132 @@
+{
+  "status": "failed",
+  "retrospective": true,
+  "original_run": ".local/m3-dds-combined/20261108T113438557325Z",
+  "source_commit": "ff06a7aa24c468e8c506824373e736219e5b92dd",
+  "adapter_sha256": "85783aae7a9a08f79083a918e862472f3dacc3bca9da4f266daa8a547fb719a0",
+  "commands": [
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-440fd1e62c",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "sh",
+      "-c",
+      "tshark --version; dpkg-query -W tshark libwireshark17t64; sha256sum /usr/bin/tshark /usr/lib/x86_64-linux-gnu/libwireshark.so.17"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-4f8cdcef5f",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113438557325Z/operator.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ]
+  ],
+  "tool_image_id": "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+  "original_status": "passed",
+  "addresses": {
+    "robot": "172.19.0.2",
+    "operator": "172.19.0.3"
+  },
+  "inputs": {
+    "operator": {
+      "path": ".local/m3-dds-combined/20261108T113438557325Z/operator.pcap00",
+      "sha256": "32abd61cd3ff0740eb4cb1a6f92440d7e818328365b15a804226890aa6ad2bd0",
+      "integrity": {
+        "records": 9838,
+        "first_timestamp_ns": 1794137680084530000,
+        "last_timestamp_ns": 1794137748760552000,
+        "classes": {
+          "in/other_udp": {
+            "packets": 486,
+            "ethernet_bytes": 517056,
+            "udp_payload_bytes": 496644
+          },
+          "out/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "out/dds_rtps": {
+            "packets": 2004,
+            "ethernet_bytes": 799132,
+            "udp_payload_bytes": 714964
+          },
+          "in/dds_rtps": {
+            "packets": 7189,
+            "ethernet_bytes": 3387734,
+            "udp_payload_bytes": 3085796
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 61,
+            "ethernet_bytes": 71302,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 69228
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 97,
+            "ethernet_bytes": 115038,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 111740
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 9838,
+        "tcpdump_reported_filtered_packets": 9838,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    }
+  },
+  "error": "ambiguous field rtps.sm.seqNumber"
+}

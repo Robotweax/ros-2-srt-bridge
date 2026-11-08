@@ -2798,3 +2798,40 @@ keine Wiederholung, alle ausgeführt. Siehe
 Capture und vorabdefinierterGegenprobe lokalisieren; längereSRT-N5Progress-Cohort
 vorabfestlegen. PacedKandidat separatführen, keineWiederholungbisgünstigesResultat.
 N3/Clock/Security/Resources weiterhinnachgeordnet. PR2Draft, M3offen, M4unberührt.
+
+
+## Ergänzung 2026-11-08: paketbezogene DDS-Discovery-Lokalisierung
+
+Nur retrospektive Analyse aller6Original-PCAPs der3DDS-Slots aus57f415b; keine
+neuenLiveRuns/Defaultänderungen oder geändertenWorkloadVerdikte. Siehe
+[evidence/m3-rtps-discovery-2026-11-08/README.md](evidence/m3-rtps-discovery-2026-11-08/README.md).
+
+- Isolierter tshark4.2.2 mitIPv4Reassembly, geprüfteOriginalhashes undFile/Filter/
+  Footerpopulationen; Source/Peer-Tap undCallback strikt unterscheiden.
+- DefaultFAILED hat6statt8CommandEndpointBindings: kompletteRobot-HELLO-Publication
+  undOperator-HELLO-Subscription fehlen inbeidenCaptures. Alle beobachteten
+  komplettenAdvertisements sindanbeidenTaps vorhanden; keinDatagramLossclaim.
+- Trotzdem154identischeRobotHELLOs anbeidenTaps: ursprünglicher generierterROS-
+  Deserializer, protokoll2/HELLO1/OriginalProcessUUID, semantischeReserialisierung
+  mitausgeneriertemSchema abgeleiteterCDRPaddingmaske.6positive/negativeChecks
+  vorherPASS. OpakeungebundeneDATA zunächstnull statt0zählen; Typnachweis separat.
+  Originaldiagnostik HELLOreceived0 bleibtunverändert. Das grenztDiscovery/
+  ReaderAcceptance ein, beweist aberkeineeinzigartigeKernel-/Middlewareursache.
+- Control-first undpacedje8Bindings; letztere235Robot-/209OperatorHELLOs als
+  Typkontrollenvalidiert. FragmentframesOp/Robot default106/109, control-first
+  158/212, paced0/0; ohneDecoderReassemblyReference4/7,3/57,0/0. Teilheaderaller11
+  defaultErstfragmente separat analysiert, nieGUID-Binding/komplettesAdvert daraus.
+  FehlendeRobotHELLOAdverts keinerkonkretenverlorenenFragmentgruppezugeordnet.
+- Analysekorrekturen/Fehlschläge separatarchiviert: INFO_DST-Feld, HEARTBEAT-Range,
+  synthetischesDigestfixture, ungebundeneCounts, MF=True, Containerworkdir und
+  unbestimmtesCDRPadding. Endanalysen438ae9d/Teilheader34d06a4 mitSHA-Provenienz.
+  OriginalePCAPs/Journals/WorkloadVerdikte unverändert; vollePDML bleibenlokal.
+- Host255PASS,6generierteCDRChecks, unabhängigcodiertesRTPS/PL-CDR-Paket gegen
+  externenDecoderPASS; Syntax/diffPASS. Alle8Produktionshashes und generierten
+  Messagebibliotheken unverändert; SDK70/ROS41 frühere volleValidation.
+  KeineSDK-/ROS-C++-/Provideränderung, OwnedAnalysetoolContainer entfernt.
+
+**Weiter:** KontrolliertenDDS-Discovery-Fragment-/Reliability-Verlust mitechten
+Endpoint-/Callbackbeobachtungen undRecovery vorabfestlegen, erstdanach Default-
+Änderungableiten. LängereSRT-N5ProgressCoverage separatvorabplanen. KeinLive-
+Kausalnachweis oderN5/M3AbschlussinDieserAnalyse, PR2Draft, M4unberührt.

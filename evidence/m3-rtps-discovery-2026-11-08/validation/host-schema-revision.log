@@ -1,0 +1,34 @@
+...............................................................................................................................................................................................E.E..........................................................
+======================================================================
+ERROR: test_binding_is_writer_guid_not_a_topic_string_anywhere_in_packet (test_m3_rtps_discovery.BindingTests.test_binding_is_writer_guid_not_a_topic_string_anywhere_in_packet)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_m3_rtps_discovery.py", line 68, in test_binding_is_writer_guid_not_a_topic_string_anywhere_in_packet
+    decoded,addresses=self.fixture();r=assess(decoded,addresses)
+                                       ~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_rtps_discovery.py", line 113, in assess
+    a={key(r) for r in own};b={key(r) for r in other}
+       ~~~^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_rtps_discovery.py", line 112, in <lambda>
+    key=lambda r:(r['writer'],r['sequence'],r['submessage_sha256'],r['topic'],r['endpoint'],r['side'])
+                                            ~^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'submessage_sha256'
+
+======================================================================
+ERROR: test_known_missing_advertisement_never_invents_local_receipt (test_m3_rtps_discovery.BindingTests.test_known_missing_advertisement_never_invents_local_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_m3_rtps_discovery.py", line 76, in test_known_missing_advertisement_never_invents_local_receipt
+    r=assess(decoded,addresses)
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_rtps_discovery.py", line 113, in assess
+    a={key(r) for r in own};b={key(r) for r in other}
+       ~~~^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_rtps_discovery.py", line 112, in <lambda>
+    key=lambda r:(r['writer'],r['sequence'],r['submessage_sha256'],r['topic'],r['endpoint'],r['side'])
+                                            ~^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'submessage_sha256'
+
+----------------------------------------------------------------------
+Ran 252 tests in 2.513s
+
+FAILED (errors=2)

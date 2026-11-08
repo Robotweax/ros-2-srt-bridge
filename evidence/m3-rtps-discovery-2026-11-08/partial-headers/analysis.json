@@ -1,0 +1,433 @@
+{
+  "source_commit": "34d06a46110cad579eed1ad2df71d048bd927286",
+  "adapter_sha256": "7483fb2ef9f16982cd8f4c599b69deaf9832356b357f5f55f1908eb911b8ef34",
+  "roles": {
+    "operator": {
+      "selected_frames": [
+        325,
+        329,
+        426,
+        594
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--memory",
+        "1g",
+        "--name",
+        "ros2-srt-rtps-analysis-84a097744b",
+        "-w",
+        "/workspace",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+        "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+        "tshark",
+        "-n",
+        "-2",
+        "-o",
+        "ip.defragment:FALSE",
+        "-r",
+        "/workspace/.local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+        "-Y",
+        "frame.number == 325 || frame.number == 329 || frame.number == 426 || frame.number == 594",
+        "-T",
+        "pdml"
+      ],
+      "inspection": {
+        "packets": 4,
+        "rows": [
+          {
+            "frame": 325,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd844",
+            "writer": "010f8e234d007a0100000000000004c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 325,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd844",
+            "writer": "010f8e234d007a0100000000000004c2",
+            "sequence": 2,
+            "partial_topic": "rq/m3_dds_operator/describe_parametersRequest",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 325,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd844",
+            "writer": "010f8e234d007a0100000000000004c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 329,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd859",
+            "writer": "010f8e234d007a0100000000000003c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 329,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd859",
+            "writer": "010f8e234d007a0100000000000003c2",
+            "sequence": 2,
+            "partial_topic": "rt/rosout",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 329,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd859",
+            "writer": "010f8e234d007a0100000000000003c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 426,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd947",
+            "writer": "010f8e23720078e300000000000003c2",
+            "sequence": 12,
+            "partial_topic": "rt/dds/commands/operator_hello",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 426,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd947",
+            "writer": "010f8e23720078e300000000000003c2",
+            "sequence": 13,
+            "partial_topic": "rt/dds/commands/sender/state",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 426,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xd947",
+            "writer": "010f8e23720078e300000000000003c2",
+            "sequence": 14,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 594,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xdb06",
+            "writer": "010f8e23720078e300000000000004c2",
+            "sequence": 10,
+            "partial_topic": "rt/dds/commands/robot",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 594,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xdb06",
+            "writer": "010f8e23720078e300000000000004c2",
+            "sequence": 11,
+            "partial_topic": "rt/dds/commands/robot_hello",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 594,
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "ip_id": "0xdb06",
+            "writer": "010f8e23720078e300000000000004c2",
+            "sequence": 12,
+            "partial_topic": null,
+            "complete_advertisement": false
+          }
+        ],
+        "scope": "header-only decode with IPv4 defragmentation disabled for known non-reassembled first fragments; partial topic text is never a complete advertisement or GUID binding; malformed truncated bodies expected"
+      },
+      "pdml_sha256": "c913daeee658342d81593361af5b57d382ad0b6cb26c11414ebc9d9b74af470c"
+    },
+    "robot": {
+      "selected_frames": [
+        320,
+        416,
+        427,
+        437,
+        772,
+        1354,
+        1472
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--memory",
+        "1g",
+        "--name",
+        "ros2-srt-rtps-analysis-2c410b8551",
+        "-w",
+        "/workspace",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+        "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+        "tshark",
+        "-n",
+        "-2",
+        "-o",
+        "ip.defragment:FALSE",
+        "-r",
+        "/workspace/.local/m3-dds-combined/20261108T113346564620Z/robot.pcap00",
+        "-Y",
+        "frame.number == 320 || frame.number == 416 || frame.number == 427 || frame.number == 437 || frame.number == 772 || frame.number == 1354 || frame.number == 1472",
+        "-T",
+        "pdml"
+      ],
+      "inspection": {
+        "packets": 7,
+        "rows": [
+          {
+            "frame": 320,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8db4",
+            "writer": "010f3dea7300721f00000000000004c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 320,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8db4",
+            "writer": "010f3dea7300721f00000000000004c2",
+            "sequence": 2,
+            "partial_topic": "rq/dds_command_coordinator/get_parametersRequest",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 320,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8db4",
+            "writer": "010f3dea7300721f00000000000004c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 416,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ec3",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 416,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ec3",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 2,
+            "partial_topic": "rt/rosout",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 416,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ec3",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 427,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef0",
+            "writer": "010f3dea7300721f01000000000003c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 427,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef0",
+            "writer": "010f3dea7300721f01000000000003c2",
+            "sequence": 2,
+            "partial_topic": "rt/rosout",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 427,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef0",
+            "writer": "010f3dea7300721f01000000000003c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 437,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef4",
+            "writer": "010f3dea7300721f01000000000004c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 437,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef4",
+            "writer": "010f3dea7300721f01000000000004c2",
+            "sequence": 2,
+            "partial_topic": "rq/srt_rate_worker/get_parametersRequest",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 437,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x8ef4",
+            "writer": "010f3dea7300721f01000000000004c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 772,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9248",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 772,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9248",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 2,
+            "partial_topic": "rt/rosout",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 772,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9248",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1354,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9b0b",
+            "writer": "010f3dea4d00d70f00000000000004c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1354,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9b0b",
+            "writer": "010f3dea4d00d70f00000000000004c2",
+            "sequence": 2,
+            "partial_topic": "rq/m3_dds_robot/describe_parametersRequest",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1354,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9b0b",
+            "writer": "010f3dea4d00d70f00000000000004c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1472,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9d19",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 1,
+            "partial_topic": "ros_discovery_info",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1472,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9d19",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 2,
+            "partial_topic": "rt/rosout",
+            "complete_advertisement": false
+          },
+          {
+            "frame": 1472,
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "ip_id": "0x9d19",
+            "writer": "010f3dea7300721f00000000000003c2",
+            "sequence": 3,
+            "partial_topic": null,
+            "complete_advertisement": false
+          }
+        ],
+        "scope": "header-only decode with IPv4 defragmentation disabled for known non-reassembled first fragments; partial topic text is never a complete advertisement or GUID binding; malformed truncated bodies expected"
+      },
+      "pdml_sha256": "fe0806035ae8bf76ac13f0688825b639b388f9e82709129f5d44ca7ff8149ca5"
+    }
+  }
+}
