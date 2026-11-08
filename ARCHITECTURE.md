@@ -1854,3 +1854,36 @@ RTPS fixture pass; production/message-library hashes stay unchanged. Prior full
 SDK70/ROS41 remain earlier validations. Detailed adapter corrections and provenance
 are in evidence/m3-rtps-discovery-2026-11-08/. Full N5/M3 remains open, PR2 draft,
 Intrinsic/M4 untouched; longer SRT progress coverage is still prospective work.
+
+
+### Controlled native DDS discovery-fragment recovery (2026-11-08)
+
+A separately frozen native fixture demonstrates that selective discovery fragment
+loss can preserve participant discovery and outgoing HELLO DATA while preventing
+endpoint qualification/callbacks, then recover without process or endpoint restart.
+It uses N0, explicit UDPv4 locators and4096-byte robot writer/reader discovery
+metadata, not production ROS coordinators, command journals or N5 sensor load.
+An exact continuation offset185 selector records18 drops during an8.000577254s
+VM hold. Operator matches/callbacks stay0 while robot matches1/1 and writes78.
+Removing the owned selector restores qualified snapshots by~805ms on original
+GUIDs; restoration-to-end counts33/33 and strict steady-origin counts28/29 pass
+the subsequent three-second fence.
+
+Independent closed captures match152 native HELLO identities. Seventy-eight robot
+HELLO origins inside the cut are present at both taps and precede the first
+complete robot publication advertisement in operator file order. This is origin/
+order evidence, not realtime-PCAP arrival latency or a unique historical cause.
+The separate no-loss control passes30/30 qualification-to-end callbacks, strict
+steady counts29/28, and70 packet identities.
+
+Three initial no-loss probe failures and skipped fault cases are preserved. Their
+participant listener's default all-status mask intercepted DATA_ON_READERS before
+reader callbacks; unread history1 exposed that fixture defect. Restricting that
+fixture mask leaves discovery and reader callbacks operational without wire/QoS
+changes. It does not establish the same defect in the original ROS/RMW workload.
+Final host262 tests and standalone Release/Werror build pass; original reports and
+posthoc fenced/capture rechecks retain distinct provenance. Production hashes stay
+unchanged, prior full SDK70/ROS41 remain earlier validations, and owned namespaces
+are removed. See evidence/m3-dds-discovery-loss-2026-11-08/. Next separately plan
+ROS/N5 confirmation/mitigation and longer SRT progress coverage. Default DDS and
+full N5/M3 acceptance remain open; PR2 draft, Intrinsic/M4 untouched.

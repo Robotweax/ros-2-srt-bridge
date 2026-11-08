@@ -91,8 +91,9 @@ def assess(result,traces):
     else:origin=max(v['monotonic_ns'] for v in result['qualified'].values())
     fence=result['steady']['end_ns']
     counts={role:sum(row['event']=='hello_received' and row['valid'] and row['sent_ns']>origin and row['monotonic_ns']<=fence for row in trace['rows']) for role,trace in traces.items()}
-    if any(n<20 for n in counts.values()):raise ValueError('insufficient fresh bidirectional callback progress')
-    return dict(fresh_callbacks=counts,callback_fence_ns=fence,original_endpoints_preserved=True,scope='real native DDS endpoints and callbacks with deliberately enlarged discovery metadata; controlled N0 fixture, not ROS bridge/N5/historical cause acceptance')
+    steady_counts={role:sum(row['event']=='hello_received' and row['valid'] and row['sent_ns']>result['steady']['begin_ns'] and row['monotonic_ns']<=fence for row in trace['rows']) for role,trace in traces.items()}
+    if any(n<20 for n in counts.values()) or any(n<20 for n in steady_counts.values()):raise ValueError('insufficient fresh bidirectional callback progress')
+    return dict(fresh_callbacks=counts,steady_fresh_callbacks=steady_counts,callback_fence_ns=fence,original_endpoints_preserved=True,scope='real native DDS endpoints and callbacks with deliberately enlarged discovery metadata; controlled N0 fixture, not ROS bridge/N5/historical cause acceptance')
 
 
 def run(out,case):
@@ -173,6 +174,7 @@ def main():
         if rows and rows[-1]['status']!='passed':rows.append(dict(case=case,status='not_executed'));break
         r=run(out/case,case);rows.append(dict(case=case,status=r['status'],error=r.get('error')));write(out/'execution.json',dict(cases=rows,qualification=False));print(case,r['status'],flush=True)
     write(out/'execution.json',dict(cases=rows,qualification=False))
+    return 0 if len(rows)==2 and all(r['status']=='passed' for r in rows) else 1
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(main())

@@ -21,3 +21,18 @@ No new live execution, parameter change, rewritten verdict or original-capture
 mutation. The separate native wire type remains a diagnostic, not production
 DdsCommandFrame. Preserve partial/discovery/callback distinctions and historical
 ROS/N5 uncertainty. All host tests261 pass before the closed-capture analysis.
+
+After these live cases, harden the cohort CLI exit code: failed baseline/skipped
+fault must return nonzero rather than merely recording the failed matrix. The
+three earlier invocations returned0 while their manifests correctly said FAILED;
+those outcomes remain unchanged. Mocked orchestration tests verify1/no retry/
+skipped fault versus0/two passing slots. This error-path/reporting change is
+host-tested only, not a new live cohort or repaired earlier exit code.
+
+
+An additional stricter recheck requires>=20 callbacks with source origins after
+steady.begin_ns as well as reception before steady.end_ns. It excludes both
+qualification-period samples and shutdown tails: baseline29 operator/28 robot,
+fault28 operator/29 robot. Earlier qualification/restoration-to-end counts30/30
+and33/33 are retained separately; neither recheck overwrites original live files.
+A regression rejects callbacks originating only before the steady interval.

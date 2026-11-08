@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: freeze controlled DDS discovery-fragment/reliability loss-and-recovery test with real endpoint/callback observations; prospectively define longer SRT progress coverage",
+  "current_priority": "N5: separately freeze ROS/N5 discovery mitigation or confirmation using controlled mechanism; prospectively extend SRT progress coverage; preserve historical UNKNOWNs and default baseline",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -1911,5 +1911,85 @@
     "production_runtime_and_generated_libraries_unchanged": true,
     "new_full_sdk_or_ros_validation": false,
     "complete_M3_acceptance": false
+  },
+  "dds_controlled_discovery_fragment_loss": {
+    "evidence": "evidence/m3-dds-discovery-loss-2026-11-08/README.md",
+    "frozen_plan_source": "d12feb5",
+    "corrected_live_source": "5ba20c1",
+    "closed_packet_and_fenced_recheck_source": "5606cdf",
+    "scope": "standalone native Fast DDS N0 fixture, not production ROS/N5; large4096-byte robot reader/writer user_data, UDPv4-only and fixed locators",
+    "preserved_failed_controls": [
+      {
+        "source": "d12feb5",
+        "baseline": "failed callback gate",
+        "fragment_case": "not_executed"
+      },
+      {
+        "source": "d3a47e8",
+        "baseline": "failed callback gate",
+        "fragment_case": "not_executed"
+      },
+      {
+        "source": "2fe1737",
+        "baseline": "failed callback gate",
+        "fragment_case": "not_executed"
+      }
+    ],
+    "fixture_defect": "participant listener StatusMask::all inherited aggregate DATA_ON_READERS and intercepted reader callback; history unread1, codec/callback0; corrected fixture listener mask none, no wire/QoS change",
+    "corrected_baseline": {
+      "status": "passed",
+      "fenced_fresh_callbacks_each": 30,
+      "pcap_records_each": 136,
+      "matched_hello_packet_identities": 70,
+      "strict_steady_callbacks_operator_robot": [
+        29,
+        28
+      ]
+    },
+    "corrected_fragment_cut": {
+      "status": "passed",
+      "selector": "owned robot-to-operator IPv4 IHL5 UDP continuation offset185, not user DATA/SPDP",
+      "actual_hold_ns": 8000577254,
+      "guaranteed_selector_ns": 9638923087,
+      "kernel_selected_drops": 18,
+      "selected_bytes": 27252,
+      "participant_discovery_preserved": true,
+      "blocked_operator_matches": [
+        0,
+        0
+      ],
+      "blocked_operator_callbacks": 0,
+      "blocked_robot_matches": [
+        1,
+        1
+      ],
+      "blocked_robot_write_attempts": 78,
+      "recovery_qualified_ms": [
+        793.14325,
+        804.947583
+      ],
+      "fenced_fresh_callbacks_each": 33,
+      "process_and_endpoint_guids_preserved": true,
+      "pcap_records_operator_robot": [
+        264,
+        282
+      ],
+      "matched_hello_identities": 152,
+      "matching_robot_hello_origins_in_cut_each_tap": 78,
+      "robot_hellos_before_first_complete_publication_advertisement": 78,
+      "strict_steady_callbacks_operator_robot": [
+        28,
+        29
+      ]
+    },
+    "all_capture_and_shutdown_gates_pass": true,
+    "host_tests_final": 262,
+    "production_runtime_hashes_unchanged": true,
+    "only_standalone_probe_rebuilt": true,
+    "new_full_sdk_ros_validation": false,
+    "original_ros_n5_cause_uniquely_proven": false,
+    "production_defaults_changed": false,
+    "complete_M3_acceptance": false,
+    "post_live_cli_hardening": "host-tested nonzero exit for failed control/skipped fault; earlier three invocations exited0 with authoritative FAILED manifests, not rewritten"
   }
 }

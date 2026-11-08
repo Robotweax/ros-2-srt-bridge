@@ -1,0 +1,22 @@
+[1/2] Building CXX object CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o
+FAILED: CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o
+/usr/bin/c++ -DFASTCDR_DYN_LINK -DFASTRTPS_DYN_LINK -DFOONATHAN_MEMORY=1 -DFOONATHAN_MEMORY_VERSION_MAJOR=0 -DFOONATHAN_MEMORY_VERSION_MINOR=7 -DFOONATHAN_MEMORY_VERSION_PATCH=3 -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64 -isystem /opt/ros/jazzy/include/fastrtps -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/foonathan_memory -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o -MF CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o.d -o CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o -c /workspace/tools/m3_dds_discovery_peer/main.cpp
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘virtual void ReaderListener::on_data_available(eprosima::fastdds::dds::DataReader*)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:85:63: error: ‘native_dds::ReturnCode_t’ has not been declared
+   85 |         while(reader->take_next_sample(&h,&info)==native_dds::ReturnCode_t::RETCODE_OK){
+      |                                                               ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘bool ParticipantGuard::close()’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:95:217: error: ‘native_dds::ReturnCode_t’ has not been declared
+   95 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=native_dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==native_dds::ReturnCode_t::RETCODE_OK&&b==native_dds::ReturnCode_t::RETCODE_OK;}
+      |                                                                                                                                                                                                                         ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:95:258: error: ‘native_dds::ReturnCode_t’ has not been declared
+   95 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=native_dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==native_dds::ReturnCode_t::RETCODE_OK&&b==native_dds::ReturnCode_t::RETCODE_OK;}
+      |                                                                                                                                                                                                                                                                  ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In function ‘int main(int, char**)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:110:102: error: ‘native_dds::ReturnCode_t’ has not been declared
+  110 |         native_dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==native_dds::ReturnCode_t::RETCODE_OK,"type registration failed");
+      |                                                                                                      ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:122:129: error: ‘native_dds::ReturnCode_t’ has not been declared
+  122 |             if(stamp>=next_send){Hello h;h.role=number;h.sequence=++sent;h.sent_ns=stamp;require(writer->write(&h)==native_dds::ReturnCode_t::RETCODE_OK,"HELLO write failed");next_send=stamp+100000000;}
+      |                                                                                                                                 ^~~~~~~~~~~~
+ninja: build stopped: subcommand failed.

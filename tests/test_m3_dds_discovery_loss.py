@@ -4,14 +4,15 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_dds_discovery_loss import selector,counters,assess,trace
+from m3_dds_discovery_loss import selector,counters,assess,trace,main
 
 
 def fixture():
     def state(role):return dict(peer_discovered=True,writer_matches=1,reader_matches=1,received=25,invalid=0,pid=1,started_ns=1,participant=role+'part',writer=role+'write',reader=role+'read',writer_metadata_bytes=4096 if role=='robot' else 0,reader_metadata_bytes=4096 if role=='robot' else 0,sent=60,monotonic_ns=10_000_000_000)
     states={r:state(r) for r in ('operator','robot')};blocked=copy.deepcopy(states);blocked['operator'].update(writer_matches=0,reader_matches=0,received=0)
-    result=dict(case='fragment-cut',initial=copy.deepcopy(states),final=copy.deepcopy(states),blocked=blocked,hold=dict(begin_ns=1,end_ns=8_000_000_001),drops=[dict(drops=3)],remove=dict(begin_ns=9_000_000_000,end_ns=9_000_000_001),qualified=copy.deepcopy(states),steady=dict(end_ns=10_000_000_000))
+    result=dict(case='fragment-cut',initial=copy.deepcopy(states),final=copy.deepcopy(states),blocked=blocked,hold=dict(begin_ns=1,end_ns=8_000_000_001),drops=[dict(drops=3)],remove=dict(begin_ns=9_000_000_000,end_ns=9_000_000_001),qualified=copy.deepcopy(states),steady=dict(begin_ns=9_000_000_005,end_ns=10_000_000_000))
     traces={role:dict(rows=[dict(event='hello_received',valid=True,sent_ns=9_000_000_010,monotonic_ns=10_000_000_000) for _ in range(20)]) for role in states}
     return result,traces
 
@@ -35,7 +36,7 @@ class DiscoveryLossTests(unittest.TestCase):
 
     def test_recovery_needs_original_endpoints_fresh_callbacks_and_preserved_participant_discovery(self):
         result,traces=fixture();self.assertEqual(assess(result,traces)['fresh_callbacks'],dict(operator=20,robot=20))
-        for defect in ('restart','stale','participant','early_match','metadata','deadline','late_callback'):
+        for defect in ('restart','stale','participant','early_match','metadata','deadline','late_callback','pre_steady'):
             r=copy.deepcopy(result);t=copy.deepcopy(traces)
             if defect=='restart':r['final']['robot']['writer']='replacement'
             elif defect=='stale':t['robot']['rows'][0]['sent_ns']=1
@@ -43,7 +44,9 @@ class DiscoveryLossTests(unittest.TestCase):
             elif defect=='early_match':t['operator']['rows'].append(dict(event='writer_match',current=1,monotonic_ns=1))
             elif defect=='metadata':r['initial']['robot']['writer_metadata_bytes']=1
             elif defect=='deadline':r['qualified']['robot']['monotonic_ns']=60_000_000_000
-            else:t['robot']['rows'][0]['monotonic_ns']=10_000_000_001
+            elif defect=='late_callback':t['robot']['rows'][0]['monotonic_ns']=10_000_000_001
+            else:
+                for row in t['robot']['rows']:row['sent_ns']=9_000_000_003
             with self.subTest(defect=defect),self.assertRaises(ValueError):assess(r,t)
 
     def test_trace_refuses_missing_footer_exhaustion_and_unclean_teardown(self):
@@ -60,3 +63,14 @@ class DiscoveryLossTests(unittest.TestCase):
                 if defect is None:self.assertEqual(trace(p)['status']['recorded'],1)
                 else:
                     with self.assertRaises(ValueError):trace(p)
+
+
+class CohortExitTests(unittest.TestCase):
+    def test_failed_control_is_nonzero_and_skips_fault_without_retry(self):
+        for statuses,expected,called in [(['failed'],1,1),(['passed','passed'],0,2)]:
+            with self.subTest(statuses=statuses),tempfile.TemporaryDirectory() as d:
+                out=Path(d)/'fresh'
+                with patch('sys.argv',['fixture','--out',str(out)]),patch('m3_dds_discovery_loss.run',side_effect=[dict(status=s) for s in statuses]) as run:
+                    self.assertEqual(main(),expected);self.assertEqual(run.call_count,called)
+                rows=json.loads((out/'execution.json').read_text())['cases']
+                if expected:self.assertEqual(rows[-1]['status'],'not_executed')

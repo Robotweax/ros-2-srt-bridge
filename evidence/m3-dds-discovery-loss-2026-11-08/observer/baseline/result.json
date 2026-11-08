@@ -1,0 +1,213 @@
+{
+  "case": "baseline",
+  "status": "failed",
+  "qualification": false,
+  "provenance": {
+    "source_commit": "d3a47e8a6ec171b668953bed111586dd56d84fac",
+    "image": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+    "probe_sha256": "115c57b33d6021abd4b5ef049da42d8cf0c1f4b4ae7425ff5e0892ac6a9fcba9",
+    "runtime_sha256": {
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "3895dc3c5965e04d37c8a395ff5b6b6f6a2095bdd0dafbaff025d573f434a545",
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "c43f6ad26275aa5a06b3c5d58b11daaf85ee68cf8f9f62390f2882fda047195a",
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "b85c46b0e8e31ff6ec1c1b499e1d5951cb3412a2e4d067a420fcf6410722470b",
+      "install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "b3dc5e33efd6272f87015540ad204819e45265eec51773b0627d2fef6f30c258",
+      "install/bridge-m3/bin/robotweax-journal-worker": "86573a71a22e03841158853d7bb458573bc524c83fd59d156a6cbad25c8ac62f",
+      "install/bridge-m3/lib/librobotweax_srt_bridge_endpoint.a": "8b2677b13f222c889acfc87bbb3b7522cc59a525c1fa6275979bdd815c46d547",
+      "install/bridge-m3/lib/librobotweax_srt_bridge_transport.a": "2bf179fdde58cf298fb379034b45f0e4a007072ba5721a1c600ec8492de1a32a",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673"
+    }
+  },
+  "interfaces": {
+    "robot": [
+      {
+        "ifindex": 11,
+        "link_index": 25,
+        "ifname": "eth0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1500,
+        "qdisc": "netem",
+        "operstate": "UP",
+        "linkmode": "DEFAULT",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "4a:69:e5:60:e7:04",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 0
+      }
+    ],
+    "operator": [
+      {
+        "ifindex": 11,
+        "link_index": 26,
+        "ifname": "eth0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1500,
+        "qdisc": "netem",
+        "operstate": "UP",
+        "linkmode": "DEFAULT",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "d6:c9:ce:14:46:ad",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 0
+      }
+    ]
+  },
+  "clock_proof": {
+    "robot": "94a8789a-1435-42a4-b375-70b597b799e7\nmonotonic           0         0\nboottime            0         0\n",
+    "operator": "94a8789a-1435-42a4-b375-70b597b799e7\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "initial": {
+    "robot": {
+      "monotonic_ns": 1994065490827,
+      "event": "state",
+      "pid": 90,
+      "started_ns": 1994064657868,
+      "participant": "010f3dea5a00f88e00000000000001c1",
+      "writer": "010f3dea5a00f88e0000000000000103",
+      "reader": "010f3dea5a00f88e0000000000000204",
+      "writer_metadata_bytes": 4096,
+      "reader_metadata_bytes": 4096,
+      "peer_discovered": false,
+      "writer_matches": 0,
+      "reader_matches": 0,
+      "sent": 1,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0
+    },
+    "operator": {
+      "monotonic_ns": 1994076703743,
+      "event": "state",
+      "pid": 89,
+      "started_ns": 1994075561327,
+      "participant": "010f8e2359000bc900000000000001c1",
+      "writer": "010f8e2359000bc90000000000000103",
+      "reader": "010f8e2359000bc90000000000000204",
+      "writer_metadata_bytes": 0,
+      "reader_metadata_bytes": 0,
+      "peer_discovered": true,
+      "writer_matches": 0,
+      "reader_matches": 0,
+      "sent": 1,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0
+    }
+  },
+  "error": "native DDS phase deadline exceeded",
+  "captures": {
+    "robot": {
+      "records": 970,
+      "first_timestamp_ns": 1794146389274508000,
+      "last_timestamp_ns": 1794146434398735000,
+      "classes": {
+        "in/dds_rtps": {
+          "packets": 482,
+          "ethernet_bytes": 110368,
+          "udp_payload_bytes": 90124
+        },
+        "out/dds_rtps": {
+          "packets": 480,
+          "ethernet_bytes": 109124,
+          "udp_payload_bytes": 88964
+        },
+        "out/ipv4_udp_fragment": {
+          "packets": 8,
+          "ethernet_bytes": 9480,
+          "udp_payload_bytes": null,
+          "ip_fragment_payload_bytes": 9208
+        }
+      },
+      "unaccounted": {},
+      "fec": {
+        "in": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        },
+        "out": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        }
+      },
+      "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 970,
+        "filtered_records": 970,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      }
+    },
+    "operator": {
+      "records": 970,
+      "first_timestamp_ns": 1794146389274475000,
+      "last_timestamp_ns": 1794146434398733000,
+      "classes": {
+        "out/dds_rtps": {
+          "packets": 482,
+          "ethernet_bytes": 110368,
+          "udp_payload_bytes": 90124
+        },
+        "in/dds_rtps": {
+          "packets": 480,
+          "ethernet_bytes": 109124,
+          "udp_payload_bytes": 88964
+        },
+        "in/ipv4_udp_fragment": {
+          "packets": 8,
+          "ethernet_bytes": 9480,
+          "udp_payload_bytes": null,
+          "ip_fragment_payload_bytes": 9208
+        }
+      },
+      "unaccounted": {},
+      "fec": {
+        "in": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        },
+        "out": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        }
+      },
+      "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 970,
+        "filtered_records": 970,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      }
+    }
+  }
+}

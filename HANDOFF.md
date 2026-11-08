@@ -2835,3 +2835,43 @@ neuenLiveRuns/Defaultänderungen oder geändertenWorkloadVerdikte. Siehe
 Endpoint-/Callbackbeobachtungen undRecovery vorabfestlegen, erstdanach Default-
 Änderungableiten. LängereSRT-N5ProgressCoverage separatvorabplanen. KeinLive-
 Kausalnachweis oderN5/M3AbschlussinDieserAnalyse, PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: kontrollierter nativer DDS-Fragmentverlust
+
+GefrorenerPlan d12feb5, drei frühereBaseline-Fehler bleibenFAILED undFaultcases
+jeweilsNOTEXECUTED; korrigierter5ba20c1Pair baseline+fragment-cutPASS. Nachweise:
+[evidence/m3-dds-discovery-loss-2026-11-08/README.md](evidence/m3-dds-discovery-loss-2026-11-08/README.md).
+
+- EigenständigerFastDDS-Probe, keinBridgeSDK/ROSCoordinator: UDPv4-only, festeOwned-
+  Locator26010/26011, BE/Volatile/KeepLast1,10Hz, native28ByteHELLO. Robot-Pub/Sub
+  user_data4096B erzwingtgroßeDiscovery;Operator leer. VerifiziertesN0/MTU1500,
+  permanenteOwnedNeighbors, gemeinsameVMClock. KeineN5Shaper/Competitor/Sensorlast.
+- DreiNoLossKontrollen matchen, habentrotzDATA0Callbacks. ZusätzlicheObserver
+  zeigenReaderHistoryunread1 vorCallback/Codec. FixtureParticipantListener mit
+  StatusMask::all fängtDATA_ON_READERS überleeregeerbteMethodeab; nativeMaske
+  none lässtvendorDiscovery undReaderCallbacksarbeiten. KeineWire-/QoS-/Codec-
+  oderProduktionsänderung. KeinBelegfüreinenidentischenROS/RMW-Fehler!
+- KorrigierteBaseline echteCallbacks/Codec, Qualifier→Fence30/30; striktSteady29/28. Dannvor
+  TeilnehmerstartgenauRobotUDPContinuationoffset185selektivgedroppt:18Packets/
+  27252Bytes; VMhold8.000577254s, garantierterSelectorzeitraum9.638923087s.
+  Participantdiscoverybeidseitiglive; Operator0Pub/SubMatches/0Callbacks, Robot
+  1/1Matches und78Writes. AlleOperatorMatchbeobachtungenvorRestore unqualifiziert.
+- NachHookRemovalQualifierSnapshots793.143250/804.947583ms (inklMatching,>=3Callbacks
+  undStateSampling, keinepureDiscoveryLatency). OriginalePID/Start-/Participant/
+  Writer/ReaderGUIDs bleiben;Restore→Fence33/33, strikt3sSteady28/29, invalid0.
+- Paketidentitätenanderendecodergeprüft: baseline70, fault152 anbeidenTaps gleich.
+  78RobotHELLOmitOriginsimHold/CutFensteranbeidenTaps, alleinOperatorPCAPorder
+  vorersterkompletterRobotPublication(frame175). KeinRT-PCAPArrival-/Ageclaim.
+  AlleFile/Filter/Kernel/Hash/Drain-PopulationenundNativeTrace/ShutdowngatesPASS.
+- SeparateposthocFencedprüfung5606cdf schließtShutdown-Tailsaus, Originalresult.json
+  unverändert. CLIslieferteninden3Fehlkohorten0trotzkorrekterFAILED-Matrix;
+  künftigerCLI liefertbeiFailed/Skippednonzero, nurhostgetestet/keinealtenExits
+  umgeschrieben. Host262PASS, StandaloneRelease/Werror/Syntax/diffPASS.
+  NurFixtureELFneugebaut;alle8Produktionshashes gleich. SDK70/ROS41 früherevolle
+  Validation, keinProduktionsbuild. AlleOwnedContainer/Netze/Selectorentfernt.
+
+**Weiter:** ROS/N5-spezifischeDiscoveryMitigation/Bestätigung separatvorabplanen,
+SRT-N5ProgressCoverageverlängern. DerkontrollierteMechanismusistbelegt, die
+historischeROS/N5-Ursache/DDSdefaultnichtgefixt. KeinevolleN5/M3-/Hardware-/Clock/
+Security-/ResourceAbnahme, keinacceptedCommandReplay. PR2Draft, M4unberührt.
