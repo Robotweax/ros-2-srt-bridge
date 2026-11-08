@@ -1887,3 +1887,39 @@ unchanged, prior full SDK70/ROS41 remain earlier validations, and owned namespac
 are removed. See evidence/m3-dds-discovery-loss-2026-11-08/. Next separately plan
 ROS/N5 confirmation/mitigation and longer SRT progress coverage. Default DDS and
 full N5/M3 acceptance remain open; PR2 draft, Intrinsic/M4 untouched.
+
+
+### ROS transfer check and extended SRT N5 progress (2026-11-08)
+
+Frozen0641523 executes six development slots once, with independent ROS/SRT
+failure gates. The matrix fails (exit1). ROS system DDS N0/control-first control
+passes8/8 commands; its selective continuation-offset185 cut drops12 packets yet
+both real coordinators remain ready with all four endpoint counts1 and HELLO
+callbacks progressing. This contradicts the planned blockade hypothesis. The
+selector is removed, workload admission barrier stays closed, fresh journals
+remain empty and all native children exit cleanly. The configured15s measurement
+never starts. It is not a ROS recovery success, loaded N5 mitigation, or evidence
+that the earlier native4096-byte discovery fixture generalizes to real ROS.
+
+SRT N0 control passes8/8. Three300s N5 seeds1701/2903/4211 yield131/131,130/130 and
+11/12 confirmed commands, with19/20/138 skipped slots. The last row fails the
+stricter progress gate while its original safety/accounting harness remainsPASS.
+Intent12 has one SDK handoff and original5s start budget; live status stays
+LOCAL_QUEUED/revision0. An early clock_unqualified peer error lacks exposed request
+kind. Later NOT_FOUND and a missing closed receiver journal entry do not establish
+nonexecution. Closed sender UNKNOWN/reconcile_required can be cleanup invalidation;
+no live UNKNOWN transition was recorded. Existing receiver trace does not include
+request-admission events. No active-window session/invalidation/session-action/
+link-loss event is recorded, but a unique delivery/admission/clock cause remains
+unproven. Accepted commands must not be replayed.
+
+All capture populations and diagnostic footer gates pass; tcpdump readiness is
+checked before application launch, without claiming filter-before-bind semantics.
+Host265 tests pass before/after live execution, eight production runtime hashes
+remain unchanged, and owned namespaces are removed. Sensor delivery gaps remain
+explicit; these bounded progress successes are not full N5 acceptance. See
+evidence/m3-ros-confirmation-srt-n5-2026-11-08/ for original verdicts, separate
+closed audits and compact public selections with original/derived hashes.
+Next instrument request-kind and receiver/clock rejection boundaries, freeze a
+focused diagnostic plan, and separately confirm loaded ROS/N5 discovery. M3 stays
+open, PR2 draft, Intrinsic/M4 untouched.

@@ -2875,3 +2875,48 @@ jeweilsNOTEXECUTED; korrigierter5ba20c1Pair baseline+fragment-cutPASS. Nachweise
 SRT-N5ProgressCoverageverlängern. DerkontrollierteMechanismusistbelegt, die
 historischeROS/N5-Ursache/DDSdefaultnichtgefixt. KeinevolleN5/M3-/Hardware-/Clock/
 Security-/ResourceAbnahme, keinacceptedCommandReplay. PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: ROS-Transferprüfung und SRT-N5-Dreiseed-Progress
+
+Gefrorener Source0641523, sechs Slots genau einmal, GesamtmatrixFAILED/Exit1.
+Keine Retries; ROS/SRT unabhängige Gruppen. Evidenz:
+[evidence/m3-ros-confirmation-srt-n5-2026-11-08/README.md](evidence/m3-ros-confirmation-srt-n5-2026-11-08/README.md).
+
+- ROS system DDS N0/control-first Kontrollslot15s:8/8 bestätigte Commands,0Skip.
+  Selektiver Fortsetzungsfragmentoffset185 vor Teilnehmerstart installiert;
+  Faultslot12Drops/8656Bytes,8.002644087s Hold. Trotzdem beide Coordinator ready,
+  alle vier Endpointzähler1, Operator HELLO83/82, Robot74/73. Vorabdefinierte
+  Blockadehypothese widersprochen; FAILED, keine Recovery-Abnahme. Selektor
+  entfernt, Restore-Barriere nie freigegeben, Workload nicht gestartet,0Execute,
+  frische geschlossene Journals leer,11Typed-Snapshots jeRolle null. Alle drei
+  nativen Kindprozesse sauber beendet. InternerStatus awaiting_recovery ist
+  letzter geschriebener Schritt vor Assertion, kein erfolgreicher Recoverybeleg.
+- N0 ohne Sensorlast/4096B Probe-Metadaten generalisiert den früheren nativen
+  Verlustmechanismus nicht automatisch auf ROS/N5. Historische Loaded-Discovery-
+  Ursache und Default-Mitigation bleiben offen; keine QoS-/Maskenänderung.
+- SRT N0 Kontrollslot15s:8/8,0Skip. N5 je300s, Seeds1701/2903:131/131 bzw130/130
+  bestätigt,19/20Skip. Seed4211:11/12 bestätigt,1unaufgelöst,138Skip. Originaler
+  Safety/Accounting-HarnessPASS, strengere Progress-GateFAILED bleibt separat.
+  Sensor Source/Observer:75028/7225,75030/12708,75034/27249; große Transportlücken
+  ausdrücklich erhalten, keine volle Sensor-/N5-Qualifikation aus Command-PASS.
+- Intent12 genau1SDK-Handoff,5sBudget unverändert. Live zuletztLOCAL_QUEUED/rev0,
+  1337Polls/172NOT_FOUND-Beobachtungen; früherPeerclock_unqualified5, RequestKind
+  nicht exponiert. Closed senderUNKNOWN/reconcile_required kann erstShutdown-
+  Invalidation sein; keinLiveUNKNOWN beobachtet, ReceiverkeinEintrag. Keine
+  Nichtausführungsaussage und keinReplay. KeineSession-/Invalidation-/Session-
+  Action-/LinkLoss-Traceevents während aktivem Fenster. ReceiverTrace hatkeinen
+  RequestAdmission-Punkt; fehlenderIntentTrace istkeinNichtempfangsnachweis.
+- Alle Capturepopulationen/Trace-/Providerfooter vollständig. Beide tcpdump
+  Listener vor Appstart bereit; kein AF_PACKET-Filter-before-bind-Claim.
+  Host265 vor/nach LivePASS;8Produktionshashes gleich, keineProduktionsbuilds.
+  SDK70/ROS41 bleibenfrühereValidierungen. PCAP/Journals/Provider-Rohsamples lokal
+  gehasht, öffentliche Selektionen und ausgelasseneFelder explizitprovenant.
+  OwnedContainer/Netze/Selektor entfernt, keineTests/Builds währendLivefenstern.
+
+**Nächste Priorität:** SRT RequestKind und ReceiverAdmission-/Clock-Rejection-
+Grenzen rein diagnostisch instrumentieren, gezieltenPlan einfrieren und die
+4211-Lücke lokalisieren. Fehlerkontext ist bisher nicht eindeutig bestimmt.
+Loaded ROS/N5-Discovery separat bestätigen; keineErfolgsretry-/Replay-/Expiryseal-
+oderTimeoutänderung. N3/Clock/Security/Resources bleiben nachgeordnet.
+PR2 bleibtDraft, M3offen, Intrinsic/M4unberührt.

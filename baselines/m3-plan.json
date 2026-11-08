@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: separately freeze ROS/N5 discovery mitigation or confirmation using controlled mechanism; prospectively extend SRT progress coverage; preserve historical UNKNOWNs and default baseline",
+  "current_priority": "N5: identify seed4211 SRT unresolved admission/proof gap with request-kind and receiver/clock diagnostics; separately confirm loaded ROS DDS discovery; preserve UNKNOWN and no replay",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -1991,5 +1991,90 @@
     "production_defaults_changed": false,
     "complete_M3_acceptance": false,
     "post_live_cli_hardening": "host-tested nonzero exit for failed control/skipped fault; earlier three invocations exited0 with authoritative FAILED manifests, not rewritten"
+  },
+  "ros_discovery_confirmation_srt_n5_progress": {
+    "evidence": "evidence/m3-ros-confirmation-srt-n5-2026-11-08/",
+    "frozen_source": "064152344a05c134b748b51e0b5ad7e5e8232a93",
+    "status": "failed",
+    "executed_slots": 6,
+    "retried_slots": 0,
+    "cohort_exit_code": 1,
+    "ros_n0_control": {
+      "confirmed_successes": 8,
+      "attempts": 8,
+      "skipped": 0
+    },
+    "ros_n0_cut": {
+      "status": "failed_hypothesis_gate",
+      "selected_drops": 12,
+      "selected_bytes": 8656,
+      "hold_ns": 8002644087,
+      "both_ready_and_four_endpoint_matches": true,
+      "commands_submitted": 0,
+      "measurement_started": false,
+      "fresh_journals_empty": true,
+      "owned_children_shutdown_pass": true,
+      "selector_removed": true,
+      "loaded_n5_cause_proven": false
+    },
+    "srt_n0_control": {
+      "confirmed_successes": 8,
+      "attempts": 8,
+      "skipped": 0
+    },
+    "srt_n5_300s": [
+      {
+        "seed": 1701,
+        "status": "passed_progress_gate",
+        "attempts": 131,
+        "successes": 131,
+        "skipped": 19,
+        "source_produced": 75028,
+        "observer_received": 7225
+      },
+      {
+        "seed": 2903,
+        "status": "passed_progress_gate",
+        "attempts": 130,
+        "successes": 130,
+        "skipped": 20,
+        "source_produced": 75030,
+        "observer_received": 12708
+      },
+      {
+        "seed": 4211,
+        "status": "failed_progress_gate",
+        "original_harness_status": "passed",
+        "attempts": 12,
+        "successes": 11,
+        "unresolved": 1,
+        "skipped": 138,
+        "source_produced": 75034,
+        "observer_received": 27249
+      }
+    ],
+    "seed4211": {
+      "unresolved_intent": 12,
+      "sdk_handoffs": 1,
+      "live_last_state": "LOCAL_QUEUED",
+      "closed_sender_state": "UNKNOWN/reconcile_required",
+      "closed_sender_transition_time_proven": false,
+      "closed_receiver_entry_present": false,
+      "original_start_budget_ms": 5000,
+      "status_polls": 1337,
+      "not_found_observations": 172,
+      "early_clock_unqualified_peer_error": true,
+      "error_request_kind_exposed": false,
+      "active_context_change_trace_events": 0,
+      "unique_cause_proven": false,
+      "absence_proven": false
+    },
+    "all_capture_population_gates_pass": true,
+    "production_runtime_hashes_unchanged": true,
+    "host_tests_final": 265,
+    "new_full_sdk_ros_validation": false,
+    "production_defaults_changed": false,
+    "complete_n5_acceptance": false,
+    "complete_M3_acceptance": false
   }
 }

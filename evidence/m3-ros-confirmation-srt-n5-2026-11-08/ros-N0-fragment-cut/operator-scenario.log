@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 251, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 241, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 162, in operator
+    if self.args.discovery_fragment_cut:self.wait(lambda:(self.run/'discovery-restored.json').exists(),'controlled discovery restoration',90)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 103, in wait
+    self.spin()
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 87, in spin
+    if (self.run/"abort").exists() or (self.run/(peer+"-failure.json")).exists():raise RuntimeError("scenario aborted; inspect peer/parent failure")
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: scenario aborted; inspect peer/parent failure

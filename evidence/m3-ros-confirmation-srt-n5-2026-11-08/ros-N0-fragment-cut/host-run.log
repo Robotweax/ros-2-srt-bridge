@@ -1,0 +1,15 @@
+/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3-dds-combined/20261108T144123008878Z
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/run_m3_dds.py", line 211, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/run_m3_dds.py", line 121, in main
+    if discovery_cut:discovery_cut.tick();report['controlled_discovery']=discovery_cut.report;save()
+                     ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_ros_discovery_cut.py", line 59, in tick
+    blocked(self.report['blocked'])
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_ros_discovery_cut.py", line 16, in blocked
+    if all(states['operator'][k]>0 for k in FIELDS):raise ValueError('fragment cut did not withhold operator endpoint discovery')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: fragment cut did not withhold operator endpoint discovery

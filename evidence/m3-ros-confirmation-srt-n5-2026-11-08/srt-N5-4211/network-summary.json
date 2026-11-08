@@ -1,0 +1,98 @@
+{
+  "network": "ros2-srt-m3-4062331a5f14",
+  "addresses": {
+    "operator": "172.19.0.2",
+    "robot": "172.19.0.3"
+  },
+  "events": [
+    {
+      "role": "operator",
+      "profile": "N5",
+      "seed": 4212,
+      "readback": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "root": true,
+          "refcnt": 21,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "options": {
+            "limit": 16,
+            "seed": 4212,
+            "ecn": false,
+            "gap": 0
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        }
+      ],
+      "monotonic_ns": 5287240606280000
+    },
+    {
+      "role": "robot",
+      "profile": "N5",
+      "seed": 4211,
+      "readback": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "root": true,
+          "refcnt": 21,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "options": {
+            "limit": 16,
+            "seed": 4211,
+            "ecn": false,
+            "gap": 0
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        }
+      ],
+      "monotonic_ns": 5287240797193916
+    }
+  ],
+  "isolation": "internal Docker bridge; separate ROS domains; localhost DDS"
+}
