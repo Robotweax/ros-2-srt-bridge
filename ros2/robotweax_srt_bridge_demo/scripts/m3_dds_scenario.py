@@ -10,7 +10,6 @@ import copy
 import json
 import math
 from pathlib import Path
-import signal
 import subprocess
 import time
 import traceback
@@ -25,6 +24,8 @@ from m2_scenario import write, read
 from dds_clock import clock_sample, ClockMonitor
 from endpoint_measurement import EndpointSampler
 import os
+from scenario_timeline import Timeline
+from scenario_processes import stop_children
 
 
 def empty_route():
@@ -49,6 +50,8 @@ class DdsScenario(Node):
         self.clock_reference=min((interval for _,interval in samples),key=lambda x:x[1]-x[0])
         if self.clock_reference[1]-self.clock_reference[0]>1000000:raise RuntimeError('cannot establish clock reference')
         self.clock=ClockMonitor(self.clock_reference)
+        self.phase="initializing"
+        self.timeline=Timeline(self.run/(args.role+"-startup-timeline.jsonl"))
         self.load=None
         if args.commands:
             from dds_command_load import DdsCommandLoad
@@ -80,6 +83,8 @@ class DdsScenario(Node):
     def spin(self,seconds=.05):
         end=time.monotonic()+seconds
         while time.monotonic()<end:
+            peer="robot" if self.args.role=="operator" else "operator"
+            if (self.run/"abort").exists() or (self.run/(peer+"-failure.json")).exists():raise RuntimeError("scenario aborted; inspect peer/parent failure")
             if self.load:self.load.tick()
             rclpy.spin_once(self,timeout_sec=min(.025,max(0,end-time.monotonic())))
             if self.process and self.process.poll() is not None:raise RuntimeError('simulator exited')
@@ -88,8 +93,10 @@ class DdsScenario(Node):
             if self.process is not None and self.process.poll() is None:roots.append(('source',self.process.pid))
             if self.load and self.load.process and self.load.process.poll() is None:roots.append(('control',self.load.process.pid))
             self.endpoint_sampler.tick(roots)
+            self.timeline.observe(self.phase,self.load.snapshot() if self.load and self.load.state else None,{r:c["received"] for r,c in self.counts.items()})
 
     def wait(self,predicate,label,seconds=45):
+        self.phase=label
         end=time.monotonic()+seconds
         while time.monotonic()<end:
             if predicate():return
@@ -143,10 +150,10 @@ class DdsScenario(Node):
                 write(self.run/'final-source.json',response)
             self.wait(lambda:(self.run/'finished.json').exists(),'observer finished')
         finally:
-            self.process.send_signal(signal.SIGINT)
-            try:self.process.wait(timeout=5)
-            except subprocess.TimeoutExpired:self.process.kill();self.process.wait()
-            self.process=None;log.close()
+            report=stop_children([(self.process,'simulator',log)])
+            write(self.run/'robot-simulator-shutdown.json',report)
+            self.process=None
+            if not report['passed']:raise RuntimeError('simulator child shutdown failed')
 
     def operator(self):
         if self.load:
@@ -179,6 +186,7 @@ class DdsScenario(Node):
         resumed=read(self.run/'resume-source.json')
         write(self.run/'measurement-start.json',dict(observer_monotonic_ns=time.monotonic_ns()))
         if self.load:self.load.begin(begin['device']['generation'])
+        self.phase="measurement"
         self.spin(self.args.seconds)
         if self.load:self.load.cutoff()
         write(self.run/'end-request.json',{})
@@ -232,7 +240,7 @@ def main():
     finally:
         try:
             if driver.load:driver.load.stop()
-        finally:driver.endpoint_sampler.close();driver.destroy_node();rclpy.shutdown()
+        finally:driver.timeline.close();driver.endpoint_sampler.close();driver.destroy_node();rclpy.shutdown()
 
 
 if __name__=='__main__':main()

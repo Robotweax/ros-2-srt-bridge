@@ -1,5 +1,4 @@
 """Nonblocking journaled DDS workload adapter for the steady sensor driver."""
-import signal
 import subprocess
 import time
 from rosidl_runtime_py.convert import message_to_ordereddict
@@ -7,6 +6,7 @@ from robotweax_srt_bridge_msgs.msg import DdsCommandState,CommandStatus
 from robotweax_srt_bridge_msgs.srv import ExecuteCommand,GetCommandStatus
 from command_workload import Cadence,record_status_observation
 from m2_scenario import write
+from scenario_processes import stop_children
 
 
 class DdsCommandLoad:
@@ -92,11 +92,8 @@ class DdsCommandLoad:
                 rate_hz=200,expected_generation=self.generation,new_generation=self.generation+1))
 
     def stop(self):
-        if self.process and self.process.poll() is None:
-            self.process.send_signal(signal.SIGINT)
-            try:self.process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                self.process.kill();self.process.wait();raise RuntimeError('DDS command shutdown exceeded five seconds')
-            if self.process.returncode:raise RuntimeError('DDS command shutdown failed')
-        if self.log:self.log.close()
-        self.process=None
+        if self.process:
+            report=stop_children([(self.process,'dds-command',self.log)])
+            write(self.node.run/(self.node.args.role+'-command-shutdown.json'),report)
+            self.process=None;self.log=None
+            if not report['passed']:raise RuntimeError('DDS command child shutdown failed')

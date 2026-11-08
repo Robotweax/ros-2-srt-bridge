@@ -147,6 +147,14 @@ def main():
     except BaseException as error:
         report['status']='failed';report['error']=str(error);raise
     finally:
+        # Let each scenario audit its owned children before namespace teardown,
+        # including when its peer fails during cold discovery.
+        (run/'abort').touch()
+        report['scenario_shutdown']=[]
+        for process,_ in processes:
+            try:process.wait(timeout=12)
+            except subprocess.TimeoutExpired:pass
+            report['scenario_shutdown'].append(dict(returncode=process.poll(),exited_before_namespace_teardown=process.poll() is not None))
         if lab:
             try:stop_captures(lab)
             except Exception as error:report['status']='failed';report['capture_stop_error']=str(error)
