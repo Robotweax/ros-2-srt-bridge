@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+project(m3_n4_peer LANGUAGES CXX)
+find_package(RobotweaxBridge 0.1 CONFIG REQUIRED COMPONENTS endpoint)
+add_executable(m3_n4_peer main.cpp)
+target_link_libraries(m3_n4_peer PRIVATE RobotweaxBridge::endpoint)
+target_compile_features(m3_n4_peer PRIVATE cxx_std_20)
+target_compile_options(m3_n4_peer PRIVATE -Wall -Wextra -Wpedantic -Werror)
