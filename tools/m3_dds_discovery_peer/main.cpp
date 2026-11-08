@@ -34,6 +34,7 @@ static void signal_stop(int){signaled=1;}
 static uint64_t now(){return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now().time_since_epoch()).count();}
 static void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
 static std::string text(const rtps::GUID_t& value){std::ostringstream s;s<<std::hex<<std::setfill('0');for(auto v:value.guidPrefix.value)s<<std::setw(2)<<unsigned(v);for(auto v:value.entityId.value)s<<std::setw(2)<<unsigned(v);return s.str();}
+static std::atomic<uint64_t> decode_calls=0,decode_bad_length=0,decode_bad_header=0,last_payload_length=0;
 struct Hello {uint32_t magic=0x48454c31,role=0;uint64_t sequence=0,sent_ns=0;};
 class HelloType final:public native_dds::TopicDataType {
     static void put(unsigned char* p,uint64_t value,unsigned n){for(unsigned i=0;i<n;++i)p[i]=static_cast<unsigned char>(value>>(8*(n-i-1)));}
@@ -47,9 +48,10 @@ public:
         put(p+4,h.magic,4);put(p+8,h.role,4);put(p+12,h.sequence,8);put(p+20,h.sent_ns,8);payload->length=28;payload->encapsulation=0;return true;
     }
     bool deserialize(rtps::SerializedPayload_t* payload,void* data) override {
-        if(payload->length!=28)return false;
+        ++decode_calls;last_payload_length=payload->length;
+        if(payload->length!=28){++decode_bad_length;return false;}
         const auto* p=payload->data;
-        if(p[0]||p[1]||p[2]||p[3])return false;
+        if(p[0]||p[1]||p[2]||p[3]){++decode_bad_header;return false;}
         auto& h=*static_cast<Hello*>(data);h.magic=static_cast<uint32_t>(get(p+4,4));h.role=static_cast<uint32_t>(get(p+8,4));h.sequence=get(p+12,8);h.sent_ns=get(p+20,8);return true;
     }
     std::function<uint32_t()> getSerializedSizeProvider(void*) override {return [](){return 28;};}
@@ -77,12 +79,15 @@ struct WriterListener final:native_dds::DataWriterListener {
     void on_publication_matched(native_dds::DataWriter*,const native_dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
 };
 struct ReaderListener final:native_dds::DataReaderListener {
-    Trace& trace;const uint32_t expected;std::atomic<int> matches=0;std::atomic<uint64_t> received=0,invalid=0;uint64_t last=0;
+    Trace& trace;const uint32_t expected;std::atomic<int> matches=0;std::atomic<uint64_t> received=0,invalid=0,callbacks=0,take_errors=0;uint64_t last=0;
     ReaderListener(Trace& t,uint32_t e):trace(t),expected(e){}
     void on_subscription_matched(native_dds::DataReader*,const native_dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
     void on_data_available(native_dds::DataReader* reader) override {
-        Hello h;native_dds::SampleInfo info;
-        while(reader->take_next_sample(&h,&info)==eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK){
+        ++callbacks;Hello h;native_dds::SampleInfo info;
+        for(;;){
+            const auto code=reader->take_next_sample(&h,&info);
+            if(code==eprosima::fastrtps::types::ReturnCode_t::RETCODE_NO_DATA)break;
+            if(code!=eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK){++take_errors;break;}
             if(!info.valid_data)continue;
             const auto stamp=now();const bool valid=h.magic==0x48454c31&&h.role==expected&&h.sequence>last&&h.sent_ns>0&&h.sent_ns<=stamp;
             if(valid){++received;last=h.sequence;}else ++invalid;
@@ -124,7 +129,7 @@ int main(int argc,char** argv){
             const auto stamp=now();
             if(stamp>=next_send){Hello h;h.role=number;h.sequence=++sent;h.sent_ns=stamp;require(writer->write(&h),"HELLO write failed");next_send=stamp+100000000;}
             if(stamp>=next_state){
-                const std::string state="\"event\":\"state\",\"pid\":"+std::to_string(getpid())+",\"started_ns\":"+std::to_string(begun)+",\"participant\":\""+text(guard.p->guid())+"\",\"writer\":\""+text(writer->guid())+"\",\"reader\":\""+text(reader->guid())+"\",\"writer_metadata_bytes\":"+std::to_string(metadata.size())+",\"reader_metadata_bytes\":"+std::to_string(metadata.size())+",\"peer_discovered\":"+(participant_listener.peer?"true":"false")+",\"writer_matches\":"+std::to_string(writer_listener.matches)+",\"reader_matches\":"+std::to_string(reader_listener.matches)+",\"sent\":"+std::to_string(sent)+",\"received\":"+std::to_string(reader_listener.received)+",\"invalid\":"+std::to_string(reader_listener.invalid);
+                const std::string state="\"event\":\"state\",\"pid\":"+std::to_string(getpid())+",\"started_ns\":"+std::to_string(begun)+",\"participant\":\""+text(guard.p->guid())+"\",\"writer\":\""+text(writer->guid())+"\",\"reader\":\""+text(reader->guid())+"\",\"writer_metadata_bytes\":"+std::to_string(metadata.size())+",\"reader_metadata_bytes\":"+std::to_string(metadata.size())+",\"peer_discovered\":"+(participant_listener.peer?"true":"false")+",\"writer_matches\":"+std::to_string(writer_listener.matches)+",\"reader_matches\":"+std::to_string(reader_listener.matches)+",\"sent\":"+std::to_string(sent)+",\"received\":"+std::to_string(reader_listener.received)+",\"invalid\":"+std::to_string(reader_listener.invalid)+",\"reader_callbacks\":"+std::to_string(reader_listener.callbacks)+",\"take_errors\":"+std::to_string(reader_listener.take_errors)+",\"decode_calls\":"+std::to_string(decode_calls)+",\"decode_bad_length\":"+std::to_string(decode_bad_length)+",\"decode_bad_header\":"+std::to_string(decode_bad_header)+",\"last_payload_length\":"+std::to_string(last_payload_length);
                 trace.emit(state);std::ofstream f(path.string()+".tmp");f<<"{\"monotonic_ns\":"<<stamp<<","<<state<<"}\n";f.close();std::filesystem::rename(path.string()+".tmp",path);next_state=stamp+200000000;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
