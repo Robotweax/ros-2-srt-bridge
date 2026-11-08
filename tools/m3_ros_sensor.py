@@ -340,8 +340,8 @@ def capture_stop(lab,processes):
     if errors:raise ValueError('; '.join(errors))
 
 
-def wait_files(run,names,peers):
-    end=time.monotonic()+45
+def wait_files(run,names,peers,timeout=45):
+    end=time.monotonic()+timeout
     while not all((run/n).exists() for n in names):
         if any(p.poll() is not None for p,_ in peers) or time.monotonic()>end:
             raise ValueError('ROS phase barrier failed: '+','.join(names))

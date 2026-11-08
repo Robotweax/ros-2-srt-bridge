@@ -54,20 +54,20 @@ class Multiroute(Finite):
         assert list(self.armed_session)==begin['bridge']['session_id']
         resume=pause=None
         if self.args.role=='robot':
-            resume=self.fence(True);self.spin(10);pause=self.fence(False)
+            resume=self.fence(True);self.spin(self.args.seconds);pause=self.fence(False)
             write(self.run/'multiroute-sent.json',dict(resume=resume,pause=pause))
-        else:self.wait(lambda:(self.run/'multiroute-sent.json').exists(),'source pause',20)
+        else:self.wait(lambda:(self.run/'multiroute-sent.json').exists(),'source pause',self.args.seconds+10)
         self.spin(2);end=self.stable_metrics()
         assert not self.bad,self.bad
         assert not self.direct
         assert end['bridge']['session_id']==begin['bridge']['session_id'] and end['bridge']['ready'] and end['bridge']['clock_qualified']
-        write(self.run/(self.args.role+'-multiroute-result.json'),dict(status='passed',begin=begin,end=end,rows=self.rows,resume=resume,pause=pause,bad=self.bad,direct=self.direct))
+        write(self.run/(self.args.role+'-multiroute-result.json'),dict(status='passed',begin=begin,end=end,rows=self.rows,resume=resume,pause=pause,bad=self.bad,direct=self.direct,nominal_seconds=self.args.seconds))
         self.wait(lambda:(self.run/'release').exists(),'host collection',30)
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);a=p.parse_args()
-    a.clock_width_ms=200;a.provider_diagnostics=False;a.command_diagnostics=False;a.sample_diagnostics=True;a.seconds=10
+    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);a=p.parse_args()
+    a.clock_width_ms=200;a.provider_diagnostics=False;a.command_diagnostics=False;a.sample_diagnostics=True
     rclpy.init();driver=Multiroute(a)
     try:driver.measure()
     except BaseException:
