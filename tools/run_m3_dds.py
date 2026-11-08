@@ -11,10 +11,11 @@ import subprocess
 import time
 from m3_dds import DdsLab,summarize_sensor_window,DDS_PROFILES,verify_profile,summarize_competitor
 from m3_network import SEEDS
-from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options,wait_ready
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_results import summarize_commands
+from m3_ros_discovery_cut import DiscoveryCut
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -31,7 +32,10 @@ def main():
     parser.add_argument('--seconds',type=int)
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 binaries; recorded as development reuse')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
+    parser.add_argument('--discovery-fragment-cut',action='store_true',help='explicit N0 control-first ROS discovery-only diagnostic')
+    parser.add_argument('--capture-drain-check',action='store_true')
     args=parser.parse_args()
+    if args.discovery_fragment_cut and (args.profile!='N0' or not args.commands or args.startup!='control-first' or args.dds_profile!='system' or args.monotonic_capture):parser.error('discovery cut requires N0/system/commands/control-first without extra observers')
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     seconds=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
     if not 10<=seconds<=7200:parser.error('duration must be 10..7200 seconds')
@@ -40,7 +44,7 @@ def main():
     inside='/workspace/'+str(run.relative_to(ROOT))
     report=dict(status='running',pcap_dispatch_mode='immediate',pcap_capture_config=pcap_configuration(),milestone='M3 DDS combined development' if args.commands else 'M3 DDS sensor development',sensor_only=not args.commands,commands_qualified=False,
         configured_workload=dict(imu_hz=200,joint_hz=50,command_period_s=2 if args.commands else None),
-        complete_m3_acceptance=False,startup_mode=args.startup if args.commands else 'sensor-only',dds_transport_profile=args.dds_profile,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,
+        complete_m3_acceptance=False,startup_mode=args.startup if args.commands else 'sensor-only',dds_transport_profile=args.dds_profile,profile=args.profile,seed=args.seed,seconds=seconds,smoke=args.smoke,skip_build=args.skip_build,discovery_fragment_cut=args.discovery_fragment_cut,capture_drain_check=args.capture_drain_check,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
             for folder in ['src','ros2','proto','cmake','containers','tools','tests']
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
@@ -50,6 +54,7 @@ def main():
         clock_scope='same Linux VM boot ID and time namespace, realtime header estimate; no cross-host clock qualification',
         dds_command_protocol=2,expiry_seal_scope='non-executing durable absence seal; original sender/process/session only, strictly past saved 5s deadline; existing records unchanged',
         dds_command_channels=dict(control='Reliable/Volatile/KeepLast(64)',liveness='BestEffort/Volatile/KeepLast(1)',hello_period_ms=100,lease_ns=1500000000,sequence_scope='independent per channel'))
+    discovery_cut=None
     lab=None;processes=[];captures=[];competitor=None;competitor_alive_checks=0
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
     def execute(label,argv):
@@ -92,6 +97,8 @@ def main():
             p=subprocess.Popen(['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
                 '-w',inside+'/'+role+'.pcap','udp'],stdout=log,stderr=subprocess.STDOUT)
             captures.append((p,log))
+        wait_ready(run,captures)
+        if args.discovery_fragment_cut:discovery_cut=DiscoveryCut(lab,run)
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_before']=mono_capture.feature_snapshot(lab,'features-before')
             mono_capture.start(run,inside,lab,captures)
@@ -104,13 +111,14 @@ def main():
         lab.snapshot('before')
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
-                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds),'--startup',args.startup]+(['--commands'] if args.commands else []))
+                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds),'--startup',args.startup]+(['--commands'] if args.commands else [])+(['--discovery-fragment-cut'] if args.discovery_fragment_cut else []))
             log=(run/(role+'-scenario.log')).open('w')
             peer=lab.addresses['operator' if role=='robot' else 'robot']
             p=subprocess.Popen(['docker','exec','-e','ROS_STATIC_PEERS='+peer,name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT)
             processes.append((p,log))
         deadline=time.monotonic()+seconds+150;outage=False
         while time.monotonic()<deadline:
+            if discovery_cut:discovery_cut.tick();report['controlled_discovery']=discovery_cut.report;save()
             if competitor is not None:
                 if competitor.poll() is not None:raise RuntimeError('N5 competitor exited before scenario completion')
                 competitor_alive_checks+=1
@@ -128,6 +136,7 @@ def main():
             time.sleep(.25)
         else:raise RuntimeError('DDS scenario deadline exceeded')
         if args.profile=='N4' and not outage:raise RuntimeError('outage was not applied')
+        if discovery_cut and discovery_cut.report['status']!='recovered':raise RuntimeError('controlled discovery did not recover')
         lab.snapshot('after')
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_after']=mono_capture.feature_snapshot(lab,'features-after')
@@ -149,6 +158,9 @@ def main():
     finally:
         # Let each scenario audit its owned children before namespace teardown,
         # including when its peer fails during cold discovery.
+        if discovery_cut:
+            try:discovery_cut.close();report['controlled_discovery']=discovery_cut.report
+            except Exception as error:report['status']='failed';report['discovery_cleanup_error']=str(error)
         (run/'abort').touch()
         report['scenario_shutdown']=[]
         for process,_ in processes:
@@ -156,7 +168,7 @@ def main():
             except subprocess.TimeoutExpired:pass
             report['scenario_shutdown'].append(dict(returncode=process.poll(),exited_before_namespace_teardown=process.poll() is not None))
         if lab:
-            try:stop_captures(lab)
+            try:stop_captures(lab,drain_check=args.capture_drain_check)
             except Exception as error:report['status']='failed';report['capture_stop_error']=str(error)
             for p,log in captures:
                 try:p.wait(timeout=5)

@@ -157,3 +157,14 @@ def pcap_rotation_options():
 def pcap_options(interface='eth0',*,buffer_kib=PCAP_BUFFER_KIB):
     if not 4096<=buffer_kib<=65536:raise ValueError('capture buffer outside bounded fixture range')
     return ['tcpdump','--immediate-mode','-n','-i',interface,'-s','0','-B',str(buffer_kib),'-U']
+
+
+def wait_ready(run,processes,seconds=10):
+    """Require capture filter/listener startup before any lab UDP producer."""
+    import time
+    run=Path(run);end=time.monotonic()+seconds
+    while True:
+        if any(p.poll() is not None for p,_ in processes):raise ValueError('capture exited during startup')
+        if all('listening on eth0' in (run/(r+'-capture.log')).read_text() for r in ('operator','robot')):return
+        if time.monotonic()>end:raise ValueError('capture startup deadline exceeded')
+        time.sleep(.02)

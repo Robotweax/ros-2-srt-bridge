@@ -16,7 +16,7 @@ import subprocess
 import time
 from m3_network import NetworkLab, SEEDS
 from m3_dds import summarize_competitor
-from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options
+from m3_capture import summarize,validate_tcpdump_footer,stop_captures,pcap_options,pcap_configuration,pcap_rotation_options,wait_ready
 from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 import m3_recorder_diagnostics as recorder_diagnostics
@@ -129,6 +129,7 @@ def main():
             argv=['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
                   '-w',inside+'/'+role+'.pcap','udp']
             captures.append((subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT),log))
+        wait_ready(run,captures)
         if args.control_qdisc_diagnostics:qdisc_diagnostics.start(lab,run,inside,qdisc_processes)
         if args.neighbor_diagnostics:neighbor_diagnostics.start(lab,run,inside,neighbor_processes)
         if args.recorder_diagnostics:recorder_diagnostics.start(lab,run,inside,recorder_processes)

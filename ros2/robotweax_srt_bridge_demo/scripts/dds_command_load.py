@@ -33,6 +33,7 @@ class DdsCommandLoad:
         self.log=(self.node.run/(self.node.args.role+'-command.log')).open('w')
         self.process=subprocess.Popen([executable,'--ros-args','-p','role:='+('sender' if self.sender else 'receiver'),
             '-p','journal_path:='+str(self.node.run/(self.node.args.role+'.sqlite'))],stdout=self.log,stderr=subprocess.STDOUT)
+        write(self.node.run/(self.node.args.role+'-command-owner.json'),dict(pid=self.process.pid,started_monotonic_ns=time.monotonic_ns()))
 
     def check(self):
         if self.process and self.process.poll() is not None:raise RuntimeError('DDS command coordinator exited')

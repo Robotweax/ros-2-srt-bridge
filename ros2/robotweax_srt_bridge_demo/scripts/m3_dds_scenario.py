@@ -128,6 +128,7 @@ class DdsScenario(Node):
         self.process=subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT)
         try:
             if self.load:self.load.launch()
+            if self.args.discovery_fragment_cut:self.wait(lambda:(self.run/'discovery-restored.json').exists(),'controlled discovery restoration',90)
             if self.load and self.args.startup=='control-first':
                 self.wait(self.load.ready,'control-first receiver ready')
                 paused=self.publishing(False)
@@ -157,7 +158,9 @@ class DdsScenario(Node):
 
     def operator(self):
         if self.load:
-            self.load.launch();self.wait(self.load.ready,'journaled DDS sender ready')
+            self.load.launch()
+            if self.args.discovery_fragment_cut:self.wait(lambda:(self.run/'discovery-restored.json').exists(),'controlled discovery restoration',90)
+            self.wait(self.load.ready,'journaled DDS sender ready')
             if self.args.startup=='control-first':
                 self.wait(lambda:(self.run/'control-ready.json').exists(),'control-first source ready')
                 write(self.run/'warmup-request.json',{})
@@ -230,7 +233,9 @@ def main():
     parser.add_argument('--run',required=True);parser.add_argument('--seconds',type=int,required=True)
     parser.add_argument('--startup',choices=['simultaneous','control-first'],default='simultaneous')
     parser.add_argument('--commands',action='store_true',help='journaled Reliable DDS commands every two seconds')
+    parser.add_argument('--discovery-fragment-cut',action='store_true')
     args=parser.parse_args()
+    if args.discovery_fragment_cut and (not args.commands or args.startup!='control-first'):parser.error('discovery cut requires journaled control-first fixture')
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
     rclpy.init();driver=DdsScenario(args)
     try:getattr(driver,args.role)()
