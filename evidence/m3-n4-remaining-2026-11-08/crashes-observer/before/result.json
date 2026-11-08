@@ -1,0 +1,200 @@
+{
+  "status": "failed",
+  "mode": "before",
+  "qualification": false,
+  "clock_proof": {
+    "operator": "ae6ee310-c916-4fc0-8835-ef2dcbdec65e\nmonotonic           0         0\nboottime            0         0\n",
+    "robot": "ae6ee310-c916-4fc0-8835-ef2dcbdec65e\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "outage_install": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 10855883295,
+        "end_ns": 10878856587,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "loss",
+          "random",
+          "100%",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 5436,
+        "packets": 39,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    },
+    "robot": {
+      "bracket": {
+        "begin_ns": 11147691545,
+        "end_ns": 11171345587,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "loss",
+          "random",
+          "100%",
+          "seed",
+          "1701"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 6119,
+        "packets": 45,
+        "drops": 3,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "outage_restore": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 13806770838,
+        "end_ns": 13829171588,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 9120,
+        "packets": 60,
+        "drops": 564,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    },
+    "robot": {
+      "bracket": {
+        "begin_ns": 14085183463,
+        "end_ns": 14108857422,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "seed",
+          "1701"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 1701,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 6119,
+        "packets": 45,
+        "drops": 31,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "error": "ROS phase barrier failed: operator-result.json,robot-final.json"
+}

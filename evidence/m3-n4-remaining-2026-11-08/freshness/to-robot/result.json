@@ -1,0 +1,4198 @@
+{
+  "status": "passed",
+  "mode": "to-robot",
+  "qualification": false,
+  "clock_proof": {
+    "operator": "a3b90a33-deef-4242-a5ee-b4f9ddcb895a\nmonotonic           0         0\nboottime            0         0\n",
+    "robot": "a3b90a33-deef-4242-a5ee-b4f9ddcb895a\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "warmup": {
+    "begin_ns": 365707824123,
+    "end_ns": 367708942124
+  },
+  "outage_install": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 367884768624,
+        "end_ns": 367905730499,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "loss",
+          "random",
+          "100%",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 26112,
+        "packets": 277,
+        "drops": 8,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "hold": {
+    "begin_ns": 368142543791,
+    "end_ns": 370142963708
+  },
+  "drop_readback": {
+    "operator": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 26112,
+        "packets": 277,
+        "drops": 17424,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ]
+  },
+  "outage_restore": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 370384027375,
+        "end_ns": 370405361084,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 27464,
+        "packets": 291,
+        "drops": 19002,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "outage_ns": [
+    367905730499,
+    370384027375
+  ],
+  "restored_ns": 370405361084,
+  "shutdown": {
+    "operator": {
+      "passed": true,
+      "children": [
+        {
+          "name": "operator-bridge-0",
+          "pid": 99,
+          "begin_ns": 382914252881,
+          "initial_returncode": null,
+          "signal_sent": true,
+          "forced_kill": false,
+          "returncode": 0,
+          "error": null,
+          "signal_begin_ns": 382914265798,
+          "signal_end_ns": 382914367340,
+          "end_ns": 383089551340,
+          "passed": true
+        }
+      ],
+      "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+    },
+    "robot": {
+      "passed": true,
+      "children": [
+        {
+          "name": "robot-source",
+          "pid": 99,
+          "begin_ns": 382888231048,
+          "initial_returncode": null,
+          "signal_sent": true,
+          "forced_kill": false,
+          "returncode": 0,
+          "error": null,
+          "signal_begin_ns": 382888240173,
+          "signal_end_ns": 382888401423,
+          "end_ns": 383058023090,
+          "passed": true
+        },
+        {
+          "name": "robot-bridge-0",
+          "pid": 98,
+          "begin_ns": 383058039590,
+          "initial_returncode": null,
+          "signal_sent": true,
+          "forced_kill": false,
+          "returncode": 0,
+          "error": null,
+          "signal_begin_ns": 383058053923,
+          "signal_end_ns": 383058072340,
+          "end_ns": 383411657631,
+          "passed": true
+        }
+      ],
+      "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+    }
+  },
+  "freshness": {
+    "passed": true,
+    "cadence": {
+      "passed": true,
+      "duration_ns": 15058480257,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 3012,
+          "target_hz": 200,
+          "actual_hz": 200.02018454683426,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 2888,
+          "unobserved": 124
+        },
+        "2": {
+          "published": 753,
+          "target_hz": 50,
+          "actual_hz": 50.005046136708565,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 746,
+          "unobserved": 7
+        }
+      },
+      "unobserved": [
+        [
+          1,
+          15
+        ],
+        [
+          1,
+          39
+        ],
+        [
+          1,
+          66
+        ],
+        [
+          1,
+          95
+        ],
+        [
+          1,
+          118
+        ],
+        [
+          1,
+          145
+        ],
+        [
+          1,
+          166
+        ],
+        [
+          1,
+          194
+        ],
+        [
+          1,
+          218
+        ],
+        [
+          1,
+          245
+        ],
+        [
+          1,
+          270
+        ],
+        [
+          1,
+          291
+        ],
+        [
+          1,
+          318
+        ],
+        [
+          1,
+          348
+        ],
+        [
+          1,
+          371
+        ],
+        [
+          1,
+          391
+        ],
+        [
+          1,
+          420
+        ],
+        [
+          1,
+          440
+        ],
+        [
+          1,
+          465
+        ],
+        [
+          1,
+          490
+        ],
+        [
+          1,
+          518
+        ],
+        [
+          1,
+          545
+        ],
+        [
+          1,
+          569
+        ],
+        [
+          1,
+          597
+        ],
+        [
+          1,
+          616
+        ],
+        [
+          1,
+          642
+        ],
+        [
+          1,
+          645
+        ],
+        [
+          1,
+          671
+        ],
+        [
+          1,
+          692
+        ],
+        [
+          1,
+          721
+        ],
+        [
+          1,
+          747
+        ],
+        [
+          1,
+          772
+        ],
+        [
+          1,
+          795
+        ],
+        [
+          1,
+          822
+        ],
+        [
+          1,
+          850
+        ],
+        [
+          1,
+          871
+        ],
+        [
+          1,
+          895
+        ],
+        [
+          1,
+          921
+        ],
+        [
+          1,
+          943
+        ],
+        [
+          1,
+          944
+        ],
+        [
+          1,
+          964
+        ],
+        [
+          1,
+          990
+        ],
+        [
+          1,
+          1010
+        ],
+        [
+          1,
+          1030
+        ],
+        [
+          1,
+          1057
+        ],
+        [
+          1,
+          1078
+        ],
+        [
+          1,
+          1103
+        ],
+        [
+          1,
+          1128
+        ],
+        [
+          1,
+          1147
+        ],
+        [
+          1,
+          1178
+        ],
+        [
+          1,
+          1201
+        ],
+        [
+          1,
+          1227
+        ],
+        [
+          1,
+          1247
+        ],
+        [
+          1,
+          1275
+        ],
+        [
+          1,
+          1296
+        ],
+        [
+          1,
+          1328
+        ],
+        [
+          1,
+          1355
+        ],
+        [
+          1,
+          1375
+        ],
+        [
+          1,
+          1388
+        ],
+        [
+          1,
+          1408
+        ],
+        [
+          1,
+          1430
+        ],
+        [
+          1,
+          1451
+        ],
+        [
+          1,
+          1479
+        ],
+        [
+          1,
+          1504
+        ],
+        [
+          1,
+          1535
+        ],
+        [
+          1,
+          1563
+        ],
+        [
+          1,
+          1584
+        ],
+        [
+          1,
+          1608
+        ],
+        [
+          1,
+          1628
+        ],
+        [
+          1,
+          1654
+        ],
+        [
+          1,
+          1667
+        ],
+        [
+          1,
+          1689
+        ],
+        [
+          1,
+          1714
+        ],
+        [
+          1,
+          1746
+        ],
+        [
+          1,
+          1772
+        ],
+        [
+          1,
+          1801
+        ],
+        [
+          1,
+          1831
+        ],
+        [
+          1,
+          1856
+        ],
+        [
+          1,
+          1878
+        ],
+        [
+          1,
+          1906
+        ],
+        [
+          1,
+          1929
+        ],
+        [
+          1,
+          1959
+        ],
+        [
+          1,
+          1986
+        ],
+        [
+          1,
+          2008
+        ],
+        [
+          1,
+          2033
+        ],
+        [
+          1,
+          2060
+        ],
+        [
+          1,
+          2087
+        ],
+        [
+          1,
+          2112
+        ],
+        [
+          1,
+          2135
+        ],
+        [
+          1,
+          2162
+        ],
+        [
+          1,
+          2181
+        ],
+        [
+          1,
+          2205
+        ],
+        [
+          1,
+          2235
+        ],
+        [
+          1,
+          2261
+        ],
+        [
+          1,
+          2283
+        ],
+        [
+          1,
+          2306
+        ],
+        [
+          1,
+          2329
+        ],
+        [
+          1,
+          2357
+        ],
+        [
+          1,
+          2383
+        ],
+        [
+          1,
+          2407
+        ],
+        [
+          1,
+          2423
+        ],
+        [
+          1,
+          2446
+        ],
+        [
+          1,
+          2472
+        ],
+        [
+          1,
+          2497
+        ],
+        [
+          1,
+          2523
+        ],
+        [
+          1,
+          2558
+        ],
+        [
+          1,
+          2586
+        ],
+        [
+          1,
+          2611
+        ],
+        [
+          1,
+          2637
+        ],
+        [
+          1,
+          2654
+        ],
+        [
+          1,
+          2683
+        ],
+        [
+          1,
+          2707
+        ],
+        [
+          1,
+          2736
+        ],
+        [
+          1,
+          2759
+        ],
+        [
+          1,
+          2781
+        ],
+        [
+          1,
+          2811
+        ],
+        [
+          1,
+          2835
+        ],
+        [
+          1,
+          2861
+        ],
+        [
+          1,
+          2886
+        ],
+        [
+          1,
+          2908
+        ],
+        [
+          1,
+          2934
+        ],
+        [
+          1,
+          2958
+        ],
+        [
+          1,
+          2973
+        ],
+        [
+          1,
+          3000
+        ],
+        [
+          2,
+          80
+        ],
+        [
+          2,
+          177
+        ],
+        [
+          2,
+          260
+        ],
+        [
+          2,
+          363
+        ],
+        [
+          2,
+          457
+        ],
+        [
+          2,
+          559
+        ],
+        [
+          2,
+          665
+        ]
+      ],
+      "scope": "isolated source preflight; observer gaps retained; no bridge admission, transport, FEC, physical sensor-age or M3 qualification"
+    },
+    "window": {
+      "source_produced": 3765,
+      "observer_received": 3634,
+      "missing": 131,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 4,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 125,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 15.058480257,
+      "source_actual_hz": {
+        "imu": 200.02018454683426,
+        "joints": 50.005046136708565
+      },
+      "published": 3635,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 2889,
+          "rounding": "up to 1ms",
+          "maximum_ms": 17,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 746,
+          "rounding": "up to 1ms",
+          "maximum_ms": 30,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "progress": {
+      "1": {
+        "before": 470,
+        "fresh_after": 1892
+      },
+      "2": {
+        "before": 121,
+        "fresh_after": 489
+      }
+    },
+    "maximum_shared_VM_ingress_to_observer_ns": 23417917,
+    "source_trace_status": {
+      "schema_version": 1,
+      "window": 1,
+      "attempted": 3765,
+      "recorded": 3765,
+      "printed": 3765,
+      "dropped": 0,
+      "encoding_failed": 0,
+      "hash_failed": 0,
+      "limit": 10000,
+      "complete": true
+    },
+    "sender_trace_status": {
+      "schema_version": 2,
+      "attempted": 7400,
+      "dropped": 0,
+      "exhausted": 0,
+      "limit": 75000
+    },
+    "receiver_trace_status": {
+      "schema_version": 2,
+      "attempted": 3635,
+      "dropped": 0,
+      "exhausted": 0,
+      "limit": 75000
+    },
+    "sdk_errors": [],
+    "sdk_without_decision": 0,
+    "contexts": {
+      "sender": [
+        {
+          "ns": 364322107789,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 0,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364420746497,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 0,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364520651622,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364620600956,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364720601914,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364820592664,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364920593873,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365020674206,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365120663373,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365220610706,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365320752831,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365420583706,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365520365915,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365620323040,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365720272248,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365820216623,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365920242748,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366022251081,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366120255457,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366220208082,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366320190415,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366420369332,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366520422415,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366620385665,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366720367040,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366820273582,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366920334374,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367020295124,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367120352082,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367220413874,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367320400915,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367420316332,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367520315041,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367620376541,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367720424082,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367820378582,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367920412916,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368020452874,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368120469291,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368220415916,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368320390249,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368420372666,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368520314999,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368620255708,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368720312791,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368820400291,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368920296916,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369020255291,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369120339250,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369220226375,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369320343000,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369420304708,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369520249042,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369620272583,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369720357417,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369820353792,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369920274917,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370020278333,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370120341042,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370220401875,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370320412750,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370420545584,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370520508084,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370620443459,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370720350459,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370820233792,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370920277751,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371020292626,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371120341876,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371220397542,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371320351209,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371420343834,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371520312501,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371620216918,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371720286668,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371820380501,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371920265334,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372020272668,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372120279251,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372220295959,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372320310876,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372420328418,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372520306710,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372620309960,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372720262960,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372820345585,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372923305543,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373020312043,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373120297335,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373220343710,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373320240252,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373420240210,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373520214460,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373620320960,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373720360460,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373820284794,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373920421460,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374020353252,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374120261002,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374220326127,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374320366960,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374420254127,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374520308669,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374620291586,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374720440044,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374820234752,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374920419086,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375020541836,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375120406086,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375220445128,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375320344169,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375420240544,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375520379753,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375620273294,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375720278128,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375820360586,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375920484128,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376020459170,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376120337295,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376220396503,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376320454336,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376420358836,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376520262587,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376620480628,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376720558795,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376820486753,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376920414337,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377020384003,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377120373962,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377220330295,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377320414295,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377420488545,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377520255254,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377620477087,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377720376879,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377820407879,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377920326962,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378020284212,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378120495046,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378220450712,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378320480337,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378420571671,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378520295587,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378620453796,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378720399838,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378820359421,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378920715004,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379020371629,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379120470921,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379220491838,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379323248463,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379420416296,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379520588921,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379620480963,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379720482088,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379820431463,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379920460255,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380020440172,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380120493755,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380220511422,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380320507755,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380420515672,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380520325047,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380623605130,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380720502172,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380820529255,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380920486297,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381020643380,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381120380505,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381220428547,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381320374839,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381426765256,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381520501006,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381621543006,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381720670589,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381821577839,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381921579214,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382020549506,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382120535964,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382223279881,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382321176464,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382421687173,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382520596673,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382620794381,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382720684548,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382820570506,
+          "owner": "86ac9e6ccafa72816a9265b8c2028143",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        }
+      ],
+      "receiver": [
+        {
+          "ns": 364339415622,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 0,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364436877831,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 0,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364536825831,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "00000000000000000000000000000000",
+          "control_generation": 0,
+          "sensor_generation": 0,
+          "ready": false,
+          "clock": false
+        },
+        {
+          "ns": 364636761664,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364736780206,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364836770414,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 0,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 364936814664,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365036585664,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365136685248,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365236732998,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365336805165,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365439013540,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365536611998,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365636480248,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365736495081,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365836425331,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 365936500290,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366036583123,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366136636540,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366236368415,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366336498373,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366436479373,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366536475540,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366636650040,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366736485749,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366836445165,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 366936534957,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367036447790,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367136486207,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367237941290,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367336441540,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367436398124,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367536395791,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367636469582,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367736747957,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367836799499,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 367936629874,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368036547791,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368136659958,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368236534249,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368336382791,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368436429541,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368536467999,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368636479333,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368736474291,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368836476125,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 368936625416,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369036591208,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369136561291,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369236430416,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369336456291,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369436460000,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369536522958,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369636582375,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369736442000,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369836501333,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 369936562417,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370036558917,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370136409792,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370236597709,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370336510959,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370436701625,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370536470709,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370638336125,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370736461917,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370836501250,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 370936461709,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371036594751,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371136603167,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371236690501,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371336498626,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371436522126,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371536585209,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371636569376,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371736452043,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371836473918,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 371936557709,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372036555001,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372136467209,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372236489501,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372336449001,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372436460710,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372536489751,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372636459626,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372736361626,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372836482376,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 372936527668,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373036614877,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373136529085,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373236504960,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373336688460,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373436399293,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373536437127,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373636440918,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373736395419,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373836462877,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 373936403085,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374036457335,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374136480794,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374236503794,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374336516335,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374438314669,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374536438336,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374636647336,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374736507502,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374836484002,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 374936673336,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375036772961,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375136520461,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375236626253,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375336476669,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375436465711,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375536533628,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375636534294,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375736481253,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375836508253,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 375936701420,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376036565086,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376136490836,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376236512545,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376336486670,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376436578628,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376536526712,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376636665462,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376736685253,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376836895712,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 376937083503,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377036504795,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377136431503,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377236523170,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377336785879,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377437050629,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377536929879,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377637104587,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377736473337,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377836787295,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 377936529421,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378036482046,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378136565712,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378236507254,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378336596379,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378436536171,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378536519129,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378636556213,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378736517421,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378836470004,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 378937075713,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379036529921,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379136531921,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379236695754,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379336553921,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379437557546,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379536646380,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379636675588,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379736669213,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379836896088,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 379936867838,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380036549797,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380136991797,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380236556880,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380336556005,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380436807838,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380536819797,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380636621797,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380736657672,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380836833047,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 380936816464,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381036822297,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381136742297,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381236739964,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381336804464,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381436764381,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381537375339,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381637211797,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381736885422,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381837900547,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 381937711881,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382036885881,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382137815006,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382236864506,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382337954423,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382436866173,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382536764631,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382636693339,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        },
+        {
+          "ns": 382736631298,
+          "owner": "915ae19837f6f9dac18f68aa7b2c73eb",
+          "session": "9e8b9fde71bf1443de30f96d177e2783",
+          "control_generation": 1,
+          "sensor_generation": 1,
+          "ready": true,
+          "clock": true
+        }
+      ]
+    },
+    "scope": "instrumented same-VM callback ingress/ROS observer and bridge age gates, no physical sensor age or independent packet capture; expected context changes and counted losses retained"
+  }
+}

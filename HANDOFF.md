@@ -2723,3 +2723,35 @@ Recovery isolieren, Crash/Restart/UNKNOWN ohneacceptedCommandReplay. DannN5-
 CONTROLProgress undDDSColdDiscovery entsprechendUserreihenfolge; N3später.
 Native12Cases sindkeinevolleN4/M3-/DDS-/Hardware-/PhysicalAge-Abnahme. Historische
 FooterursachebleibtUNKNOWN/alteFailedundSkippedCasesbleiben. PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: verbleibende bounded N4-Gates
+
+Die zuvor als nächste Schritte genannten ROS-Frische-, Deadline-Overrun-, isolierten
+QUERY- und Crash/Restart-Entwicklungstests sind jetzt ausgeführt: 4 native +3 ROS-
+Frische +3 korrigierte ROS-Restart-Cases PASS. Nachweise und Scope stehen in
+[evidence/m3-n4-remaining-2026-11-08/README.md](evidence/m3-n4-remaining-2026-11-08/README.md).
+
+- Native6s-Unterbrechungen überschreiten das ursprüngliche5s-Budget: Admission/
+  Dispatch werden sicher abgelehnt, gestartete Arbeit verfällt; jeweils0Effects.
+  Separat unterdrückte direkte Finalantwort wird per QUERY mit1Effect rekonstruiert.
+- ROS200/50Hz über15s, beide/einseitige Cuts: vollständige Tracepopulationen,
+  sechs Bilanzen0, frische Samples beider Routen nachRestore, beobachtete gemeinsame
+  VM-Ingress→Callback-Maxima25.352125/23.417917/23.454333ms <=250ms. Verluste sind
+  explizit bilanziert, keine PhysicalAge-/CrossHost-/Lossless-Aussage.
+- Realer ROS-Restart mit persistentem externem Simulator: vorAdmission UNKNOWN
+  trotzNOT_FOUND/abgelaufenerDeadline und0Effects; nachEffect/vorCommit UNKNOWN
+  mit1Effect; nachCommit dauerhaftSUCCEEDED mit1Effect. Je1SDK-Handoff, originale
+  Deadline, neuerReceiverOwner/Session, keinacceptedCommandReplay. Alle kontrolliert
+  gestoppten Inkarnationen haben vollständige Footer; absichtlich gekillte nicht.
+- Zwei frühere Restart-Fixture-Cohorts bleiben FAILED, Folgetests dort unexecuted.
+  Explizites Schließen der SQLite-Observer und Eigentümer-konforme Inspektion
+  korrigiert: keine Live-Reads gegen exklusiven Worker; nachStop oder stabile private
+  DB/WAL-Kopie beim angehaltenen eigenen Writer. Erstursache nicht eindeutig belegt.
+- Host239 PASS, StandaloneFixture Release/Werror und Syntax/diff PASS. Produktions-
+  SDK/ROS/Worker/Provider unverändert; SDK70/ROS41 bleiben frühere volle Validation.
+  Originale Rohartefakte/Fehler erhalten, Credentials und OwnedNamespaces entfernt.
+
+**Nächster Schritt:** SRT N5-CONTROL-Progress und DDS-ColdDiscovery. In dieser
+Änderung kein N5-Run. Breite N4/DDS-/kombinierteLast-/Hardware-/M3-Abnahme bleibt
+separat offen; PR2 bleibt Draft, Intrinsic/M4 unberührt.

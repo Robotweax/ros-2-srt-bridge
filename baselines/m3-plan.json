@@ -343,7 +343,7 @@
       "implemented": "mid-window kernel outage, both directions or one endpoint egress",
       "pending": "barriers before admission, after dispatch, after result commit; precise VM-clock transition timing",
       "phase_followup": {
-        "status": "native command phase matrix passes; complete ROS/crash/deadline N4 gates remain open",
+        "status": "native phases and requested bounded ROS freshness/deadline/restart development cases pass; full comparison acceptance pending",
         "evidence": "evidence/m3-failure-n4-2026-11-08/README.md",
         "execution_matrix": "evidence/m3-failure-n4-2026-11-08/execution-matrix.json",
         "failure_controls": {
@@ -410,17 +410,97 @@
           "bounded_workers_and_transports_stopped": true
         },
         "scope": "native installed endpoint/provider and simulated handler; no ROS SENSOR or hardware acceptance",
-        "host_tests": 231,
+        "host_tests": 239,
         "previous_full_sdk_tests": 70,
         "previous_ros_reported_tests": 41,
         "production_source_or_binary_changed": false,
         "remaining": [
-          "ROS sensor freshness during/after interruption",
-          "explicit deadline overrun",
-          "withheld result and query-only recovery isolation",
-          "crash/restart and retained UNKNOWN with no accepted-command replay"
+          "long-duration combined sensor/command/crash and full comparison scope",
+          "cross-host age, hardware and matched DDS/security/resource acceptance"
         ],
-        "full_N4_acceptance": false
+        "full_N4_acceptance": false,
+        "remaining_development_tests": {
+          "status": "requested bounded development cases pass; broader M3 comparison acceptance remains pending",
+          "evidence": "evidence/m3-n4-remaining-2026-11-08/README.md",
+          "execution_matrix": "evidence/m3-n4-remaining-2026-11-08/execution-matrix.json",
+          "initial_source": "c70de04",
+          "native": {
+            "cases_passed": 4,
+            "overrun_hold_seconds": 6,
+            "original_command_budget_seconds": 5,
+            "overrun_states": [
+              6,
+              6,
+              7
+            ],
+            "overrun_effects": [
+              0,
+              0,
+              0
+            ],
+            "withheld_direct_final_result": "actual QUERY recovery succeeds; one effect/handoff"
+          },
+          "ros_freshness": {
+            "cases_passed": 3,
+            "directions": [
+              "both",
+              "to-robot",
+              "to-operator"
+            ],
+            "nominal_source_seconds": 15,
+            "source_hz": "both routes within1% of200/50Hz",
+            "bridge_upper_age_budget_ms": 250,
+            "shared_VM_observer_ingress_max_ns": [
+              25352125,
+              23417917,
+              23454333
+            ],
+            "conservation_balances": "all0",
+            "physical_sensor_age_claim": false
+          },
+          "restart_original_failures": [
+            {
+              "source": "c70de04",
+              "first_case": "before",
+              "status": "failed new-session qualification; exact old-worker/startup cause not recorded",
+              "later_cases": "not_executed"
+            },
+            {
+              "source": "726752b",
+              "first_case": "before",
+              "status": "qualified receiver then observer failed on exclusive live SQLite read",
+              "later_cases": "not_executed"
+            }
+          ],
+          "corrected_restart": {
+            "source": "24fdcf2",
+            "cases_passed": 3,
+            "positions": [
+              "before_admission",
+              "after_external_effect_before_commit",
+              "after_result_commit"
+            ],
+            "states": [
+              8,
+              8,
+              4
+            ],
+            "effects": [
+              0,
+              1,
+              1
+            ],
+            "sdk_command_handoffs_each": 1,
+            "original_deadline_preserved": true,
+            "unknown_not_found_retained_beyond_expiry": true,
+            "new_receiver_owner_and_session": true,
+            "journal_observation": "closed journals or private DB/WAL copy of stopped sole owned writer; no production lock change"
+          },
+          "production_source_or_binary_changed": false,
+          "previous_full_sdk_tests": 70,
+          "previous_ros_reported_tests": 41,
+          "full_M3_acceptance": false
+        }
       }
     },
     "N5": {
@@ -454,7 +534,6 @@
   "pending_gates": [
     "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
     "N3 ROS publication/age/accounting with trusted connection identity and validated source-DATA selector",
-    "N4 ROS sensor freshness, deadline overrun, withheld-result and crash/restart/UNKNOWN boundaries; native phase cuts passed",
     "complete three-seed full-duration comparison matrix",
     "matched-window CPU and wire-byte measurements; controlled resource comparison",
     "further reduce and qualify strict-pacing replacements at actual 200/50 Hz; N5 command outcome qualification"
@@ -1696,5 +1775,6 @@
     "SRT N5 command progress and DDS cold discovery",
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
-  ]
+  ],
+  "current_priority": "SRT N5 command progress and DDS cold discovery, after bounded N4 development gates; no N5 run in latest change"
 }

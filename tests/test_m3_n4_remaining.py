@@ -95,3 +95,20 @@ class JournalInspectionTests(unittest.TestCase):
             before=hashlib.sha256(path.read_bytes()).hexdigest()
             self.assertEqual(copied_entries(path,Path(d)/'copy'),[dict(id='01'*16,state=3)])
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),before)
+
+    def test_exclusive_wal_copy_reads_committed_state_without_touching_live_owner(self):
+        import sqlite3
+        import hashlib
+        from scenario_journal import copied_entries,visible_entries
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'journal.sqlite';db=sqlite3.connect(path)
+            try:
+                db.execute('PRAGMA locking_mode=EXCLUSIVE');db.execute('PRAGMA journal_mode=WAL');db.execute('PRAGMA wal_autocheckpoint=0')
+                db.execute('CREATE TABLE entries(id BLOB,state INTEGER)');db.execute('INSERT INTO entries VALUES(?,?)',(bytes([1])*16,13));db.commit()
+                db.execute('UPDATE entries SET state=14')  # Uncommitted result is not proof.
+                originals=[path,Path(str(path)+'-wal')];before=[hashlib.sha256(p.read_bytes()).hexdigest() for p in originals]
+                with self.assertRaisesRegex(sqlite3.OperationalError,'locked'):visible_entries(path)
+                self.assertEqual(copied_entries(path,Path(d)/'copy-wal'),[dict(id='01'*16,state=3)])
+                self.assertEqual([hashlib.sha256(p.read_bytes()).hexdigest() for p in originals],before)
+                self.assertEqual(db.execute('SELECT state FROM entries').fetchone()[0],14)
+            finally:db.rollback();db.close()

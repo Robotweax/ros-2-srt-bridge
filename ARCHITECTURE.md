@@ -1765,3 +1765,31 @@ production defaults are unchanged. These cases do not qualify ROS sensor freshne
 deadline overrun, crash/UNKNOWN recovery, DDS parity or full N4/M3. Those N4 gates
 precede N5 and further N3 work under the user's agreed priority order. See
 evidence/m3-failure-n4-2026-11-08/.
+
+
+### Remaining bounded N4 development gates (2026-11-08)
+
+The follow-up in evidence/m3-n4-remaining-2026-11-08/ supplies ten passing bounded
+cases: four native deadline/query cases, three continuous ROS sensor freshness
+cuts and three real ROS crash/restart cases. Six-second holds exceed the original
+five-second command budget and produce zero effects; direct terminal reply
+suppression separately proves QUERY recovery without replay. Fifteen-second
+200/50Hz sensor runs retain complete traces, balanced explicit losses, fresh
+post-restore progress and shared-VM ingress-to-callback maxima below250ms.
+
+Restart before admission retains UNKNOWN despite NOT_FOUND and elapsed expiry;
+restart after an observed effect but before durable completion retains UNKNOWN
+with invalid result and no second effect; committed success remains durable.
+Original sender deadlines and one SDK command handoff are retained, with new
+receiver owner/session. Simulator ground truth never substitutes for command proof.
+Two failed observer-fixture cohorts remain failed with later cases unexecuted.
+Journal inspection now respects exclusive worker ownership, using closed journals
+or a private stable DB/WAL copy while the sole owned writer is stopped. Production
+locking, deadlines, APIs and binaries are unchanged. All controlled incarnations
+require complete final traces; deliberately killed incarnations remain explicit
+injected negatives. Host239 tests pass; full SDK70/ROS41 are earlier validations.
+
+These results close the requested bounded development gates, not full N4/DDS,
+combined-load, physical-age, cross-host, hardware or M3 acceptance. Next priority
+is SRT N5 progress and default DDS cold discovery; no N5 execution in this follow-up.
+PR2 remains draft and Intrinsic/M4 untouched.

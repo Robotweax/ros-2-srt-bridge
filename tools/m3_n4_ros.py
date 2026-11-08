@@ -99,9 +99,15 @@ def check_crash(out,mode):
         if r['state']!=expected or r['owner_epoch']!=initial['owner'] or r['payload_hash']!=s['payload_hash'] or s['result_valid']!=(mode=='committed') or r['result_valid']!=s['result_valid']:raise ValueError('recovered journal proof/old ownership mismatch')
         if mode=='effect' and (crash['device']['effects']!=1 or crash['journal'][0]['state']!=3 or not crash['fault']['worker_fault']):raise ValueError('crash did not occur after external effect before commit')
         if mode=='committed' and crash['journal'][0]['state']!=4:raise ValueError('crash not after durable success')
+    controlled=[]
+    for path in sorted(out.glob('*-bridge-*.log')):
+        if path.name=='robot-bridge-1.log' and mode in ('before','committed'):continue
+        item=commands(path)
+        if not item['complete']:raise ValueError('controlled incarnation command trace incomplete')
+        controlled.append(dict(name=path.name,attempted=item['attempted'],complete=True))
     new_owner=bytes(robot['metrics']['owner_epoch']).hex()
     if new_owner==initial['owner'] or bytes(robot['metrics']['session_id']).hex()==initial['session']:raise ValueError('restart did not change owner/session')
-    return dict(sender_journal=a,receiver_journal=b,sender_trace=trace,status=op['status'],device=op['device'],initial_owner=initial['owner'],new_owner=new_owner,expected_crashes=robot['crashes'],not_found_observed=op['not_found'],scope='real ROS worker/bridge restart, external simulator persists; no accepted-command replay, original deadline and unresolved UNKNOWN retained; no physical-device outcome proof')
+    return dict(sender_journal=a,receiver_journal=b,sender_trace=trace,status=op['status'],device=op['device'],initial_owner=initial['owner'],new_owner=new_owner,expected_crashes=robot['crashes'],controlled_traces=controlled,not_found_observed=op['not_found'],scope='real ROS worker/bridge restart, external simulator persists; no accepted-command replay, original deadline and unresolved UNKNOWN retained; no physical-device outcome proof')
 
 
 if __name__=='__main__':

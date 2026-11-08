@@ -1,0 +1,324 @@
+{
+  "full_N4_M3_acceptance": false,
+  "cases": [
+    {
+      "suite": "native",
+      "name": "admission-both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "outcome": {
+        "state": 6,
+        "reason": 1,
+        "effects": 0,
+        "command_sends": 1,
+        "sender_deadline_ns": 257795499614,
+        "receiver_deadline_ns": 257790385213,
+        "deadline_conservative_margin_ns": 5114401,
+        "journal_proof_match": true,
+        "scope": "controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "hold_seconds": 6,
+      "guaranteed_outage_ns": [
+        253565564198,
+        260109271660
+      ]
+    },
+    {
+      "suite": "native",
+      "name": "dispatch-both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "outcome": {
+        "state": 6,
+        "reason": 1,
+        "effects": 0,
+        "command_sends": 1,
+        "sender_deadline_ns": 270139994245,
+        "receiver_deadline_ns": 270134663069,
+        "deadline_conservative_margin_ns": 5331176,
+        "journal_proof_match": true,
+        "scope": "controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "hold_seconds": 6,
+      "guaranteed_outage_ns": [
+        265883053412,
+        272438193414
+      ]
+    },
+    {
+      "suite": "native",
+      "name": "started-both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "outcome": {
+        "state": 7,
+        "reason": 3,
+        "effects": 0,
+        "command_sends": 1,
+        "sender_deadline_ns": 282631654500,
+        "receiver_deadline_ns": 282626501162,
+        "deadline_conservative_margin_ns": 5153338,
+        "journal_proof_match": true,
+        "scope": "controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "hold_seconds": 6,
+      "guaranteed_outage_ns": [
+        278369477167,
+        284906943420
+      ]
+    },
+    {
+      "suite": "native",
+      "name": "query-both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "outcome": {
+        "state": 4,
+        "reason": 0,
+        "effects": 1,
+        "command_sends": 1,
+        "sender_deadline_ns": 294923638006,
+        "receiver_deadline_ns": 294918533364,
+        "deadline_conservative_margin_ns": 5104642,
+        "journal_proof_match": true,
+        "scope": "controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+      },
+      "hold_seconds": 2,
+      "guaranteed_outage_ns": [
+        290656304506,
+        293197878924
+      ]
+    },
+    {
+      "suite": "freshness",
+      "name": "both",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "source_actual_hz": {
+        "imu": 200.00136823254192,
+        "joints": 50.01694795054934
+      },
+      "source_produced": 3764,
+      "observer_received": 2886,
+      "losses": {
+        "upstream_dds": 4,
+        "validation": 0,
+        "admission": 4,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 133,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 735,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "maximum_shared_VM_ingress_to_observer_ns": 25352125,
+      "progress": {
+        "1": {
+          "before": 519,
+          "fresh_after": 1761
+        },
+        "2": {
+          "before": 135,
+          "fresh_after": 455
+        }
+      }
+    },
+    {
+      "suite": "freshness",
+      "name": "to-robot",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "source_actual_hz": {
+        "imu": 200.02018454683426,
+        "joints": 50.005046136708565
+      },
+      "source_produced": 3765,
+      "observer_received": 3634,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 4,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 125,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "maximum_shared_VM_ingress_to_observer_ns": 23417917,
+      "progress": {
+        "1": {
+          "before": 470,
+          "fresh_after": 1892
+        },
+        "2": {
+          "before": 121,
+          "fresh_after": 489
+        }
+      }
+    },
+    {
+      "suite": "freshness",
+      "name": "to-operator",
+      "status": "passed",
+      "error": null,
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217",
+      "source_actual_hz": {
+        "imu": 200.0048760404967,
+        "joints": 50.017825193787445
+      },
+      "source_produced": 3764,
+      "observer_received": 2961,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 12,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 133,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 658,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "maximum_shared_VM_ingress_to_observer_ns": 23454333,
+      "progress": {
+        "1": {
+          "before": 464,
+          "fresh_after": 1885
+        },
+        "2": {
+          "before": 120,
+          "fresh_after": 489
+        }
+      }
+    },
+    {
+      "suite": "crashes",
+      "name": "before",
+      "status": "failed",
+      "error": "ROS phase barrier failed: operator-result.json,robot-final.json",
+      "source_commit": "c70de04314a074ae3e3564939fc00eb139a66217"
+    },
+    {
+      "suite": "crashes",
+      "name": "effect",
+      "status": "not_executed",
+      "error": "prior case failed; not substituted"
+    },
+    {
+      "suite": "crashes",
+      "name": "committed",
+      "status": "not_executed",
+      "error": "prior case failed; not substituted"
+    },
+    {
+      "suite": "crashes-observer",
+      "name": "before",
+      "status": "failed",
+      "error": "ROS phase barrier failed: operator-result.json,robot-final.json",
+      "source_commit": "726752bf0836ac13de8894a352a747401f4fb5be"
+    },
+    {
+      "suite": "crashes-observer",
+      "name": "effect",
+      "status": "not_executed",
+      "error": "prior case failed; not substituted"
+    },
+    {
+      "suite": "crashes-observer",
+      "name": "committed",
+      "status": "not_executed",
+      "error": "prior case failed; not substituted"
+    },
+    {
+      "suite": "crashes-exclusive",
+      "name": "before",
+      "status": "passed",
+      "error": null,
+      "source_commit": "24fdcf23fbef16f59c7805dc7eddc3ed872f664d",
+      "state": 8,
+      "reason": 2,
+      "effects": 0,
+      "not_found_observed": true,
+      "receiver_owner_changed": true,
+      "sdk_command_handoffs": 1
+    },
+    {
+      "suite": "crashes-exclusive",
+      "name": "effect",
+      "status": "passed",
+      "error": null,
+      "source_commit": "24fdcf23fbef16f59c7805dc7eddc3ed872f664d",
+      "state": 8,
+      "reason": 1,
+      "effects": 1,
+      "not_found_observed": false,
+      "receiver_owner_changed": true,
+      "sdk_command_handoffs": 1
+    },
+    {
+      "suite": "crashes-exclusive",
+      "name": "committed",
+      "status": "passed",
+      "error": null,
+      "source_commit": "24fdcf23fbef16f59c7805dc7eddc3ed872f664d",
+      "state": 4,
+      "reason": 0,
+      "effects": 1,
+      "not_found_observed": false,
+      "receiver_owner_changed": true,
+      "sdk_command_handoffs": 1
+    }
+  ]
+}
