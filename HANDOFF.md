@@ -3096,3 +3096,56 @@ Replay, Deadlineerneuerung oder Absence-Erfindung. Bei fehlendem Clock-/Kontext-
 Beweis UNKNOWN bewahren. Terminal-Progress getrennt von All-Success-Deadlinegate
 führen; ursprüngliche FAILED-Verdikte nicht umwerten. CONTROL-Verzögerung/Clock-
 Expiry-Ursache separat untersuchen. PR2 bleibt Draft, M3 offen, M4 unberührt.
+
+
+## Ergänzung 2026-11-08: dauerhafter Receiver-Expiry-Status
+
+Plan1f11963, Build-/Live-Sourcea866505. Vollständig validierte empfangene Commands
+können jetzt EXPIRED/start_deadline dauerhaft journalisieren, wenn eine qualifizierte
+AgeResult-Untergrenze strikt über dem Originalbudget liegt. Obere Grenze allein
+oder ein straddling Intervall genügt nicht. Latest-Deadline = Evaluation minus
+(lower_age-budget), positiv und bereits vergangen. Diese Evidenz ist kein neues
+Ausführungsfenster. Interner expiry_only-Pfad darf niemals dispatchen, sendet erst
+nach Commit STATUS und lässt bestehende Records maßgeblich. Kein neues Wireformat,
+Provider-/Clock-Config-Wechsel, Replay oder Deadlineerneuerung. Fehlender Beweis
+bleibt ungewiss. Evidenz:
+[evidence/m3-durable-receiver-expiry-2026-11-08/README.md](evidence/m3-durable-receiver-expiry-2026-11-08/README.md).
+
+- Sowohl initial qualifiziert verspäteter Empfang als auch retained Revalidation
+  nutzen denselben Beweis. Straddling darf begrenzt warten; zukünftige/ungültige/
+  unqualifizierte Clock, NOT_FOUND, Timeout, Abwesenheit und Underflow beweisen
+  keine Expiry. Neuer Trace39 hält Originalkontext/-sequenz, lower/upper-Age,
+  Originalbudget und Latest-Deadline fest. Worker34 und geschlossene Journals
+  validieren den Commit unabhängig; Logs allein schaffen keine Autorität.
+- Release/Werror SDK72/72, ROS41/41, Host273 vor/nach LivePASS. Vier echte native
+  IPv4/IPv6-Delayfälle (Original500ms-Budget,650ms CONTROL-Gate): direct und
+  retained Latearrival jeweils1SDK-Handoff/0Dispatch/0Effect, ClosedEXPIRED ohne
+  Resultpayload, echter QUERY nach Receiver-Restart und Duplicate-ID ohne Replay;
+  späterer frischer IntentSUCCEEDED. Acht frühere Retention-Negative/Recovery-Cases
+  bleiben grün. Beweisschwellen/Equality/Straddle/Invalid/Future/Underflow geprüft.
+- Zwei geplante Live-Slots genau einmal: N0/4211/15s8/8; N5/4211/300s136/136
+  bestätigt,14Skip,0expired/0unaufgelöst. Sowohl striktes All-Success als auch
+  explizites neues Success-or-Verified-Expiry-CompletionPASS, Exit0. Keine echte
+  Live-Expiry in diesem Lauf; native Abdeckung nicht als Livebeweis ausgeben.
+  Default-All-Success unverändert, alte FAILED-Matrizen/UNKNOWNs nicht umgewertet.
+- Neuer LiveIntent5 hält senderseitig vor SDK (Traceabstand2.235969917s), dann
+  receiverseitig604.138208ms; Originalorigin bis frischer Receiver-Evaluation
+  2.860698626s, Ageintervall[2.851650879,2.883293135]s innerhalb5s. Genau1SDK-
+  Handoff,1Resume, rechtzeitigerDispatch und dauerhafterSuccess. Keine genaue
+  Clock-Recovery-/Wire-Latenz oder Gegenbeweis zu einem historischen Fehler.
+- Telemetrie bleibt schlecht: Source75022/Observer871, größte Kategorie71187
+  SRT-Accept-to-Receiver-Gap; alle sechs Residuen0, Source~200/50Hz. Keine eindeutige
+  physische Loss-/Providerursache und keine volle Sensor-/N5-Abnahme daraus.
+- Capture/Drain/Provider/Trace-Populationen PASS, Drops0, keine aktiven Kontext-
+  wechselereignisse. Alle Successes mit passenden Journal-/Budget-/Dispatch-/
+  Originalkontext-/Sequenz-/einmaligemSDK-Beweisen. Rebuilt bridge_node,
+  dds_command_node, endpoint.a, transport.a (auch gemeinsames Code/Header-Relinking);
+  alle8 Hashes während/nach Live fest, Providerpin unverändert. Kein DDS-Profil-
+  oder Defaultwechsel/neue DDS-N5-Qualifikation. Keine Tests/Builds während Live,
+  eigene Namespaces entfernt. Rohdaten lokal gehasht, Selektionen dokumentiert.
+
+Weiter: Breitere vorab fixierte instrumentierte N5-Seed-Abdeckung mit getrennten
+All-Success-/Verified-Expiry-Completion-Verdikten. Sensorverfügbarkeit separat
+untersuchen. Historische UNKNOWNs nicht rückwirkend ablaufen lassen; keine
+Budgetlockerung, kein Retry bis PASS. FullM3/LoadedROSDiscovery/Hardware-/Clock-/
+Security-/Resource-Gates bleiben offen, PR2 Draft, Intrinsic/M4 unberührt.

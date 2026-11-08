@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "N5: design durable receiver expiry status for a fully validated provably stale received command, with no dispatch/replay/renewed budget; preserve unknown when clock/context proof unavailable; separate terminal progress from all-success gate and investigate CONTROL delay/clock expiry",
+  "current_priority": "N5: freeze broader instrumented multi-seed coverage with strict all-success and qualified-durable-expiry completion separate; investigate severe telemetry delivery gap independently; historical UNKNOWN/clock-delay cause and loaded DDS discovery remain open",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2295,6 +2295,80 @@
     "durable_expiry_outcome_implemented": false,
     "underlying_delay_clock_cause_proven": false,
     "historical_uncertainty_resolved": false,
+    "complete_M3_acceptance": false
+  },
+  "durable_receiver_expiry": {
+    "evidence": "evidence/m3-durable-receiver-expiry-2026-11-08/",
+    "plan_source": "1f11963",
+    "source": "a866505120db0c843f4c2888001b4eacf63bd009",
+    "proof": "qualified lower age bound strictly exceeds original budget; positive latest possible converted past deadline; no upper-only/straddle expiry",
+    "internal_path": "expiry_only -> journal admit -> commit/status, never dispatch; existing records preserved",
+    "wire_provider_clock_config_changed": false,
+    "source_budget_renewed": false,
+    "sdk_tests": 72,
+    "ros_tests": 41,
+    "host_tests": 273,
+    "native_late_modes": [
+      "qualified direct",
+      "retained revalidation"
+    ],
+    "native_families": [
+      "ipv4",
+      "ipv6"
+    ],
+    "native_expiry_cases": 4,
+    "native_original_fixture_budget_ms": 500,
+    "native_control_delay_ms": 650,
+    "native_expired_sdk_handoffs_each": 1,
+    "native_expired_dispatches_effects_each": 0,
+    "native_restart_query_duplicate_and_later_fresh_success": true,
+    "live_gate_selected": "durable-outcomes",
+    "strict_all_success_also_reported": true,
+    "live_cohort_exit": 0,
+    "live_n0": {
+      "seed": 4211,
+      "seconds": 15,
+      "successes": 8,
+      "attempts": 8,
+      "expired": 0,
+      "unresolved": 0,
+      "skipped": 0
+    },
+    "live_n5": {
+      "seed": 4211,
+      "seconds": 300,
+      "successes": 136,
+      "attempts": 136,
+      "expired": 0,
+      "unresolved": 0,
+      "skipped": 14,
+      "strict_all_success": true,
+      "durable_outcome_completion": true,
+      "source_produced": 75022,
+      "observer_received": 871,
+      "srt_accept_to_receiver_gap": 71187
+    },
+    "live_expiry_exercised": false,
+    "live_retained_intent": 5,
+    "source_defer_to_sdk_trace_ns": 2235969917,
+    "receiver_defer_to_resume_trace_ns": 604138208,
+    "source_origin_to_fresh_receiver_evaluation_ns": 2860698626,
+    "live_single_sdk_handoff_and_timely_dispatch": true,
+    "active_context_events": 0,
+    "all_capture_provider_trace_population_gates_pass": true,
+    "new_build": true,
+    "changed_artifacts": [
+      "bridge_node",
+      "dds_command_node",
+      "endpoint.a",
+      "transport.a"
+    ],
+    "all8_rebuilt_runtime_hashes_fixed": true,
+    "provider_pin_unchanged": true,
+    "new_dds_profile_qualification": false,
+    "retries": 0,
+    "historical_uncertainty_resolved": false,
+    "full_sensor_n5_acceptance": false,
     "complete_M3_acceptance": false
   }
 }

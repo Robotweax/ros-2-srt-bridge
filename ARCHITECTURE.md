@@ -2078,3 +2078,47 @@ transport.a rebuild; all8 runtime hashes fixed across live, provider unchanged,
 owned namespaces removed, no tests/builds overlap measurement. Sensor75030/17058
 source/observer counts retain delivery gaps. Full M3 open, PR2 draft, M4 untouched.
 Evidence: evidence/m3-receiver-clock-retention-2026-11-08/.
+
+
+### Qualified journal-only receiver expiry (2026-11-08)
+
+Plan1f11963 and sourcea866505 add a durable terminal EXPIRED/start_deadline path
+for fully validated received commands. A qualified age LOWER bound must strictly
+exceed the original budget; upper-bound failure or a straddling interval is not
+expiry proof. The latest possible converted deadline is evaluated_ns minus
+(age_lower-budget), positive and past. This bound is evidence only, never an
+execution window. Internal expiry_only notifications use existing journal admission
+and a separate endpoint completion path that cannot dispatch, preserves existing
+records, and sends STATUS only after commit. The original sender deadline is
+unchanged; no wire/provider/clock-configuration/replay-policy change. Ambiguous
+intervals may wait within existing bounds, but unknown/future/invalid clock,
+context loss, timeout/NOT_FOUND/absence/underflow cannot manufacture expiry.
+
+Trace39 records original context/sequence, qualified age bounds, original budget
+and latest expiry deadline; worker/journal evidence validates commit independently.
+Release/Werror SDK72/ROS41 and host273 before/after live pass. Four native SRT
+IPv4/IPv6 direct/retained delayed-arrival cases use an original500ms fixture budget
+and650ms gate: one SDK handoff, zero expiry dispatch/effect, matching EXPIRED
+records, real wire QUERY after receiver restart, duplicate-ID reconciliation and
+later fresh-ID success. Existing recovery/context/shutdown/resource-expiry and
+negative clock contracts remain green.
+
+The fixed N0/4211/15s and N5/4211/300s live slots pass8/8 and136/136, with0/14
+skips, no expired or unresolved attempt. Strict all-success and separately declared
+success-or-qualified-durable-expiry completion both pass here; no live expiry
+coverage is claimed. Default strict gate and all old FAILED/UNKNOWN evidence stay
+unchanged. Live intent5 exercises sender unsent retention2.235969917s and receiver
+retention604.138208ms by trace gaps, then one handoff/resume and durable success
+within original5s. These are stage observations, not exact recovery/wire latency
+or retroactive proof for older failures.
+
+N5 telemetry75022/871 produced/observed remains poor;71187 is in the accept-to-
+receiver gap category, with zero accounting residuals but no unique physical-loss/
+provider cause. Full sensor/N5/M3 qualification remains open. Four artifacts
+rebuild (bridge_node, dds_command_node, endpoint.a, transport.a), all eight new
+hashes fixed across/post-live, provider unchanged, owned namespaces removed,
+no tests/builds overlap live. No DDS profile/default or new DDS qualification.
+Evidence: evidence/m3-durable-receiver-expiry-2026-11-08/. Next freeze broader
+multi-seed command coverage with both metrics, investigate telemetry availability
+separately; historical uncertainty, loaded ROS discovery and hardware/clock/security/
+resource gates remain distinct. PR2 draft, Intrinsic/M4 untouched.

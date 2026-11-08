@@ -1,0 +1,501 @@
+{
+  "native_cases": [
+    {
+      "retained": false,
+      "sdk_handoffs": 1,
+      "expired_dispatches": 0,
+      "expired_effects": 0,
+      "restart_query_duplicate": true,
+      "later_fresh_success": true
+    },
+    {
+      "retained": true,
+      "sdk_handoffs": 1,
+      "expired_dispatches": 0,
+      "expired_effects": 0,
+      "restart_query_duplicate": true,
+      "later_fresh_success": true
+    },
+    {
+      "retained": false,
+      "sdk_handoffs": 1,
+      "expired_dispatches": 0,
+      "expired_effects": 0,
+      "restart_query_duplicate": true,
+      "later_fresh_success": true
+    },
+    {
+      "retained": true,
+      "sdk_handoffs": 1,
+      "expired_dispatches": 0,
+      "expired_effects": 0,
+      "restart_query_duplicate": true,
+      "later_fresh_success": true
+    }
+  ],
+  "proof_contract": [
+    {
+      "lower_bound_required": true,
+      "straddle_equality_unknown": true,
+      "invalid_future_underflow_refused": true
+    }
+  ],
+  "retention_regressions": [
+    {
+      "mode": "recover",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 1,
+      "drops": 0,
+      "effects": 1
+    },
+    {
+      "mode": "expiry",
+      "original_budget_ms": 500,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "context",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "shutdown",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "recover",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 1,
+      "drops": 0,
+      "effects": 1
+    },
+    {
+      "mode": "expiry",
+      "original_budget_ms": 500,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "context",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    },
+    {
+      "mode": "shutdown",
+      "original_budget_ms": 5000,
+      "sdk_handoffs": 1,
+      "resumes": 0,
+      "drops": 1,
+      "effects": 0
+    }
+  ],
+  "closed_journals": {
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-retained": {
+      "sender": {
+        "sha256": "b981812fd3d38d7e7dbbd62b1aecc7cbefd9d14d22c966a84c85d9d6b821403e",
+        "entries": {
+          "3800ee9c4867c01e3ccc8e1579f7cf52": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "session": "75e3372803712c2e259a292acbb39673",
+            "owner_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "source_ns": 192713812168,
+            "admitted_ns": 192719430210,
+            "dispatched_ns": 0,
+            "finished_ns": 193575112335,
+            "deadline_ns": 193213812168,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "b47b836dcdc549ddcbe7c0d252958fbb": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "session": "41ba210a7eafbfc428608da11dfb7641",
+            "owner_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "source_ns": 193919228836,
+            "admitted_ns": 193922815127,
+            "dispatched_ns": 0,
+            "finished_ns": 193979194711,
+            "deadline_ns": 194419228836,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "50538f787abcccc7b73844c0ad2bd7621e74b778813c2bcb5401694fa49689b2",
+        "entries": {
+          "3800ee9c4867c01e3ccc8e1579f7cf52": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "session": "75e3372803712c2e259a292acbb39673",
+            "owner_epoch": "400413a04800ca31ca1d4bc03856af51",
+            "source_ns": 192713812168,
+            "admitted_ns": 193553423794,
+            "dispatched_ns": 0,
+            "finished_ns": 193553423794,
+            "deadline_ns": 193219293010,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "b47b836dcdc549ddcbe7c0d252958fbb": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "47c4d1fdaedf80dfc60dbfcfcdc9ab8b",
+            "session": "41ba210a7eafbfc428608da11dfb7641",
+            "owner_epoch": "5cc52b3e645a7901624790f1b2fe79c6",
+            "source_ns": 193919228836,
+            "admitted_ns": 193940942127,
+            "dispatched_ns": 193960897794,
+            "finished_ns": 193970721419,
+            "deadline_ns": 194412511110,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "scope": "expiry-only record plus later fresh success, original500ms fixture source budget"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-direct": {
+      "sender": {
+        "sha256": "1f6b09b070f012ba0ab595123a4fbf23db791c578f045904e562488d11a77c9d",
+        "entries": {
+          "96ae6b92da7d50f7f5fc15be4eeec89f": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "session": "4b3875e226abe07158b08383e3854ee5",
+            "owner_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "source_ns": 191065404209,
+            "admitted_ns": 191070879459,
+            "dispatched_ns": 0,
+            "finished_ns": 191763638001,
+            "deadline_ns": 191565404209,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "ec41d0f0022b29a296b5ac0c6e0f28c8": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "session": "0b1db8b6c0e7991f2e3c929c5433076f",
+            "owner_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "source_ns": 192138561293,
+            "admitted_ns": 192142417293,
+            "dispatched_ns": 0,
+            "finished_ns": 192206303918,
+            "deadline_ns": 192638561293,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "bd468e1de75e2944fb4cc0b17d83ac5923350df1be4516677b33c6cf42be7cb8",
+        "entries": {
+          "96ae6b92da7d50f7f5fc15be4eeec89f": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "session": "4b3875e226abe07158b08383e3854ee5",
+            "owner_epoch": "22aa181ccfe69506201b5087d0702855",
+            "source_ns": 191065404209,
+            "admitted_ns": 191744956918,
+            "dispatched_ns": 0,
+            "finished_ns": 191744956918,
+            "deadline_ns": 191571576201,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "ec41d0f0022b29a296b5ac0c6e0f28c8": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "2b96c29d0639a0c881ab4c9109ef1113",
+            "session": "0b1db8b6c0e7991f2e3c929c5433076f",
+            "owner_epoch": "fafd461aae0ad715d893cac6b9f3abd0",
+            "source_ns": 192138561293,
+            "admitted_ns": 192159377668,
+            "dispatched_ns": 192184436043,
+            "finished_ns": 192193982418,
+            "deadline_ns": 192631659279,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "scope": "expiry-only record plus later fresh success, original500ms fixture source budget"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-retained": {
+      "sender": {
+        "sha256": "d5caca3a9d9dac8a96400b07fc048f9f4cb406d3fa4f75cc51e73bef85b4cfc5",
+        "entries": {
+          "5de69d3d291c17b0d9ae0e054b512314": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "015869452f335280c5531a4c484955f4",
+            "session": "370b9273567f576da2726095346dd1b2",
+            "owner_epoch": "015869452f335280c5531a4c484955f4",
+            "source_ns": 182234924872,
+            "admitted_ns": 182239770580,
+            "dispatched_ns": 0,
+            "finished_ns": 183110042747,
+            "deadline_ns": 182734924872,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "aac03b01dba1eb1a5fd8150af9bb61d3": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "015869452f335280c5531a4c484955f4",
+            "session": "5013f71345f1c474b420e36386d036f4",
+            "owner_epoch": "015869452f335280c5531a4c484955f4",
+            "source_ns": 183469573539,
+            "admitted_ns": 183474246497,
+            "dispatched_ns": 0,
+            "finished_ns": 183537414622,
+            "deadline_ns": 183969573539,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "576d3523230482f1b36a6b4e11b1c2274d7fd80d1273e344302304dff354c020",
+        "entries": {
+          "5de69d3d291c17b0d9ae0e054b512314": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "015869452f335280c5531a4c484955f4",
+            "session": "370b9273567f576da2726095346dd1b2",
+            "owner_epoch": "ac535781647b823b4c4d32188c99a792",
+            "source_ns": 182234924872,
+            "admitted_ns": 183083384164,
+            "dispatched_ns": 0,
+            "finished_ns": 183083384164,
+            "deadline_ns": 182740388232,
+            "result_valid": false,
+            "result_generation": 0
+          },
+          "aac03b01dba1eb1a5fd8150af9bb61d3": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "015869452f335280c5531a4c484955f4",
+            "session": "5013f71345f1c474b420e36386d036f4",
+            "owner_epoch": "54aa1819559e8b2cf4d475c58a680849",
+            "source_ns": 183469573539,
+            "admitted_ns": 183489757956,
+            "dispatched_ns": 183511655872,
+            "finished_ns": 183524437789,
+            "deadline_ns": 183962831835,
+            "result_valid": true,
+            "result_generation": 1
+          }
+        }
+      },
+      "scope": "expiry-only record plus later fresh success, original500ms fixture source budget"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-direct": {
+      "sender": {
+        "sha256": "b517bedb384d2a702ef45334a084483acfb3eb587f4d47aa084631566b917495",
+        "entries": {
+          "56767f9d148d2d9baef13cb975f6ab70": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "session": "f3ee8bcd710894b06a584afb7c58e5e4",
+            "owner_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "source_ns": 181649659371,
+            "admitted_ns": 181654051330,
+            "dispatched_ns": 0,
+            "finished_ns": 181718313580,
+            "deadline_ns": 182149659371,
+            "result_valid": true,
+            "result_generation": 1
+          },
+          "feb8af9e005327c1627fbfd8dc644525": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "session": "6c91b5e0ba3530ccc282d3b4fc57108a",
+            "owner_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "source_ns": 180600935163,
+            "admitted_ns": 180605897996,
+            "dispatched_ns": 0,
+            "finished_ns": 181287298746,
+            "deadline_ns": 181100935163,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "receiver": {
+        "sha256": "4f03cb38e689bebe21e067d9c1f3e6d362ee8ef5e17245508336f3a7e8c16678",
+        "entries": {
+          "56767f9d148d2d9baef13cb975f6ab70": {
+            "state": 4,
+            "reason": 0,
+            "revision": 3,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "session": "f3ee8bcd710894b06a584afb7c58e5e4",
+            "owner_epoch": "569f185f9fa45a4500597cd45fd8d67b",
+            "source_ns": 181649659371,
+            "admitted_ns": 181664555080,
+            "dispatched_ns": 181694192163,
+            "finished_ns": 181704497913,
+            "deadline_ns": 182143101433,
+            "result_valid": true,
+            "result_generation": 1
+          },
+          "feb8af9e005327c1627fbfd8dc644525": {
+            "state": 7,
+            "reason": 3,
+            "revision": 1,
+            "route": 100,
+            "payload_hash": "1e21fff2a6c03d6d0a2dc043857c4f9b2a268caf0e4274fa59c280e7148245cc",
+            "source_epoch": "f43c3fe26af1f7beb4ef4d7f071d319b",
+            "session": "6c91b5e0ba3530ccc282d3b4fc57108a",
+            "owner_epoch": "299df0e67d703249cc206da91d2a8907",
+            "source_ns": 180600935163,
+            "admitted_ns": 181262172205,
+            "dispatched_ns": 0,
+            "finished_ns": 181262172205,
+            "deadline_ns": 181107658687,
+            "result_valid": false,
+            "result_generation": 0
+          }
+        }
+      },
+      "scope": "expiry-only record plus later fresh success, original500ms fixture source budget"
+    }
+  },
+  "raw_hashes": {
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-retained/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-retained/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-retained/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "b981812fd3d38d7e7dbbd62b1aecc7cbefd9d14d22c966a84c85d9d6b821403e"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-retained/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "50538f787abcccc7b73844c0ad2bd7621e74b778813c2bcb5401694fa49689b2"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-direct/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-direct/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-direct/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "1f6b09b070f012ba0ab595123a4fbf23db791c578f045904e562488d11a77c9d"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1206/durable-direct/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "bd468e1de75e2944fb4cc0b17d83ac5923350df1be4516677b33c6cf42be7cb8"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-retained/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-retained/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-retained/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "d5caca3a9d9dac8a96400b07fc048f9f4cb406d3fa4f75cc51e73bef85b4cfc5"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-retained/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "576d3523230482f1b36a6b4e11b1c2274d7fd80d1273e344302304dff354c020"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-direct/receiver.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-direct/sender.sqlite.owner": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-direct/sender.sqlite": {
+      "bytes": 12288,
+      "sha256": "b517bedb384d2a702ef45334a084483acfb3eb587f4d47aa084631566b917495"
+    },
+    "build/m3-sdk/tests/native/wire-errors-1094/durable-direct/receiver.sqlite": {
+      "bytes": 12288,
+      "sha256": "4f03cb38e689bebe21e067d9c1f3e6d362ee8ef5e17245508336f3a7e8c16678"
+    }
+  }
+}
