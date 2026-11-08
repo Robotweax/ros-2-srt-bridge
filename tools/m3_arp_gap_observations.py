@@ -13,7 +13,7 @@ def parse_arp(row):
     if len(frame)<42 or row['length']<42 or frame[14:20]!=b'\x00\x01\x08\x00\x06\x04':raise ValueError('unsupported ARP header shape')
     if row['artifact_version']!=2 or row['vlan_present'] or row['gso_size'] or row['gso_segs'] not in (0,1):raise ValueError('unqualified ARP representation')
     return dict(monotonic_ns=row['monotonic_ns'],packet_type=row['packet_type'],outgoing=row['packet_type']==4,
-                operation=int.from_bytes(frame[20:22],'big'),sender_ipv4=socket.inet_ntoa(frame[28:32]),target_ipv4=socket.inet_ntoa(frame[38:42]))
+                operation=int.from_bytes(frame[20:22],'big'),ethernet_source_mac=frame[6:12].hex(':'),ethernet_destination_mac=frame[:6].hex(':'),sender_mac=frame[22:28].hex(':'),target_mac=frame[32:38].hex(':'),sender_ipv4=socket.inet_ntoa(frame[28:32]),target_ipv4=socket.inet_ntoa(frame[38:42]))
 
 
 def analyze(run,analysis):
