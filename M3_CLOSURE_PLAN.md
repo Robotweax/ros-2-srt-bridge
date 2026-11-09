@@ -1,8 +1,8 @@
 # M3 acceptance closure plan — 2026-11-09
 
 **Plan prepared; execution is not scheduled or authorized by this document.**
-The current no-new-experiments instruction remains in force. This step performs
-read-only planning checks and changes documentation only: no tuning, build,
+The current no-new-experiments instruction remains in force. The original planning step performed
+read-only checks and documentation changes: no tuning, build,
 traffic, fixture execution, journal recovery, expiry or replay. M3 remains open,
 PR2 draft and Intrinsic/M4 untouched. The existing
 [acceptance conclusion](M3_COMPARISON_AND_ACCEPTANCE.md) is unchanged.
@@ -49,22 +49,31 @@ barriers/watchdogs are separate fixture settings, not production overrides.
 
 ## 2. Preparation before any future live case
 
-These are named preparation deliverables, not work executed by this plan:
+Offline source preparation is now implemented and427 Python checks pass; see
+[evidence and readiness delta](evidence/m3-offline-closure-preparation-2026-11-09/README.md).
+This does not authorize execution. Native compilation/link and live validation
+remain unperformed; no live dispatcher is wired. All38 cases remain disabled.
+The original planning snapshots below retain their original scope.
 
-1. **Strict campaign assessor.** Make the case-level and cohort-level verdict use
+These are the preparation deliverables and their remaining boundaries:
+
+
+1. **Strict campaign assessor.** Closed-case assessment and callback stop control
+   are implemented with offline negative controls; live dispatcher wiring remains
+   pending. Make the case-level and cohort-level verdict use
    the same declared source/capture/clock/journal/cleanup gates before advancing.
    `run_m3.py` exit0 alone is insufficient: earlier harness safety passes allowed
    unresolved commands. Use the existing closed `command_progress` proof and
    SENSOR accounting, with explicit positive/nonempty populations. Preserve inner
    harness status separately. A late audit failure stops the campaign; it cannot
    merely annotate a PASS after later cases have been scheduled.
-2. **Matched N4 fixture port.** `tools/m3_n4.py` still names `install/bridge-m3`
-   and `build/m3-n4-peer`; `tools/m3_n4_ros.py` still names `install/m3-ros`.
-   Prepare explicit selected SDK/worker/ROS paths and prefix/hash checks, including
-   scenario child processes. An old IPC3-linked peer is not current-build evidence
+2. **Matched N4 fixture port.** Source now supports explicit selected
+   SDK/worker/ROS paths, child prefix checks and post-build fixture bindings.
+   Nonbaseline native selection refuses the currently missing binding before
+   lab creation. Native compilation/link and runtime validation remain pending. An old IPC3-linked peer is not current-build evidence
    when run beside an IPC4 worker. Build only the standalone peer into a new
    isolated fixture prefix against the fixed SDK; do not overwrite old
-   fixtures or rebuild production libraries. No such port/build is performed now.
+   fixtures or rebuild production libraries. The source port is offline-tested; no fixture build was performed.
 3. **Offline negative controls.** Before a future campaign, the orchestration
    must stop on a source skip, missing histogram/footer, wrong image/build,
    unresolved result, incomplete capture, changed epoch or failed cleanup. Mocked

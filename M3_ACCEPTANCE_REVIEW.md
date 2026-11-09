@@ -1,5 +1,11 @@
 # M3 acceptance review — 2026-11-09
 
+Offline closure preparation is now source-implemented and427 Python tests pass
+([evidence](evidence/m3-offline-closure-preparation-2026-11-09/README.md)).
+Native N4 build/link and live dispatcher wiring remain pending; all38 future
+cases are disabled. No tuning or new experiments were performed.
+
+
 Final comparison and acceptance conclusion:
 [M3_COMPARISON_AND_ACCEPTANCE.md](M3_COMPARISON_AND_ACCEPTANCE.md).
 The reporting task is complete; the qualification status below remains open.

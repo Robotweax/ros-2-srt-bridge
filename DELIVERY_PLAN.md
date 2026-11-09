@@ -1,5 +1,11 @@
 # Delivery focus — 2026-11-09
 
+Offline closure preparation is now source-implemented and427 Python tests pass
+([evidence](evidence/m3-offline-closure-preparation-2026-11-09/README.md)).
+Native N4 build/link and live dispatcher wiring remain pending; all38 future
+cases are disabled. No tuning or new experiments were performed.
+
+
 M0–M2 are accepted for the recorded Linux amd64/Jazzy simulator baseline. M3 is
 the delivery blocker. PR2 remains draft; Intrinsic/M4 is not started. Current
 implementation and qualification are described by the latest HANDOFF entries.

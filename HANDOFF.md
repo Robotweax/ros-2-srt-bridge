@@ -4065,3 +4065,31 @@ The concrete planning request is complete; no new experiment follows automatical
 Further prep can remain offline, but current no-new-experiments scope must be
 explicitly changed before live execution. Current M3notaccepted/PR2draft/M4untouched
 and comparison limits remain. This plan creates no waiver or merge permission.
+
+
+### 2026-11-09 — Offline closure source preparation
+
+- Current continue scope remains no tuning/new experiments. No builds, Docker,
+  ROS/fixture launches, traffic/capture, journal recovery, forced expiry or replay.
+- N4 native/ROS runners now select explicit layouts, verify child prefixes and
+  preserve all production timing/settings. Standalone CMake imports the selected
+  SDK worker and emits peer/SDK/header/archive/provider/source binding metadata.
+  Private IPC4 retains existing CLI flag `--worker-ipc-v3`. Nonbaseline missing or
+  stale binding refuses before output/lab creation. Actual candidate fixture is
+  not built; binding remains absent. CMake source-reviewed only.
+- New closed-case strict assessor reuses N3 raw validators, combined SENSOR and
+  durable command progress, N4 phase/freshness/crash outcomes, frozen provenance,
+  outage kernel/bracket/drop checks and recorded cleanup. Combined capture uses
+  original summaries rather than independent full packet reparsing. Callback-only
+  stop controller is offline-tested; no live dispatcher is implemented/wired.
+-427 offline Python checks pass. Read-only retained N3 baseline passes, known
+  two-loss2903 still rejects skipped slots. All13 candidate manifest entries and
+ 86 native inputs unchanged, provider52be7c86 clean/archive unchanged. No SDK/ROS
+  rebuild/tests repeated; prior SDK81/ROS41 retain their original scope.
+- Evidence: `evidence/m3-offline-closure-preparation-2026-11-09/README.md`,
+  readiness-update/verification/source-snapshot JSON and validation logs. Snapshot
+  has null native fixture binding and is not a complete live campaign freeze.
+- Next offline work: live-dispatcher design/wiring with prospective freeze and
+  mocked transitions. Isolated fixture build/link and any live qualification
+  remain pending separately authorized scope. All38 planned cases disabled;
+  M3notaccepted/PR2draft/M4untouched. Do not retry/splice old N3 or replay118.

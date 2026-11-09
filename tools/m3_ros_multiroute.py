@@ -13,7 +13,7 @@ from m3_ros_sensor import wait_files, capture_start, capture_stop, identity_capt
 from m3_monotonic_capture import feature_snapshot
 from m3_sensor_fault import Selection, install, remove, counters, readback
 from m3_multiroute_capture import verify_captures, verify_recovery, verify_two_loss
-from m3_source_preflight import ROOT, IMAGE, sha, write
+from m3_source_preflight import ROOT, IMAGE, sha, write, source_inventory
 from m3_source_trace import summarize as source_trace
 from m3_sample_trace import summarize as sample_trace
 from m3_multiroute_accounting import assess
@@ -34,7 +34,7 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline
         paths+=layout['runtime_paths'][:-1]
     if capture:paths += ['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
     inventory={p:sha(ROOT/p) for p in paths}
-    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory,runtime_layout=layout,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,capture=capture,losses=losses,base_seed=seed))
+    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,source_sha256=source_inventory(ROOT),runtime_sha256=inventory,runtime_layout=layout,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,capture=capture,losses=losses,base_seed=seed))
     lab=NetworkLab(ROOT,out,IMAGE,monotonic_capture=capture);peers=[];captures=[];fault=None;key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32));result=dict(status='running',qualification=False,capture=capture,losses=losses,base_seed=seed,seconds=seconds,scope='bounded source/accounting fixture; no full seeded N3/M3, physical age or resource qualification')
     try:
         lab.start(key)

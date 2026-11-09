@@ -5,10 +5,11 @@ import hashlib
 import json
 from pathlib import Path
 import secrets
+import shlex
 import subprocess
 from m3_network import NetworkLab
 from m3_neighbor_diagnostics import configure
-from m3_source_preflight import ROOT,IMAGE,sha,write
+from m3_source_preflight import ROOT,IMAGE,sha,write,source_inventory
 from m3_ros_sensor import wait_files
 from m3_n4 import network,DIRECTIONS
 from m3_dds_result_timeline import common_clock,read_journal
@@ -16,23 +17,32 @@ from m3_source_trace import summarize as source_trace
 from m3_sample_trace import summarize as samples
 from m3_command_trace import summarize as commands
 from m3_n4_sensor_check import assess
+from m3_runtime_layout import LAYOUTS,matched
 
 
 def hold(lab,seconds,label):return json.loads(lab.inside('robot',label,['python3','-c','import time,json;b=time.monotonic_ns();time.sleep('+str(seconds)+');print(json.dumps(dict(begin_ns=b,end_ns=time.monotonic_ns())))']))
 
 
-def run_case(out,mode):
+def run_case(out,mode,runtime_layout='baseline'):
+    layout=matched(ROOT,runtime_layout)
     out.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(out.relative_to(ROOT));lab=NetworkLab(ROOT,out,IMAGE);peers=[];cut={};result=dict(status='running',mode=mode,qualification=False)
     key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    inventory={p:sha(ROOT/p) for p in ('install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node','install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker','install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator','install/srt-m0/lib/librobotweax-srt.a')}
-    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory))
+    paths=('install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node','install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker','install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator','install/srt-m0/lib/librobotweax-srt.a')
+    paths=[p.replace('install/m3-ros/',layout['ros']+'/',1) for p in paths]
+    if runtime_layout!='baseline':paths+=layout['runtime_paths'][:-1]
+    inventory={p:sha(ROOT/p) for p in paths}
+    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,source_sha256=source_inventory(ROOT),runtime_sha256=inventory,runtime_layout=layout))
     fresh=mode in DIRECTIONS
     try:
-        lab.start(key);configure(lab,'permanent');lab.apply('N0',1701)
+        lab.start(key)
+        for role in lab.containers:
+            prefix=lab.inside(role,role+'-selected-ros-prefix',['bash','-c','source /opt/ros/jazzy/setup.bash && source '+shlex.quote(layout['ros']+'/setup.bash')+' && ros2 pkg prefix robotweax_srt_bridge']).strip()
+            if prefix!='/workspace/'+layout['ros']+'/robotweax_srt_bridge':raise ValueError('selected ROS prefix mismatch')
+        configure(lab,'permanent');lab.apply('N0',1701)
         result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         for role,name in lab.containers.items():
             log=(out/(role+'-scenario.log')).open('w');script='m3_ros_n4_sensor.py' if fresh else 'm3_ros_n4_crash.py'
-            cmd='source /opt/ros/jazzy/setup.bash && source install/m3-ros/setup.bash && exec python3 ros2/robotweax_srt_bridge_demo/scripts/'+script+' --role '+role+' --run '+inside+' --peer '+lab.addresses['operator']+('' if fresh else ' --case '+mode)
+            cmd='source /opt/ros/jazzy/setup.bash && source '+shlex.quote(layout['ros']+'/setup.bash')+' && exec python3 ros2/robotweax_srt_bridge_demo/scripts/'+script+' --role '+role+' --run '+inside+' --peer '+lab.addresses['operator']+' --ros-install '+shlex.quote(layout['ros'])+('' if fresh else ' --case '+mode)
             peers.append((subprocess.Popen(['docker','exec',name,'bash','-c',cmd],stdout=log,stderr=subprocess.STDOUT),log))
         if fresh:
             wait_files(out,[r+'-fresh-ready.json' for r in lab.containers],peers)
@@ -66,7 +76,7 @@ def run_case(out,mode):
             result['freshness']=assess(source_trace(out/'robot-source.log'),sender,receiver,samples(out/'robot-bridge-0.log',allow_inactive_admissions=True),samples(out/'operator-bridge-0.log'),result['outage_ns'],result['restored_ns'],mode)
         else:
             result['crash']=check_crash(out,mode)
-        if inventory!={p:sha(ROOT/p) for p in inventory}:raise ValueError('runtime changed during case')
+        if inventory!={p:sha(ROOT/p) for p in inventory} or matched(ROOT,runtime_layout)!=layout:raise ValueError('runtime changed during case')
         result['status']='passed'
     except Exception as error:result.update(status='failed',error=str(error))
     finally:
@@ -111,7 +121,7 @@ def check_crash(out,mode):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--crashes',action='store_true');a=p.parse_args();root=a.output.resolve();root.mkdir(parents=True,exist_ok=False);rows=[]
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--crashes',action='store_true');p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();root=a.output.resolve();root.mkdir(parents=True,exist_ok=False);rows=[]
     for mode in (('before','effect','committed') if a.crashes else tuple(DIRECTIONS)):
-        print('START '+mode,flush=True);r=run_case(root/mode,mode);rows.append(dict(mode=mode,status=r['status'],error=r.get('error')));write(root/'cohort.json',dict(cases=rows,status='passed' if all(x['status']=='passed' for x in rows) else 'failed',qualification=False));print(json.dumps(rows[-1]),flush=True)
+        print('START '+mode,flush=True);r=run_case(root/mode,mode,a.runtime_layout);rows.append(dict(mode=mode,status=r['status'],error=r.get('error')));write(root/'cohort.json',dict(cases=rows,status='passed' if all(x['status']=='passed' for x in rows) else 'failed',qualification=False));print(json.dumps(rows[-1]),flush=True)
         if r['status']!='passed':raise SystemExit(1)

@@ -16,6 +16,12 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def source_inventory(root=ROOT):
+    root=Path(root)
+    return {str(p.relative_to(root)):sha(p) for folder in ('src','ros2','proto','cmake','containers','tools','tests')
+        for p in sorted((root/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)}
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',required=True);a=p.parse_args()
     out=Path(a.output).resolve();relative=out.relative_to(ROOT);out.mkdir(parents=True,exist_ok=False)

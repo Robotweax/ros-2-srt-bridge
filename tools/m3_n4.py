@@ -9,11 +9,13 @@ import struct
 import subprocess
 import time
 from m3_network import NetworkLab,PROFILES
-from m3_source_preflight import ROOT,IMAGE,sha,write
+from m3_source_preflight import ROOT,IMAGE,sha,write,source_inventory
 from m3_control_fault import bracket
 from m3_neighbor_diagnostics import configure
 from m3_dds_result_timeline import common_clock,read_journal
 from m3_ros_sensor import wait_files
+from m3_runtime_layout import LAYOUTS
+from m3_n4_fixture import native_layout
 
 PHASES=('admission','started','committed')
 DIRECTIONS={'both':('operator','robot'),'to-robot':('operator',),'to-operator':('robot',)}
@@ -73,17 +75,18 @@ with sqlite3.connect('file:'+sys.argv[1]+'?mode=ro',uri=True,timeout=1) as db:
 '''
 
 
-def run_case(out,phase,direction,hold_seconds=2):
+def run_case(out,phase,direction,hold_seconds=2,runtime_layout='baseline'):
+    selected=native_layout(ROOT,runtime_layout)
     if hold_seconds not in (2,6):raise ValueError("only declared2/6-second holds")
     out.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(out.relative_to(ROOT));lab=NetworkLab(ROOT,out,IMAGE);peers=[];result=dict(status='running',phase=phase,direction=direction,hold_seconds=hold_seconds,qualification=False)
     key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32))
-    runtime=['build/m3-n4-peer/m3_n4_peer','install/bridge-m3/bin/robotweax-journal-worker','install/bridge-m3/lib/librobotweax_srt_bridge_endpoint.a','install/bridge-m3/lib/librobotweax_srt_bridge_transport.a','install/srt-m0/lib/librobotweax-srt.a']
-    inventory={p:sha(ROOT/p) for p in runtime};write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory,simulated_handler=True,source_load=False,operation_watchdog_seconds=20,command_budget_seconds=5))
+    inventory=dict(selected['runtime_sha256'])
+    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,source_sha256=source_inventory(ROOT),runtime_sha256=inventory,runtime_layout=selected['layout'],fixture_binding=selected['binding'],simulated_handler=True,source_load=False,operation_watchdog_seconds=20,command_budget_seconds=5))
     try:
         lab.start(key);configure(lab,'permanent');lab.apply('N0',1701)
         result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         for role,name in lab.containers.items():
-            log=(out/(role+'-peer.log')).open('w');peers.append((subprocess.Popen(['docker','exec',name,'build/m3-n4-peer/m3_n4_peer',role,inside,lab.addresses['operator'],phase,'/run/bridge/passphrase'],stdout=log,stderr=subprocess.STDOUT),log))
+            log=(out/(role+'-peer.log')).open('w');peers.append((subprocess.Popen(['docker','exec',name,selected['peer'],role,inside,lab.addresses['operator'],phase,'/run/bridge/passphrase'],stdout=log,stderr=subprocess.STDOUT),log))
         wait_files(out,[r+'-ready.json' for r in lab.containers],peers);(out/'go').touch()
         wait_files(out,['robot-barrier.json','submitted.json'],peers)
         barrier=json.loads((out/'robot-barrier.json').read_text())['snapshot']
@@ -118,7 +121,7 @@ def run_case(out,phase,direction,hold_seconds=2):
         result['withheld_direct_result']=phase=='query'
         result['stopped']={r:json.loads((out/(r+'-stopped.json')).read_text()) for r in lab.containers}
         result['journals']=dict(sender=a,receiver=b)
-        if inventory!={p:sha(ROOT/p) for p in runtime}:raise ValueError('runtime changed')
+        if selected!=native_layout(ROOT,runtime_layout):raise ValueError('runtime or fixture binding changed')
         result['status']='passed'
     except Exception as error:result.update(status='failed',error=str(error))
     finally:
@@ -151,7 +154,8 @@ def failure_suite(out):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');p.add_argument('--dispatch-only',action='store_true');p.add_argument('--remaining-native',action='store_true');a=p.parse_args();root=a.output.resolve()
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--failure-controls',action='store_true');p.add_argument('--dispatch-only',action='store_true');p.add_argument('--remaining-native',action='store_true');p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();root=a.output.resolve()
+    if a.failure_controls and a.runtime_layout!='baseline':p.error('failure-controls retains its baseline-only fixture; select a separate matched case')
     if a.failure_controls:result=failure_suite(root)
     else:
         root.mkdir(parents=True,exist_ok=False);rows=[];result=dict(status='running',cases=rows,qualification=False)
@@ -159,7 +163,7 @@ if __name__=='__main__':
             phases=(('admission','dispatch','started','query') if a.remaining_native else ('dispatch',) if a.dispatch_only else PHASES)
             for phase in phases:
                 for direction in (('both',) if a.remaining_native else DIRECTIONS):
-                    print('START '+phase+' '+direction,flush=True);case=run_case(root/(phase+'-'+direction),phase,direction,6 if a.remaining_native and phase!='query' else 2);rows.append(dict(phase=phase,direction=direction,status=case['status'],error=case.get('error')));write(root/'cohort.json',result)
+                    print('START '+phase+' '+direction,flush=True);case=run_case(root/(phase+'-'+direction),phase,direction,6 if a.remaining_native and phase!='query' else 2,a.runtime_layout);rows.append(dict(phase=phase,direction=direction,status=case['status'],error=case.get('error')));write(root/'cohort.json',result)
                     print(json.dumps(rows[-1]),flush=True)
                     if case['status']!='passed':raise RuntimeError('N4 phase case failed; remaining cases not executed')
             result['status']='passed'
