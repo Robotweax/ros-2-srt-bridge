@@ -81,7 +81,7 @@ class Benchmark(Driver):
 
     def start(self, executable, name, parameters=None):
         package = 'robotweax_srt_bridge_demo' if executable=='rate_simulator' else 'robotweax_srt_bridge'
-        argv = ['/workspace/install/m3-ros/'+package+'/lib/'+package+'/'+executable]
+        argv = ['/workspace/'+getattr(self.args,'ros_install','install/m3-ros')+'/'+package+'/lib/'+package+'/'+executable]
         if parameters:
             argv += ['--ros-args']
             for key, value in parameters.items():argv += ['-p', key+':='+str(value)]
@@ -303,6 +303,7 @@ class Benchmark(Driver):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros'),default='install/m3-ros')
     parser.add_argument('--role',choices=['robot','operator'],required=True)
     parser.add_argument('--run',required=True)
     parser.add_argument('--peer',default='')

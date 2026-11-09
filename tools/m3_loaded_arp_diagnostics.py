@@ -6,16 +6,20 @@ from m3_source_preflight import ROOT,IMAGE,sha,write
 from m3_n5_progress import RUNTIMES
 from m3_admission_diagnostics import analyze
 from m3_control_fault_analysis import ARCHIVE
+import m3_runtime_layout
 
 SLOTS=[dict(label='srt-N0-2903',profile='N0',seconds=15,seed=2903),dict(label='srt-N5-2903',profile='N5',seconds=300,seed=2903)]
 OBSERVERS=['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');args=parser.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
-    runtime={p:sha(ROOT/p) for p in RUNTIMES};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
-    if runtime[RUNTIMES[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
-    report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,slots=SLOTS,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');args=parser.parse_args();
+    if args.start_trace and not args.packet_trace:parser.error('start-trace cohort requires packet-trace')
+    out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
+    layout=m3_runtime_layout.matched(ROOT,'start-trace' if args.start_trace else 'baseline')
+    runtime_paths=layout['runtime_paths'];runtime={p:sha(ROOT/p) for p in runtime_paths};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
+    if runtime[runtime_paths[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
+    report=dict(runtime_layout=layout,source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,slots=SLOTS,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
     write(out/'execution.json',report);failed=False
     for slot in SLOTS:
         row=dict(slot=slot,status='not_executed');report['rows'].append(row)
@@ -23,6 +27,7 @@ def main():
         before=set((ROOT/'.local/m3').glob('*'))
         argv=[sys.executable,'tools/run_m3.py','--profile',slot['profile'],'--seconds',str(slot['seconds']),'--seed',str(slot['seed']),'--skip-build','--command-diagnostics','--provider-diagnostics','--sensor-provider-diagnostics','--monotonic-capture','--capture-drain-check','--neighbor-diagnostics','--neighbor-mode','dynamic','--control-qdisc-diagnostics','--arp-reply-diagnostics']
         if args.packet_trace:argv+=['--arp-packet-trace']
+        if args.start_trace:argv+=['--start-diagnostics','--runtime-layout','start-trace']
         row.update(status='running',argv=argv);write(out/'execution.json',report)
         try:
             with (out/(slot['label']+'.log')).open('x') as log:
@@ -53,6 +58,9 @@ def main():
                 values=data.get('arp_packet_diagnostics',{})
                 if set(values)!={'operator','robot'} or not all(v['complete'] for v in values.values()):raise ValueError('packet trace incomplete')
                 if slot['profile']=='N0' and sum(v['status']['created'] for v in values.values())<=0:raise ValueError('packet trace positive control absent')
+            if args.start_trace:
+                if data.get('runtime_layout')!=layout or not data.get('start_diagnostics_enabled') or not data.get('start_diagnostics',{}).get('complete') or not data['start_diagnostics']['starts']:raise ValueError('matched start diagnostics incomplete')
+                m3_runtime_layout.matched(ROOT,'start-trace')
             row['analysis']=analyze(data,run)
             if runtime!={p:sha(ROOT/p) for p in runtime} or observers!={p:sha(ROOT/p) for p in observers}:raise ValueError('runtime/observer changed during cohort')
             if not row['analysis']['durable_outcomes']['complete']:raise ValueError('command progress failed; uncertainty retained')
@@ -60,7 +68,9 @@ def main():
         except Exception as error:row.update(status='failed',error=str(error));failed=True
         write(out/'execution.json',report);print(slot['label'],row['status'],row.get('error',''),flush=True)
     report['runtime_after']={p:sha(ROOT/p) for p in runtime};report['observer_after']={p:sha(ROOT/p) for p in observers}
-    report['runtime_unchanged']=runtime==report['runtime_after'] and observers==report['observer_after'];write(out/'execution.json',report)
+    report['runtime_unchanged']=runtime==report['runtime_after'] and observers==report['observer_after'];
+    if args.start_trace:report['matched_after']=m3_runtime_layout.matched(ROOT,'start-trace')
+    write(out/'execution.json',report)
     return int(failed or not report['runtime_unchanged'])
 
 

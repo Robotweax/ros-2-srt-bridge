@@ -22,6 +22,7 @@ import m3_monotonic_capture as mono_capture
 import m3_recorder_diagnostics as recorder_diagnostics
 import m3_command_trace
 import m3_start_trace_analysis
+import m3_runtime_layout
 import m3_provider_stats
 import m3_control_fault
 import m3_neighbor_diagnostics as neighbor_diagnostics
@@ -41,6 +42,7 @@ def main():
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
     parser.add_argument('--smoke',action='store_true',help='15 s development run; never full-duration qualification')
     parser.add_argument('--seconds',type=int,help='explicit development duration, 10..7200 seconds')
+    parser.add_argument('--runtime-layout',choices=tuple(m3_runtime_layout.LAYOUTS),default='baseline',help='explicit calibrated install paths; nonbaseline requires --skip-build')
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 build during development')
     parser.add_argument('--build-image',action='store_true')
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
@@ -74,6 +76,7 @@ def main():
         parser.error('loaded ARP observer requires N0/N5, dynamic neighbors, all diagnostics/drain, no faults')
     if args.arp_packet_trace and (not args.arp_reply_diagnostics or duration>480):parser.error('ARP packet trace requires loaded ARP diagnostics and <=480s')
     if args.start_diagnostics and not args.command_diagnostics:parser.error('start diagnostics require command diagnostics')
+    if args.runtime_layout!='baseline' and not args.skip_build:parser.error('explicit matched runtime layout requires --skip-build')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -130,6 +133,8 @@ def main():
             execute('ros-tests',offline('set -e; source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; '
                 'colcon --log-base '+inside+'/colcon-test test --base-paths ros2 --build-base build/m3-ros '
                 '--install-base install/m3-ros --return-code-on-test-failure; colcon test-result --test-result-base build/m3-ros --verbose'))
+        report['runtime_layout']=m3_runtime_layout.matched(ROOT,args.runtime_layout)
+        ros_install=report['runtime_layout']['ros']
         execute('versions',offline('dpkg-query -W; tc -V'))
         if args.monotonic_capture:report['monotonic_capture_config']=mono_capture.prepare(ROOT,run,image,execute,args.skip_build)
         if args.arp_packet_trace:report['arp_packet_configuration']=arp_packet_diagnostics.prepare()
@@ -163,9 +168,9 @@ def main():
             captures.append((competitor,log))
         lab.snapshot('before')
         for role,name in lab.containers.items():
-            command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
+            command=('set -e; ' if args.runtime_layout!='baseline' else '')+'source /opt/ros/jazzy/setup.bash; source '+shlex.quote(ros_install+'/setup.bash')+'; exec python3 '+shlex.join([
                 'ros2/robotweax_srt_bridge_demo/scripts/m3_scenario.py','--role',role,'--run',inside,
-                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--start-diagnostics'] if args.start_diagnostics else [])+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
+                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200','--ros-install',ros_install]+(['--start-diagnostics'] if args.start_diagnostics else [])+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
             log=(run/(role+'-scenario.log')).open('w')
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False
