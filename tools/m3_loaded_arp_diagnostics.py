@@ -12,8 +12,8 @@ OBSERVERS=['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-featu
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);args=parser.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
-    runtime={p:sha(ROOT/p) for p in RUNTIMES};observers={p:sha(ROOT/p) for p in OBSERVERS}
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');args=parser.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
+    runtime={p:sha(ROOT/p) for p in RUNTIMES};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
     if runtime[RUNTIMES[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
     report=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,slots=SLOTS,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
     write(out/'execution.json',report);failed=False
@@ -22,6 +22,7 @@ def main():
         if failed:row['why']='prior cohort failure; no retries';write(out/'execution.json',report);continue
         before=set((ROOT/'.local/m3').glob('*'))
         argv=[sys.executable,'tools/run_m3.py','--profile',slot['profile'],'--seconds',str(slot['seconds']),'--seed',str(slot['seed']),'--skip-build','--command-diagnostics','--provider-diagnostics','--sensor-provider-diagnostics','--monotonic-capture','--capture-drain-check','--neighbor-diagnostics','--neighbor-mode','dynamic','--control-qdisc-diagnostics','--arp-reply-diagnostics']
+        if args.packet_trace:argv+=['--arp-packet-trace']
         row.update(status='running',argv=argv);write(out/'execution.json',report)
         try:
             with (out/(slot['label']+'.log')).open('x') as log:
@@ -48,6 +49,10 @@ def main():
             if slot['profile']=='N0' and not all(v['last']['pass_counter']['packets']>v['first']['pass_counter']['packets'] for v in data['qdisc_diagnostics'].values()):raise ValueError('N0 selected PASS positive control absent')
             if not data.get('arp_reply_diagnostics') or not all(v['complete'] for v in data['arp_reply_diagnostics'].values()):raise ValueError('ARP reply diagnostics incomplete')
             if slot['profile']=='N0' and sum(v['last']['counters']['eligible']['packets']-v['first']['counters']['eligible']['packets'] for v in data['arp_reply_diagnostics'].values())<=0:raise ValueError('N0 ARP reply positive control absent')
+            if args.packet_trace:
+                values=data.get('arp_packet_diagnostics',{})
+                if set(values)!={'operator','robot'} or not all(v['complete'] for v in values.values()):raise ValueError('packet trace incomplete')
+                if slot['profile']=='N0' and sum(v['status']['created'] for v in values.values())<=0:raise ValueError('packet trace positive control absent')
             row['analysis']=analyze(data,run)
             if runtime!={p:sha(ROOT/p) for p in runtime} or observers!={p:sha(ROOT/p) for p in observers}:raise ValueError('runtime/observer changed during cohort')
             if not row['analysis']['durable_outcomes']['complete']:raise ValueError('command progress failed; uncertainty retained')

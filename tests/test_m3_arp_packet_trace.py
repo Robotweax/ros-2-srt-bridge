@@ -1,6 +1,7 @@
 import copy
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_arp_packet_analysis import lifecycles,reply_header
@@ -41,6 +42,25 @@ class PacketTraceTests(unittest.TestCase):
         second=[dict(r,cookie=2,ns=r['ns']+100) for r in self.rows];self.status.update(created=2,retired=2,records=8,emitted=8,detach_before_ns=200);self.assertEqual([r['cookie'] for r in self.analyze(self.rows+second)],[1,2])
     def test_consume_is_not_delivery(self):
         self.rows[-1]['kind']=6;self.assertEqual(self.analyze()[0]['outcome'],'consumed_before_driver')
+    def test_detach_callback_runs_after_drain_before_capture_close(self):
+        from m3_capture import stop_captures
+        order=[]
+        class Lab:
+            containers={'robot':'owned-robot','operator':'owned-operator'}
+            run=Path('/unused')
+            def inside(self,role,label,argv):order.append(label)
+        with patch('time.sleep'),patch('m3_capture_drain.check',side_effect=lambda *a:order.append('drained')):
+            stop_captures(Lab(),drain_check=True,before_close=lambda:order.append('detached'))
+        self.assertLess(order.index('competitor-stop'),order.index('drained'));self.assertLess(order.index('drained'),order.index('detached'));self.assertLess(order.index('detached'),order.index('robot-capture-stop'))
+    def test_detach_failure_still_closes_native_captures(self):
+        from m3_capture import stop_captures
+        order=[]
+        class Lab:
+            containers={'robot':'owned-robot','operator':'owned-operator'}
+            def inside(self,role,label,argv):order.append(label)
+        def fail():raise ValueError('detach failure')
+        with patch('time.sleep'),self.assertRaisesRegex(RuntimeError,'detach failure'):stop_captures(Lab(),before_close=fail)
+        self.assertIn('robot-capture-stop',order);self.assertIn('operator-capture-stop',order)
     def test_old_readiness_schema_rejected(self):
         self.ready['version']=1
         with self.assertRaisesRegex(ValueError,'readiness'):self.analyze()

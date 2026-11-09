@@ -115,7 +115,7 @@ def validate_tcpdump_footer(footer,records,*,require_nonempty=True):
     return dict(tcpdump_reported_packets=captured,tcpdump_reported_filtered_packets=filtered,tcpdump_kernel_drops=dropped,tcpdump_file_integrity_valid=True,tcpdump_population_reconciled=filtered==captured)
 
 
-def stop_captures(lab,*,drain_check=False):
+def stop_captures(lab,*,drain_check=False,before_close=None):
     """Stop the owned UDP load first, allow buffered dispatch, then close taps."""
     import time
     def stop(role,label,names):
@@ -131,6 +131,9 @@ def stop_captures(lab,*,drain_check=False):
             from m3_capture_drain import check
             check(lab,lab.run)
         except Exception as error:errors.append('capture drain: '+str(error))
+    if before_close is not None:
+        try:before_close()
+        except Exception as error:errors.append(str(error))
     for role in lab.containers:
         try:stop(role,role+'-capture-stop',('tcpdump','m3_mono_cap'))
         except Exception as error:errors.append(str(error))
