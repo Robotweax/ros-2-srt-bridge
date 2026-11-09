@@ -100,6 +100,15 @@ isolated SDK75/ROS41/host364 checks pass; the installed baseline remains fixed.
 No tuning or new N5 run; a prospective cohort with the matched new baseline is
 next, while command34's historical branch remains unrecorded.
 
+The [prospective matched-build cohort](evidence/m3-loaded-start-tracing-2026-11-09/README.md)
+now passes N0 8/8 and N5/2903 129/129 with21 skipped slots. All137 starts join
+actual grants/consume/gates to closed successful journals; N5 minimum gate
+headroom587ms, no rejection recurrence. New command48 records a later clock
+qualification deadline than admission. ARP tracing retains9 drops and2 delayed
+reply windows; telemetry remains unqualified. No tuning/rebuild/old-baseline
+replacement; host374 PASS, matched SDK75/ROS41 reused. Next predeclare broader
+seed coverage; original34 and earlier UNKNOWNs remain unresolved, PR2 draft.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

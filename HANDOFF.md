@@ -3486,3 +3486,43 @@ Next: separately freeze a prospective loaded cohort with matched new SDK/ROS
 baseline and start tracing; no tuning. Original34 cannot be reclassified, earlier
 UNKNOWN98/12 retained. M3/fullmatrix/defaultloadedDDS/clock/security/resources/
 hardware/comparison open. PR2 draft, Intrinsic-M4 untouched.
+
+### 2026-11-09 — Prospective matched-build loaded start tracing, no tuning
+
+- Evidence: `evidence/m3-loaded-start-tracing-2026-11-09/README.md`; prospective
+  plan before live, frozen sourcea508d0e13ca8384c0e0b0bc97f1fa663c124bcbf.
+  Explicit fixed --runtime-layout start-trace requires --skip-build. Validates
+  all calibrated SDK/ROS/test binaries/archives and preserved baseline. ROS setup
+  prefixes/embedded listener worker path verified; scenario forwards selected
+  executable prefix. Default baseline paths unchanged; no runtime build/install
+  replacement, provider/dependency/source-policy/traffic/timeouts tuning.
+- Once each N0/2903/15s8/8,0skip; N5/2903/300s129/129,21skip. Both strict and
+  durable gatesPASS/exit0;8/129closed effects,0expired/UNKNOWN/unresolved/unadmitted,
+  zero active context/linkloss. All137 starts fully joined by originalcontext,
+  check/worker token/slot/generation to closed journals. Every branch handler
+  invoked,consume1/gatepass/returned4/0. No rejection recurrence or missing stage.
+- N5 actual minimum consume slack587.290706ms, secondgate587.290415ms; original
+  mapped budget atconsume>=4825.898982ms.121grants equal ownerclockdeadline,
+  122below original record deadline (not exclusive cause buckets). New intent48
+  admission-clock margin386.035498ms but owner has later deadline and actual
+  consume slack4827.250313ms. No dispatch past lastadmission deadline. Historical
+  34's13.48ms condition not reproduced; never borrow new grant/ID for old intent.
+- ARP N5 OP8driver/0drop,robot8driver/9actualQDISC_DROP,0pending/loss/collision/
+  unknownfree/bulk ambiguity; native source/peer counts match.23positive steps
+  OP7/robot16;11robotmissing-source envelopes=9distinctdropIDs+2latequeued7/17,
+  residence59.418/58.471ms, driver11.659/14.076ms afterouterend. Max surviving
+  robotresidence96.984ms. One1.203180126s robotCONTROLgap has OP responderreply
+  inside/no scoped drop created; no unique causal/historical claim.
+- SENSOR75029produced/10582observed,accept-to-receivergap61599/rejected128,
+  sixresiduals0,source~200/50Hz; telemetry remainsunqualified. Added observer/new
+  binarybaseline prevents mitigation/performance claims or replacing old failures.
+- Host374 beforelive; SDK75/ROS41 reused exact prior matched qualification,
+  no rebuild/retest. Source/matched/oldbaseline/3observer hashes fixed;717prior
+  plus303new raw hashes checked, exact omissions.2ownednetworks/containers and
+  credentials removed; roots/features unchanged. No tests/build/heavyanalysis
+  overlaps capture. Packet/gap/allattempt joins afterclosed sourceverification.
+
+Next predeclare broader seed coverage on same matched baseline/diagnostics and
+observe actual start-lease headroom. No tuning, retry or retroclassification.
+Original34 branch unavailable/UNKNOWN98,12 retained; fullM3/N3/N5/DDS/clock/
+security/resource/hardware/comparison gates open. PR2 draft/Intrinsic-M4 untouched.
