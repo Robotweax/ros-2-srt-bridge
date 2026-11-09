@@ -11,21 +11,27 @@ import m3_runtime_layout
 SLOTS=[dict(label='srt-N0-2903',profile='N0',seconds=15,seed=2903),dict(label='srt-N5-2903',profile='N5',seconds=300,seed=2903)]
 OBSERVERS=['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
 ADDITIONAL_SLOTS=[dict(label='srt-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='srt-N5-1701',profile='N5',seconds=300,seed=1701),dict(label='srt-N5-4211',profile='N5',seconds=300,seed=4211)]
+SENDER_SLOTS=[dict(label='sender-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='sender-N5-1701',profile='N5',seconds=300,seed=1701)]
 
 
-def selected_slots(coverage,start_trace):
+def selected_slots(coverage,start_trace,sender_trace=False):
+    if coverage=='sender-visibility':
+        if not start_trace or not sender_trace:raise ValueError('sender cohort requires sender and start tracing')
+        return SENDER_SLOTS
+    if sender_trace:raise ValueError('sender tracing requires separate sender-visibility coverage')
     if coverage=='focused':return SLOTS
     if coverage!='additional-seeds' or not start_trace:raise ValueError('additional seed coverage requires matched start tracing')
     return ADDITIONAL_SLOTS
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');parser.add_argument('--coverage',choices=('focused','additional-seeds'),default='focused');args=parser.parse_args();
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');parser.add_argument('--sender-trace',action='store_true');parser.add_argument('--coverage',choices=('focused','additional-seeds','sender-visibility'),default='focused');args=parser.parse_args();
     if args.start_trace and not args.packet_trace:parser.error('start-trace cohort requires packet-trace')
-    try:slots=selected_slots(args.coverage,args.start_trace)
+    try:slots=selected_slots(args.coverage,args.start_trace,args.sender_trace)
     except ValueError as error:parser.error(str(error))
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
-    layout=m3_runtime_layout.matched(ROOT,'start-trace' if args.start_trace else 'baseline')
+    layout_name='sender-visibility' if args.sender_trace else 'start-trace' if args.start_trace else 'baseline'
+    layout=m3_runtime_layout.matched(ROOT,layout_name)
     runtime_paths=layout['runtime_paths'];runtime={p:sha(ROOT/p) for p in runtime_paths};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
     if runtime[runtime_paths[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
     report=dict(runtime_layout=layout,source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,coverage=args.coverage,slots=slots,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
@@ -36,7 +42,8 @@ def main():
         before=set((ROOT/'.local/m3').glob('*'))
         argv=[sys.executable,'tools/run_m3.py','--profile',slot['profile'],'--seconds',str(slot['seconds']),'--seed',str(slot['seed']),'--skip-build','--command-diagnostics','--provider-diagnostics','--sensor-provider-diagnostics','--monotonic-capture','--capture-drain-check','--neighbor-diagnostics','--neighbor-mode','dynamic','--control-qdisc-diagnostics','--arp-reply-diagnostics']
         if args.packet_trace:argv+=['--arp-packet-trace']
-        if args.start_trace:argv+=['--start-diagnostics','--runtime-layout','start-trace']
+        if args.start_trace:argv+=['--start-diagnostics','--runtime-layout',layout_name]
+        if args.sender_trace:argv+=['--sender-diagnostics']
         row.update(status='running',argv=argv);write(out/'execution.json',report)
         try:
             with (out/(slot['label']+'.log')).open('x') as log:
@@ -69,7 +76,10 @@ def main():
                 if slot['profile']=='N0' and sum(v['status']['created'] for v in values.values())<=0:raise ValueError('packet trace positive control absent')
             if args.start_trace:
                 if data.get('runtime_layout')!=layout or not data.get('start_diagnostics_enabled') or not data.get('start_diagnostics',{}).get('complete') or not data['start_diagnostics']['starts']:raise ValueError('matched start diagnostics incomplete')
-                m3_runtime_layout.matched(ROOT,'start-trace')
+                m3_runtime_layout.matched(ROOT,layout_name)
+            if args.sender_trace:
+                from m3_sender_trace_analysis import summarize
+                if not data.get('sender_diagnostics_enabled') or summarize(data['command_diagnostics'])!=data.get('sender_diagnostics'):raise ValueError('matched sender diagnostics incomplete')
             row['analysis']=analyze(data,run)
             if runtime!={p:sha(ROOT/p) for p in runtime} or observers!={p:sha(ROOT/p) for p in observers}:raise ValueError('runtime/observer changed during cohort')
             if not row['analysis']['durable_outcomes']['complete']:raise ValueError('command progress failed; uncertainty retained')
@@ -78,7 +88,7 @@ def main():
         write(out/'execution.json',report);print(slot['label'],row['status'],row.get('error',''),flush=True)
     report['runtime_after']={p:sha(ROOT/p) for p in runtime};report['observer_after']={p:sha(ROOT/p) for p in observers}
     report['runtime_unchanged']=runtime==report['runtime_after'] and observers==report['observer_after'];
-    if args.start_trace:report['matched_after']=m3_runtime_layout.matched(ROOT,'start-trace')
+    if args.start_trace:report['matched_after']=m3_runtime_layout.matched(ROOT,layout_name)
     write(out/'execution.json',report)
     return int(failed or not report['runtime_unchanged'])
 

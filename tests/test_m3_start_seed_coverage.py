@@ -12,6 +12,11 @@ class StartSeedCoverageTests(unittest.TestCase):
     def test_extension_cannot_silently_use_old_runtime(self):
         for name,enabled in [('additional-seeds',False),('unknown',True)]:
             with self.assertRaises(ValueError):selected_slots(name,enabled)
+    def test_sender_cohort_is_separate_and_bounded_without_4211(self):
+        self.assertEqual([(r['profile'],r['seed'],r['seconds']) for r in selected_slots('sender-visibility',True,True)],[('N0',1701,15),('N5',1701,300)])
+    def test_sender_cohort_cannot_borrow_old_selection_or_omit_diagnostics(self):
+        for coverage,start,sender in [('focused',True,True),('additional-seeds',True,True),('sender-visibility',False,True),('sender-visibility',True,False)]:
+            with self.subTest(coverage=coverage,start=start,sender=sender),self.assertRaises(ValueError):selected_slots(coverage,start,sender)
 
 
 if __name__=='__main__':unittest.main()
