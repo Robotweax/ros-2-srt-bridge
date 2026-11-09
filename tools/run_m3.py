@@ -285,8 +285,8 @@ def main():
                 report['command_diagnostics']=m3_command_trace.summarize_run(run)
                 if args.start_diagnostics:report['start_diagnostics']=m3_start_trace_analysis.summarize_run(run)
                 if args.sender_diagnostics:
-                    from m3_sender_trace_analysis import summarize
-                    report['sender_diagnostics']=summarize(report['command_diagnostics'])
+                    from m3_sender_trace_analysis import summarize as summarize_sender
+                    report['sender_diagnostics']=summarize_sender(report['command_diagnostics'])
             except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
         if args.sensor_provider_diagnostics:
             try:report['sensor_provider_diagnostics']=m3_provider_stats.summarize_run(run,sensor=True)

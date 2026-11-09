@@ -3634,3 +3634,31 @@ Next: new predeclared prospective loaded cohort with this calibrated visibility;
 do not silently resume stopped4211. Intent118UNKNOWN, historical34/98/12 retained;
 M3/fullmatrix/defaultloadedDDS/clock/security/resources/hardware gatesopen,
 PR2draft and Intrinsic/M4 untouched.
+
+### 2026-11-09 — Prospective sender cohort stopped at N0 harness bug
+
+- Evidence: `evidence/m3-sender-loaded-cohort-2026-11-09/README.md`.
+  Predeclared N0/1701/15s then N5/1701/300s on calibrated sender-visibility,
+  frozen9b221a0563d7317d759caedbabec4be59026056a, host389 before live.
+- N0 original harness/outerexit1 FAIL; N5 NOT_EXECUTED under stopfirstfailure.
+  No retry, replacement slot or loaded run. Old4211 remains stopped. Original
+  `.local/m3/20261109T134421999439Z/run.json` and allraw retain failed verdict.
+- Harness bug from9e7557d: unaliased local sender summarize import shadows
+  earlier packet summarize throughoutmain, even withsenderflagfalse. Capture
+  parsing raises UnboundLocalError. Fixed alias summarize_sender after closed
+  source verification; new compiled-scope regressionguard. Host390 PASS afterfix;
+  no end-to-end live rerun ofrepair. Runtime/provider unchanged.
+- Offline read-only decoding reconciles tcpdump populations and nativev2; original
+  failedgate is never promoted. Closedjournals8/8success/effects8/0skip/unresolved,
+  all8starts handlerinvoked. Sender45=0,46=8,47=63,48=36,0traceloss. No actual
+  senderclockdeferral or loaded telemetry/path diagnosis captured. ARP eachpeer
+ 1driver/0drop. Onlyfreshintent1–8/newjournals/session/epochs, never118context.
+- 148newraw/323priorraw hashes checked, exact public omissions. Fixed new and
+  botholdruntime inventories/3observers; oneownednetwork/2containers/credentials/
+  rules removed, roots/features unchanged. No heavywork overlapslive. Captured
+  source checked beforealiasfix and againstGitblob afterwards. SDK77/ROS41 exact
+  binary qualification reused; no rebuild/tuning/forcedexpiry/replay.
+
+Next: a NEW separately frozen cohort after harness repair; do not resume/relabel
+the failedplan. Actual loaded senderdeferral stilloutstanding.118UNKNOWN and
+historical34/98/12 retained; PR2draft/M3fullgatesopen/Intrinsic-M4 untouched.
