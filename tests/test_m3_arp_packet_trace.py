@@ -61,6 +61,17 @@ class PacketTraceTests(unittest.TestCase):
         def fail():raise ValueError('detach failure')
         with patch('time.sleep'),self.assertRaisesRegex(RuntimeError,'detach failure'):stop_captures(Lab(),before_close=fail)
         self.assertIn('robot-capture-stop',order);self.assertIn('operator-capture-stop',order)
+    def test_packet_windows_keep_queued_carry_out(self):
+        from m3_arp_packet_windows import membership
+        rows=self.analyze();window=membership(rows,25,50)
+        self.assertEqual(window['carry_in_ids'],[1]);self.assertEqual(window['carry_out_ids'],[1]);self.assertEqual(window['created_counts']['qdisc_drop'],0);self.assertEqual(window['lifetimes'][0]['outcome'],'driver_start')
+        self.assertEqual(membership(rows,11,19)['lifetimes'],[])
+    def test_packet_window_terminal_drop_is_not_creation_count(self):
+        from m3_arp_packet_windows import membership
+        self.rows[-1].update(kind=5,aux=77);rows=self.analyze();window=membership(rows,50,95)
+        self.assertTrue(window['lifetimes'][0]['terminal_inside']);self.assertFalse(window['lifetimes'][0]['created_inside']);self.assertEqual(window['created_counts']['qdisc_drop'],0)
+        self.assertEqual(membership(rows,20,90)['created_counts']['qdisc_drop'],1)
+        with self.assertRaises(ValueError):membership(rows,90,20)
     def test_old_readiness_schema_rejected(self):
         self.ready['version']=1
         with self.assertRaisesRegex(ValueError,'readiness'):self.analyze()
