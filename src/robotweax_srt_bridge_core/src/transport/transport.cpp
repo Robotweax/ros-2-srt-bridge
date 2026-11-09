@@ -119,6 +119,7 @@ struct TransportOwner::Impl {
     explicit Impl(TransportConfig c):config(std::move(c)),control_address(config.control),sensor_address(config.sensor),
         session(config.session),queues(config.session.manifest),budget(config.bandwidth,monotonic_ns()) {
         if(config.start_diagnostics&&!config.command_trace)throw std::invalid_argument("start diagnostics require command trace");
+        if(config.sender_diagnostics&&!config.command_trace)throw std::invalid_argument("sender diagnostics require command trace");
         if(control_address.ipv6!=sensor_address.ipv6||config.passphrase.size()<10||config.passphrase.size()>79||
            (config.session.role==Role::caller&&(!config.control.port||!config.sensor.port)))throw std::invalid_argument("invalid transport endpoints or credential length");
         for(const auto& route:config.session.manifest.routes())route_ids[route_count++]=route.id;
@@ -132,6 +133,18 @@ struct TransportOwner::Impl {
             c.control_generation,c.sensor_generation,route,value,{},detail});
     }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}
+    void trace_sender(CommandTracePoint point,const Input& item,unsigned value,unsigned detail=0,CommandTraceReason reason=CommandTraceReason::none,std::uint64_t evaluated=0,std::uint64_t previous=0){
+        if(!config.sender_diagnostics)return;
+        CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=point;e.reason=reason;
+        e.request=item.request;e.route=item.route;e.session=item.context.session;e.owner_epoch=config.session.local_epoch;
+        e.control_generation=item.context.control_generation;e.sensor_generation=item.context.sensor_generation;
+        e.value=value;e.detail=detail;e.origin_ns=item.origin;e.evaluated_ns=evaluated;
+        if(item.proof){e.command_deadline_ns=item.proof->entry.context.deadline_ns;e.entry_owner_epoch=item.proof->entry.owner_epoch;}
+        if(point==CommandTracePoint::sender_clock){const auto o=session.clock_observation();e.clock_error=unsigned(o.error);e.clock_observed=o.observed;
+            e.probe_anchor_ns=o.anchor_ns;e.offset_lower_ns=o.offset.lower;e.offset_upper_ns=o.offset.upper;
+            e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_previous_deadline_ns=previous;}
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
     std::size_t index(std::uint32_t route)const{
         for(std::size_t i=0;i<route_count;++i)if(route_ids[i]==route)return i;
         return route_count;
@@ -145,7 +158,8 @@ struct TransportOwner::Impl {
         if(!same_control(shared.context,current.context)||!current.running){
             for(std::size_t n=0;n<input_count;++n){const auto& item=controls[(input_head+n)%controls.size()];
                 if(item.kind==Kind::command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,item.request,item.route);}
-            if(pending_command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+            if(pending_command){trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+                trace_sender(CommandTracePoint::sender_pending_release,*pending_command,5,0,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);}
             while(retained.size()){
                 trace_receiver(CommandTracePoint::receiver_retained_dropped,retained.front().message,unsigned(SessionError::obsolete_connection),current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);
                 retained.pop();++current.stale_work;
@@ -493,16 +507,21 @@ struct TransportOwner::Impl {
             if(bad_context||revoked||expired){++current.stale_work;if(item.kind==Kind::sample)++current.sensor_input_rejected;
                 if(item.kind==Kind::command)trace(CommandTracePoint::input_dropped,bad_context?CommandTraceReason::context_mismatch:
                     revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,item.request,item.route);
-                if(item.kind==Kind::command)release_pending_command();
+                if(item.kind==Kind::command){trace_sender(CommandTracePoint::sender_pending_release,item,1,0,bad_context?CommandTraceReason::context_mismatch:revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline);release_pending_command();}
                 continue;}
             const auto time=monotonic_ns();
+            const auto previous=config.sender_diagnostics&&item.kind==Kind::command?session.clock_deadline().value_or(0):0;
             auto made=item.kind==Kind::sample?session.make_sample(item.route,item.size,time):session.make_control(item.kind,item.route,item.request,item.size,item.origin,time);
+            if(item.kind==Kind::command&&made.action.error==SessionError::clock_unqualified&&!pending_clock_reported)
+                trace_sender(CommandTracePoint::sender_clock,item,unsigned(made.action.error),1,CommandTraceReason::session_rejected,time,previous);
+            if(item.kind==Kind::command&&made.envelope&&pending_clock_reported)
+                trace_sender(CommandTracePoint::sender_clock,item,0,2,CommandTraceReason::none,time,previous);
             apply(made.action);if(!made.envelope){
                 if(item.kind==Kind::command&&made.action.error==SessionError::clock_unqualified){
                     if(!pending_clock_reported){trace(CommandTracePoint::clock_deferred,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));pending_clock_reported=true;}
                     continue; // Retain original proof/origin/deadline in the reserved ingress slot.
                 }
-                if(item.kind==Kind::command){trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));release_pending_command();}
+                if(item.kind==Kind::command){trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));trace_sender(CommandTracePoint::sender_pending_release,item,2,0,CommandTraceReason::session_rejected);release_pending_command();}
                 ++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;
             }
             auto envelope=*made.envelope;
@@ -510,7 +529,8 @@ struct TransportOwner::Impl {
             const auto body=std::span(item.bytes).first(item.size);
             const auto result=item.kind==Kind::sample?queues.sensor({Channel::sensor,links[1].generation},envelope,body,time):queues.control({Channel::control,links[0].generation},envelope,body);
             if(result!=QueueError::none){if(item.kind==Kind::command)trace(CommandTracePoint::queue_rejected,CommandTraceReason::queue_rejected,item.request,item.route,unsigned(result));++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;}
-            else if(item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
+            if(item.kind==Kind::command)trace_sender(CommandTracePoint::sender_pending_release,item,result==QueueError::none?4:3,0,result==QueueError::none?CommandTraceReason::none:CommandTraceReason::queue_rejected,time);
+            if(result==QueueError::none&&item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
             if(item.kind==Kind::command)release_pending_command();
         }
     }

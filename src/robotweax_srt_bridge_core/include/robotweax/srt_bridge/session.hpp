@@ -79,6 +79,7 @@ public:
     const Identity& session_id() const noexcept { return session_id_; }
     std::optional<std::uint64_t> clock_deadline() const noexcept { return clock_.qualification_deadline(); }
     ClockError clock_state() const noexcept { return clock_.state(); }
+    ClockObservation clock_observation() const noexcept { return clock_.observation(); }
 private:
     SessionConfig config_;
     ClockMapper clock_;

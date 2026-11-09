@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_runtime_layout import paths,matched,CALIBRATION
+from m3_runtime_layout import paths,matched,CALIBRATION,SENDER_CALIBRATION
 from m3_n5_progress import RUNTIMES
 from m3_source_preflight import sha
 
@@ -43,6 +43,20 @@ class RuntimeLayoutTests(unittest.TestCase):
         with self.assertRaises(ValueError):paths('../../wrong')
         root=Path(__file__).resolve().parents[1];p=subprocess.run([sys.executable,'tools/run_m3.py','--runtime-layout','start-trace'],cwd=root,capture_output=True,text=True)
         self.assertEqual(p.returncode,2);self.assertIn('requires --skip-build',p.stderr)
+    def test_sender_layout_preserves_both_previous_builds(self):
+        expected={}
+        for name in paths('sender-visibility')[:-1]:
+            p=self.root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(name);expected[name]=sha(p)
+        (self.root/'install/m3-sender-visibility-ros/setup.bash').write_text('fixture setup')
+        manifest=self.root/SENDER_CALIBRATION;manifest.parent.mkdir(parents=True)
+        data=dict(new_matched_build_binaries=expected,installed_baseline=self.baseline,preserved_start_trace=self.expected)
+        manifest.write_text(json.dumps(data));self.assertEqual(matched(self.root,'sender-visibility')['sdk'],'install/bridge-sender-visibility')
+        data['preserved_start_trace']={};manifest.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'start-trace manifest mismatch'):matched(self.root,'sender-visibility')
+    def test_sender_diagnostics_cannot_use_old_ignored_parameter_override(self):
+        root=Path(__file__).resolve().parents[1]
+        p=subprocess.run([sys.executable,'tools/run_m3.py','--sender-diagnostics','--command-diagnostics','--skip-build'],cwd=root,capture_output=True,text=True)
+        self.assertEqual(p.returncode,2);self.assertIn('sender-visibility runtime layout',p.stderr)
 
 
 if __name__=='__main__':unittest.main()

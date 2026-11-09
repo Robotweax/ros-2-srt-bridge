@@ -3595,3 +3595,42 @@ Intrinsic-M4 untouched.
 Next: separately calibrated sender-owner clock/defer/release/receipt visibility;
 no automatic expiry from diagnostics. UNKNOWN118/98/12 and historical34 retained;
 4211 remainsunexecuted, M3/fullmatrix gatesopen, PR2draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Default-off sender clock/reconciliation visibility
+
+- Evidence: `evidence/m3-sender-visibility-2026-11-09/README.md`; plan before
+  edits/calibration. No loaded run, tuning, forced command expiry or118 replay.
+- New sender_diagnostics requires CommandTrace. Point45 captures actual owner
+  post-check ClockError, observed bit/probe anchor/signed offset, original
+  origin/deadline and optional pre/post clock deadlines at firstdefer/recovery.
+  No second check. Point46 distinguishes pending release branches including
+  outboundqueued versus drop/flush; no outcome or receipt authority.
+- Point47 records sender worker journal replies (operation/error/token), explicit
+  entry availability and stored state/reason/revision/context. Point48 records
+  caller-event enqueue with localerror/peererror and entry availability. No
+  transport-to-coordinator receipt channel or journal mutation is introduced.
+  Legacy29 remains unchanged; historical118 exactClockError cannot be recovered.
+- Separate `build/m3-sender-visibility`, `install/bridge-sender-visibility`,
+  `build/m3-sender-visibility-ros`, `install/m3-sender-visibility-ros`. Explicit
+  runtime layout sender-visibility requires skipbuild, verifies both old baseline
+  and start-trace baseline; default unchanged. Runner rejects old layout and
+  requires positive versioned release/journal/event records when enabled.
+- SDK77/77, ROS41/41, host387/387 PASS. Four fresh success controls: IPv4/IPv6,
+  enabled/disabled, random IDs/journals, each1effect/1SDKhandoff, original5sbudget.
+  Enabled each1release/5journal/3event,0loss; disabled0newrecords. Closed journals
+  bothsides4/succeeded/rev3/generation1. Snapshot-only fixtures distinguish
+  unobserved/qualified/expired/wide, no command in those fixtures.
+- No actual sender clockdefer/recovery occurred in healthycontrols; capture of
+  those paths and deadline-drop reconciliation with newbuild still outstanding.
+  Larger fixed POD/event and enabled observerwork mean no performance claim.
+  Existing synthetic SDK regression failure cases remain separate.
+- Both previous runtime inventories/provider fixed;20freshraw and303originalraw
+  hashes checked,4complete operatorlogs public, SQLite retainedlocal/hashed and
+  immutable entries public. No heavywork overlaps calibration; owned containers
+  removed. C++/CMake inputs fixed afterSDKinventory; scenario Pythonlayout extended
+  beforeROSbuild, explicitly recorded. No application journal recovery by audit.
+
+Next: new predeclared prospective loaded cohort with this calibrated visibility;
+do not silently resume stopped4211. Intent118UNKNOWN, historical34/98/12 retained;
+M3/fullmatrix/defaultloadedDDS/clock/security/resources/hardware gatesopen,
+PR2draft and Intrinsic/M4 untouched.

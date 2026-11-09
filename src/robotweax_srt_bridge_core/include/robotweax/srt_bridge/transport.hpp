@@ -23,6 +23,7 @@ struct TransportConfig {
     std::shared_ptr<SampleTrace> sample_trace{}; // Opt-in ROS admission / SENSOR SDK handoff observations.
     std::shared_ptr<ProviderDiagnostics> sensor_provider_diagnostics{}; // Independent opt-in SENSOR SDK reads.
     bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
+    bool sender_diagnostics=false; // Requires command_trace; no outcome/replay authority.
 };
 struct TransportContext {
     Identity session{};

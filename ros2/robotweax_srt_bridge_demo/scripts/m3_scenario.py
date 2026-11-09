@@ -102,6 +102,7 @@ class Benchmark(Driver):
             'sensor_provider_diagnostics': str(getattr(self.args,'sensor_provider_diagnostics',False)).lower(),
             'sample_diagnostics': str(getattr(self.args,'sample_diagnostics',False)).lower(),
             **({'start_diagnostics':'true'} if getattr(self.args,'start_diagnostics',False) else {}),
+            **({'sender_diagnostics':'true'} if getattr(self.args,'sender_diagnostics',False) else {}),
             'command_diagnostics': str(self.args.command_diagnostics).lower()})
 
     def spin(self, seconds=.05):
@@ -303,18 +304,20 @@ class Benchmark(Driver):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros'),default='install/m3-ros')
+    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros'),default='install/m3-ros')
     parser.add_argument('--role',choices=['robot','operator'],required=True)
     parser.add_argument('--run',required=True)
     parser.add_argument('--peer',default='')
     parser.add_argument('--seconds',type=float,default=300)
     parser.add_argument('--clock-width-ms',type=int,default=200)
     parser.add_argument('--start-diagnostics',action='store_true')
+    parser.add_argument('--sender-diagnostics',action='store_true')
     parser.add_argument('--command-diagnostics',action='store_true')
     parser.add_argument('--provider-diagnostics',action='store_true')
     parser.add_argument('--sensor-provider-diagnostics',action='store_true')
     args=parser.parse_args()
     if args.start_diagnostics and not args.command_diagnostics:parser.error('start diagnostics require command diagnostics')
+    if args.sender_diagnostics and not args.command_diagnostics:parser.error('sender diagnostics require command diagnostics')
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')
     rclpy.init();driver=Benchmark(args)
     try:getattr(driver,args.role)()

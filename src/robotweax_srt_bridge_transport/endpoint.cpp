@@ -103,6 +103,18 @@ struct CommandEndpoint::Impl {
         }
         options.transport.command_trace->record(CommandTraceProducer::coordinator,e);
     }
+    void trace_sender(CommandTracePoint point,const std::optional<JournalEntry>& entry,unsigned error,unsigned detail,std::uint64_t token=0){
+        if(!sender||!options.transport.sender_diagnostics)return;
+        CommandTraceEvent e{};e.monotonic_ns=now();e.point=point;e.value=error;e.detail=detail;e.worker_token=token;
+        e.request=job.task.id;e.route=job.task.route;e.owner_epoch=options.transport.session.local_epoch;
+        const auto c=current.transport.context;e.control_generation=c.control_generation;e.sensor_generation=c.sensor_generation;
+        e.session=!zero(job.request.session)?job.request.session:!zero(job.message.context.session)?job.message.context.session:c.session;
+        e.journal_entry_available=entry.has_value();
+        if(entry){e.request=entry->request_id;e.route=entry->route;e.session=entry->context.session;e.entry_owner_epoch=entry->owner_epoch;
+            e.origin_ns=entry->context.source_monotonic_ns;e.command_deadline_ns=entry->context.deadline_ns;
+            e.terminal_state=unsigned(entry->state);e.terminal_reason=unsigned(entry->reason);e.journal_revision=entry->revision;}
+        options.transport.command_trace->record(CommandTraceProducer::coordinator,e);
+    }
     void fail(EndpointFault fault){if(current.fault==EndpointFault::none)current.fault=fault;stopping=true;transport.request_stop();}
     void publish(JournalWorker* worker){
         current.transport=transport.snapshot();
@@ -116,6 +128,7 @@ struct CommandEndpoint::Impl {
         std::lock_guard lock(mutex);if(output_count==output.size())return false;
         const auto id=job.entry?job.entry->request_id:job.task.id;const auto route=job.entry?job.entry->route:job.task.route;
         output[(output_head+output_count++)%output.size()]={id,route,job.error,job.entry,job.received_error,job.received_error?job.message.context:TransportContext{}};
+        trace_sender(CommandTracePoint::sender_event,job.entry,unsigned(job.error),job.received_error?unsigned(job.received_error->code):0);
         if(sender&&job.entry&&terminal(*job.entry))for(auto& track:tracks)if(track.used&&track.id==id)track={};
         job={};return true;
     }
@@ -163,6 +176,7 @@ struct CommandEndpoint::Impl {
         job.worker_token=0;
         if(reply.journal.entry)job.entry=reply.journal.entry;
         const auto error=reply.journal.error;
+        trace_sender(CommandTracePoint::sender_journal,reply.journal.entry,unsigned(error),unsigned(reply.operation),reply.token);
         if(job.after==After::peer_admit||job.after==After::peer_expire||job.after==After::peer_get)
             trace(CommandTracePoint::receiver_worker_result,CommandTraceReason::none,unsigned(error),job.message.context.session,
                 job.entry?job.entry->owner_epoch:Identity{},unsigned(job.message.envelope.kind),job.message.envelope.sequence,job.message.envelope.source_monotonic_ns);

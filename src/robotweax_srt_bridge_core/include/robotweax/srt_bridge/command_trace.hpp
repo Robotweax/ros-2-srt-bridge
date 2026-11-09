@@ -11,7 +11,8 @@ enum class CommandTracePoint : unsigned {
     provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred,session_action,link_lost,
     control_admission,peer_error_received,receiver_worker_result,
     receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected,receiver_expiry_admission,
-    start_submission,start_check,execute_submission,worker_start,start_declined
+    start_submission,start_check,execute_submission,worker_start,start_declined,
+    sender_clock,sender_pending_release,sender_journal,sender_event
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
@@ -44,6 +45,14 @@ struct CommandTraceEvent {
     unsigned consume_result=0;
     bool second_gate_checked=false,handler_invoked=false;
     unsigned terminal_state=0,terminal_reason=0;
+    // Points45..48 only, default-off sender diagnostics. No worker IPC fields.
+    //45 detail1=first deferral,2=recovered;46 value:1=stale drop,2=make
+    // rejection,3=queue rejection,4=outbound queued,5=mailbox flush.
+    //47 detail=WorkerOperation,value=JournalError;48 value=local JournalError,
+    // detail=received peer ControlErrorCode (0 if absent).
+    std::uint64_t clock_previous_deadline_ns=0,probe_anchor_ns=0,journal_revision=0;
+    std::int64_t offset_lower_ns=0,offset_upper_ns=0;
+    bool clock_observed=false,journal_entry_available=false;
 };
 enum class CommandTraceProducer : unsigned { coordinator=0,transport=1 };
 // Two fixed SPSC lanes: exactly one coordinator producer and one transport

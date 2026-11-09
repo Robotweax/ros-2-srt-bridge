@@ -7,8 +7,10 @@ from m3_n5_progress import RUNTIMES
 LAYOUTS={
     'baseline':dict(ros='install/m3-ros',sdk='install/bridge-m3'),
     'start-trace':dict(ros='install/m3-start-trace-ros',sdk='install/bridge-start-trace-qualified'),
+    'sender-visibility':dict(ros='install/m3-sender-visibility-ros',sdk='install/bridge-sender-visibility'),
 }
 CALIBRATION='evidence/m3-start-tracing-2026-11-09/binary-verification.json'
+SENDER_CALIBRATION='evidence/m3-sender-visibility-2026-11-09/binary-verification.json'
 
 
 def paths(name):
@@ -19,8 +21,9 @@ def paths(name):
 
 def matched(root,name):
     root=Path(root);runtime_paths=paths(name);c=dict(LAYOUTS[name]);c['name']=name;c['runtime_paths']=runtime_paths
-    if name=='start-trace':
-        manifest=root/CALIBRATION;data=json.loads(manifest.read_text());expected=data['new_matched_build_binaries']
+    if name!='baseline':
+        calibration=SENDER_CALIBRATION if name=='sender-visibility' else CALIBRATION
+        manifest=root/calibration;data=json.loads(manifest.read_text());expected=data['new_matched_build_binaries']
         required=set(c['runtime_paths'][:-1])|{str(p.relative_to(root)) for p in (root/c['sdk']/'lib').glob('lib*.a')}
         if not expected or not required<=set(expected):raise ValueError('incomplete matched runtime manifest')
         for p,h in expected.items():
@@ -30,5 +33,9 @@ def matched(root,name):
         if not set(RUNTIMES)<=set(baseline):raise ValueError('incomplete preserved baseline manifest')
         for p,h in baseline.items():
             if sha(root/p)!=h:raise ValueError('preserved installed baseline changed: '+p)
-        c.update(calibration=CALIBRATION,calibration_sha256=sha(manifest),matched_build_sha256=dict(expected),preserved_baseline_sha256=dict(baseline))
+        if name=='sender-visibility':
+            previous=matched(root,'start-trace')['matched_build_sha256']
+            if data.get('preserved_start_trace')!=previous:raise ValueError('preserved start-trace manifest mismatch')
+            c['preserved_start_trace_sha256']=previous
+        c.update(calibration=calibration,calibration_sha256=sha(manifest),matched_build_sha256=dict(expected),preserved_baseline_sha256=dict(baseline))
     return c

@@ -7,6 +7,7 @@ POINTS={1:'endpoint_started',2:'session_changed',3:'invalidate_requested',4:'inv
     25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred',30:'session_action',31:'link_lost',32:'control_admission',33:'peer_error_received',34:'receiver_worker_result',35:'receiver_deferred',36:'receiver_resumed',37:'receiver_retained_dropped',38:'receiver_capacity_rejected',39:'receiver_expiry_admission',40:'start_submission',41:'start_check',42:'execute_submission',43:'worker_start',44:'start_declined'}
 REASONS={0:'none',1:'session_changed',2:'abandoned_submit',3:'context_mismatch',4:'proof_revoked',
     5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown',11:'socket_state',12:'security_timeout',13:'epoll_error',14:'receive_error',15:'wire_decode',16:'session_decision'}
+POINTS.update({45:'sender_clock',46:'sender_pending_release',47:'sender_journal',48:'sender_event'})
 
 
 def summarize(path):
@@ -39,6 +40,9 @@ def summarize(path):
             if event['point'] in (32,36) and (not 0<event['evaluated_ns']<=event['monotonic_ns'] or not 0<=event['clock_error']<=9 or not 0<=event['age_error']<=9):raise ValueError('invalid admission clock metadata')
         if event['point'] in range(40,45):
             from m3_start_trace_analysis import validate
+            validate(event)
+        if event['point'] in range(45,49):
+            from m3_sender_trace_analysis import validate
             validate(event)
         if event['point']==39:
             for key in ('age_lower_ns','age_upper_ns','expiry_deadline_ns','budget_ms'):
