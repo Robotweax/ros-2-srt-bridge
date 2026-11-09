@@ -17,6 +17,11 @@ class StartSeedCoverageTests(unittest.TestCase):
     def test_sender_cohort_cannot_borrow_old_selection_or_omit_diagnostics(self):
         for coverage,start,sender in [('focused',True,True),('additional-seeds',True,True),('sender-visibility',False,True),('sender-visibility',True,False)]:
             with self.subTest(coverage=coverage,start=start,sender=sender),self.assertRaises(ValueError):selected_slots(coverage,start,sender)
+    def test_probe_cohort_is_explicit_and_bounded(self):
+        self.assertEqual([(r['profile'],r['seed'],r['seconds']) for r in selected_slots('probe-tracing',True,True,True)],[('N0',1701,15),('N5',1701,300)])
+    def test_probe_cohort_cannot_borrow_or_drop_diagnostics(self):
+        for args in [('focused',True,True,True),('sender-visibility',True,True,True),('probe-tracing',False,True,True),('probe-tracing',True,False,True),('probe-tracing',True,True,False)]:
+            with self.subTest(args=args),self.assertRaises(ValueError):selected_slots(*args)
 
 
 if __name__=='__main__':unittest.main()

@@ -12,9 +12,14 @@ SLOTS=[dict(label='srt-N0-2903',profile='N0',seconds=15,seed=2903),dict(label='s
 OBSERVERS=['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
 ADDITIONAL_SLOTS=[dict(label='srt-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='srt-N5-1701',profile='N5',seconds=300,seed=1701),dict(label='srt-N5-4211',profile='N5',seconds=300,seed=4211)]
 SENDER_SLOTS=[dict(label='sender-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='sender-N5-1701',profile='N5',seconds=300,seed=1701)]
+PROBE_SLOTS=[dict(label='probe-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='probe-N5-1701',profile='N5',seconds=300,seed=1701)]
 
 
-def selected_slots(coverage,start_trace,sender_trace=False):
+def selected_slots(coverage,start_trace,sender_trace=False,probe_trace=False):
+    if coverage=='probe-tracing':
+        if not all((start_trace,sender_trace,probe_trace)):raise ValueError('probe cohort requires probe, sender and start tracing')
+        return PROBE_SLOTS
+    if probe_trace:raise ValueError('probe tracing requires separate probe-tracing coverage')
     if coverage=='sender-visibility':
         if not start_trace or not sender_trace:raise ValueError('sender cohort requires sender and start tracing')
         return SENDER_SLOTS
@@ -25,12 +30,12 @@ def selected_slots(coverage,start_trace,sender_trace=False):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');parser.add_argument('--sender-trace',action='store_true');parser.add_argument('--coverage',choices=('focused','additional-seeds','sender-visibility'),default='focused');args=parser.parse_args();
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');parser.add_argument('--sender-trace',action='store_true');parser.add_argument('--probe-trace',action='store_true');parser.add_argument('--coverage',choices=('focused','additional-seeds','sender-visibility','probe-tracing'),default='focused');args=parser.parse_args();
     if args.start_trace and not args.packet_trace:parser.error('start-trace cohort requires packet-trace')
-    try:slots=selected_slots(args.coverage,args.start_trace,args.sender_trace)
+    try:slots=selected_slots(args.coverage,args.start_trace,args.sender_trace,args.probe_trace)
     except ValueError as error:parser.error(str(error))
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
-    layout_name='sender-visibility' if args.sender_trace else 'start-trace' if args.start_trace else 'baseline'
+    layout_name='probe-tracing' if args.probe_trace else 'sender-visibility' if args.sender_trace else 'start-trace' if args.start_trace else 'baseline'
     layout=m3_runtime_layout.matched(ROOT,layout_name)
     runtime_paths=layout['runtime_paths'];runtime={p:sha(ROOT/p) for p in runtime_paths};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
     if runtime[runtime_paths[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
@@ -44,6 +49,7 @@ def main():
         if args.packet_trace:argv+=['--arp-packet-trace']
         if args.start_trace:argv+=['--start-diagnostics','--runtime-layout',layout_name]
         if args.sender_trace:argv+=['--sender-diagnostics']
+        if args.probe_trace:argv+=['--probe-diagnostics']
         row.update(status='running',argv=argv);write(out/'execution.json',report)
         try:
             with (out/(slot['label']+'.log')).open('x') as log:
@@ -80,6 +86,9 @@ def main():
             if args.sender_trace:
                 from m3_sender_trace_analysis import summarize
                 if not data.get('sender_diagnostics_enabled') or summarize(data['command_diagnostics'])!=data.get('sender_diagnostics'):raise ValueError('matched sender diagnostics incomplete')
+            if args.probe_trace:
+                from m3_probe_trace_analysis import summarize as summarize_probes
+                if not data.get('probe_diagnostics_enabled') or summarize_probes(data['command_diagnostics'])!=data.get('probe_diagnostics'):raise ValueError('matched probe diagnostics incomplete')
             row['analysis']=analyze(data,run)
             if runtime!={p:sha(ROOT/p) for p in runtime} or observers!={p:sha(ROOT/p) for p in observers}:raise ValueError('runtime/observer changed during cohort')
             if not row['analysis']['durable_outcomes']['complete']:raise ValueError('command progress failed; uncertainty retained')
