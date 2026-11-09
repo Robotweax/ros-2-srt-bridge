@@ -3404,3 +3404,41 @@ Next: inspect intent34 worker/start-fence clock/grant context rejection without
 replay or tuning; then separately plan mitigation using exact ARP lifetimes.
 Original intents98/12 remain UNKNOWN. FullM3/N3/N5/DDSDiscovery/clock/security/
 resource/hardware/comparison gates open. PR2 draft, Intrinsic/M4 untouched.
+
+### 2026-11-09 — Command34 start-fence diagnosis, no tuning
+
+- Evidence: `evidence/m3-command34-start-fence-2026-11-09/README.md`; prospective
+  plan precedes read-only all122 joins and controlled checks. Original N5 stays
+  FAILED121/122,28skips;34 is REJECTED/context_lost6/1 with one SDK handoff,
+  matching closed journals/receiver dispatch, not expiry/UNKNOWN/nonexecution.
+- Original common clock/hashes verified. Relative source origin: admission eval
+  13.700375ms, observed clock deadline27.181747ms, dispatch mutation27.628416ms,
+  receiver rejection36.911291ms, sender observation936.653917ms, workload
+  observation1104.808125ms. Mutation stamps precede SQLite commit, not fsync or
+  handler start. Clock margin13.481372ms; dispatch0.446669ms past observed lease;
+  4872.252696ms original mapped budget remains at rejection. Only34 of122 crosses
+  last admission clock deadline; next-smallest margin201.803998ms, successful45.
+  Later QUERY clock_error2 expired; observation after receiver rejection.
+- Source narrows6/1 to post-dispatch coordinator start-check/submission decline
+  OR worker consume expired/revoked/invalid OR worker second pre-handler gate.
+  ROS backend cannot emit6/1. Point34 covers admission/GET, not execute. Actual
+  start grant may refresh after admission and is unlogged. No unique branch,
+  actual grant, scheduler/fsync, ARP or session-loss causality claim.
+- Separate probe against unchanged execution_pool.cpp passes9 counterfactual
+  assertions; old lease rejects at recorded dispatch while refreshed grant can
+  start at same time. Never replay/compare supplied historic times to live VM.
+  Existing built execution_contract/IPv4/IPv6 start tests once PASS5146/324/324
+  assertions, unchanged fixtures. Phase6 clock-lease lapse and phase1 revocation
+  both6/1/noeffects; original budget phase4 gives7/3/noeffects. Closed journals
+  read immutable. These controlled causes do not reproduce command34 uniquely.
+- Host350 PASS (9new guards),3focused existing native tests only; fullSDK72/ROS41
+  prior. All14 existing runtime/observer/test binaries unchanged, provider fixed;
+  only isolated diagnostic probe built.497original raw hashes reverified,66new
+  local artifacts hashed with exact public omissions. No N5 rerun, installed
+  build, defaults/policy/clock/rate/queue/neighbor/budget/timeout changes.
+
+Next: bounded default-off post-dispatch start-check/grant/execute/worker-consume
+and second-gate observations, calibrated before a new cohort. Original34 cannot
+be assigned a unique branch from old fields. Preserve one-use start fences and
+journal authority; no tuning yet. Original98/12 UNKNOWN and fullM3 gates open,
+PR2 draft/Intrinsic-M4 untouched.

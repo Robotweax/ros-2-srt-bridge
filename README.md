@@ -83,6 +83,15 @@ one REJECTED/context_lost command34,28skips. Host341 PASS; original failures and
 UNKNOWNs remain, M3 incomplete/PR2 draft. Next: worker/start-fence rejection
 diagnosis before any separately planned mitigation.
 
+[Command34 start-fence diagnosis](evidence/m3-command34-start-fence-2026-11-09/README.md)
+finds a13.48ms admission clock margin, with dispatch0.447ms past that observed
+clock deadline and4.872s of original budget left at rejection. Only34 crosses
+that boundary among122 attempts. Actual grant/consume/start-check decisions were
+not logged, so coordinator refusal versus worker gate remains unresolved. The
+isolated probe and three existing execution tests pass; host350 PASS, all
+installed binaries unchanged. No tuning or N5 retry; targeted start-stage
+visibility is next.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

@@ -1,0 +1,767 @@
+[
+  {
+    "label": "execution_contract",
+    "result": {
+      "exit_code": 0,
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+        "-w",
+        "/workspace/.local/m3-command34-start-fence/controls/execution_contract",
+        "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+        "/workspace/build/m3-sdk/src/robotweax_srt_bridge_core/execution_tests"
+      ],
+      "timeout_seconds": 60,
+      "retries": 0
+    },
+    "phase_journals": []
+  },
+  {
+    "label": "execution_start_ipv4",
+    "result": {
+      "exit_code": 0,
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+        "-w",
+        "/workspace/.local/m3-command34-start-fence/controls/execution_start_ipv4",
+        "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+        "/workspace/build/m3-sdk/tests/native/execution_start_tests",
+        "ipv4"
+      ],
+      "timeout_seconds": 90,
+      "retries": 0
+    },
+    "phase_journals": [
+      {
+        "phase": 0,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/0/receiver.sqlite",
+        "receiver": {
+          "sha256": "60c2c8c8988f377d72bbe08f148a53a3f35dee994a5814d15430c66170557c0f",
+          "entries": {
+            "900077b21da30aa63ae336cea86a022e": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "1f2fca56b3b40efc503d8d5cef6f2a3a",
+              "session": "811f69e112180cd6774bc765a6da4d6b",
+              "owner_epoch": "cbb319f7e3b6a229516a8ac186252c57",
+              "source_ns": 36814113766,
+              "admitted_ns": 36837968141,
+              "dispatched_ns": 36853924224,
+              "finished_ns": 36858880349,
+              "deadline_ns": 41809020365,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "eb3a52877de9223ff5e9022b902a71f97afea43b71078b50a9ccfb30e9a80a73",
+          "entries": {
+            "900077b21da30aa63ae336cea86a022e": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "1f2fca56b3b40efc503d8d5cef6f2a3a",
+              "session": "811f69e112180cd6774bc765a6da4d6b",
+              "owner_epoch": "1f2fca56b3b40efc503d8d5cef6f2a3a",
+              "source_ns": 36814113766,
+              "admitted_ns": 36814773266,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 41814113766,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 1,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/1/receiver.sqlite",
+        "receiver": {
+          "sha256": "c776fbfec16b361f79d1d497b2d17b172a71789efc4d54352ed75224a36ba9ef",
+          "entries": {
+            "17240fe8387bef0638a51dfd42725d6c": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "8f6dd71f58b5739e2989673eb8f49782",
+              "session": "aeee5b2d8abac6ce26cce0e6190f9801",
+              "owner_epoch": "1914a25383925024c252e42435af0fc1",
+              "source_ns": 37625881641,
+              "admitted_ns": 37647181641,
+              "dispatched_ns": 37662509266,
+              "finished_ns": 37669619308,
+              "deadline_ns": 42619354563,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "426174d1ff34f4a81c41b1f80e571187243a0590a6a27f15859417301dd9604e",
+          "entries": {
+            "17240fe8387bef0638a51dfd42725d6c": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "8f6dd71f58b5739e2989673eb8f49782",
+              "session": "aeee5b2d8abac6ce26cce0e6190f9801",
+              "owner_epoch": "8f6dd71f58b5739e2989673eb8f49782",
+              "source_ns": 37625881641,
+              "admitted_ns": 37626302016,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 42625881641,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 2,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/2/receiver.sqlite",
+        "receiver": {
+          "sha256": "2ba0557d80a1a8c79ec20d3895edd92ad020145132122dc30acb3602bac45943",
+          "entries": {
+            "b5997086a4d7436ea296789e5347f46f": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "e28ceec7c1fc1dc250201d8be0fdf952",
+              "session": "de55666077ba2cc87b6ce668303c89e9",
+              "owner_epoch": "4c97ea053eefb54d1a07e17d0f880fdc",
+              "source_ns": 38418135891,
+              "admitted_ns": 38440651891,
+              "dispatched_ns": 38455181933,
+              "finished_ns": 38471581891,
+              "deadline_ns": 43411512556,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "1ddd88d4fa0bb738e0608adda8b235690e04a0f841b521734fc0fd841c6bbd54",
+          "entries": {
+            "b5997086a4d7436ea296789e5347f46f": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "e28ceec7c1fc1dc250201d8be0fdf952",
+              "session": "de55666077ba2cc87b6ce668303c89e9",
+              "owner_epoch": "e28ceec7c1fc1dc250201d8be0fdf952",
+              "source_ns": 38418135891,
+              "admitted_ns": 38418563891,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 43418135891,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 3,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/3/receiver.sqlite",
+        "receiver": {
+          "sha256": "5195df1704da27155bc678873d9b34720f327e822052d76ee58645e42ef0d3fd",
+          "entries": {
+            "f9edea870f6847ec1963c2018e5d4957": {
+              "state": 8,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "ec90ceda86814ce93d3006ee103a07a3",
+              "session": "d34209f98da1a9cfb49707ac6cab4bd0",
+              "owner_epoch": "e9bc1f9e04cc1956242254fb960aa54e",
+              "source_ns": 39260660433,
+              "admitted_ns": 39283428975,
+              "dispatched_ns": 39298836392,
+              "finished_ns": 0,
+              "deadline_ns": 44253713708,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "d8147288641eb9a909fa087a3279714fcfa83d6af6351ff1a1032d7334e549ca",
+          "entries": {
+            "f9edea870f6847ec1963c2018e5d4957": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "ec90ceda86814ce93d3006ee103a07a3",
+              "session": "d34209f98da1a9cfb49707ac6cab4bd0",
+              "owner_epoch": "ec90ceda86814ce93d3006ee103a07a3",
+              "source_ns": 39260660433,
+              "admitted_ns": 39261086392,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 44260660433,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 4,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/4/receiver.sqlite",
+        "receiver": {
+          "sha256": "16c85410300803fc4155a7568776d19fad9502dccf8a59b37e90aead440e657e",
+          "entries": {
+            "c01f116ae386a9f366e79354d605ff61": {
+              "state": 7,
+              "reason": 3,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "af38959b1f3c7ee2ec80b4991fcc0aa2",
+              "session": "2277acd43352145daa51250a6b6f18c8",
+              "owner_epoch": "15e0e02d29427b13d6d6f08e59f32bc2",
+              "source_ns": 42158206268,
+              "admitted_ns": 42185500685,
+              "dispatched_ns": 42200460643,
+              "finished_ns": 47153910562,
+              "deadline_ns": 47151027292,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "a2bb111cea3396b1c704da31122bb6de59ba2e25f3508d81fd978f8d6743c9fc",
+          "entries": {
+            "c01f116ae386a9f366e79354d605ff61": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "af38959b1f3c7ee2ec80b4991fcc0aa2",
+              "session": "2277acd43352145daa51250a6b6f18c8",
+              "owner_epoch": "af38959b1f3c7ee2ec80b4991fcc0aa2",
+              "source_ns": 42158206268,
+              "admitted_ns": 42158619601,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 47158206268,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 5,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/5/receiver.sqlite",
+        "receiver": {
+          "sha256": "8e38dd7bbd4b3a32ed0a4df22c04b02ceb7d34380c3f817d865406082f5a88da",
+          "entries": {
+            "51fe19cec77912852ceded78febc08b1": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "6a87eb85885d689ff940ec53f7aa8506",
+              "session": "11a046d677c4cac063cf2447c1363228",
+              "owner_epoch": "fac5df5617692446e6f1fd91d6fa04c3",
+              "source_ns": 47955351146,
+              "admitted_ns": 47978560604,
+              "dispatched_ns": 47993730146,
+              "finished_ns": 47998682104,
+              "deadline_ns": 52948786781,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "e75632cfc7c41518531bdc7a70f4e719868d4bd6b7ee9ae9b45fd2b1d956406b",
+          "entries": {
+            "51fe19cec77912852ceded78febc08b1": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "6a87eb85885d689ff940ec53f7aa8506",
+              "session": "11a046d677c4cac063cf2447c1363228",
+              "owner_epoch": "6a87eb85885d689ff940ec53f7aa8506",
+              "source_ns": 47955351146,
+              "admitted_ns": 47955779688,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 52955351146,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 6,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv4/execution-start-1/6/receiver.sqlite",
+        "receiver": {
+          "sha256": "01254f5ceb52ad7c4ec1539820191f9ad677b0eaec62a4dc0c53f77eec5550fe",
+          "entries": {
+            "6975d6ed9cca91ac97410600b971c919": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "80149edcd1541577e77c731d6b6610b5",
+              "session": "f09de391352165b06a5b348fd27ea5ee",
+              "owner_epoch": "b031c3519c2bc45f02c5c205e7ddef68",
+              "source_ns": 48753346188,
+              "admitted_ns": 48781986646,
+              "dispatched_ns": 48796560105,
+              "finished_ns": 49879108897,
+              "deadline_ns": 53746435893,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "bb46f105a415c4eb359480e217ed2abb7ac222f9ecdc0261afbb1f1d9d34f8e2",
+          "entries": {
+            "6975d6ed9cca91ac97410600b971c919": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "80149edcd1541577e77c731d6b6610b5",
+              "session": "f09de391352165b06a5b348fd27ea5ee",
+              "owner_epoch": "80149edcd1541577e77c731d6b6610b5",
+              "source_ns": 48753346188,
+              "admitted_ns": 48753780063,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 53753346188,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      }
+    ]
+  },
+  {
+    "label": "execution_start_ipv6",
+    "result": {
+      "exit_code": 0,
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "none",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+        "-w",
+        "/workspace/.local/m3-command34-start-fence/controls/execution_start_ipv6",
+        "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+        "/workspace/build/m3-sdk/tests/native/execution_start_tests",
+        "ipv6"
+      ],
+      "timeout_seconds": 90,
+      "retries": 0
+    },
+    "phase_journals": [
+      {
+        "phase": 0,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/0/receiver.sqlite",
+        "receiver": {
+          "sha256": "e4f00a1caa6d86e28bc1d187112aacff464131ac997cf563670b68ce221efefa",
+          "entries": {
+            "3b9c6e200883b6858faa3bdbd63c8363": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "41f2190ddbdd1e6426c407c1b475cc5e",
+              "session": "522d13d6eec3f2b4913b6af3bbbdc35b",
+              "owner_epoch": "270326bcde6da09b2c06a5e9db4ede36",
+              "source_ns": 51554177273,
+              "admitted_ns": 51583442689,
+              "dispatched_ns": 51598717606,
+              "finished_ns": 51603487523,
+              "deadline_ns": 56549141815,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "e03bb8133bf0baac26a5f78c19f87a4c00bfdcce519924fd02eaba1a65ae2258",
+          "entries": {
+            "3b9c6e200883b6858faa3bdbd63c8363": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "41f2190ddbdd1e6426c407c1b475cc5e",
+              "session": "522d13d6eec3f2b4913b6af3bbbdc35b",
+              "owner_epoch": "41f2190ddbdd1e6426c407c1b475cc5e",
+              "source_ns": 51554177273,
+              "admitted_ns": 51554861981,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 56554177273,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 1,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/1/receiver.sqlite",
+        "receiver": {
+          "sha256": "7ec9e127f7193f4770e92b7bb835eeefe6a2107414593966cb1ca857e7878e7d",
+          "entries": {
+            "1da7fd36ed5eb09208a48137d18365fe": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "45d5eb2c5869d04d4473127d6c0821d4",
+              "session": "13e6f6af16d418329151f033d17e34c1",
+              "owner_epoch": "481414eeb9b3477c52bce181596a1caa",
+              "source_ns": 52375749565,
+              "admitted_ns": 52393197856,
+              "dispatched_ns": 52408967023,
+              "finished_ns": 52415675231,
+              "deadline_ns": 57368805044,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "54b34754130be84c8e15a98da5f78d22e2cbf29f5d3e7f8e98831de55b598b4e",
+          "entries": {
+            "1da7fd36ed5eb09208a48137d18365fe": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "45d5eb2c5869d04d4473127d6c0821d4",
+              "session": "13e6f6af16d418329151f033d17e34c1",
+              "owner_epoch": "45d5eb2c5869d04d4473127d6c0821d4",
+              "source_ns": 52375749565,
+              "admitted_ns": 52376155523,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 57375749565,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 2,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/2/receiver.sqlite",
+        "receiver": {
+          "sha256": "50385a735bb4c63cfff4dc1c48349a4ea9167ba6775cb75e68b8bbe908353ed5",
+          "entries": {
+            "9cb8aa314e45b91253e1f30fe83d59e7": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "92405f7bd480c4b26f72d24066e4f4cf",
+              "session": "4ef0628df8c4e3826ef2a44256f9b1ce",
+              "owner_epoch": "d63b500635b1dbc707dfba7a960d33e4",
+              "source_ns": 53182508398,
+              "admitted_ns": 53204349065,
+              "dispatched_ns": 53219494565,
+              "finished_ns": 53233759065,
+              "deadline_ns": 58175739934,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "4f8a45ae7b251158d1695081547205bdd32127c442966ed08a782e846b6b2a93",
+          "entries": {
+            "9cb8aa314e45b91253e1f30fe83d59e7": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "92405f7bd480c4b26f72d24066e4f4cf",
+              "session": "4ef0628df8c4e3826ef2a44256f9b1ce",
+              "owner_epoch": "92405f7bd480c4b26f72d24066e4f4cf",
+              "source_ns": 53182508398,
+              "admitted_ns": 53182936190,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 58182508398,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 3,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/3/receiver.sqlite",
+        "receiver": {
+          "sha256": "1c3c005d96edcac1c749b9ee0af1dc96d74855627f298c285c24d001c650ad18",
+          "entries": {
+            "c859516353abe97cfd3be74bb2b15962": {
+              "state": 8,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "04dbfbfcc074e7557f170e7ff9592b17",
+              "session": "bb7fb1e1a77a2d18b518e453bc9dc19f",
+              "owner_epoch": "5c1ee9563bec82899aa5e6324d727291",
+              "source_ns": 53964342899,
+              "admitted_ns": 53989799357,
+              "dispatched_ns": 54004828732,
+              "finished_ns": 0,
+              "deadline_ns": 58957333617,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "2735521fd44ec7919f4b43a160ac1a280a04de6bff71d8d6fb08683673edd6f5",
+          "entries": {
+            "c859516353abe97cfd3be74bb2b15962": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "04dbfbfcc074e7557f170e7ff9592b17",
+              "session": "bb7fb1e1a77a2d18b518e453bc9dc19f",
+              "owner_epoch": "04dbfbfcc074e7557f170e7ff9592b17",
+              "source_ns": 53964342899,
+              "admitted_ns": 53964738399,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 58964342899,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 4,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/4/receiver.sqlite",
+        "receiver": {
+          "sha256": "f2fd558b752a9e98c8854a42ccf961f5aec4e776ca913b98e40caa9e85173eec",
+          "entries": {
+            "da152304f44bd2349478df5201d638d0": {
+              "state": 7,
+              "reason": 3,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "032fb8d94ecb0c4a59185e29f6d1e006",
+              "session": "f612c3a4591a73a38729e320bdf28dfd",
+              "owner_epoch": "645174504dd360a65d8fccde69272ccc",
+              "source_ns": 56797231483,
+              "admitted_ns": 56820148192,
+              "dispatched_ns": 56835289358,
+              "finished_ns": 61791958360,
+              "deadline_ns": 61789916423,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "9830bc732b65d37af29d5b82292bd9f8ddb84c1d13fc14bcce85c943c7875cb0",
+          "entries": {
+            "da152304f44bd2349478df5201d638d0": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "032fb8d94ecb0c4a59185e29f6d1e006",
+              "session": "f612c3a4591a73a38729e320bdf28dfd",
+              "owner_epoch": "032fb8d94ecb0c4a59185e29f6d1e006",
+              "source_ns": 56797231483,
+              "admitted_ns": 56797641025,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 61797231483,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 5,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/5/receiver.sqlite",
+        "receiver": {
+          "sha256": "caebb4ce363a0aac7b5ef4d4fe8f51a84be4e9869573a71bbf04b861ce7c743c",
+          "entries": {
+            "9ca43be5437d7bfd9ad26ecba7b69d77": {
+              "state": 4,
+              "reason": 0,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "150fe93d8deb2747292ac36398c5dc2d",
+              "session": "93355201c5fb9de48e6c943c81500c5c",
+              "owner_epoch": "5e5cc140627ddabb2975aa0fab85e113",
+              "source_ns": 62526318486,
+              "admitted_ns": 62551891569,
+              "dispatched_ns": 62566953236,
+              "finished_ns": 62572070986,
+              "deadline_ns": 67519763593,
+              "result_valid": true,
+              "result_generation": 1
+            }
+          }
+        },
+        "sender": {
+          "sha256": "23853d6e2901fbe6b1c4cfdd75949f04c4e3e268b62469bff72ad4076377f52b",
+          "entries": {
+            "9ca43be5437d7bfd9ad26ecba7b69d77": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "150fe93d8deb2747292ac36398c5dc2d",
+              "session": "93355201c5fb9de48e6c943c81500c5c",
+              "owner_epoch": "150fe93d8deb2747292ac36398c5dc2d",
+              "source_ns": 62526318486,
+              "admitted_ns": 62526722444,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 67526318486,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      },
+      {
+        "phase": 6,
+        "receiver_path": ".local/m3-command34-start-fence/controls/execution_start_ipv6/execution-start-1/6/receiver.sqlite",
+        "receiver": {
+          "sha256": "cdc13a94aa732e585cc4f62aa0f7c2e03bbd132c52773595cdf5d4ef66b48717",
+          "entries": {
+            "81b76a1a7d66272e03c8857fe00162bf": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "c236e491effab6cb716de7ba49835451",
+              "session": "f4f2936dad9d9c71fc6c54fc897efb69",
+              "owner_epoch": "f5e6102f15d84281143158e108eaef7d",
+              "source_ns": 63355111153,
+              "admitted_ns": 63379899986,
+              "dispatched_ns": 63395685194,
+              "finished_ns": 64426996778,
+              "deadline_ns": 68348090641,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "sender": {
+          "sha256": "603138d5934d93da87b4169526199165d02fc1bee52ce908073acdfc0ac4e0b0",
+          "entries": {
+            "81b76a1a7d66272e03c8857fe00162bf": {
+              "state": 1,
+              "reason": 0,
+              "revision": 0,
+              "route": 100,
+              "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+              "source_epoch": "c236e491effab6cb716de7ba49835451",
+              "session": "f4f2936dad9d9c71fc6c54fc897efb69",
+              "owner_epoch": "c236e491effab6cb716de7ba49835451",
+              "source_ns": 63355111153,
+              "admitted_ns": 63355500028,
+              "dispatched_ns": 0,
+              "finished_ns": 0,
+              "deadline_ns": 68355111153,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        },
+        "scope": "Closed controlled journal state; effect assertions belong to unchanged test source and passed test console, not inference from invalid result/absence"
+      }
+    ]
+  }
+]
