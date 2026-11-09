@@ -24,9 +24,13 @@ is audited FAIL after five passing cases: three source slots skipped in case6;
 the harness now enforces that missed gate (host402). Three later executions are
 excluded from cohort qualification. The [DDS confirmation](evidence/m3-dds-loaded-confirmation-2026-11-09/README.md)
 passes N0 8/8 but fails loaded cold discovery before measurement; host407 pass.
-The [M3 acceptance review](M3_ACCEPTANCE_REVIEW.md) now lists the closure work,
-including existing-capture SENSOR bounds and comparison limitations. No automatic
-N3 retry or DDS fallback experiment. No tuning, forced expiry or historical118 replay. PR2 stays draft;
+The [M3 acceptance review](M3_ACCEPTANCE_REVIEW.md) lists the remaining closure work.
+The [retained N5 SENSOR audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md)
+supports the publication-age gate for27,750 publications (max182.559637ms <250ms)
+and fixed bridge slots; queue peaks/continuous availability/whole-stack memory
+caps remain unavailable. Host413 pass. Next is the comparison/acceptance statement,
+with no new experiment, tuning, N3 retry or DDS fallback. No forced expiry or
+historical118 replay. PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 

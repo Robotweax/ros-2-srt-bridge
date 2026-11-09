@@ -3936,3 +3936,49 @@ Next: retained N5 SENSOR freshness/bounds assessment and explicit comparison
 limitations; no automatic new cohort. N3 auditedFAIL/source-slot decision remains
 open and prospective; old historical118/34/98/12/stoppedN5/4211 untouched. PR2draft/
 M3open/Intrinsic-M4 untouched; no tuning/forced expiry/replay or acceptance waiver.
+
+
+### 2026-11-09 — Offline retained N5 SENSOR freshness/bounds assessment
+
+- Explicit user constraint: retained captures only, no tuning/new experiments.
+  `tools/m3_n5_sensor_audit.py` reads the whole frozen probe cohort1fdf7cb,
+  N0/15s control and N5/1701/300s, never launches peers/traffic or opens journals.
+ 303 original raw hashes verified before/after; six frozen source Git blobs match
+  captured source inventory. Existing probe/sender-reconcile runtime chains fixed.
+- N5 source interval300.147813012s,75,037 produced/75,034 ingress/72,240 SDK handoffs/
+ 28,290 receiver decisions/27,750 publications/typed observations. Histograms are
+  full RPC checkpoint deltas, counts22,990IMU/4,760joints; not last diagnostic tail.
+  Upper age p50/p95/p99/max bins106/134/144/179ms IMU and113/141/152/183ms joints.
+  Exact window maxima178.324341/182.559637ms, each new cumulative maximum, <250ms.
+  Six pipeline balances0; empty qualified unchanged-owner/context checkpoints.
+- Receiver539 rejected:465 clock age unqualified/invalid,0 stale_sample,74 other
+  unclassified. Preserve all47,287 source-unobserved samples;43,950 SDK-to-decoded
+  gap is not exclusive WAN loss/FEC retirement. Unknown/missing ages have no
+  publication percentile. No per-SAMPLE trace exists in these logs. Ages are
+  ingress-to-prepublish authorization under original mapper model, not physical
+  sensor age/typed-observer arrival age or uninterrupted availability.
+- Frozen fixed8-slot arrays and2 configured sensor routes retain one latest sample
+  per route at each persistent ingress/outbound/receive stage. Structural bound,
+  not measured high-water. All six pending fields0 at both checkpoints; continuous
+  occupancy peak unavailable. Separate BIND/CONTROL/transient/provider/FEC/RMW/
+  kernel memory outside this slot claim. No production source or limits changed.
+- Complete SENSOR observer:2,983 active sender/2,875 receiver fully source-contained
+  reads, one original owner/generation/socket each. Premeasurementrobot-bridge-1
+  contributes0 eligible reads and is unavailable, never a0 occupancy peak/stitch.
+  Smoothed sender sendbuffer packets0..59,bytes59..26679,flight0..61; receiver
+  bytes35..196 despite packet gauge0. No SDKhardpeak claim. FC256/SRT+UDP buffers
+ 262144 each are checked source requests, not normalized readback/allocator caps.
+  Sampled endpoint RSS sums297828352/196771840bytes include observer/workers and
+  can double-count/miss peaks; no whole-stack memory/leak/resource-parity proof.
+- `evidence/m3-n5-sensor-retained-audit-2026-11-09/`: full assessment/checkpoints,
+  input hashes, source/binary proof and compact gate decision.6 new offline guards,
+ 413 total host checks PASS. Initial focused discovery also counted4 imported
+  existing accounting tests; final discovery avoids duplicates. No runtime build/
+  experiment/capture/tuning, journal recovery, expiry or historical command replay.
+
+Close the publication-age assessment for this retained run and record structural
+bridge bounds; keep continuous availability/queue peaks/hard SDKprocess caps
+unavailable. Not newest-build/all-seed/fullN5/M3 acceptance. Next comparison/
+acceptance statement with explicit limits and prospective N3 source-slot decision;
+no new experiment. N3auditedFAIL, defaultDDSN5coldFAIL and old UNKNOWN/stopped scopes
+unchanged. PR2draft/M3open/Intrinsic-M4untouched.

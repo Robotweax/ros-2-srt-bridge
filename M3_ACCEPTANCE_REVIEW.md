@@ -20,6 +20,7 @@ numerical superiority claim.
 |N3 deterministic repair|[30s matrix audit](evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md): first5 cases pass; one/two-loss transport/freshness subgates pass in all9 executions|Cohort FAIL at case6:3 skipped IMU source slots; later3 outside intended stop boundary. Corrected guard, no retry or retrospective relaxation|
 |N4 interruption/start/result/restart|[Failure controls and phase cuts](evidence/m3-failure-n4-2026-11-08/README.md), [remaining bounded cases](evidence/m3-n4-remaining-2026-11-08/README.md) retain passing scoped evidence and earlier failures|Bounded native/ROS fixtures, not every long combined load/hardware case|
 |N5 SRT command progress|[Frozen probe cohort](evidence/m3-probe-loaded-cohort-2026-11-09/README.md): N0 8/8, N5 128/128,22 skipped offers|Qualified prior matched probe build, not newest sender-reconcile loaded qualification; SENSOR reduction/accounting is not full freshness/availability acceptance|
+|N5 retained SENSOR freshness and bridge slots|[Offline audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md): all27,750 publications covered; exact modeled upper ages178.324341/182.559637ms <250ms; six balances0; fixed one-latest-sample/route/stage storage|Prior probe build/one300s seed only;465 unknown-age rejections and47,287 unobserved source samples retained. No continuous availability, measured queue high-water or hard SDK/process memory peak|
 |Default DDS cold startup under N5|[Latest matched-build confirmation](evidence/m3-dds-loaded-confirmation-2026-11-09/README.md): N0 8/8; N5 FAIL before measurement with asymmetric sampled endpoint matching|Current default-DDS cold-start failure confirmed. No steady60s workload result, no unique fragmentation cause or default change|
 |Age, CPU, memory and wire comparison|Existing source fences, endpoint/resource accounting and observation scopes retained|No common-origin age equivalence, complete observer/security-cost parity or controlled hardware-performance claim|
 |Lifecycle and provenance|Latest DDS cohort: all6 native children exit0,4 containers/2 networks removed;146 raw hashes; matched runtime chain fixed; host407 pass|Does not erase prior missing-footer failures or qualify real robots/cross-host clocks|
@@ -36,10 +37,13 @@ numerical superiority claim.
    explicitly accounted simulator slot skipping. No current report is reclassified
    by such a future choice. This is an acceptance-contract decision, not permission
    to tune production rates/queues/clock rules or hide missing source samples.
-3. Finish the bridge's scoped N5 SENSOR freshness/bounds assessment from existing
-   captures and state counters. Report accepted-publication ages, rejected/unknown
-   populations, occupancy and loss/accounting separately. High sample reduction
-   alone is allowed by N5 and does not justify another open-ended loss diagnosis.
+3. The retained-run N5 publication-age assessment is now complete in the
+   [offline audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md).
+   All publication histograms reconcile; unknown/missing populations are explicit,
+   and fixed bridge slots are source-established. Keep continuous availability,
+   measured occupancy peaks and total SDK/process memory caps unavailable rather
+   than upgrading them to passes or launching another experiment. This does not
+   promote the old probe build into newest-build/all-seed qualification.
 4. Complete the comparison statement with explicit asymmetries: default DDS
    cannot enter a loaded steady window in the latest case; its age origin and
    security costs differ. Preserve failed/unavailable populations and make a

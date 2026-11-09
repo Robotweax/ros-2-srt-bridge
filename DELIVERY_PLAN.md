@@ -72,6 +72,22 @@ work is the existing-capture N5 SENSOR freshness/bounds assessment and explicit
 comparison limitations; any N3 source-slot contract change remains prospective.
 Keep M3 open/PR2 draft; no automatic new cohort or acceptance waiver.
 
+### Retained N5 SENSOR assessment completed
+
+`evidence/m3-n5-sensor-retained-audit-2026-11-09/` recomputes the complete frozen
+300s N5/1701 publication-age/checkpoint population:27,750 publications, modeled
+upper maxima178.324341/182.559637ms below250ms, six conservation residuals0.
+465 unknown-age rejections,74 other rejections and47,287 unobserved source samples
+remain explicit; no per-SAMPLE cause is manufactured. Fixed latest-only bridge
+slots are source-established, but continuous occupancy peaks/availability and
+hard SDK/process memory caps are unavailable. This closes that retained-run age
+assessment, not newest-build/all-seed/full N5 or M3 acceptance.
+
+Offline only:303 original hashes and six frozen source blobs verify,413 host
+checks pass; no runtime experiment/build/tuning/journal recovery/replay. Next is
+the comparison/acceptance statement with these limits and the prospective N3
+source-slot contract decision; no automatic new experiment.
+
 ### Implemented contract: authoritative sender submission receipt
 
 - Give each admitted sender proof a bounded, opaque submission receipt that the

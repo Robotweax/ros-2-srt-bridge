@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "M3_ACCEPTANCE_REVIEW.md: sender reconciliation implemented;30s N3 audited FAIL unchanged; current-build default DDS N0 passes8/8, N5 cold start fails readiness before measurement. Bounded confirmation closed, host407. Next retained N5 SENSOR freshness/bounds and explicit comparison limits; no automatic cohort, tuning, forced expiry or historical118 replay.",
+  "current_priority": "M3_ACCEPTANCE_REVIEW.md: retained N5 publication-age assessment completed offline (27750 publications,max182.559637ms<250ms;fixed bridge slots), with465 unknown-age rejections/47287 missing source samples explicit and continuous peaks/availability/whole-stack memory caps unavailable. Host413. Next comparison/acceptance statement and prospective N3 source-slot decision; no experiments/tuning/forced expiry/historical replay. M3 open/PR2 draft.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2766,5 +2766,42 @@
     "host_tests": 407,
     "sdk81_ros41_reused": true,
     "next": "M3_ACCEPTANCE_REVIEW.md: existing-capture N5 SENSOR bounds and comparison limits, no automatic further cold-start run"
+  },
+  "n5_retained_sensor_audit": {
+    "evidence": "evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md",
+    "mode": "read-only; no runtime experiment",
+    "source_cohort": "m3-probe-loaded-cohort-2026-11-09",
+    "runtime_layout": "probe-tracing",
+    "seed": 1701,
+    "source_seconds": 300.147813012,
+    "publication_age_gate": "supported for full retained RPC checkpoint delta",
+    "publications": 27750,
+    "imu_joints_publications": [
+      22990,
+      4760
+    ],
+    "exact_upper_age_max_ns": [
+      178324341,
+      182559637
+    ],
+    "age_budget_ns": 250000000,
+    "source_produced": 75037,
+    "unobserved_source": 47287,
+    "receiver_rejected": 539,
+    "unknown_age_rejected": 465,
+    "stale_sample_rejected": 0,
+    "other_unclassified_receiver_rejections": 74,
+    "balances": "six residuals0",
+    "bridge_slot_bound": "frozen fixed arrays, one latest sample per configured sensor route per stage",
+    "measured_bridge_queue_high_water": null,
+    "sdk_hard_peak_qualified": false,
+    "continuous_availability_qualified": false,
+    "whole_stack_memory_cap_qualified": false,
+    "raw_hashes_verified": 303,
+    "frozen_source_blobs_verified": 6,
+    "host_tests": 413,
+    "newest_sender_reconcile_loaded_qualification": false,
+    "full_N5_accepted": false,
+    "next": "comparison/acceptance statement with explicit scope; no automatic experiment"
   }
 }
