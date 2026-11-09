@@ -3703,3 +3703,42 @@ historical34/98/12 retained; PR2draft/M3fullgatesopen/Intrinsic-M4 untouched.
 Next: diagnose retained intent3 probe-renewal gap before further instrumentation;
 no historical118ClockError retroclassification. Actualdeadline-drop reconciliation
 remainsopen; old34/98/12,PR2draft/M3fullgates/Intrinsic-M4 unchanged.
+
+### 2026-11-09 — Intent3 probe-renewal gap, retained evidence only
+
+- Evidence: `evidence/m3-intent3-probe-gap-2026-11-09/README.md`, full derived
+  headers/provider/neighbor/root context inanalysis.json, read-only script/guards.
+  No newrun/build/tuning/forcedexpiry/replay or application journal recovery.
+- Old/new retained anchors62373601819/69240717739ns separate6867115920ns;
+  ageatfirstdefer6482085962ns, notsamequantity. Two snapshots notcontinuousprobe
+  history. Existing intent3 success/originalbudget/1SDKhandoff unchanged.
+- Source1s owner timer attempts begin_probe, schedulesnext evenifbusy; onepending
+  probe,2s timeout, matchingecho withage<2s required. SharedCONTROL FIFO/SDK
+  backpressure/receive-space gates; no probe-specificattempt/handoff/reject trace.
+  probe_busy/not_pending alone do notemit commandtrace. No timer-policy changes.
+- PinnedCONTROL forceswireinorder. Reply-length157byteDATA candidate443/msg29
+  atoperator65636107154ns cannot havecompleteearlier nativeprefixbefore
+ 67846142822ns (missing442), wait2210035668ns>2s. ConditionalTimeReply would
+  alreadybelate; encryptedpayloadmeansno exactkind/echo/rejection proof.
+  Candidate455/msg41 precedesnewanchor1455833ns, prefixavailableatfirsttap;
+  compatiblewithrecovery, notauthentication/SDKreadproof. Prefixguards withhold
+  missingpredecessors and refusewrap; allcapturedfirstflowpredecessors checked.
+- Fixedcontext60373601819..71240717739ns: operator104 owner providerreads,
+  maxspacing110.811500ms;robot108/max101.470292ms. No6.8swholeownerstall, but
+  shortjitter/backpressureunmeasured. Allstate5/sameidentity,0context/linkloss.
+  AllCONTROLdirections active,maxadjacentgap<0.992s; threepriorprimary>=1s
+  gapsoccurmuchlater. Retainedanchor-interval deltas OP39/robot256retransmissions,
+  OP8NAKsent/robot8received,0undecryptincrement. Contextmax robot17sendbuffer,
+  OP9receivebuffer. Aggregateobservations, notperprobe packetreceipt.
+- Both108neighborreads REACHABLE/stableMAC,0errors,0scopedARPreplylifetimes.
+  Rootwholeinterface OP0/robot2708drop increments,robot6787overlimits; notspecific
+  probedrops and no blanketARPabsenceclaim. Reliableordering/recoverydelay fits
+  failedclockrenewal despiteUDP/owneractivity; exactprobechain remainsunproven.
+- 303raw checked before/after,471otherpriorraw rechecked; allcapturedsource matches, provider52be7c8clean,
+  calibrated new/old inventories fixed. Analysis-only packet-order contractguards
+  pass; no newruntime qualification claim. Historical118UNKNOWN unchanged.
+
+Next optional diagnostic increment: separately calibrated default-off per-probe
+attempt/result/queue/handoff/correlatedecho/admission visibility, preserving1pending
+and2s/5sbounds. Do not infer historical118ClockError or forceexpiry. PR2draft,
+M3/fullgatesopen,Intrinsic/M4 untouched.
