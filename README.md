@@ -4,11 +4,11 @@ The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
 remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
-[Bounded live shutdown calibration](evidence/m3-shutdown-live-calibration-2026-11-09/README.md)
-passed default-off and healthy shutdown-stage gates on a new matched build.
-The observer sampled a separate blocked target during the parent wait, but all22
-post-signal kernel-stack reads were denied; overall calibration FAIL. No tuning,
-permission change or two-loss4211 retry; all29 campaign cases remain disabled.
+The [observer-permission attempt](evidence/m3-observer-stack-permissions-2026-11-09/README.md)
+failed in observer pre-exec setup before arming. A native-x86-64 filter was
+prepared on an ARM64 Docker daemon; exact nested errno is not retained. The one
+blocked target exited0 and the capability container/volume were removed. No retry,
+production tuning or two-loss4211 run; all29 campaign cases remain disabled.
 
 
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small

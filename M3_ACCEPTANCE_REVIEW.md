@@ -4,11 +4,11 @@ The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
 remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
-[Bounded live shutdown calibration](evidence/m3-shutdown-live-calibration-2026-11-09/README.md)
-passed default-off and healthy shutdown-stage gates on a new matched build.
-The observer sampled a separate blocked target during the parent wait, but all22
-post-signal kernel-stack reads were denied; overall calibration FAIL. No tuning,
-permission change or two-loss4211 retry; all29 campaign cases remain disabled.
+The [observer-permission attempt](evidence/m3-observer-stack-permissions-2026-11-09/README.md)
+failed in observer pre-exec setup before arming. A native-x86-64 filter was
+prepared on an ARM64 Docker daemon; exact nested errno is not retained. The one
+blocked target exited0 and the capability container/volume were removed. No retry,
+production tuning or two-loss4211 run; all29 campaign cases remain disabled.
 
 
 Final comparison and acceptance conclusion:
@@ -56,9 +56,12 @@ numerical superiority claim.
    discriminating next evidence, subject to a separate scope decision. The new shutdown-tracing matched build has a separate bounded live calibration:
    default-off and healthy stages PASS, independent3s wait sampling PASS, but
    kernel-stack access FAIL (22 post-signal reads denied/errno13). No two-loss4211
-   retry or permission fallback. Stack capture remains uncalibrated; the next
-   prerequisite is a separately scoped access/tooling decision, not another
-   production cohort or timeout increase. Keep8 strict PASS/1 FAIL, the5s
+   retry or permission fallback. A subsequent one-shot permission attempt failed before observer arming;
+   native-x86-64 in-process filter versus ARM64 daemon is an unchecked
+   compatibility blocker, while exact pre-exec errno is unavailable. Target
+   cleanup and permission-container removal pass. Stack capture remains
+   uncalibrated; a compatible observer policy and explicit pre-exec diagnostics
+   are prerequisites, with no automatic further run or timeout change. Keep8 strict PASS/1 FAIL, the5s
    lifecycle gate and all29 remaining stages disabled; no retry or cohort splice.
 3. The retained-run N5 publication-age assessment is now complete in the
    [offline audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md).

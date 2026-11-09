@@ -1,0 +1,54 @@
+{
+  "status": "failed_observer_preexec_setup",
+  "blocked_target_runs": 1,
+  "observer_armed": false,
+  "stack_capture_attempted": false,
+  "kernel_stacks_captured": 0,
+  "target_cleanup": {
+    "returncode": 0,
+    "forced_kill": false,
+    "signal_to_reap_ns": 3074699502,
+    "existing_wait_seconds": 5
+  },
+  "failure": {
+    "error": "SubprocessError: Exception occurred in preexec_fn.",
+    "exact_preexec_errno": "not retained by Popen; no attribution to a specific call",
+    "known_compatibility_blocker": "native-x86_64-only additive seccomp filter versus aarch64 Docker daemon; image/process architecture is not sufficient preflight",
+    "daemon_architecture": "aarch64",
+    "selected_image_architecture": "amd64",
+    "missed_preflight_check": true
+  },
+  "permissions": {
+    "container_policy": "one SYS_ADMIN capability, read-only minimal bundle/private PID/network-none/NNP/default Docker seccomp",
+    "per_role_before_signal_attestation": "not reached; observer preexec failed",
+    "supervisor_final": {
+      "Name": "python3",
+      "Pid": "1",
+      "PPid": "0",
+      "Uid": "0\t0\t0\t0",
+      "Gid": "0\t0\t0\t0",
+      "CapInh": "0000000000000000",
+      "CapPrm": "0000000000000000",
+      "CapEff": "0000000000000000",
+      "CapBnd": "0000000000200000",
+      "CapAmb": "0000000000000000",
+      "NoNewPrivs": "1",
+      "Seccomp": "2",
+      "Seccomp_filters": "1"
+    },
+    "permissions_persist": false,
+    "container_removed": true,
+    "output_volume_removed": true
+  },
+  "original_fixture_unchanged": true,
+  "matched_build_entries_unchanged": 13,
+  "original_N3_raw_files_unchanged": 913,
+  "prior_stack_calibration_failure_unchanged": true,
+  "no_tuning": true,
+  "retry_two_loss_4211": false,
+  "additional_target_attempts": 0,
+  "remaining_campaign_cases_disabled": 29,
+  "M3_complete": false,
+  "PR2_keep_draft": true,
+  "M4_started": false
+}

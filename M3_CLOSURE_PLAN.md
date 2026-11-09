@@ -17,6 +17,9 @@ on a new matched build passes default-off, healthy stages and independent wait
 sampling, but fails kernel-stack access (22 denied post-signal reads). No two-loss
 4211 retry or permission change occurred. Stack capture remains uncalibrated;
 all29 remaining campaign cases remain disabled and no corrective patch/experiment is queued.
+A later scoped-permission blocked-target attempt failed before observer arming;
+native-x86 filter/ARM64 daemon compatibility remains unresolved. No retry followed;
+its capability container and output volume were removed.
 
 ## 1. One candidate, with a concrete coverage ledger
 

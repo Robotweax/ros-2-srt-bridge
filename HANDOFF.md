@@ -4301,3 +4301,41 @@ and comparison limits remain. This plan creates no waiver or merge permission.
 - Original N38PASS/1FAIL and unknownhangcause unchanged. Newbuild matched but
   calibrationpartial, no stackcapture readiness claim, no N3credit/splice/9of9.
   All29 N0/N4/N1/N2/N5 campaign cases disabled. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — One observer-only permission attempt; pre-exec FAIL
+
+- User authorizes narrowly scoped observer stack-access preparation and rerun
+  onlyblockedfixture; no tuning/two-loss4211 or campaign advance. Predeclared1run
+  with exact existingfixturebinary/SDK13,3s hold/5swait, no rebuild. All29disabled.
+- Added tools/m3_observer_permissions.py (opt-in only), native-x86 classicBPF
+  deny filter and selfcapdrop/NNP functions. Offline461PythonPASS (4new policy
+  checks) +1evidence-local finalgate syntheticcontrolPASS. No native filter was
+  installed by tests; correctBPFemulation did not testarchitecturecompatibility.
+- MinimalRO bundle only5files (fixture/observer/cleanup/controller/permission
+  helper), freshnamedvolume/out, DockerrootfsRO/networknone/privatePID, cap-drop
+  ALL cap-addSYS_ADMIN,NNP, defaultDockerseccomp retained; notprivileged/nohost
+  PID/proc/socket/workspaceRW. Intendedtargetcaps0 beforeexec, observercap21 plus
+  addedfilter, supervisorcaps0 beforesignal. NoSYS_PTRACE/GDB/newimage/sysctl.
+- Actual1targetattempt .local/observer-stack-permissions-20261109T221741624697Z:
+  containerpolicyinspectPASS,targetready, Observer Popen fails opaque
+  SubprocessError:Exceptionoccurredinpreexec_fn. No ready/JSONL/per-role proof.
+  Exactnestederrno/call notretained, no kernelstackcalibration/captureattempt.
+  Targetpreexec selfdrop check passed by controlpath, but plannedroleattestation
+  not reached; do not infer observercap/filter enforcement from configuration.
+- Read-onlydaemonmetadataaarch64 vsimage/processamd64; helpernative-x86filter
+  and process-only architecturecheck are a concretecompatibilityblocker. Exact
+  preexec cause notproven. I missed native-daemon architecture preflight, which
+  shouldhave rejectedthis beforetargetlaunch. Do not use this asreadyARM64 recipe.
+- Failurecleanup:supervisorfinalCapEff/Prm/Inh/Amb0,NNP1,bnd21only; target exits0
+  unforcedafter3.074699502s,5originalmarkers. Container+namedvolume removed0 and
+  absent. No furtherattempt/policyfallback/escalation, no tuning or4211retry.
+- Evidence evidence/m3-observer-stack-permissions-2026-11-09/README.md, frozen
+  PLAN/profile/readonlybundle sources, gate/result/child/finalcaps/postflight/
+  rawhashes. All13matched entries, earliercalibrationindex and913N3raw verify
+  unchanged. No source/fixture edit afterattempt; intendedsourcefreeze stillmatches.
+- Next prerequisite:compatible daemon-nativeobserverpolicy or nativeexecution,
+  plus explicitpreexecerrorretention before anyotherliveattempt. Notimplemented
+  orlaunched now. Prioroff/healthy-stage/waitsamplingPASS retained, prior22stack
+  readsdeniedFAIL unchanged, thissetupFAIL separate. Stackaccess uncalibrated,
+  originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
