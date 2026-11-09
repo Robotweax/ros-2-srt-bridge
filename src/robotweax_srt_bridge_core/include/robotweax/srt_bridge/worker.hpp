@@ -33,6 +33,7 @@ struct WorkerReply {
     std::optional<DispatchTicket> dispatch{};
     RateResult device{};
     std::uint64_t effects=0;
+    std::optional<WorkerStartObservation> start_observation{};
 };
 struct WorkerOptions {
     std::string executable; // Absolute path to the installed/built worker executable.
@@ -41,6 +42,7 @@ struct WorkerOptions {
     std::optional<JournalPoint> test_pause_at{};
     std::optional<JournalFaults> test_faults{};
     bool simulated_rate_handler=false,external_rate_handler=false;
+    bool start_diagnostics=false; // Local shared-mapping diagnostics only, default off.
     // 1: before atomic start, 2: after start, 3: after simulated effect.
     unsigned test_handler_pause=0;
 };

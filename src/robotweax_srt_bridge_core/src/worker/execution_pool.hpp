@@ -20,10 +20,13 @@ struct Record {
 // lock-free on the qualified platform; no emulated/process-private mutexes.
 class Pool : public std::enable_shared_from_this<Pool> {
 public:
-    static std::shared_ptr<Pool> create();
+    static std::shared_ptr<Pool> create(bool diagnostics=false);
     static std::shared_ptr<Pool> map(int fd);
     ~Pool();
     int fd()const noexcept{return fd_;}
+    bool diagnostics_enabled()const noexcept;
+    void publish_observation(std::uint32_t slot,std::uint64_t generation,const WorkerStartObservation& observation)noexcept;
+    std::optional<WorkerStartObservation> observation(const Record& record)const noexcept;
     std::shared_ptr<Record> allocate(const JournalEntry& entry,std::string local,std::string remote,std::shared_ptr<std::atomic<bool>> live);
     bool grant(const Record& record,std::uint64_t deadline)noexcept;
     void revoke(const Record& record)noexcept;

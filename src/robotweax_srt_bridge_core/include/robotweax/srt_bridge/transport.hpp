@@ -22,6 +22,7 @@ struct TransportConfig {
     std::shared_ptr<ProviderDiagnostics> provider_diagnostics{}; // CONTROL only; non-clearing SDK reads add observer work.
     std::shared_ptr<SampleTrace> sample_trace{}; // Opt-in ROS admission / SENSOR SDK handoff observations.
     std::shared_ptr<ProviderDiagnostics> sensor_provider_diagnostics{}; // Independent opt-in SENSOR SDK reads.
+    bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
 };
 struct TransportContext {
     Identity session{};
@@ -58,6 +59,8 @@ struct CommandCheck {
     TransportContext context{};
     SessionError error=SessionError::invalid_state;
     bool start_granted=false;
+    std::uint32_t grant_slot=UINT32_MAX;
+    std::uint64_t grant_generation=0,clock_deadline_ns=0;
     bool fresh() const noexcept { return error==SessionError::none; }
 };
 // One thread exclusively owns all provider sockets/epoll, Session, outbound

@@ -36,6 +36,7 @@ struct CommandEndpoint::Impl {
         After after=After::local_get;
         Task task{};
         TransportMessage message{};
+        CommandCheck start_check{};
         WorkerRequest request{};
         std::uint64_t worker_token=0,check_token=0,sent_ns=0;
         std::optional<JournalEntry> entry{};
@@ -48,7 +49,7 @@ struct CommandEndpoint::Impl {
     EndpointOptions options;
     TransportOwner transport;
     const bool sender;
-    std::atomic<bool> stopping{false};
+    std::atomic<bool> stopping{false},resume_test{false};
     std::thread thread;
     mutable std::mutex mutex;
     EndpointSnapshot shared{},current{};
@@ -67,6 +68,8 @@ struct CommandEndpoint::Impl {
            (sending!=(s.role==Role::listener))||(!sending&&!o.worker.simulated_rate_handler&&!o.worker.external_rate_handler)||
            (sending&&(o.worker.simulated_rate_handler||o.worker.external_rate_handler))||(o.worker.simulated_rate_handler&&o.worker.external_rate_handler)||o.operation_timeout_ns<1000000||o.operation_timeout_ns>60000000000ULL)
             throw std::invalid_argument("endpoint worker/transport binding or handler configuration mismatch");
+        if(o.worker.start_diagnostics&&!o.transport.start_diagnostics)throw std::invalid_argument("worker start diagnostics require endpoint start trace");
+        o.worker.start_diagnostics=o.transport.start_diagnostics;
         const auto schema=rate_command_schema_hash();
         for(const auto& route:s.manifest.routes())if(route.enabled&&route.kind==RouteKind::command&&
             (route.type_name!="robotweax.srt_bridge.v1.SetMeasurementRateCommand"||route.type_hash!=schema))throw std::invalid_argument("endpoint only supports declared rate-command schema");
@@ -81,6 +84,24 @@ struct CommandEndpoint::Impl {
         const auto c=transport.snapshot().context;
         options.transport.command_trace->record(CommandTraceProducer::coordinator,{0,now(),point,reason,job.task.id,zero(session)?c.session:session,
             options.transport.session.local_epoch,c.control_generation,c.sensor_generation,job.task.route,value,entry_owner,detail,request_sequence,origin_ns});
+    }
+    void trace_start(CommandTracePoint point,unsigned value,std::uint64_t worker_token=0,const WorkerReply* reply=nullptr){
+        if(!options.transport.start_diagnostics)return;
+        CommandTraceEvent e{};const auto& c=job.message.context;const auto& check=job.start_check;
+        e.monotonic_ns=now();e.point=point;e.value=value;e.request=job.task.id;e.route=job.task.route;e.session=c.session;
+        e.owner_epoch=options.transport.session.local_epoch;e.entry_owner_epoch=job.entry?job.entry->owner_epoch:Identity{};
+        e.control_generation=c.control_generation;e.sensor_generation=c.sensor_generation;e.detail=6;
+        e.request_sequence=job.message.envelope.sequence;e.origin_ns=job.message.envelope.source_monotonic_ns;
+        e.check_token=job.check_token;e.worker_token=worker_token;e.evaluated_ns=check.evaluated_ns;e.clock_deadline_ns=check.clock_deadline_ns;
+        e.start_granted=check.start_granted;e.grant_slot=check.grant_slot;e.grant_generation=check.grant_generation;
+        e.grant_deadline_ns=check.start_granted?check.deadline_ns:0;e.command_deadline_ns=job.entry?job.entry->context.deadline_ns:0;
+        if(reply){
+            if(reply->journal.entry){e.terminal_state=unsigned(reply->journal.entry->state);e.terminal_reason=unsigned(reply->journal.entry->reason);}
+            if(reply->start_observation){const auto& o=*reply->start_observation;e.worker_observation_available=true;
+                e.consume_ns=o.consume_ns;e.consume_deadline_ns=o.consume_deadline_ns;e.consume_result=o.consume_result;
+                e.second_gate_ns=o.second_gate_ns;e.second_gate_deadline_ns=o.second_gate_deadline_ns;e.second_gate_checked=o.second_gate_checked;e.handler_invoked=o.handler_invoked;}
+        }
+        options.transport.command_trace->record(CommandTraceProducer::coordinator,e);
     }
     void fail(EndpointFault fault){if(current.fault==EndpointFault::none)current.fault=fault;stopping=true;transport.request_stop();}
     void publish(JournalWorker* worker){
@@ -121,6 +142,7 @@ struct CommandEndpoint::Impl {
         auto q=request(committed?WorkerOperation::finish:WorkerOperation::decline);
         const bool expired=error==SessionError::stale_sample;
         q.state=expired?CommandState::expired:CommandState::rejected;q.reason=expired?CommandReason::start_deadline:CommandReason::context_lost;
+        if(committed)trace_start(CommandTracePoint::start_declined,unsigned(error));
         rpc(q,committed?After::finish:After::decline);
     }
     void context_changes(){
@@ -136,7 +158,9 @@ struct CommandEndpoint::Impl {
         if(reply.token!=job.worker_token||job.stage!=Stage::rpc_wait){fail(EndpointFault::protocol);return;}
         if(reply.device.valid){current.device=reply.device;current.effects=reply.effects;}
         if(reply.test_paused){current.test_paused=true;return;}
-        current.test_paused=false;job.worker_token=0;
+        current.test_paused=false;
+        if(reply.operation==WorkerOperation::execute)trace_start(CommandTracePoint::worker_start,unsigned(reply.journal.error),reply.token,&reply);
+        job.worker_token=0;
         if(reply.journal.entry)job.entry=reply.journal.entry;
         const auto error=reply.journal.error;
         if(job.after==After::peer_admit||job.after==After::peer_expire||job.after==After::peer_get)
@@ -253,6 +277,7 @@ struct CommandEndpoint::Impl {
             case Stage::start_submit:{
                 const bool start=job.stage==Stage::start_submit;
                 const auto result=start?transport.request_command_start(job.message.context,job.message.envelope,*job.dispatch_ticket,job.check_token):transport.request_command_check(job.message.context,job.message.envelope,job.check_token);
+                if(start&&result!=SubmitResult::busy)trace_start(CommandTracePoint::start_submission,unsigned(result));
                 if(result==SubmitResult::busy)break;
                 if(result==SubmitResult::queued){job.sent_ns=now();job.stage=start?Stage::start_wait:Stage::precheck_wait;}
                 else decline(SessionError::obsolete_connection,start);
@@ -262,12 +287,14 @@ struct CommandEndpoint::Impl {
                 const bool start=job.stage==Stage::start_wait;CommandCheck check;
                 if(transport.poll_command_check(check)){
                     if(check.token!=job.check_token){fail(EndpointFault::protocol);break;}
+                    if(start)job.start_check=check;
                     if(!check.fresh()||(start&&!check.start_granted))decline(check.error,start);
                     else if(start)job.stage=Stage::execute_submit;
                     else{auto q=request(WorkerOperation::begin_dispatch);q.session=job.message.context.session;q.clock_qualified=true;rpc(q,After::dispatch);}
                 }else if(now()-job.sent_ns>=options.operation_timeout_ns)fail(EndpointFault::timeout);
                 break;}
             case Stage::execute_submit:{const auto submitted=worker.submit_execute(std::move(*job.dispatch_ticket));
+                if(submitted.result!=WorkerSubmit::busy)trace_start(CommandTracePoint::execute_submission,unsigned(submitted.result),submitted.token);
                 if(submitted.result==WorkerSubmit::queued){job.worker_token=submitted.token;job.sent_ns=now();job.after=After::finish;job.stage=Stage::rpc_wait;}
                 else if(submitted.result!=WorkerSubmit::busy)fail(EndpointFault::worker);
                 break;}
@@ -279,6 +306,7 @@ struct CommandEndpoint::Impl {
         try{
             trace(CommandTracePoint::endpoint_started);worker=std::make_unique<JournalWorker>(options.worker);current.running=true;const auto startup=now();bool seen_transport=false;
             while(!stopping.load()){
+                if(resume_test.exchange(false))worker->resume_test_barrier();
                 context_changes();WorkerReply reply;for(unsigned n=0;n<8&&worker->poll(reply);++n)completion(std::move(reply));
                 if(worker->state()==WorkerState::failed){fail(EndpointFault::worker);break;}
                 const auto network=transport.snapshot();seen_transport=seen_transport||network.running;
@@ -333,6 +361,10 @@ bool CommandEndpoint::poll(CommandEvent& event){
 }
 EndpointSnapshot CommandEndpoint::snapshot()const{std::lock_guard lock(impl_->mutex);return impl_->shared;}
 TransportOwner& CommandEndpoint::transport()noexcept{return impl_->transport;}
+bool CommandEndpoint::resume_test_barrier()noexcept{
+    if(!impl_->options.worker.test_pause_at&&!impl_->options.worker.test_handler_pause)return false;
+    impl_->resume_test.store(true);return true;
+}
 void CommandEndpoint::request_stop()noexcept{impl_->stopping=true;impl_->transport.request_stop();}
 void CommandEndpoint::join(){request_stop();if(impl_->thread.joinable())impl_->thread.join();}
 }

@@ -38,7 +38,7 @@ struct JournalWorker::Impl {
             throw std::invalid_argument("worker requires absolute executable and serializable options");
         const auto init=worker_ipc::initialize_frame(options);
         int pair[2];if(socketpair(AF_UNIX,SOCK_SEQPACKET|SOCK_CLOEXEC|SOCK_NONBLOCK,0,pair)<0)throw std::runtime_error("worker socketpair failed");
-        try{execution=execution_detail::Pool::create();}catch(...){close(pair[0]);close(pair[1]);throw;}
+        try{execution=execution_detail::Pool::create(options.start_diagnostics);}catch(...){close(pair[0]);close(pair[1]);throw;}
         // Duplicate sources above all destination descriptors before spawn actions;
         // this is safe even when concurrent transport threads close/reuse fds.
         const int ipc_source=fcntl(pair[1],F_DUPFD_CLOEXEC,10);
@@ -100,7 +100,10 @@ struct JournalWorker::Impl {
             if(reply.journal.entry){const auto& e=*reply.journal.entry;
                 if((pending->request.operation!=WorkerOperation::invalidate_session&&e.request_id!=pending->request.request_id)||!valid_command(e.command)||e.payload_hash!=command_hash(e.route,e.command))throw std::runtime_error("invalid worker record");}
             const auto request=pending->request;const auto executed=pending->dispatch;*pending={};--count;
-            if(executed)executed->pool->revoke(*executed);
+            if(executed){
+                if(options.start_diagnostics)reply.start_observation=executed->pool->observation(*executed);
+                executed->pool->revoke(*executed);
+            }
             // The child may exit just after a committed result; that result is
             // still useful, but a dead/stopping worker cannot mint a send ticket.
             inspect();

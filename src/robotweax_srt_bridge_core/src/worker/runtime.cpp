@@ -57,17 +57,26 @@ int bridge::run_journal_worker(int argc,char** argv,RateHandlerBackend* external
                     result=journal->get(request.request_id);
                     if((!options.simulated_rate_handler&&!options.external_rate_handler)||options.journal.side!=bridge::JournalSide::receiver||!result||result.entry->state!=bridge::CommandState::dispatching||result.entry->owner_epoch!=options.journal.process_epoch){result.error=bridge::JournalError::invalid_state;break;}
                     const auto entry=*result.entry;pause_handler(1);
-                    const auto start=execution->consume(request.grant_slot,request.grant_generation,entry.request_id,entry.payload_hash,monotonic());
+                    WorkerStartObservation observation{};const bool observing=execution->diagnostics_enabled();
+                    if(observing)observation.consume_deadline_ns=execution->deadline(request.grant_slot,request.grant_generation);
+                    const auto consume_ns=monotonic();
+                    const auto start=execution->consume(request.grant_slot,request.grant_generation,entry.request_id,entry.payload_hash,consume_ns);
+                    if(observing){observation.consume_ns=consume_ns;observation.consume_result=unsigned(start)+1;}
                     if(start!=bridge::execution_detail::Start::started){
                         const bool expired=monotonic()>=entry.context.deadline_ns;
-                        result=journal->finish(entry.request_id,expired?bridge::CommandState::expired:bridge::CommandState::rejected,expired?bridge::CommandReason::start_deadline:bridge::CommandReason::context_lost,{},monotonic());break;
+                        result=journal->finish(entry.request_id,expired?bridge::CommandState::expired:bridge::CommandState::rejected,expired?bridge::CommandReason::start_deadline:bridge::CommandReason::context_lost,{},monotonic());
+                        if(observing)execution->publish_observation(request.grant_slot,request.grant_generation,observation);
+                        break;
                     }
                     pause_handler(2);
-                    if(monotonic()>=execution->deadline(request.grant_slot,request.grant_generation)){
+                    const auto gate_ns=monotonic();const auto gate_deadline=execution->deadline(request.grant_slot,request.grant_generation);
+                    if(observing){observation.second_gate_checked=true;observation.second_gate_ns=gate_ns;observation.second_gate_deadline_ns=gate_deadline;}
+                    if(gate_ns>=gate_deadline){
                         const bool expired=monotonic()>=entry.context.deadline_ns;
                         result=journal->finish(entry.request_id,expired?bridge::CommandState::expired:bridge::CommandState::rejected,expired?bridge::CommandReason::start_deadline:bridge::CommandReason::context_lost,{},monotonic());
                     }
                     else if(options.external_rate_handler){
+                        if(observing)observation.handler_invoked=true;
                         bridge::HandlerOutcome outcome;
                         try{outcome=external->execute(entry,execution->deadline(request.grant_slot,request.grant_generation));}catch(...){outcome={};}
                         const bridge::CommandStatus proposed{outcome.state,outcome.reason,entry.command,entry.payload_hash,outcome.result,3};
@@ -77,9 +86,11 @@ int bridge::run_journal_worker(int argc,char** argv,RateHandlerBackend* external
                     }
                     else if(device_generation!=entry.command.expected_generation)result=journal->finish(entry.request_id,bridge::CommandState::failed,bridge::CommandReason::generation_conflict,{},monotonic());
                     else{
+                        if(observing)observation.handler_invoked=true;
                         device_rate=entry.command.rate_hz;device_generation=entry.command.new_generation;++effects;pause_handler(3);
                         result=journal->finish(entry.request_id,bridge::CommandState::succeeded,bridge::CommandReason::none,{device_rate,device_generation,true},monotonic());
                     }
+                    if(observing)execution->publish_observation(request.grant_slot,request.grant_generation,observation);
                     execution->complete(request.grant_slot,request.grant_generation);break;
                 }
                 case Op::sender_may_transmit:may_transmit=journal->sender_may_transmit(request.request_id,request.session,operation_now);result.error=journal->healthy()?bridge::JournalError::none:bridge::JournalError::storage;break;

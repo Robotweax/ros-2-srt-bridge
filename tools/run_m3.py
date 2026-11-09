@@ -55,6 +55,7 @@ def main():
     parser.add_argument('--control-egress-fault',choices=['operator','robot'],help='development-only six-second CONTROL drop, N0 >=45s with all diagnostics; not qualification')
     parser.add_argument('--sensor-provider-diagnostics',action='store_true',help='separate bounded SENSOR SDK statistics; adds observer work')
     parser.add_argument('--provider-diagnostics',action='store_true',help='development-only CONTROL non-clearing provider statistics; adds observer workload')
+    parser.add_argument('--start-diagnostics',action='store_true',help='bounded start-check/grant/worker observations, requires command diagnostics and matched rebuilt worker')
     parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
@@ -71,6 +72,7 @@ def main():
     if args.arp_reply_diagnostics and (args.profile not in ('N0','N5') or args.neighbor_mode!='dynamic' or args.control_egress_fault or args.root_loss_burst or not all((args.neighbor_diagnostics,args.control_qdisc_diagnostics,args.monotonic_capture,args.capture_drain_check,args.command_diagnostics,args.provider_diagnostics,args.sensor_provider_diagnostics))):
         parser.error('loaded ARP observer requires N0/N5, dynamic neighbors, all diagnostics/drain, no faults')
     if args.arp_packet_trace and (not args.arp_reply_diagnostics or duration>480):parser.error('ARP packet trace requires loaded ARP diagnostics and <=480s')
+    if args.start_diagnostics and not args.command_diagnostics:parser.error('start diagnostics require command diagnostics')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -94,6 +96,7 @@ def main():
     report['recorder_diagnostics_enabled']=args.recorder_diagnostics
     report['provider_diagnostics_enabled']=args.provider_diagnostics
     report['sensor_provider_diagnostics_enabled']=args.sensor_provider_diagnostics
+    report['start_diagnostics_enabled']=args.start_diagnostics
     report['command_diagnostics_enabled']=args.command_diagnostics
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
@@ -161,7 +164,7 @@ def main():
         for role,name in lab.containers.items():
             command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
                 'ros2/robotweax_srt_bridge_demo/scripts/m3_scenario.py','--role',role,'--run',inside,
-                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
+                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200']+(['--start-diagnostics'] if args.start_diagnostics else [])+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
             log=(run/(role+'-scenario.log')).open('w')
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False

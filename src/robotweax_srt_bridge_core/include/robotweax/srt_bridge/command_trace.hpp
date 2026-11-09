@@ -10,7 +10,8 @@ enum class CommandTracePoint : unsigned {
     mailbox_flushed=20,input_dropped,make_rejected,queue_rejected,outbound_dropped,
     provider_sent,provider_error,outbound_flushed,transport_stopping,clock_deferred,session_action,link_lost,
     control_admission,peer_error_received,receiver_worker_result,
-    receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected,receiver_expiry_admission
+    receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected,receiver_expiry_admission,
+    start_submission,start_check,execute_submission,worker_start,start_declined
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
@@ -35,6 +36,14 @@ struct CommandTraceEvent {
     std::uint64_t expiry_deadline_ns=0;unsigned budget_ms=0; // Point39 qualified expiry proof.
     unsigned clock_error=0,age_error=0; // Point32: post-admission clock state and returned AgeResult error.
     // age_error is meaningful for COMMAND freshness decisions, not QUERY/identity rejection.
+    // Points40..44 only. Local diagnostics, not IPC/wire authority.
+    std::uint64_t check_token=0,worker_token=0,grant_generation=0,grant_deadline_ns=0,command_deadline_ns=0;
+    std::uint32_t grant_slot=UINT32_MAX;
+    bool start_granted=false,worker_observation_available=false;
+    std::uint64_t consume_ns=0,consume_deadline_ns=0,second_gate_ns=0,second_gate_deadline_ns=0;
+    unsigned consume_result=0;
+    bool second_gate_checked=false,handler_invoked=false;
+    unsigned terminal_state=0,terminal_reason=0;
 };
 enum class CommandTraceProducer : unsigned { coordinator=0,transport=1 };
 // Two fixed SPSC lanes: exactly one coordinator producer and one transport

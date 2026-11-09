@@ -16,14 +16,16 @@ struct alignas(64) Slot {
     alignas(std::atomic_ref<std::uint64_t>::required_alignment) std::uint64_t word=0;
     std::uint64_t deadline=0;
     Identity id{};Digest hash{};
+    std::uint64_t observation_ready=0;
+    WorkerStartObservation observation{};
 };
 std::uint64_t word(std::uint64_t generation,State state){return (generation<<3)|unsigned(state);}
 std::atomic_ref<std::uint64_t> atomic(Slot& slot){return std::atomic_ref(slot.word);}
 void revoke_slot(Slot& slot){auto value=atomic(slot).load(std::memory_order_acquire);while((value&mask)==unsigned(State::prepared)||(value&mask)==unsigned(State::granted)){
     if(atomic(slot).compare_exchange_weak(value,(value&~mask)|unsigned(State::revoked),std::memory_order_acq_rel))break;}}
 }
-struct Pool::Mapping {std::uint64_t magic=execution_detail::magic,version=1;std::array<Slot,64> slots{};};
-std::shared_ptr<Pool> Pool::create(){
+struct Pool::Mapping {std::uint64_t magic=execution_detail::magic,version=2,flags=0;std::array<Slot,64> slots{};};
+std::shared_ptr<Pool> Pool::create(bool diagnostics){
 #ifndef __linux__
     throw std::runtime_error("execution pool requires qualified Linux memfd atomics");
 #else
@@ -33,7 +35,7 @@ std::shared_ptr<Pool> Pool::create(){
     if(pool->fd_<0||ftruncate(pool->fd_,sizeof(Mapping)))throw std::runtime_error("execution memfd allocation failed");
     void* memory=mmap(nullptr,sizeof(Mapping),PROT_READ|PROT_WRITE,MAP_SHARED,pool->fd_,0);
     if(memory==MAP_FAILED)throw std::runtime_error("execution mapping failed");
-    pool->mapping_=new(memory) Mapping;
+    pool->mapping_=new(memory) Mapping;pool->mapping_->flags=diagnostics?1:0;
     if(fcntl(pool->fd_,F_ADD_SEALS,F_SEAL_GROW|F_SEAL_SHRINK|F_SEAL_SEAL)<0)throw std::runtime_error("execution sealing failed");
     return pool;
 #endif
@@ -50,9 +52,22 @@ std::shared_ptr<Pool> Pool::map(int fd){
     void* memory=mmap(nullptr,sizeof(Mapping),PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
     if(memory==MAP_FAILED)throw std::runtime_error("execution remap failed");
     pool->mapping_=static_cast<Mapping*>(memory);
-    if(pool->mapping_->magic!=magic||pool->mapping_->version!=1)throw std::runtime_error("invalid execution mapping header");
+    if(pool->mapping_->magic!=magic||pool->mapping_->version!=2||pool->mapping_->flags>1)throw std::runtime_error("invalid execution mapping header");
     return pool;
 #endif
+}
+bool Pool::diagnostics_enabled()const noexcept{return mapping_->flags==1;}
+void Pool::publish_observation(std::uint32_t i,std::uint64_t generation,const WorkerStartObservation& observation)noexcept{
+    if(!diagnostics_enabled()||i>=64||!generation)return;
+    auto& slot=mapping_->slots[i];
+    if((atomic(slot).load(std::memory_order_acquire)>>3)!=generation||std::atomic_ref(slot.observation_ready).load(std::memory_order_acquire))return;
+    slot.observation=observation;std::atomic_ref(slot.observation_ready).store(generation,std::memory_order_release);
+}
+std::optional<WorkerStartObservation> Pool::observation(const Record& record)const noexcept{
+    if(!diagnostics_enabled()||record.slot>=64||!record.generation)return {};
+    auto& slot=mapping_->slots[record.slot];
+    if((atomic(slot).load(std::memory_order_acquire)>>3)!=record.generation||std::atomic_ref(slot.observation_ready).load(std::memory_order_acquire)!=record.generation)return {};
+    return slot.observation;
 }
 Pool::~Pool(){if(mapping_)munmap(mapping_,sizeof(Mapping));if(fd_>=0)close(fd_);}
 Record::~Record(){if(pool&&slot!=UINT32_MAX)pool->release(*this);}
@@ -61,6 +76,7 @@ std::shared_ptr<Record> Pool::allocate(const JournalEntry& entry,std::string loc
     for(std::size_t i=0;i<mapping_->slots.size();++i){auto& slot=mapping_->slots[i];const auto old=atomic(slot).load(std::memory_order_acquire);
         if((old&mask)!=unsigned(State::free)||(old>>3)==max_generation)continue;
         record->slot=i;record->generation=(old>>3)+1;slot.id=entry.request_id;slot.hash=entry.payload_hash;slot.deadline=entry.context.deadline_ns;
+        slot.observation={};std::atomic_ref(slot.observation_ready).store(0,std::memory_order_relaxed);
         atomic(slot).store(word(record->generation,State::prepared),std::memory_order_release);return record;
     }
     return {};

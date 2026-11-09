@@ -4,7 +4,7 @@ import json
 POINTS={1:'endpoint_started',2:'session_changed',3:'invalidate_requested',4:'invalidate_completed',
     5:'sender_admission',6:'submit_result',7:'worker_unknown',8:'endpoint_stopping',9:'endpoint_stopped',
     20:'mailbox_flushed',21:'input_dropped',22:'make_rejected',23:'queue_rejected',24:'outbound_dropped',
-    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred',30:'session_action',31:'link_lost',32:'control_admission',33:'peer_error_received',34:'receiver_worker_result',35:'receiver_deferred',36:'receiver_resumed',37:'receiver_retained_dropped',38:'receiver_capacity_rejected',39:'receiver_expiry_admission'}
+    25:'provider_sent',26:'provider_error',27:'outbound_flushed',28:'transport_stopping',29:'clock_deferred',30:'session_action',31:'link_lost',32:'control_admission',33:'peer_error_received',34:'receiver_worker_result',35:'receiver_deferred',36:'receiver_resumed',37:'receiver_retained_dropped',38:'receiver_capacity_rejected',39:'receiver_expiry_admission',40:'start_submission',41:'start_check',42:'execute_submission',43:'worker_start',44:'start_declined'}
 REASONS={0:'none',1:'session_changed',2:'abandoned_submit',3:'context_mismatch',4:'proof_revoked',
     5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown',11:'socket_state',12:'security_timeout',13:'epoll_error',14:'receive_error',15:'wire_decode',16:'session_decision'}
 
@@ -37,6 +37,9 @@ def summarize(path):
             if event['point']>=35 and event['detail']!=6:raise ValueError('retention observation requires COMMAND')
             if type(event.get('value')) is not int or not (1 if event['point']==33 else 0)<=event['value']<=maximum:raise ValueError('invalid admission error enum')
             if event['point'] in (32,36) and (not 0<event['evaluated_ns']<=event['monotonic_ns'] or not 0<=event['clock_error']<=9 or not 0<=event['age_error']<=9):raise ValueError('invalid admission clock metadata')
+        if event['point'] in range(40,45):
+            from m3_start_trace_analysis import validate
+            validate(event)
         if event['point']==39:
             for key in ('age_lower_ns','age_upper_ns','expiry_deadline_ns','budget_ms'):
                 if type(event.get(key)) is not int:raise ValueError('invalid expiry proof metadata')

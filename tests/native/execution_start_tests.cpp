@@ -19,8 +19,8 @@ void ready(JournalWorker& w){WorkerReply reply;until([&]{w.poll(reply);return w.
 WorkerReply rpc(JournalWorker& w,const WorkerRequest& q){WorkerSubmission submitted;until([&]{submitted=w.submit(q);return submitted.result!=WorkerSubmit::busy;},"worker busy");check(submitted.result==WorkerSubmit::queued,"worker request rejected");WorkerReply reply;until([&]{return w.poll(reply);},"worker reply missing");check(reply.token==submitted.token&&!reply.test_paused,"wrong worker reply");return reply;}
 void scenario(const std::string& ip,const std::filesystem::path& directory,unsigned phase){
     const auto key=secret();auto operator_config=config(Role::listener,ip,key);TransportOwner op(operator_config);until([&]{return op.snapshot().control_port!=0;},"listen timeout");
-    auto robot_config=config(Role::caller,ip,key);if(phase==6)robot_config.session.clock.max_probe_age_ns=1500000000ULL;robot_config.control.port=op.snapshot().control_port;robot_config.sensor.port=op.snapshot().sensor_port;TransportOwner robot(robot_config);until([&]{return op.snapshot().state==SessionState::active&&robot.snapshot().state==SessionState::active;},"session timeout");
-    const auto sender_options=options(operator_config,directory/"sender.sqlite",JournalSide::sender);auto receiver_options=options(robot_config,directory/"receiver.sqlite",JournalSide::receiver);receiver_options.test_handler_pause=phase>=4?1:phase;
+    auto robot_config=config(Role::caller,ip,key);robot_config.command_trace=std::make_shared<CommandTrace>();robot_config.start_diagnostics=true;if(phase==6)robot_config.session.clock.max_probe_age_ns=1500000000ULL;robot_config.control.port=op.snapshot().control_port;robot_config.sensor.port=op.snapshot().sensor_port;TransportOwner robot(robot_config);until([&]{return op.snapshot().state==SessionState::active&&robot.snapshot().state==SessionState::active;},"session timeout");
+    const auto sender_options=options(operator_config,directory/"sender.sqlite",JournalSide::sender);auto receiver_options=options(robot_config,directory/"receiver.sqlite",JournalSide::receiver);receiver_options.test_handler_pause=phase>=4?1:phase;receiver_options.start_diagnostics=true;
     JournalWorker sender(sender_options),receiver(receiver_options);ready(sender);ready(receiver);
     WorkerRequest q;q.operation=WorkerOperation::admit;q.request_id=random_identity();q.route=100;q.command={100,5000,0,1};const auto origin=now();q.context={op.snapshot().context.session,operator_config.session.local_epoch,origin,origin+5000000000ULL};
     auto admitted=rpc(sender,q);check(admitted.ticket.has_value(),"missing sender ticket");auto send_context=op.snapshot().context;if(phase==5)send_context.sensor_generation=0;until([&]{return op.submit_command(send_context,std::move(*admitted.ticket))==SubmitResult::queued;},"command send failed");
@@ -43,7 +43,14 @@ void scenario(const std::string& ip,const std::filesystem::path& directory,unsig
             check(receiver.resume_test_barrier(),"handler resume failed");until([&]{return receiver.poll(reply);},"resumed execution reply missing");check(!reply.test_paused&&reply.token==submitted.token,"wrong resumed reply");
         }
     }
-    if(phase!=3){const auto expected=(phase==1||phase==6)?CommandState::rejected:phase==4?CommandState::expired:CommandState::succeeded;
+    if(phase!=3){
+        check(reply.start_observation.has_value(),"missing explicit worker start observation");const auto& o=*reply.start_observation;
+        check(o.consume_ns>0&&o.consume_deadline_ns==granted.deadline_ns,"wrong consumed grant deadline");
+        if(phase==1)check(o.consume_result==3&&!o.second_gate_checked&&!o.handler_invoked,"revoked consume branch lost");
+        else if(phase==4||phase==6)check((o.consume_result==2||o.consume_result==3)&&o.consume_ns>=granted.deadline_ns&&!o.second_gate_checked&&!o.handler_invoked,"elapsed consume branch lost");
+        else check(o.consume_result==1&&o.second_gate_checked&&o.second_gate_ns<o.second_gate_deadline_ns&&o.handler_invoked,"successful worker gates lost");
+        std::cout<<"WORKER_START_OBSERVATION {\"phase\":"<<phase<<",\"consume_result\":"<<o.consume_result<<",\"consume_ns\":"<<o.consume_ns<<",\"consume_deadline_ns\":"<<o.consume_deadline_ns<<",\"second_gate_ns\":"<<o.second_gate_ns<<",\"second_gate_deadline_ns\":"<<o.second_gate_deadline_ns<<",\"handler_invoked\":"<<(o.handler_invoked?"true":"false")<<"}\n";
+        const auto expected=(phase==1||phase==6)?CommandState::rejected:phase==4?CommandState::expired:CommandState::succeeded;
         if(!reply.journal||reply.journal.entry->state!=expected){std::cerr<<"phase="<<phase<<" expected="<<int(expected)<<" actual="<<(reply.journal.entry?int(reply.journal.entry->state):-1)<<" reason="<<(reply.journal.entry?int(reply.journal.entry->reason):-1)<<"\n";}check(reply.journal&&reply.journal.entry->state==expected,"wrong fenced handler result");check(reply.effects==((phase==1||phase==4||phase==6)?0U:1U),"revocation/expiry allowed effect or running effect lost");
         q.operation=WorkerOperation::get;auto stored=rpc(receiver,q);check(stored.journal.entry->state==expected&&!stored.dispatch,"GET minted a start ticket");check(receiver.join(),"receiver stop failed");}
     check(sender.join(),"sender stop failed");op.request_stop();op.join();robot.request_stop();robot.join();

@@ -118,6 +118,7 @@ struct TransportOwner::Impl {
     }
     explicit Impl(TransportConfig c):config(std::move(c)),control_address(config.control),sensor_address(config.sensor),
         session(config.session),queues(config.session.manifest),budget(config.bandwidth,monotonic_ns()) {
+        if(config.start_diagnostics&&!config.command_trace)throw std::invalid_argument("start diagnostics require command trace");
         if(control_address.ipv6!=sensor_address.ipv6||config.passphrase.size()<10||config.passphrase.size()>79||
            (config.session.role==Role::caller&&(!config.control.port||!config.sensor.port)))throw std::invalid_argument("invalid transport endpoints or credential length");
         for(const auto& route:config.session.manifest.routes())route_ids[route_count++]=route.id;
@@ -441,6 +442,7 @@ struct TransportOwner::Impl {
             }
             if(work.proof){
                 auto& record=*work.proof;
+                if(config.start_diagnostics){result.grant_slot=record.slot;result.grant_generation=record.generation;}
                 if(result.error==SessionError::none){
                     result.deadline_ns=std::min(result.deadline_ns,record.entry.context.deadline_ns);
                     const auto clock_deadline=session.clock_deadline();
@@ -454,6 +456,17 @@ struct TransportOwner::Impl {
                     }
                 }
                 if(!result.start_granted)record.pool->revoke(record);
+                if(config.start_diagnostics){
+                    result.clock_deadline_ns=session.clock_deadline().value_or(0);
+                    CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=CommandTracePoint::start_check;
+                    e.request=record.entry.request_id;e.route=record.entry.route;e.session=work.context.session;e.owner_epoch=config.session.local_epoch;
+                    e.entry_owner_epoch=record.entry.owner_epoch;e.control_generation=work.context.control_generation;e.sensor_generation=work.context.sensor_generation;
+                    e.detail=6;e.request_sequence=work.envelope.sequence;e.origin_ns=record.entry.context.source_monotonic_ns;
+                    e.check_token=result.token;e.evaluated_ns=result.evaluated_ns;e.clock_deadline_ns=result.clock_deadline_ns;e.clock_error=unsigned(session.clock_state());
+                    e.value=unsigned(result.error);e.start_granted=result.start_granted;e.grant_slot=record.slot;e.grant_generation=record.generation;
+                    e.grant_deadline_ns=result.start_granted?result.deadline_ns:0;e.command_deadline_ns=record.entry.context.deadline_ns;
+                    config.command_trace->record(CommandTraceProducer::transport,e);
+                }
             }
             std::lock_guard lock(mutex);checks[at].result=result;checks[at].state=2;
         }
