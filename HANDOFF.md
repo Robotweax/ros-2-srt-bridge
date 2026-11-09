@@ -4133,3 +4133,41 @@ and comparison limits remain. This plan creates no waiver or merge permission.
 - Preparation task complete; all38 live slots disabled/unscheduled. Next live
   stage, only if separately authorized: strict9-case N3 then fixed N0/N4/N1/N2/N5
   order, stop first failed gate. M3notaccepted/PR2draft/Intrinsic-M4untouched.
+
+
+### 2026-11-09 — Authorized strict N3 cohort;8 PASS then shutdown FAIL
+
+- User explicitly authorizes exact9-case N3 on frozen matched build, no tuning,
+  stop first failed gate, remaining stages disabled. Original freeze still matches
+  before/after:13 candidate entries,86 native inputs, source/helper/nativefixture/
+  provider/image/preserved chain. No frozen source/tool/binary change or build.
+- General dispatcher requires38-case grant. New evidence-local run-n3-only.py
+  is hash-bound with a precise9-case grant, using unchanged frozen single-case
+  adapters, strict assessor and sequence controller. No broad grant fabricated;
+  all29 other slots explicit disabled. Two mocked driver controls pass (nine-only
+  success path, first failed assessment stops). Prior440 suite retained, not rerun.
+- Fresh `.local/m3-n3-frozen-cohort-20261109T192408181359Z`: seeds1701/2903/4211,
+  baseline/one/two-loss each30s, exact declared order, no retries. First8 pass full
+  independent strict/raw assessment and owned cleanup before subsequent launch.
+  All first8 zero source skips,30.053400722..30.059300180s, cadence within1%, six
+  balances0, complete trace/capture identities/populations, per-route age buckets
+  <=60ms IMU/37ms joints. Reduction/missing counts remain; no lossless/physical age
+  inference. New two-loss2903 passes; original older failed cohort stays failed.
+- First failure is finalcase N3-two-loss-4211: operator-bridge-0 does not exit
+  during unchanged5s SIGINT wait; force-killed/-9 after~5.011041044s. Robot source
+  and bridge exit0 without force. Scenario exitsnonzero, strict assessor refuses;
+  no later launch. Cause of shutdown delay not established. Fault restored, each
+  selected classifier1drop; postmeasurement source/SDK/typed accounting/capture
+  revalidation not reached after child failure and cannot be inferred PASS.
+- Cohort FAIL (8strictPASS/1FAIL), no N3 slots remain after case9 and all29 other
+  campaign slots remain disabled/unexecuted. Owned container/network/credential
+  cleanup confirmed all9 cases. Original full freeze still matches;9 older N3
+  result hashes match. No operator intervention/threshold increase/retry/expiry/
+  historical118 replay or cohortsplice. PrivateIPC4 unchanged, no N4fixture run.
+- `evidence/m3-n3-frozen-cohort-2026-11-09/README.md`, gate-report/campaign/grant/
+  preflight/postflight, eight strict proofs, failed original child/error records
+  and913 local raw hashes (~301MB) retained. Source/main/runtime code unchanged;
+  only documentation and new evidence-local scoped driver/control/publisher added.
+- Requested execution complete. Next action is retained-evidence/source diagnosis
+  of operator shutdown, then separate engineering/validation decision. Do not
+  auto-rerun two-loss4211 or start N0/N4/N1/N2/N5. M3notaccepted/PR2draft/M4untouched.

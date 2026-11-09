@@ -1,9 +1,9 @@
 # Delivery focus — 2026-11-09
 
-Campaign dispatch is wired and the isolated N4 fixture build/link is validated;
-440 offline Python tests pass ([evidence](evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md)).
-No fixture or campaign case was launched. All38 future cases remain disabled;
-M3 acceptance and live runtime qualification remain open. No tuning occurred.
+The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
+finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
+exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
+remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
 
 
 M0–M2 are accepted for the recorded Linux amd64/Jazzy simulator baseline. M3 is
@@ -13,7 +13,9 @@ The current comparison and acceptance decision is in
 `M3_COMPARISON_AND_ACCEPTANCE.md`: reporting complete, M3 completion not accepted
 under the unchanged plan. No new experiment or waiver is queued.
 `M3_CLOSURE_PLAN.md` now gives the concrete N3/current-build closure sequence;
-it is a planning artifact, with execution disabled and readiness blockers explicit.
+the authorized N3-only execution is now recorded as8 strict passes/final shutdown FAIL,
+with every later stage disabled. Next work is retained-evidence teardown diagnosis,
+not another experiment or a shutdown-budget increase.
 
 ## Execution rules
 

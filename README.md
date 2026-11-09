@@ -1,9 +1,9 @@
 # ROS 2 SRT Bridge
 
-Campaign dispatch is wired and the isolated N4 fixture build/link is validated;
-440 offline Python tests pass ([evidence](evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md)).
-No fixture or campaign case was launched. All38 future cases remain disabled;
-M3 acceptance and live runtime qualification remain open. No tuning occurred.
+The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
+finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
+exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
+remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
 
 
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small
@@ -40,7 +40,7 @@ complete: no general SRT superiority or DDS equivalence is established; M3 remai
 not accepted as complete under the unchanged plan. No new experiment, tuning,
 threshold waiver, N3 retry, DDS fallback, forced expiry or historical118 replay.
 The [closure plan](M3_CLOSURE_PLAN.md) now specifies the strict N3/current-build
-sequence and readiness gaps; it starts no experiments. PR2 stays draft;
+sequence and readiness gaps; the authorized N3 outcome above leaves later stages disabled. PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 

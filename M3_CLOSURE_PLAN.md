@@ -1,16 +1,17 @@
 # M3 acceptance closure plan — 2026-11-09
 
-**Plan prepared; execution is not scheduled or authorized by this document.**
-The current no-new-experiments instruction remains in force. The original planning step performed
-read-only checks and documentation changes: no tuning, build,
-traffic, fixture execution, journal recovery, expiry or replay. M3 remains open,
-PR2 draft and Intrinsic/M4 untouched. The existing
-[acceptance conclusion](M3_COMPARISON_AND_ACCEPTANCE.md) is unchanged.
+**Latest authorized N3 execution: FAIL,8 strict passes then a shutdown failure.**
+See [the frozen current-build cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md).
+The exact9-case N3-only scope was authorized and executed once, without tuning,
+rebuild or retry. Case9 two-loss4211 exceeded the existing5s operator bridge
+shutdown wait and was force-killed. No remaining stage was authorized or launched;
+all29 N0/N4/N1/N2/N5 cases remain disabled. M3 remains open, PR2 draft and M4 untouched.
 
-The route below keeps the strict N3 source-slot contract. It does not propose a
-relaxed threshold or a retry-until-pass program. A future request to execute a
-specified stage would need to explicitly change the current no-experiment scope;
-this plan does not start that stage automatically.
+The plan below preserves its fixed gates, original case order and historical
+planning snapshots. Neither the new8-case passing prefix nor the old5-case prefix
+closes N3. No automatic retry, cohort splice, threshold relaxation or stage
+advancement follows. Next work is retained-evidence/source diagnosis of the
+operator shutdown failure before a separate fix/qualification decision.
 
 ## 1. One candidate, with a concrete coverage ledger
 
@@ -26,10 +27,10 @@ verify this candidate. SDK81/ROS41/host413 are retained results, not new test ru
 | Area | Credit available now | Closure needed for this candidate |
 |---|---|---|
 |SDK/ROS components|Recorded SDK81/ROS41, current recovery/receipt/execution guards|Reuse; do not repeat solely for prose or unchanged native inputs|
-|N3|Five qualified prefix cases; fault subgates and original failure retained|One separately frozen strict9-case candidate cohort, if later authorized; no old-cohort splice|
+|N3|New candidate cohort:8 strict prefix passes, case9 shutdown FAIL; original cohort failure retained|Diagnose operator shutdown from retained evidence; no retry, splice, threshold relaxation or later-stage advance|
 |Combined SRT N0|Native checks and30s sensor-only baseline are useful but different|One300s combined candidate control|
 |N1/N2|Historical3-seed600s series retain their own binary scope|Six600s candidate cases|
-|N4|Current component guards plus earlier bounded network/ROS evidence|Port old fixtures to this candidate, then the19 bounded cases below|
+|N4|Current component guards, matched fixture source/build-link preparation and earlier bounded network/ROS evidence|All19 current-build runtime cases remain disabled; build/link alone is not qualification|
 |SRT N5|Prior probe-build128/128 and full retained publication-age audit|Three300s candidate cases; fresh plan, not resumption of old stopped4211|
 |DDS comparison|Current-build N0 8/8 and N5 cold-start failure already documented|Reuse the measured outcomes and explicit age/capture/security limitations; no new DDS experiment proposed|
 |Final acceptance|Comparison reporting is complete|Review candidate-labelled coverage without waiving N3, mixing builds or asserting unsupported superiority|
@@ -52,8 +53,9 @@ barriers/watchdogs are separate fixture settings, not production overrides.
 The dispatcher is wired and the isolated native fixture compile/link is now
 validated under the user's explicit preparation-only scope.440 offline Python
 checks pass. See [current build/readiness evidence](evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md).
-No fixture or campaign case was launched; all38 cases remain disabled. The
-original planning snapshots retain their original scope.
+That preparation step launched no fixture or campaign case. The later N3-only
+execution is recorded above; all29 other cases remain disabled. Original planning
+snapshots retain their original scope.
 
 1. **Strict dispatch and assessment.** `tools/m3_campaign_dispatcher.py` now
    maps all38 declared slots to single-case adapters. It checks the complete

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py", line 80, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py", line 76, in main
+    try:driver.cleanup()
+        ^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py", line 22, in cleanup
+    if not report['passed']:raise RuntimeError('abnormal child shutdown; see '+self.args.role+'-child-shutdown.json')
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: abnormal child shutdown; see operator-child-shutdown.json

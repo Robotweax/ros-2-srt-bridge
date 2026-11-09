@@ -1,0 +1,9148 @@
+{
+  "status": "failed",
+  "candidate_id": "sender-reconcile-929d1f7c7727",
+  "candidate_manifest_sha256": "929d1f7c7727b6c9ba363762074557873d0ffeb6ed6a2b4ab75957d341ee0fc7",
+  "frozen_source_commit": "4f986098a06838b328ce7a065dae98af003aeacb",
+  "original_freeze_sha256": "18ce5ca28b9c789e246b85b0bdb44ec381b25cf72dac6f817fb1db1d92c57a51",
+  "driver_sha256": "3ec6c226fe888f60a0bff574e9d6dac2faff9ac3b2cc8e74f233f6d6acd00d90",
+  "authorized_cases": 9,
+  "executed_cases": 9,
+  "strict_passed": 8,
+  "failed_case": "N3-two-loss-4211",
+  "no_retry": true,
+  "no_tuning": true,
+  "production_rebuild": false,
+  "first_failed_gate": {
+    "gate": "scenario_owned_child_shutdown",
+    "role": "operator",
+    "child": "operator-bridge-0",
+    "wait_budget_seconds": 5,
+    "forced_kill": true,
+    "returncode": -9,
+    "error": "child exceeded shutdown deadline",
+    "signal_to_reap_ns": 5011041044,
+    "cause": "not established from this cohort; no rerun or threshold change"
+  },
+  "disabled_case_ids": [
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "all_later_stages_disabled": true,
+  "M3_complete": false,
+  "PR2_keep_draft": true,
+  "M4_started": false,
+  "rows": [
+    {
+      "id": "N3-baseline-1701",
+      "seed": 1701,
+      "losses": 0,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-baseline-1701",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "3457a7b8edc79e5ee52bdb8c5e15ca22468636f84004c8cea26f070c4cdc9ff8",
+      "provenance_sha256": "ded2320638d2475a3bb0daae049003c0a67e98dbcea918ea07ce3e986cc1677b",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 140,
+              "begin_ns": 50937990440,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 50938014273,
+              "signal_end_ns": 50938125440,
+              "end_ns": 51157375856,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 50937392565,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 50937414648,
+              "signal_end_ns": 50937615106,
+              "end_ns": 51157458398,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 51157475148,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 51157488523,
+              "signal_end_ns": 51157507606,
+              "end_ns": 51477755732,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": null,
+      "selected_fault_counters": null,
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30055706514,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6012,
+            "target_hz": 200,
+            "actual_hz": 200.02857018847985,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5787,
+            "unobserved": 225
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.00714254711996,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1486,
+            "unobserved": 17
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            28
+          ],
+          [
+            1,
+            54
+          ],
+          [
+            1,
+            60
+          ],
+          [
+            1,
+            66
+          ],
+          [
+            1,
+            68
+          ],
+          [
+            1,
+            97
+          ],
+          [
+            1,
+            128
+          ],
+          [
+            1,
+            162
+          ],
+          [
+            1,
+            187
+          ],
+          [
+            1,
+            219
+          ],
+          [
+            1,
+            250
+          ],
+          [
+            1,
+            279
+          ],
+          [
+            1,
+            309
+          ],
+          [
+            1,
+            349
+          ],
+          [
+            1,
+            378
+          ],
+          [
+            1,
+            409
+          ],
+          [
+            1,
+            433
+          ],
+          [
+            1,
+            457
+          ],
+          [
+            1,
+            479
+          ],
+          [
+            1,
+            515
+          ],
+          [
+            1,
+            548
+          ],
+          [
+            1,
+            577
+          ],
+          [
+            1,
+            605
+          ],
+          [
+            1,
+            637
+          ],
+          [
+            1,
+            668
+          ],
+          [
+            1,
+            702
+          ],
+          [
+            1,
+            732
+          ],
+          [
+            1,
+            766
+          ],
+          [
+            1,
+            800
+          ],
+          [
+            1,
+            831
+          ],
+          [
+            1,
+            852
+          ],
+          [
+            1,
+            876
+          ],
+          [
+            1,
+            905
+          ],
+          [
+            1,
+            932
+          ],
+          [
+            1,
+            962
+          ],
+          [
+            1,
+            993
+          ],
+          [
+            1,
+            1023
+          ],
+          [
+            1,
+            1045
+          ],
+          [
+            1,
+            1078
+          ],
+          [
+            1,
+            1104
+          ],
+          [
+            1,
+            1127
+          ],
+          [
+            1,
+            1149
+          ],
+          [
+            1,
+            1175
+          ],
+          [
+            1,
+            1199
+          ],
+          [
+            1,
+            1233
+          ],
+          [
+            1,
+            1263
+          ],
+          [
+            1,
+            1293
+          ],
+          [
+            1,
+            1325
+          ],
+          [
+            1,
+            1358
+          ],
+          [
+            1,
+            1389
+          ],
+          [
+            1,
+            1414
+          ],
+          [
+            1,
+            1431
+          ],
+          [
+            1,
+            1466
+          ],
+          [
+            1,
+            1490
+          ],
+          [
+            1,
+            1517
+          ],
+          [
+            1,
+            1551
+          ],
+          [
+            1,
+            1580
+          ],
+          [
+            1,
+            1612
+          ],
+          [
+            1,
+            1641
+          ],
+          [
+            1,
+            1668
+          ],
+          [
+            1,
+            1694
+          ],
+          [
+            1,
+            1723
+          ],
+          [
+            1,
+            1749
+          ],
+          [
+            1,
+            1781
+          ],
+          [
+            1,
+            1809
+          ],
+          [
+            1,
+            1836
+          ],
+          [
+            1,
+            1858
+          ],
+          [
+            1,
+            1890
+          ],
+          [
+            1,
+            1925
+          ],
+          [
+            1,
+            1955
+          ],
+          [
+            1,
+            1983
+          ],
+          [
+            1,
+            2013
+          ],
+          [
+            1,
+            2045
+          ],
+          [
+            1,
+            2068
+          ],
+          [
+            1,
+            2084
+          ],
+          [
+            1,
+            2112
+          ],
+          [
+            1,
+            2141
+          ],
+          [
+            1,
+            2171
+          ],
+          [
+            1,
+            2200
+          ],
+          [
+            1,
+            2232
+          ],
+          [
+            1,
+            2258
+          ],
+          [
+            1,
+            2285
+          ],
+          [
+            1,
+            2308
+          ],
+          [
+            1,
+            2332
+          ],
+          [
+            1,
+            2365
+          ],
+          [
+            1,
+            2392
+          ],
+          [
+            1,
+            2419
+          ],
+          [
+            1,
+            2448
+          ],
+          [
+            1,
+            2458
+          ],
+          [
+            1,
+            2461
+          ],
+          [
+            1,
+            2469
+          ],
+          [
+            1,
+            2474
+          ],
+          [
+            1,
+            2475
+          ],
+          [
+            1,
+            2486
+          ],
+          [
+            1,
+            2496
+          ],
+          [
+            1,
+            2497
+          ],
+          [
+            1,
+            2502
+          ],
+          [
+            1,
+            2506
+          ],
+          [
+            1,
+            2535
+          ],
+          [
+            1,
+            2565
+          ],
+          [
+            1,
+            2590
+          ],
+          [
+            1,
+            2626
+          ],
+          [
+            1,
+            2646
+          ],
+          [
+            1,
+            2671
+          ],
+          [
+            1,
+            2695
+          ],
+          [
+            1,
+            2722
+          ],
+          [
+            1,
+            2748
+          ],
+          [
+            1,
+            2774
+          ],
+          [
+            1,
+            2802
+          ],
+          [
+            1,
+            2825
+          ],
+          [
+            1,
+            2854
+          ],
+          [
+            1,
+            2889
+          ],
+          [
+            1,
+            2916
+          ],
+          [
+            1,
+            2939
+          ],
+          [
+            1,
+            2972
+          ],
+          [
+            1,
+            3008
+          ],
+          [
+            1,
+            3025
+          ],
+          [
+            1,
+            3052
+          ],
+          [
+            1,
+            3087
+          ],
+          [
+            1,
+            3117
+          ],
+          [
+            1,
+            3151
+          ],
+          [
+            1,
+            3180
+          ],
+          [
+            1,
+            3208
+          ],
+          [
+            1,
+            3243
+          ],
+          [
+            1,
+            3269
+          ],
+          [
+            1,
+            3304
+          ],
+          [
+            1,
+            3329
+          ],
+          [
+            1,
+            3360
+          ],
+          [
+            1,
+            3387
+          ],
+          [
+            1,
+            3410
+          ],
+          [
+            1,
+            3437
+          ],
+          [
+            1,
+            3465
+          ],
+          [
+            1,
+            3494
+          ],
+          [
+            1,
+            3522
+          ],
+          [
+            1,
+            3557
+          ],
+          [
+            1,
+            3589
+          ],
+          [
+            1,
+            3615
+          ],
+          [
+            1,
+            3647
+          ],
+          [
+            1,
+            3679
+          ],
+          [
+            1,
+            3706
+          ],
+          [
+            1,
+            3734
+          ],
+          [
+            1,
+            3763
+          ],
+          [
+            1,
+            3791
+          ],
+          [
+            1,
+            3824
+          ],
+          [
+            1,
+            3853
+          ],
+          [
+            1,
+            3891
+          ],
+          [
+            1,
+            3920
+          ],
+          [
+            1,
+            3948
+          ],
+          [
+            1,
+            3973
+          ],
+          [
+            1,
+            4001
+          ],
+          [
+            1,
+            4031
+          ],
+          [
+            1,
+            4061
+          ],
+          [
+            1,
+            4085
+          ],
+          [
+            1,
+            4117
+          ],
+          [
+            1,
+            4141
+          ],
+          [
+            1,
+            4176
+          ],
+          [
+            1,
+            4204
+          ],
+          [
+            1,
+            4230
+          ],
+          [
+            1,
+            4263
+          ],
+          [
+            1,
+            4286
+          ],
+          [
+            1,
+            4315
+          ],
+          [
+            1,
+            4335
+          ],
+          [
+            1,
+            4364
+          ],
+          [
+            1,
+            4387
+          ],
+          [
+            1,
+            4417
+          ],
+          [
+            1,
+            4446
+          ],
+          [
+            1,
+            4475
+          ],
+          [
+            1,
+            4503
+          ],
+          [
+            1,
+            4531
+          ],
+          [
+            1,
+            4566
+          ],
+          [
+            1,
+            4603
+          ],
+          [
+            1,
+            4640
+          ],
+          [
+            1,
+            4668
+          ],
+          [
+            1,
+            4696
+          ],
+          [
+            1,
+            4720
+          ],
+          [
+            1,
+            4738
+          ],
+          [
+            1,
+            4740
+          ],
+          [
+            1,
+            4766
+          ],
+          [
+            1,
+            4792
+          ],
+          [
+            1,
+            4819
+          ],
+          [
+            1,
+            4857
+          ],
+          [
+            1,
+            4884
+          ],
+          [
+            1,
+            4911
+          ],
+          [
+            1,
+            4945
+          ],
+          [
+            1,
+            4968
+          ],
+          [
+            1,
+            4995
+          ],
+          [
+            1,
+            5025
+          ],
+          [
+            1,
+            5052
+          ],
+          [
+            1,
+            5074
+          ],
+          [
+            1,
+            5103
+          ],
+          [
+            1,
+            5133
+          ],
+          [
+            1,
+            5159
+          ],
+          [
+            1,
+            5185
+          ],
+          [
+            1,
+            5215
+          ],
+          [
+            1,
+            5240
+          ],
+          [
+            1,
+            5269
+          ],
+          [
+            1,
+            5306
+          ],
+          [
+            1,
+            5329
+          ],
+          [
+            1,
+            5365
+          ],
+          [
+            1,
+            5403
+          ],
+          [
+            1,
+            5432
+          ],
+          [
+            1,
+            5463
+          ],
+          [
+            1,
+            5491
+          ],
+          [
+            1,
+            5505
+          ],
+          [
+            1,
+            5507
+          ],
+          [
+            1,
+            5515
+          ],
+          [
+            1,
+            5547
+          ],
+          [
+            1,
+            5576
+          ],
+          [
+            1,
+            5609
+          ],
+          [
+            1,
+            5638
+          ],
+          [
+            1,
+            5669
+          ],
+          [
+            1,
+            5692
+          ],
+          [
+            1,
+            5714
+          ],
+          [
+            1,
+            5746
+          ],
+          [
+            1,
+            5782
+          ],
+          [
+            1,
+            5806
+          ],
+          [
+            1,
+            5835
+          ],
+          [
+            1,
+            5860
+          ],
+          [
+            1,
+            5882
+          ],
+          [
+            1,
+            5912
+          ],
+          [
+            1,
+            5939
+          ],
+          [
+            1,
+            5967
+          ],
+          [
+            1,
+            5997
+          ],
+          [
+            2,
+            57
+          ],
+          [
+            2,
+            148
+          ],
+          [
+            2,
+            248
+          ],
+          [
+            2,
+            338
+          ],
+          [
+            2,
+            429
+          ],
+          [
+            2,
+            522
+          ],
+          [
+            2,
+            616
+          ],
+          [
+            2,
+            703
+          ],
+          [
+            2,
+            799
+          ],
+          [
+            2,
+            886
+          ],
+          [
+            2,
+            977
+          ],
+          [
+            2,
+            1075
+          ],
+          [
+            2,
+            1174
+          ],
+          [
+            2,
+            1261
+          ],
+          [
+            2,
+            1301
+          ],
+          [
+            2,
+            1402
+          ],
+          [
+            2,
+            1497
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5792,
+          "rounding": "up to 1ms",
+          "maximum_ms": 19,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1486,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14794,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7281,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "2a54ea61886ddcaf802f3d681eb00ea75f9a0b05d1f509fa27f2154bcd32d4db"
+    },
+    {
+      "id": "N3-one-loss-1701",
+      "seed": 1701,
+      "losses": 1,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-one-loss-1701",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "4208a4d583ab3fc20225b2039092a7adbd2670c29715e53877218075f06d867b",
+      "provenance_sha256": "66f9d5999cf4015fb7059554b3d1e2edd5fb7f5d888b4d907bf248788d06a596",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 102219818171,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 102219825338,
+              "signal_end_ns": 102219957588,
+              "end_ns": 102391821879,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 102222207879,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 102222214296,
+              "signal_end_ns": 102222342921,
+              "end_ns": 102391891629,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 102391908088,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 102391925588,
+              "signal_end_ns": 102391950129,
+              "end_ns": 102745358504,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30053640556,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6011,
+            "target_hz": 200,
+            "actual_hz": 200.0090467841822,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5785,
+            "unobserved": 226
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.010580155818644,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1487,
+            "unobserved": 16
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            11
+          ],
+          [
+            1,
+            37
+          ],
+          [
+            1,
+            59
+          ],
+          [
+            1,
+            81
+          ],
+          [
+            1,
+            107
+          ],
+          [
+            1,
+            137
+          ],
+          [
+            1,
+            159
+          ],
+          [
+            1,
+            178
+          ],
+          [
+            1,
+            208
+          ],
+          [
+            1,
+            225
+          ],
+          [
+            1,
+            246
+          ],
+          [
+            1,
+            270
+          ],
+          [
+            1,
+            298
+          ],
+          [
+            1,
+            326
+          ],
+          [
+            1,
+            345
+          ],
+          [
+            1,
+            371
+          ],
+          [
+            1,
+            398
+          ],
+          [
+            1,
+            427
+          ],
+          [
+            1,
+            463
+          ],
+          [
+            1,
+            487
+          ],
+          [
+            1,
+            515
+          ],
+          [
+            1,
+            540
+          ],
+          [
+            1,
+            560
+          ],
+          [
+            1,
+            585
+          ],
+          [
+            1,
+            608
+          ],
+          [
+            1,
+            637
+          ],
+          [
+            1,
+            665
+          ],
+          [
+            1,
+            687
+          ],
+          [
+            1,
+            716
+          ],
+          [
+            1,
+            743
+          ],
+          [
+            1,
+            772
+          ],
+          [
+            1,
+            804
+          ],
+          [
+            1,
+            833
+          ],
+          [
+            1,
+            859
+          ],
+          [
+            1,
+            887
+          ],
+          [
+            1,
+            912
+          ],
+          [
+            1,
+            942
+          ],
+          [
+            1,
+            963
+          ],
+          [
+            1,
+            992
+          ],
+          [
+            1,
+            1014
+          ],
+          [
+            1,
+            1035
+          ],
+          [
+            1,
+            1065
+          ],
+          [
+            1,
+            1093
+          ],
+          [
+            1,
+            1129
+          ],
+          [
+            1,
+            1161
+          ],
+          [
+            1,
+            1184
+          ],
+          [
+            1,
+            1207
+          ],
+          [
+            1,
+            1238
+          ],
+          [
+            1,
+            1263
+          ],
+          [
+            1,
+            1291
+          ],
+          [
+            1,
+            1322
+          ],
+          [
+            1,
+            1324
+          ],
+          [
+            1,
+            1349
+          ],
+          [
+            1,
+            1378
+          ],
+          [
+            1,
+            1406
+          ],
+          [
+            1,
+            1432
+          ],
+          [
+            1,
+            1466
+          ],
+          [
+            1,
+            1490
+          ],
+          [
+            1,
+            1513
+          ],
+          [
+            1,
+            1533
+          ],
+          [
+            1,
+            1562
+          ],
+          [
+            1,
+            1587
+          ],
+          [
+            1,
+            1617
+          ],
+          [
+            1,
+            1647
+          ],
+          [
+            1,
+            1680
+          ],
+          [
+            1,
+            1710
+          ],
+          [
+            1,
+            1739
+          ],
+          [
+            1,
+            1766
+          ],
+          [
+            1,
+            1797
+          ],
+          [
+            1,
+            1821
+          ],
+          [
+            1,
+            1843
+          ],
+          [
+            1,
+            1870
+          ],
+          [
+            1,
+            1907
+          ],
+          [
+            1,
+            1936
+          ],
+          [
+            1,
+            1965
+          ],
+          [
+            1,
+            1994
+          ],
+          [
+            1,
+            2020
+          ],
+          [
+            1,
+            2046
+          ],
+          [
+            1,
+            2066
+          ],
+          [
+            1,
+            2096
+          ],
+          [
+            1,
+            2128
+          ],
+          [
+            1,
+            2156
+          ],
+          [
+            1,
+            2186
+          ],
+          [
+            1,
+            2209
+          ],
+          [
+            1,
+            2235
+          ],
+          [
+            1,
+            2257
+          ],
+          [
+            1,
+            2273
+          ],
+          [
+            1,
+            2302
+          ],
+          [
+            1,
+            2331
+          ],
+          [
+            1,
+            2363
+          ],
+          [
+            1,
+            2367
+          ],
+          [
+            1,
+            2390
+          ],
+          [
+            1,
+            2418
+          ],
+          [
+            1,
+            2446
+          ],
+          [
+            1,
+            2471
+          ],
+          [
+            1,
+            2493
+          ],
+          [
+            1,
+            2515
+          ],
+          [
+            1,
+            2533
+          ],
+          [
+            1,
+            2555
+          ],
+          [
+            1,
+            2571
+          ],
+          [
+            1,
+            2599
+          ],
+          [
+            1,
+            2624
+          ],
+          [
+            1,
+            2653
+          ],
+          [
+            1,
+            2680
+          ],
+          [
+            1,
+            2705
+          ],
+          [
+            1,
+            2735
+          ],
+          [
+            1,
+            2763
+          ],
+          [
+            1,
+            2794
+          ],
+          [
+            1,
+            2824
+          ],
+          [
+            1,
+            2853
+          ],
+          [
+            1,
+            2885
+          ],
+          [
+            1,
+            2909
+          ],
+          [
+            1,
+            2943
+          ],
+          [
+            1,
+            2971
+          ],
+          [
+            1,
+            3003
+          ],
+          [
+            1,
+            3029
+          ],
+          [
+            1,
+            3053
+          ],
+          [
+            1,
+            3080
+          ],
+          [
+            1,
+            3103
+          ],
+          [
+            1,
+            3138
+          ],
+          [
+            1,
+            3165
+          ],
+          [
+            1,
+            3193
+          ],
+          [
+            1,
+            3226
+          ],
+          [
+            1,
+            3254
+          ],
+          [
+            1,
+            3280
+          ],
+          [
+            1,
+            3300
+          ],
+          [
+            1,
+            3331
+          ],
+          [
+            1,
+            3354
+          ],
+          [
+            1,
+            3389
+          ],
+          [
+            1,
+            3413
+          ],
+          [
+            1,
+            3435
+          ],
+          [
+            1,
+            3456
+          ],
+          [
+            1,
+            3486
+          ],
+          [
+            1,
+            3519
+          ],
+          [
+            1,
+            3554
+          ],
+          [
+            1,
+            3577
+          ],
+          [
+            1,
+            3610
+          ],
+          [
+            1,
+            3642
+          ],
+          [
+            1,
+            3668
+          ],
+          [
+            1,
+            3695
+          ],
+          [
+            1,
+            3714
+          ],
+          [
+            1,
+            3750
+          ],
+          [
+            1,
+            3782
+          ],
+          [
+            1,
+            3811
+          ],
+          [
+            1,
+            3840
+          ],
+          [
+            1,
+            3866
+          ],
+          [
+            1,
+            3893
+          ],
+          [
+            1,
+            3923
+          ],
+          [
+            1,
+            3954
+          ],
+          [
+            1,
+            3978
+          ],
+          [
+            1,
+            4009
+          ],
+          [
+            1,
+            4032
+          ],
+          [
+            1,
+            4059
+          ],
+          [
+            1,
+            4087
+          ],
+          [
+            1,
+            4113
+          ],
+          [
+            1,
+            4145
+          ],
+          [
+            1,
+            4180
+          ],
+          [
+            1,
+            4211
+          ],
+          [
+            1,
+            4237
+          ],
+          [
+            1,
+            4268
+          ],
+          [
+            1,
+            4290
+          ],
+          [
+            1,
+            4319
+          ],
+          [
+            1,
+            4325
+          ],
+          [
+            1,
+            4344
+          ],
+          [
+            1,
+            4369
+          ],
+          [
+            1,
+            4398
+          ],
+          [
+            1,
+            4417
+          ],
+          [
+            1,
+            4445
+          ],
+          [
+            1,
+            4471
+          ],
+          [
+            1,
+            4498
+          ],
+          [
+            1,
+            4526
+          ],
+          [
+            1,
+            4549
+          ],
+          [
+            1,
+            4576
+          ],
+          [
+            1,
+            4599
+          ],
+          [
+            1,
+            4628
+          ],
+          [
+            1,
+            4662
+          ],
+          [
+            1,
+            4697
+          ],
+          [
+            1,
+            4729
+          ],
+          [
+            1,
+            4756
+          ],
+          [
+            1,
+            4788
+          ],
+          [
+            1,
+            4823
+          ],
+          [
+            1,
+            4852
+          ],
+          [
+            1,
+            4875
+          ],
+          [
+            1,
+            4899
+          ],
+          [
+            1,
+            4927
+          ],
+          [
+            1,
+            4957
+          ],
+          [
+            1,
+            4982
+          ],
+          [
+            1,
+            5016
+          ],
+          [
+            1,
+            5041
+          ],
+          [
+            1,
+            5065
+          ],
+          [
+            1,
+            5093
+          ],
+          [
+            1,
+            5119
+          ],
+          [
+            1,
+            5144
+          ],
+          [
+            1,
+            5168
+          ],
+          [
+            1,
+            5198
+          ],
+          [
+            1,
+            5226
+          ],
+          [
+            1,
+            5251
+          ],
+          [
+            1,
+            5281
+          ],
+          [
+            1,
+            5310
+          ],
+          [
+            1,
+            5346
+          ],
+          [
+            1,
+            5371
+          ],
+          [
+            1,
+            5404
+          ],
+          [
+            1,
+            5428
+          ],
+          [
+            1,
+            5454
+          ],
+          [
+            1,
+            5474
+          ],
+          [
+            1,
+            5478
+          ],
+          [
+            1,
+            5504
+          ],
+          [
+            1,
+            5525
+          ],
+          [
+            1,
+            5555
+          ],
+          [
+            1,
+            5577
+          ],
+          [
+            1,
+            5602
+          ],
+          [
+            1,
+            5634
+          ],
+          [
+            1,
+            5666
+          ],
+          [
+            1,
+            5694
+          ],
+          [
+            1,
+            5716
+          ],
+          [
+            1,
+            5745
+          ],
+          [
+            1,
+            5772
+          ],
+          [
+            1,
+            5797
+          ],
+          [
+            1,
+            5823
+          ],
+          [
+            1,
+            5855
+          ],
+          [
+            1,
+            5874
+          ],
+          [
+            1,
+            5895
+          ],
+          [
+            1,
+            5924
+          ],
+          [
+            1,
+            5953
+          ],
+          [
+            1,
+            5983
+          ],
+          [
+            1,
+            6010
+          ],
+          [
+            2,
+            79
+          ],
+          [
+            2,
+            181
+          ],
+          [
+            2,
+            285
+          ],
+          [
+            2,
+            384
+          ],
+          [
+            2,
+            486
+          ],
+          [
+            2,
+            583
+          ],
+          [
+            2,
+            638
+          ],
+          [
+            2,
+            728
+          ],
+          [
+            2,
+            835
+          ],
+          [
+            2,
+            927
+          ],
+          [
+            2,
+            1024
+          ],
+          [
+            2,
+            1110
+          ],
+          [
+            2,
+            1204
+          ],
+          [
+            2,
+            1291
+          ],
+          [
+            2,
+            1399
+          ],
+          [
+            2,
+            1497
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5785,
+          "rounding": "up to 1ms",
+          "maximum_ms": 16,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 12
+        },
+        "joint": {
+          "count": 1487,
+          "rounding": "up to 1ms",
+          "maximum_ms": 31,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14789,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7275,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "cfa4f9d3cff232f4aa5c06e09eac134ac5c7b4ddaad131cb58bae65bbfe6f026"
+    },
+    {
+      "id": "N3-two-loss-1701",
+      "seed": 1701,
+      "losses": 2,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-two-loss-1701",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "8fa5b86951b1221678cc37365d0d062bffeef4f760def59579ef0f9631a53076",
+      "provenance_sha256": "33f45c5388732d87709f3aaa24a3eb3bae2814e0c111f922280b96baf4a0510a",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 153889447944,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 153889462777,
+              "signal_end_ns": 153889599902,
+              "end_ns": 154105377444,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 153889923652,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 153889931277,
+              "signal_end_ns": 153890033069,
+              "end_ns": 154057908236,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 154057924361,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 154057936902,
+              "signal_end_ns": 154057963236,
+              "end_ns": 154406854194,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30053400722,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6011,
+            "target_hz": 200,
+            "actual_hz": 200.0106429086997,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5767,
+            "unobserved": 244
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.010979253331506,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1482,
+            "unobserved": 21
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            35
+          ],
+          [
+            1,
+            63
+          ],
+          [
+            1,
+            89
+          ],
+          [
+            1,
+            117
+          ],
+          [
+            1,
+            149
+          ],
+          [
+            1,
+            174
+          ],
+          [
+            1,
+            205
+          ],
+          [
+            1,
+            233
+          ],
+          [
+            1,
+            263
+          ],
+          [
+            1,
+            292
+          ],
+          [
+            1,
+            307
+          ],
+          [
+            1,
+            332
+          ],
+          [
+            1,
+            357
+          ],
+          [
+            1,
+            387
+          ],
+          [
+            1,
+            413
+          ],
+          [
+            1,
+            442
+          ],
+          [
+            1,
+            464
+          ],
+          [
+            1,
+            496
+          ],
+          [
+            1,
+            526
+          ],
+          [
+            1,
+            554
+          ],
+          [
+            1,
+            585
+          ],
+          [
+            1,
+            615
+          ],
+          [
+            1,
+            637
+          ],
+          [
+            1,
+            661
+          ],
+          [
+            1,
+            690
+          ],
+          [
+            1,
+            720
+          ],
+          [
+            1,
+            748
+          ],
+          [
+            1,
+            771
+          ],
+          [
+            1,
+            804
+          ],
+          [
+            1,
+            834
+          ],
+          [
+            1,
+            859
+          ],
+          [
+            1,
+            888
+          ],
+          [
+            1,
+            912
+          ],
+          [
+            1,
+            937
+          ],
+          [
+            1,
+            962
+          ],
+          [
+            1,
+            985
+          ],
+          [
+            1,
+            1008
+          ],
+          [
+            1,
+            1030
+          ],
+          [
+            1,
+            1059
+          ],
+          [
+            1,
+            1079
+          ],
+          [
+            1,
+            1087
+          ],
+          [
+            1,
+            1088
+          ],
+          [
+            1,
+            1099
+          ],
+          [
+            1,
+            1120
+          ],
+          [
+            1,
+            1144
+          ],
+          [
+            1,
+            1162
+          ],
+          [
+            1,
+            1183
+          ],
+          [
+            1,
+            1210
+          ],
+          [
+            1,
+            1216
+          ],
+          [
+            1,
+            1239
+          ],
+          [
+            1,
+            1276
+          ],
+          [
+            1,
+            1305
+          ],
+          [
+            1,
+            1330
+          ],
+          [
+            1,
+            1358
+          ],
+          [
+            1,
+            1384
+          ],
+          [
+            1,
+            1402
+          ],
+          [
+            1,
+            1428
+          ],
+          [
+            1,
+            1453
+          ],
+          [
+            1,
+            1479
+          ],
+          [
+            1,
+            1500
+          ],
+          [
+            1,
+            1524
+          ],
+          [
+            1,
+            1556
+          ],
+          [
+            1,
+            1582
+          ],
+          [
+            1,
+            1608
+          ],
+          [
+            1,
+            1620
+          ],
+          [
+            1,
+            1652
+          ],
+          [
+            1,
+            1684
+          ],
+          [
+            1,
+            1712
+          ],
+          [
+            1,
+            1737
+          ],
+          [
+            1,
+            1766
+          ],
+          [
+            1,
+            1769
+          ],
+          [
+            1,
+            1794
+          ],
+          [
+            1,
+            1813
+          ],
+          [
+            1,
+            1838
+          ],
+          [
+            1,
+            1871
+          ],
+          [
+            1,
+            1898
+          ],
+          [
+            1,
+            1931
+          ],
+          [
+            1,
+            1956
+          ],
+          [
+            1,
+            1981
+          ],
+          [
+            1,
+            2003
+          ],
+          [
+            1,
+            2029
+          ],
+          [
+            1,
+            2051
+          ],
+          [
+            1,
+            2076
+          ],
+          [
+            1,
+            2098
+          ],
+          [
+            1,
+            2133
+          ],
+          [
+            1,
+            2162
+          ],
+          [
+            1,
+            2193
+          ],
+          [
+            1,
+            2223
+          ],
+          [
+            1,
+            2225
+          ],
+          [
+            1,
+            2245
+          ],
+          [
+            1,
+            2268
+          ],
+          [
+            1,
+            2300
+          ],
+          [
+            1,
+            2319
+          ],
+          [
+            1,
+            2352
+          ],
+          [
+            1,
+            2383
+          ],
+          [
+            1,
+            2413
+          ],
+          [
+            1,
+            2445
+          ],
+          [
+            1,
+            2476
+          ],
+          [
+            1,
+            2504
+          ],
+          [
+            1,
+            2514
+          ],
+          [
+            1,
+            2540
+          ],
+          [
+            1,
+            2567
+          ],
+          [
+            1,
+            2593
+          ],
+          [
+            1,
+            2620
+          ],
+          [
+            1,
+            2645
+          ],
+          [
+            1,
+            2681
+          ],
+          [
+            1,
+            2719
+          ],
+          [
+            1,
+            2748
+          ],
+          [
+            1,
+            2777
+          ],
+          [
+            1,
+            2812
+          ],
+          [
+            1,
+            2829
+          ],
+          [
+            1,
+            2858
+          ],
+          [
+            1,
+            2882
+          ],
+          [
+            1,
+            2883
+          ],
+          [
+            1,
+            2884
+          ],
+          [
+            1,
+            2885
+          ],
+          [
+            1,
+            2906
+          ],
+          [
+            1,
+            2935
+          ],
+          [
+            1,
+            2961
+          ],
+          [
+            1,
+            2991
+          ],
+          [
+            1,
+            3017
+          ],
+          [
+            1,
+            3039
+          ],
+          [
+            1,
+            3040
+          ],
+          [
+            1,
+            3041
+          ],
+          [
+            1,
+            3042
+          ],
+          [
+            1,
+            3069
+          ],
+          [
+            1,
+            3096
+          ],
+          [
+            1,
+            3122
+          ],
+          [
+            1,
+            3154
+          ],
+          [
+            1,
+            3180
+          ],
+          [
+            1,
+            3208
+          ],
+          [
+            1,
+            3245
+          ],
+          [
+            1,
+            3273
+          ],
+          [
+            1,
+            3301
+          ],
+          [
+            1,
+            3332
+          ],
+          [
+            1,
+            3362
+          ],
+          [
+            1,
+            3385
+          ],
+          [
+            1,
+            3415
+          ],
+          [
+            1,
+            3441
+          ],
+          [
+            1,
+            3474
+          ],
+          [
+            1,
+            3495
+          ],
+          [
+            1,
+            3536
+          ],
+          [
+            1,
+            3559
+          ],
+          [
+            1,
+            3582
+          ],
+          [
+            1,
+            3606
+          ],
+          [
+            1,
+            3637
+          ],
+          [
+            1,
+            3669
+          ],
+          [
+            1,
+            3691
+          ],
+          [
+            1,
+            3721
+          ],
+          [
+            1,
+            3743
+          ],
+          [
+            1,
+            3775
+          ],
+          [
+            1,
+            3799
+          ],
+          [
+            1,
+            3831
+          ],
+          [
+            1,
+            3863
+          ],
+          [
+            1,
+            3888
+          ],
+          [
+            1,
+            3911
+          ],
+          [
+            1,
+            3941
+          ],
+          [
+            1,
+            3969
+          ],
+          [
+            1,
+            3997
+          ],
+          [
+            1,
+            4026
+          ],
+          [
+            1,
+            4058
+          ],
+          [
+            1,
+            4080
+          ],
+          [
+            1,
+            4104
+          ],
+          [
+            1,
+            4136
+          ],
+          [
+            1,
+            4166
+          ],
+          [
+            1,
+            4189
+          ],
+          [
+            1,
+            4190
+          ],
+          [
+            1,
+            4191
+          ],
+          [
+            1,
+            4192
+          ],
+          [
+            1,
+            4208
+          ],
+          [
+            1,
+            4224
+          ],
+          [
+            1,
+            4252
+          ],
+          [
+            1,
+            4278
+          ],
+          [
+            1,
+            4307
+          ],
+          [
+            1,
+            4342
+          ],
+          [
+            1,
+            4365
+          ],
+          [
+            1,
+            4384
+          ],
+          [
+            1,
+            4398
+          ],
+          [
+            1,
+            4426
+          ],
+          [
+            1,
+            4453
+          ],
+          [
+            1,
+            4479
+          ],
+          [
+            1,
+            4510
+          ],
+          [
+            1,
+            4544
+          ],
+          [
+            1,
+            4567
+          ],
+          [
+            1,
+            4595
+          ],
+          [
+            1,
+            4606
+          ],
+          [
+            1,
+            4629
+          ],
+          [
+            1,
+            4655
+          ],
+          [
+            1,
+            4682
+          ],
+          [
+            1,
+            4706
+          ],
+          [
+            1,
+            4728
+          ],
+          [
+            1,
+            4756
+          ],
+          [
+            1,
+            4783
+          ],
+          [
+            1,
+            4804
+          ],
+          [
+            1,
+            4835
+          ],
+          [
+            1,
+            4868
+          ],
+          [
+            1,
+            4882
+          ],
+          [
+            1,
+            4884
+          ],
+          [
+            1,
+            4891
+          ],
+          [
+            1,
+            4919
+          ],
+          [
+            1,
+            4938
+          ],
+          [
+            1,
+            4968
+          ],
+          [
+            1,
+            4999
+          ],
+          [
+            1,
+            5017
+          ],
+          [
+            1,
+            5044
+          ],
+          [
+            1,
+            5070
+          ],
+          [
+            1,
+            5098
+          ],
+          [
+            1,
+            5130
+          ],
+          [
+            1,
+            5161
+          ],
+          [
+            1,
+            5195
+          ],
+          [
+            1,
+            5225
+          ],
+          [
+            1,
+            5254
+          ],
+          [
+            1,
+            5273
+          ],
+          [
+            1,
+            5300
+          ],
+          [
+            1,
+            5328
+          ],
+          [
+            1,
+            5360
+          ],
+          [
+            1,
+            5381
+          ],
+          [
+            1,
+            5413
+          ],
+          [
+            1,
+            5436
+          ],
+          [
+            1,
+            5467
+          ],
+          [
+            1,
+            5493
+          ],
+          [
+            1,
+            5513
+          ],
+          [
+            1,
+            5537
+          ],
+          [
+            1,
+            5567
+          ],
+          [
+            1,
+            5597
+          ],
+          [
+            1,
+            5629
+          ],
+          [
+            1,
+            5652
+          ],
+          [
+            1,
+            5679
+          ],
+          [
+            1,
+            5706
+          ],
+          [
+            1,
+            5722
+          ],
+          [
+            1,
+            5749
+          ],
+          [
+            1,
+            5753
+          ],
+          [
+            1,
+            5755
+          ],
+          [
+            1,
+            5782
+          ],
+          [
+            1,
+            5815
+          ],
+          [
+            1,
+            5848
+          ],
+          [
+            1,
+            5875
+          ],
+          [
+            1,
+            5897
+          ],
+          [
+            1,
+            5921
+          ],
+          [
+            1,
+            5954
+          ],
+          [
+            1,
+            5979
+          ],
+          [
+            1,
+            6008
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            67
+          ],
+          [
+            2,
+            143
+          ],
+          [
+            2,
+            242
+          ],
+          [
+            2,
+            338
+          ],
+          [
+            2,
+            433
+          ],
+          [
+            2,
+            516
+          ],
+          [
+            2,
+            616
+          ],
+          [
+            2,
+            706
+          ],
+          [
+            2,
+            743
+          ],
+          [
+            2,
+            819
+          ],
+          [
+            2,
+            913
+          ],
+          [
+            2,
+            931
+          ],
+          [
+            2,
+            1030
+          ],
+          [
+            2,
+            1048
+          ],
+          [
+            2,
+            1133
+          ],
+          [
+            2,
+            1220
+          ],
+          [
+            2,
+            1243
+          ],
+          [
+            2,
+            1334
+          ],
+          [
+            2,
+            1436
+          ],
+          [
+            2,
+            1491
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5768,
+          "rounding": "up to 1ms",
+          "maximum_ms": 32,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1482,
+          "rounding": "up to 1ms",
+          "maximum_ms": 31,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14748,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7252,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "edb1d3ac59f1a4c0ac84a8fdd4f86c57ca2cbfb04f52ef8d106f217d4a1ee97e"
+    },
+    {
+      "id": "N3-baseline-2903",
+      "seed": 2903,
+      "losses": 0,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-baseline-2903",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "e455c2d47ab3f51c3c188f69b6bc29eb9ab09916f9886de0d2b04fa38eee57e6",
+      "provenance_sha256": "c77cc4d1b468df0e90fbfa4e1f172c2a6a79eb91fa4351f53ad3e36a19a8cff9",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 205092724093,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 205092735968,
+              "signal_end_ns": 205092839093,
+              "end_ns": 205309458426,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 143,
+              "begin_ns": 205093578759,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 205093585509,
+              "signal_end_ns": 205093692259,
+              "end_ns": 205259134593,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 142,
+              "begin_ns": 205259156134,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 205259185759,
+              "signal_end_ns": 205259220384,
+              "end_ns": 205601956385,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": null,
+      "selected_fault_counters": null,
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30057820014,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6012,
+            "target_hz": 200,
+            "actual_hz": 200.01450528347686,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5769,
+            "unobserved": 243
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.003626320869216,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1487,
+            "unobserved": 16
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            32
+          ],
+          [
+            1,
+            59
+          ],
+          [
+            1,
+            89
+          ],
+          [
+            1,
+            96
+          ],
+          [
+            1,
+            120
+          ],
+          [
+            1,
+            151
+          ],
+          [
+            1,
+            175
+          ],
+          [
+            1,
+            206
+          ],
+          [
+            1,
+            235
+          ],
+          [
+            1,
+            248
+          ],
+          [
+            1,
+            254
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            1,
+            256
+          ],
+          [
+            1,
+            281
+          ],
+          [
+            1,
+            307
+          ],
+          [
+            1,
+            333
+          ],
+          [
+            1,
+            363
+          ],
+          [
+            1,
+            391
+          ],
+          [
+            1,
+            418
+          ],
+          [
+            1,
+            442
+          ],
+          [
+            1,
+            469
+          ],
+          [
+            1,
+            497
+          ],
+          [
+            1,
+            521
+          ],
+          [
+            1,
+            548
+          ],
+          [
+            1,
+            583
+          ],
+          [
+            1,
+            607
+          ],
+          [
+            1,
+            623
+          ],
+          [
+            1,
+            649
+          ],
+          [
+            1,
+            675
+          ],
+          [
+            1,
+            701
+          ],
+          [
+            1,
+            735
+          ],
+          [
+            1,
+            754
+          ],
+          [
+            1,
+            791
+          ],
+          [
+            1,
+            813
+          ],
+          [
+            1,
+            839
+          ],
+          [
+            1,
+            866
+          ],
+          [
+            1,
+            891
+          ],
+          [
+            1,
+            920
+          ],
+          [
+            1,
+            944
+          ],
+          [
+            1,
+            968
+          ],
+          [
+            1,
+            992
+          ],
+          [
+            1,
+            1018
+          ],
+          [
+            1,
+            1042
+          ],
+          [
+            1,
+            1072
+          ],
+          [
+            1,
+            1105
+          ],
+          [
+            1,
+            1140
+          ],
+          [
+            1,
+            1172
+          ],
+          [
+            1,
+            1198
+          ],
+          [
+            1,
+            1204
+          ],
+          [
+            1,
+            1223
+          ],
+          [
+            1,
+            1252
+          ],
+          [
+            1,
+            1280
+          ],
+          [
+            1,
+            1305
+          ],
+          [
+            1,
+            1343
+          ],
+          [
+            1,
+            1370
+          ],
+          [
+            1,
+            1384
+          ],
+          [
+            1,
+            1385
+          ],
+          [
+            1,
+            1386
+          ],
+          [
+            1,
+            1387
+          ],
+          [
+            1,
+            1388
+          ],
+          [
+            1,
+            1389
+          ],
+          [
+            1,
+            1402
+          ],
+          [
+            1,
+            1430
+          ],
+          [
+            1,
+            1447
+          ],
+          [
+            1,
+            1462
+          ],
+          [
+            1,
+            1496
+          ],
+          [
+            1,
+            1523
+          ],
+          [
+            1,
+            1546
+          ],
+          [
+            1,
+            1579
+          ],
+          [
+            1,
+            1612
+          ],
+          [
+            1,
+            1642
+          ],
+          [
+            1,
+            1668
+          ],
+          [
+            1,
+            1694
+          ],
+          [
+            1,
+            1716
+          ],
+          [
+            1,
+            1735
+          ],
+          [
+            1,
+            1743
+          ],
+          [
+            1,
+            1765
+          ],
+          [
+            1,
+            1797
+          ],
+          [
+            1,
+            1822
+          ],
+          [
+            1,
+            1853
+          ],
+          [
+            1,
+            1885
+          ],
+          [
+            1,
+            1902
+          ],
+          [
+            1,
+            1926
+          ],
+          [
+            1,
+            1948
+          ],
+          [
+            1,
+            1973
+          ],
+          [
+            1,
+            2009
+          ],
+          [
+            1,
+            2041
+          ],
+          [
+            1,
+            2068
+          ],
+          [
+            1,
+            2094
+          ],
+          [
+            1,
+            2119
+          ],
+          [
+            1,
+            2148
+          ],
+          [
+            1,
+            2165
+          ],
+          [
+            1,
+            2190
+          ],
+          [
+            1,
+            2217
+          ],
+          [
+            1,
+            2241
+          ],
+          [
+            1,
+            2267
+          ],
+          [
+            1,
+            2291
+          ],
+          [
+            1,
+            2316
+          ],
+          [
+            1,
+            2347
+          ],
+          [
+            1,
+            2370
+          ],
+          [
+            1,
+            2393
+          ],
+          [
+            1,
+            2422
+          ],
+          [
+            1,
+            2449
+          ],
+          [
+            1,
+            2470
+          ],
+          [
+            1,
+            2492
+          ],
+          [
+            1,
+            2511
+          ],
+          [
+            1,
+            2539
+          ],
+          [
+            1,
+            2560
+          ],
+          [
+            1,
+            2588
+          ],
+          [
+            1,
+            2613
+          ],
+          [
+            1,
+            2639
+          ],
+          [
+            1,
+            2667
+          ],
+          [
+            1,
+            2693
+          ],
+          [
+            1,
+            2722
+          ],
+          [
+            1,
+            2748
+          ],
+          [
+            1,
+            2766
+          ],
+          [
+            1,
+            2790
+          ],
+          [
+            1,
+            2815
+          ],
+          [
+            1,
+            2840
+          ],
+          [
+            1,
+            2865
+          ],
+          [
+            1,
+            2896
+          ],
+          [
+            1,
+            2913
+          ],
+          [
+            1,
+            2920
+          ],
+          [
+            1,
+            2949
+          ],
+          [
+            1,
+            2976
+          ],
+          [
+            1,
+            3002
+          ],
+          [
+            1,
+            3030
+          ],
+          [
+            1,
+            3064
+          ],
+          [
+            1,
+            3092
+          ],
+          [
+            1,
+            3117
+          ],
+          [
+            1,
+            3144
+          ],
+          [
+            1,
+            3178
+          ],
+          [
+            1,
+            3207
+          ],
+          [
+            1,
+            3240
+          ],
+          [
+            1,
+            3270
+          ],
+          [
+            1,
+            3291
+          ],
+          [
+            1,
+            3316
+          ],
+          [
+            1,
+            3351
+          ],
+          [
+            1,
+            3381
+          ],
+          [
+            1,
+            3409
+          ],
+          [
+            1,
+            3435
+          ],
+          [
+            1,
+            3466
+          ],
+          [
+            1,
+            3500
+          ],
+          [
+            1,
+            3522
+          ],
+          [
+            1,
+            3553
+          ],
+          [
+            1,
+            3575
+          ],
+          [
+            1,
+            3604
+          ],
+          [
+            1,
+            3629
+          ],
+          [
+            1,
+            3659
+          ],
+          [
+            1,
+            3692
+          ],
+          [
+            1,
+            3721
+          ],
+          [
+            1,
+            3747
+          ],
+          [
+            1,
+            3784
+          ],
+          [
+            1,
+            3803
+          ],
+          [
+            1,
+            3833
+          ],
+          [
+            1,
+            3868
+          ],
+          [
+            1,
+            3897
+          ],
+          [
+            1,
+            3901
+          ],
+          [
+            1,
+            3918
+          ],
+          [
+            1,
+            3941
+          ],
+          [
+            1,
+            3968
+          ],
+          [
+            1,
+            3999
+          ],
+          [
+            1,
+            4023
+          ],
+          [
+            1,
+            4054
+          ],
+          [
+            1,
+            4073
+          ],
+          [
+            1,
+            4103
+          ],
+          [
+            1,
+            4129
+          ],
+          [
+            1,
+            4159
+          ],
+          [
+            1,
+            4186
+          ],
+          [
+            1,
+            4214
+          ],
+          [
+            1,
+            4232
+          ],
+          [
+            1,
+            4256
+          ],
+          [
+            1,
+            4275
+          ],
+          [
+            1,
+            4306
+          ],
+          [
+            1,
+            4335
+          ],
+          [
+            1,
+            4369
+          ],
+          [
+            1,
+            4397
+          ],
+          [
+            1,
+            4433
+          ],
+          [
+            1,
+            4456
+          ],
+          [
+            1,
+            4485
+          ],
+          [
+            1,
+            4514
+          ],
+          [
+            1,
+            4528
+          ],
+          [
+            1,
+            4559
+          ],
+          [
+            1,
+            4586
+          ],
+          [
+            1,
+            4613
+          ],
+          [
+            1,
+            4640
+          ],
+          [
+            1,
+            4664
+          ],
+          [
+            1,
+            4691
+          ],
+          [
+            1,
+            4701
+          ],
+          [
+            1,
+            4702
+          ],
+          [
+            1,
+            4709
+          ],
+          [
+            1,
+            4737
+          ],
+          [
+            1,
+            4744
+          ],
+          [
+            1,
+            4753
+          ],
+          [
+            1,
+            4782
+          ],
+          [
+            1,
+            4807
+          ],
+          [
+            1,
+            4840
+          ],
+          [
+            1,
+            4861
+          ],
+          [
+            1,
+            4890
+          ],
+          [
+            1,
+            4925
+          ],
+          [
+            1,
+            4956
+          ],
+          [
+            1,
+            4988
+          ],
+          [
+            1,
+            5011
+          ],
+          [
+            1,
+            5031
+          ],
+          [
+            1,
+            5063
+          ],
+          [
+            1,
+            5089
+          ],
+          [
+            1,
+            5106
+          ],
+          [
+            1,
+            5129
+          ],
+          [
+            1,
+            5156
+          ],
+          [
+            1,
+            5180
+          ],
+          [
+            1,
+            5213
+          ],
+          [
+            1,
+            5244
+          ],
+          [
+            1,
+            5275
+          ],
+          [
+            1,
+            5298
+          ],
+          [
+            1,
+            5325
+          ],
+          [
+            1,
+            5354
+          ],
+          [
+            1,
+            5381
+          ],
+          [
+            1,
+            5409
+          ],
+          [
+            1,
+            5433
+          ],
+          [
+            1,
+            5458
+          ],
+          [
+            1,
+            5494
+          ],
+          [
+            1,
+            5521
+          ],
+          [
+            1,
+            5523
+          ],
+          [
+            1,
+            5549
+          ],
+          [
+            1,
+            5577
+          ],
+          [
+            1,
+            5583
+          ],
+          [
+            1,
+            5597
+          ],
+          [
+            1,
+            5620
+          ],
+          [
+            1,
+            5645
+          ],
+          [
+            1,
+            5673
+          ],
+          [
+            1,
+            5699
+          ],
+          [
+            1,
+            5734
+          ],
+          [
+            1,
+            5760
+          ],
+          [
+            1,
+            5783
+          ],
+          [
+            1,
+            5815
+          ],
+          [
+            1,
+            5849
+          ],
+          [
+            1,
+            5874
+          ],
+          [
+            1,
+            5905
+          ],
+          [
+            1,
+            5933
+          ],
+          [
+            1,
+            5957
+          ],
+          [
+            1,
+            5981
+          ],
+          [
+            1,
+            6010
+          ],
+          [
+            2,
+            76
+          ],
+          [
+            2,
+            169
+          ],
+          [
+            2,
+            261
+          ],
+          [
+            2,
+            357
+          ],
+          [
+            2,
+            457
+          ],
+          [
+            2,
+            554
+          ],
+          [
+            2,
+            647
+          ],
+          [
+            2,
+            752
+          ],
+          [
+            2,
+            849
+          ],
+          [
+            2,
+            948
+          ],
+          [
+            2,
+            1040
+          ],
+          [
+            2,
+            1141
+          ],
+          [
+            2,
+            1208
+          ],
+          [
+            2,
+            1309
+          ],
+          [
+            2,
+            1407
+          ],
+          [
+            2,
+            1501
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5771,
+          "rounding": "up to 1ms",
+          "maximum_ms": 33,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1487,
+          "rounding": "up to 1ms",
+          "maximum_ms": 33,
+          "p50_ms": 18,
+          "p95_ms": 27,
+          "p99_ms": 28
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14761,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7260,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "e6e61b69b55ce5d977fb6e84cf8f2f703bac01c2a49eafd259ea8ce698901b74"
+    },
+    {
+      "id": "N3-one-loss-2903",
+      "seed": 2903,
+      "losses": 1,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-one-loss-2903",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "82a329ac6f351331e3e98c4332d65fb13cb73247c3ca979e5cd23b57d34a0d2c",
+      "provenance_sha256": "2a65a1acbc577767d5dd0080c2d3dd60ff294943803199c6d8b30d8e7c4a18a0",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 256732571158,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 256732582242,
+              "signal_end_ns": 256732699742,
+              "end_ns": 256954182075,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 256753625950,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 256753631408,
+              "signal_end_ns": 256753724158,
+              "end_ns": 256921541783,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 256921560283,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 256921580283,
+              "signal_end_ns": 256921602033,
+              "end_ns": 257263632159,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30055009847,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6011,
+            "target_hz": 200,
+            "actual_hz": 199.99993447348677,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5767,
+            "unobserved": 244
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.00830169915998,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1488,
+            "unobserved": 15
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            11
+          ],
+          [
+            1,
+            38
+          ],
+          [
+            1,
+            65
+          ],
+          [
+            1,
+            100
+          ],
+          [
+            1,
+            116
+          ],
+          [
+            1,
+            138
+          ],
+          [
+            1,
+            166
+          ],
+          [
+            1,
+            196
+          ],
+          [
+            1,
+            229
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            1,
+            279
+          ],
+          [
+            1,
+            307
+          ],
+          [
+            1,
+            333
+          ],
+          [
+            1,
+            358
+          ],
+          [
+            1,
+            385
+          ],
+          [
+            1,
+            415
+          ],
+          [
+            1,
+            444
+          ],
+          [
+            1,
+            470
+          ],
+          [
+            1,
+            494
+          ],
+          [
+            1,
+            510
+          ],
+          [
+            1,
+            511
+          ],
+          [
+            1,
+            519
+          ],
+          [
+            1,
+            545
+          ],
+          [
+            1,
+            575
+          ],
+          [
+            1,
+            606
+          ],
+          [
+            1,
+            640
+          ],
+          [
+            1,
+            678
+          ],
+          [
+            1,
+            704
+          ],
+          [
+            1,
+            732
+          ],
+          [
+            1,
+            753
+          ],
+          [
+            1,
+            783
+          ],
+          [
+            1,
+            806
+          ],
+          [
+            1,
+            828
+          ],
+          [
+            1,
+            854
+          ],
+          [
+            1,
+            881
+          ],
+          [
+            1,
+            909
+          ],
+          [
+            1,
+            929
+          ],
+          [
+            1,
+            959
+          ],
+          [
+            1,
+            984
+          ],
+          [
+            1,
+            1013
+          ],
+          [
+            1,
+            1039
+          ],
+          [
+            1,
+            1065
+          ],
+          [
+            1,
+            1094
+          ],
+          [
+            1,
+            1119
+          ],
+          [
+            1,
+            1144
+          ],
+          [
+            1,
+            1166
+          ],
+          [
+            1,
+            1194
+          ],
+          [
+            1,
+            1206
+          ],
+          [
+            1,
+            1233
+          ],
+          [
+            1,
+            1265
+          ],
+          [
+            1,
+            1291
+          ],
+          [
+            1,
+            1317
+          ],
+          [
+            1,
+            1345
+          ],
+          [
+            1,
+            1374
+          ],
+          [
+            1,
+            1402
+          ],
+          [
+            1,
+            1428
+          ],
+          [
+            1,
+            1456
+          ],
+          [
+            1,
+            1477
+          ],
+          [
+            1,
+            1502
+          ],
+          [
+            1,
+            1533
+          ],
+          [
+            1,
+            1557
+          ],
+          [
+            1,
+            1583
+          ],
+          [
+            1,
+            1615
+          ],
+          [
+            1,
+            1641
+          ],
+          [
+            1,
+            1656
+          ],
+          [
+            1,
+            1657
+          ],
+          [
+            1,
+            1658
+          ],
+          [
+            1,
+            1669
+          ],
+          [
+            1,
+            1695
+          ],
+          [
+            1,
+            1725
+          ],
+          [
+            1,
+            1750
+          ],
+          [
+            1,
+            1772
+          ],
+          [
+            1,
+            1801
+          ],
+          [
+            1,
+            1823
+          ],
+          [
+            1,
+            1848
+          ],
+          [
+            1,
+            1873
+          ],
+          [
+            1,
+            1887
+          ],
+          [
+            1,
+            1916
+          ],
+          [
+            1,
+            1944
+          ],
+          [
+            1,
+            1958
+          ],
+          [
+            1,
+            1987
+          ],
+          [
+            1,
+            2011
+          ],
+          [
+            1,
+            2042
+          ],
+          [
+            1,
+            2069
+          ],
+          [
+            1,
+            2073
+          ],
+          [
+            1,
+            2099
+          ],
+          [
+            1,
+            2128
+          ],
+          [
+            1,
+            2163
+          ],
+          [
+            1,
+            2192
+          ],
+          [
+            1,
+            2223
+          ],
+          [
+            1,
+            2235
+          ],
+          [
+            1,
+            2236
+          ],
+          [
+            1,
+            2262
+          ],
+          [
+            1,
+            2290
+          ],
+          [
+            1,
+            2320
+          ],
+          [
+            1,
+            2347
+          ],
+          [
+            1,
+            2366
+          ],
+          [
+            1,
+            2395
+          ],
+          [
+            1,
+            2412
+          ],
+          [
+            1,
+            2436
+          ],
+          [
+            1,
+            2466
+          ],
+          [
+            1,
+            2492
+          ],
+          [
+            1,
+            2522
+          ],
+          [
+            1,
+            2550
+          ],
+          [
+            1,
+            2579
+          ],
+          [
+            1,
+            2584
+          ],
+          [
+            1,
+            2605
+          ],
+          [
+            1,
+            2632
+          ],
+          [
+            1,
+            2662
+          ],
+          [
+            1,
+            2695
+          ],
+          [
+            1,
+            2722
+          ],
+          [
+            1,
+            2752
+          ],
+          [
+            1,
+            2782
+          ],
+          [
+            1,
+            2808
+          ],
+          [
+            1,
+            2841
+          ],
+          [
+            1,
+            2869
+          ],
+          [
+            1,
+            2899
+          ],
+          [
+            1,
+            2919
+          ],
+          [
+            1,
+            2949
+          ],
+          [
+            1,
+            2978
+          ],
+          [
+            1,
+            2999
+          ],
+          [
+            1,
+            3024
+          ],
+          [
+            1,
+            3050
+          ],
+          [
+            1,
+            3077
+          ],
+          [
+            1,
+            3103
+          ],
+          [
+            1,
+            3127
+          ],
+          [
+            1,
+            3157
+          ],
+          [
+            1,
+            3175
+          ],
+          [
+            1,
+            3201
+          ],
+          [
+            1,
+            3222
+          ],
+          [
+            1,
+            3237
+          ],
+          [
+            1,
+            3261
+          ],
+          [
+            1,
+            3285
+          ],
+          [
+            1,
+            3311
+          ],
+          [
+            1,
+            3333
+          ],
+          [
+            1,
+            3363
+          ],
+          [
+            1,
+            3391
+          ],
+          [
+            1,
+            3420
+          ],
+          [
+            1,
+            3447
+          ],
+          [
+            1,
+            3475
+          ],
+          [
+            1,
+            3498
+          ],
+          [
+            1,
+            3515
+          ],
+          [
+            1,
+            3518
+          ],
+          [
+            1,
+            3519
+          ],
+          [
+            1,
+            3520
+          ],
+          [
+            1,
+            3527
+          ],
+          [
+            1,
+            3549
+          ],
+          [
+            1,
+            3564
+          ],
+          [
+            1,
+            3592
+          ],
+          [
+            1,
+            3621
+          ],
+          [
+            1,
+            3650
+          ],
+          [
+            1,
+            3654
+          ],
+          [
+            1,
+            3670
+          ],
+          [
+            1,
+            3698
+          ],
+          [
+            1,
+            3727
+          ],
+          [
+            1,
+            3753
+          ],
+          [
+            1,
+            3784
+          ],
+          [
+            1,
+            3812
+          ],
+          [
+            1,
+            3840
+          ],
+          [
+            1,
+            3868
+          ],
+          [
+            1,
+            3887
+          ],
+          [
+            1,
+            3911
+          ],
+          [
+            1,
+            3941
+          ],
+          [
+            1,
+            3977
+          ],
+          [
+            1,
+            4003
+          ],
+          [
+            1,
+            4031
+          ],
+          [
+            1,
+            4066
+          ],
+          [
+            1,
+            4097
+          ],
+          [
+            1,
+            4131
+          ],
+          [
+            1,
+            4158
+          ],
+          [
+            1,
+            4182
+          ],
+          [
+            1,
+            4207
+          ],
+          [
+            1,
+            4231
+          ],
+          [
+            1,
+            4259
+          ],
+          [
+            1,
+            4283
+          ],
+          [
+            1,
+            4312
+          ],
+          [
+            1,
+            4338
+          ],
+          [
+            1,
+            4363
+          ],
+          [
+            1,
+            4385
+          ],
+          [
+            1,
+            4410
+          ],
+          [
+            1,
+            4432
+          ],
+          [
+            1,
+            4449
+          ],
+          [
+            1,
+            4477
+          ],
+          [
+            1,
+            4502
+          ],
+          [
+            1,
+            4525
+          ],
+          [
+            1,
+            4547
+          ],
+          [
+            1,
+            4582
+          ],
+          [
+            1,
+            4594
+          ],
+          [
+            1,
+            4609
+          ],
+          [
+            1,
+            4634
+          ],
+          [
+            1,
+            4636
+          ],
+          [
+            1,
+            4639
+          ],
+          [
+            1,
+            4641
+          ],
+          [
+            1,
+            4669
+          ],
+          [
+            1,
+            4699
+          ],
+          [
+            1,
+            4731
+          ],
+          [
+            1,
+            4760
+          ],
+          [
+            1,
+            4787
+          ],
+          [
+            1,
+            4812
+          ],
+          [
+            1,
+            4843
+          ],
+          [
+            1,
+            4875
+          ],
+          [
+            1,
+            4901
+          ],
+          [
+            1,
+            4927
+          ],
+          [
+            1,
+            4957
+          ],
+          [
+            1,
+            4985
+          ],
+          [
+            1,
+            5012
+          ],
+          [
+            1,
+            5037
+          ],
+          [
+            1,
+            5069
+          ],
+          [
+            1,
+            5096
+          ],
+          [
+            1,
+            5122
+          ],
+          [
+            1,
+            5147
+          ],
+          [
+            1,
+            5175
+          ],
+          [
+            1,
+            5204
+          ],
+          [
+            1,
+            5222
+          ],
+          [
+            1,
+            5250
+          ],
+          [
+            1,
+            5280
+          ],
+          [
+            1,
+            5305
+          ],
+          [
+            1,
+            5334
+          ],
+          [
+            1,
+            5356
+          ],
+          [
+            1,
+            5383
+          ],
+          [
+            1,
+            5411
+          ],
+          [
+            1,
+            5437
+          ],
+          [
+            1,
+            5460
+          ],
+          [
+            1,
+            5482
+          ],
+          [
+            1,
+            5502
+          ],
+          [
+            1,
+            5525
+          ],
+          [
+            1,
+            5552
+          ],
+          [
+            1,
+            5579
+          ],
+          [
+            1,
+            5604
+          ],
+          [
+            1,
+            5629
+          ],
+          [
+            1,
+            5650
+          ],
+          [
+            1,
+            5653
+          ],
+          [
+            1,
+            5680
+          ],
+          [
+            1,
+            5706
+          ],
+          [
+            1,
+            5733
+          ],
+          [
+            1,
+            5757
+          ],
+          [
+            1,
+            5782
+          ],
+          [
+            1,
+            5806
+          ],
+          [
+            1,
+            5835
+          ],
+          [
+            1,
+            5865
+          ],
+          [
+            1,
+            5890
+          ],
+          [
+            1,
+            5918
+          ],
+          [
+            1,
+            5949
+          ],
+          [
+            1,
+            5980
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            189
+          ],
+          [
+            2,
+            283
+          ],
+          [
+            2,
+            374
+          ],
+          [
+            2,
+            457
+          ],
+          [
+            2,
+            560
+          ],
+          [
+            2,
+            651
+          ],
+          [
+            2,
+            748
+          ],
+          [
+            2,
+            841
+          ],
+          [
+            2,
+            933
+          ],
+          [
+            2,
+            1034
+          ],
+          [
+            2,
+            1137
+          ],
+          [
+            2,
+            1241
+          ],
+          [
+            2,
+            1354
+          ],
+          [
+            2,
+            1457
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5768,
+          "rounding": "up to 1ms",
+          "maximum_ms": 28,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 12
+        },
+        "joint": {
+          "count": 1488,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14760,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7258,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "396855e78e67d7c5791b3654f69118b7d79f36f27016ea27b435ba6eeb743112"
+    },
+    {
+      "id": "N3-two-loss-2903",
+      "seed": 2903,
+      "losses": 2,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-two-loss-2903",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "fe9dab9d6c5570baa8d20de8207ddedb049ea91e46430a83add2cf80b151ce10",
+      "provenance_sha256": "bff2e77a00a41cbeddce58a103292e34011d0cd14e155dcc3913839e39c7c854",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 308653416515,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 308653430807,
+              "signal_end_ns": 308653592474,
+              "end_ns": 308872488224,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 308654077515,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 308654084557,
+              "signal_end_ns": 308654188182,
+              "end_ns": 308819300432,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 308819319141,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 308819334349,
+              "signal_end_ns": 308819355557,
+              "end_ns": 309149699432,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30054004389,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6011,
+            "target_hz": 200,
+            "actual_hz": 200.00662547983364,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5803,
+            "unobserved": 208
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.00997472902844,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1488,
+            "unobserved": 15
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            1,
+            32
+          ],
+          [
+            1,
+            66
+          ],
+          [
+            1,
+            92
+          ],
+          [
+            1,
+            117
+          ],
+          [
+            1,
+            150
+          ],
+          [
+            1,
+            182
+          ],
+          [
+            1,
+            210
+          ],
+          [
+            1,
+            213
+          ],
+          [
+            1,
+            246
+          ],
+          [
+            1,
+            266
+          ],
+          [
+            1,
+            290
+          ],
+          [
+            1,
+            321
+          ],
+          [
+            1,
+            347
+          ],
+          [
+            1,
+            378
+          ],
+          [
+            1,
+            404
+          ],
+          [
+            1,
+            437
+          ],
+          [
+            1,
+            464
+          ],
+          [
+            1,
+            500
+          ],
+          [
+            1,
+            528
+          ],
+          [
+            1,
+            557
+          ],
+          [
+            1,
+            581
+          ],
+          [
+            1,
+            604
+          ],
+          [
+            1,
+            624
+          ],
+          [
+            1,
+            653
+          ],
+          [
+            1,
+            678
+          ],
+          [
+            1,
+            704
+          ],
+          [
+            1,
+            739
+          ],
+          [
+            1,
+            761
+          ],
+          [
+            1,
+            786
+          ],
+          [
+            1,
+            812
+          ],
+          [
+            1,
+            845
+          ],
+          [
+            1,
+            883
+          ],
+          [
+            1,
+            906
+          ],
+          [
+            1,
+            940
+          ],
+          [
+            1,
+            975
+          ],
+          [
+            1,
+            998
+          ],
+          [
+            1,
+            1027
+          ],
+          [
+            1,
+            1055
+          ],
+          [
+            1,
+            1077
+          ],
+          [
+            1,
+            1097
+          ],
+          [
+            1,
+            1127
+          ],
+          [
+            1,
+            1159
+          ],
+          [
+            1,
+            1187
+          ],
+          [
+            1,
+            1206
+          ],
+          [
+            1,
+            1212
+          ],
+          [
+            1,
+            1238
+          ],
+          [
+            1,
+            1257
+          ],
+          [
+            1,
+            1277
+          ],
+          [
+            1,
+            1311
+          ],
+          [
+            1,
+            1339
+          ],
+          [
+            1,
+            1345
+          ],
+          [
+            1,
+            1374
+          ],
+          [
+            1,
+            1405
+          ],
+          [
+            1,
+            1435
+          ],
+          [
+            1,
+            1442
+          ],
+          [
+            1,
+            1471
+          ],
+          [
+            1,
+            1505
+          ],
+          [
+            1,
+            1536
+          ],
+          [
+            1,
+            1571
+          ],
+          [
+            1,
+            1606
+          ],
+          [
+            1,
+            1639
+          ],
+          [
+            1,
+            1671
+          ],
+          [
+            1,
+            1677
+          ],
+          [
+            1,
+            1713
+          ],
+          [
+            1,
+            1747
+          ],
+          [
+            1,
+            1777
+          ],
+          [
+            1,
+            1811
+          ],
+          [
+            1,
+            1847
+          ],
+          [
+            1,
+            1880
+          ],
+          [
+            1,
+            1917
+          ],
+          [
+            1,
+            1947
+          ],
+          [
+            1,
+            1984
+          ],
+          [
+            1,
+            2018
+          ],
+          [
+            1,
+            2049
+          ],
+          [
+            1,
+            2076
+          ],
+          [
+            1,
+            2109
+          ],
+          [
+            1,
+            2136
+          ],
+          [
+            1,
+            2167
+          ],
+          [
+            1,
+            2171
+          ],
+          [
+            1,
+            2200
+          ],
+          [
+            1,
+            2238
+          ],
+          [
+            1,
+            2274
+          ],
+          [
+            1,
+            2302
+          ],
+          [
+            1,
+            2337
+          ],
+          [
+            1,
+            2372
+          ],
+          [
+            1,
+            2404
+          ],
+          [
+            1,
+            2434
+          ],
+          [
+            1,
+            2472
+          ],
+          [
+            1,
+            2503
+          ],
+          [
+            1,
+            2536
+          ],
+          [
+            1,
+            2567
+          ],
+          [
+            1,
+            2601
+          ],
+          [
+            1,
+            2631
+          ],
+          [
+            1,
+            2635
+          ],
+          [
+            1,
+            2668
+          ],
+          [
+            1,
+            2701
+          ],
+          [
+            1,
+            2733
+          ],
+          [
+            1,
+            2774
+          ],
+          [
+            1,
+            2807
+          ],
+          [
+            1,
+            2838
+          ],
+          [
+            1,
+            2875
+          ],
+          [
+            1,
+            2911
+          ],
+          [
+            1,
+            2942
+          ],
+          [
+            1,
+            2975
+          ],
+          [
+            1,
+            3007
+          ],
+          [
+            1,
+            3038
+          ],
+          [
+            1,
+            3063
+          ],
+          [
+            1,
+            3093
+          ],
+          [
+            1,
+            3125
+          ],
+          [
+            1,
+            3166
+          ],
+          [
+            1,
+            3193
+          ],
+          [
+            1,
+            3226
+          ],
+          [
+            1,
+            3253
+          ],
+          [
+            1,
+            3284
+          ],
+          [
+            1,
+            3288
+          ],
+          [
+            1,
+            3317
+          ],
+          [
+            1,
+            3352
+          ],
+          [
+            1,
+            3386
+          ],
+          [
+            1,
+            3410
+          ],
+          [
+            1,
+            3441
+          ],
+          [
+            1,
+            3477
+          ],
+          [
+            1,
+            3511
+          ],
+          [
+            1,
+            3546
+          ],
+          [
+            1,
+            3582
+          ],
+          [
+            1,
+            3615
+          ],
+          [
+            1,
+            3638
+          ],
+          [
+            1,
+            3673
+          ],
+          [
+            1,
+            3703
+          ],
+          [
+            1,
+            3738
+          ],
+          [
+            1,
+            3771
+          ],
+          [
+            1,
+            3803
+          ],
+          [
+            1,
+            3835
+          ],
+          [
+            1,
+            3869
+          ],
+          [
+            1,
+            3906
+          ],
+          [
+            1,
+            3933
+          ],
+          [
+            1,
+            3966
+          ],
+          [
+            1,
+            3995
+          ],
+          [
+            1,
+            4029
+          ],
+          [
+            1,
+            4063
+          ],
+          [
+            1,
+            4095
+          ],
+          [
+            1,
+            4125
+          ],
+          [
+            1,
+            4155
+          ],
+          [
+            1,
+            4186
+          ],
+          [
+            1,
+            4219
+          ],
+          [
+            1,
+            4248
+          ],
+          [
+            1,
+            4273
+          ],
+          [
+            1,
+            4309
+          ],
+          [
+            1,
+            4342
+          ],
+          [
+            1,
+            4373
+          ],
+          [
+            1,
+            4404
+          ],
+          [
+            1,
+            4437
+          ],
+          [
+            1,
+            4467
+          ],
+          [
+            1,
+            4498
+          ],
+          [
+            1,
+            4531
+          ],
+          [
+            1,
+            4544
+          ],
+          [
+            1,
+            4554
+          ],
+          [
+            1,
+            4587
+          ],
+          [
+            1,
+            4616
+          ],
+          [
+            1,
+            4648
+          ],
+          [
+            1,
+            4678
+          ],
+          [
+            1,
+            4713
+          ],
+          [
+            1,
+            4746
+          ],
+          [
+            1,
+            4781
+          ],
+          [
+            1,
+            4817
+          ],
+          [
+            1,
+            4849
+          ],
+          [
+            1,
+            4880
+          ],
+          [
+            1,
+            4888
+          ],
+          [
+            1,
+            4921
+          ],
+          [
+            1,
+            4952
+          ],
+          [
+            1,
+            4986
+          ],
+          [
+            1,
+            5019
+          ],
+          [
+            1,
+            5053
+          ],
+          [
+            1,
+            5085
+          ],
+          [
+            1,
+            5115
+          ],
+          [
+            1,
+            5147
+          ],
+          [
+            1,
+            5160
+          ],
+          [
+            1,
+            5161
+          ],
+          [
+            1,
+            5171
+          ],
+          [
+            1,
+            5176
+          ],
+          [
+            1,
+            5177
+          ],
+          [
+            1,
+            5193
+          ],
+          [
+            1,
+            5231
+          ],
+          [
+            1,
+            5261
+          ],
+          [
+            1,
+            5296
+          ],
+          [
+            1,
+            5331
+          ],
+          [
+            1,
+            5361
+          ],
+          [
+            1,
+            5394
+          ],
+          [
+            1,
+            5427
+          ],
+          [
+            1,
+            5460
+          ],
+          [
+            1,
+            5486
+          ],
+          [
+            1,
+            5518
+          ],
+          [
+            1,
+            5552
+          ],
+          [
+            1,
+            5586
+          ],
+          [
+            1,
+            5622
+          ],
+          [
+            1,
+            5653
+          ],
+          [
+            1,
+            5687
+          ],
+          [
+            1,
+            5718
+          ],
+          [
+            1,
+            5747
+          ],
+          [
+            1,
+            5780
+          ],
+          [
+            1,
+            5811
+          ],
+          [
+            1,
+            5843
+          ],
+          [
+            1,
+            5869
+          ],
+          [
+            1,
+            5900
+          ],
+          [
+            1,
+            5928
+          ],
+          [
+            1,
+            5947
+          ],
+          [
+            1,
+            5982
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            171
+          ],
+          [
+            2,
+            261
+          ],
+          [
+            2,
+            375
+          ],
+          [
+            2,
+            507
+          ],
+          [
+            2,
+            641
+          ],
+          [
+            2,
+            766
+          ],
+          [
+            2,
+            816
+          ],
+          [
+            2,
+            933
+          ],
+          [
+            2,
+            1055
+          ],
+          [
+            2,
+            1201
+          ],
+          [
+            2,
+            1258
+          ],
+          [
+            2,
+            1381
+          ],
+          [
+            2,
+            1499
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5803,
+          "rounding": "up to 1ms",
+          "maximum_ms": 21,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1488,
+          "rounding": "up to 1ms",
+          "maximum_ms": 31,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14799,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7291,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "aa5e1fb5076169c1e98defe1220194bb7f9de0e53d027e181e16f79894e16339"
+    },
+    {
+      "id": "N3-baseline-4211",
+      "seed": 4211,
+      "losses": 0,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-baseline-4211",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "cd759389e53cd130002a389ca699617ccbacf1e730dca64c8652398f48ac8364",
+      "provenance_sha256": "16341bf36571d09ed2592bcff731434b7c0238797e7ad441b114d1b3dbb89f44",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 359606121080,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 359606130289,
+              "signal_end_ns": 359606242289,
+              "end_ns": 359773660831,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 359609165830,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 359609173372,
+              "signal_end_ns": 359609287997,
+              "end_ns": 359774874831,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 359774891706,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 359774906414,
+              "signal_end_ns": 359774928372,
+              "end_ns": 360111634747,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": null,
+      "selected_fault_counters": null,
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30059300180,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6012,
+            "target_hz": 200,
+            "actual_hz": 200.00465626275934,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5815,
+            "unobserved": 197
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.001164065689835,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1490,
+            "unobserved": 13
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            15
+          ],
+          [
+            1,
+            46
+          ],
+          [
+            1,
+            77
+          ],
+          [
+            1,
+            115
+          ],
+          [
+            1,
+            149
+          ],
+          [
+            1,
+            187
+          ],
+          [
+            1,
+            220
+          ],
+          [
+            1,
+            254
+          ],
+          [
+            1,
+            292
+          ],
+          [
+            1,
+            321
+          ],
+          [
+            1,
+            354
+          ],
+          [
+            1,
+            386
+          ],
+          [
+            1,
+            415
+          ],
+          [
+            1,
+            449
+          ],
+          [
+            1,
+            482
+          ],
+          [
+            1,
+            514
+          ],
+          [
+            1,
+            546
+          ],
+          [
+            1,
+            558
+          ],
+          [
+            1,
+            559
+          ],
+          [
+            1,
+            560
+          ],
+          [
+            1,
+            594
+          ],
+          [
+            1,
+            625
+          ],
+          [
+            1,
+            661
+          ],
+          [
+            1,
+            696
+          ],
+          [
+            1,
+            727
+          ],
+          [
+            1,
+            764
+          ],
+          [
+            1,
+            800
+          ],
+          [
+            1,
+            836
+          ],
+          [
+            1,
+            867
+          ],
+          [
+            1,
+            908
+          ],
+          [
+            1,
+            920
+          ],
+          [
+            1,
+            921
+          ],
+          [
+            1,
+            923
+          ],
+          [
+            1,
+            932
+          ],
+          [
+            1,
+            964
+          ],
+          [
+            1,
+            1001
+          ],
+          [
+            1,
+            1014
+          ],
+          [
+            1,
+            1046
+          ],
+          [
+            1,
+            1080
+          ],
+          [
+            1,
+            1113
+          ],
+          [
+            1,
+            1149
+          ],
+          [
+            1,
+            1186
+          ],
+          [
+            1,
+            1223
+          ],
+          [
+            1,
+            1257
+          ],
+          [
+            1,
+            1293
+          ],
+          [
+            1,
+            1335
+          ],
+          [
+            1,
+            1370
+          ],
+          [
+            1,
+            1401
+          ],
+          [
+            1,
+            1439
+          ],
+          [
+            1,
+            1477
+          ],
+          [
+            1,
+            1499
+          ],
+          [
+            1,
+            1527
+          ],
+          [
+            1,
+            1566
+          ],
+          [
+            1,
+            1600
+          ],
+          [
+            1,
+            1641
+          ],
+          [
+            1,
+            1664
+          ],
+          [
+            1,
+            1704
+          ],
+          [
+            1,
+            1743
+          ],
+          [
+            1,
+            1777
+          ],
+          [
+            1,
+            1810
+          ],
+          [
+            1,
+            1841
+          ],
+          [
+            1,
+            1844
+          ],
+          [
+            1,
+            1877
+          ],
+          [
+            1,
+            1911
+          ],
+          [
+            1,
+            1933
+          ],
+          [
+            1,
+            1934
+          ],
+          [
+            1,
+            1935
+          ],
+          [
+            1,
+            1966
+          ],
+          [
+            1,
+            1984
+          ],
+          [
+            1,
+            1989
+          ],
+          [
+            1,
+            1990
+          ],
+          [
+            1,
+            1995
+          ],
+          [
+            1,
+            2013
+          ],
+          [
+            1,
+            2046
+          ],
+          [
+            1,
+            2084
+          ],
+          [
+            1,
+            2119
+          ],
+          [
+            1,
+            2156
+          ],
+          [
+            1,
+            2193
+          ],
+          [
+            1,
+            2233
+          ],
+          [
+            1,
+            2271
+          ],
+          [
+            1,
+            2305
+          ],
+          [
+            1,
+            2343
+          ],
+          [
+            1,
+            2379
+          ],
+          [
+            1,
+            2413
+          ],
+          [
+            1,
+            2443
+          ],
+          [
+            1,
+            2478
+          ],
+          [
+            1,
+            2511
+          ],
+          [
+            1,
+            2549
+          ],
+          [
+            1,
+            2585
+          ],
+          [
+            1,
+            2612
+          ],
+          [
+            1,
+            2650
+          ],
+          [
+            1,
+            2680
+          ],
+          [
+            1,
+            2713
+          ],
+          [
+            1,
+            2745
+          ],
+          [
+            1,
+            2783
+          ],
+          [
+            1,
+            2814
+          ],
+          [
+            1,
+            2843
+          ],
+          [
+            1,
+            2881
+          ],
+          [
+            1,
+            2914
+          ],
+          [
+            1,
+            2940
+          ],
+          [
+            1,
+            2974
+          ],
+          [
+            1,
+            2983
+          ],
+          [
+            1,
+            3012
+          ],
+          [
+            1,
+            3051
+          ],
+          [
+            1,
+            3087
+          ],
+          [
+            1,
+            3117
+          ],
+          [
+            1,
+            3154
+          ],
+          [
+            1,
+            3194
+          ],
+          [
+            1,
+            3220
+          ],
+          [
+            1,
+            3257
+          ],
+          [
+            1,
+            3290
+          ],
+          [
+            1,
+            3326
+          ],
+          [
+            1,
+            3358
+          ],
+          [
+            1,
+            3394
+          ],
+          [
+            1,
+            3426
+          ],
+          [
+            1,
+            3457
+          ],
+          [
+            1,
+            3472
+          ],
+          [
+            1,
+            3504
+          ],
+          [
+            1,
+            3536
+          ],
+          [
+            1,
+            3569
+          ],
+          [
+            1,
+            3601
+          ],
+          [
+            1,
+            3632
+          ],
+          [
+            1,
+            3651
+          ],
+          [
+            1,
+            3685
+          ],
+          [
+            1,
+            3719
+          ],
+          [
+            1,
+            3756
+          ],
+          [
+            1,
+            3792
+          ],
+          [
+            1,
+            3795
+          ],
+          [
+            1,
+            3826
+          ],
+          [
+            1,
+            3859
+          ],
+          [
+            1,
+            3896
+          ],
+          [
+            1,
+            3924
+          ],
+          [
+            1,
+            3926
+          ],
+          [
+            1,
+            3951
+          ],
+          [
+            1,
+            3987
+          ],
+          [
+            1,
+            4014
+          ],
+          [
+            1,
+            4047
+          ],
+          [
+            1,
+            4082
+          ],
+          [
+            1,
+            4117
+          ],
+          [
+            1,
+            4154
+          ],
+          [
+            1,
+            4196
+          ],
+          [
+            1,
+            4232
+          ],
+          [
+            1,
+            4271
+          ],
+          [
+            1,
+            4296
+          ],
+          [
+            1,
+            4328
+          ],
+          [
+            1,
+            4364
+          ],
+          [
+            1,
+            4406
+          ],
+          [
+            1,
+            4441
+          ],
+          [
+            1,
+            4484
+          ],
+          [
+            1,
+            4517
+          ],
+          [
+            1,
+            4551
+          ],
+          [
+            1,
+            4584
+          ],
+          [
+            1,
+            4618
+          ],
+          [
+            1,
+            4651
+          ],
+          [
+            1,
+            4686
+          ],
+          [
+            1,
+            4719
+          ],
+          [
+            1,
+            4753
+          ],
+          [
+            1,
+            4789
+          ],
+          [
+            1,
+            4825
+          ],
+          [
+            1,
+            4859
+          ],
+          [
+            1,
+            4893
+          ],
+          [
+            1,
+            4926
+          ],
+          [
+            1,
+            4957
+          ],
+          [
+            1,
+            4993
+          ],
+          [
+            1,
+            5016
+          ],
+          [
+            1,
+            5023
+          ],
+          [
+            1,
+            5054
+          ],
+          [
+            1,
+            5077
+          ],
+          [
+            1,
+            5105
+          ],
+          [
+            1,
+            5142
+          ],
+          [
+            1,
+            5175
+          ],
+          [
+            1,
+            5189
+          ],
+          [
+            1,
+            5224
+          ],
+          [
+            1,
+            5254
+          ],
+          [
+            1,
+            5287
+          ],
+          [
+            1,
+            5321
+          ],
+          [
+            1,
+            5356
+          ],
+          [
+            1,
+            5389
+          ],
+          [
+            1,
+            5420
+          ],
+          [
+            1,
+            5451
+          ],
+          [
+            1,
+            5483
+          ],
+          [
+            1,
+            5517
+          ],
+          [
+            1,
+            5551
+          ],
+          [
+            1,
+            5585
+          ],
+          [
+            1,
+            5619
+          ],
+          [
+            1,
+            5652
+          ],
+          [
+            1,
+            5686
+          ],
+          [
+            1,
+            5721
+          ],
+          [
+            1,
+            5757
+          ],
+          [
+            1,
+            5791
+          ],
+          [
+            1,
+            5824
+          ],
+          [
+            1,
+            5854
+          ],
+          [
+            1,
+            5885
+          ],
+          [
+            1,
+            5891
+          ],
+          [
+            1,
+            5925
+          ],
+          [
+            1,
+            5959
+          ],
+          [
+            1,
+            5991
+          ],
+          [
+            2,
+            85
+          ],
+          [
+            2,
+            233
+          ],
+          [
+            2,
+            382
+          ],
+          [
+            2,
+            448
+          ],
+          [
+            2,
+            504
+          ],
+          [
+            2,
+            649
+          ],
+          [
+            2,
+            780
+          ],
+          [
+            2,
+            812
+          ],
+          [
+            2,
+            933
+          ],
+          [
+            2,
+            1057
+          ],
+          [
+            2,
+            1197
+          ],
+          [
+            2,
+            1331
+          ],
+          [
+            2,
+            1468
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5816,
+          "rounding": "up to 1ms",
+          "maximum_ms": 25,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1490,
+          "rounding": "up to 1ms",
+          "maximum_ms": 37,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14807,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7306,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "bd9bdacb6d574265a90332b6f375c0719db910e5d2cd5d7dc9df460ab5df94fa"
+    },
+    {
+      "id": "N3-one-loss-4211",
+      "seed": 4211,
+      "losses": 1,
+      "status": "passed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-one-loss-4211",
+      "inner_status": "passed",
+      "inner_error": null,
+      "strict_error": null,
+      "source_seconds": 30,
+      "result_sha256": "40b6700576251b85aec2fecb62d92a0ffd9aeca65fb4d9ac10700f8baed0e34b",
+      "provenance_sha256": "b8a5cfda7fa38e8a7fd9644a2ef67c120af5ab7c01e50f21edccc22739e4eeae",
+      "child_shutdown": {
+        "operator": {
+          "passed": true,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 142,
+              "begin_ns": 411444906146,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 411444912896,
+              "signal_end_ns": 411445030854,
+              "end_ns": 411660944562,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 143,
+              "begin_ns": 411424622937,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 411424639396,
+              "signal_end_ns": 411424771146,
+              "end_ns": 411589802437,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 142,
+              "begin_ns": 411589817687,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 411589831146,
+              "signal_end_ns": 411589852812,
+              "end_ns": 411913689854,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "cadence": {
+        "passed": true,
+        "duration_ns": 30057656972,
+        "tolerance_fraction": 0.01,
+        "routes": {
+          "1": {
+            "published": 6012,
+            "target_hz": 200,
+            "actual_hz": 200.01559022383003,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 5803,
+            "unobserved": 209
+          },
+          "2": {
+            "published": 1503,
+            "target_hz": 50,
+            "actual_hz": 50.00389755595751,
+            "skipped_slots": 0,
+            "cadence_pass": true,
+            "observed": 1489,
+            "unobserved": 14
+          }
+        },
+        "unobserved": [
+          [
+            1,
+            11
+          ],
+          [
+            1,
+            43
+          ],
+          [
+            1,
+            77
+          ],
+          [
+            1,
+            111
+          ],
+          [
+            1,
+            143
+          ],
+          [
+            1,
+            151
+          ],
+          [
+            1,
+            178
+          ],
+          [
+            1,
+            193
+          ],
+          [
+            1,
+            226
+          ],
+          [
+            1,
+            262
+          ],
+          [
+            1,
+            264
+          ],
+          [
+            1,
+            292
+          ],
+          [
+            1,
+            324
+          ],
+          [
+            1,
+            349
+          ],
+          [
+            1,
+            386
+          ],
+          [
+            1,
+            419
+          ],
+          [
+            1,
+            454
+          ],
+          [
+            1,
+            486
+          ],
+          [
+            1,
+            520
+          ],
+          [
+            1,
+            545
+          ],
+          [
+            1,
+            547
+          ],
+          [
+            1,
+            575
+          ],
+          [
+            1,
+            606
+          ],
+          [
+            1,
+            608
+          ],
+          [
+            1,
+            609
+          ],
+          [
+            1,
+            617
+          ],
+          [
+            1,
+            644
+          ],
+          [
+            1,
+            677
+          ],
+          [
+            1,
+            712
+          ],
+          [
+            1,
+            717
+          ],
+          [
+            1,
+            753
+          ],
+          [
+            1,
+            787
+          ],
+          [
+            1,
+            819
+          ],
+          [
+            1,
+            857
+          ],
+          [
+            1,
+            890
+          ],
+          [
+            1,
+            926
+          ],
+          [
+            1,
+            962
+          ],
+          [
+            1,
+            993
+          ],
+          [
+            1,
+            1029
+          ],
+          [
+            1,
+            1059
+          ],
+          [
+            1,
+            1096
+          ],
+          [
+            1,
+            1135
+          ],
+          [
+            1,
+            1164
+          ],
+          [
+            1,
+            1197
+          ],
+          [
+            1,
+            1221
+          ],
+          [
+            1,
+            1254
+          ],
+          [
+            1,
+            1285
+          ],
+          [
+            1,
+            1316
+          ],
+          [
+            1,
+            1346
+          ],
+          [
+            1,
+            1380
+          ],
+          [
+            1,
+            1411
+          ],
+          [
+            1,
+            1445
+          ],
+          [
+            1,
+            1480
+          ],
+          [
+            1,
+            1515
+          ],
+          [
+            1,
+            1546
+          ],
+          [
+            1,
+            1554
+          ],
+          [
+            1,
+            1586
+          ],
+          [
+            1,
+            1620
+          ],
+          [
+            1,
+            1645
+          ],
+          [
+            1,
+            1671
+          ],
+          [
+            1,
+            1701
+          ],
+          [
+            1,
+            1732
+          ],
+          [
+            1,
+            1762
+          ],
+          [
+            1,
+            1799
+          ],
+          [
+            1,
+            1831
+          ],
+          [
+            1,
+            1869
+          ],
+          [
+            1,
+            1905
+          ],
+          [
+            1,
+            1945
+          ],
+          [
+            1,
+            1971
+          ],
+          [
+            1,
+            2006
+          ],
+          [
+            1,
+            2010
+          ],
+          [
+            1,
+            2011
+          ],
+          [
+            1,
+            2013
+          ],
+          [
+            1,
+            2022
+          ],
+          [
+            1,
+            2055
+          ],
+          [
+            1,
+            2086
+          ],
+          [
+            1,
+            2123
+          ],
+          [
+            1,
+            2154
+          ],
+          [
+            1,
+            2189
+          ],
+          [
+            1,
+            2226
+          ],
+          [
+            1,
+            2259
+          ],
+          [
+            1,
+            2291
+          ],
+          [
+            1,
+            2323
+          ],
+          [
+            1,
+            2356
+          ],
+          [
+            1,
+            2392
+          ],
+          [
+            1,
+            2425
+          ],
+          [
+            1,
+            2461
+          ],
+          [
+            1,
+            2496
+          ],
+          [
+            1,
+            2516
+          ],
+          [
+            1,
+            2551
+          ],
+          [
+            1,
+            2568
+          ],
+          [
+            1,
+            2599
+          ],
+          [
+            1,
+            2637
+          ],
+          [
+            1,
+            2645
+          ],
+          [
+            1,
+            2647
+          ],
+          [
+            1,
+            2683
+          ],
+          [
+            1,
+            2698
+          ],
+          [
+            1,
+            2736
+          ],
+          [
+            1,
+            2778
+          ],
+          [
+            1,
+            2811
+          ],
+          [
+            1,
+            2849
+          ],
+          [
+            1,
+            2886
+          ],
+          [
+            1,
+            2923
+          ],
+          [
+            1,
+            2954
+          ],
+          [
+            1,
+            2990
+          ],
+          [
+            1,
+            3026
+          ],
+          [
+            1,
+            3057
+          ],
+          [
+            1,
+            3090
+          ],
+          [
+            1,
+            3123
+          ],
+          [
+            1,
+            3153
+          ],
+          [
+            1,
+            3186
+          ],
+          [
+            1,
+            3221
+          ],
+          [
+            1,
+            3256
+          ],
+          [
+            1,
+            3298
+          ],
+          [
+            1,
+            3331
+          ],
+          [
+            1,
+            3365
+          ],
+          [
+            1,
+            3400
+          ],
+          [
+            1,
+            3432
+          ],
+          [
+            1,
+            3465
+          ],
+          [
+            1,
+            3502
+          ],
+          [
+            1,
+            3536
+          ],
+          [
+            1,
+            3538
+          ],
+          [
+            1,
+            3572
+          ],
+          [
+            1,
+            3613
+          ],
+          [
+            1,
+            3633
+          ],
+          [
+            1,
+            3634
+          ],
+          [
+            1,
+            3635
+          ],
+          [
+            1,
+            3636
+          ],
+          [
+            1,
+            3637
+          ],
+          [
+            1,
+            3638
+          ],
+          [
+            1,
+            3639
+          ],
+          [
+            1,
+            3640
+          ],
+          [
+            1,
+            3641
+          ],
+          [
+            1,
+            3642
+          ],
+          [
+            1,
+            3676
+          ],
+          [
+            1,
+            3709
+          ],
+          [
+            1,
+            3746
+          ],
+          [
+            1,
+            3763
+          ],
+          [
+            1,
+            3764
+          ],
+          [
+            1,
+            3800
+          ],
+          [
+            1,
+            3830
+          ],
+          [
+            1,
+            3867
+          ],
+          [
+            1,
+            3904
+          ],
+          [
+            1,
+            3926
+          ],
+          [
+            1,
+            3961
+          ],
+          [
+            1,
+            3996
+          ],
+          [
+            1,
+            4028
+          ],
+          [
+            1,
+            4061
+          ],
+          [
+            1,
+            4101
+          ],
+          [
+            1,
+            4139
+          ],
+          [
+            1,
+            4177
+          ],
+          [
+            1,
+            4215
+          ],
+          [
+            1,
+            4249
+          ],
+          [
+            1,
+            4281
+          ],
+          [
+            1,
+            4312
+          ],
+          [
+            1,
+            4346
+          ],
+          [
+            1,
+            4376
+          ],
+          [
+            1,
+            4409
+          ],
+          [
+            1,
+            4443
+          ],
+          [
+            1,
+            4476
+          ],
+          [
+            1,
+            4514
+          ],
+          [
+            1,
+            4538
+          ],
+          [
+            1,
+            4544
+          ],
+          [
+            1,
+            4578
+          ],
+          [
+            1,
+            4607
+          ],
+          [
+            1,
+            4639
+          ],
+          [
+            1,
+            4672
+          ],
+          [
+            1,
+            4705
+          ],
+          [
+            1,
+            4729
+          ],
+          [
+            1,
+            4764
+          ],
+          [
+            1,
+            4800
+          ],
+          [
+            1,
+            4836
+          ],
+          [
+            1,
+            4868
+          ],
+          [
+            1,
+            4894
+          ],
+          [
+            1,
+            4929
+          ],
+          [
+            1,
+            4963
+          ],
+          [
+            1,
+            4998
+          ],
+          [
+            1,
+            5031
+          ],
+          [
+            1,
+            5063
+          ],
+          [
+            1,
+            5095
+          ],
+          [
+            1,
+            5123
+          ],
+          [
+            1,
+            5155
+          ],
+          [
+            1,
+            5189
+          ],
+          [
+            1,
+            5227
+          ],
+          [
+            1,
+            5254
+          ],
+          [
+            1,
+            5288
+          ],
+          [
+            1,
+            5325
+          ],
+          [
+            1,
+            5364
+          ],
+          [
+            1,
+            5398
+          ],
+          [
+            1,
+            5437
+          ],
+          [
+            1,
+            5472
+          ],
+          [
+            1,
+            5505
+          ],
+          [
+            1,
+            5538
+          ],
+          [
+            1,
+            5574
+          ],
+          [
+            1,
+            5608
+          ],
+          [
+            1,
+            5645
+          ],
+          [
+            1,
+            5647
+          ],
+          [
+            1,
+            5662
+          ],
+          [
+            1,
+            5699
+          ],
+          [
+            1,
+            5739
+          ],
+          [
+            1,
+            5758
+          ],
+          [
+            1,
+            5796
+          ],
+          [
+            1,
+            5829
+          ],
+          [
+            1,
+            5863
+          ],
+          [
+            1,
+            5868
+          ],
+          [
+            1,
+            5905
+          ],
+          [
+            1,
+            5940
+          ],
+          [
+            1,
+            5974
+          ],
+          [
+            1,
+            6006
+          ],
+          [
+            2,
+            105
+          ],
+          [
+            2,
+            137
+          ],
+          [
+            2,
+            226
+          ],
+          [
+            2,
+            360
+          ],
+          [
+            2,
+            489
+          ],
+          [
+            2,
+            532
+          ],
+          [
+            2,
+            669
+          ],
+          [
+            2,
+            793
+          ],
+          [
+            2,
+            909
+          ],
+          [
+            2,
+            910
+          ],
+          [
+            2,
+            976
+          ],
+          [
+            2,
+            1119
+          ],
+          [
+            2,
+            1250
+          ],
+          [
+            2,
+            1381
+          ]
+        ],
+        "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5804,
+          "rounding": "up to 1ms",
+          "maximum_ms": 60,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 12
+        },
+        "joint": {
+          "count": 1489,
+          "rounding": "up to 1ms",
+          "maximum_ms": 30,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14796,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7296,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "strict_assessment_sha256": "30696665bbab27dba46ec3bc6e8ded28dc5f1f988e09c3976eb3af99a20b9d1b"
+    },
+    {
+      "id": "N3-two-loss-4211",
+      "seed": 4211,
+      "losses": 2,
+      "status": "failed",
+      "run": ".local/m3-n3-frozen-cohort-20261109T192408181359Z/N3-two-loss-4211",
+      "inner_status": "failed",
+      "inner_error": "multiroute scenario exit failed; inspect child-shutdown/scenario logs",
+      "strict_error": "N3 inner harness failed",
+      "source_seconds": 30,
+      "result_sha256": "aeeb44066fe4a359d1b97468011fd9ca14f7e864b73e7ff5c7f606aa9b5738ad",
+      "provenance_sha256": "47e1da65da2c7172c5943ea8658534adf12911d31e80f0250c1af20556a7eb22",
+      "child_shutdown": {
+        "operator": {
+          "passed": false,
+          "children": [
+            {
+              "name": "operator-bridge-0",
+              "pid": 141,
+              "begin_ns": 463726695128,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": true,
+              "returncode": -9,
+              "error": "child exceeded shutdown deadline",
+              "signal_begin_ns": 463726703794,
+              "signal_end_ns": 463726850211,
+              "end_ns": 468737744838,
+              "passed": false
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        },
+        "robot": {
+          "passed": true,
+          "children": [
+            {
+              "name": "robot-source",
+              "pid": 142,
+              "begin_ns": 463750915503,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 463750923211,
+              "signal_end_ns": 463751235461,
+              "end_ns": 463917188086,
+              "passed": true
+            },
+            {
+              "name": "robot-bridge-0",
+              "pid": 141,
+              "begin_ns": 463917206378,
+              "initial_returncode": null,
+              "signal_sent": true,
+              "forced_kill": false,
+              "returncode": 0,
+              "error": null,
+              "signal_begin_ns": 463917222544,
+              "signal_end_ns": 463917245086,
+              "end_ns": 464245266794,
+              "passed": true
+            }
+          ],
+          "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+        }
+      },
+      "fault_restored": true,
+      "selected_fault_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "cleanup": {
+        "recorded_owned_removal": "passed",
+        "containers_absent": true,
+        "network_absent": true,
+        "credential_absent": true
+      },
+      "unassessed_gates": "source/SDK/receiver/typed accounting and measurement capture revalidation not reached after abnormal child exit; no inferred pass"
+    }
+  ]
+}
