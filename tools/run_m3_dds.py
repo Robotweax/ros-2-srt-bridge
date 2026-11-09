@@ -16,6 +16,7 @@ from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 from m3_results import summarize_commands
 from m3_ros_discovery_cut import DiscoveryCut
+from m3_runtime_layout import LAYOUTS,matched
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -30,11 +31,13 @@ def main():
     parser.add_argument('--outage-direction',choices=['both','robot','operator'],default='both')
     parser.add_argument('--smoke',action='store_true')
     parser.add_argument('--seconds',type=int)
+    parser.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline',help='explicit fixed matched install; nonbaseline requires --skip-build')
     parser.add_argument('--skip-build',action='store_true',help='reuse M3 binaries; recorded as development reuse')
     parser.add_argument('--monotonic-capture',action='store_true',help='experimental passive kernel-monotonic observer; adds CAP_BPF to owned endpoints')
     parser.add_argument('--discovery-fragment-cut',action='store_true',help='explicit N0 control-first ROS discovery-only diagnostic')
     parser.add_argument('--capture-drain-check',action='store_true')
     args=parser.parse_args()
+    if args.runtime_layout!='baseline' and not args.skip_build:parser.error('explicit matched runtime layout requires --skip-build')
     if args.discovery_fragment_cut and (args.profile!='N0' or not args.commands or args.startup!='control-first' or args.dds_profile!='system' or args.monotonic_capture):parser.error('discovery cut requires N0/system/commands/control-first without extra observers')
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     seconds=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
@@ -76,14 +79,18 @@ def main():
                 'set -e; source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; '
                 'colcon --log-base '+inside+'/colcon-test test --base-paths ros2 --build-base build/m3-ros '
                 '--install-base install/m3-ros --return-code-on-test-failure; colcon test-result --test-result-base build/m3-ros --verbose'])
-        binary=ROOT/'install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'
+        report['runtime_layout']=matched(ROOT,args.runtime_layout);ros_install=report['runtime_layout']['ros']
+        binary=ROOT/ros_install/'robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator'
         report['simulator_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
         if args.commands:
-            binary=ROOT/'install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
+            binary=ROOT/ros_install/'robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
             report['command_node_binary_sha256']=hashlib.sha256(binary.read_bytes()).hexdigest()
         report.update(verify_profile(ROOT,run,image,args.dds_profile,execute,build_probe=not args.skip_build))
         if args.monotonic_capture:report['monotonic_capture_config']=mono_capture.prepare(ROOT,run,image,execute,args.skip_build)
         lab=DdsLab(ROOT,run,image,args.dds_profile,monotonic_capture=args.monotonic_capture);lab.start()
+        for role in lab.containers:
+            prefix=lab.inside(role,role+'-selected-ros-prefix',['bash','-c','source /opt/ros/jazzy/setup.bash && source '+shlex.quote(ros_install+'/setup.bash')+' && ros2 pkg prefix robotweax_srt_bridge']).strip()
+            if prefix!='/workspace/'+ros_install+'/robotweax_srt_bridge':raise ValueError('selected ROS prefix mismatch')
         report['discovery']=dict(ros_domain_id=60,range='SUBNET',static_peers={role:lab.addresses['operator' if role=='robot' else 'robot'] for role in lab.containers},rmw='rmw_fastrtps_cpp')
         # Cross-container realtime age estimates require the same kernel and
         # time namespaces. Capture the raw proof rather than assuming host time.
@@ -110,8 +117,8 @@ def main():
             captures.append((p,log));competitor=p
         lab.snapshot('before')
         for role,name in lab.containers.items():
-            command='source /opt/ros/jazzy/setup.bash; source install/m3-ros/setup.bash; exec python3 '+shlex.join([
-                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds),'--startup',args.startup]+(['--commands'] if args.commands else [])+(['--discovery-fragment-cut'] if args.discovery_fragment_cut else []))
+            command='source /opt/ros/jazzy/setup.bash && source '+shlex.quote(ros_install+'/setup.bash')+' && exec python3 '+shlex.join([
+                'ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py','--role',role,'--run',inside,'--seconds',str(seconds),'--startup',args.startup,'--ros-install',ros_install]+(['--commands'] if args.commands else [])+(['--discovery-fragment-cut'] if args.discovery_fragment_cut else []))
             log=(run/(role+'-scenario.log')).open('w')
             peer=lab.addresses['operator' if role=='robot' else 'robot']
             p=subprocess.Popen(['docker','exec','-e','ROS_STATIC_PEERS='+peer,name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT)

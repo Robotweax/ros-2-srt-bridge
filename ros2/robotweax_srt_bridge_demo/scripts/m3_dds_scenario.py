@@ -123,7 +123,7 @@ class DdsScenario(Node):
 
     def robot(self):
         log=(self.run/'simulator.log').open('w')
-        argv=['/workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator']
+        argv=['/workspace/'+self.args.ros_install+'/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator']
         if self.load and self.args.startup=='control-first':argv+=['--ros-args','-p','publishing_enabled:=false']
         self.process=subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT)
         try:
@@ -234,6 +234,7 @@ def main():
     parser.add_argument('--startup',choices=['simultaneous','control-first'],default='simultaneous')
     parser.add_argument('--commands',action='store_true',help='journaled Reliable DDS commands every two seconds')
     parser.add_argument('--discovery-fragment-cut',action='store_true')
+    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros')
     args=parser.parse_args()
     if args.discovery_fragment_cut and (not args.commands or args.startup!='control-first'):parser.error('discovery cut requires journaled control-first fixture')
     if not 10<=args.seconds<=7200:parser.error('duration must be 10..7200 seconds')

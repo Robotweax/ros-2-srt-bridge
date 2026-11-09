@@ -29,7 +29,7 @@ class DdsCommandLoad:
         if state.failed:raise RuntimeError('DDS command coordinator failed')
 
     def launch(self):
-        executable='/workspace/install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
+        executable='/workspace/'+getattr(self.node.args,'ros_install','install/m3-ros')+'/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node'
         self.log=(self.node.run/(self.node.args.role+'-command.log')).open('w')
         self.process=subprocess.Popen([executable,'--ros-args','-p','role:='+('sender' if self.sender else 'receiver'),
             '-p','journal_path:='+str(self.node.run/(self.node.args.role+'.sqlite'))],stdout=self.log,stderr=subprocess.STDOUT)

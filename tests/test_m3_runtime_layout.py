@@ -24,7 +24,7 @@ class RuntimeLayoutTests(unittest.TestCase):
     def save(self):self.manifest.write_text(json.dumps(dict(new_matched_build_binaries=self.expected,installed_baseline=self.baseline)))
     def test_scenario_parsers_accept_selected_reconciliation_prefix(self):
         root=Path(__file__).resolve().parents[1]/'ros2/robotweax_srt_bridge_demo/scripts'
-        for name in ('m3_scenario.py','m3_ros_multiroute_scenario.py'):
+        for name in ('m3_scenario.py','m3_ros_multiroute_scenario.py','m3_dds_scenario.py'):
             calls=[n for n in ast.walk(ast.parse((root/name).read_text())) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='add_argument' and n.args and isinstance(n.args[0],ast.Constant) and n.args[0].value=='--ros-install']
             self.assertEqual(len(calls),1,name)
             choices=next(k.value for k in calls[0].keywords if k.arg=='choices')
