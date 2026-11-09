@@ -16,7 +16,7 @@ std::string hex(Identity id){std::string s;constexpr char h[]="0123456789abcdef"
 EndpointOptions options(Role role,const std::string& ip,const std::string& key,const std::filesystem::path& path,bool enabled,unsigned phase){
  Route route{100,RouteKind::command,Direction::listener_to_caller,QosMapping::request_status,true,4000,5000,0,1,"robotweax.srt_bridge.v1.SetMeasurementRateCommand",rate_command_schema_hash()};auto manifest=*make_manifest(std::span(&route,1)).value;
  SessionConfig s{role,role==Role::caller?"robot":"operator",role==Role::caller?"operator":"robot",random_identity(),role==Role::caller?1U:2U,manifest,{1000,1000000,phase==1?500000000ULL:phase==2?1500000000ULL:5000000000ULL,100000000}};
- EndpointOptions o;o.transport={s,{ip,0},{ip,0},key};o.transport.command_trace=std::make_shared<CommandTrace>();o.transport.start_diagnostics=enabled;
+ EndpointOptions o{{s,{ip,0},{ip,0},key},WorkerOptions{}};o.transport.command_trace=std::make_shared<CommandTrace>();o.transport.start_diagnostics=enabled;
  o.worker.executable=WORKER_EXECUTABLE;o.worker.journal.path=path.string();o.worker.journal.local_peer_id=s.local_peer_id;o.worker.journal.remote_peer_id=s.expected_peer_id;o.worker.journal.process_epoch=s.local_epoch;o.worker.journal.side=role==Role::listener?JournalSide::sender:JournalSide::receiver;o.worker.simulated_rate_handler=role==Role::caller;
  if(role==Role::caller&&phase==1)o.worker.test_pause_at=JournalPoint::dispatch_committed;
  if(role==Role::caller&&phase==2)o.worker.test_handler_pause=2;
