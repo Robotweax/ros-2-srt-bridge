@@ -10,18 +10,27 @@ import m3_runtime_layout
 
 SLOTS=[dict(label='srt-N0-2903',profile='N0',seconds=15,seed=2903),dict(label='srt-N5-2903',profile='N5',seconds=300,seed=2903)]
 OBSERVERS=['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
+ADDITIONAL_SLOTS=[dict(label='srt-N0-1701',profile='N0',seconds=15,seed=1701),dict(label='srt-N5-1701',profile='N5',seconds=300,seed=1701),dict(label='srt-N5-4211',profile='N5',seconds=300,seed=4211)]
+
+
+def selected_slots(coverage,start_trace):
+    if coverage=='focused':return SLOTS
+    if coverage!='additional-seeds' or not start_trace:raise ValueError('additional seed coverage requires matched start tracing')
+    return ADDITIONAL_SLOTS
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');args=parser.parse_args();
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--packet-trace',action='store_true');parser.add_argument('--start-trace',action='store_true');parser.add_argument('--coverage',choices=('focused','additional-seeds'),default='focused');args=parser.parse_args();
     if args.start_trace and not args.packet_trace:parser.error('start-trace cohort requires packet-trace')
+    try:slots=selected_slots(args.coverage,args.start_trace)
+    except ValueError as error:parser.error(str(error))
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
     layout=m3_runtime_layout.matched(ROOT,'start-trace' if args.start_trace else 'baseline')
     runtime_paths=layout['runtime_paths'];runtime={p:sha(ROOT/p) for p in runtime_paths};observers={p:sha(ROOT/p) for p in OBSERVERS+(['build/arp-packet-trace/arp_packet_trace'] if args.packet_trace else [])}
     if runtime[runtime_paths[-1]]!=ARCHIVE:raise ValueError('provider pin mismatch')
-    report=dict(runtime_layout=layout,source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,slots=SLOTS,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
+    report=dict(runtime_layout=layout,source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,coverage=args.coverage,slots=slots,progress_gate='durable-outcomes',strict_success_also_reported=True,runtime_before=runtime,observer_before=observers,rows=[],qualification=False)
     write(out/'execution.json',report);failed=False
-    for slot in SLOTS:
+    for slot in slots:
         row=dict(slot=slot,status='not_executed');report['rows'].append(row)
         if failed:row['why']='prior cohort failure; no retries';write(out/'execution.json',report);continue
         before=set((ROOT/'.local/m3').glob('*'))
