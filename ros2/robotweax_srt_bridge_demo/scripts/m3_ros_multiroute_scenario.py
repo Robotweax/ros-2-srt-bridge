@@ -69,7 +69,7 @@ class Multiroute(Finite):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--shutdown-diagnostics',action='store_true');p.add_argument('--shutdown-stacks',action='store_true');p.add_argument('--shutdown-stack-mode',choices=('procfs','gdb'),default='procfs');p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--shutdown-diagnostics',action='store_true');p.add_argument('--shutdown-stacks',action='store_true');p.add_argument('--shutdown-stack-mode',choices=('procfs','gdb'),default='procfs');p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros','install/m3-shutdown-trace-calibration-ros'),default='install/m3-ros');a=p.parse_args()
     if a.shutdown_stack_mode!='procfs' and not a.shutdown_stacks:p.error('GDB requires explicit shutdown stack observer')
     a.clock_width_ms=200;a.provider_diagnostics=False;a.command_diagnostics=False;a.sample_diagnostics=True
     rclpy.init();driver=Multiroute(a)

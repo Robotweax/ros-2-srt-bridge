@@ -1,0 +1,1311 @@
+{
+  "status": "failed",
+  "rows": [
+    {
+      "slot": {
+        "id": "default-off-N0",
+        "kind": "sensor",
+        "diagnostics": false
+      },
+      "status": "passed",
+      "produced": {
+        "run": ".local/m3-shutdown-live-calibration-20261109T213149536405Z/default-off-N0",
+        "inner_status": "passed"
+      },
+      "assessment": {
+        "status": "passed",
+        "proofs": {
+          "sensor": {
+            "gate": "N3_strict_window_and_recorded_capture",
+            "window": {
+              "source_produced": 2515,
+              "observer_received": 2416,
+              "missing": 99,
+              "losses": {
+                "upstream_dds": 0,
+                "validation": 0,
+                "admission": 4,
+                "ingress_replaced": 1,
+                "ingress_flushed": 0,
+                "input_rejected": 0,
+                "outbound_replaced": 93,
+                "outbound_expired": 0,
+                "outbound_flushed": 0,
+                "srt_accept_to_receiver_gap": 0,
+                "receiver_rejected": 0,
+                "receive_replaced": 0,
+                "receive_flushed": 0,
+                "poll_expired": 0,
+                "publication_rejected": 0,
+                "observer_dds": 1
+              },
+              "balances": {
+                "typed_ingress": 0,
+                "ingress_mailbox": 0,
+                "outbound_queue": 0,
+                "receive_mailbox": 0,
+                "publication": 0,
+                "end_to_end": 0
+              },
+              "source_enabled_seconds": 10.055720797,
+              "source_actual_hz": {
+                "imu": 200.08510982129252,
+                "joints": 50.02127745532313
+              },
+              "published": 2417,
+              "age_upper_histograms": {
+                "imu": {
+                  "count": 1920,
+                  "rounding": "up to 1ms",
+                  "maximum_ms": 16,
+                  "p50_ms": 10,
+                  "p95_ms": 12,
+                  "p99_ms": 13
+                },
+                "joint": {
+                  "count": 497,
+                  "rounding": "up to 1ms",
+                  "maximum_ms": 29,
+                  "p50_ms": 17,
+                  "p95_ms": 26,
+                  "p99_ms": 28
+                }
+              },
+              "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+            }
+          }
+        }
+      }
+    },
+    {
+      "slot": {
+        "id": "enabled-procfs-N0",
+        "kind": "sensor",
+        "diagnostics": true
+      },
+      "status": "passed",
+      "produced": {
+        "run": ".local/m3-shutdown-live-calibration-20261109T213149536405Z/enabled-procfs-N0",
+        "inner_status": "passed"
+      },
+      "assessment": {
+        "status": "passed",
+        "proofs": {
+          "sensor": {
+            "gate": "N3_strict_window_and_recorded_capture",
+            "window": {
+              "source_produced": 2514,
+              "observer_received": 2423,
+              "missing": 91,
+              "losses": {
+                "upstream_dds": 4,
+                "validation": 0,
+                "admission": 9,
+                "ingress_replaced": 0,
+                "ingress_flushed": 0,
+                "input_rejected": 0,
+                "outbound_replaced": 77,
+                "outbound_expired": 0,
+                "outbound_flushed": 0,
+                "srt_accept_to_receiver_gap": 0,
+                "receiver_rejected": 0,
+                "receive_replaced": 0,
+                "receive_flushed": 0,
+                "poll_expired": 0,
+                "publication_rejected": 0,
+                "observer_dds": 1
+              },
+              "balances": {
+                "typed_ingress": 0,
+                "ingress_mailbox": 0,
+                "outbound_queue": 0,
+                "receive_mailbox": 0,
+                "publication": 0,
+                "end_to_end": 0
+              },
+              "source_enabled_seconds": 10.054181921,
+              "source_actual_hz": {
+                "imu": 200.01627340755178,
+                "joints": 50.02893362705049
+              },
+              "published": 2424,
+              "age_upper_histograms": {
+                "imu": {
+                  "count": 1926,
+                  "rounding": "up to 1ms",
+                  "maximum_ms": 31,
+                  "p50_ms": 9,
+                  "p95_ms": 12,
+                  "p99_ms": 12
+                },
+                "joint": {
+                  "count": 498,
+                  "rounding": "up to 1ms",
+                  "maximum_ms": 28,
+                  "p50_ms": 17,
+                  "p95_ms": 26,
+                  "p99_ms": 27
+                }
+              },
+              "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+            }
+          },
+          "operator": {
+            "stages": {
+              "records": 51,
+              "points": [
+                "control_close_begin",
+                "control_close_end",
+                "endpoint_shutdown_begin",
+                "endpoint_shutdown_body_end",
+                "endpoint_transport_join_begin",
+                "endpoint_transport_join_end",
+                "epoll_release_begin",
+                "epoll_release_end",
+                "main_context_shutdown_begin",
+                "main_context_shutdown_end",
+                "main_node_reset_begin",
+                "main_node_reset_end",
+                "main_spin_begin",
+                "main_spin_end",
+                "node_destructor_begin",
+                "node_destructor_body_end",
+                "node_endpoint_join_begin",
+                "node_endpoint_join_end",
+                "node_endpoint_stop_begin",
+                "node_endpoint_stop_end",
+                "node_timers_reset",
+                "node_trace_drain_begin",
+                "node_trace_drain_end",
+                "provider_cleanup_begin",
+                "provider_cleanup_end",
+                "provider_release_begin",
+                "provider_release_end",
+                "provider_release_locked",
+                "ros_context_shutdown_callback",
+                "sensor_close_begin",
+                "sensor_close_end",
+                "socket_close_begin",
+                "socket_close_end",
+                "socket_epoll_remove_begin",
+                "transport_session_stop_begin",
+                "transport_session_stop_end",
+                "transport_shutdown_begin",
+                "transport_thread_body_end",
+                "worker_join_begin",
+                "worker_join_end",
+                "worker_stop_begin",
+                "worker_stop_end"
+              ],
+              "rows": [
+                {
+                  "schema_version": 1,
+                  "sequence": 1,
+                  "monotonic_ns": 508132632689,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_spin_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 2,
+                  "monotonic_ns": 527641155364,
+                  "pid": 142,
+                  "tid": 146,
+                  "point": "ros_context_shutdown_callback",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 3,
+                  "monotonic_ns": 527647078239,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_spin_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 4,
+                  "monotonic_ns": 527647267114,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_node_reset_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 5,
+                  "monotonic_ns": 527648031864,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_destructor_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 6,
+                  "monotonic_ns": 527648508031,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_timers_reset",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 7,
+                  "monotonic_ns": 527649256573,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_endpoint_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 8,
+                  "monotonic_ns": 527649471531,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_endpoint_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 9,
+                  "monotonic_ns": 527649668864,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_endpoint_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 10,
+                  "monotonic_ns": 527650169781,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "transport_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 11,
+                  "monotonic_ns": 527650566698,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "transport_session_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 12,
+                  "monotonic_ns": 527650949031,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_epoll_remove_begin",
+                  "detail": 856853874,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 13,
+                  "monotonic_ns": 527651312698,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_begin",
+                  "detail": 856853874,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 14,
+                  "monotonic_ns": 527651521864,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "endpoint_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 15,
+                  "monotonic_ns": 527651644156,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "worker_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 16,
+                  "monotonic_ns": 527652483948,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "worker_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 17,
+                  "monotonic_ns": 527652579489,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "worker_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 18,
+                  "monotonic_ns": 527654853906,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_end",
+                  "detail": 856853874,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 19,
+                  "monotonic_ns": 527655552823,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_epoll_remove_begin",
+                  "detail": 402004429,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 20,
+                  "monotonic_ns": 527655634948,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_begin",
+                  "detail": 402004429,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 21,
+                  "monotonic_ns": 527655787239,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_end",
+                  "detail": 402004429,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 22,
+                  "monotonic_ns": 527655864406,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "transport_session_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 23,
+                  "monotonic_ns": 527656099281,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "control_close_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 24,
+                  "monotonic_ns": 527656198406,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_epoll_remove_begin",
+                  "detail": 631293271,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 25,
+                  "monotonic_ns": 527656267573,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_begin",
+                  "detail": 631293271,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 26,
+                  "monotonic_ns": 527657881864,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_end",
+                  "detail": 631293271,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 27,
+                  "monotonic_ns": 527657997239,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "control_close_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 28,
+                  "monotonic_ns": 527658088073,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "sensor_close_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 29,
+                  "monotonic_ns": 527658272906,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_epoll_remove_begin",
+                  "detail": 358593755,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 30,
+                  "monotonic_ns": 527658335364,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_begin",
+                  "detail": 358593755,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 31,
+                  "monotonic_ns": 527658444614,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "socket_close_end",
+                  "detail": 358593755,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 32,
+                  "monotonic_ns": 527658515906,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "sensor_close_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 33,
+                  "monotonic_ns": 527658585739,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "epoll_release_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 34,
+                  "monotonic_ns": 527658868614,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "epoll_release_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 35,
+                  "monotonic_ns": 527658939198,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "provider_release_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 36,
+                  "monotonic_ns": 527659015031,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "provider_release_locked",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 37,
+                  "monotonic_ns": 527659129614,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "provider_cleanup_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 38,
+                  "monotonic_ns": 527659176698,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "worker_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 39,
+                  "monotonic_ns": 527659291823,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "endpoint_transport_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 40,
+                  "monotonic_ns": 527665017406,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "provider_cleanup_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 41,
+                  "monotonic_ns": 527665210739,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "provider_release_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 42,
+                  "monotonic_ns": 527665306406,
+                  "pid": 142,
+                  "tid": 156,
+                  "point": "transport_thread_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 43,
+                  "monotonic_ns": 527665489281,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "endpoint_transport_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 44,
+                  "monotonic_ns": 527665751156,
+                  "pid": 142,
+                  "tid": 157,
+                  "point": "endpoint_shutdown_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 45,
+                  "monotonic_ns": 527666076739,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_endpoint_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 46,
+                  "monotonic_ns": 527666161531,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_trace_drain_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 47,
+                  "monotonic_ns": 527666252406,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_trace_drain_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 48,
+                  "monotonic_ns": 527666294573,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "node_destructor_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 49,
+                  "monotonic_ns": 527688603031,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_node_reset_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 50,
+                  "monotonic_ns": 527688780948,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_context_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 51,
+                  "monotonic_ns": 527689299906,
+                  "pid": 142,
+                  "tid": 142,
+                  "point": "main_context_shutdown_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                }
+              ]
+            },
+            "observer": {
+              "control": {
+                "group_cleanup_signal_sent": false,
+                "scope": "observer lifecycle only; stack availability remains in sample/GDB records; intrusive GDB timing unqualified",
+                "footer": {
+                  "kind": "status",
+                  "completed": true,
+                  "reason": "parent_stop",
+                  "samples": 1,
+                  "sample_limit": 48,
+                  "budget_exhausted": false,
+                  "kernel_stack_reads_ok": 0,
+                  "kernel_stack_reads_unavailable": 24,
+                  "userspace_stacks_requested": false,
+                  "end_ns": 527894615989,
+                  "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+                },
+                "armed": true,
+                "returncode": 0,
+                "forced_kill": false,
+                "path": "/workspace/.local/m3-shutdown-live-calibration-20261109T213149536405Z/enabled-procfs-N0/operator-bridge-0-shutdown-stacks.jsonl",
+                "complete": true
+              },
+              "post_signal_samples": 1,
+              "post_signal_thread_reads": 24,
+              "nonempty_post_signal_kernel_stacks": 0,
+              "unavailable_post_signal_kernel_stacks": 24,
+              "kernel_errors": [
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                }
+              ],
+              "rows_sha256": "1b2e901b3d7f71b05c71aecc1490a8eb2c08bb7fc6abcabf8c819d9d0389d0dc",
+              "intrusive": false
+            }
+          },
+          "robot": {
+            "stages": {
+              "records": 42,
+              "points": [
+                "control_close_begin",
+                "control_close_end",
+                "endpoint_shutdown_begin",
+                "endpoint_shutdown_body_end",
+                "endpoint_transport_join_begin",
+                "endpoint_transport_join_end",
+                "epoll_release_begin",
+                "epoll_release_end",
+                "main_context_shutdown_begin",
+                "main_context_shutdown_end",
+                "main_node_reset_begin",
+                "main_node_reset_end",
+                "main_spin_begin",
+                "main_spin_end",
+                "node_destructor_begin",
+                "node_destructor_body_end",
+                "node_endpoint_join_begin",
+                "node_endpoint_join_end",
+                "node_endpoint_stop_begin",
+                "node_endpoint_stop_end",
+                "node_timers_reset",
+                "node_trace_drain_begin",
+                "node_trace_drain_end",
+                "provider_cleanup_begin",
+                "provider_cleanup_end",
+                "provider_release_begin",
+                "provider_release_end",
+                "provider_release_locked",
+                "ros_context_shutdown_callback",
+                "sensor_close_begin",
+                "sensor_close_end",
+                "socket_close_begin",
+                "socket_close_end",
+                "socket_epoll_remove_begin",
+                "transport_session_stop_begin",
+                "transport_session_stop_end",
+                "transport_shutdown_begin",
+                "transport_thread_body_end",
+                "worker_join_begin",
+                "worker_join_end",
+                "worker_stop_begin",
+                "worker_stop_end"
+              ],
+              "rows": [
+                {
+                  "schema_version": 1,
+                  "sequence": 1,
+                  "monotonic_ns": 508122929064,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_spin_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 2,
+                  "monotonic_ns": 528128855490,
+                  "pid": 141,
+                  "tid": 148,
+                  "point": "ros_context_shutdown_callback",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 3,
+                  "monotonic_ns": 528135084448,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_spin_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 4,
+                  "monotonic_ns": 528135214115,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_node_reset_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 5,
+                  "monotonic_ns": 528136259740,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_destructor_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 6,
+                  "monotonic_ns": 528138013115,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_timers_reset",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 7,
+                  "monotonic_ns": 528138271073,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_endpoint_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 8,
+                  "monotonic_ns": 528139148865,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_endpoint_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 9,
+                  "monotonic_ns": 528139186698,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_endpoint_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 10,
+                  "monotonic_ns": 528140879656,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "endpoint_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 11,
+                  "monotonic_ns": 528140957115,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "worker_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 12,
+                  "monotonic_ns": 528141251781,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "worker_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 13,
+                  "monotonic_ns": 528141345365,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "worker_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 14,
+                  "monotonic_ns": 528143772323,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "transport_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 15,
+                  "monotonic_ns": 528143910740,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "transport_session_stop_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 16,
+                  "monotonic_ns": 528144067365,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "transport_session_stop_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 17,
+                  "monotonic_ns": 528144300448,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "control_close_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 18,
+                  "monotonic_ns": 528144415490,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "socket_epoll_remove_begin",
+                  "detail": 893331744,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 19,
+                  "monotonic_ns": 528144530031,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "socket_close_begin",
+                  "detail": 893331744,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 20,
+                  "monotonic_ns": 528145423781,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "socket_close_end",
+                  "detail": 893331744,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 21,
+                  "monotonic_ns": 528145498365,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "control_close_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 22,
+                  "monotonic_ns": 528145583656,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "sensor_close_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 23,
+                  "monotonic_ns": 528145685365,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "sensor_close_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 24,
+                  "monotonic_ns": 528145764823,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "epoll_release_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 25,
+                  "monotonic_ns": 528146095823,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "epoll_release_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 26,
+                  "monotonic_ns": 528146177698,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "provider_release_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 27,
+                  "monotonic_ns": 528146247240,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "provider_release_locked",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 28,
+                  "monotonic_ns": 528146298031,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "provider_cleanup_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 29,
+                  "monotonic_ns": 528152169365,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "provider_cleanup_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 30,
+                  "monotonic_ns": 528152322906,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "provider_release_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 31,
+                  "monotonic_ns": 528152357448,
+                  "pid": 141,
+                  "tid": 171,
+                  "point": "transport_thread_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 32,
+                  "monotonic_ns": 528287370656,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "worker_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 33,
+                  "monotonic_ns": 528287461115,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "endpoint_transport_join_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 34,
+                  "monotonic_ns": 528287560365,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "endpoint_transport_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 35,
+                  "monotonic_ns": 528287787865,
+                  "pid": 141,
+                  "tid": 172,
+                  "point": "endpoint_shutdown_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 36,
+                  "monotonic_ns": 528288034656,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_endpoint_join_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 37,
+                  "monotonic_ns": 528288082240,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_trace_drain_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 38,
+                  "monotonic_ns": 528288183365,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_trace_drain_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 39,
+                  "monotonic_ns": 528288215490,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "node_destructor_body_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 40,
+                  "monotonic_ns": 528306123740,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_node_reset_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 41,
+                  "monotonic_ns": 528306248406,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_context_shutdown_begin",
+                  "detail": 0,
+                  "dropped_before": 0
+                },
+                {
+                  "schema_version": 1,
+                  "sequence": 42,
+                  "monotonic_ns": 528306672573,
+                  "pid": 141,
+                  "tid": 141,
+                  "point": "main_context_shutdown_end",
+                  "detail": 0,
+                  "dropped_before": 0
+                }
+              ]
+            },
+            "observer": {
+              "control": {
+                "group_cleanup_signal_sent": false,
+                "scope": "observer lifecycle only; stack availability remains in sample/GDB records; intrusive GDB timing unqualified",
+                "footer": {
+                  "kind": "status",
+                  "completed": true,
+                  "reason": "parent_stop",
+                  "samples": 2,
+                  "sample_limit": 48,
+                  "budget_exhausted": false,
+                  "kernel_stack_reads_ok": 0,
+                  "kernel_stack_reads_unavailable": 40,
+                  "userspace_stacks_requested": false,
+                  "end_ns": 528633046823,
+                  "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+                },
+                "armed": true,
+                "returncode": 0,
+                "forced_kill": false,
+                "path": "/workspace/.local/m3-shutdown-live-calibration-20261109T213149536405Z/enabled-procfs-N0/robot-bridge-0-shutdown-stacks.jsonl",
+                "complete": true
+              },
+              "post_signal_samples": 1,
+              "post_signal_thread_reads": 4,
+              "nonempty_post_signal_kernel_stacks": 0,
+              "unavailable_post_signal_kernel_stacks": 4,
+              "kernel_errors": [
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                },
+                {
+                  "status": "unavailable",
+                  "error": "PermissionError",
+                  "errno": 13
+                }
+              ],
+              "rows_sha256": "07adf8d292a680baf57dc8d65761c1027e1fdbded16a94b6ec1ec2eab9c6efaa",
+              "intrusive": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "slot": {
+        "id": "independent-blocked-procfs",
+        "kind": "blocked"
+      },
+      "status": "failed",
+      "produced": {
+        "run": ".local/m3-shutdown-live-calibration-20261109T213149536405Z/independent-blocked-procfs",
+        "inner_status": "passed"
+      },
+      "error": "post-signal kernel stack unavailable; independent sampling is not stack calibration"
+    }
+  ],
+  "complete_M3_acceptance": false,
+  "all_campaign_stages_disabled": true,
+  "retry_two_loss_4211": false,
+  "remaining_campaign_cases_disabled": 29,
+  "scope": "bounded shutdown visibility calibration only",
+  "no_tuning": true
+}

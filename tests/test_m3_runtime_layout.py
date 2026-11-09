@@ -6,7 +6,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_runtime_layout import paths,matched,CALIBRATION,SENDER_CALIBRATION,PROBE_CALIBRATION,RECONCILE_CALIBRATION
+from m3_runtime_layout import paths,matched,CALIBRATION,SENDER_CALIBRATION,PROBE_CALIBRATION,RECONCILE_CALIBRATION,SHUTDOWN_CALIBRATION,LAYOUTS
 from m3_n5_progress import RUNTIMES
 from m3_source_preflight import sha
 
@@ -87,6 +87,22 @@ class RuntimeLayoutTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'probe-tracing manifest mismatch'):matched(self.root,'sender-reconcile')
         data['preserved_probe_tracing']=inventories['probe-tracing'];data['preserved_sender_visibility']={};target.write_text(json.dumps(data))
         with self.assertRaisesRegex(ValueError,'sender-visibility manifest mismatch'):matched(self.root,'sender-reconcile')
+
+    def test_shutdown_layout_requires_complete_preserved_reconciliation_chain(self):
+        inventories={}
+        for name,manifest in (('sender-visibility',SENDER_CALIBRATION),('probe-tracing',PROBE_CALIBRATION),('sender-reconcile',RECONCILE_CALIBRATION),('shutdown-tracing',SHUTDOWN_CALIBRATION)):
+            expected={}
+            for path in paths(name)[:-1]:
+                p=self.root/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(path);expected[path]=sha(p)
+            (self.root/LAYOUTS[name]['ros']/'setup.bash').write_text('fixture setup')
+            data=dict(new_matched_build_binaries=expected,installed_baseline=self.baseline,preserved_start_trace=self.expected)
+            if name!='sender-visibility':data['preserved_sender_visibility']=inventories['sender-visibility']
+            if name in ('sender-reconcile','shutdown-tracing'):data['preserved_probe_tracing']=inventories['probe-tracing']
+            if name=='shutdown-tracing':data['preserved_sender_reconcile']=inventories['sender-reconcile']
+            p=self.root/manifest;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(data));inventories[name]=expected
+        self.assertEqual(matched(self.root,'shutdown-tracing')['sdk'],'install/bridge-shutdown-trace-calibration')
+        data['preserved_sender_reconcile']={};p.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'sender-reconcile manifest mismatch'):matched(self.root,'shutdown-tracing')
 
 
 if __name__=='__main__':unittest.main()

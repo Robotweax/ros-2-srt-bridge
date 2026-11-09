@@ -37,7 +37,7 @@ class Freshness(Multiroute):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--role',required=True,choices=('robot','operator'));p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--role',required=True,choices=('robot','operator'));p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros','install/m3-shutdown-trace-calibration-ros'),default='install/m3-ros');a=p.parse_args()
     a.clock_width_ms=200;a.sample_diagnostics=True;a.command_diagnostics=False;a.provider_diagnostics=False
     rclpy.init();d=Freshness(a)
     try:d.measure()

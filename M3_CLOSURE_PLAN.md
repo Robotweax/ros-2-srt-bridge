@@ -12,10 +12,11 @@ planning snapshots. Neither the new8-case passing prefix nor the old5-case prefi
 closes N3. No automatic retry, cohort splice, threshold relaxation or stage
 advancement follows. The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
 is complete to its observation limit: no post-signal stage/stack data, hence no
-uniquely identified blocked function. Default-off stage and independent-stack visibility is now implemented and
-offline-tested with isolated compilation, but not live calibrated. Sources have
-changed: any live use requires a new matched-build/prospective freeze and explicit
-scope. No corrective patch, retry or further experiment is queued.
+uniquely identified blocked function. The separate [bounded shutdown calibration](evidence/m3-shutdown-live-calibration-2026-11-09/README.md)
+on a new matched build passes default-off, healthy stages and independent wait
+sampling, but fails kernel-stack access (22 denied post-signal reads). No two-loss
+4211 retry or permission change occurred. Stack capture remains uncalibrated;
+all29 remaining campaign cases remain disabled and no corrective patch/experiment is queued.
 
 ## 1. One candidate, with a concrete coverage ledger
 

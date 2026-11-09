@@ -4256,3 +4256,48 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   verification/source-snapshot/compilation-artifacts and validationlogs. Rootcause
   still unknown; new visibility is preparation only. No case9retry/splice or
   N0/N4/N1/N2/N5 advance. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Bounded live shutdown calibration; partial PASS/access FAIL
+
+- User authorizes bounded live calibration on new matched build, no tuning or
+  two-loss4211 retry, remaining campaign stages disabled. Predeclared PLAN has
+  exactly3 one-shot slots: N0sensor1701/10s off; same with stages+procfs observer;
+  separate finite3s condition-variable blocked target, noROS/SRT/network command.
+  Stop first failed live gate, no fallback/permission/image/cap changes, noGDB.
+- New SDK install/bridge-shutdown-trace-calibration and all3ROS packages under
+  install/m3-shutdown-trace-calibration-ros built fresh/pinned image/provider.
+  New shutdown-tracing layout13-entry manifest includesSDK/worker/ROS+fixture,
+  recursively preserves allold chains including sender-reconcile. ActualCMake
+  import/embedded workerprefix verified. Source/parser choices extended, defaults
+  unchanged. Offline457 Python tests +2 gate controls PASS beforelivecapture.
+- Initial evidence-local wrapper import collision failed before any case/output
+  existed; tools/helper order fixed, gatecontrols rerun, new prospective freeze.
+  Invalidated freeze/preflight +failedlogs retained; no live case retry. Source/
+  driver/fixture/plan/inventory frozen beforeactualrun, still match afterward.
+- Actual .local/m3-shutdown-live-calibration-20261109T213149536405Z:
+  default-off PASS full original10s sensor/cadence/zero-skip/age/accounting/capture/
+  shutdown/cleanup, no stage/observer outputs. Enabled PASS same +51operator/
+ 42robot real stage records, contiguousIDs/zero drops/stage pairs; observers ready
+  beforeSIGINT, each1contained post-signal sample and complete lifecycle.
+  Operatorwait223.842ms off/221.282on; robot340.790off/342.737on, not overhead ratio.
+- Separatefixture exits0/unforced after3.061764543s under unchanged5s wait,5valid
+  stages, distinct observer covers11post-signal samples/22threadreads while parent
+  blocks. Bothtasks observedS/futex_do_wait. All22post-signal kernelstack reads
+  PermissionError/errno13,0nonempty stacks;24total reads unavailable. Specific
+  kernelpermissionrule notattributed. wchan/syscall aren't stack substitutes.
+  Observercontrolcomplete/notexhausted; stackaccess mandatorygateFAIL, stop.
+- Overall2slotPASS/1FAIL (stack access), not fully calibrated. No toolsinstalled,
+  caps/sysctls/ptrace/queues/rates/crypto/clock/5sbudget changes, no original4211
+  retry or newqualificationmatrixcase. GDB/eu-stack/pstack absentpinnedimage;
+  procfs selectedprospectively. No realdebuggerattach or newprivileges. Next
+  prerequisite is separate bounded access/tooling scope; no automatic escalation.
+- All owned SENSOR namespaces/credentials removed and blockedcontainer--rm exited.
+  New13candidate/preserved chain +preparation artifacts +913 originalN3raw files
+  verifyunchanged.219newlocalfiles (~23MB) retained/hash-indexed. Publish compact
+  gate-report/calibration/realstage/observerdenials, fullraw local. Evidencefolder
+  evidence/m3-shutdown-live-calibration-2026-11-09/README.md; manifestimmutable
+  inventoryscope (no PASS inferred), PLAN/freeze/driver bound, postflightverifies.
+- Original N38PASS/1FAIL and unknownhangcause unchanged. Newbuild matched but
+  calibrationpartial, no stackcapture readiness claim, no N3credit/splice/9of9.
+  All29 N0/N4/N1/N2/N5 campaign cases disabled. M3notaccepted/PR2draft/M4untouched.

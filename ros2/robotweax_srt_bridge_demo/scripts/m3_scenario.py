@@ -306,7 +306,7 @@ class Benchmark(Driver):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros')
+    parser.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros','install/m3-shutdown-trace-calibration-ros'),default='install/m3-ros')
     parser.add_argument('--role',choices=['robot','operator'],required=True)
     parser.add_argument('--run',required=True)
     parser.add_argument('--peer',default='')
