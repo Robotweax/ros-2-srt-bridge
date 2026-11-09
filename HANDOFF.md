@@ -3662,3 +3662,44 @@ PR2draft and Intrinsic/M4 untouched.
 Next: a NEW separately frozen cohort after harness repair; do not resume/relabel
 the failedplan. Actual loaded senderdeferral stilloutstanding.118UNKNOWN and
 historical34/98/12 retained; PR2draft/M3fullgatesopen/Intrinsic-M4 untouched.
+
+### 2026-11-09 — New repaired-harness loaded cohort captures actual sender deferral
+
+- Evidence: `evidence/m3-sender-loaded-repair-cohort-2026-11-09/README.md`.
+  New user-authorized plan/frozenb97b86b431e1894facbe87c9398b7bb35525594b,
+  exact sender-visibility build, no implementation/runtime change. Priorfailed
+  N0 remainsfailed, itsN5notexecuted; this newcohort is separate, onceperslot.
+- N0/1701/15s PASS8/8,0skip/effects8. N5/1701/300s PASS128/128,22skip/effects128.
+  Both original harness/strict/durable gatespass/exit0, no unresolved/UNKNOWN/
+  expired/unadmitted. No retry/tuning/forcedexpiry/historical118replay. Old4211
+  remainsunexecuted under stoppedplan. No fullmatrix/mitigation claim.
+- New intent3 sender45detail1 ClockError2/expired at68855687781ns; observedprobe
+ 62373601819ns, age6482085962ns versus5s; excess1482085962ns. Probeoffsetwidth
+ 6051625ns, drift-expanded19015797ns versus200ms, so recorded cause is probe-age
+  expiration atcheck. Prior/postclockdeadlines0/unavailable, never invented.
+- Sameintent recovery45detail2 at69240784239ns after385096458ns; newanchor
+ 69240717739ns, age66500ns, width14348457ns. Originalorigin68844935156/deadline
+ 73844935156ns unchanged,4604150917ns budget remains.46value4outboundqueued,
+ one25SDKhandoff69240809072ns; bothjournals4/0/rev3/validgeneration3.
+- Pending journal/event snapshotsstay1/rev0, then2/rev1 and4/rev3.49sender/75all
+  originalrequestevents retained. No input/outbounddrop. No actualdeadline-drop
+  reconciliation captured. Whyprobeupdatesgap6.482s remainsunproven; notunique
+  ARP/qdisc/provider/scheduler cause. Firstdeferonce, notcontinuousclockhistory.
+- All136attempts/startgroups joined, handlerinvoked/success;0unavailable/active
+  contextloss. N5 minconsume899.657540ms,gate899.657040ms, budget>=1229.803969ms.
+  Sendercounts N0:45=0/46=8/47=63/48=36; N5:45=2/46=128/47=3116/48=2002.
+- N5 ARP OP6driver/0drop,robot13driver/17actualQDISC_DROP,0pending/loss/other/
+  consumed ambiguity.33positive windows,22missing robot envelopes retain17
+  distinctdropIDs+5latequeued6/16/23/24/29; maxresidence124.545667ms.3CONTROLgaps:
+  OP4.118100169/1.084114958s,robot1.138184376s; no unique clock cause assigned.
+  SENSOR75026produced/27663observed,gap43709/rejected391,sixresiduals0;
+  telemetry unqualified, source~200/50Hz.
+- Host390beforelive, exactSDK77/ROS41qualification reused. Allsource/new/old
+  baseline/3observer/provider hashes fixed;303newraw/471priorraw checked, exact
+  omissions.2ownednetworks/containers/rules/credentials removed, roots/features
+  restored. No tests/builds/heavyanalysis overlapslive. Immutableclosedjournals.
+  Numericnew118 hasfreshsession/epochs/origin, old118UNKNOWN retained.
+
+Next: diagnose retained intent3 probe-renewal gap before further instrumentation;
+no historical118ClockError retroclassification. Actualdeadline-drop reconciliation
+remainsopen; old34/98/12,PR2draft/M3fullgates/Intrinsic-M4 unchanged.

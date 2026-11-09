@@ -1,0 +1,236 @@
+{
+  "owned_networks": [
+    "ros2-srt-m3-1ad419b5f16d",
+    "ros2-srt-m3-3f8b4d4e7160"
+  ],
+  "owned_containers_absent": true,
+  "owned_networks_absent": true,
+  "credentials_removed": true,
+  "roots_and_features_unchanged": true,
+  "root_configurations": {
+    "sender-N0-1701/operator": {
+      "unchanged": true,
+      "before": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "limit": 256,
+            "seed": 1702,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ],
+      "after": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "limit": 256,
+            "seed": 1702,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ]
+    },
+    "sender-N0-1701/robot": {
+      "unchanged": true,
+      "before": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "limit": 256,
+            "seed": 1701,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ],
+      "after": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "limit": 256,
+            "seed": 1701,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ]
+    },
+    "sender-N5-1701/operator": {
+      "unchanged": true,
+      "before": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          }
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "root": null,
+          "options": {
+            "limit": 16,
+            "seed": 1702,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ],
+      "after": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          }
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "root": null,
+          "options": {
+            "limit": 16,
+            "seed": 1702,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ]
+    },
+    "sender-N5-1701/robot": {
+      "unchanged": true,
+      "before": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          }
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "root": null,
+          "options": {
+            "limit": 16,
+            "seed": 1701,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ],
+      "after": [
+        {
+          "kind": "tbf",
+          "handle": "1:",
+          "parent": null,
+          "root": true,
+          "options": {
+            "rate": 64000,
+            "burst": 4096,
+            "lat": 448000
+          }
+        },
+        {
+          "kind": "netem",
+          "handle": "10:",
+          "parent": "1:1",
+          "root": null,
+          "options": {
+            "limit": 16,
+            "seed": 1701,
+            "ecn": false,
+            "gap": 0
+          }
+        },
+        {
+          "kind": "clsact",
+          "handle": "ffff:",
+          "parent": "ffff:fff1",
+          "root": null,
+          "options": {}
+        }
+      ]
+    }
+  }
+}
