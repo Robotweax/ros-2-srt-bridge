@@ -8,6 +8,7 @@ POINTS={1:'endpoint_started',2:'session_changed',3:'invalidate_requested',4:'inv
 REASONS={0:'none',1:'session_changed',2:'abandoned_submit',3:'context_mismatch',4:'proof_revoked',
     5:'deadline',6:'missing_proof',7:'session_rejected',8:'queue_rejected',9:'provider_error',10:'shutdown',11:'socket_state',12:'security_timeout',13:'epoll_error',14:'receive_error',15:'wire_decode',16:'session_decision'}
 POINTS.update({45:'sender_clock',46:'sender_pending_release',47:'sender_journal',48:'sender_event'})
+POINTS.update({50:'probe_attempt',51:'probe_queue',52:'probe_sdk',53:'probe_admission',54:'probe_pending_cleared'})
 
 
 def summarize(path):
@@ -43,6 +44,9 @@ def summarize(path):
             validate(event)
         if event['point'] in range(45,49):
             from m3_sender_trace_analysis import validate
+            validate(event)
+        if event['point'] in range(50,55):
+            from m3_probe_trace_analysis import validate
             validate(event)
         if event['point']==39:
             for key in ('age_lower_ns','age_upper_ns','expiry_deadline_ns','budget_ms'):

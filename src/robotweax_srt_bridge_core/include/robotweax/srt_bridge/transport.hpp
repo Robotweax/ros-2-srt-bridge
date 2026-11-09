@@ -24,6 +24,7 @@ struct TransportConfig {
     std::shared_ptr<ProviderDiagnostics> sensor_provider_diagnostics{}; // Independent opt-in SENSOR SDK reads.
     bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
     bool sender_diagnostics=false; // Requires command_trace; no outcome/replay authority.
+    bool probe_diagnostics=false; // Requires command_trace; per-probe lifecycle only.
 };
 struct TransportContext {
     Identity session{};

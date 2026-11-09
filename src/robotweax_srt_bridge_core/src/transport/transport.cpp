@@ -69,6 +69,7 @@ struct TransportOwner::Impl {
     std::size_t route_count=0;
     int epoll=-1;
     std::uint64_t next_probe=0;std::array<std::uint64_t,2> next_provider_sample{};
+    std::uint64_t probe_sdk_busy_sequence=0; // Diagnostic suppression only.
     std::atomic<bool> stopping{false};
     std::thread thread;
     mutable std::mutex mutex;
@@ -120,6 +121,7 @@ struct TransportOwner::Impl {
         session(config.session),queues(config.session.manifest),budget(config.bandwidth,monotonic_ns()) {
         if(config.start_diagnostics&&!config.command_trace)throw std::invalid_argument("start diagnostics require command trace");
         if(config.sender_diagnostics&&!config.command_trace)throw std::invalid_argument("sender diagnostics require command trace");
+        if(config.probe_diagnostics&&!config.command_trace)throw std::invalid_argument("probe diagnostics require command trace");
         if(control_address.ipv6!=sensor_address.ipv6||config.passphrase.size()<10||config.passphrase.size()>79||
            (config.session.role==Role::caller&&(!config.control.port||!config.sensor.port)))throw std::invalid_argument("invalid transport endpoints or credential length");
         for(const auto& route:config.session.manifest.routes())route_ids[route_count++]=route.id;
@@ -133,6 +135,26 @@ struct TransportOwner::Impl {
             c.control_generation,c.sensor_generation,route,value,{},detail});
     }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}
+    static bool probe_kind(Kind kind){return kind==Kind::time_probe||kind==Kind::time_reply;}
+    static ProbeAdmissionObservation probe_fields(const OutboundManagement& out){
+        ProbeAdmissionObservation o;
+        if(const auto* p=std::get_if<TimeProbe>(&out.payload)){o.t1=p->initiator_send_ns;o.fields_available=true;}
+        if(const auto* p=std::get_if<TimeReply>(&out.payload)){o.t1=p->initiator_send_ns;o.t2=p->responder_receive_ns;o.t3=p->responder_send_ns;o.fields_available=true;}
+        return o;
+    }
+    void trace_probe(CommandTracePoint point,Kind kind,const Envelope* envelope,unsigned value,std::uint64_t evaluated,
+                     const ProbeAdmissionObservation& observation={},std::uint64_t pending_before=0,std::uint64_t ended=0,CommandTraceReason reason=CommandTraceReason::none,int transferred=0,unsigned message_bytes=0){
+        if(!config.probe_diagnostics)return;
+        CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=point;e.reason=reason;e.detail=unsigned(kind);e.value=value;
+        const auto c=context();e.session=envelope?envelope->session_id:c.session;e.owner_epoch=config.session.local_epoch;e.control_generation=c.control_generation;e.sensor_generation=c.sensor_generation;
+        if(envelope){e.entry_owner_epoch=envelope->source_epoch;e.request_sequence=envelope->sequence;e.origin_ns=envelope->source_monotonic_ns;}
+        e.evaluated_ns=evaluated;e.probe_end_ns=ended;e.probe_pending_before=pending_before;e.probe_pending_after=session.pending_probe_origin();
+        e.probe_sdk_bytes=transferred;e.probe_message_bytes=message_bytes;
+        e.probe_t1=observation.t1;e.probe_t2=observation.t2;e.probe_t3=observation.t3;e.probe_fields_available=observation.fields_available;e.probe_mapper_submitted=observation.mapper_submitted;
+        const auto clock=session.clock_observation();e.clock_error=unsigned(observation.mapper_submitted?observation.mapper_result:clock.error);
+        e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_observed=clock.observed;e.probe_anchor_ns=clock.anchor_ns;e.offset_lower_ns=clock.offset.lower;e.offset_upper_ns=clock.offset.upper;
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
     void trace_sender(CommandTracePoint point,const Input& item,unsigned value,unsigned detail=0,CommandTraceReason reason=CommandTraceReason::none,std::uint64_t evaluated=0,std::uint64_t previous=0){
         if(!config.sender_diagnostics)return;
         CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=point;e.reason=reason;
@@ -273,7 +295,7 @@ struct TransportOwner::Impl {
         const bool permanent=session.state()==SessionState::failed;
         const auto discarded=queues.apply(action);current.stale_work+=discarded.count;
         for(std::size_t n=0;n<discarded.count;++n)trace(CommandTracePoint::outbound_flushed,shutting_down?CommandTraceReason::shutdown:CommandTraceReason::context_mismatch,discarded.ids[n]);
-        if(action.close_control){command_proofs={};receipts={};receipt_cursor=0;}
+        if(action.close_control){command_proofs={};receipts={};receipt_cursor=0;probe_sdk_busy_sequence=0;}
         if(action.close_sensor)drop(1,permanent);
         if(action.close_control){drop(0,permanent);next_probe=0;}
         if(permanent){current.fault=TransportFault::protocol;links[0].retry.permanent_failure();links[1].retry.permanent_failure();}
@@ -282,7 +304,9 @@ struct TransportOwner::Impl {
             std::array<std::byte,management_payload_bytes> bytes{};auto& out=*action.send;
             const auto encoded=encode_management(out.payload,bytes);require(bool(encoded));
             const auto body=std::span(bytes).first(encoded.bytes_written);
+            const auto probe_time=config.probe_diagnostics&&probe_kind(out.envelope.kind)?monotonic_ns():0;
             const auto result=out.connection.channel==Channel::control?queues.control(out.connection,out.envelope,body):queues.binding(out.connection,out.envelope,body);
+            if(probe_time)trace_probe(CommandTracePoint::probe_queue,out.envelope.kind,&out.envelope,unsigned(result),probe_time,probe_fields(out));
             if(result!=QueueError::none){++current.rejected;apply(session.control_lost(links[0].generation));}
         }
     }
@@ -377,7 +401,12 @@ struct TransportOwner::Impl {
             const auto decoded=decode(std::span(bytes).first(count),channel(i),std::span(route_ids).first(route_count));
             if(!decoded){++current.rejected;lost(i,CommandTraceReason::wire_decode,unsigned(decoded.error));return;}
             const auto& view=decoded.message;const auto kind=view.envelope.kind;const Connection connection{channel(i),link.generation};
-            if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
+            if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){
+                const auto pending=config.probe_diagnostics&&probe_kind(kind)?session.pending_probe_origin():0;
+                const auto time=monotonic_ns();ProbeAdmissionObservation observation;
+                auto action=session.receive(connection,view,time,config.probe_diagnostics&&probe_kind(kind)?&observation:nullptr);
+                if(probe_kind(kind))trace_probe(CommandTracePoint::probe_admission,kind,&view.envelope,unsigned(action.error),time,observation,pending);
+                apply(action);continue;}
             if(kind==Kind::sample)++current.samples_received;
             const auto admission_ns=monotonic_ns();
             const auto result=i?session.admit_sample(connection,view,admission_ns):session.admit_control(connection,view,admission_ns);
@@ -557,11 +586,18 @@ struct TransportOwner::Impl {
             const bool observing=i&&bool(config.sample_trace);
             SRT_MSGCTRL metadata=srt_msgctrl_default;metadata.msgttl=ttl;metadata.inorder=0;
             const auto trace_begin=observing?monotonic_ns():0;
+            const bool probing=config.probe_diagnostics&&!i&&probe_kind(packet->envelope.kind);
+            const auto probe_begin=probing?monotonic_ns():0;
             const int count=observing?srt_sendmsg2(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,&metadata):
                 srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
             const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;
+            const auto probe_end=probing?monotonic_ns():0;
             const auto trace_end=observing?monotonic_ns():0;
             require(budget.finish(permit.id,count!=SRT_ERROR));
+            if(probing&&(error!=SRT_EASYNCSND||probe_sdk_busy_sequence!=packet->envelope.sequence)){
+                trace_probe(CommandTracePoint::probe_sdk,packet->envelope.kind,&packet->envelope,unsigned(error),probe_begin,{},0,probe_end,error?CommandTraceReason::provider_error:CommandTraceReason::none,count,unsigned(packet->size));
+                probe_sdk_busy_sequence=error==SRT_EASYNCSND?packet->envelope.sequence:0;
+            }
             if(observing){
                 SampleTraceEvent e;e.begin_ns=trace_begin;e.end_ns=trace_end;e.origin_ns=packet->envelope.source_monotonic_ns;
                 e.owner_epoch=config.session.local_epoch;e.session=packet->envelope.session_id;e.source_epoch=packet->envelope.source_epoch;
@@ -585,8 +621,18 @@ struct TransportOwner::Impl {
     }
     void timers(){
         refresh_grants();
-        apply(session.tick(monotonic_ns()));
-        if((control_ready(session.state())||session.state()==SessionState::synchronizing)&&monotonic_ns()>=next_probe){apply(session.begin_probe(monotonic_ns()));next_probe=monotonic_ns()+second;}
+        const auto pending=config.probe_diagnostics?session.pending_probe_origin():0;
+        const auto tick_time=monotonic_ns();auto tick=session.tick(tick_time);
+        if(pending&&!session.pending_probe_origin()){
+            ProbeAdmissionObservation o;o.t1=pending;o.fields_available=true;
+            trace_probe(CommandTracePoint::probe_pending_cleared,Kind::time_probe,nullptr,unsigned(tick.error),tick_time,o,pending,0,tick.close_control?CommandTraceReason::context_mismatch:CommandTraceReason::deadline);
+        }
+        apply(tick);
+        if((control_ready(session.state())||session.state()==SessionState::synchronizing)&&monotonic_ns()>=next_probe){
+            const auto before=config.probe_diagnostics?session.pending_probe_origin():0;const auto time=monotonic_ns();auto action=session.begin_probe(time);
+            if(config.probe_diagnostics)trace_probe(CommandTracePoint::probe_attempt,Kind::time_probe,action.send?&action.send->envelope:nullptr,unsigned(action.error),time,action.send?probe_fields(*action.send):ProbeAdmissionObservation{},before);
+            apply(action);next_probe=monotonic_ns()+second;
+        }
         for(unsigned i=0;i<2;++i){auto& link=links[i];
             if(config.session.role==Role::caller){
                 const bool enabled=!i||control_ready(session.state());

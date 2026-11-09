@@ -41,7 +41,7 @@ def analyze(run,manifest):
         name=str(p.relative_to(ROOT));h=sha(p)
         if manifest.get(name,{}).get('sha256')!=h:raise ValueError('original loaded start input changed')
         hashes[name]=h
-    if not report.get('start_diagnostics_enabled') or report.get('runtime_layout',{}).get('name') not in ('start-trace','sender-visibility'):raise ValueError('matched start layout not recorded')
+    if not report.get('start_diagnostics_enabled') or report.get('runtime_layout',{}).get('name') not in ('start-trace','sender-visibility','probe-tracing'):raise ValueError('matched start layout not recorded')
     progress=command_progress(report,run);traces=command_traces(run);starts=start_traces(run)
     if starts!=report.get('start_diagnostics'):raise ValueError('closed start reanalysis differs from original')
     events=[e for n,t in traces.items() if n.startswith('robot-') for e in t['events']];rows=[]

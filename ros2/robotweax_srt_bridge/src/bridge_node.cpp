@@ -1,5 +1,6 @@
 #include <robotweax/srt_bridge/start_trace_json.hpp>
 #include <robotweax/srt_bridge/sender_trace_json.hpp>
+#include <robotweax/srt_bridge/probe_trace_json.hpp>
 #include <robotweax_srt_bridge/sensor_codec.hpp>
 #include <robotweax_srt_bridge/publication_metrics.hpp>
 #include <robotweax/srt_bridge/endpoint.hpp>
@@ -72,7 +73,7 @@ class BridgeNode final:public rclcpp::Node {
                 <<"\",\"request_sequence\":"<<e.request_sequence<<",\"origin_ns\":"<<e.origin_ns<<",\"evaluated_ns\":"<<e.evaluated_ns
                 <<",\"clock_deadline_ns\":"<<e.clock_deadline_ns<<",\"clock_error\":"<<e.clock_error<<",\"age_error\":"<<e.age_error<<",\"age_lower_ns\":"<<e.age_lower_ns<<",\"age_upper_ns\":"<<e.age_upper_ns
                 <<",\"expiry_deadline_ns\":"<<e.expiry_deadline_ns<<",\"budget_ms\":"<<e.budget_ms;
-            core::append_start_trace_json(line,e);core::append_sender_trace_json(line,e);line<<"}";
+            core::append_start_trace_json(line,e);core::append_sender_trace_json(line,e);core::append_probe_trace_json(line,e);line<<"}";
             std::cout<<line.str()<<std::endl;
         }
     }
@@ -201,6 +202,7 @@ public:
         if(declare_parameter<bool>("command_diagnostics",false)){command_trace_=std::make_shared<core::CommandTrace>();transport.command_trace=command_trace_;}
         transport.start_diagnostics=declare_parameter<bool>("start_diagnostics",false);
         transport.sender_diagnostics=declare_parameter<bool>("sender_diagnostics",false);
+        transport.probe_diagnostics=declare_parameter<bool>("probe_diagnostics",false);
         if(declare_parameter<bool>("provider_diagnostics",false)){provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.provider_diagnostics=provider_diagnostics_;}
         if(declare_parameter<bool>("sensor_provider_diagnostics",false)){sensor_provider_diagnostics_=std::make_shared<core::ProviderDiagnostics>();transport.sensor_provider_diagnostics=sensor_provider_diagnostics_;}
         if(declare_parameter<bool>("sample_diagnostics",false)){sample_trace_=std::make_shared<core::SampleTrace>();transport.sample_trace=sample_trace_;}

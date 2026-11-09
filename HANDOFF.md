@@ -3742,3 +3742,42 @@ Next optional diagnostic increment: separately calibrated default-off per-probe
 attempt/result/queue/handoff/correlatedecho/admission visibility, preserving1pending
 and2s/5sbounds. Do not infer historical118ClockError or forceexpiry. PR2draft,
 M3/fullgatesopen,Intrinsic/M4 untouched.
+
+### 2026-11-09 — Calibrated default-off per-probe tracing
+
+- Evidence: `evidence/m3-probe-tracing-2026-11-09/README.md`; planbeforeedits.
+  New probe_diagnostics requiresCommandTrace, defaultfalse. No1pending/1sattempt/
+ 2sreply/5sclockage/budget/rate/queue/expiry decision changes. No new loadedrun,
+  forcedliveexpiry orhistorical118replay. Priorbaselines/provider fixed.
+- Points50attempt/51queue/52SDK/53admission/54pendingclear. ExistingSessionreceive
+  optionalstackoutput exposes validatedt1/t2/t3 andactualmappercall/result; null
+  whenoff. No second decode/check, callback, allocation orownerI/O. 53evaluated=t4.
+  Managementsequence/session/owner/generation joins51to52, validatedsourceepoch/
+  t1/t2/t3 joinscrosspeer. Queue/wire/workerIPC/ROSschemas unchanged; C++objects
+  needmatchedrebuild. SDKbracket/bytes actual, acceptance notdelivery.
+- Before/after pending disambiguates busy, unmatched andlate replies. Natural
+  tickclear54, beginreplacementvisible50; no commandexpiry manufactured. Context
+  clear canhaveSID0, keptunavailable ratherthanforcedjoin. FirstEASYNCSND+finalSDK
+  recorded, repeatedwouldblock suppressed; boundedlane/dropcounts unchanged.
+- Separate SDK/ROS `build/m3-probe-tracing`, `install/bridge-probe-tracing`,
+  `build/m3-probe-tracing-ros`, `install/m3-probe-tracing-ros`. Explicitlayout
+  probe-tracing requires skipbuild, verifiesallolderbaselinechain. Runner rejects
+  oldignoredparameter layouts andrequirespositiveprobe lifecycle perendpoint.
+  Sender/start flags compatible, defaultpathsunchanged. No loadedcohort launched.
+- SDK79/79,ROS41/41,host396/396 PASS. Fourfreshcommands IPv4/IPv6 enabled/disabled,
+  each1effect/1SDKhandoff,matching4/0/rev3/gen1 journals/original5sbudget. Enabled
+  each4attempts/8queues/8SDK/8admissions/0clears; actualqualifiedmapper4each,8total
+  reciprocalexactechojoins. Disabled0newrecords.8fulltraces,0loss.
+- Session-only virtualtime busy/accepted/wrongecho/late/invalidcontext guards
+  pass, no commands there. No liveSDKwouldblock/late/clear pathwitnessed; no
+  qualificationclaimforthosebranches. BiggerPOD andenabledobserverwork preclude
+  timingcomparison/mitigationclaim. Historicalcandidatepacketsnotretrodecoded.
+-24newraw/774priorraw checked, immutableclosedjournal selections; rawSQLitelocal
+  hashed,8publictraces,exactlognormalization. Allsource/binaryinventories archived.
+  Priorbaseline/start/sender installs/provider unchanged. No heavywork overlaps
+  SDKcalibration, ownednetwork-nonecontainers removed. PR2draft/M3open/Intrinsic
+  untouched. No runtimepolicytuning orold118proofreuse.
+
+Next: separately freeze a prospective loadedprobe-tracing cohort; actualbusy/
+late/timeout paths remainuncapturedonnewbuild. Preserve1pending/2s/5s rules,
+historical118UNKNOWN andold3/34/98/12 scopes; no forcedexpiry orreplay.

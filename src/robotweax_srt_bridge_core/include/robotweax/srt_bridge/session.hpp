@@ -49,6 +49,12 @@ struct SessionConfig {
     ClockConfig clock;
     Limits limits{};
 };
+// Optional stack-only diagnostic output from the existing validated decode.
+struct ProbeAdmissionObservation {
+    std::uint64_t t1=0,t2=0,t3=0;
+    bool fields_available=false,mapper_submitted=false;
+    ClockError mapper_result=ClockError::unqualified;
+};
 // Event-driven, single I/O owner. No sockets, callbacks, queues or locks here.
 // Actions carry socket generations so stale queued sends can be discarded.
 class Session {
@@ -62,7 +68,7 @@ public:
                                     Identity listener_assigned_session = {});
     SessionAction sensor_connected(std::uint64_t generation, Security security, std::uint64_t now,
                                    Identity caller_binding_id = {});
-    SessionAction receive(Connection source, const MessageView& message, std::uint64_t now);
+    SessionAction receive(Connection source, const MessageView& message, std::uint64_t now,ProbeAdmissionObservation* observation=nullptr);
     SessionAction begin_probe(std::uint64_t now);
     SessionAction tick(std::uint64_t now);
     SessionAction control_lost(std::uint64_t generation);
@@ -80,6 +86,7 @@ public:
     std::optional<std::uint64_t> clock_deadline() const noexcept { return clock_.qualification_deadline(); }
     ClockError clock_state() const noexcept { return clock_.state(); }
     ClockObservation clock_observation() const noexcept { return clock_.observation(); }
+    std::uint64_t pending_probe_origin() const noexcept { return pending_probe_.value_or(0); }
 private:
     SessionConfig config_;
     ClockMapper clock_;

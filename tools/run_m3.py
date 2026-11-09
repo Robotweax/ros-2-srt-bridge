@@ -60,6 +60,7 @@ def main():
     parser.add_argument('--provider-diagnostics',action='store_true',help='development-only CONTROL non-clearing provider statistics; adds observer workload')
     parser.add_argument('--start-diagnostics',action='store_true',help='bounded start-check/grant/worker observations, requires command diagnostics and matched rebuilt worker')
     parser.add_argument('--sender-diagnostics',action='store_true',help='bounded sender clock/release/journal/event observations; requires command diagnostics')
+    parser.add_argument('--probe-diagnostics',action='store_true',help='default-off per-probe lifecycle observations; requires command diagnostics and calibrated probe layout')
     parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
     args=parser.parse_args()
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
@@ -78,7 +79,9 @@ def main():
     if args.arp_packet_trace and (not args.arp_reply_diagnostics or duration>480):parser.error('ARP packet trace requires loaded ARP diagnostics and <=480s')
     if args.start_diagnostics and not args.command_diagnostics:parser.error('start diagnostics require command diagnostics')
     if args.sender_diagnostics and not args.command_diagnostics:parser.error('sender diagnostics require command diagnostics')
-    if args.sender_diagnostics and args.runtime_layout!='sender-visibility':parser.error('sender diagnostics require sender-visibility runtime layout')
+    if args.sender_diagnostics and args.runtime_layout not in ('sender-visibility','probe-tracing'):parser.error('sender diagnostics require sender-visibility runtime layout or probe-tracing')
+    if args.probe_diagnostics and not args.command_diagnostics:parser.error('probe diagnostics require command diagnostics')
+    if args.probe_diagnostics and args.runtime_layout!='probe-tracing':parser.error('probe diagnostics require probe-tracing runtime layout')
     if args.runtime_layout!='baseline' and not args.skip_build:parser.error('explicit matched runtime layout requires --skip-build')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
@@ -105,6 +108,7 @@ def main():
     report['sensor_provider_diagnostics_enabled']=args.sensor_provider_diagnostics
     report['start_diagnostics_enabled']=args.start_diagnostics
     report['sender_diagnostics_enabled']=args.sender_diagnostics
+    report['probe_diagnostics_enabled']=args.probe_diagnostics
     report['command_diagnostics_enabled']=args.command_diagnostics
     credential=run/'passphrase';credential.touch(mode=0o600);credential.write_text(secrets.token_urlsafe(32)+'\n')
     def save():(run/'run.json').write_text(json.dumps(report,indent=2)+'\n')
@@ -174,7 +178,7 @@ def main():
         for role,name in lab.containers.items():
             command=('set -e; ' if args.runtime_layout!='baseline' else '')+'source /opt/ros/jazzy/setup.bash; source '+shlex.quote(ros_install+'/setup.bash')+'; exec python3 '+shlex.join([
                 'ros2/robotweax_srt_bridge_demo/scripts/m3_scenario.py','--role',role,'--run',inside,
-                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200','--ros-install',ros_install]+(['--sender-diagnostics'] if args.sender_diagnostics else [])+(['--start-diagnostics'] if args.start_diagnostics else [])+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
+                '--peer',lab.addresses['operator'],'--seconds',str(duration),'--clock-width-ms','200','--ros-install',ros_install]+(['--probe-diagnostics'] if args.probe_diagnostics else [])+(['--sender-diagnostics'] if args.sender_diagnostics else [])+(['--start-diagnostics'] if args.start_diagnostics else [])+(['--command-diagnostics'] if args.command_diagnostics else [])+(['--provider-diagnostics'] if args.provider_diagnostics else [])+(['--sensor-provider-diagnostics'] if args.sensor_provider_diagnostics else []))
             log=(run/(role+'-scenario.log')).open('w')
             processes.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT),log))
         deadline=time.monotonic()+duration+120;outage=False
@@ -287,6 +291,9 @@ def main():
                 if args.sender_diagnostics:
                     from m3_sender_trace_analysis import summarize as summarize_sender
                     report['sender_diagnostics']=summarize_sender(report['command_diagnostics'])
+                if args.probe_diagnostics:
+                    from m3_probe_trace_analysis import summarize as summarize_probes
+                    report['probe_diagnostics']=summarize_probes(report['command_diagnostics'])
             except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
         if args.sensor_provider_diagnostics:
             try:report['sensor_provider_diagnostics']=m3_provider_stats.summarize_run(run,sensor=True)

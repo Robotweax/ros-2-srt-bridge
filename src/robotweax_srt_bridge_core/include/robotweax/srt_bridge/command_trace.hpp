@@ -12,7 +12,8 @@ enum class CommandTracePoint : unsigned {
     control_admission,peer_error_received,receiver_worker_result,
     receiver_deferred,receiver_resumed,receiver_retained_dropped,receiver_capacity_rejected,receiver_expiry_admission,
     start_submission,start_check,execute_submission,worker_start,start_declined,
-    sender_clock,sender_pending_release,sender_journal,sender_event
+    sender_clock,sender_pending_release,sender_journal,sender_event,
+    probe_attempt=50,probe_queue,probe_sdk,probe_admission,probe_pending_cleared
 };
 enum class CommandTraceReason : unsigned {
     none,session_changed,abandoned_submit,context_mismatch,proof_revoked,deadline,
@@ -53,6 +54,12 @@ struct CommandTraceEvent {
     std::uint64_t clock_previous_deadline_ns=0,probe_anchor_ns=0,journal_revision=0;
     std::int64_t offset_lower_ns=0,offset_upper_ns=0;
     bool clock_observed=false,journal_entry_available=false;
+    // Points50..54, default-off. detail=Kind9/10; value=SessionError for50/53/54,
+    // QueueError for51, SDK error (0=local acceptance) for52. Never wire/IPC data.
+    std::uint64_t probe_t1=0,probe_t2=0,probe_t3=0,probe_pending_before=0,probe_pending_after=0,probe_end_ns=0;
+    bool probe_fields_available=false,probe_mapper_submitted=false;
+    int probe_sdk_bytes=0;
+    unsigned probe_message_bytes=0;
 };
 enum class CommandTraceProducer : unsigned { coordinator=0,transport=1 };
 // Two fixed SPSC lanes: exactly one coordinator producer and one transport

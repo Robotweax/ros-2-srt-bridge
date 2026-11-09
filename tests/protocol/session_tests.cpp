@@ -21,7 +21,7 @@ struct Pair {
     Session c{config(Role::caller)}, l{config(Role::listener)};
     std::uint64_t now=1000000000, cg=1, lg=11, cs=1, ls=11;
     std::uint64_t next() { return now+=1000000; }
-    SessionAction deliver(Session& receiver, SessionAction message, bool to_listener=true) {
+    SessionAction deliver(Session& receiver, SessionAction message, bool to_listener=true,ProbeAdmissionObservation* observation=nullptr) {
         check(message.send.has_value(),"expected outbound management");
         std::array<std::byte,512> payload{};
         const auto packed=encode_management(message.send->payload,payload); check(bool(packed),"payload encoding");
@@ -31,7 +31,7 @@ struct Pair {
         const auto decoded=decode(std::span(wire).first(encoded.bytes_written),message.send->connection.channel,allowed);
         check(bool(decoded),"wire decoding");
         const auto channel=message.send->connection.channel;
-        return receiver.receive({channel,channel==Channel::control?(to_listener?lg:cg):(to_listener?ls:cs)},decoded.message,next());
+        return receiver.receive({channel,channel==Channel::control?(to_listener?lg:cg):(to_listener?ls:cs)},decoded.message,next(),observation);
     }
     void handshake(unsigned session=10) {
         check(l.control_connected(lg,security(Channel::control),next(),id(session)).error==SessionError::none,"listener control");
@@ -185,6 +185,20 @@ void peer_restart() {
     auto fresh=restarted.make_sample(1,4,p.next());auto e=*fresh.envelope;
     check(e.sequence==1&&p.l.admit_sample({Channel::sensor,p.ls},p.sample(e),p.next()).envelope.has_value(),"new epoch failed to reset receive watermark");
 }
+void probe_observations() {
+    Pair p;p.handshake();ProbeAdmissionObservation o;
+    auto request=p.c.begin_probe(p.next());const auto t1=p.c.pending_probe_origin();
+    check(t1!=0&&p.c.begin_probe(p.next()).error==SessionError::probe_busy,"pending getter changed busy decision");
+    auto reply=p.deliver(p.l,std::move(request),true,&o);check(o.fields_available&&o.t1==t1&&!o.mapper_submitted,"request fields unavailable");
+    check(p.deliver(p.c,std::move(reply),false,&o).error==SessionError::none&&o.fields_available&&o.mapper_submitted&&o.mapper_result==ClockError::none&&o.t1==t1&&o.t2<=o.t3&&!p.c.pending_probe_origin(),"accepted reply observation mismatch");
+    request=p.c.begin_probe(p.next());reply=p.deliver(p.l,std::move(request));++std::get<TimeReply>(reply.send->payload).initiator_send_ns;
+    const auto pending=p.c.pending_probe_origin();check(p.deliver(p.c,std::move(reply),false,&o).error==SessionError::probe_not_pending&&o.fields_available&&!o.mapper_submitted&&o.t1!=pending&&p.c.pending_probe_origin()==pending,"mismatched echo observation changed pending");
+    Pair late;late.handshake();request=late.c.begin_probe(late.next());reply=late.deliver(late.l,std::move(request));late.now+=2000000000ULL;
+    check(late.deliver(late.c,std::move(reply),false,&o).error==SessionError::probe_not_pending&&o.fields_available&&!o.mapper_submitted,"late reply observation changed admission");
+    check(late.c.pending_probe_origin()!=0,"late receive unexpectedly cleared pending");late.c.tick(late.next());check(!late.c.pending_probe_origin(),"existing tick did not clear pending");
+    Pair invalid;invalid.handshake();request=invalid.c.begin_probe(invalid.next());reply=invalid.deliver(invalid.l,std::move(request));reply.send->envelope.session_id=id(99);
+    o.fields_available=true;o.t1=99;check(invalid.deliver(invalid.c,std::move(reply),false,&o).error==SessionError::stale_session&&!o.fields_available&&!o.t1&&!o.mapper_submitted,"pre-validation observation leaked stale fields");
+}
 void clock_invalidation_and_wrap() {
     Pair p; p.activate();
     p.now+=5000000001ULL;
@@ -205,6 +219,6 @@ void clock_invalidation_and_wrap() {
     check(limits.c.tick(0).error==SessionError::invalid_time && limits.c.state()==SessionState::disconnected,"local clock regression");
 }
 }
-int main() { try { happy_and_data(); reordered_samples(); rebind_and_disconnect(); bad_peers_and_timeouts(); cross_channel_reorder(); peer_restart(); clock_invalidation_and_wrap();
+int main() { try { happy_and_data(); reordered_samples(); rebind_and_disconnect(); bad_peers_and_timeouts(); cross_channel_reorder(); peer_restart(); clock_invalidation_and_wrap();probe_observations();
     std::cout<<"PASS session contract: "<<checks<<" checks\n"; }
     catch(const std::exception& e) { std::cerr<<"FAIL: "<<e.what()<<'\n'; return 1; } }
