@@ -18,7 +18,10 @@ def validate(event):
     if point==41:
         if event['grant_slot']>=64 or not event['grant_generation'] or event['start_granted']!=(event['value']==0):raise ValueError('inconsistent owner start decision')
         if event['start_granted'] and not 0<event['evaluated_ns']<event['grant_deadline_ns']<=event['clock_deadline_ns']:raise ValueError('invalid owner grant/clock bound')
-    if point in (42,43) and (not event['start_granted'] or not event['worker_token']):raise ValueError('execute without granted identity/token')
+    if point in (42,43) and not event['start_granted']:raise ValueError('execute without granted identity')
+    if point==42 and (bool(event['worker_token'])!=(event['value']==0)):raise ValueError('execute submission result/token mismatch')
+    if point==43 and not event['worker_token']:raise ValueError('worker result without token')
+    if event['terminal_state']>8 or event['terminal_reason']>6 or (not event['terminal_state'] and event['terminal_reason']):raise ValueError('invalid worker terminal enum')
     if point!=43 and (event['worker_observation_available'] or any(event[k] for k in ('consume_ns','consume_deadline_ns','consume_result','second_gate_ns','second_gate_deadline_ns','terminal_state','terminal_reason')) or event['second_gate_checked'] or event['handler_invoked']):raise ValueError('worker metadata on nonworker event')
     if point==43 and event['worker_observation_available']:
         if event['consume_result'] not in (1,2,3,4) or not 0<event['consume_ns']<=event['monotonic_ns']:raise ValueError('invalid worker consume observation')
@@ -48,11 +51,15 @@ def analyze(events):
         if len(submission)!=1:raise ValueError('missing start submission')
         if any(e.get('control_generation')!=submission[0].get('control_generation') for e in rows):raise ValueError('changed original control generation')
         if any(e['command_deadline_ns']!=submission[0]['command_deadline_ns'] for e in rows):raise ValueError('changed original start deadline')
-        if submission[0]['value']==0 and not decision:raise ValueError('missing owner start decision')
+        if submission[0]['value']==0 and not decision and not declined:raise ValueError('missing owner start decision')
         if submission[0]['value']!=0 and decision:raise ValueError('owner decision without queued start')
         if declined:
-            if execute or worker or (decision and decision[0]['start_granted']):raise ValueError('decline mixed with execution/grant')
-            branch='coordinator_start_declined'
+            if execute or worker:raise ValueError('decline mixed with execution')
+            branch='coordinator_start_declined_after_owner_grant' if decision and decision[0]['start_granted'] else 'coordinator_start_declined'
+        elif execute and execute[0]['value']!=0:
+            if not decision or not decision[0]['start_granted'] or worker:raise ValueError('inconsistent failed execute submission')
+            if any(execute[0][k]!=decision[0][k] for k in ('grant_slot','grant_generation','grant_deadline_ns')):raise ValueError('cross-generation failed execute join')
+            branch='execute_submission_failed'
         else:
             if not decision or not decision[0]['start_granted'] or not execute or not worker:raise ValueError('incomplete granted start lifecycle')
             d,x,w=decision[0],execute[0],worker[0]
@@ -63,5 +70,15 @@ def analyze(events):
             if w['consume_result']!=1:branch={2:'worker_consume_expired',3:'worker_consume_revoked',4:'worker_consume_invalid'}[w['consume_result']]
             elif w['second_gate_ns']>=w['second_gate_deadline_ns']:branch='worker_second_gate_elapsed'
             else:branch='worker_handler_invoked' if w['handler_invoked'] else 'worker_gate_passed_without_handler'
-        result.append(dict(identity=dict(zip(('owner_epoch','session','request','route','origin_ns','request_sequence','check_token'),key)),branch=branch,events=sorted(rows,key=lambda e:e['monotonic_ns']),scope='Observed start branch only; journal/effect authority remains separate; revoked alone does not identify revocation cause.'))
+        result.append(dict(identity=dict(zip(('owner_epoch','session','request','route','origin_ns','request_sequence','check_token'),key)),branch=branch,owner_decision_available=bool(decision),events=sorted(rows,key=lambda e:e['monotonic_ns']),scope='Observed start branch only; journal/effect authority remains separate; revoked alone does not identify revocation cause.'))
     return result
+
+
+def summarize_run(run):
+    from m3_command_trace import summarize_run as command_traces
+    traces=command_traces(run)
+    if not traces or not all(t['complete'] for t in traces.values()):raise ValueError('start diagnostics require complete command traces')
+    events=[e for name,t in traces.items() if name.startswith('robot-') for e in t['events']]
+    rows=analyze(events)
+    if not rows:raise ValueError('start diagnostics unavailable: no positive start observations; require matching rebuilt runtime')
+    return dict(complete=True,starts=rows,scope='Opt-in diagnostic coverage, not command progress/journal/effect authority. Missing stages or mismatched runtime fail diagnostics.')

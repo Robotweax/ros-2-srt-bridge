@@ -1,6 +1,7 @@
 import copy
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_start_trace_analysis import analyze,validate
@@ -42,6 +43,27 @@ class StartTraceTests(unittest.TestCase):
         for change in (dict(start_trace_version=0),dict(consume_ns=500),dict(handler_invoked=1),dict(grant_slot=64),dict(consume_result=5),dict(second_gate_deadline_ns=501)):
             row=dict(self.rows[-1],**change)
             with self.assertRaises(ValueError):validate(row)
+    def test_failed_execute_submission_has_no_worker_token(self):
+        self.rows[2].update(value=2,worker_token=0)
+        self.assertEqual(analyze(self.rows[:3])[0]['branch'],'execute_submission_failed')
+        self.rows[2]['worker_token']=9
+        with self.assertRaises(ValueError):analyze(self.rows[:3])
+    def test_coordinator_may_decline_after_owner_grant(self):
+        declined=dict(self.rows[1],point=44,monotonic_ns=125,value=7,start_granted=False,grant_deadline_ns=0)
+        self.assertEqual(analyze(self.rows[:2]+[declined])[0]['branch'],'coordinator_start_declined_after_owner_grant')
+        result=analyze([self.rows[0],declined])[0]
+        self.assertEqual(result['branch'],'coordinator_start_declined');self.assertFalse(result['owner_decision_available'])
+    def test_terminal_enum_is_not_arbitrary_integer(self):
+        for changes in (dict(terminal_state=9),dict(terminal_reason=7),dict(terminal_state=0,terminal_reason=1)):
+            with self.assertRaises(ValueError):validate(dict(self.rows[-1],**changes))
+    def test_old_runtime_without_start_rows_is_unavailable(self):
+        from m3_start_trace_analysis import summarize_run
+        with patch('m3_command_trace.summarize_run',return_value={'robot-bridge-1.log':dict(complete=True,events=[])}),self.assertRaisesRegex(ValueError,'matching rebuilt runtime'):summarize_run(Path('/unused'))
+    def test_runner_rejects_flag_without_command_diagnostics(self):
+        import subprocess
+        root=Path(__file__).resolve().parents[1]
+        result=subprocess.run([sys.executable,str(root/'tools/run_m3.py'),'--start-diagnostics'],cwd=root,capture_output=True,text=True)
+        self.assertEqual(result.returncode,2);self.assertIn('start diagnostics require command diagnostics',result.stderr)
     def test_empty_and_duplicate_events(self):
         self.assertEqual(analyze([]),[])
         with self.assertRaisesRegex(ValueError,'duplicate'):analyze(self.rows+[self.rows[-1]])

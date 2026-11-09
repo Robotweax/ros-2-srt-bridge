@@ -21,6 +21,7 @@ from m3_window_measurement import summarize_endpoints
 import m3_monotonic_capture as mono_capture
 import m3_recorder_diagnostics as recorder_diagnostics
 import m3_command_trace
+import m3_start_trace_analysis
 import m3_provider_stats
 import m3_control_fault
 import m3_neighbor_diagnostics as neighbor_diagnostics
@@ -273,6 +274,7 @@ def main():
         if args.command_diagnostics:
             try:
                 report['command_diagnostics']=m3_command_trace.summarize_run(run)
+                if args.start_diagnostics:report['start_diagnostics']=m3_start_trace_analysis.summarize_run(run)
             except Exception as error:report['status']='failed';report['command_diagnostics_error']=str(error)
         if args.sensor_provider_diagnostics:
             try:report['sensor_provider_diagnostics']=m3_provider_stats.summarize_run(run,sensor=True)
