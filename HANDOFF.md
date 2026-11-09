@@ -3567,3 +3567,31 @@ for118's pre-SDK deadline-drop path; preserve UNKNOWN/one-useproof/no replay.
 No forceexpiry or tuning.4211 remainsunexecuted under stoppedplan; newprospective
 plan requiredbeforelatercohort. Original34/98/12,fullM3gatesopen,PR2draft,
 Intrinsic-M4 untouched.
+
+### 2026-11-09 — Intent118 sender pending-input/journal diagnosis, read-only
+
+- Evidence: `evidence/m3-sender-pending-diagnosis-2026-11-09/README.md` and
+  `analysis.json`; reusable `tools/m3_sender_pending_diagnosis.py`. No new live
+  run, build, policy change, forced expiry, command replay or journal recovery.
+- Clock point29 only logs SessionError13: current source permits ClockError
+  unqualified OR expired. Generic clock_error0/deadline0 unused; historical
+  interval-width versus probe-age cause cannot be recovered. One point29 means
+  once-per-pending notification, not one check or proof of continuous failure.
+- Pending input drops 2.624127ms after original deadline. Transport slot release
+  has no journal/endpoint completion RPC; queued submit is volatile admission.
+  GET/QUERY/NOT_FOUND do not mint tickets or invent a result. Last driver cache
+  remains local_queued at371404447417ns; observation ends374237012044ns.
+- Newly joined teardown chain for originalsession: trace2 sessionchange at
+ 374642701836, trace3 invalidate at374642706752, successful trace4 at374653670794.
+  This is after observation and28.309508180s after inputdrop. Unchanged sender
+  invalidate implementation explains closedUNKNOWN8/reconcile_required2/rev0;
+  no per-entry commit trace available. Normal journal destructor merely closes.
+  No active-window contextloss claim changes. Audit never opens application
+  journal recovery; immutable reads preserve originalfiles.
+- 303raw hashes checked before/after, source matches captured manifest, matched
+  SDK/ROS and preserved baseline verified twice. Host380 PASS (4new guards).
+  Prior exactbinarySDK75/ROS41 qualification reused; no runtime change.
+
+Next: separately calibrated sender-owner clock/defer/release/receipt visibility;
+no automatic expiry from diagnostics. UNKNOWN118/98/12 and historical34 retained;
+4211 remainsunexecuted, M3/fullmatrix gatesopen, PR2draft/Intrinsic-M4 untouched.
