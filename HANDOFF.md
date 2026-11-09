@@ -3442,3 +3442,47 @@ and second-gate observations, calibrated before a new cohort. Original34 cannot
 be assigned a unique branch from old fields. Preserve one-use start fences and
 journal authority; no tuning yet. Original98/12 UNKNOWN and fullM3 gates open,
 PR2 draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Targeted start/check/grant/worker tracing, no tuning
+
+- Evidence: `evidence/m3-start-tracing-2026-11-09/README.md`; Plan0527ccf,
+  implementationd13d03e, fixture manifest-constructor correction before capture.
+  Failed build preparation retained; no case retry. Producers/C++ tests frozen
+  for full SDK75-test sequential stop-on-failure run, source/binaries verified
+  atclosure. Posthoc reader/harness guards tracked separately with Git blobs.
+- Default-off TransportConfig/ROS start_diagnostics requires CommandTrace;
+  endpoint matches WorkerOptions flag. Points40submission,41ownercheck/grant,
+  42execsubmission,43actualworkerconsume/gate,44coordinatordecline. Correlate
+  originalcontext/check/worker token/slot/generation, separate grant/command
+  deadlines; explicit unavailable. Two bounded trace lanes/counters unchanged.
+- Worker fixed POD observation in64slot sealed memfd, generation release/acquire,
+  read after matching IPC reply while record held. Private mappingversion2,
+  size/flags/version checks reject mismatches. C++ structures grow: rebuild all
+  consumers/workers together. SocketIPCv3/SRT/protobuf/CDR wire unchanged. No
+  one-use CAS/revoke/freshness/budget/timeout/default policy change.
+- New endpoint cases once each IPv4/IPv6: normal4events+success/effect1;
+  coordinatorclockdenial3events40/41error13/44,noexecute,6/1/effects0;
+  secondgate4events,consume1thenlategate,nohandler,6/1/effects0; disabled0new
+  events/success/effect1.8captures complete,0drops. Synthetic500ms/1.5s leases
+  only named fixtures, existing1s probes/3s operationtimeout/5s budget retained.
+  Test-only atomic resume API requires explicit preexisting barrier options.
+- Existing direct execution-start cases return12 observations acrossfamilies;
+  revoked-beforeconsume and clock-lease lapse bothactual3/revoked (owner may
+  revoke elapsed grant), so enum3 alone is not session-loss cause. Budget case
+ 7/3, crashcaseUNKNOWN/noinventedreply, running completion unchanged. No repeat
+  race to force2/4 samples; their pool/parser contract guards separate.
+- Reader validates bounds/enums/context/generation/availability/gate identity.
+  Handles failed execute submission/no token, decline after prior owner grant,
+  canceled-owner observation absent explicitly. Harness --start-diagnostics
+  requires --command-diagnostics and positive new start records; old ignored
+  override cannot produce false enabled report. Disabled scenario omits newparam.
+- New isolated SDK75/75, ROS41/41, host364/364 PASS. Builds use separate
+  build/install *start-trace-qualified* SDK and *m3-start-trace-ros* ROS prefixes;
+  original8runtime+2observers+ARP tracer and previous14binaries fixed. Provider
+  untouched.563old+154new raw hashes, exact omissions, closed immutable journal
+  selections, removed testcontainers. No heavy work overlaps native captures.
+
+Next: separately freeze a prospective loaded cohort with matched new SDK/ROS
+baseline and start tracing; no tuning. Original34 cannot be reclassified, earlier
+UNKNOWN98/12 retained. M3/fullmatrix/defaultloadedDDS/clock/security/resources/
+hardware/comparison open. PR2 draft, Intrinsic-M4 untouched.

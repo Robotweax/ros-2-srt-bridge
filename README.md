@@ -92,6 +92,14 @@ isolated probe and three existing execution tests pass; host350 PASS, all
 installed binaries unchanged. No tuning or N5 retry; targeted start-stage
 visibility is next.
 
+[Targeted start tracing](evidence/m3-start-tracing-2026-11-09/README.md) is now
+implemented and calibrated: actual check/grant, execute submission, consume and
+second-gate observations distinguish coordinator refusal from worker rejection.
+Default-off flags require command diagnostics and matched rebuilt workers. New
+isolated SDK75/ROS41/host364 checks pass; the installed baseline remains fixed.
+No tuning or new N5 run; a prospective cohort with the matched new baseline is
+next, while command34's historical branch remains unrecorded.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT
