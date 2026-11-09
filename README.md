@@ -67,6 +67,13 @@ restoration delivers all3 originally queued UDP identities once and a distinct
 fresh control. Clean and scoped loss cases pass; the first broader capture fixture
 remains failed. Host317 PASS, runtime/provider unchanged, no tuning or new N5 claim.
 
+The [loaded ARP eligibility cohort](evidence/m3-loaded-arp-eligibility-2026-11-09/README.md)
+passes N0 8/8 and N5/2903 134/134 with16 skips. A separately marked audit of all
+positive reply increments finds8 robot read envelopes with eligible/PASS growth
+but no reply source hook, alongside root pressure. This is downstream absence or
+delay, not8 proved packet drops or a fixed historical failure. Host327 PASS;
+runtime/defaults unchanged, no tuning, PR2 draft.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

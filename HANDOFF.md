@@ -3325,3 +3325,40 @@ PIPE-Zähler nutzen, um Replyeligibilität gegen spätereQueue/Drop-Assoziation 
 Last zu trennen. NochkeineDefault-Tunings oderhistorischeAuflösung. AlteIntents98/
 12, FullM3/N5/DDSDiscovery/Clock/Security/Resource/Hardware-/Vergleichsgates offen,
 PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-09 — Loaded ARP reply eligibility, no tuning
+
+- Evidence: `evidence/m3-loaded-arp-eligibility-2026-11-09/README.md`.
+  Plan24062a9, frozen live source2aae62b. PASS-only exact seven-word ARP reply
+  selectors on both peers,200ms/37500-record polling; separate CONTROL preference.
+  Every read validates software selector/actions/indexes/zero drops. Non-atomic
+  PIPE/PASS counters are not exclusive drop buckets. Dynamic defaults unchanged.
+- Once each: N0/2903/15s8/8,0skips; N5/2903/300s134/134,16skips,zero expired/
+  unresolved/context-loss, both command gatesPASS/exit0. No retry or resolution
+  of prior intents98/12. Added observer work prevents a mitigation claim.
+- N0 reply counts operator1/robot2; N5 lifetime execution counts11/14. Primary
+  selection finds one1.026943917s robot CONTROL gap with10INCOMPLETE samples;
+  contained responder reads have no positive growth, but the next read includes
+  the late edge reply. Zero growth is not generation-absence proof.
+- After closed source verification:17e4e46 adds correct responder-root scope and
+  two tests;051df30 separately audits ALL positive reply steps in publication.
+  Operator10steps have replies; robot13steps have5with/8without source replies
+  in~222–224ms outer envelopes. Each missing envelope reports+1PIPE/+1PASS,
+  zero action drops. These are eight windows, not eight lost packets; later
+  observations may fall outside and ARP has no request nonce.
+- All eight have wider~645–647ms robot-root context with drops176..6089 and
+  sampled peak qlen16, requester DELAY/PROBE. Whole-interface root context is
+  not specific ARP loss. Post-eligibility absence/delay localized, exact branch
+  and historical cause unproved; no tuning.
+- Source75034/SDKaccepted72066/decoded15913/observer15850; gap56153,rejected63,
+  unknown-age19/stale0, six residuals0, sources~200/50Hz. Telemetry/fullM3 open.
+  UDP multisets67864/65672 match. Root1294240robot/0operator is not ARP loss.
+- Host322 before live/327 after posthoc guards. SDK72/ROS41 remain prior; no
+  rebuild. Eight runtime/two observer hashes fixed and equal controlled fixture,
+  provider unchanged. No tests/builds/heavy analysis during live. Raw/source
+  provenance, exact public omissions, rules/namespaces/credentials cleanup pass.
+
+Next separately calibrate packet-level queued-versus-dropped ARP observation or
+control before mitigation. Historical UNKNOWNs, fullN3/N5, default loaded DDS
+discovery, clock/security/resource/hardware and comparison gates remain open.
+PR2 draft, Intrinsic/M4 untouched.

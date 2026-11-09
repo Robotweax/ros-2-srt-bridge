@@ -2280,3 +2280,37 @@ no tests/builds/heavy analysis overlap live, six owned namespaces/credentials cl
 Exact public/local raw-file disposition and hashes retained. Next separately use
 the qualified ARP counter under loaded N5 without tuning to distinguish generation
 from later queue/drop behavior. PR2 draft, M3 incomplete, Intrinsic/M4 untouched.
+
+### Loaded PASS-only ARP reply visibility (2026-11-09)
+
+The default-off --arp-reply-diagnostics path installs the qualified exact owned
+ARP reply u32 PIPE→PASS selector on both peers beside CONTROL IP PASS. New bounded
+200ms/37500-record reads validate every selector/action, software status, indexes,
+cumulative counts and zero action drops, with complete/error/population gates.
+PIPE/PASS snapshots are non-atomic; no equality or counter-minus-tap drop inference.
+Loaded mode exposes no fault verdict and requires dynamic peers/all diagnostics,
+N0/N5 and no injected loss. Roots/defaults/budgets/idle/provider/runtime stay fixed.
+
+Frozen2aae62b cohort passes N0/2903 8/8 and N5/2903 134/134,16skips,zero expiry/
+unresolved/context-loss events. Its single primary1.027s CONTROL source gap has
+INCOMPLETE requester samples but no positive contained responder reply growth;
+edge reads retain a later reply. Zero growth does not prove no generation. Added
+observer work and absent recurrence do not resolve prior failures or qualify M3.
+
+After closed source/archive verification, responder-root correlation17e4e46 keeps
+reply-source root separate from CONTROL requester root. A separately marked
+all-positive-step audit051df30 selects every adjacent positive action increment
+inside source publication, not only primary CONTROL gaps. Operator10steps have
+source replies; robot13steps have5with/8without source reply inside widened read
+envelopes. Those8show positive PIPE/PASS,zero action drops and root context peak
+qlen16/drop growth176..6089 in wider~645ms contexts. This localizes post-eligibility
+absence/delay under load, not8packet drops or a unique kernel/historical cause;
+ARP has no nonce, contexts differ and later replies may be outside the envelopes.
+
+Evidence: `evidence/m3-loaded-arp-eligibility-2026-11-09/`. Host322 before live,
+327 after posthoc guards; SDK72/ROS41 remain prior validations. No SDK/ROS/native
+observer rebuild or tuning;8runtime+2observer hashes fixed, provider unchanged,
+all population/cleanup gates pass, original hashes/selections retained. N5 sensor
+75034/15850 and gap56153 remain unqualified despite zero conservation residuals.
+Next separately calibrate packet-level queued-versus-dropped ARP observation or
+control before mitigation. PR2 draft, M3 incomplete, Intrinsic/M4 untouched.
