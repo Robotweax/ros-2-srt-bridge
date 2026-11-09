@@ -10,8 +10,10 @@ all29 N0/N4/N1/N2/N5 cases remain disabled. M3 remains open, PR2 draft and M4 un
 The plan below preserves its fixed gates, original case order and historical
 planning snapshots. Neither the new8-case passing prefix nor the old5-case prefix
 closes N3. No automatic retry, cohort splice, threshold relaxation or stage
-advancement follows. Next work is retained-evidence/source diagnosis of the
-operator shutdown failure before a separate fix/qualification decision.
+advancement follows. The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
+is complete to its observation limit: no post-signal stage/stack data, hence no
+uniquely identified blocked function. No patch or further experiment is queued;
+further visibility needs a separate scope decision before fix/qualification.
 
 ## 1. One candidate, with a concrete coverage ledger
 

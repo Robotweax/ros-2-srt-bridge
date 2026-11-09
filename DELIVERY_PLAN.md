@@ -4,6 +4,9 @@ The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
 remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
+The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
+confirms a pre-signal observation cutoff: the blocked function remains unknown.
+No tuning, retry, patch or new experiment followed.
 
 
 M0–M2 are accepted for the recorded Linux amd64/Jazzy simulator baseline. M3 is
@@ -14,8 +17,9 @@ The current comparison and acceptance decision is in
 under the unchanged plan. No new experiment or waiver is queued.
 `M3_CLOSURE_PLAN.md` now gives the concrete N3/current-build closure sequence;
 the authorized N3-only execution is now recorded as8 strict passes/final shutdown FAIL,
-with every later stage disabled. Next work is retained-evidence teardown diagnosis,
-not another experiment or a shutdown-budget increase.
+with every later stage disabled. Retained diagnosis now locates the observation gap but cannot name the blocked
+function. Any further stage/stack visibility needs a separate scope decision;
+no new experiment, patch or shutdown-budget increase is queued.
 
 ## Execution rules
 

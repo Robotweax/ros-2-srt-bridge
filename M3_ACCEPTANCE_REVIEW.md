@@ -4,6 +4,9 @@ The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
 remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
+The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
+confirms a pre-signal observation cutoff: the blocked function remains unknown.
+No tuning, retry, patch or new experiment followed.
 
 
 Final comparison and acceptance conclusion:
@@ -43,12 +46,14 @@ numerical superiority claim.
    to their archived hashes; a passing historical run is not silently assigned to
    a new binary. New sender reconciliation has focused recovery/capacity/result-
    race and full affected SDK/ROS checks, but no new loaded SRT cohort is claimed.
-2. Diagnose the operator shutdown failure from retained source/logs. The exact
-   frozen current-build N3 cohort passed8 cases then stopped at two-loss4211's
-   abnormal child exit; every passing case retained zero skipped slots. Do not
-   increase the5s shutdown wait, retry the case, splice cohorts or advance to N0.
-   Source/SDK/typed/capture checks not reached in case9 remain unqualified. A fix
-   and any future execution require a separate prospective validation decision.
+2. The [retained operator shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
+   is complete to its observation limit. Sampler and packet data end before
+   SIGINT; absent footer alone does not locate the blocking stage. The operator
+   worker is plain SDK, not ROS rate backend. No specific corrective patch is
+   justified yet; a narrow stage/blocked-stack visibility design would be the
+   discriminating next evidence, subject to a separate scope decision. No new
+   instrumentation or experiment is started. Keep8 strict PASS/1 FAIL, the5s
+   lifecycle gate and all29 remaining stages disabled; no retry or cohort splice.
 3. The retained-run N5 publication-age assessment is now complete in the
    [offline audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md).
    All publication histograms reconcile; unknown/missing populations are explicit,

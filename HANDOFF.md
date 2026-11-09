@@ -4171,3 +4171,42 @@ and comparison limits remain. This plan creates no waiver or merge permission.
 - Requested execution complete. Next action is retained-evidence/source diagnosis
   of operator shutdown, then separate engineering/validation decision. Do not
   auto-rerun two-loss4211 or start N0/N4/N1/N2/N5. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Retained shutdown diagnosis reaches observation limit
+
+- User requests diagnosis only, no tuning/retry/new experiments; remaining stages
+  disabled. Read-only retained913 raw hashes + original complete freeze verify.
+  No production/source/tool changes, build, ROS/Docker/fixture launch, process
+  attachment, journal recovery, expiry/replay, new tracer or suite rerun.
+- `evidence/m3-n3-shutdown-diagnosis-2026-11-09/{README.md,assessment.json,
+  input-hashes.json,analyze.py}` compare all9 same-build operator exits and matching
+  source.8 clean SIGINT-to-reap167.531..221.600ms, finalcase forced-kill/-9 after
+ 5.011041044s. Signal-send return does not prove handler/destructor entry.
+- Failed operator metrics3.165358251s pre-signal ready/clocktrue, faults0,
+  commands_sent0, all3pending sensor0. Last process sample102.537375ms pre-signal;
+  OOM/throttle counters0 and capsmax only at that pre-signal observation. Native
+  packet streams' last records943.992..944.018ms pre-signal. No post-signal thread
+  state, stack/wchan or lifecycle markers. Sampler runs only during scenario spin;
+  synchronous stop_children does not collect through its5s wait. Recorders stop
+  before release/cleanup by existing host order. More old packets cannot fill gap.
+- Failed log7308 consecutive sample events, missing footer; last sample event
+ 5.478214919s pre-signal falls within clean5.097..5.560s gaps. Absence of footer
+  alone does not localize hang. No command traces enabled. Parent alive-at-poll/
+  SIGINT/timeout/forcedkill proves lifecycle failure, not unique internal cause.
+- Actual operator worker is plain SDK journal worker (callee/sender branch), NOT
+  ROS rate backend, which belongs to clean robot caller side. Bridge itselfROS.
+  Code path: main spin->node reset->destructor timers->endpoint stop/join->trace
+  drain/footer->members. Endpoint stops worker (nominal2s kill/4s join thresholds),
+  then transport.join; no total timeout on surrounding native joins. Transport
+  closes sockets/epoll and destroys RUN-LOCAL Provider (srt_cleanup) before its
+  thread completes. Thus provider cleanup remains inside join candidate path;
+  do not incorrectly exclude it as a later member destructor. No evidence pins
+  ROS executor vs worker join vs transport/socket/provider join vs trace drain.
+- Root cause remains undetermined, diagnosis complete to retained limit. No
+  justified specific patch, no budget/rate/queue/clock/provider change. Proposed
+  next discriminating evidence is narrow shutdown stage + blocked stack/worker
+  visibility with independent observer surviving synchronous wait, only after a
+  separate explicit scope decision. Not implemented/scheduled/executed now.
+- Keep cohort8PASS/1FAIL, case9 measurement gates not reached remain unqualified,
+  all29 other cases disabled, no retry/splice. M3notaccepted/PR2draft/M4untouched.

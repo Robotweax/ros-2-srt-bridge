@@ -1,0 +1,1254 @@
+{
+  "status": "diagnosed_to_observation_limit",
+  "root_cause": "undetermined",
+  "proven_failure": "operator bridge did not reap during existing5s SIGINT wait; parent forced kill/-9",
+  "current_cohort_status": "failed_8_strict_passes_1_child_shutdown_failure",
+  "candidate_manifest_sha256": "929d1f7c7727b6c9ba363762074557873d0ffeb6ed6a2b4ab75957d341ee0fc7",
+  "clean_operator_shutdown_ns": {
+    "minimum": 167530542,
+    "maximum": 221599833
+  },
+  "failed_signal_to_reap_ns": 5011041044,
+  "observation_gap": {
+    "process_sampler": "scenario-spin driven; stops before synchronous stop_children, not an independent teardown sampler",
+    "packets": "all native records precede operator SIGINT; recorders stopped before release",
+    "lifecycle_trace": "command diagnostics disabled; no handler/spin/destructor/join stage markers or thread stacks"
+  },
+  "failure_path": {
+    "operator_worker": "plain SDK journal worker, not ROS rate worker",
+    "footer": "absent; normally emitted after endpoint join and trace drain, before member destruction",
+    "localization": "no proof SIGINT handler/destructor entered; cannot select ROS executor, worker join, transport join/socket-close/provider cleanup or trace drain from retained data"
+  },
+  "unsupported_causes": [
+    "ROS rate backend shutdown on operator",
+    "selected two-source loss as causal proof",
+    "source-rate/queue/buffer/clock tuning needed",
+    "post-signal CPU starvation/OOM exclusion from pre-signal counters",
+    "provider global cleanup proven cause",
+    "native worker4s join as unconditional total bridge shutdown bound"
+  ],
+  "no_runtime_changes": true,
+  "no_tuning": true,
+  "no_retry": true,
+  "new_experiments": 0,
+  "remaining_stage_cases_disabled": 29,
+  "M3_complete": false,
+  "rows": [
+    {
+      "case": "N3-baseline-1701",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 140,
+        "begin_ns": 50937990440,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 50938014273,
+        "signal_end_ns": 50938125440,
+        "end_ns": 51157375856,
+        "passed": true
+      },
+      "signal_to_reap_ns": 219361583,
+      "observed_sample_records": 7281,
+      "last_sample_event_ns": 45840782687,
+      "signal_minus_last_sample_event_ns": 5097231586,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7281,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 50782361690,
+      "signal_minus_last_process_sample_ns": 155652583,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 50780665940,
+        "end_ns": 50782361690,
+        "wall_ns": 1794252299930753968,
+        "offset_min_ns": 1794252249150087070,
+        "offset_max_ns": 1794252249150088028,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 140,
+            "comm": "bridge_node",
+            "start_ticks": 1102,
+            "cpu_ticks": 549,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70909952
+          },
+          {
+            "label": "control",
+            "pid": 156,
+            "comm": "robotweax-journ",
+            "start_ticks": 1141,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 14901248
+          },
+          {
+            "label": "observer",
+            "pid": 106,
+            "comm": "python3",
+            "start_ticks": 864,
+            "cpu_ticks": 885,
+            "waited_child_cpu_ticks": 115,
+            "rss_bytes": 115900416
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 544,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 21109227,
+            "user_usec": 18628215,
+            "system_usec": 2481011,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 245911552,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 48171902813,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15309,
+          "last_packet_ns": 49854761189,
+          "signal_minus_last_packet_ns": 1083253084,
+          "stop_before_ns": 50153254648
+        },
+        {
+          "role": "robot",
+          "records": 15309,
+          "last_packet_ns": 49854685106,
+          "signal_minus_last_packet_ns": 1083329167,
+          "stop_before_ns": 50322131856
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-one-loss-1701",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 102219818171,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 102219825338,
+        "signal_end_ns": 102219957588,
+        "end_ns": 102391821879,
+        "passed": true
+      },
+      "signal_to_reap_ns": 171996541,
+      "observed_sample_records": 7275,
+      "last_sample_event_ns": 96819983627,
+      "signal_minus_last_sample_event_ns": 5399841711,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7275,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 102064436837,
+      "signal_minus_last_process_sample_ns": 155388501,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 102062772546,
+        "end_ns": 102064436837,
+        "wall_ns": 1794252351213247880,
+        "offset_min_ns": 1794252249150474834,
+        "offset_max_ns": 1794252249150475334,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 6179,
+            "cpu_ticks": 438,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 69730304
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 6216,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15085568
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 5961,
+            "cpu_ticks": 732,
+            "waited_child_cpu_ticks": 110,
+            "rss_bytes": 115998720
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 718,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 17486059,
+            "user_usec": 14390887,
+            "system_usec": 3095171,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 152723456,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 99140037294,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15313,
+          "last_packet_ns": 100830275379,
+          "signal_minus_last_packet_ns": 1389549959,
+          "stop_before_ns": 101463788920
+        },
+        {
+          "role": "robot",
+          "records": 15333,
+          "last_packet_ns": 101615940337,
+          "signal_minus_last_packet_ns": 603885001,
+          "stop_before_ns": 101633189254
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-two-loss-1701",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 153889447944,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 153889462777,
+        "signal_end_ns": 153889599902,
+        "end_ns": 154105377444,
+        "passed": true
+      },
+      "signal_to_reap_ns": 215914667,
+      "observed_sample_records": 7252,
+      "last_sample_event_ns": 148374515109,
+      "signal_minus_last_sample_event_ns": 5514947668,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7252,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 153836842027,
+      "signal_minus_last_process_sample_ns": 52620750,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 153834199027,
+        "end_ns": 153836842027,
+        "wall_ns": 1794252402985038251,
+        "offset_min_ns": 1794252249150835890,
+        "offset_max_ns": 1794252249150839224,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 11319,
+            "cpu_ticks": 456,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70561792
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 11355,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15085568
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 11100,
+            "cpu_ticks": 760,
+            "waited_child_cpu_ticks": 112,
+            "rss_bytes": 115957760
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 892,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 18062488,
+            "user_usec": 16049699,
+            "system_usec": 2012789,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 154382336,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 150718921692,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15346,
+          "last_packet_ns": 152997471652,
+          "signal_minus_last_packet_ns": 891991125,
+          "stop_before_ns": 153102256485
+        },
+        {
+          "role": "robot",
+          "records": 15346,
+          "last_packet_ns": 152997449402,
+          "signal_minus_last_packet_ns": 892013375,
+          "stop_before_ns": 153274030694
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-baseline-2903",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 205092724093,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 205092735968,
+        "signal_end_ns": 205092839093,
+        "end_ns": 205309458426,
+        "passed": true
+      },
+      "signal_to_reap_ns": 216722458,
+      "observed_sample_records": 7260,
+      "last_sample_event_ns": 199987152174,
+      "signal_minus_last_sample_event_ns": 5105583794,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7260,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 205092189759,
+      "signal_minus_last_process_sample_ns": 546209,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 205090464676,
+        "end_ns": 205092189759,
+        "wall_ns": 1794252454240988220,
+        "offset_min_ns": 1794252249150522044,
+        "offset_max_ns": 1794252249150523544,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 16542,
+            "cpu_ticks": 539,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70103040
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 16578,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15085568
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 16317,
+            "cpu_ticks": 888,
+            "waited_child_cpu_ticks": 116,
+            "rss_bytes": 116211712
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1066,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 20676602,
+            "user_usec": 18496315,
+            "system_usec": 2180287,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 151527424,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 202346212300,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15271,
+          "last_packet_ns": 204172207676,
+          "signal_minus_last_packet_ns": 920528292,
+          "stop_before_ns": 204348787509
+        },
+        {
+          "role": "robot",
+          "records": 15271,
+          "last_packet_ns": 204172224467,
+          "signal_minus_last_packet_ns": 920511501,
+          "stop_before_ns": 204514693801
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-one-loss-2903",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 256732571158,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 256732582242,
+        "signal_end_ns": 256732699742,
+        "end_ns": 256954182075,
+        "passed": true
+      },
+      "signal_to_reap_ns": 221599833,
+      "observed_sample_records": 7258,
+      "last_sample_event_ns": 251236498281,
+      "signal_minus_last_sample_event_ns": 5496083961,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7258,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 256629901908,
+      "signal_minus_last_process_sample_ns": 102680334,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 256628220325,
+        "end_ns": 256629901908,
+        "wall_ns": 1794252505779560674,
+        "offset_min_ns": 1794252249151337391,
+        "offset_max_ns": 1794252249151340349,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 21627,
+            "cpu_ticks": 460,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70389760
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 21663,
+            "cpu_ticks": 6,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15081472
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 21400,
+            "cpu_ticks": 782,
+            "waited_child_cpu_ticks": 114,
+            "rss_bytes": 116592640
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1240,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 18440239,
+            "user_usec": 16568288,
+            "system_usec": 1871950,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 161927168,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 253554366282,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15257,
+          "last_packet_ns": 255246790158,
+          "signal_minus_last_packet_ns": 1485792084,
+          "stop_before_ns": 255947694200
+        },
+        {
+          "role": "robot",
+          "records": 15269,
+          "last_packet_ns": 256043763241,
+          "signal_minus_last_packet_ns": 688819001,
+          "stop_before_ns": 256123384158
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-two-loss-2903",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 308653416515,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 308653430807,
+        "signal_end_ns": 308653592474,
+        "end_ns": 308872488224,
+        "passed": true
+      },
+      "signal_to_reap_ns": 219057417,
+      "observed_sample_records": 7291,
+      "last_sample_event_ns": 303093757638,
+      "signal_minus_last_sample_event_ns": 5559673169,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7291,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 308600858182,
+      "signal_minus_last_process_sample_ns": 52572625,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 308598364390,
+        "end_ns": 308600858182,
+        "wall_ns": 1794252557749964753,
+        "offset_min_ns": 1794252249151597071,
+        "offset_max_ns": 1794252249151600363,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 26784,
+            "cpu_ticks": 631,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70283264
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 26821,
+            "cpu_ticks": 6,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15032320
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 26564,
+            "cpu_ticks": 932,
+            "waited_child_cpu_ticks": 111,
+            "rss_bytes": 116539392
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1414,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 22097590,
+            "user_usec": 19701690,
+            "system_usec": 2395900,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 152211456,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 305467124347,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15399,
+          "last_packet_ns": 307613891432,
+          "signal_minus_last_packet_ns": 1039539375,
+          "stop_before_ns": 307813071057
+        },
+        {
+          "role": "robot",
+          "records": 15399,
+          "last_packet_ns": 307613874140,
+          "signal_minus_last_packet_ns": 1039556667,
+          "stop_before_ns": 307992713473
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-baseline-4211",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 359606121080,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 359606130289,
+        "signal_end_ns": 359606242289,
+        "end_ns": 359773660831,
+        "passed": true
+      },
+      "signal_to_reap_ns": 167530542,
+      "observed_sample_records": 7306,
+      "last_sample_event_ns": 354442253578,
+      "signal_minus_last_sample_event_ns": 5163876711,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7306,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 359398308497,
+      "signal_minus_last_process_sample_ns": 207821792,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 359395351080,
+        "end_ns": 359398308497,
+        "wall_ns": 1794252608514058263,
+        "offset_min_ns": 1794252249118706183,
+        "offset_max_ns": 1794252249118707183,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 31987,
+            "cpu_ticks": 623,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70172672
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 32023,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15081472
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 31767,
+            "cpu_ticks": 968,
+            "waited_child_cpu_ticks": 113,
+            "rss_bytes": 116117504
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1588,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 22443255,
+            "user_usec": 20050196,
+            "system_usec": 2393058,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 153313280,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 356775429121,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15388,
+          "last_packet_ns": 358653105372,
+          "signal_minus_last_packet_ns": 953024917,
+          "stop_before_ns": 358826136955
+        },
+        {
+          "role": "robot",
+          "records": 15388,
+          "last_packet_ns": 358653083288,
+          "signal_minus_last_packet_ns": 953047001,
+          "stop_before_ns": 359003892039
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-one-loss-4211",
+      "strict_status": "passed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 142,
+        "begin_ns": 411444906146,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": false,
+        "returncode": 0,
+        "error": null,
+        "signal_begin_ns": 411444912896,
+        "signal_end_ns": 411445030854,
+        "end_ns": 411660944562,
+        "passed": true
+      },
+      "signal_to_reap_ns": 216031666,
+      "observed_sample_records": 7296,
+      "last_sample_event_ns": 405931572601,
+      "signal_minus_last_sample_event_ns": 5513340295,
+      "sample_footer": [
+        {
+          "schema_version": 2,
+          "attempted": 7296,
+          "dropped": 0,
+          "exhausted": 0,
+          "limit": 75000
+        }
+      ],
+      "last_process_sample_end_ns": 411291207145,
+      "signal_minus_last_process_sample_ns": 153705751,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 411289365395,
+        "end_ns": 411291207145,
+        "wall_ns": 1794252660400226301,
+        "offset_min_ns": 1794252249110859989,
+        "offset_max_ns": 1794252249110860906,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 142,
+            "comm": "bridge_node",
+            "start_ticks": 37088,
+            "cpu_ticks": 581,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70557696
+          },
+          {
+            "label": "control",
+            "pid": 158,
+            "comm": "robotweax-journ",
+            "start_ticks": 37124,
+            "cpu_ticks": 6,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15085568
+          },
+          {
+            "label": "observer",
+            "pid": 108,
+            "comm": "python3",
+            "start_ticks": 36868,
+            "cpu_ticks": 901,
+            "waited_child_cpu_ticks": 113,
+            "rss_bytes": 115724288
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1762,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 21292508,
+            "user_usec": 19047591,
+            "system_usec": 2244917,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 153001984,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 408247971019,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15539,
+          "last_packet_ns": 409938784353,
+          "signal_minus_last_packet_ns": 1506128543,
+          "stop_before_ns": 410626910145
+        },
+        {
+          "role": "robot",
+          "records": 15559,
+          "last_packet_ns": 410718211770,
+          "signal_minus_last_packet_ns": 726701126,
+          "stop_before_ns": 410805199645
+        }
+      ],
+      "command_trace_lines": 0
+    },
+    {
+      "case": "N3-two-loss-4211",
+      "strict_status": "failed",
+      "operator_child": {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "begin_ns": 463726695128,
+        "initial_returncode": null,
+        "signal_sent": true,
+        "forced_kill": true,
+        "returncode": -9,
+        "error": "child exceeded shutdown deadline",
+        "signal_begin_ns": 463726703794,
+        "signal_end_ns": 463726850211,
+        "end_ns": 468737744838,
+        "passed": false
+      },
+      "signal_to_reap_ns": 5011041044,
+      "observed_sample_records": 7308,
+      "last_sample_event_ns": 458248488875,
+      "signal_minus_last_sample_event_ns": 5478214919,
+      "sample_footer": [],
+      "last_process_sample_end_ns": 463624166419,
+      "signal_minus_last_process_sample_ns": 102537375,
+      "process_samples_during_shutdown": 0,
+      "last_process_sample": {
+        "begin_ns": 463622099294,
+        "end_ns": 463624166419,
+        "wall_ns": 1794252712732354506,
+        "offset_min_ns": 1794252249110252545,
+        "offset_max_ns": 1794252249110255212,
+        "hz": 100,
+        "page_size_bytes": 4096,
+        "processes": [
+          {
+            "label": "control",
+            "pid": 141,
+            "comm": "bridge_node",
+            "start_ticks": 42300,
+            "cpu_ticks": 521,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 70078464
+          },
+          {
+            "label": "control",
+            "pid": 157,
+            "comm": "robotweax-journ",
+            "start_ticks": 42338,
+            "cpu_ticks": 5,
+            "waited_child_cpu_ticks": 0,
+            "rss_bytes": 15085568
+          },
+          {
+            "label": "observer",
+            "pid": 107,
+            "comm": "python3",
+            "start_ticks": 42080,
+            "cpu_ticks": 813,
+            "waited_child_cpu_ticks": 112,
+            "rss_bytes": 116133888
+          }
+        ],
+        "errors": [],
+        "cgroup": {
+          "available": true,
+          "identity": {
+            "device": 41,
+            "inode": 1936,
+            "namespace": "cgroup:[4026532560]"
+          },
+          "cpu": {
+            "usage_usec": 19482684,
+            "user_usec": 17006581,
+            "system_usec": 2476103,
+            "nice_usec": 0,
+            "nr_periods": 0,
+            "nr_throttled": 0,
+            "throttled_usec": 0,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "memory_current_bytes": 162054144,
+          "memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "limits": {
+            "cpu_max": "max 100000",
+            "memory_max": "max"
+          }
+        }
+      },
+      "end_metrics": {
+        "monotonic_ns": 460561345543,
+        "bridge": {
+          "ready": true,
+          "clock_qualified": true,
+          "fault": 0,
+          "worker_fault": 0,
+          "commands_sent": 0,
+          "sensor_ingress_pending": 0,
+          "sensor_outbound_pending": 0,
+          "sensor_receive_pending": 0
+        }
+      },
+      "measurement_captures": [
+        {
+          "role": "operator",
+          "records": 15404,
+          "last_packet_ns": 462782685710,
+          "signal_minus_last_packet_ns": 944018084,
+          "stop_before_ns": 462923505377
+        },
+        {
+          "role": "robot",
+          "records": 15404,
+          "last_packet_ns": 462782712127,
+          "signal_minus_last_packet_ns": 943991667,
+          "stop_before_ns": 463105378836
+        }
+      ],
+      "command_trace_lines": 0
+    }
+  ]
+}
