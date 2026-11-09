@@ -2,7 +2,7 @@ from pathlib import Path
 import copy,json,sys,tempfile,unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_arp_reply_diagnostics import summarize,LIMIT
-from m3_loaded_arp_analysis import interval,reply_witness
+from m3_loaded_arp_analysis import interval,reply_witness,root_comparison
 
 
 def row(n,p=0):
@@ -38,3 +38,16 @@ class LoadedArpTests(unittest.TestCase):
         v=interval([row(1),row(2),row(3)],110,320)
         self.assertEqual(len(v['crossing']),1);self.assertIn('not_generation_absence',reply_witness(v,[],[])['classification'])
         self.assertIn('insufficient',reply_witness(interval([row(1)],90,130),[],[])['classification'])
+
+
+class ReplyRootScopeTests(unittest.TestCase):
+    def roots(self,multiplier):
+        return [dict(begin_ns=n*100,end_ns=n*100+10,pass_counter=dict(packets=n,bytes=n*10),root=dict(packets=n,bytes=n*10,drops=n*multiplier,overlimits=n,backlog=n,qlen=n)) for n in range(1,5)]
+    def test_reply_source_role_not_requester_root_is_used(self):
+        rows=dict(operator=self.roots(3),robot=self.roots(7))
+        r=root_comparison(rows,'robot',[90,420],[150,350])
+        self.assertEqual(r['role'],'robot');self.assertEqual(r['within_control_window']['totals']['root_drops'],21)
+        self.assertEqual(r['within_reply_read_envelope']['totals']['root_drops'],7)
+    def test_missing_envelope_is_not_zero_root_loss(self):
+        r=root_comparison(dict(operator=self.roots(3)),'operator',[90,420],None)
+        self.assertIsNone(r['within_reply_read_envelope'])

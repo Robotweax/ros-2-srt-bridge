@@ -8,6 +8,8 @@ from m3_arp_reply_diagnostics import summarize
 from m3_arp_gap_observations import parse_arp
 from m3_udp_path_analysis import arp_kind
 from m3_monotonic_capture import records
+from m3_qdisc_diagnostics import summarize as qdisc_summary
+from m3_qdisc_gap_analysis import inside_deltas
 
 
 def interval(rows,start,end):
@@ -31,16 +33,25 @@ def reply_witness(value,source_replies,peer_replies):
     return dict(classification='reply_eligibility_and_pass_growth_without_source_reply_observation' if grew and not source else 'reply_growth_with_source_observation' if grew else 'no_positive_contained_reply_growth_not_generation_absence_proof',source_replies_in_outer_envelope=len(source),peer_replies_in_outer_envelope=len(peer),source_replies_between_reads=sum(inner[0]<=r['monotonic_ns']<=inner[1] for r in source_replies),outer_read_envelope_ns=envelope,inner_read_gap_ns=inner,delta=delta,scope='Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference.')
 
 
+def root_comparison(qdisc_rows,role,window,envelope):
+    # ARP responder is opposite the CONTROL requester. Never attach the
+    # requester's root drops to an emitted reply from the other peer.
+    rows=qdisc_rows[role]
+    return dict(role=role,within_control_window=inside_deltas(rows,*window),within_reply_read_envelope=None if envelope is None else inside_deltas(rows,*envelope),scope='Reply-source whole-interface root snapshots; contained read pairs only, different tails from reply counters; no per-ARP drop attribution or mirrored-child sum.')
+
+
 def analyze(run,manifest):
     run=run.resolve();report=json.loads((run/'run.json').read_text())
     if not report.get('arp_reply_diagnostics_enabled'):raise ValueError('requires loaded ARP instrumentation')
-    primary=path_analysis(run,manifest);summaries={};rows={};hashes={};arps={r:[] for r in ('operator','robot')}
+    primary=path_analysis(run,manifest);summaries={};rows={};hashes={};qdisc_rows={};arps={r:[] for r in ('operator','robot')}
     for role in arps:
         p=run/(role+'-arp-reply-samples.jsonl');q=p.with_suffix('.status.json')
-        for f in (p,q):
+        qr=run/(role+'-qdisc-samples.jsonl');qs=qr.with_suffix('.status.json')
+        for f in (p,q,qr,qs):
             key=str(f.relative_to(ROOT));h=sha(f)
             if manifest.get(key,{}).get('sha256')!=h:raise ValueError('original reply observation hash mismatch')
             hashes[key]=h
+        qdisc_summary(qr);qdisc_rows[role]=[json.loads(l) for l in qr.read_text().splitlines()]
         summaries[role]=summarize(p);rows[role]=[json.loads(l) for l in p.read_text().splitlines()]
         start,end=primary['primary_control']['active_ns']
         if rows[role][0]['begin_ns']>start or rows[role][-1]['end_ns']<end:raise ValueError('ARP observer source-window coverage insufficient')
@@ -59,7 +70,7 @@ def analyze(run,manifest):
                 a,b=v['outer_read_envelope_ns'];status=report['monotonic_captures']['statuses'][role]
                 if not status['ready_ns']<=a<b<=status['stop_before_ns']:raise ValueError('reply envelope outside native coverage')
             source=[r for r in arps[role] if r['identity_class']=='outgoing_local_reply'];sink=[r for r in arps[peer] if r['identity_class']=='incoming_peer_reply']
-            comparisons[role]=dict(reads=v,witness=reply_witness(v,source,sink),arp_inside_window={r:[a for a in arps[r] if start<=a['monotonic_ns']<=end] for r in (role,peer)})
+            comparisons[role]=dict(reads=v,witness=reply_witness(v,source,sink),reply_source_root=root_comparison(qdisc_rows,role,[start,end],v['outer_read_envelope_ns']),arp_inside_window={r:[a for a in arps[r] if start<=a['monotonic_ns']<=end] for r in (role,peer)})
         joined.append(dict(family=w['family'],requester=requester,responder=responder,window_ns=w['window_ns'],control_stage=w['stage_classification'],control_primary_classification=w['primary_classification'],identity_stable=w['identity_stable'],neighbors=w['neighbors'],control_qdisc=w['qdisc'],reply_comparisons=comparisons))
     if any(sha(ROOT/name)!=h for name,h in hashes.items()):raise ValueError('ARP inputs changed during analysis')
     for role in arps:
