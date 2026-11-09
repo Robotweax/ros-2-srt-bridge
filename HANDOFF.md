@@ -4093,3 +4093,43 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   mocked transitions. Isolated fixture build/link and any live qualification
   remain pending separately authorized scope. All38 planned cases disabled;
   M3notaccepted/PR2draft/M4untouched. Do not retry/splice old N3 or replay118.
+
+
+### 2026-11-09 — Dispatcher wired; isolated N4 compile/link validated
+
+- User explicitly authorizes wiring dispatcher and native fixture build/link,
+  without tuning or starting experiments. One standalone build completed in the
+  pinned amd64/Jazzy image with --network none, no network capabilities. No peer,
+  worker, ROS workload, capture, impairment, campaign case, expiry/recovery/replay.
+- `tools/m3_campaign_dispatcher.py` maps all38 exact predeclared slots to single
+  cases; QUERY is2s alone, never the legacy six-second remaining-native batch.
+  Combined adapter uses fixed layout/image/output, skip-build, native capture,
+  existing command/start/sender/CONTROL+SENSOR provider diagnostics. Settings
+  unchanged, no probe expansion or ARP study. `run_m3.main(argv)` gains explicit
+  fresh output and immutable image selection; shared source inventory adds root
+  CMakeLists. Before/after source/build/binding drift, strict outcome/cleanup
+  rejection or inner failure stops all later slots. No retries or resume.
+- Disabled freeze prepared: exact plan/38 invocations, candidate/preserved chain,
+  native binding, provider/image/helper/source hashes. No authorization grant.
+  Live dispatcher requires later explicit scope change plus separate exact
+  freeze/order/fresh `.local` output grant. Tests mock all adapter boundaries;
+  dispatcher has not run live. A passing campaign never auto-accepts M3.
+- New isolated `build/m3-n4-sender-reconcile-peer` compiled/linked C++20 Release
+  with Werror against existing SDK. Static audit verifies prefixes, macro worker,
+  linker contributions (sixSDK archives+pinnedprovider), ELF64/x86-64/needed libs,
+  no RPATH,36 binding files. Native preflight now passes. Private IPC4 still
+  launches --worker-ipc-v3. No loader/IPC/runtime qualification or fixture run.
+-440 offline Python tests pass;13 dispatcher tests include exact mapping/grants,
+  output reuse/outside-root refusal, pre/post drift and cleanup-failure stop.
+  Failed intermediate test log retained (macOS temp /var alias fixed). Optional
+  rg filter absent in image was replaced by direct readelf inspection. No native
+  rebuild for these corrections; initial unused SQLite direct-dependency audit
+  assumption corrected to actual ELF dependencies. All13 candidate entries and
+ 86 native inputs unchanged; provider52be7c86 clean/archive unchanged. SDK81/ROS41
+  remain prior evidence; not rerun. Original N3fail/comparison limits unchanged.
+- Evidence `evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md`,
+  link-proof/fixture-binding/campaign-freeze/readiness-update JSON, static
+  verify-build.py and logs. Original planning/earlier readiness snapshots preserved.
+- Preparation task complete; all38 live slots disabled/unscheduled. Next live
+  stage, only if separately authorized: strict9-case N3 then fixed N0/N4/N1/N2/N5
+  order, stop first failed gate. M3notaccepted/PR2draft/Intrinsic-M4untouched.

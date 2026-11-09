@@ -30,14 +30,17 @@ import m3_qdisc_diagnostics as qdisc_diagnostics
 import m3_arp_reply_diagnostics as arp_reply_diagnostics
 import m3_arp_packet_diagnostics as arp_packet_diagnostics
 import m3_root_loss_burst
+from m3_source_preflight import source_inventory
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
 
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def main():
+def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output',type=Path,help='fresh campaign-owned output directory inside the repository')
+    parser.add_argument('--image-reference',help='explicit immutable image reference; never pulls')
     parser.add_argument('--profile',choices=['N0','N1','N2','N4','N5'],default='N0')
     parser.add_argument('--seed',type=int,choices=SEEDS,default=SEEDS[0])
     parser.add_argument('--smoke',action='store_true',help='15 s development run; never full-duration qualification')
@@ -62,7 +65,7 @@ def main():
     parser.add_argument('--sender-diagnostics',action='store_true',help='bounded sender clock/release/journal/event observations; requires command diagnostics')
     parser.add_argument('--probe-diagnostics',action='store_true',help='default-off per-probe lifecycle observations; requires command diagnostics and calibrated probe layout')
     parser.add_argument('--command-diagnostics',action='store_true',help='development-only bounded command handoff trace; adds observer workload')
-    args=parser.parse_args()
+    args=parser.parse_args(argv)
     if args.smoke and args.seconds:parser.error('choose --smoke or --seconds')
     duration=15 if args.smoke else args.seconds or (600 if args.profile in ('N1','N2') else 300)
     if not 10<=duration<=7200:parser.error('duration must be 10..7200 seconds')
@@ -84,14 +87,14 @@ def main():
     if args.probe_diagnostics and args.runtime_layout not in ('probe-tracing','sender-reconcile'):parser.error('probe diagnostics require probe-tracing runtime layout')
     if args.runtime_layout!='baseline' and not args.skip_build:parser.error('explicit matched runtime layout requires --skip-build')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
+    run=args.output.resolve() if args.output else ROOT/'.local/m3'/stamp
+    run.relative_to(ROOT)
+    run.mkdir(parents=True,exist_ok=False)
     inside='/workspace/'+str(run.relative_to(ROOT))
     report=dict(status='running',pcap_dispatch_mode='immediate',pcap_capture_config=pcap_configuration(),milestone='M3 development',complete_m3_acceptance=False,
         profile=args.profile,seed=args.seed,seconds=duration,smoke=args.smoke,skip_build=args.skip_build,
         max_clock_interval_ms=200,clock_assumptions=dict(relative_drift_ppm=1000,timestamp_error_ns=1000000,max_probe_age_ns=5000000000),
-        source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
-            for folder in ['src','ros2','proto','cmake','containers','tools','tests']
-            for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
+        source_sha256=source_inventory(ROOT),
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
     processes=[];captures=[];recorder_processes=[];neighbor_processes=[];qdisc_processes=[];arp_reply_processes=[];arp_packet_processes=[];lab=None;competitor=None;competitor_alive_checks=0
@@ -120,9 +123,11 @@ def main():
     try:
         if args.build_image:
             execute('image-build',['docker','build','--platform','linux/amd64','--pull=false','-f','containers/m3.Dockerfile','-t','ros2-srt-m3:20261105','.'])
-        info=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64','ros2-srt-m3:20261105'],text=True))[0]
+        info=json.loads(subprocess.check_output(['docker','image','inspect','--platform','linux/amd64',args.image_reference or 'ros2-srt-m3:20261105'],text=True))[0]
         assert info['Architecture']=='amd64' and info['Os']=='linux'
-        image=info['RepoDigests'][0];report.update(image_reference=image,image_platform_id=info['Id'])
+        image=args.image_reference or info['RepoDigests'][0]
+        if args.image_reference and args.image_reference not in info['RepoDigests']:raise ValueError('requested immutable image reference not present')
+        report.update(image_reference=image,image_platform_id=info['Id'])
         save()
         def offline(command):return ['docker','run','--rm','--pull=never','--platform','linux/amd64','--network','none',
             '-v',str(ROOT)+':/workspace','-w','/workspace',image,'bash','-c',command]

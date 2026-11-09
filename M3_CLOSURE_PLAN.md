@@ -49,49 +49,47 @@ barriers/watchdogs are separate fixture settings, not production overrides.
 
 ## 2. Preparation before any future live case
 
-Offline source preparation is now implemented and427 Python checks pass; see
-[evidence and readiness delta](evidence/m3-offline-closure-preparation-2026-11-09/README.md).
-This does not authorize execution. Native compilation/link and live validation
-remain unperformed; no live dispatcher is wired. All38 cases remain disabled.
-The original planning snapshots below retain their original scope.
+The dispatcher is wired and the isolated native fixture compile/link is now
+validated under the user's explicit preparation-only scope.440 offline Python
+checks pass. See [current build/readiness evidence](evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md).
+No fixture or campaign case was launched; all38 cases remain disabled. The
+original planning snapshots retain their original scope.
 
-These are the preparation deliverables and their remaining boundaries:
+1. **Strict dispatch and assessment.** `tools/m3_campaign_dispatcher.py` now
+   maps all38 declared slots to single-case adapters. It checks the complete
+   freeze before/after each case, applies the shared closed-case assessor and
+   recorded cleanup gates, then permits the next slot. Inner harness status is
+   separate. Failure stops every later slot with no retry or resumption. All
+   adapter calls and complete campaign transitions were tested with mocks only;
+   live dispatch remains unvalidated. Combined capture assessment consumes the
+   original summaries rather than independently reparsing every packet.
+2. **Matched N4 fixture build/link.** The standalone peer compiled and linked
+   in a network-disabled pinned-image container against the selected SDK and
+   provider, into `build/m3-n4-sender-reconcile-peer`. Imported prefixes, selected
+   worker macro, linker map and ELF metadata pass static audit. The36-file
+   binding passes native preflight. Production and old fixture prefixes were
+   not rebuilt. No peer/worker execution or loader/runtime/IPC validation was
+   performed. IPC4 retains its existing `--worker-ipc-v3` process launch flag.
+3. **Offline negative controls.** Source skips, missing observers/footer,
+   frozen input drift, unresolved command progress, outage readback/timing,
+   incomplete capture and cleanup failures reject independently of inner PASS.
+   Dispatcher checks additionally bind the output and exact case order and
+   prove no later dispatch after failure.440 host Python tests pass; no runtime
+   matrix case is closed by these tests.
+4. **Frozen evidence identity and execution gate.** The new disabled
+   `campaign-freeze.json` binds the plan, invocation settings, candidate/preserved
+   builds, peer binding, provider/image, helpers and full source inventory.
+   No authorization grant is created. A future execute request requires a
+   separate exact-freeze/order/fresh-output grant after an explicit scope change;
+   the current no-new-experiments instruction remains in force. Fresh journals
+   never reopen old identities and no old-cohort splice is supported.
 
-
-1. **Strict campaign assessor.** Closed-case assessment and callback stop control
-   are implemented with offline negative controls; live dispatcher wiring remains
-   pending. Make the case-level and cohort-level verdict use
-   the same declared source/capture/clock/journal/cleanup gates before advancing.
-   `run_m3.py` exit0 alone is insufficient: earlier harness safety passes allowed
-   unresolved commands. Use the existing closed `command_progress` proof and
-   SENSOR accounting, with explicit positive/nonempty populations. Preserve inner
-   harness status separately. A late audit failure stops the campaign; it cannot
-   merely annotate a PASS after later cases have been scheduled.
-2. **Matched N4 fixture port.** Source now supports explicit selected
-   SDK/worker/ROS paths, child prefix checks and post-build fixture bindings.
-   Nonbaseline native selection refuses the currently missing binding before
-   lab creation. Native compilation/link and runtime validation remain pending. An old IPC3-linked peer is not current-build evidence
-   when run beside an IPC4 worker. Build only the standalone peer into a new
-   isolated fixture prefix against the fixed SDK; do not overwrite old
-   fixtures or rebuild production libraries. The source port is offline-tested; no fixture build was performed.
-3. **Offline negative controls.** Before a future campaign, the orchestration
-   must stop on a source skip, missing histogram/footer, wrong image/build,
-   unresolved result, incomplete capture, changed epoch or failed cleanup. Mocked
-   stage transitions must prove that later slots remain unexecuted after failure.
-   Freeze these harness changes and their checks before live execution.
-4. **Fresh evidence identity.** Freeze candidate manifest, provider/image hashes,
-   driver/assessor bytes, settings and full case list; allocate new output paths,
-   namespaces and journals. Fresh numeric request IDs do not reopen historical
-   identities. Verify hashes before/after each case; changing the native candidate
-   pauses the plan for an impact review rather than silently continuing.
-
-Completed in this planning step: the current zero-skip guard was applied read-only
-to all9 retained N3 result files after checking their original hashes. It correctly
-rejects the sixth case; the final3 keep `outside_stop_boundary`, even though their
-individual window checks pass. The failed cohort is not repaired. Candidate/hash
-checks and runner readiness findings are in
-[readiness.json](evidence/m3-closure-plan-2026-11-09/readiness.json).
-N4 porting and the all-stage strict orchestrator are explicitly **not ready**.
+The original planning step applied the zero-skip guard to all9 retained N3
+results: the sixth remains failed and the final3 remain `outside_stop_boundary`.
+Neither this preparation nor the later build changes those results. Original
+[readiness.json](evidence/m3-closure-plan-2026-11-09/readiness.json) describes the
+then-missing port/orchestrator; the new readiness delta records their preparation
+completion without implying live qualification or M3 acceptance.
 
 ## 3. First execution stage: strict N3, only if separately authorized
 

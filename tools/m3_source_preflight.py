@@ -18,8 +18,10 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def source_inventory(root=ROOT):
     root=Path(root)
-    return {str(p.relative_to(root)):sha(p) for folder in ('src','ros2','proto','cmake','containers','tools','tests')
+    files={str(p.relative_to(root)):sha(p) for folder in ('src','ros2','proto','cmake','containers','tools','tests')
         for p in sorted((root/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)}
+    files['CMakeLists.txt']=sha(root/'CMakeLists.txt')
+    return files
 
 
 def main():

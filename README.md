@@ -1,9 +1,9 @@
 # ROS 2 SRT Bridge
 
-Offline closure preparation is now source-implemented and427 Python tests pass
-([evidence](evidence/m3-offline-closure-preparation-2026-11-09/README.md)).
-Native N4 build/link and live dispatcher wiring remain pending; all38 future
-cases are disabled. No tuning or new experiments were performed.
+Campaign dispatch is wired and the isolated N4 fixture build/link is validated;
+440 offline Python tests pass ([evidence](evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md)).
+No fixture or campaign case was launched. All38 future cases remain disabled;
+M3 acceptance and live runtime qualification remain open. No tuning occurred.
 
 
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small
