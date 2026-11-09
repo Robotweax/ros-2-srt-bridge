@@ -3526,3 +3526,44 @@ Next predeclare broader seed coverage on same matched baseline/diagnostics and
 observe actual start-lease headroom. No tuning, retry or retroclassification.
 Original34 branch unavailable/UNKNOWN98,12 retained; fullM3/N3/N5/DDS/clock/
 security/resource/hardware/comparison gates open. PR2 draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Predeclared additional start-trace seeds, no tuning
+
+- Evidence: `evidence/m3-start-broader-seeds-2026-11-09/README.md`; frozenlive
+  58081d142ae30b52cf4bb07532b68cb3b9f3375b. Added fixed --coverage additional-seeds
+  requiring matched start+packet tracing; focused2903default unchanged. Declared
+  N0/1701/15s thenN5/1701/300s thenN5/4211/300s, stopfirstfailure/no retries.
+- N0 PASS8/8,0skip/effects8. N5/1701 FAIL117success/118attempts,32skip,1unresolved,
+  effects117. Original harness/capture gatesPASS/exit0; strict/durable gatesFAIL,
+  outerexit1. N5/4211 NOT_EXECUTED asdeclared. No new2903run or fullmatrix claim.
+- Originalintent118: source341341538487/deadline346341538487ns, Point5localqueued,
+  Point6volatileSubmitResultqueued,29clock_unqualified13 atorigin+16.960125ms,
+ 21input_dropped/deadline atdeadline+2.624127ms.0originalSDKhandoffs/point25,
+ 0receiverCOMMAND32 and0start40–44,no receiverjournal. Closed senderUNKNOWN8/
+ reconcile_required2/revision0/invalidresult. WorkloadterminalUNKNOWNcounter0 is
+ not no uncertainty: driver never got terminal status, rowunresolved.158query
+ admission/worker observations,48peererror observations,45NOT_FOUNDstatuspolls;
+ stored64/158historywith94omitted explicit. No expiry/nonexecution/replay authority.
+- Sourceinputs retains originalproof/origin/deadline onclockunqualified then
+ dropspendinginputatdeadline. Generic29doesnotlogexactClockMappererror; its
+ clock_error0default isnotqualifiedclockevidence. This0SDKpath differs fromolder
+ UNKNOWN98/12withSDK1; old34startbranch remainsunavailable. No causalARP/probe/
+ scheduler claim. No active transport context/linkloss observations.
+- All117startgroups handlerinvoked/consume1/gatepass/closed4/0,actualminconsume
+ slack38.302831ms,gate38.302581ms,commandbudget>=1341.413163ms.118explicitly
+ unavailable start, retainedinallattemptanalysis. No recorded worker rejection.
+- N5ARP OP7driver/0drop,robot9driver/18actualdrop,0pending/loss/collision/unknown
+ free/bulkambiguity; nativecounts match.32positivewindows OP6/robot26;22missing
+ robotwindows=18distinctdrops+4latequeuedIDs3/11/17/19. Maxsurvivingrobotresidence
+126.729ms. FourCONTROLgaps OP4.200145/1.306023,R1.089744/1.237644s retained.
+- SENSOR75053produced/25216observed,gap43926/rejected2760,sixresiduals0;
+ telemetry unqualified. Host376new; matchedSDK75/ROS41prior exactbinaries.
+ Allsource/matched/oldbaseline/observers/provider fixed, no build/tuning/fault.
+1020prior+303new raw hashes checked/exactomissions,2ownednetworks/containers/
+ credentials removed,roots/features stable. No heavywork overlaps live.
+
+Next: diagnose source clock qualification and pending-input/journal reconciliation
+for118's pre-SDK deadline-drop path; preserve UNKNOWN/one-useproof/no replay.
+No forceexpiry or tuning.4211 remainsunexecuted under stoppedplan; newprospective
+plan requiredbeforelatercohort. Original34/98/12,fullM3gatesopen,PR2draft,
+Intrinsic-M4 untouched.

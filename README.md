@@ -109,6 +109,14 @@ reply windows; telemetry remains unqualified. No tuning/rebuild/old-baseline
 replacement; host374 PASS, matched SDK75/ROS41 reused. Next predeclare broader
 seed coverage; original34 and earlier UNKNOWNs remain unresolved, PR2 draft.
 
+The [predeclared additional-seed cohort](evidence/m3-start-broader-seeds-2026-11-09/README.md)
+stops at N5/1701:117/118 successes,32skips, intent118 unresolved;4211 stays
+NOT_EXECUTED. N0 passes8/8. Complete start traces show117 successful worker
+starts;118 instead has source clock deferral and a deadline-dropped pending input
+before any recorded SDK handoff. Closed sender retains UNKNOWN/reconcile_required;
+no expiry or replay is inferred. Host376 PASS, exact matched builds/settings fixed,
+no tuning/retry. Next diagnose sender clock qualification and journal reconciliation.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT
