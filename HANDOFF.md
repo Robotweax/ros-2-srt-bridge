@@ -3781,3 +3781,36 @@ M3/fullgatesopen,Intrinsic/M4 untouched.
 Next: separately freeze a prospective loadedprobe-tracing cohort; actualbusy/
 late/timeout paths remainuncapturedonnewbuild. Preserve1pending/2s/5s rules,
 historical118UNKNOWN andold3/34/98/12 scopes; no forcedexpiry orreplay.
+
+### 2026-11-09 — Delivery acceleration: close instrumentation, target reconciliation
+
+- User requested faster delivery. `DELIVERY_PLAN.md` replaces open-ended forensic
+  work with ordered acceptance blockers. Reuse exact builds/checks, preserve old
+  uncertainty without reconstructing missing history, publish compact gate
+  reports, and measure progress by closed gates. PR2draft/M3open/M4notstarted.
+- One final bounded cohort in this probe chain, frozen1fdf7cb9a661284ba295ca377fa3ebf22da99b25:
+  `evidence/m3-probe-loaded-cohort-2026-11-09/README.md`. N0/1701/15s8/8,
+ 0skip/effects8; N5/1701/300s128/128,22skip/effects128. Originalharness/strict/
+  durablegates PASS/exit0. No unresolved/UNKNOWN/expired/unadmitted. No retry,
+  tuning, forcedexpiry orhistorical118replay; stopped4211 unchanged.
+- N5 wholecapture615attempts:443emitted/172busy;443exactprobejoins,398qualified/
+ 45rejectedoldEchoesagainstnewpendingt1,45naturaltickclears.886SDKsuccess,
+ 0SDKerrors. Queue-to-SDK max0.950125ms, SDKend-to-peeradmission max3514.765669ms;
+  commonVM clock, includesbuffer/order/ownerinterval notuniquenetworkcause.
+  MaxacceptedRTT1934.701543ms,minrejected2009.280043ms.427emittedstartinside
+  sourcewindow; setup/drainseparate. N0 50qualified/0reject/0busy,30insource.
+- Fresh49/85 senderclockdefer/recover, originalsbudgetpreserved/success. No new
+  deadline-drop reproduction. Instrumentationloop CLOSED; no automatic newrun or
+  tracer toseekunobservedbranches. No broad ARP archaeology repeated.
+- Compact gate/493lifecycle/all136commandproofs and2fullN5probeexamples published;
+ 303newraw/798priorraw hashed/retained, explicitomissions. Allsource/binaries/
+  observersfixed,2ownednetworks/containers/rules/credentials removed,roots/features
+  restored. Host398prelive, exactSDK79/ROS41reused, no rebuild/heavyworklive.
+- NEXT IMPLEMENTATION: bounded opaque authoritative per-admission transport
+  receipt, never lossytraceauthority; exactsenderrow conservativeUNKNOWN/
+  reconcile_required ondrop, no EXPIRED/success/newticket/unrelatedinvalidation.
+  Preserve nonterminalprovisionalUNKNOWN query-first andhigher/finalpeerresults.
+  Context/reuse/result-race/restart/storage/capacity gates inDELIVERY_PLAN.md.
+
+After that fix, close remainingN3 ROS SENSOR/DDS/comparison acceptance gates.
+Historical118UNKNOWN/34/98/12 remain recorded, not repeated forensic prerequisites.

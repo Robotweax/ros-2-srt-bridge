@@ -33,6 +33,38 @@ implementation and qualification are described by the latest HANDOFF entries.
 |4|Acceptance review|One consolidated gate report for command safety/progress, sensor age/bounds, teardown, matrix coverage and resource/security comparability; open gates remain explicit|
 |5|Intrinsic/M4|Start its separate pinned API/toolchain inventory after the bridge milestone decision; no remote real-time or motion capability inferred|
 
+## Current checkpoint
+
+Priority1 is closed by `evidence/m3-probe-loaded-cohort-2026-11-09/`: N0 8/8,
+N5 128/128,22 skipped offers, actual busy/timeout/old-echo branches retained.
+No further diagnostic cohort or new trace facility is scheduled automatically.
+Priority2 is next: the bounded implementation contract is below. Historical
+UNKNOWN outcomes remain uncertainty, not a requirement to reproduce them.
+
+### Next implementation: authoritative sender submission receipt
+
+- Give each admitted sender proof a bounded, opaque submission receipt that the
+  coordinator can retain. The transport updates it at its actual handoff/drop
+  decisions; do not consume lossy CommandTrace as authority. Bound storage by
+  outstanding tracked admissions and fence receipt reuse by original identity,
+  session/epoch, payload and generation.
+- A proved pending/outbound drop must reach the coordinator even while its
+  current job has completed. Reconcile that exact sender entry conservatively
+  to UNKNOWN/reconcile_required, preserving revision/result rules. Never invent
+  receiver EXPIRED/success, never invalidate unrelated entries or reset device
+  generations, and never reissue a command ticket.
+- Preserve the existing query-first treatment of provisional UNKNOWN (already
+  nonterminal in the endpoint). A later authoritative peer result may reconcile
+  it; NOT_FOUND remains insufficient for expiry or replay. Known accepted/final
+  peer states must not be overwritten by a delayed local receipt.
+- Validate receipt before/after SDK acceptance, stale/reused/wrong-context
+  receipts, result races, worker restart/storage failure and bounded saturation.
+  Use fresh fixtures and revocation/context loss where possible; no live forced
+  expiry of historical118 or a retry of the stopped experiment.
+- This is a correctness/status-delivery change, not clock/network tuning. Rebuild
+  and test affected SDK/ROS layers once the implementation is concrete, then
+  return to the remaining N3/DDS acceptance gates.
+
 The SENSOR contract permits drops under N5 overload; freshness and boundedness
 are the acceptance criteria, not lossless delivery. Raw loss percentages alone
 must not create another open-ended diagnostic program. Cross-host clock,
