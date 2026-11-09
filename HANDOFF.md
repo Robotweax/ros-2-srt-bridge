@@ -3362,3 +3362,45 @@ Next separately calibrate packet-level queued-versus-dropped ARP observation or
 control before mitigation. Historical UNKNOWNs, fullN3/N5, default loaded DDS
 discovery, clock/security/resource/hardware and comparison gates remain open.
 PR2 draft, Intrinsic/M4 untouched.
+
+### 2026-11-09 — Packet-level ARP queue/drop tracing, no tuning
+
+- Evidence: `evidence/m3-arp-packet-tracing-2026-11-09/README.md`.
+  Plan4729f9a, V1 live88ba3f1 FAILED N0/no matches despite30 native replies;
+  N5 NOT_EXECUTED. Unsigned namespace/header JMP64 sign extension diagnosed
+  after closure. V2 JMP32 fix223d797/kernel BPF regression; V2 live38f0af4
+  calibration once each: N0 driver30, N5 known synthetic UDP load drop20/driver10.
+  First verifier failure and all original outcomes preserved, no retry.
+- New passive raw tracer validates running BTF prototypes/layout/reasons, exact
+  owned42-byte reply/netns/ifindex before creation, private skb pointer map keys,
+  local monotonic IDs; queue/enqueue/dequeue/driver-start/kfree/consume. Retire
+  at driver-start to exclude later bridge/peer frees. CAP_BPF/PERFMON only owned
+  endpoints, no privileged/global tracefs/sysctl. Bounded4096IDs/4MiB/1Mevents/600s.
+  No pre-queue classifier drop, clone/copy or physical-wire inference.
+- Separate loaded plan252ede8/live5544747: default-off --arp-packet-trace with
+  loaded ARP/all diagnostics/dynamic/N0-N5/no fault/<=480s guard. Stop load/drain,
+  detach tracer before native capture closes. Existing traffic/defaults/provider/
+  runtime unchanged. N0/2903/15s8/8PASS. N5/2903/300s121success/122attempts,28skip;
+  intent34 REJECTED/context_lost(6/1), not EXPIRED. Matching closed journals,
+  receiver dispatched,121effects,0unresolved/UNKNOWN/verified-expired. Original
+  harness/capturesPASS/exit0; outer durable and all-success gatesFAIL/exit1.
+  Zero active transport context/link events; worker/start-fence cause still open.
+- Full N5 tracer operator12driver/0drop; robot26IDs=10driver/16actual QDISC_DROP,
+  zero pending/reserve/map/read/collision/otherfree/bulk ambiguity. Source/peer
+  native reply counts equal driver counts. Ten robot successful enqueue/dequeue;
+  seven69.406–113.944ms,three<1us. Exact inner netem/TBF instruction not located.
+- Prospective all32 positive steps inside publication OP11/robot21:18robot
+  windows no source reply;13have exactdropIDs,5queued IDs4/13/18/21/22 reachdriver
+  1.082–96.874ms after window end. These are new cohort identities, not historic8.
+  Four primary>=1sCONTROLgaps remain, none with creation of dropped ARP inside;
+  ARP observations do not uniquely explain all gaps or original failures.
+- Host336V1/337V2/339loaded/341closed boundaryguards. SDK72/ROS41 prior only;
+  eight runtime/two existing observer hashes fixed; new tracer fixed V2→loaded.
+  All source verified atclosure and original Git blobs after analysis changes.
+  497rawfiles hashed, public omissions explicit;5ownednetworks/containers and
+  credentials removed. No tests/builds/heavy analysis whilelive, no tuning.
+
+Next: inspect intent34 worker/start-fence clock/grant context rejection without
+replay or tuning; then separately plan mitigation using exact ARP lifetimes.
+Original intents98/12 remain UNKNOWN. FullM3/N3/N5/DDSDiscovery/clock/security/
+resource/hardware/comparison gates open. PR2 draft, Intrinsic/M4 untouched.

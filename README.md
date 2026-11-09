@@ -8,7 +8,7 @@ The later M4 adapter belongs in
 [intrinsic-core-srt-integration](https://github.com/Robotweax/intrinsic-core-srt-integration).
 SRT is a separately installed dependency; the enclosing SRT checkout is preserved.
 
-## Development status — 2026-11-08
+## Development status — 2026-11-09
 
 M0's selected local qualification checks pass on Ubuntu 24.04 Linux amd64 under
 Docker Desktop emulation. The installed C API probe covers CONTROL/SENSOR,
@@ -73,6 +73,15 @@ positive reply increments finds8 robot read envelopes with eligible/PASS growth
 but no reply source hook, alongside root pressure. This is downstream absence or
 delay, not8 proved packet drops or a fixed historical failure. Host327 PASS;
 runtime/defaults unchanged, no tuning, PR2 draft.
+
+[Packet-level ARP tracing](evidence/m3-arp-packet-tracing-2026-11-09/README.md)
+now distinguishes13 actual qdisc drops from5 queued replies arriving after the
+18 missing-tap counter windows in a new N5 cohort. Full tracing records16 robot
+reply drops and10 driver starts; seven survivors queue69–114ms. Zero observer
+loss/pending, no tuning. N0 passes8/8; N5 progress **fails** with121 successes and
+one REJECTED/context_lost command34,28skips. Host341 PASS; original failures and
+UNKNOWNs remain, M3 incomplete/PR2 draft. Next: worker/start-fence rejection
+diagnosis before any separately planned mitigation.
 
 ## Run M0
 
