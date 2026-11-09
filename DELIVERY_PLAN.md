@@ -57,6 +57,21 @@ fault subgates pass, but do not close the planned N3 matrix or retry automatical
 Next: loaded DDS discovery/comparison confirmation with existing defaults, then
 consolidate acceptance decisions including the prospective source-slot allowance.
 
+### DDS confirmation and acceptance checkpoint
+
+`evidence/m3-dds-loaded-confirmation-2026-11-09/` closes the bounded confirmation
+question: current matched-build system DDS/simultaneous N0 passes8/8 commands;
+N5 cold start FAILS sender readiness before measurement. Operator never samples
+robot CONTROL/HELLO publishers or a received HELLO; robot matches all4 endpoints
+and receives407. Captures/competitor/shutdown gates pass; journals empty in N5.
+No retry, startup-order fallback, decoder/tracer expansion or default change.
+
+Use `M3_ACCEPTANCE_REVIEW.md` as the current closure list. A DDS failure is a
+comparison result, not an obligation to tune DDS until it passes. Next useful
+work is the existing-capture N5 SENSOR freshness/bounds assessment and explicit
+comparison limitations; any N3 source-slot contract change remains prospective.
+Keep M3 open/PR2 draft; no automatic new cohort or acceptance waiver.
+
 ### Implemented contract: authoritative sender submission receipt
 
 - Give each admitted sender proof a bounded, opaque submission receipt that the

@@ -3894,3 +3894,45 @@ zero-skip relaxation. Next ordered work: loaded DDS discovery/comparison with
 existing defaults, then consolidated acceptance decisions (including any future
 source-slot scheduling allowance). No further tracer/ARP study justified here.
 PR2draft/M3open/Intrinsic-M4untouched; no forced expiry/historical replay.
+
+
+### 2026-11-09 — Current-build default DDS cold confirmation: N0 pass, N5 fail
+
+- Frozen f54f783 two-case plan: system DDS/simultaneous N0/1701/15s then N5/1701/
+ 60s only after control passes, once each/stop failure/no retry. Python-only matched
+  layout/prefix selection for DDS coordinator and simulator, baseline builds fixed.
+ 407 host checks PASS before live, SDK81/ROS41 reused, no native rebuild/tests or
+  heavy analysis during live capture. No new tracer/fragment cut/pacing/default.
+- N0 PASS8/8 successful commands/effects,0 skipped offers. Source interval
+ 15.097493797s, IMU3019/3005 callbacks and joints755/755, actual199.966964/50.008300Hz.
+  No stale/invalid/clock-rejected callback; realtime estimated upper histogram
+  bins max6/21ms, not SRT conservative clock bounds/physical ages. Max terminal
+  observation209.008667ms includes poll wait; original5s/closed matching proof.
+- N5 FAIL before measurement,45s sender-readiness wait. Operator46 timeline rows:
+  CONTROLpub0/sub1, HELLOpub0/sub1, sent434/received0; sampled maxima also0 reverse
+  pubs/callbacks. Robot46rows matches4 endpoints, sent438/received407, notready.
+  Both journal/handler/QoS eligible; stable single process epoch each, no failed
+  coordinator flag. Both N5 journals empty, no measurement marker/command/effect.
+  Robot aborts after operator failure. Nominal60s requested window never executed.
+- Whole-run competitor live189 polls,128024.432286bps over48.182803s, actualload
+  gate passes;512kbit/16packet/dynamic neighbors/system defaults unchanged. All
+  PCAP populations pass/zero kernel drops: N0robot7282/operator7252, N5robot7294/
+  operator7312. Different tap totals are not packet-loss subtraction authority.
+- Cohort/harness exit1 retained. No retry/control-first fallback/newdecode. Existing
+  native4096byte fragmentation mechanism/contradicted ROS N0 transfer hypothesis
+  remain separate; no unique original/current fragmentation/ARP/qdisc/CPU cause.
+- `evidence/m3-dds-loaded-confirmation-2026-11-09/`: compact gate report, complete
+  original verdicts/strict closed command proof, sampled startup states,146 raw
+  hashes and4 immutable closed fresh journals. Raw packets/resources/fulltyped/
+  source/inspect/environment/journal streams stay local.112 Python source hashes
+  and full matched/preserved archive/runtime chain fixed; provider unchanged.
+  All6 native children controlled exit0/no forcedkill, both scenarios exit before
+  namespace teardown;4 owned containers/2 networks removed; no credential created.
+
+`M3_ACCEPTANCE_REVIEW.md` consolidates the actual remaining gates. DDS cold failure
+is a comparison outcome, not an instruction to tune DDS until successful. No
+steady-window performance/security/age equivalence follows from a failed startup.
+Next: retained N5 SENSOR freshness/bounds assessment and explicit comparison
+limitations; no automatic new cohort. N3 auditedFAIL/source-slot decision remains
+open and prospective; old historical118/34/98/12/stoppedN5/4211 untouched. PR2draft/
+M3open/Intrinsic-M4 untouched; no tuning/forced expiry/replay or acceptance waiver.

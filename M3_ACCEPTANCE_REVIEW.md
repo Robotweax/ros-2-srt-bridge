@@ -1,0 +1,54 @@
+# M3 acceptance review — 2026-11-09
+
+**M3 is not ready to mark complete or merge.** The current evidence supports a
+local Linux amd64/Jazzy simulator development result, with explicit failed and
+unqualified gates. M0–M2 remain accepted only in their recorded scope; Intrinsic/
+M4 is not started. PR2 stays draft. No new diagnostic cohort is scheduled here.
+
+The milestone contract in [ARCHITECTURE.md](ARCHITECTURE.md) asks for reproducible
+impairment evidence, preserved semantics and demonstrated benefit or justified
+non-superiority. It does not require tuning DDS until it succeeds. A failed DDS
+cold start is a measured comparison outcome; it supplies no steady-window latency,
+sensor availability or resource denominator and must not be converted into a
+numerical superiority claim.
+
+| Gate | Current evidence and result | Remaining boundary |
+|---|---|---|
+|Core/ROS command semantics|[M2 acceptance](evidence/m2-ros-jazzy-2026-11-05/ACCEPTANCE.md); [sender reconciliation](evidence/m3-sender-reconciliation-2026-11-09/README.md) implements exact-row UNKNOWN on actual local abandonment; SDK81/ROS41 pass|Simulator only; no historical UNKNOWN replay/nonexecution inference|
+|N1/N2 SRT execution|[N1](evidence/m3-srt-n1-full-2026-11-06/README.md), [N2](evidence/m3-srt-n2-full-2026-11-06/README.md): recorded three-seed600s cases and publication-age bounds|Those exact historical build hashes; not a fresh matrix on the latest install|
+|N1/N2 DDS execution|[N1](evidence/m3-dds-n1-full-2026-11-06/README.md), [N2](evidence/m3-dds-n2-full-2026-11-06/README.md): full-duration execution/capture evidence|DDS age gate remains open; realtime Header ages are not SRT ingress interval bounds|
+|N3 deterministic repair|[30s matrix audit](evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md): first5 cases pass; one/two-loss transport/freshness subgates pass in all9 executions|Cohort FAIL at case6:3 skipped IMU source slots; later3 outside intended stop boundary. Corrected guard, no retry or retrospective relaxation|
+|N4 interruption/start/result/restart|[Failure controls and phase cuts](evidence/m3-failure-n4-2026-11-08/README.md), [remaining bounded cases](evidence/m3-n4-remaining-2026-11-08/README.md) retain passing scoped evidence and earlier failures|Bounded native/ROS fixtures, not every long combined load/hardware case|
+|N5 SRT command progress|[Frozen probe cohort](evidence/m3-probe-loaded-cohort-2026-11-09/README.md): N0 8/8, N5 128/128,22 skipped offers|Qualified prior matched probe build, not newest sender-reconcile loaded qualification; SENSOR reduction/accounting is not full freshness/availability acceptance|
+|Default DDS cold startup under N5|[Latest matched-build confirmation](evidence/m3-dds-loaded-confirmation-2026-11-09/README.md): N0 8/8; N5 FAIL before measurement with asymmetric sampled endpoint matching|Current default-DDS cold-start failure confirmed. No steady60s workload result, no unique fragmentation cause or default change|
+|Age, CPU, memory and wire comparison|Existing source fences, endpoint/resource accounting and observation scopes retained|No common-origin age equivalence, complete observer/security-cost parity or controlled hardware-performance claim|
+|Lifecycle and provenance|Latest DDS cohort: all6 native children exit0,4 containers/2 networks removed;146 raw hashes; matched runtime chain fixed; host407 pass|Does not erase prior missing-footer failures or qualify real robots/cross-host clocks|
+
+## Concrete closure work
+
+1. Freeze the build and scope being accepted. Earlier full matrices remain tied
+   to their archived hashes; a passing historical run is not silently assigned to
+   a new binary. New sender reconciliation has focused recovery/capacity/result-
+   race and full affected SDK/ROS checks, but no new loaded SRT cohort is claimed.
+2. Resolve the source scheduling qualification contract before another N3 run.
+   The failed plan required zero skipped slots; average cadence alone was
+   insufficient. Either retain that strict gate or prospectively define bounded,
+   explicitly accounted simulator slot skipping. No current report is reclassified
+   by such a future choice. This is an acceptance-contract decision, not permission
+   to tune production rates/queues/clock rules or hide missing source samples.
+3. Finish the bridge's scoped N5 SENSOR freshness/bounds assessment from existing
+   captures and state counters. Report accepted-publication ages, rejected/unknown
+   populations, occupancy and loss/accounting separately. High sample reduction
+   alone is allowed by N5 and does not justify another open-ended loss diagnosis.
+4. Complete the comparison statement with explicit asymmetries: default DDS
+   cannot enter a loaded steady window in the latest case; its age origin and
+   security costs differ. Preserve failed/unavailable populations and make a
+   justified non-superiority statement where equivalence is absent. Do not make
+   DDS mitigation or repeated cold-start attempts a prerequisite for documenting
+   the observed comparator outcome.
+
+No automatic N3 retry, DDS fallback experiment, provider patch, ARP study or new
+tracer follows from this review. Existing no-tuning/no-forced-expiry/no-historical-
+replay constraints persist. A scoped acceptance proposal can be reviewed after
+these concrete boundaries are resolved; this document grants no waiver, changes
+no acceptance threshold and authorizes neither merge nor M4 development.

@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "DELIVERY_PLAN.md: sender reconciliation implemented.30s N3 cohort audited FAIL at two-loss2903 after5 passing cases (3 IMU skips; original harness missed zero-skip gate);3 later executions outside stop boundary. Guard fixed, host402. Next loaded DDS discovery/comparison and consolidated acceptance; no automatic N3 retry/tuning/forced expiry/historical118 replay.",
+  "current_priority": "M3_ACCEPTANCE_REVIEW.md: sender reconciliation implemented;30s N3 audited FAIL unchanged; current-build default DDS N0 passes8/8, N5 cold start fails readiness before measurement. Bounded confirmation closed, host407. Next retained N5 SENSOR freshness/bounds and explicit comparison limits; no automatic cohort, tuning, forced expiry or historical118 replay.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2730,5 +2730,41 @@
     "full_N3_accepted": false,
     "automatic_retry": false,
     "next": "loaded DDS discovery/comparison and consolidated acceptance; any changed source scheduling allowance must be prospective"
+  },
+  "dds_loaded_confirmation": {
+    "evidence": "evidence/m3-dds-loaded-confirmation-2026-11-09/README.md",
+    "frozen_source": "f54f783",
+    "status": "failed",
+    "cohort_exit_code": 1,
+    "dds_profile": "system",
+    "startup": "simultaneous",
+    "runtime_layout": "sender-reconcile",
+    "N0": {
+      "nominal_seconds": 15,
+      "commands": 8,
+      "successes": 8,
+      "effects": 8,
+      "skipped_offers": 0
+    },
+    "N5": {
+      "nominal_requested_seconds": 60,
+      "measurement_started": false,
+      "sender_readiness_timeout_seconds": 45,
+      "operator_control_publishers": 0,
+      "operator_hello_publishers": 0,
+      "operator_hellos_received": 0,
+      "robot_complete_endpoint_match": true,
+      "robot_hellos_received": 407,
+      "commands_submitted": 0,
+      "fresh_journals_empty": true,
+      "capture_population_gates_pass": true,
+      "competitor_offered_bps": 128024.43228551897
+    },
+    "retry": false,
+    "default_change": false,
+    "native_rebuild": false,
+    "host_tests": 407,
+    "sdk81_ros41_reused": true,
+    "next": "M3_ACCEPTANCE_REVIEW.md: existing-capture N5 SENSOR bounds and comparison limits, no automatic further cold-start run"
   }
 }

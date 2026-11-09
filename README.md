@@ -22,8 +22,11 @@ journal row. Private worker IPC4 requires matched SDK/ROS workers; the new
 The [30s N3 follow-up](evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md)
 is audited FAIL after five passing cases: three source slots skipped in case6;
 the harness now enforces that missed gate (host402). Three later executions are
-excluded from cohort qualification. Next: loaded DDS discovery/comparison and
-consolidated acceptance; no automatic N3 retry. No tuning, forced expiry or historical118 replay. PR2 stays draft;
+excluded from cohort qualification. The [DDS confirmation](evidence/m3-dds-loaded-confirmation-2026-11-09/README.md)
+passes N0 8/8 but fails loaded cold discovery before measurement; host407 pass.
+The [M3 acceptance review](M3_ACCEPTANCE_REVIEW.md) now lists the closure work,
+including existing-capture SENSOR bounds and comparison limitations. No automatic
+N3 retry or DDS fallback experiment. No tuning, forced expiry or historical118 replay. PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 
