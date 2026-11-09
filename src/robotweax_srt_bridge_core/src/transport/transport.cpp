@@ -135,6 +135,9 @@ struct TransportOwner::Impl {
             c.control_generation,c.sensor_generation,route,value,{},detail});
     }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}
+    static void abandon(const std::shared_ptr<DurableCommandTicket::Proof>& proof){
+        if(proof){auto expected=SubmissionDisposition::queued;proof->disposition.compare_exchange_strong(expected,SubmissionDisposition::abandoned,std::memory_order_release,std::memory_order_relaxed);}
+    }
     static bool probe_kind(Kind kind){return kind==Kind::time_probe||kind==Kind::time_reply;}
     static ProbeAdmissionObservation probe_fields(const OutboundManagement& out){
         ProbeAdmissionObservation o;
@@ -179,8 +182,10 @@ struct TransportOwner::Impl {
         if(shared.context!=current.context||!current.running)flush_mailboxes();
         if(!same_control(shared.context,current.context)||!current.running){
             for(std::size_t n=0;n<input_count;++n){const auto& item=controls[(input_head+n)%controls.size()];
+                abandon(item.proof);
                 if(item.kind==Kind::command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,item.request,item.route);}
             if(pending_command){trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+                abandon(pending_command->proof);
                 trace_sender(CommandTracePoint::sender_pending_release,*pending_command,5,0,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);}
             while(retained.size()){
                 trace_receiver(CommandTracePoint::receiver_retained_dropped,retained.front().message,unsigned(SessionError::obsolete_connection),current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);
@@ -295,7 +300,7 @@ struct TransportOwner::Impl {
         const bool permanent=session.state()==SessionState::failed;
         const auto discarded=queues.apply(action);current.stale_work+=discarded.count;
         for(std::size_t n=0;n<discarded.count;++n)trace(CommandTracePoint::outbound_flushed,shutting_down?CommandTraceReason::shutdown:CommandTraceReason::context_mismatch,discarded.ids[n]);
-        if(action.close_control){command_proofs={};receipts={};receipt_cursor=0;probe_sdk_busy_sequence=0;}
+        if(action.close_control){for(const auto& proof:command_proofs)abandon(proof);command_proofs={};receipts={};receipt_cursor=0;probe_sdk_busy_sequence=0;}
         if(action.close_sensor)drop(1,permanent);
         if(action.close_control){drop(0,permanent);next_probe=0;}
         if(permanent){current.fault=TransportFault::protocol;links[0].retry.permanent_failure();links[1].retry.permanent_failure();}
@@ -534,6 +539,7 @@ struct TransportOwner::Impl {
             const bool revoked=!bad_context&&item.proof&&!item.proof->live->load();
             const bool expired=!bad_context&&!revoked&&item.proof&&time_expired(item.proof->entry);
             if(bad_context||revoked||expired){++current.stale_work;if(item.kind==Kind::sample)++current.sensor_input_rejected;
+                abandon(item.proof);
                 if(item.kind==Kind::command)trace(CommandTracePoint::input_dropped,bad_context?CommandTraceReason::context_mismatch:
                     revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,item.request,item.route);
                 if(item.kind==Kind::command){trace_sender(CommandTracePoint::sender_pending_release,item,1,0,bad_context?CommandTraceReason::context_mismatch:revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline);release_pending_command();}
@@ -550,13 +556,14 @@ struct TransportOwner::Impl {
                     if(!pending_clock_reported){trace(CommandTracePoint::clock_deferred,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));pending_clock_reported=true;}
                     continue; // Retain original proof/origin/deadline in the reserved ingress slot.
                 }
-                if(item.kind==Kind::command){trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));trace_sender(CommandTracePoint::sender_pending_release,item,2,0,CommandTraceReason::session_rejected);release_pending_command();}
+                if(item.kind==Kind::command){abandon(item.proof);trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));trace_sender(CommandTracePoint::sender_pending_release,item,2,0,CommandTraceReason::session_rejected);release_pending_command();}
                 ++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;
             }
             auto envelope=*made.envelope;
             if(item.kind==Kind::sample)envelope.source_monotonic_ns=item.origin; // Preserve callback ingress, not dequeue time.
             const auto body=std::span(item.bytes).first(item.size);
             const auto result=item.kind==Kind::sample?queues.sensor({Channel::sensor,links[1].generation},envelope,body,time):queues.control({Channel::control,links[0].generation},envelope,body);
+            if(result!=QueueError::none)abandon(item.proof);
             if(result!=QueueError::none){if(item.kind==Kind::command)trace(CommandTracePoint::queue_rejected,CommandTraceReason::queue_rejected,item.request,item.route,unsigned(result));++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;}
             if(item.kind==Kind::command)trace_sender(CommandTracePoint::sender_pending_release,item,result==QueueError::none?4:3,0,result==QueueError::none?CommandTraceReason::none:CommandTraceReason::queue_rejected,time);
             if(result==QueueError::none&&item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
@@ -577,10 +584,11 @@ struct TransportOwner::Impl {
                 if(missing||revoked||expired){
                     trace(CommandTracePoint::outbound_dropped,missing?CommandTraceReason::missing_proof:
                         revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,packet->envelope.request_id,packet->envelope.route_id);
-                    if(proof!=command_proofs.end())proof->reset();
+                    if(proof!=command_proofs.end()){abandon(*proof);proof->reset();}
                     queues.control_sent();++current.rejected;continue;
                 }
             }
+            if(!i&&packet->envelope.kind==Kind::command&&config.test_hold_command_handoff)return;
             auto permit=budget.reserve(channel(i),packet->size,time);if(!permit){if(permit.error!=BudgetError::rate_limited)throw std::runtime_error("invalid budget");return;}
             const auto ttl=i?(binding?200:sensor_ttl_ms(*packet,time)):-1;
             const bool observing=i&&bool(config.sample_trace);
@@ -616,7 +624,7 @@ struct TransportOwner::Impl {
             if(packet->envelope.kind==Kind::command||packet->envelope.kind==Kind::query)remember(packet->envelope);
             else if(packet->envelope.kind==Kind::error)++current.errors_sent;
             const auto route=packet->envelope.route_id;
-            if(!i){if(proof!=command_proofs.end())proof->reset();queues.control_sent();}else if(binding)queues.binding_sent();else queues.sensor_sent(route);
+            if(!i){if(proof!=command_proofs.end()){(*proof)->disposition.store(SubmissionDisposition::sdk_accepted,std::memory_order_release);proof->reset();}queues.control_sent();}else if(binding)queues.binding_sent();else queues.sensor_sent(route);
         }
     }
     void timers(){
@@ -707,7 +715,7 @@ struct TransportOwner::Impl {
             samples[at]=item;sample_pending[at]=true;
         }else{
             if(input_count+(pending_command?1:0)==controls.size()||(item.proof&&input_commands+(pending_command?1:0)==56))return SubmitResult::busy;
-            if(item.proof){if(!item.proof->live->load()||item.proof->claimed.exchange(true))return SubmitResult::obsolete;++input_commands;}
+            if(item.proof){if(!item.proof->live->load()||item.proof->claimed.exchange(true))return SubmitResult::obsolete;item.proof->disposition.store(SubmissionDisposition::queued,std::memory_order_release);++input_commands;}
             controls[(input_head+input_count++)%controls.size()]=std::move(item);
         }
         return SubmitResult::queued;
@@ -756,6 +764,12 @@ SubmitResult TransportOwner::submit_command(TransportContext context,DurableComm
     Impl::Input input;input.kind=Kind::command;input.context=context;input.route=e.route;input.request=e.request_id;input.origin=e.context.source_monotonic_ns;input.proof=ticket.proof_;
     const auto encoded=encode_rate_command(e.command,input.bytes);if(!encoded)return SubmitResult::invalid;
     input.size=encoded.bytes_written;const auto result=impl_->submit(std::move(input));if(result==SubmitResult::queued)ticket.proof_.reset();return result;
+}
+bool TransportOwner::abandon_unsubmitted_command(DurableCommandTicket&& ticket){
+    const auto p=ticket.proof_;if(!p)return false;
+    if(impl_->config.session.role!=Role::listener||p->local_peer!=impl_->config.session.local_peer_id||p->remote_peer!=impl_->config.session.expected_peer_id||p->entry.owner_epoch!=impl_->config.session.local_epoch||p->entry.context.source_epoch!=impl_->config.session.local_epoch||!p->live->load())return false;
+    if(p->claimed.exchange(true))return false;
+    p->disposition.store(SubmissionDisposition::abandoned,std::memory_order_release);ticket.proof_.reset();return true;
 }
 SubmitResult TransportOwner::request_command_check(TransportContext context,const Envelope& command,std::uint64_t token){
     if(!token||command.kind!=Kind::command||impl_->config.session.role!=Role::caller)return SubmitResult::invalid;

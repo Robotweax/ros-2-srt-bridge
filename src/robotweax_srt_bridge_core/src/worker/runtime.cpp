@@ -50,6 +50,7 @@ int bridge::run_journal_worker(int argc,char** argv,RateHandlerBackend* external
                 case Op::begin_dispatch:result=journal->begin_dispatch(request.request_id,request.session,request.clock_qualified,operation_now);break;
                 case Op::finish:result=journal->finish(request.request_id,request.state,request.reason,request.result,operation_now);break;
                 case Op::invalidate_session:result.error=journal->invalidate_session(request.session,operation_now);break;
+                case Op::reconcile_sender:result=journal->reconcile_sender(request.request_id,request.route,request.command,request.context,operation_now);break;
                 case Op::observe_remote:result.error=journal->observe_remote(request.request_id,request.route,request.remote_status,operation_now);break;
                 case Op::decline:result=journal->decline(request.request_id,request.state,request.reason,operation_now);break;
                 case Op::handler_snapshot:if(!options.simulated_rate_handler&&!options.external_rate_handler)result.error=bridge::JournalError::invalid_state;break;

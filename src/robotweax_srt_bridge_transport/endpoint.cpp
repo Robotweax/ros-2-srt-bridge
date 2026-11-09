@@ -27,10 +27,10 @@ JournalError local_error(ControlErrorCode error){switch(error){
 
 }
 struct CommandEndpoint::Impl {
-    enum class Stage { idle,rpc_submit,rpc_wait,send_command,send_status,send_error,precheck_submit,precheck_wait,start_submit,start_wait,execute_submit,event };
-    enum class After { local_admit,local_get,peer_admit,peer_expire,peer_get,peer_observe,peer_observed_get,peer_error_get,dispatch,finish,decline,invalidate,abandoned };
+    enum class Stage { idle,rpc_submit,rpc_wait,send_command,send_status,send_error,precheck_submit,precheck_wait,start_submit,start_wait,execute_submit,event,reconcile_submit };
+    enum class After { local_admit,local_get,peer_admit,peer_expire,peer_get,peer_observe,peer_observed_get,peer_error_get,dispatch,finish,decline,invalidate,reconciled };
     struct Task {bool execute=false;Identity id{};std::uint32_t route=0;RateCommand command{};std::uint64_t origin=0;TransportContext context{};};
-    struct Track {bool used=false;Identity id{};std::uint32_t route=0;Identity queried_session{},suspended_session{};std::uint64_t next=0;};
+    struct Track {bool used=false;Identity id{};std::uint32_t route=0;Identity queried_session{},suspended_session{};std::uint64_t next=0;SenderSubmissionReceipt receipt{};};
     struct Job {
         Stage stage=Stage::idle;
         After after=After::local_get;
@@ -42,6 +42,7 @@ struct CommandEndpoint::Impl {
         std::optional<JournalEntry> entry{};
         std::optional<DurableCommandTicket> sender_ticket{};
         std::optional<DispatchTicket> dispatch_ticket{};
+        SenderSubmissionReceipt receipt{};
         JournalError error=JournalError::none;
         std::optional<ControlError> outgoing_error{},received_error{};
         bool dispatch_after_status=false,notify_after_status=false;
@@ -138,7 +139,7 @@ struct CommandEndpoint::Impl {
         if(found!=tracks.end()){if(explicit_request){found->suspended_session={};found->next=0;}else if(!zero(found->suspended_session)){found->suspended_session={};found->next=now()+1000000000ULL;}return true;}
         found=std::find_if(tracks.begin(),tracks.end(),[](const auto& value){return !value.used;});
         if(found==tracks.end())return false;
-        *found={true,entry.request_id,entry.route,{},{},0};return true;
+        *found={true,entry.request_id,entry.route,{},{},0,{}};return true;
     }
     void rpc(WorkerRequest request,After after){job.request=request;job.after=after;job.worker_token=0;job.stage=Stage::rpc_submit;}
     WorkerRequest request(WorkerOperation op)const{
@@ -182,8 +183,8 @@ struct CommandEndpoint::Impl {
                 job.entry?job.entry->owner_epoch:Identity{},unsigned(job.message.envelope.kind),job.message.envelope.sequence,job.message.envelope.source_monotonic_ns);
         if(reply.journal.entry&&reply.journal.entry->state==CommandState::unknown)
             trace(CommandTracePoint::worker_unknown,CommandTraceReason::none,unsigned(reply.journal.entry->reason),{},reply.journal.entry->owner_epoch);
-        if(job.after==After::invalidate||job.after==After::abandoned)
-            trace(CommandTracePoint::invalidate_completed,job.after==After::invalidate?CommandTraceReason::session_changed:CommandTraceReason::abandoned_submit,unsigned(error),job.request.session);
+        if(job.after==After::invalidate)
+            trace(CommandTracePoint::invalidate_completed,CommandTraceReason::session_changed,unsigned(error),job.request.session);
         if(error==JournalError::storage||error==JournalError::corrupt){notify(error);fail(EndpointFault::worker);return;}
         if(job.after==After::peer_error_get){
             if(job.entry&&job.entry->route!=job.task.route)job.entry.reset();
@@ -192,18 +193,23 @@ struct CommandEndpoint::Impl {
             job.entry.reset();notify(local_error(job.received_error->code));return;
         }
         if(error!=JournalError::none){if(job.after==After::peer_admit||job.after==After::peer_expire||job.after==After::peer_get)send_error(error);else notify(error);return;}
-        if(job.entry&&(job.after==After::local_get||job.after==After::peer_get||job.after==After::peer_observed_get)&&job.entry->route!=job.task.route){if(job.after==After::peer_get)send_error(JournalError::conflict);else notify(JournalError::conflict);return;}
+        if(job.entry&&(job.after==After::local_get||job.after==After::peer_get||job.after==After::peer_observed_get||job.after==After::reconciled)&&job.entry->route!=job.task.route){if(job.after==After::peer_get)send_error(JournalError::conflict);else notify(JournalError::conflict);return;}
         switch(job.after){
             case After::local_admit:
                 trace(CommandTracePoint::sender_admission,CommandTraceReason::none,job.entry?unsigned(job.entry->state):0,{},job.entry?job.entry->owner_epoch:Identity{});
                 if(!job.entry){fail(EndpointFault::protocol);break;}
                 if(!track(*job.entry,true)){notify(JournalError::busy);break;}
                 job.sender_ticket=std::move(reply.ticket);
-                if(job.sender_ticket)job.stage=Stage::send_command;
+                if(job.sender_ticket){
+                    auto found=std::find_if(tracks.begin(),tracks.end(),[&](const auto& t){return t.used&&t.id==job.entry->request_id;});
+                    if(found==tracks.end()){fail(EndpointFault::capacity);break;}
+                    found->receipt=job.sender_ticket->receipt();job.stage=Stage::send_command;
+                }
                 else notify(); // Duplicate/recovered intent is queried, never resent.
                 break;
             case After::local_get:
             case After::peer_observed_get:
+            case After::reconciled:
                 if(!job.entry||!track(*job.entry,job.after==After::local_get)){notify(JournalError::busy);break;}
                 notify();break;
             case After::peer_error_get:break; // Completed above without journal mutation.
@@ -223,7 +229,6 @@ struct CommandEndpoint::Impl {
             case After::finish:
             case After::decline:if(job.entry)send_status();else notify(JournalError::invalid_state);break;
             case After::invalidate:job={};break;
-            case After::abandoned:rpc(request(WorkerOperation::get),After::local_get);break;
         }
     }
     bool query_due(){
@@ -238,6 +243,11 @@ struct CommandEndpoint::Impl {
     }
     void idle(){
         if(lost_count){auto q=request(WorkerOperation::invalidate_session);q.session=lost[lost_head];trace(CommandTracePoint::invalidate_requested,CommandTraceReason::session_changed,0,q.session);lost[lost_head]={};lost_head=(lost_head+1)%lost.size();--lost_count;rpc(q,After::invalidate);return;}
+        if(sender)for(auto& t:tracks)if(t.used&&t.receipt&&t.receipt.disposition()==SubmissionDisposition::abandoned){
+            job.task.id=t.id;job.task.route=t.route;job.receipt=std::move(t.receipt);
+            job.request.operation=WorkerOperation::reconcile_sender;job.request.request_id=t.id;job.request.route=t.route;job.request.session=job.receipt.session();
+            job.after=After::reconciled;job.stage=Stage::reconcile_submit;return;
+        }
         TransportMessage message;
         if(transport.poll_control(message)){
             job.message=message;job.task.id=message.envelope.request_id;job.task.route=message.envelope.route_id;job.task.context=message.context;
@@ -257,7 +267,9 @@ struct CommandEndpoint::Impl {
         {std::lock_guard lock(mutex);if(input_count){task=input[input_head];input[input_head]={};input_head=(input_head+1)%input.size();--input_count;found=true;}}
         if(found){
             job.task=task;
-            if(task.execute){auto q=request(WorkerOperation::admit);q.command=task.command;q.context={task.context.session,options.worker.journal.process_epoch,task.origin,task.origin+std::uint64_t(task.command.budget_ms)*1000000};rpc(q,After::local_admit);}
+            if(task.execute){
+                if(std::none_of(tracks.begin(),tracks.end(),[&](const auto& t){return !t.used||t.id==task.id;})){notify(JournalError::busy);return;}
+                auto q=request(WorkerOperation::admit);q.command=task.command;q.context={task.context.session,options.worker.journal.process_epoch,task.origin,task.origin+std::uint64_t(task.command.budget_ms)*1000000};rpc(q,After::local_admit);}
             else rpc(request(WorkerOperation::get),After::local_get);
         }else query_due();
     }
@@ -269,12 +281,18 @@ struct CommandEndpoint::Impl {
                 else if(submitted.result!=WorkerSubmit::busy)fail(EndpointFault::worker);
                 break;}
             case Stage::rpc_wait:if(now()-job.sent_ns>=options.operation_timeout_ns)fail(EndpointFault::timeout);break;
+            case Stage::reconcile_submit:{const auto submitted=worker.submit_reconcile(job.receipt);
+                if(submitted.result==WorkerSubmit::queued){job.worker_token=submitted.token;job.sent_ns=now();job.stage=Stage::rpc_wait;}
+                else if(submitted.result!=WorkerSubmit::busy)fail(EndpointFault::worker);
+                break;}
             case Stage::send_command:{
                 const auto result=transport.submit_command(job.task.context,std::move(*job.sender_ticket));
                 if(result==SubmitResult::busy)break;
                 trace(CommandTracePoint::submit_result,CommandTraceReason::none,unsigned(result),job.task.context.session);
                 if(result==SubmitResult::queued){++current.commands_sent;notify();}
-                else{auto q=request(WorkerOperation::invalidate_session);q.session=job.task.context.session;trace(CommandTracePoint::invalidate_requested,CommandTraceReason::abandoned_submit,unsigned(result),q.session);rpc(q,After::abandoned);}break;}
+                else if(transport.abandon_unsubmitted_command(std::move(*job.sender_ticket)))job={};
+                else fail(EndpointFault::protocol);
+                break;}
             case Stage::send_status:{
                 if(!job.entry){fail(EndpointFault::protocol);break;}
                 const bool withhold=options.test_withhold_final_status&&job.message.envelope.kind==Kind::command&&terminal(*job.entry);

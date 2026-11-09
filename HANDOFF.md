@@ -3814,3 +3814,41 @@ historical118UNKNOWN andold3/34/98/12 scopes; no forcedexpiry orreplay.
 
 After that fix, close remainingN3 ROS SENSOR/DDS/comparison acceptance gates.
 Historical118UNKNOWN/34/98/12 remain recorded, not repeated forensic prerequisites.
+
+
+### 2026-11-09 — Sender receipt correctness gap closed
+
+- `evidence/m3-sender-reconciliation-2026-11-09/README.md`: transport publishes
+  queued/SDK-accepted/abandoned on the original opaque one-use sender proof.
+  Coordinator retains at most64 receipts and services actual abandonment after
+  its original job completes. Not CommandTrace-derived authority. BUSY retains
+  the receipt; minting-worker generation/peers/owner/context/payload fence it.
+- Exact sender local_queued/rev0 becomes UNKNOWN/reconcile_required only; original
+  deadline/result rules preserved. Delayed receipts preserve peer acceptance and
+  final success. Unsubmitted refusal now retires its own proof and reconciles its
+  row instead of invalidating the session. Real session loss retains its existing
+  invalidation behavior. Query-first UNKNOWN stays nonterminal; no new ticket,
+  remote cancellation, EXPIRED/success fabrication or unrelated-row mutation.
+- Full tracking table now returns BUSY before durable admission. Private worker
+  IPC4/op11 rejects older workers and generic forged requests. SDK supervisors,
+  consumers and ROS workers require matched rebuild; SRT/ROS schemas unchanged.
+- Fresh IPv4/IPv6 real context loss before original5s deadline, exact-row vs
+  unrelated preservation, SDK acceptance, unclaimed/forged/foreign/reused/stale
+  receipts, paused-worker BUSY/retry, replacement generation, query after reconnect
+  without effects, and64+1 capacity pass. Journal tests cover context/payload,
+  accepted/final result races, idempotence, owner restart and storage failure.
+  Default-off C++ test-only handoff hold has no ROS/CLI/env entry point.
+- SDK81/81, ROS41/41, host399/399 PASS. Isolated bridge-sender-reconcile /
+  m3-sender-reconcile-ros installations and explicit sender-reconcile --skip-build
+  layout verify every preserved baseline in the chain. Old provider clean at
+  52be7c86; all1101 priorraw+28 newraw hashes verify,14 closed fresh DBs decoded
+  immutable. No builds/heavy tests overlap retained native fixture capture.
+- Initial fixture queried disconnected (existing API refuses); reconnect added.
+  Storage fixture initially left failure count disabled; armed to0. Initial ROS
+  test invocation selected enclosing SDK package; scoped --base-paths ros2 fixes
+  invocation, no rebuild. All failed logs retained; no production tuning.
+
+NEXT: actual ROS SENSOR N3 freshness/repair, loaded DDS discovery/comparison and
+consolidated acceptance. No new N5/deadline-drop qualification claimed for this
+build. Historical118 remains UNKNOWN, old34/98/12/stopped4211 unchanged. No tuning,
+forced expiry or historical replay. PR2 draft/M3 open/Intrinsic-M4 untouched.

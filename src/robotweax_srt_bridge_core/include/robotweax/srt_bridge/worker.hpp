@@ -4,7 +4,7 @@
 #include <array>
 
 namespace robotweax::srt_bridge {
-enum class WorkerOperation : std::uint16_t { admit=1,get,begin_dispatch,finish,invalidate_session,observe_remote,sender_may_transmit,execute,handler_snapshot,decline };
+enum class WorkerOperation : std::uint16_t { admit=1,get,begin_dispatch,finish,invalidate_session,observe_remote,sender_may_transmit,execute,handler_snapshot,decline,reconcile_sender };
 struct WorkerRequest {
     WorkerOperation operation=WorkerOperation::get;
     Identity request_id{},session{};
@@ -58,6 +58,7 @@ public:
     JournalWorker& operator=(const JournalWorker&)=delete;
     WorkerSubmission submit(const WorkerRequest& request);
     WorkerSubmission submit_execute(DispatchTicket&& ticket);
+    WorkerSubmission submit_reconcile(SenderSubmissionReceipt& receipt);
     bool poll(WorkerReply& reply);
     bool resume_test_barrier() noexcept;
     WorkerState state() const noexcept;

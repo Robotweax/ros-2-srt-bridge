@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from m3_runtime_layout import paths,matched,CALIBRATION,SENDER_CALIBRATION,PROBE_CALIBRATION
+from m3_runtime_layout import paths,matched,CALIBRATION,SENDER_CALIBRATION,PROBE_CALIBRATION,RECONCILE_CALIBRATION
 from m3_n5_progress import RUNTIMES
 from m3_source_preflight import sha
 
@@ -63,17 +63,21 @@ class RuntimeLayoutTests(unittest.TestCase):
         self.assertEqual(p.returncode,2);self.assertIn('probe-tracing runtime layout',p.stderr)
     def test_probe_layout_verifies_preserved_sender_build(self):
         inventories={}
-        for name,manifest in (('sender-visibility',SENDER_CALIBRATION),('probe-tracing',PROBE_CALIBRATION)):
+        for name,manifest in (('sender-visibility',SENDER_CALIBRATION),('probe-tracing',PROBE_CALIBRATION),('sender-reconcile',RECONCILE_CALIBRATION)):
             expected={}
             for path in paths(name)[:-1]:
                 p=self.root/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(path);expected[path]=sha(p)
             setup=self.root/('install/m3-'+name+'-ros/setup.bash');setup.write_text('fixture setup')
             data=dict(new_matched_build_binaries=expected,installed_baseline=self.baseline,preserved_start_trace=self.expected)
-            if name=='probe-tracing':data['preserved_sender_visibility']=inventories['sender-visibility']
+            if name in ('probe-tracing','sender-reconcile'):data['preserved_sender_visibility']=inventories['sender-visibility']
+            if name=='sender-reconcile':data['preserved_probe_tracing']=inventories['probe-tracing']
             target=self.root/manifest;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps(data));inventories[name]=expected
         self.assertEqual(matched(self.root,'probe-tracing')['sdk'],'install/bridge-probe-tracing')
-        data['preserved_sender_visibility']={};target.write_text(json.dumps(data))
-        with self.assertRaisesRegex(ValueError,'sender-visibility manifest mismatch'):matched(self.root,'probe-tracing')
+        self.assertEqual(matched(self.root,'sender-reconcile')['sdk'],'install/bridge-sender-reconcile')
+        data['preserved_probe_tracing']={};target.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'probe-tracing manifest mismatch'):matched(self.root,'sender-reconcile')
+        data['preserved_probe_tracing']=inventories['probe-tracing'];data['preserved_sender_visibility']={};target.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError,'sender-visibility manifest mismatch'):matched(self.root,'sender-reconcile')
 
 
 if __name__=='__main__':unittest.main()

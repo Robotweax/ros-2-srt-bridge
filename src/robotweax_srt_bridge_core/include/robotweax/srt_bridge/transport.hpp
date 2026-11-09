@@ -25,6 +25,7 @@ struct TransportConfig {
     bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
     bool sender_diagnostics=false; // Requires command_trace; no outcome/replay authority.
     bool probe_diagnostics=false; // Requires command_trace; per-probe lifecycle only.
+    bool test_hold_command_handoff=false; // Test-only context-loss fixture; never ROS/CLI/env configured.
 };
 struct TransportContext {
     Identity session{};
@@ -84,6 +85,9 @@ public:
     // Only a newly committed sender-worker admission can supply this ticket.
     // BUSY leaves it usable; QUEUED consumes it once. No receiver execution grant.
     SubmitResult submit_command(TransportContext context,DurableCommandTicket&& ticket);
+    // Retire only an unclaimed local ticket. Not cancellation after handoff.
+    // Retain its receipt before calling, then reconcile through its worker.
+    bool abandon_unsubmitted_command(DurableCommandTicket&& ticket);
     // CONTROL is FIFO (64); samples latest-only per route. Poll copies ownership.
     // Sample deadlines are rechecked at poll. Consumers must still recheck before
     // deferred publication. Neither poll method authorizes command execution.

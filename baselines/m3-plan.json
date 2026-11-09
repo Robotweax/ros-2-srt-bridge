@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "DELIVERY_PLAN.md: instrumentation loop closed by one probe-traced N0/N5 cohort; implement authoritative per-command transport receipt and conservative sender-journal reconciliation, then remaining N3/DDS acceptance gates; no automatic further diagnostics cohort",
+  "current_priority": "DELIVERY_PLAN.md: authoritative per-command transport receipt and conservative sender-journal reconciliation implemented; next actual ROS SENSOR N3 freshness/repair and loaded DDS discovery/comparison acceptance. Instrumentation loop closed; no automatic diagnostics cohort, tuning, forced expiry or historical118 replay.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2705,5 +2705,12 @@
     "qualification": false,
     "instrumentation_loop": "closed",
     "cohort_evidence": "evidence/m3-probe-loaded-cohort-2026-11-09/README.md"
+  },
+  "sender_receipt_reconciliation": {
+    "status": "implemented; qualification in evidence/m3-sender-reconciliation-2026-11-09",
+    "behavior": "proved local abandonment -> exact sender local_queued/rev0 UNKNOWN/reconcile_required; preserve authoritative peer results, no ticket reuse or unrelated invalidation",
+    "private_worker_ipc": 4,
+    "runtime_layout": "sender-reconcile",
+    "next": "remaining ROS SENSOR N3/DDS acceptance; M3 open, PR2 draft, M4 untouched"
   }
 }

@@ -38,10 +38,14 @@ implementation and qualification are described by the latest HANDOFF entries.
 Priority1 is closed by `evidence/m3-probe-loaded-cohort-2026-11-09/`: N0 8/8,
 N5 128/128,22 skipped offers, actual busy/timeout/old-echo branches retained.
 No further diagnostic cohort or new trace facility is scheduled automatically.
-Priority2 is next: the bounded implementation contract is below. Historical
+Priority2 is implemented in `evidence/m3-sender-reconciliation-2026-11-09/`:
+opaque transport receipts drive exact-row UNKNOWN reconciliation, with one-use/
+worker-generation guards and bounded admission. SDK81/81 pass; matched ROS/host
+validation is recorded with the change. Priority3 is next: actual ROS SENSOR N3
+freshness/repair and loaded DDS discovery/comparison acceptance. Historical
 UNKNOWN outcomes remain uncertainty, not a requirement to reproduce them.
 
-### Next implementation: authoritative sender submission receipt
+### Implemented contract: authoritative sender submission receipt
 
 - Give each admitted sender proof a bounded, opaque submission receipt that the
   coordinator can retain. The transport updates it at its actual handoff/drop

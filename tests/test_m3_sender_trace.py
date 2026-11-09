@@ -45,6 +45,11 @@ class SenderTraceTests(unittest.TestCase):
         e['worker_token']=0
         with self.assertRaisesRegex(ValueError,'metadata'):validate(e)
 
+    def test_receipt_worker_operation_is_bounded(self):
+        e=self.journal();e['detail']=11;validate(e)
+        e['detail']=12
+        with self.assertRaises(ValueError):validate(e)
+
     def test_required_new_observations_and_capture_loss_cannot_be_ignored(self):
         release=self.event(46);release.update(value=4,reason=0)
         trace={'operator.log':dict(complete=True,events=[release,self.journal(),self.journal(48)])}

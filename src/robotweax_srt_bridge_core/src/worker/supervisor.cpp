@@ -146,7 +146,7 @@ struct JournalWorker::Impl {
     WorkerSubmission submit(const WorkerRequest& request,std::shared_ptr<execution_detail::Record> record={}){
     inspect();if(state==WorkerState::stopping||state==WorkerState::stopped)return {WorkerSubmit::stopped,0};
     if(state!=WorkerState::ready)return {WorkerSubmit::not_ready,0};
-    if(unsigned(request.operation)<1||unsigned(request.operation)>10)return {WorkerSubmit::invalid,0};
+    if(unsigned(request.operation)<1||unsigned(request.operation)>11)return {WorkerSubmit::invalid,0};
     if(count==requests.size())return {WorkerSubmit::busy,0};
     if(next==UINT64_MAX)return {WorkerSubmit::invalid,0};
     const auto token=next+1;const auto frame=worker_ipc::encode(request,token);
@@ -160,8 +160,21 @@ struct JournalWorker::Impl {
 JournalWorker::JournalWorker(WorkerOptions options):impl_(std::make_unique<Impl>(std::move(options))){}
 JournalWorker::~JournalWorker(){if(!impl_->join()&&impl_->pid>0){reap_later(impl_->pid);impl_->pid=-1;}if(impl_->socket>=0)close(impl_->socket);}
 WorkerSubmission JournalWorker::submit(const WorkerRequest& request){
-    if(request.operation==WorkerOperation::execute||request.grant_slot!=UINT32_MAX||request.grant_generation)return {WorkerSubmit::invalid,0};
+    if((request.operation==WorkerOperation::execute||request.operation==WorkerOperation::reconcile_sender)||request.grant_slot!=UINT32_MAX||request.grant_generation)return {WorkerSubmit::invalid,0};
     return impl_->submit(request);
+}
+WorkerSubmission JournalWorker::submit_reconcile(SenderSubmissionReceipt& receipt){
+    const auto p=receipt.proof_;
+    if(!p||p->live!=impl_->live||!p->live->load()||!p->claimed.load()||
+       p->disposition.load(std::memory_order_acquire)!=SubmissionDisposition::abandoned||
+       impl_->options.journal.side!=JournalSide::sender||p->entry.owner_epoch!=impl_->options.journal.process_epoch||
+       p->local_peer!=impl_->options.journal.local_peer_id||p->remote_peer!=impl_->options.journal.remote_peer_id)return {WorkerSubmit::invalid,0};
+    bool expected=false;if(!p->reconciliation_submitted.compare_exchange_strong(expected,true))return {WorkerSubmit::invalid,0};
+    WorkerRequest q;q.operation=WorkerOperation::reconcile_sender;q.request_id=p->entry.request_id;q.route=p->entry.route;
+    q.command=p->entry.command;q.context=p->entry.context;q.session=p->entry.context.session;
+    const auto result=impl_->submit(q);
+    if(result.result!=WorkerSubmit::queued)p->reconciliation_submitted.store(false);
+    return result;
 }
 WorkerSubmission JournalWorker::submit_execute(DispatchTicket&& ticket){
     const auto record=ticket.record_;

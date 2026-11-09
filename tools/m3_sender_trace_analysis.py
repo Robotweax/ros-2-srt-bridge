@@ -23,7 +23,7 @@ def validate(e):
         reasons={1:(3,4,5),2:(7,),3:(8,),4:(0,),5:(3,10)}
         if e['value'] not in reasons or e['reason'] not in reasons[e['value']]:raise ValueError('invalid sender release branch')
     if point in (47,48):
-        if e['value']>10 or (point==47 and (not 1<=e['detail']<=10 or not e['worker_token'])) or (point==48 and (e['detail']>9 or e['worker_token'])):raise ValueError('invalid sender journal/event metadata')
+        if e['value']>10 or (point==47 and (not 1<=e['detail']<=11 or not e['worker_token'])) or (point==48 and (e['detail']>9 or e['worker_token'])):raise ValueError('invalid sender journal/event metadata')
         if e['journal_entry_available']:
             if not 1<=e['terminal_state']<=8 or not 0<e['origin_ns']<e['command_deadline_ns'] or e['entry_owner_epoch']=='00'*16:raise ValueError('invalid journal entry snapshot')
         elif any(e[k] for k in ('terminal_state','terminal_reason','journal_revision','origin_ns','command_deadline_ns')) or e['entry_owner_epoch']!='00'*16:raise ValueError('unavailable journal entry invented')

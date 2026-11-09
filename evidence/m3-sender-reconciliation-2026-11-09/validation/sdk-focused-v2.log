@@ -1,0 +1,79 @@
+[1/2] Building CXX object tests/native/CMakeFiles/sender_receipt_tests.dir/sender_receipt_tests.cpp.o
+[2/2] Linking CXX executable tests/native/sender_receipt_tests
+Internal ctest changing into directory: /workspace/build/m3-sender-reconcile
+UpdateCTestConfiguration  from :/workspace/build/m3-sender-reconcile/DartConfiguration.tcl
+Parse Config file:/workspace/build/m3-sender-reconcile/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/build/m3-sender-reconcile/DartConfiguration.tcl
+Parse Config file:/workspace/build/m3-sender-reconcile/DartConfiguration.tcl
+Test project /workspace/build/m3-sender-reconcile
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 7
+    Start  7: worker_contract
+
+7: Test command: /workspace/build/m3-sender-reconcile/src/robotweax_srt_bridge_core/worker_tests
+7: Working Directory: /workspace/build/m3-sender-reconcile/src/robotweax_srt_bridge_core
+7: Test timeout computed to be: 90
+7: PASS process journal worker: 5439 checks
+1/4 Test  #7: worker_contract ..................   Passed   11.49 sec
+test 11
+    Start 11: journal_contract
+
+11: Test command: /workspace/build/m3-sender-reconcile/src/robotweax_srt_bridge_core/journal_tests
+11: Working Directory: /workspace/build/m3-sender-reconcile/src/robotweax_srt_bridge_core
+11: Test timeout computed to be: 120
+11: FAIL: receipt storage failure fabricated state
+2/4 Test #11: journal_contract .................***Failed    0.36 sec
+test 68
+    Start 68: sender_receipt_ipv4
+
+68: Test command: /workspace/build/m3-sender-reconcile/tests/native/sender_receipt_tests "ipv4"
+68: Working Directory: /workspace/build/m3-sender-reconcile/tests/native
+68: Test timeout computed to be: 60
+68: RECEIPT_CONTRACT abandonment=UNKNOWN unrelated=queued busy_preserved=1 forged_stale_reuse_refused=1 no_expiry=1
+68: RECEIPT_ENDPOINT operation11=observed UNKNOWN=queryable SDK_handoffs=0 effects=0
+68: RECEIPT_CAPACITY tracked=64 overflow=BUSY absent_journal=1
+68: PASS sender receipt ipv4 checks=3263
+3/4 Test #68: sender_receipt_ipv4 ..............   Passed    4.03 sec
+test 69
+    Start 69: sender_receipt_ipv6
+
+69: Test command: /workspace/build/m3-sender-reconcile/tests/native/sender_receipt_tests "ipv6"
+69: Working Directory: /workspace/build/m3-sender-reconcile/tests/native
+69: Test timeout computed to be: 60
+69: RECEIPT_CONTRACT abandonment=UNKNOWN unrelated=queued busy_preserved=1 forged_stale_reuse_refused=1 no_expiry=1
+69: RECEIPT_ENDPOINT operation11=observed UNKNOWN=queryable SDK_handoffs=0 effects=0
+69: RECEIPT_CAPACITY tracked=64 overflow=BUSY absent_journal=1
+69: PASS sender receipt ipv6 checks=3229
+4/4 Test #69: sender_receipt_ipv6 ..............   Passed    3.97 sec
+
+The following tests passed:
+	worker_contract
+	sender_receipt_ipv4
+	sender_receipt_ipv6
+
+75% tests passed, 1 tests failed out of 4
+
+Label Time Summary:
+crash        =  11.49 sec*proc (1 test)
+journal      =   0.36 sec*proc (1 test)
+lifecycle    =  11.49 sec*proc (1 test)
+m1           =  11.86 sec*proc (2 tests)
+m3           =   8.00 sec*proc (2 tests)
+native       =   8.00 sec*proc (2 tests)
+process      =  11.49 sec*proc (1 test)
+receipt      =   8.00 sec*proc (2 tests)
+recovery     =   8.00 sec*proc (2 tests)
+worker       =  11.49 sec*proc (1 test)
+
+Total Test time (real) =  19.90 sec
+
+The following tests FAILED:
+	 11 - journal_contract (Failed)
+Errors while running CTest
+Output from these tests are in: /workspace/build/m3-sender-reconcile/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

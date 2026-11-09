@@ -11,14 +11,18 @@ SRT is a separately installed dependency; the enclosing SRT checkout is preserve
 ## Development status — 2026-11-09
 
 Current delivery focus: [DELIVERY_PLAN.md](DELIVERY_PLAN.md). M0–M2 are accepted
-for the documented simulator baseline; M3 remains open. The calibrated per-probe
-build passes SDK79/ROS41/host396. Its [bounded loaded cohort](evidence/m3-probe-loaded-cohort-2026-11-09/README.md)
-now passes N0 8/8 and N5 128/128 and captures actual busy/late-echo decisions.
-The instrumentation loop is closed. Next is an authoritative per-command
-transport receipt and conservative sender-journal reconciliation, then remaining
-N3/DDS acceptance work. No tuning, forced expiry or historical118 replay.
-PR2 stays draft; Intrinsic/M4 has not started. Older entries below retain their
-historical scope and are not the current work queue.
+for the documented simulator baseline; M3 remains open. The bounded probe cohort
+closed the instrumentation loop (N0 8/8, N5 128/128). The
+[sender receipt change](evidence/m3-sender-reconciliation-2026-11-09/README.md)
+now carries actual local abandonment to the exact sender journal row as
+UNKNOWN/reconcile_required, preserving query-first recovery, peer results and
+one-use tickets. SDK81/ROS41/host399 checks pass. It prevents tracking-capacity overflow from leaving an orphan
+journal row. Private worker IPC4 requires matched SDK/ROS workers; the new
+`sender-reconcile` install layout preserves earlier calibrated builds.
+Next: actual ROS SENSOR N3 freshness/repair and loaded DDS discovery/comparison
+acceptance. No tuning, forced expiry or historical118 replay. PR2 stays draft;
+Intrinsic/M4 has not started. Older entries below retain their historical scope
+and are not the current work queue.
 
 M0's selected local qualification checks pass on Ubuntu 24.04 Linux amd64 under
 Docker Desktop emulation. The installed C API probe covers CONTROL/SENSOR,
