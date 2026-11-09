@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-09",
+  "base_commit": "8cb9c9e4a9ec541564e1e7abec7e6f0a4583d755",
+  "comparison_status": "completed_with_limitations",
+  "m3_acceptance": "not_accepted_as_complete",
+  "complete_m3_acceptance": false,
+  "pr2_keep_draft": true,
+  "merge_authorized": false,
+  "m4_started": false,
+  "reported_series": [
+    {
+      "transport": "srt",
+      "profile": "N1",
+      "seeds": [
+        1701,
+        2903,
+        4211
+      ],
+      "nominal_seconds_per_seed": 600,
+      "totals": {
+        "attempts": 900,
+        "successes": 900,
+        "effects": 900,
+        "expired": 0,
+        "expired_without_dispatch": 0,
+        "unknown": 0,
+        "unresolved": 0,
+        "not_admitted": 0,
+        "rejected": 0,
+        "failed": 0,
+        "skipped_slots": 0
+      },
+      "capture_population_exceptions": [],
+      "evidence": "evidence/m3-srt-n1-full-2026-11-06",
+      "comparison_scope": "separate historical frozen series; no newest-build promotion or causal performance ranking"
+    },
+    {
+      "transport": "srt",
+      "profile": "N2",
+      "seeds": [
+        1701,
+        2903,
+        4211
+      ],
+      "nominal_seconds_per_seed": 600,
+      "totals": {
+        "attempts": 900,
+        "successes": 900,
+        "effects": 900,
+        "expired": 0,
+        "expired_without_dispatch": 0,
+        "unknown": 0,
+        "unresolved": 0,
+        "not_admitted": 0,
+        "rejected": 0,
+        "failed": 0,
+        "skipped_slots": 0
+      },
+      "capture_population_exceptions": [],
+      "evidence": "evidence/m3-srt-n2-full-2026-11-06",
+      "comparison_scope": "separate historical frozen series; no newest-build promotion or causal performance ranking"
+    },
+    {
+      "transport": "dds",
+      "profile": "N1",
+      "seeds": [
+        1701,
+        2903,
+        4211
+      ],
+      "nominal_seconds_per_seed": 600,
+      "totals": {
+        "attempts": 892,
+        "successes": 890,
+        "effects": 890,
+        "expired": 2,
+        "expired_without_dispatch": 2,
+        "unknown": 0,
+        "unresolved": 0,
+        "not_admitted": 0,
+        "rejected": 0,
+        "failed": 0,
+        "skipped_slots": 8
+      },
+      "capture_population_exceptions": [],
+      "evidence": "evidence/m3-dds-n1-full-2026-11-06",
+      "comparison_scope": "separate historical frozen series; no newest-build promotion or causal performance ranking"
+    },
+    {
+      "transport": "dds",
+      "profile": "N2",
+      "seeds": [
+        1701,
+        2903,
+        4211
+      ],
+      "nominal_seconds_per_seed": 600,
+      "totals": {
+        "attempts": 843,
+        "successes": 830,
+        "effects": 830,
+        "expired": 12,
+        "expired_without_dispatch": 12,
+        "unknown": 0,
+        "unresolved": 0,
+        "not_admitted": 1,
+        "skipped_slots": 57
+      },
+      "capture_population_exceptions": [
+        {
+          "seed": 2903,
+          "role": "robot",
+          "filtered": 170340,
+          "captured_file": 170338,
+          "kernel_drops": 0
+        }
+      ],
+      "evidence": "evidence/m3-dds-n2-full-2026-11-06",
+      "comparison_scope": "separate historical frozen series; no newest-build promotion or causal performance ranking"
+    }
+  ],
+  "n5_srt": {
+    "source": "evidence/m3-probe-loaded-cohort-2026-11-09",
+    "runtime_layout": "probe-tracing",
+    "seed": 1701,
+    "nominal_seconds": 300,
+    "commands_succeeded": 128,
+    "command_attempts": 128,
+    "skipped_command_offers": 22,
+    "publication_age_assessment": "supported for retained run",
+    "publications": 27750,
+    "upper_age_max_ns": [
+      178324341,
+      182559637
+    ],
+    "source_produced": 75037,
+    "unobserved_source": 47287,
+    "receiver_rejected": 539,
+    "unknown_age_rejected": 465,
+    "stale_sample_rejected": 0,
+    "other_unclassified_rejections": 74,
+    "bridge_storage_bound": "source-established fixed latest-only slots",
+    "continuous_queue_high_water": null,
+    "hard_sdk_memory_peak": null,
+    "continuous_availability_qualified": false
+  },
+  "dds_latest": {
+    "source": "evidence/m3-dds-loaded-confirmation-2026-11-09",
+    "runtime_layout": "sender-reconcile",
+    "default_profile": "system",
+    "startup": "simultaneous",
+    "N0": {
+      "commands": 8,
+      "successes": 8,
+      "effects": 8,
+      "skipped_offers": 0
+    },
+    "N5": {
+      "status": "failed_before_measurement",
+      "requested_seconds": 60,
+      "measured_seconds": null,
+      "submitted_commands": 0,
+      "effects": 0,
+      "success_ratio": null,
+      "steady_window_comparison": null
+    }
+  },
+  "open_gates": [
+    {
+      "id": "N3_predeclared_cohort",
+      "status": "failed",
+      "qualified_prefix_cases": 5,
+      "first_failed_case": "two-loss-2903",
+      "skipped_imu_source_slots": 3,
+      "later_actual_executions_outside_stop_boundary": 3,
+      "original_harness_status": "passed",
+      "audited_status": "failed",
+      "threshold_relaxed": false
+    },
+    {
+      "id": "newest_candidate_profile_seed_matrix",
+      "status": "incomplete",
+      "prior_results_promoted_to_new_binary": false
+    },
+    {
+      "id": "comparison_age_and_capture_coverage",
+      "status": "limited",
+      "dds_N1_N2_age_gate_complete": false,
+      "dds_N2_seed2903_robot_capture_population_reconciled": false,
+      "latest_dds_N5_steady_window_available": false
+    }
+  ],
+  "claim_limits": [
+    "no general SRT superiority or DDS equivalence",
+    "no common-origin physical/cross-host age comparison",
+    "security configuration/cost not equated",
+    "no isolated CPU/wire/FEC/resource ranking",
+    "no hard whole-stack allocator/kernel/RMW peak",
+    "no universal real-time/hardware guarantee"
+  ],
+  "preserved_outcomes": [
+    "N3 audited failure",
+    "DDS loaded cold-start failure",
+    "original UNKNOWN/rejected/unresolved intents and stopped N5/4211",
+    "earlier failed capture and clock mappings"
+  ],
+  "work_performed": {
+    "retained_reports_only": true,
+    "runtime_experiments_started": 0,
+    "tuning_changes": 0,
+    "native_builds": 0,
+    "journals_opened_or_recovered": false,
+    "replay_or_expiry": false,
+    "threshold_changes": false,
+    "new_runtime_test_execution": false,
+    "last_validation_reused": {
+      "sdk": 81,
+      "ros": 41,
+      "host": 413
+    }
+  },
+  "automatic_followup_experiments": false,
+  "scope": "technical comparison and acceptance assessment; no waiver, merge or M4 authorization"
+}

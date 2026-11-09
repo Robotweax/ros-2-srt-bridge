@@ -28,9 +28,12 @@ The [M3 acceptance review](M3_ACCEPTANCE_REVIEW.md) lists the remaining closure 
 The [retained N5 SENSOR audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md)
 supports the publication-age gate for27,750 publications (max182.559637ms <250ms)
 and fixed bridge slots; queue peaks/continuous availability/whole-stack memory
-caps remain unavailable. Host413 pass. Next is the comparison/acceptance statement,
-with no new experiment, tuning, N3 retry or DDS fallback. No forced expiry or
-historical118 replay. PR2 stays draft;
+caps remain unavailable. Host413 is retained validation.
+The [comparison and acceptance statement](M3_COMPARISON_AND_ACCEPTANCE.md) is
+complete: no general SRT superiority or DDS equivalence is established; M3 remains
+not accepted as complete under the unchanged plan. No new experiment, tuning,
+threshold waiver, N3 retry, DDS fallback, forced expiry or historical118 replay.
+PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 

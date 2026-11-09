@@ -3,6 +3,9 @@
 M0–M2 are accepted for the recorded Linux amd64/Jazzy simulator baseline. M3 is
 the delivery blocker. PR2 remains draft; Intrinsic/M4 is not started. Current
 implementation and qualification are described by the latest HANDOFF entries.
+The current comparison and acceptance decision is in
+`M3_COMPARISON_AND_ACCEPTANCE.md`: reporting complete, M3 completion not accepted
+under the unchanged plan. No new experiment or waiver is queued.
 
 ## Execution rules
 
@@ -87,6 +90,23 @@ Offline only:303 original hashes and six frozen source blobs verify,413 host
 checks pass; no runtime experiment/build/tuning/journal recovery/replay. Next is
 the comparison/acceptance statement with these limits and the prospective N3
 source-slot contract decision; no automatic new experiment.
+
+### Comparison and acceptance statement delivered
+
+`M3_COMPARISON_AND_ACCEPTANCE.md` completes Priority4's consolidated reporting
+exit criterion while leaving Priority3's open qualification explicit. Supported
+retained bridge behavior is documented; a general SRT-over-DDS speed/resource/
+security claim or DDS equivalence is not established. The DDS N2 capture
+population exception and clock-rejected age populations are retained, not hidden
+behind older execution PASS labels. Latest DDS N5 never entered measurement.
+
+M3 completion is not accepted under the unchanged plan: the frozen N3 cohort
+fails, the newest candidate does not inherit older full profile/seed matrices,
+and comparison age/capture coverage has the listed limits. This is not a claim
+that all bridge properties fail or that DDS must be tuned until successful.
+No source-slot waiver, runtime threshold change, merge, M4 start or automatic
+new experiment follows. Any future scope/contract proposal must be explicit and
+prospective; the current reporting request is complete.
 
 ### Implemented contract: authoritative sender submission receipt
 

@@ -1,5 +1,9 @@
 # M3 acceptance review — 2026-11-09
 
+Final comparison and acceptance conclusion:
+[M3_COMPARISON_AND_ACCEPTANCE.md](M3_COMPARISON_AND_ACCEPTANCE.md).
+The reporting task is complete; the qualification status below remains open.
+
 **M3 is not ready to mark complete or merge.** The current evidence supports a
 local Linux amd64/Jazzy simulator development result, with explicit failed and
 unqualified gates. M0–M2 remain accepted only in their recorded scope; Intrinsic/
@@ -16,7 +20,7 @@ numerical superiority claim.
 |---|---|---|
 |Core/ROS command semantics|[M2 acceptance](evidence/m2-ros-jazzy-2026-11-05/ACCEPTANCE.md); [sender reconciliation](evidence/m3-sender-reconciliation-2026-11-09/README.md) implements exact-row UNKNOWN on actual local abandonment; SDK81/ROS41 pass|Simulator only; no historical UNKNOWN replay/nonexecution inference|
 |N1/N2 SRT execution|[N1](evidence/m3-srt-n1-full-2026-11-06/README.md), [N2](evidence/m3-srt-n2-full-2026-11-06/README.md): recorded three-seed600s cases and publication-age bounds|Those exact historical build hashes; not a fresh matrix on the latest install|
-|N1/N2 DDS execution|[N1](evidence/m3-dds-n1-full-2026-11-06/README.md), [N2](evidence/m3-dds-n2-full-2026-11-06/README.md): full-duration execution/capture evidence|DDS age gate remains open; realtime Header ages are not SRT ingress interval bounds|
+|N1/N2 DDS execution|[N1](evidence/m3-dds-n1-full-2026-11-06/README.md), [N2](evidence/m3-dds-n2-full-2026-11-06/README.md): full-duration execution evidence|DDS age gate remains open; N2/2903 robot has170,340 filtered vs170,338 file records, so capture population is not reconciled. Realtime Header ages are not SRT ingress interval bounds|
 |N3 deterministic repair|[30s matrix audit](evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md): first5 cases pass; one/two-loss transport/freshness subgates pass in all9 executions|Cohort FAIL at case6:3 skipped IMU source slots; later3 outside intended stop boundary. Corrected guard, no retry or retrospective relaxation|
 |N4 interruption/start/result/restart|[Failure controls and phase cuts](evidence/m3-failure-n4-2026-11-08/README.md), [remaining bounded cases](evidence/m3-n4-remaining-2026-11-08/README.md) retain passing scoped evidence and earlier failures|Bounded native/ROS fixtures, not every long combined load/hardware case|
 |N5 SRT command progress|[Frozen probe cohort](evidence/m3-probe-loaded-cohort-2026-11-09/README.md): N0 8/8, N5 128/128,22 skipped offers|Qualified prior matched probe build, not newest sender-reconcile loaded qualification; SENSOR reduction/accounting is not full freshness/availability acceptance|
@@ -44,12 +48,12 @@ numerical superiority claim.
    measured occupancy peaks and total SDK/process memory caps unavailable rather
    than upgrading them to passes or launching another experiment. This does not
    promote the old probe build into newest-build/all-seed qualification.
-4. Complete the comparison statement with explicit asymmetries: default DDS
-   cannot enter a loaded steady window in the latest case; its age origin and
-   security costs differ. Preserve failed/unavailable populations and make a
-   justified non-superiority statement where equivalence is absent. Do not make
-   DDS mitigation or repeated cold-start attempts a prerequisite for documenting
-   the observed comparator outcome.
+4. The [comparison and acceptance statement](M3_COMPARISON_AND_ACCEPTANCE.md)
+   is now complete: default DDS has no latest loaded steady window, age/security/
+   resource equivalence is not established, and no general superiority claim is
+   justified. Failed/unavailable populations, including the DDS N2 capture
+   discrepancy, remain explicit. This reporting closure grants no M3 acceptance,
+   changes no source-slot threshold and does not schedule another experiment.
 
 No automatic N3 retry, DDS fallback experiment, provider patch, ARP study or new
 tracer follows from this review. Existing no-tuning/no-forced-expiry/no-historical-

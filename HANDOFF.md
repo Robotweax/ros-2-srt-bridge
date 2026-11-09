@@ -3982,3 +3982,43 @@ unavailable. Not newest-build/all-seed/fullN5/M3 acceptance. Next comparison/
 acceptance statement with explicit limits and prospective N3 source-slot decision;
 no new experiment. N3auditedFAIL, defaultDDSN5coldFAIL and old UNKNOWN/stopped scopes
 unchanged. PR2draft/M3open/Intrinsic-M4untouched.
+
+
+### 2026-11-09 — Comparison and M3 acceptance statement delivered, no experiments
+
+- Explicit user request: comparison/M3 acceptance statement with limits retained,
+  no tuning/new experiments. `M3_COMPARISON_AND_ACCEPTANCE.md` is the canonical
+  conclusion; `evidence/m3-comparison-acceptance-2026-11-09/` supplies machine
+  decision and50-report hash index. Documentation/retained JSON checks only;
+  SDK81/ROS41/host413 validation is reused, not re-executed. No runtime/native build,
+  capture/traffic, journal open/recovery, forced expiry or historical replay.
+- Four original three-seed600s N1/N2 primary totals checked against per-seed rows:
+  SRT900/900 successes/effects atN1 andN2,0 skipped offers; DDSN1 892attempts,
+ 890successes/effects+2receiver-backed expiries,8skips; DDSN2 843attempts,
+ 830successes/effects+12receiver-backed expiries+1nonadmission,57skips. Distinct
+  recorded series, no pooled success probability/current-build/causal ranking.
+- Explicit older DDSN2/2903robot population exception170340filtered vs170338file,
+  kernel0 remains unreconciled; executionPASS never means all capture/age gates
+  qualify. DDSN1/N2 age gate remains open; rejected/unavailable clock populations
+  stay out of accepted percentiles with visible denominators. Source ages differ.
+- RetainedN5probe build128/128,22skips and all27750 publication upper bounds
+  <=182.559637ms support their own command/freshness/slot properties; preserve
+ 465unknownage/47287source-unobserved and unmeasured queue/memory/availability.
+  LatestDDSN0passes8/8; defaultN5coldFAIL before measurement has no steady-window
+  denominator, not0% success or a comparative speed/resource ratio.
+- No general SRT superiority or DDS equivalence established. Security/cost,
+  topology/observer/build/run-time, age origin, tick/RSS/PCAP and hardware limits
+  explicit. Demonstrated selective bridge capabilities are distinct from a
+  controlled transport advantage. DDS failure is an observed comparator outcome,
+  not an instruction to tune until it passes. No unique historical cause assigned.
+- Acceptance conclusion: M3 NOT accepted as complete under unchanged plan.
+  N3auditedFAIL still5prefixPASS/case6threeIMUskips/last3outside_stop_boundary;
+  no threshold relaxation or retry. Latestcandidate lacks complete inherited
+  profile/seed proof; older matrices retain exact build scope. Comparison age/
+  capture/nonmeasurement boundaries remain explicit. No invented mandatory hard
+  memory/hardware threshold, waiver, merge or M4 authorization.
+
+The comparison/acceptance reporting request is complete; open qualification is
+not hidden and no new experiment is queued automatically. M0–M2 retain recorded
+acceptance; PR2draft/M3open/Intrinsic-M4untouched. Future scope/source-slot changes
+must be explicit/prospective and cannot retrospectively reclassify failed cases.
