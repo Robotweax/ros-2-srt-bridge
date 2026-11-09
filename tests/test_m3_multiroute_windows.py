@@ -8,7 +8,7 @@ from m3_multiroute_cohort import short_cases,thirty_second_cases,execute
 
 
 def assessment():
-    return dict(cadence=dict(duration_ns=10_050_000_000),source_trace_status=dict(attempted=2513),sender_trace_status=dict(attempted=5001),sdk_without_receiver_decision=[],window=dict(losses=dict(srt_accept_to_receiver_gap=0,receiver_rejected=0)))
+    return dict(cadence=dict(duration_ns=10_050_000_000,routes={'1':dict(skipped_slots=0),'2':dict(skipped_slots=0)}),source_trace_status=dict(attempted=2513),sender_trace_status=dict(attempted=5001),sdk_without_receiver_decision=[],window=dict(losses=dict(srt_accept_to_receiver_gap=0,receiver_rejected=0)))
 
 
 class WindowTests(unittest.TestCase):
@@ -31,6 +31,13 @@ class WindowTests(unittest.TestCase):
             if fault=='source':a['source_trace_status']['attempted']=2751
             if fault=='sender':a['sender_trace_status']['attempted']=5502
             with self.assertRaises(ValueError):verify_window(a,10,0)
+
+    def test_rate_pass_cannot_hide_skipped_source_slots_or_unavailable_evidence(self):
+        for value in (1,3,True,None):
+            a=assessment();a['cadence']['routes']['1']['skipped_slots']=value
+            with self.subTest(value=value),self.assertRaisesRegex(ValueError,'source scheduling'):verify_window(a,10,0)
+        a=assessment();a['cadence']['routes'].pop('2')
+        with self.assertRaisesRegex(ValueError,'source scheduling'):verify_window(a,10,0)
 
     def test_receiver_gap_and_rejection_cannot_become_successful_baseline_or_repair(self):
         a=assessment();a['sdk_without_receiver_decision']=[7,8];a['window']['losses']['srt_accept_to_receiver_gap']=2

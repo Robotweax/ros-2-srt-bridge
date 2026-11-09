@@ -19,8 +19,11 @@ UNKNOWN/reconcile_required, preserving query-first recovery, peer results and
 one-use tickets. SDK81/ROS41/host399 checks pass. It prevents tracking-capacity overflow from leaving an orphan
 journal row. Private worker IPC4 requires matched SDK/ROS workers; the new
 `sender-reconcile` install layout preserves earlier calibrated builds.
-Next: actual ROS SENSOR N3 freshness/repair and loaded DDS discovery/comparison
-acceptance. No tuning, forced expiry or historical118 replay. PR2 stays draft;
+The [30s N3 follow-up](evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md)
+is audited FAIL after five passing cases: three source slots skipped in case6;
+the harness now enforces that missed gate (host402). Three later executions are
+excluded from cohort qualification. Next: loaded DDS discovery/comparison and
+consolidated acceptance; no automatic N3 retry. No tuning, forced expiry or historical118 replay. PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 

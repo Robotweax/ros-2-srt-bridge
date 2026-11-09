@@ -1,0 +1,4730 @@
+{
+  "baseline-1701": {
+    "summary": {
+      "name": "baseline-1701",
+      "losses": 0,
+      "seed": 1701,
+      "seconds": 30,
+      "status": "passed",
+      "error": null,
+      "source_duration_ns": 30057437721,
+      "source_hz": {
+        "1": 200.0170492177263,
+        "2": 50.00426230443158
+      },
+      "source": 7515,
+      "sdk": 7256,
+      "receiver": 7256,
+      "published": 7253,
+      "observed": 7252,
+      "unobserved": 263,
+      "age_upper_max_ns": {
+        "imu": 24396122,
+        "joint": 29772140
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": true
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30057437721,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6012,
+          "target_hz": 200,
+          "actual_hz": 200.0170492177263,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5768,
+          "unobserved": 244
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.00426230443158,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1484,
+          "unobserved": 19
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7515,
+      "observer_received": 7252,
+      "missing": 263,
+      "losses": {
+        "upstream_dds": 11,
+        "validation": 0,
+        "admission": 16,
+        "ingress_replaced": 2,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 230,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 3,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.057437721,
+      "source_actual_hz": {
+        "imu": 200.0170492177263,
+        "joints": 50.00426230443158
+      },
+      "published": 7253,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5769,
+          "rounding": "up to 1ms",
+          "maximum_ms": 25,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1484,
+          "rounding": "up to 1ms",
+          "maximum_ms": 30,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14761,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7256,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 45697,
+        "destination_port": 10081,
+        "sequence": 387032496,
+        "message_number": 1,
+        "socket_id": 343220223,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 11464684171
+      },
+      "initial_sequence": 387032496,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 14084539423
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 7645594461,
+          "stop_before_ns": 13915540589,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 7645315211,
+          "stop_before_ns": 14084539423,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15508,
+          "seen": 15508,
+          "submitted": 15508,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 14590597840,
+          "stop_before_ns": 49409204980,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15508,
+          "seen": 15508,
+          "submitted": 15508,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 14594522131,
+          "stop_before_ns": 49586696355,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 142,
+            "begin_ns": 50182580647,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 50182588397,
+            "signal_end_ns": 50184593522,
+            "end_ns": 50405034522,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 50185133731,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 50185142731,
+            "signal_end_ns": 50185422647,
+            "end_ns": 50353916022,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 50353933522,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 50353945064,
+            "signal_end_ns": 50353969022,
+            "end_ns": 50681743606,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": null,
+    "final_counters": null,
+    "recovery": null,
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "one-loss-1701": {
+    "summary": {
+      "name": "one-loss-1701",
+      "losses": 1,
+      "seed": 1701,
+      "seconds": 30,
+      "status": "passed",
+      "error": null,
+      "source_duration_ns": 30055068181,
+      "source_hz": {
+        "1": 199.99954629282763,
+        "2": 50.008204637850596
+      },
+      "source": 7514,
+      "sdk": 7269,
+      "receiver": 7269,
+      "published": 7268,
+      "observed": 7268,
+      "unobserved": 246,
+      "age_upper_max_ns": {
+        "imu": 20779338,
+        "joint": 30655877
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": true
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30055068181,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6011,
+          "target_hz": 200,
+          "actual_hz": 199.99954629282763,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5782,
+          "unobserved": 229
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.008204637850596,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1486,
+          "unobserved": 17
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7514,
+      "observer_received": 7268,
+      "missing": 246,
+      "losses": {
+        "upstream_dds": 5,
+        "validation": 0,
+        "admission": 11,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 229,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.055068181,
+      "source_actual_hz": {
+        "imu": 199.99954629282763,
+        "joints": 50.008204637850596
+      },
+      "published": 7268,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5782,
+          "rounding": "up to 1ms",
+          "maximum_ms": 21,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1486,
+          "rounding": "up to 1ms",
+          "maximum_ms": 31,
+          "p50_ms": 16,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14779,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7269,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 42560,
+        "destination_port": 10081,
+        "sequence": 1831764036,
+        "message_number": 1,
+        "socket_id": 959350025,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 61194760652
+      },
+      "initial_sequence": 1831764036,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 63873165737
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 57685758151,
+          "stop_before_ns": 63702983862,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 57686073984,
+          "stop_before_ns": 63873165737,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15325,
+          "seen": 15325,
+          "submitted": 15325,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 64427320029,
+          "stop_before_ns": 99863044087,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9085,
+          "filtered_records": 9085,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7268,
+        "parity_records": 1817,
+        "selected_parity_ns": 65163440904
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15345,
+          "seen": 15345,
+          "submitted": 15345,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 64431389612,
+          "stop_before_ns": 100032531129,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9085,
+          "filtered_records": 9085,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7268,
+        "parity_records": 1817,
+        "selected_parity_ns": 65163426071
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 142,
+            "begin_ns": 100685372087,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 100685377962,
+            "signal_end_ns": 100685526629,
+            "end_ns": 100902638879,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 100685792546,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 100685803171,
+            "signal_end_ns": 100685950504,
+            "end_ns": 100852298838,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 100852313088,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 100852326338,
+            "signal_end_ns": 100852342879,
+            "end_ns": 101189066671,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 3,
+          "sequence": 1831764043,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 64997510071,
+          "end_ns": 65020630654,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "42560",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x6d2e804b",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x392e8509",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 97895277919,
+        "end_ns": 97916455253,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": {
+      "parity_incoming_ns": 65163440904,
+      "install_end_ns": 65020630654,
+      "remove_begin_ns": 97895277919,
+      "message_number": 8,
+      "source_route": 2,
+      "source_counter": 2,
+      "source_payload_sha256": "a0bd3d6122e231f67d48e3187a20e85949e92c33c3be991d79cd36988f94af63",
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "receiver_decision": {
+        "sequence": 7,
+        "point": 4,
+        "begin_ns": 65165089321,
+        "end_ns": 65165097571,
+        "origin_ns": 65157375112,
+        "owner_epoch": "0a9ee4e0932c60e5b5f9d3ae98e8786b",
+        "session": "60f16410fef33bbaaa226b2dbf10a17f",
+        "control_generation": 1,
+        "sensor_generation": 1,
+        "source_epoch": "ec992e566139fa2ee9621085a35a2eb2",
+        "envelope_sequence": 2,
+        "callback_sequence": 0,
+        "route": 2,
+        "bytes": 364,
+        "kind": 5,
+        "result": 0,
+        "stamp_sec": 0,
+        "stamp_nanosec": 0,
+        "socket": 959350025,
+        "message_number": 8,
+        "initial_sequence": -1,
+        "initial_sequence_available": 0
+      },
+      "typed_observation": {
+        "route": 2,
+        "counter": 2,
+        "stamp_sec": 1794239811,
+        "stamp_nanosec": 534322418,
+        "payload_sha256": "a0bd3d6122e231f67d48e3187a20e85949e92c33c3be991d79cd36988f94af63",
+        "observed_ns": 65166334737
+      },
+      "scope": "SDK-accepted source selected before traffic; absent at both native/PCAP taps, accepted and typed-observed while classifier still installed; no physical-wire/cryptographic-FEC or full N3 qualification"
+    },
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "two-loss-1701": {
+    "summary": {
+      "name": "two-loss-1701",
+      "losses": 2,
+      "seed": 1701,
+      "seconds": 30,
+      "status": "passed",
+      "error": null,
+      "source_duration_ns": 30053833056,
+      "source_hz": {
+        "1": 200.00776569163625,
+        "2": 50.01025982940098
+      },
+      "source": 7514,
+      "sdk": 7258,
+      "receiver": 7256,
+      "published": 7252,
+      "observed": 7251,
+      "unobserved": 263,
+      "age_upper_max_ns": {
+        "imu": 18940788,
+        "joint": 28731403
+      },
+      "receiver_gap": 2,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": true
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30053833056,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6011,
+          "target_hz": 200,
+          "actual_hz": 200.00776569163625,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5766,
+          "unobserved": 245
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.01025982940098,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1485,
+          "unobserved": 18
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7514,
+      "observer_received": 7251,
+      "missing": 263,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 13,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 242,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 4,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.053833056,
+      "source_actual_hz": {
+        "imu": 200.00776569163625,
+        "joints": 50.01025982940098
+      },
+      "published": 7252,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5767,
+          "rounding": "up to 1ms",
+          "maximum_ms": 19,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1485,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14772,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7256,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 47439,
+        "destination_port": 10081,
+        "sequence": 1657737643,
+        "message_number": 1,
+        "socket_id": 758547371,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 111599035593
+      },
+      "initial_sequence": 1657737643,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 114196475427
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 78,
+          "seen": 78,
+          "submitted": 78,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 108020267633,
+          "stop_before_ns": 114027179844,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 78,
+          "seen": 78,
+          "submitted": 78,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 108028654549,
+          "stop_before_ns": 114196475427,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15281,
+          "seen": 15281,
+          "submitted": 15281,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 114715313719,
+          "stop_before_ns": 150403720026,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814,
+        "selected_parity_ns": 115663491386
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15281,
+          "seen": 15281,
+          "submitted": 15281,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 114724403677,
+          "stop_before_ns": 150573564568,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814,
+        "selected_parity_ns": 115663466678
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "begin_ns": 151173043735,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 151173048568,
+            "signal_end_ns": 151173131777,
+            "end_ns": 151393375735,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 141,
+            "begin_ns": 151171797360,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 151171806235,
+            "signal_end_ns": 151171925360,
+            "end_ns": 151341954152,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 140,
+            "begin_ns": 151341969943,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 151341982818,
+            "signal_end_ns": 151342021943,
+            "end_ns": 151679909985,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 2,
+          "sequence": 1657737649,
+          "message_number": 7
+        },
+        {
+          "position": 3,
+          "sequence": 1657737650,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 115304858261,
+          "end_ns": 115327817719,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "47439",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x62cf11b1",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x7",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x2d3683ab",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "begin_ns": 115505426553,
+          "end_ns": 115527731053,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "47439",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x62cf11b2",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x2d3683ab",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        },
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 148372236693,
+        "end_ns": 148393361651,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 494
+      },
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": null,
+    "two_loss": {
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 5,
+          "source_payload_sha256": "4e70e0bc935b75b36a23adf8734858f08b3856f9e16a91019411d99a9e0a1bac",
+          "envelope_sequence": 5,
+          "subsequent_observations": 5762
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "874b623988ef580bea530d5ea487b2f716f1eb2ce7810ac9d9165437b4b56019",
+          "envelope_sequence": 2,
+          "subsequent_observations": 1484
+        }
+      ],
+      "parity_incoming_ns": 115663491386,
+      "receiver_cutoff_ns": 148040904484,
+      "install_end_ns": 115527731053,
+      "remove_begin_ns": 148372236693,
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "scope": "two selected SDK-accepted sources absent at native/full-PCAP taps and drained receiver/typed cutoff with parity present and later progress on both routes; no permanent absence, internal provider expiry or generic irrecoverable-loss counter claim"
+    },
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "baseline-2903": {
+    "summary": {
+      "name": "baseline-2903",
+      "losses": 0,
+      "seed": 2903,
+      "seconds": 30,
+      "status": "passed",
+      "error": null,
+      "source_duration_ns": 30054693805,
+      "source_hz": {
+        "1": 200.0020375852237,
+        "2": 50.008827564563504
+      },
+      "source": 7514,
+      "sdk": 7278,
+      "receiver": 7278,
+      "published": 7275,
+      "observed": 7274,
+      "unobserved": 240,
+      "age_upper_max_ns": {
+        "imu": 16978105,
+        "joint": 29516652
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": true
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30054693805,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6011,
+          "target_hz": 200,
+          "actual_hz": 200.0020375852237,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5788,
+          "unobserved": 223
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.008827564563504,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1486,
+          "unobserved": 17
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7514,
+      "observer_received": 7274,
+      "missing": 240,
+      "losses": {
+        "upstream_dds": 3,
+        "validation": 0,
+        "admission": 9,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 224,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 3,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.054693805,
+      "source_actual_hz": {
+        "imu": 200.00203758522372,
+        "joints": 50.008827564563504
+      },
+      "published": 7275,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5789,
+          "rounding": "up to 1ms",
+          "maximum_ms": 17,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1486,
+          "rounding": "up to 1ms",
+          "maximum_ms": 30,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14790,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7278,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 34629,
+        "destination_port": 10081,
+        "sequence": 174195637,
+        "message_number": 1,
+        "socket_id": 794157058,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 162302957407
+      },
+      "initial_sequence": 174195637,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 164920958658
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 158666720780,
+          "stop_before_ns": 164756728741,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 158675359030,
+          "stop_before_ns": 164920958658,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15311,
+          "seen": 15311,
+          "submitted": 15311,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 165430268867,
+          "stop_before_ns": 200159309216,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9097,
+          "filtered_records": 9097,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7278,
+        "parity_records": 1819
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15311,
+          "seen": 15311,
+          "submitted": 15311,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 165430238992,
+          "stop_before_ns": 200334065091,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9097,
+          "filtered_records": 9097,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7278,
+        "parity_records": 1819
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "begin_ns": 201000808216,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 201000816800,
+            "signal_end_ns": 201000940008,
+            "end_ns": 201221207841,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 143,
+            "begin_ns": 201026985800,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 201026996591,
+            "signal_end_ns": 201027142508,
+            "end_ns": 201203745008,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 142,
+            "begin_ns": 201203757050,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 201203771300,
+            "signal_end_ns": 201203791800,
+            "end_ns": 201551205592,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": null,
+    "final_counters": null,
+    "recovery": null,
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "one-loss-2903": {
+    "summary": {
+      "name": "one-loss-2903",
+      "losses": 1,
+      "seed": 2903,
+      "seconds": 30,
+      "status": "passed",
+      "error": null,
+      "source_duration_ns": 30053284098,
+      "source_hz": {
+        "1": 200.01141906484764,
+        "2": 50.01117332464915
+      },
+      "source": 7514,
+      "sdk": 7272,
+      "receiver": 7272,
+      "published": 7272,
+      "observed": 7272,
+      "unobserved": 242,
+      "age_upper_max_ns": {
+        "imu": 28303716,
+        "joint": 28262843
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": true
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30053284098,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6011,
+          "target_hz": 200,
+          "actual_hz": 200.01141906484764,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5786,
+          "unobserved": 225
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.01117332464915,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1486,
+          "unobserved": 17
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7514,
+      "observer_received": 7272,
+      "missing": 242,
+      "losses": {
+        "upstream_dds": 7,
+        "validation": 0,
+        "admission": 7,
+        "ingress_replaced": 1,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 227,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.053284098,
+      "source_actual_hz": {
+        "imu": 200.01141906484767,
+        "joints": 50.01117332464915
+      },
+      "published": 7272,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5786,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1486,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14780,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7272,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 33574,
+        "destination_port": 10081,
+        "sequence": 598330235,
+        "message_number": 1,
+        "socket_id": 394242936,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 211804348763
+      },
+      "initial_sequence": 598330235,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 214438454555
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 208239260636,
+          "stop_before_ns": 214264118972,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 208243222220,
+          "stop_before_ns": 214438454555,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15281,
+          "seen": 15281,
+          "submitted": 15281,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 215004700847,
+          "stop_before_ns": 250467829447,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9089,
+          "filtered_records": 9089,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7271,
+        "parity_records": 1818,
+        "selected_parity_ns": 215753492723
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15293,
+          "seen": 15293,
+          "submitted": 15293,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 215004704389,
+          "stop_before_ns": 250638837114,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9089,
+          "filtered_records": 9089,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7271,
+        "parity_records": 1818,
+        "selected_parity_ns": 215753469056
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 140,
+            "begin_ns": 251266720739,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 251266731323,
+            "signal_end_ns": 251266823823,
+            "end_ns": 251487853073,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 251266289698,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 251266309364,
+            "signal_end_ns": 251266440448,
+            "end_ns": 251436716823,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 251436733406,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 251436748073,
+            "signal_end_ns": 251436772073,
+            "end_ns": 251763615281,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 3,
+          "sequence": 598330242,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 215573030098,
+          "end_ns": 215596259098,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "33574",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x23a9cb82",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x177fab78",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 248443392446,
+        "end_ns": 248463913488,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": {
+      "parity_incoming_ns": 215753492723,
+      "install_end_ns": 215596259098,
+      "remove_begin_ns": 248443392446,
+      "message_number": 8,
+      "source_route": 2,
+      "source_counter": 2,
+      "source_payload_sha256": "4a57c3d304f4f4a75880c441b560727a0f384e3384616f04c00a5851dd07ccfb",
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "receiver_decision": {
+        "sequence": 7,
+        "point": 4,
+        "begin_ns": 215755599556,
+        "end_ns": 215755606264,
+        "origin_ns": 215748038764,
+        "owner_epoch": "420cdc1f83c50502243a095cfae58c4d",
+        "session": "14b583c45827d8655d046bf7dc044fd0",
+        "control_generation": 1,
+        "sensor_generation": 1,
+        "source_epoch": "24e4ef9db5f466c7e805ae38d4608cf2",
+        "envelope_sequence": 2,
+        "callback_sequence": 0,
+        "route": 2,
+        "bytes": 364,
+        "kind": 5,
+        "result": 0,
+        "stamp_sec": 0,
+        "stamp_nanosec": 0,
+        "socket": 394242936,
+        "message_number": 8,
+        "initial_sequence": -1,
+        "initial_sequence_available": 0
+      },
+      "typed_observation": {
+        "route": 2,
+        "counter": 2,
+        "stamp_sec": 1794239962,
+        "stamp_nanosec": 126364752,
+        "payload_sha256": "4a57c3d304f4f4a75880c441b560727a0f384e3384616f04c00a5851dd07ccfb",
+        "observed_ns": 215756772306
+      },
+      "scope": "SDK-accepted source selected before traffic; absent at both native/PCAP taps, accepted and typed-observed while classifier still installed; no physical-wire/cryptographic-FEC or full N3 qualification"
+    },
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "two-loss-2903": {
+    "summary": {
+      "name": "two-loss-2903",
+      "losses": 2,
+      "seed": 2903,
+      "seconds": 30,
+      "status": "failed",
+      "error": "source scheduling skipped slots or missing route evidence",
+      "source_duration_ns": 30053475639,
+      "source_hz": {
+        "1": 199.91032225914986,
+        "2": 50.01085458646842
+      },
+      "source": 7511,
+      "sdk": 7232,
+      "receiver": 7230,
+      "published": 7229,
+      "observed": 7225,
+      "unobserved": 286,
+      "age_upper_max_ns": {
+        "imu": 32092464,
+        "joint": 35182399
+      },
+      "receiver_gap": 2,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 3,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "failed",
+      "predeclared_cohort_qualified": false
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30053475639,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6008,
+          "target_hz": 200,
+          "actual_hz": 199.91032225914986,
+          "skipped_slots": 3,
+          "cadence_pass": true,
+          "observed": 5740,
+          "unobserved": 268
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.01085458646842,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1485,
+          "unobserved": 18
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7511,
+      "observer_received": 7225,
+      "missing": 286,
+      "losses": {
+        "upstream_dds": 23,
+        "validation": 0,
+        "admission": 9,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 247,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 4
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.053475639,
+      "source_actual_hz": {
+        "imu": 199.91032225914986,
+        "joints": 50.01085458646842
+      },
+      "published": 7229,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5744,
+          "rounding": "up to 1ms",
+          "maximum_ms": 33,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1485,
+          "rounding": "up to 1ms",
+          "maximum_ms": 36,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7511,
+        "recorded": 7511,
+        "printed": 7511,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14721,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7230,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 41879,
+        "destination_port": 10081,
+        "sequence": 1771830155,
+        "message_number": 1,
+        "socket_id": 333511833,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 262454716995
+      },
+      "initial_sequence": 1771830155,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 267771956247
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 118,
+          "seen": 118,
+          "submitted": 118,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 258791314285,
+          "stop_before_ns": 267597947664,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 118,
+          "seen": 118,
+          "submitted": 118,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 258791304868,
+          "stop_before_ns": 267771956247,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15401,
+          "seen": 15401,
+          "submitted": 15401,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 268333442206,
+          "stop_before_ns": 304040499680,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9038,
+          "filtered_records": 9038,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7230,
+        "parity_records": 1808,
+        "selected_parity_ns": 269283386748
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15421,
+          "seen": 15421,
+          "submitted": 15421,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 268337687873,
+          "stop_before_ns": 304216571888,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9038,
+          "filtered_records": 9038,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7230,
+        "parity_records": 1808,
+        "selected_parity_ns": 269283361748
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 142,
+            "begin_ns": 304835972722,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 304835985513,
+            "signal_end_ns": 304836285680,
+            "end_ns": 305054749388,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 304872767472,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 304872782472,
+            "signal_end_ns": 304872879097,
+            "end_ns": 305041601513,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 305041615430,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 305041628888,
+            "signal_end_ns": 305041647972,
+            "end_ns": 305368784305,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 2,
+          "sequence": 1771830161,
+          "message_number": 7
+        },
+        {
+          "position": 3,
+          "sequence": 1771830162,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 268921530623,
+          "end_ns": 268944399248,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "41879",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x699bfb91",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x7",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x13e0fc99",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "begin_ns": 269126027165,
+          "end_ns": 269148930373,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "41879",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x699bfb92",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x13e0fc99",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        },
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 302006572679,
+        "end_ns": 302027337220,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 494
+      },
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": null,
+    "two_loss": {
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 5,
+          "source_payload_sha256": "eb6eed22217e1911820dc7ba44a1be3bc99b3c873c6ae21936402b506af857b9",
+          "envelope_sequence": 5,
+          "subsequent_observations": 5736
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "f0b2e55461b02d1076842563edfc7aea83c98f6deb4adfca6c1856e53ac5c127",
+          "envelope_sequence": 2,
+          "subsequent_observations": 1484
+        }
+      ],
+      "parity_incoming_ns": 269283386748,
+      "receiver_cutoff_ns": 301669111428,
+      "install_end_ns": 269148930373,
+      "remove_begin_ns": 302006572679,
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "scope": "two selected SDK-accepted sources absent at native/full-PCAP taps and drained receiver/typed cutoff with parity present and later progress on both routes; no permanent absence, internal provider expiry or generic irrecoverable-loss counter claim"
+    },
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "baseline-4211": {
+    "summary": {
+      "name": "baseline-4211",
+      "losses": 0,
+      "seed": 4211,
+      "seconds": 30,
+      "status": "outside_stop_boundary",
+      "error": null,
+      "source_duration_ns": 30059234263,
+      "source_hz": {
+        "1": 200.00509485366993,
+        "2": 50.00127371341748
+      },
+      "source": 7515,
+      "sdk": 7256,
+      "receiver": 7256,
+      "published": 7256,
+      "observed": 7252,
+      "unobserved": 263,
+      "age_upper_max_ns": {
+        "imu": 28696045,
+        "joint": 33779850
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": false,
+      "reason": "actually executed after missed stop gate; supplementary evidence only"
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30059234263,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6012,
+          "target_hz": 200,
+          "actual_hz": 200.00509485366993,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5765,
+          "unobserved": 247
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.00127371341748,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1487,
+          "unobserved": 16
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7515,
+      "observer_received": 7252,
+      "missing": 263,
+      "losses": {
+        "upstream_dds": 12,
+        "validation": 0,
+        "admission": 9,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 238,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 4
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.059234263,
+      "source_actual_hz": {
+        "imu": 200.00509485366993,
+        "joints": 50.00127371341748
+      },
+      "published": 7256,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5769,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1487,
+          "rounding": "up to 1ms",
+          "maximum_ms": 34,
+          "p50_ms": 17,
+          "p95_ms": 25,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14760,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7256,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 42184,
+        "destination_port": 10081,
+        "sequence": 1396146958,
+        "message_number": 1,
+        "socket_id": 732667574,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 316056127394
+      },
+      "initial_sequence": 1396146958,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 318744684145
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 312471522184,
+          "stop_before_ns": 318570816645,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 312471331142,
+          "stop_before_ns": 318744684145,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15438,
+          "seen": 15438,
+          "submitted": 15438,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 319261443270,
+          "stop_before_ns": 354053022577,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15438,
+          "seen": 15438,
+          "submitted": 15438,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 319266340937,
+          "stop_before_ns": 354218118911,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9070,
+          "filtered_records": 9070,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7256,
+        "parity_records": 1814
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "begin_ns": 354839442578,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 354839453120,
+            "signal_end_ns": 354839534370,
+            "end_ns": 355011411953,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 354839044786,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 354839055203,
+            "signal_end_ns": 354839178036,
+            "end_ns": 355011542620,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 355011573578,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 355011597120,
+            "signal_end_ns": 355011619495,
+            "end_ns": 355347257911,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": null,
+    "final_counters": null,
+    "recovery": null,
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "one-loss-4211": {
+    "summary": {
+      "name": "one-loss-4211",
+      "losses": 1,
+      "seed": 4211,
+      "seconds": 30,
+      "status": "outside_stop_boundary",
+      "error": null,
+      "source_duration_ns": 30058988138,
+      "source_hz": {
+        "1": 200.0067325087282,
+        "2": 50.00168312718205
+      },
+      "source": 7515,
+      "sdk": 7255,
+      "receiver": 7255,
+      "published": 7253,
+      "observed": 7251,
+      "unobserved": 264,
+      "age_upper_max_ns": {
+        "imu": 25185537,
+        "joint": 30108994
+      },
+      "receiver_gap": 0,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": false,
+      "reason": "actually executed after missed stop gate; supplementary evidence only"
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30058988138,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6012,
+          "target_hz": 200,
+          "actual_hz": 200.0067325087282,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5763,
+          "unobserved": 249
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.00168312718205,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1488,
+          "unobserved": 15
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7515,
+      "observer_received": 7251,
+      "missing": 264,
+      "losses": {
+        "upstream_dds": 10,
+        "validation": 0,
+        "admission": 9,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 241,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 2,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.058988138,
+      "source_actual_hz": {
+        "imu": 200.0067325087282,
+        "joints": 50.00168312718205
+      },
+      "published": 7253,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5765,
+          "rounding": "up to 1ms",
+          "maximum_ms": 26,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1488,
+          "rounding": "up to 1ms",
+          "maximum_ms": 31,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7515,
+        "recorded": 7515,
+        "printed": 7515,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14761,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7255,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 40600,
+        "destination_port": 10081,
+        "sequence": 1779787777,
+        "message_number": 1,
+        "socket_id": 87441382,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 365766429541
+      },
+      "initial_sequence": 1779787777,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 368485908334
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 362184691122,
+          "stop_before_ns": 368305216042,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 88,
+          "seen": 88,
+          "submitted": 88,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 362192472206,
+          "stop_before_ns": 368485908334,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15402,
+          "seen": 15402,
+          "submitted": 15402,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 369042327501,
+          "stop_before_ns": 404501412850,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9068,
+          "filtered_records": 9068,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7254,
+        "parity_records": 1814,
+        "selected_parity_ns": 369781344543
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15412,
+          "seen": 15412,
+          "submitted": 15412,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 369046263876,
+          "stop_before_ns": 404668817808,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9068,
+          "filtered_records": 9068,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7254,
+        "parity_records": 1814,
+        "selected_parity_ns": 369781322043
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "begin_ns": 405299802142,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 405299809017,
+            "signal_end_ns": 405299920600,
+            "end_ns": 405467893975,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "begin_ns": 405302461809,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 405302467350,
+            "signal_end_ns": 405302564934,
+            "end_ns": 405467802225,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "begin_ns": 405467821059,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 405467834725,
+            "signal_end_ns": 405467854975,
+            "end_ns": 405805735517,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 3,
+          "sequence": 1779787784,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 369621319793,
+          "end_ns": 369644609709,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "40600",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x6a156808",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x5363fe6",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 402527157849,
+        "end_ns": 402547757599,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": {
+      "parity_incoming_ns": 369781344543,
+      "install_end_ns": 369644609709,
+      "remove_begin_ns": 402527157849,
+      "message_number": 8,
+      "source_route": 2,
+      "source_counter": 2,
+      "source_payload_sha256": "b309ac99b42a19db54a80449eefc0280ed3cc6be9ecc6d68ab74b6a358da931b",
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "receiver_decision": {
+        "sequence": 7,
+        "point": 4,
+        "begin_ns": 369783031959,
+        "end_ns": 369783041293,
+        "origin_ns": 369775135168,
+        "owner_epoch": "a9b9cd29e608bde34bcf3d9ee526e9b7",
+        "session": "f6fe40176bf9695e3d917a5bc9c008d4",
+        "control_generation": 1,
+        "sensor_generation": 1,
+        "source_epoch": "759dcb1899e33ee4e8e1ad07984396df",
+        "envelope_sequence": 2,
+        "callback_sequence": 0,
+        "route": 2,
+        "bytes": 364,
+        "kind": 5,
+        "result": 0,
+        "stamp_sec": 0,
+        "stamp_nanosec": 0,
+        "socket": 87441382,
+        "message_number": 8,
+        "initial_sequence": -1,
+        "initial_sequence_available": 0
+      },
+      "typed_observation": {
+        "route": 2,
+        "counter": 2,
+        "stamp_sec": 1794240116,
+        "stamp_nanosec": 155359754,
+        "payload_sha256": "b309ac99b42a19db54a80449eefc0280ed3cc6be9ecc6d68ab74b6a358da931b",
+        "observed_ns": 369784046959
+      },
+      "scope": "SDK-accepted source selected before traffic; absent at both native/PCAP taps, accepted and typed-observed while classifier still installed; no physical-wire/cryptographic-FEC or full N3 qualification"
+    },
+    "two_loss": null,
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  },
+  "two-loss-4211": {
+    "summary": {
+      "name": "two-loss-4211",
+      "losses": 2,
+      "seed": 4211,
+      "seconds": 30,
+      "status": "outside_stop_boundary",
+      "error": null,
+      "source_duration_ns": 30054499430,
+      "source_hz": {
+        "1": 200.00333108193112,
+        "2": 50.00915099253743
+      },
+      "source": 7514,
+      "sdk": 7255,
+      "receiver": 7253,
+      "published": 7252,
+      "observed": 7252,
+      "unobserved": 262,
+      "age_upper_max_ns": {
+        "imu": 15248840,
+        "joint": 28166515
+      },
+      "receiver_gap": 2,
+      "receiver_rejected": 0,
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "original_harness_status": "passed",
+      "individual_guard_status": "passed",
+      "predeclared_cohort_qualified": false,
+      "reason": "actually executed after missed stop gate; supplementary evidence only"
+    },
+    "cadence": {
+      "passed": true,
+      "duration_ns": 30054499430,
+      "tolerance_fraction": 0.01,
+      "routes": {
+        "1": {
+          "published": 6011,
+          "target_hz": 200,
+          "actual_hz": 200.00333108193112,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 5768,
+          "unobserved": 243
+        },
+        "2": {
+          "published": 1503,
+          "target_hz": 50,
+          "actual_hz": 50.00915099253743,
+          "skipped_slots": 0,
+          "cadence_pass": true,
+          "observed": 1484,
+          "unobserved": 19
+        }
+      },
+      "scope": "measured source cadence and remote typed hashes; unobserved IDs have no individual loss-stage inference"
+    },
+    "window": {
+      "source_produced": 7514,
+      "observer_received": 7252,
+      "missing": 262,
+      "losses": {
+        "upstream_dds": 2,
+        "validation": 0,
+        "admission": 13,
+        "ingress_replaced": 1,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 243,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.05449943,
+      "source_actual_hz": {
+        "imu": 200.00333108193112,
+        "joints": 50.00915099253743
+      },
+      "published": 7252,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5768,
+          "rounding": "up to 1ms",
+          "maximum_ms": 16,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 12
+        },
+        "joint": {
+          "count": 1484,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "window_budget": {
+      "nominal_seconds": 30,
+      "fence_allowance_seconds": 1,
+      "source_record_allowance": 7750,
+      "sender_record_allowance": 15501,
+      "source_limit": 10000,
+      "sample_limit": 75000,
+      "scope": "predeclared allowance only; actual counters, complete footers and recorder gates remain mandatory"
+    },
+    "trace_status": {
+      "source_trace_status": {
+        "schema_version": 1,
+        "window": 1,
+        "attempted": 7514,
+        "recorded": 7514,
+        "printed": 7514,
+        "dropped": 0,
+        "encoding_failed": 0,
+        "hash_failed": 0,
+        "limit": 10000,
+        "complete": true
+      },
+      "sender_trace_status": {
+        "schema_version": 2,
+        "attempted": 14768,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "receiver_trace_status": {
+        "schema_version": 2,
+        "attempted": 7253,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      }
+    },
+    "identity": {
+      "binding": {
+        "direction": "out",
+        "source": "172.19.0.3",
+        "destination": "172.19.0.2",
+        "source_port": 59623,
+        "destination_port": 10081,
+        "sequence": 1207944215,
+        "message_number": 1,
+        "socket_id": 629653679,
+        "retransmitted": false,
+        "control": false,
+        "monotonic_ns": 416176370314
+      },
+      "initial_sequence": 1207944215,
+      "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+      "capture_stop_before_ns": 418835905190
+    },
+    "identity_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 412611696895,
+          "stop_before_ns": 418660855732,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 76,
+          "seen": 76,
+          "submitted": 76,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 412611446979,
+          "stop_before_ns": 418835905190,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 8,
+          "filtered_records": 8,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "known_source_parity_records": 1
+      }
+    },
+    "measurement_captures": {
+      "operator": {
+        "status": {
+          "complete": true,
+          "records": 15266,
+          "seen": 15266,
+          "submitted": 15266,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 419397467649,
+          "stop_before_ns": 455107022540,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9067,
+          "filtered_records": 9067,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7253,
+        "parity_records": 1814,
+        "selected_parity_ns": 420326102232
+      },
+      "robot": {
+        "status": {
+          "complete": true,
+          "records": 15266,
+          "seen": 15266,
+          "submitted": 15266,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 419402315357,
+          "stop_before_ns": 455282307374,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "footer": {
+          "capture_backend": "filtered_packet_socket",
+          "captured_records": 9067,
+          "filtered_records": 9067,
+          "kernel_drops": 0,
+          "file_integrity_valid": true,
+          "population_reconciled": true
+        },
+        "source_records": 7253,
+        "parity_records": 1814,
+        "selected_parity_ns": 420326067357
+      }
+    },
+    "child_shutdown": {
+      "operator": {
+        "passed": true,
+        "children": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "begin_ns": 455929016957,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 455929024165,
+            "signal_end_ns": 455929118749,
+            "end_ns": 456095990541,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      },
+      "robot": {
+        "passed": true,
+        "children": [
+          {
+            "name": "robot-source",
+            "pid": 141,
+            "begin_ns": 455896047040,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 455896058540,
+            "signal_end_ns": 455896197832,
+            "end_ns": 456064114291,
+            "passed": true
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 140,
+            "begin_ns": 456064137374,
+            "initial_returncode": null,
+            "signal_sent": true,
+            "forced_kill": false,
+            "returncode": 0,
+            "error": null,
+            "signal_begin_ns": 456064163541,
+            "signal_end_ns": 456064181916,
+            "end_ns": 456402393332,
+            "passed": true
+          }
+        ],
+        "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+      }
+    },
+    "clock_proof": {
+      "operator": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n",
+      "robot": "e1a34827-409c-4701-9631-b8e1c5d234b2\nmonotonic           0         0\nboottime            0         0\n"
+    },
+    "runtime_sha256": {
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "bdc3d25bc78f7c7852d933d61f2853f25a07ab5557ac119a9811b4850c8b069b",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "7a33cdaf347f356b9a51bbfd5cddf3d92cc34c005504c2ad5a95c6da57088411",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_transport.a": "87d5a66a80acf64265b897b91b743e68dab99a6e8e7b71f800a98d578a0f3f9e",
+      "install/bridge-sender-reconcile/lib/librobotweax_srt_bridge_endpoint.a": "2a3c8af514fa53925e90900c1a5d34382183777c7e21246b47d28519f617cc3c",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "82c689694641b61f7ca85a440f052d2ec0bdb39c3d7b8b28b766b24f4cbadba3",
+      "install/m3-sender-reconcile-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "dea142ebaee41060fcd2bbd1d4e217a630cc4550b0a04d0ec3e7d597c4bcede5",
+      "install/bridge-sender-reconcile/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+      "build/m3-monotonic-capture/monotonic_capture": "6d9e647c05ad8a12d418822db6c32f43a9b7fc3392a5ce533b836a47465c90ca",
+      "build/m3-netdev-features/netdev_features": "5f29f46772c5eb3aaf9b5fd5ac315efe61994155d0dce5815b77d43779d277c3"
+    },
+    "source_commit": "b5ae42c362e2f8578382ae9cc230f9782f94b2a4",
+    "fault": {
+      "targets": [
+        {
+          "position": 2,
+          "sequence": 1207944221,
+          "message_number": 7
+        },
+        {
+          "position": 3,
+          "sequence": 1207944222,
+          "message_number": 8
+        }
+      ],
+      "install": [
+        {
+          "begin_ns": 419973157857,
+          "end_ns": 419994538691,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "59623",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x47ffc41d",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x7",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x2587c0af",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "begin_ns": 420159877524,
+          "end_ns": 420181296566,
+          "argv": [
+            "tc",
+            "filter",
+            "add",
+            "dev",
+            "eth0",
+            "egress",
+            "protocol",
+            "ip",
+            "pref",
+            "49149",
+            "u32",
+            "match",
+            "u8",
+            "0x45",
+            "0xff",
+            "at",
+            "0",
+            "match",
+            "ip",
+            "protocol",
+            "17",
+            "0xff",
+            "match",
+            "u16",
+            "0",
+            "0x3fff",
+            "at",
+            "6",
+            "match",
+            "ip",
+            "src",
+            "172.19.0.3/32",
+            "match",
+            "ip",
+            "dst",
+            "172.19.0.2/32",
+            "match",
+            "ip",
+            "sport",
+            "59623",
+            "0xffff",
+            "match",
+            "ip",
+            "dport",
+            "10081",
+            "0xffff",
+            "match",
+            "u32",
+            "0x47ffc41e",
+            "0xffffffff",
+            "at",
+            "28",
+            "match",
+            "u32",
+            "0x8",
+            "0x3ffffff",
+            "at",
+            "32",
+            "match",
+            "u32",
+            "0x2587c0af",
+            "0xffffffff",
+            "at",
+            "40",
+            "action",
+            "drop"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "restored": true,
+      "initial_counters": [
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        },
+        {
+          "packets": 0,
+          "drops": 0,
+          "bytes": 0
+        }
+      ],
+      "remove": {
+        "begin_ns": 453087925581,
+        "end_ns": 453108264664,
+        "argv": [
+          "tc",
+          "qdisc",
+          "del",
+          "dev",
+          "eth0",
+          "clsact"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "final_counters": [
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 494
+      },
+      {
+        "packets": 1,
+        "drops": 1,
+        "bytes": 438
+      }
+    ],
+    "recovery": null,
+    "two_loss": {
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 5,
+          "source_payload_sha256": "8078af77caed0221321fddd1086998210a15a49ac56995e1b622b015230ab418",
+          "envelope_sequence": 5,
+          "subsequent_observations": 5764
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "9e510f9805bc5a7f0bdb0debc9009b6c8dfa3016358f33a93d67b38f7aa8f9d7",
+          "envelope_sequence": 2,
+          "subsequent_observations": 1483
+        }
+      ],
+      "parity_incoming_ns": 420326102232,
+      "receiver_cutoff_ns": 452715188539,
+      "install_end_ns": 420181296566,
+      "remove_begin_ns": 453087925581,
+      "row_messages": [
+        {
+          "message_number": 5,
+          "route": 1
+        },
+        {
+          "message_number": 6,
+          "route": 1
+        },
+        {
+          "message_number": 7,
+          "route": 1
+        },
+        {
+          "message_number": 8,
+          "route": 2
+        }
+      ],
+      "scope": "two selected SDK-accepted sources absent at native/full-PCAP taps and drained receiver/typed cutoff with parity present and later progress on both routes; no permanent absence, internal provider expiry or generic irrecoverable-loss counter claim"
+    },
+    "features": {
+      "unchanged": true,
+      "before_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "after_canonical_sha256": "d7c408ed72e72e0a0ebbabb8ca67bfebf8c2e04a0c4f726676bab903e800c42b",
+      "scope": "full feature readbacks retained in hashed local raw files and original result; canonical sorted compact JSON hash"
+    }
+  }
+}

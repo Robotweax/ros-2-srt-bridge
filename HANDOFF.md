@@ -3852,3 +3852,45 @@ NEXT: actual ROS SENSOR N3 freshness/repair, loaded DDS discovery/comparison and
 consolidated acceptance. No new N5/deadline-drop qualification claimed for this
 build. Historical118 remains UNKNOWN, old34/98/12/stopped4211 unchanged. No tuning,
 forced expiry or historical replay. PR2 draft/M3 open/Intrinsic-M4 untouched.
+
+
+### 2026-11-09 — Thirty-second N3 matrix audited FAIL; source-slot guard corrected
+
+- Frozen plan/source b5ae42c: baseline/one-loss/two-loss30s for1701,2903,4211,
+  once each/stop first failure/no retry. Exact sender-reconcile SDK81/ROS41
+  binaries reused. Python-only matched layout/prefix verification and explicit
+  cohort selector; generic scenario parser now accepts sender-reconcile prefix.
+  Host401 PASS before capture. No rebuild/tests/heavy analysis during live.
+- Original harness reports all9 PASS/exit0, but the plan's zero-source-skip gate
+  was missing from verify_window. Audit: first5 cases PASS; case6 two-loss2903
+  FAIL with3 IMU skipped5ms slots. Average199.910322Hz stays within1%, so the old
+  rate-only check passed. Counter5605/trace7006 begins17.451971ms after due;
+  publish bracket73.708us, preceding60.125us. Late source invocation established,
+  not unique scheduler/DDS/observer causality or transport loss of unsent slots.
+- Last3 fresh4211 N3 cases actually executed after missed stop. Retain them as
+  supplementary/outside_stop_boundary, not NOT_EXECUTED or qualified continuation.
+  Original raw PASS/log unchanged; separate audited planFAIL/firstfailure recorded.
+  Earlier progress claim of9 passing cases is corrected by this final audit.
+- All9 independently measured transport/fault/freshness subgates pass: rate within
+ 1%, balances6x0, context/QoS/clock stable, no invalid/receiver rejection beyond
+  selected two-source gap, upper age max35.182399ms <250ms, complete source/sample/
+  native/PCAP diagnostics. Actual SDK8 one-loss repaired/originaltypedhash while
+  classifier installed atall3 starts; SDK7/8 two-loss absent atdrainedcutoff and
+  both routes subsequently progress. No lossless/physical-age/comparison claim.
+- verify_window now rejects positive/bool/missing skipped_slots evidence or missing
+  route even when average rate passes. Host402 PASS after post-capture guard.
+  No rerun/cohort replacement, no production source/clock/rate/queue/TTL/provider
+  tuning. Frozen111 source hashes verified before guard; original guard Git blob
+  matches frozen hash, later guard hash separately retained. Full runtime/archive/
+  observer chain fixed, provider unchanged. SDK81/ROS41 reused, notnew executions.
+- `evidence/m3-n3-thirty-second-matrix-2026-11-09/`: compact gate report, audited
+  execution matrix, exact skip neighbors, fault/capture/accounting/shutdown proof.
+ 901 newraw files hashed/local,18 closed fresh journals immutable-decoded empty.
+ 18 owned containers/9 networks/9 credentials removed; controlled children exit0,
+  no forced kill. Original historical118/34/98/12/stoppedN5/4211 untouched.
+
+N3 thirty-second matrix remains OPEN/FAIL; no automatic retry or retrospective
+zero-skip relaxation. Next ordered work: loaded DDS discovery/comparison with
+existing defaults, then consolidated acceptance decisions (including any future
+source-slot scheduling allowance). No further tracer/ARP study justified here.
+PR2draft/M3open/Intrinsic-M4untouched; no forced expiry/historical replay.

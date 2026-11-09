@@ -45,6 +45,18 @@ validation is recorded with the change. Priority3 is next: actual ROS SENSOR N3
 freshness/repair and loaded DDS discovery/comparison acceptance. Historical
 UNKNOWN outcomes remain uncertainty, not a requirement to reproduce them.
 
+### N3 follow-up checkpoint
+
+The fixed30s three-seed matrix in
+`evidence/m3-n3-thirty-second-matrix-2026-11-09/` is audited FAIL: five prefix cases
+pass; two-loss2903 skips3 IMU source slots despite cadence within1%. The old
+harness missed the frozen zero-skip gate and continued; three later cases are
+supplementary outside the intended stop boundary. Guard corrected, host402 pass;
+original harnessPASS/exit0 and all measurements retained. All transport/freshness/
+fault subgates pass, but do not close the planned N3 matrix or retry automatically.
+Next: loaded DDS discovery/comparison confirmation with existing defaults, then
+consolidate acceptance decisions including the prospective source-slot allowance.
+
 ### Implemented contract: authoritative sender submission receipt
 
 - Give each admitted sender proof a bounded, opaque submission receipt that the

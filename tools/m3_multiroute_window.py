@@ -18,6 +18,9 @@ def budget(seconds):
 def verify_window(assessment,seconds,losses):
     limits=budget(seconds)
     if type(losses) is not int or losses not in (0,1,2):raise ValueError('invalid fault count')
+    routes=assessment['cadence'].get('routes',{})
+    if set(routes)!={'1','2'} or any(type(r.get('skipped_slots')) is not int or r['skipped_slots']!=0 for r in routes.values()):
+        raise ValueError('source scheduling skipped slots or missing route evidence')
     elapsed=assessment['cadence']['duration_ns']
     if not seconds*10**9<=elapsed<=(seconds+1)*10**9:raise ValueError('actual source window outside predeclared duration allowance')
     if assessment['source_trace_status']['attempted']>limits['source_record_allowance'] or assessment['sender_trace_status']['attempted']>limits['sender_record_allowance']:raise ValueError('actual diagnostic population exceeds window allowance')

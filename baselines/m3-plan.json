@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "DELIVERY_PLAN.md: authoritative per-command transport receipt and conservative sender-journal reconciliation implemented; next actual ROS SENSOR N3 freshness/repair and loaded DDS discovery/comparison acceptance. Instrumentation loop closed; no automatic diagnostics cohort, tuning, forced expiry or historical118 replay.",
+  "current_priority": "DELIVERY_PLAN.md: sender reconciliation implemented.30s N3 cohort audited FAIL at two-loss2903 after5 passing cases (3 IMU skips; original harness missed zero-skip gate);3 later executions outside stop boundary. Guard fixed, host402. Next loaded DDS discovery/comparison and consolidated acceptance; no automatic N3 retry/tuning/forced expiry/historical118 replay.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -2712,5 +2712,23 @@
     "private_worker_ipc": 4,
     "runtime_layout": "sender-reconcile",
     "next": "remaining ROS SENSOR N3/DDS acceptance; M3 open, PR2 draft, M4 untouched"
+  },
+  "n3_thirty_second_matrix": {
+    "evidence": "evidence/m3-n3-thirty-second-matrix-2026-11-09/README.md",
+    "source": "b5ae42c",
+    "original_harness_status": "passed; exit0",
+    "audited_status": "failed",
+    "qualified_prefix_cases": 5,
+    "first_failed_case": "two-loss-2903",
+    "imu_skipped_slots": 3,
+    "later_cases_actually_executed_outside_stop_boundary": 3,
+    "source_slot_guard_corrected": true,
+    "host_tests_after_guard": 402,
+    "runtime_layout": "sender-reconcile",
+    "sdk81_ros41_reused": true,
+    "sdk_ros_rebuilt": false,
+    "full_N3_accepted": false,
+    "automatic_retry": false,
+    "next": "loaded DDS discovery/comparison and consolidated acceptance; any changed source scheduling allowance must be prospective"
   }
 }
