@@ -53,6 +53,7 @@ struct Program {
  void imm(int d,int v){op(BPF_ALU64|BPF_MOV|BPF_K,d,0,0,v);}void mov(int d,int s){op(BPF_ALU64|BPF_MOV|BPF_X,d,s);}void add(int d,int v){op(BPF_ALU64|BPF_ADD|BPF_K,d,0,0,v);}
  void map(int d,int fd){op(BPF_LD|BPF_DW|BPF_IMM,d,BPF_PSEUDO_MAP_FD,0,fd);op(0);}void call(int h){op(BPF_JMP|BPF_CALL,0,0,0,h);}void label(const std::string&s){labels[s]=code.size();}
  void jump(uint8_t c,int r,int v,const std::string&s){jumps.emplace_back(code.size(),s);op(BPF_JMP|c|BPF_K,r,0,0,v);}void count(int off){imm(0,1);op(BPF_STX|BPF_DW|BPF_ATOMIC,8,0,off,BPF_ADD);}
+ void jump32(uint8_t c,int r,int v,const std::string&s){jumps.emplace_back(code.size(),s);op(BPF_JMP32|c|BPF_K,r,0,0,v);}
  void finish(){for(auto [i,n]:jumps){require(labels.count(n),"jump label");require(labels.at(n)<code.size(),"jump out of range");code[i].off=labels.at(n)-i-1;}}
  void stack(int r,int off){mov(r,10);add(r,off);}void read(int dst,int size,int src,int offset){stack(1,dst);imm(2,size);mov(3,src);add(3,offset);call(BPF_FUNC_probe_read_kernel);jump(BPF_JNE,0,0,"read_failed");}
  void lookup(int mapfd){map(1,mapfd);stack(2,-8);call(BPF_FUNC_map_lookup_elem);}
@@ -62,9 +63,9 @@ Program program(const Hook& h,const Layout& l,int stats,int ring,int tracked,uin
  Program p;p.mov(6,1);p.op(BPF_ST|BPF_W|BPF_MEM,10,0,-4,0);p.map(1,stats);p.stack(2,-4);p.call(BPF_FUNC_map_lookup_elem);p.jump(BPF_JEQ,0,0,"exit");p.mov(8,0);
  p.op(BPF_LDX|BPF_DW|BPF_MEM,7,6,h.skb_arg*8);p.jump(BPF_JEQ,7,0,"exit");p.op(BPF_STX|BPF_DW|BPF_MEM,10,7,-8);
  if(h.kind==1){
-  p.read(-16,8,7,l.dev);p.op(BPF_LDX|BPF_DW|BPF_MEM,9,10,-16);p.jump(BPF_JEQ,9,0,"exit");p.read(-24,4,9,l.ifindex);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-24);p.jump(BPF_JNE,0,index,"exit");p.read(-24,8,9,l.nd_net);p.op(BPF_LDX|BPF_DW|BPF_MEM,9,10,-24);p.read(-24,4,9,l.net_inum);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-24);p.jump(BPF_JNE,0,netns,"exit");
+  p.read(-16,8,7,l.dev);p.op(BPF_LDX|BPF_DW|BPF_MEM,9,10,-16);p.jump(BPF_JEQ,9,0,"exit");p.read(-24,4,9,l.ifindex);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-24);p.jump32(BPF_JNE,0,index,"exit");p.read(-24,8,9,l.nd_net);p.op(BPF_LDX|BPF_DW|BPF_MEM,9,10,-24);p.read(-24,4,9,l.net_inum);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-24);p.jump32(BPF_JNE,0,netns,"exit");
   p.read(-16,8,7,l.head);p.read(-24,2,7,l.mac);p.op(BPF_LDX|BPF_DW|BPF_MEM,9,10,-16);p.op(BPF_LDX|BPF_H|BPF_MEM,0,10,-24);p.op(BPF_ALU64|BPF_ADD|BPF_X,9,0);p.read(-96,42,9,0);
-  for(int off=0;off<40;off+=4){uint32_t word;std::memcpy(&word,header.data()+off,4);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-96+off);p.jump(BPF_JNE,0,word,"exit");}uint16_t tail;std::memcpy(&tail,header.data()+40,2);p.op(BPF_LDX|BPF_H|BPF_MEM,0,10,-56);p.jump(BPF_JNE,0,tail,"exit");
+  for(int off=0;off<40;off+=4){uint32_t word;std::memcpy(&word,header.data()+off,4);p.op(BPF_LDX|BPF_W|BPF_MEM,0,10,-96+off);p.jump32(BPF_JNE,0,word,"exit");}uint16_t tail;std::memcpy(&tail,header.data()+40,2);p.op(BPF_LDX|BPF_H|BPF_MEM,0,10,-56);p.jump32(BPF_JNE,0,tail,"exit");
   p.lookup(tracked);p.jump(BPF_JNE,0,0,"collision");p.imm(0,1);p.op(BPF_STX|BPF_DW|BPF_ATOMIC,8,0,0,BPF_ADD|BPF_FETCH);p.add(0,1);p.op(BPF_STX|BPF_DW|BPF_MEM,10,0,-32);
   p.map(1,tracked);p.stack(2,-8);p.stack(3,-32);p.imm(4,BPF_NOEXIST);p.call(BPF_FUNC_map_update_elem);p.jump(BPF_JNE,0,0,"map_failed");
  }else{p.lookup(tracked);p.jump(BPF_JEQ,0,0,"exit");p.op(BPF_LDX|BPF_DW|BPF_MEM,0,0,0);p.op(BPF_STX|BPF_DW|BPF_MEM,10,0,-32);}
@@ -80,6 +81,11 @@ Program program(const Hook& h,const Layout& l,int stats,int ring,int tracked,uin
  p.label("reserve_failed");p.count(16);p.label("retire");if(h.kind>=4){p.map(1,tracked);p.stack(2,-8);p.call(BPF_FUNC_map_delete_elem);p.jump(BPF_JNE,0,0,"map_failed");p.count(48);}p.jump(BPF_JA,0,0,"exit");
  if(h.kind==1){p.label("collision");p.count(40);p.jump(BPF_JA,0,0,"exit");}if(h.kind==1||h.kind>=4){p.label("map_failed");p.count(24);p.jump(BPF_JA,0,0,"exit");}if(h.kind==1){p.label("read_failed");p.count(32);}p.label("exit");p.imm(0,0);p.op(BPF_JMP|BPF_EXIT);p.finish();return p;
 }
+void unsigned_regression(){
+ std::array<char,64> data{};
+ for(bool narrow:{false,true}){Program p;p.op(BPF_ALU|BPF_MOV|BPF_K,7,0,0,int32_t(0xf0000001));if(narrow)p.jump32(BPF_JNE,7,int32_t(0xf0000001),"mismatch");else p.jump(BPF_JNE,7,int32_t(0xf0000001),"mismatch");p.imm(0,42);p.op(BPF_JMP|BPF_EXIT);p.label("mismatch");p.imm(0,0);p.op(BPF_JMP|BPF_EXIT);p.finish();Fd fd(bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER,"arp_u32_check","GPL",p.code.data(),p.code.size(),nullptr));require(fd.value>=0,"unsigned regression load");bpf_test_run_opts opt{};opt.sz=sizeof(opt);opt.data_in=data.data();opt.data_size_in=data.size();require(!bpf_prog_test_run_opts(fd.value,&opt),"unsigned regression run");require(opt.retval==(narrow?42u:0u),"unexpected comparison semantics");}
+ std::cout<<"{\"passed\":true,\"high_bit_u32\":4026531841,\"jmp64_matches\":false,\"jmp32_matches\":true}\n";
+}
 struct Sink {std::ofstream out;uint64_t records=0;bool failed=false;};
 int consume(void* ctx,void* data,size_t size){auto&s=*static_cast<Sink*>(ctx);if(size!=sizeof(Record)||s.records>=1000000){s.failed=true;return -1;}auto&r=*static_cast<Record*>(data);s.out<<"{\"ns\":"<<r.ns<<",\"cookie\":"<<r.cookie<<",\"kind\":"<<r.kind<<",\"aux\":"<<r.aux<<",\"handle\":"<<r.handle<<",\"parent\":"<<r.parent<<"}\n";++s.records;if(!s.out){s.failed=true;return -1;}return 0;}
 std::array<uint8_t,6> mac(const char* s){std::array<uint8_t,6> out{};unsigned a[6];int n=0;require(sscanf(s,"%x:%x:%x:%x:%x:%x%n",&a[0],&a[1],&a[2],&a[3],&a[4],&a[5],&n)==6&&s[n]==0,"MAC");for(int i=0;i<6;++i){require(a[i]<256,"MAC byte");out[i]=a[i];}return out;}
@@ -87,7 +93,7 @@ std::array<uint8_t,6> mac(const char* s){std::array<uint8_t,6> out{};unsigned a[
 int main(int argc,char**argv){try{
  require(!prctl(PR_SET_NAME,"m3_arp_trace",0,0,0),"process name");
  require(argc==2||argc==9,"usage: arp_packet_trace --inspect | IFACE SOURCE_IP TARGET_IP SOURCE_MAC TARGET_MAC OUT READY MAX_SECONDS");Types b;auto l=layout(b);for(auto&h:hooks)b.signature(h.name,h.signature);
- if(argc==2){require(std::string(argv[1])=="--inspect","inspect argument");std::cout<<"{\"btf_valid\":true,\"offsets\":["<<l.dev<<","<<l.head<<","<<l.mac<<","<<l.ifindex<<","<<l.nd_net<<","<<l.net_inum<<","<<l.qhandle<<","<<l.qparent<<"],\"drop_reasons\":{";int id=b.named("skb_drop_reason",BTF_KIND_ENUM);auto*t=b.type(id);auto*e=btf_enum(t);for(unsigned i=0;i<btf_vlen(t);++i){if(i)std::cout<<",";std::cout<<"\""<<e[i].val<<"\":\""<<btf__name_by_offset(b.b,e[i].name_off)<<"\"";}std::cout<<"}}\n";return 0;}
+ if(argc==2){if(std::string(argv[1])=="--selftest"){unsigned_regression();return 0;}require(std::string(argv[1])=="--inspect","inspect argument");std::cout<<"{\"btf_valid\":true,\"offsets\":["<<l.dev<<","<<l.head<<","<<l.mac<<","<<l.ifindex<<","<<l.nd_net<<","<<l.net_inum<<","<<l.qhandle<<","<<l.qparent<<"],\"drop_reasons\":{";int id=b.named("skb_drop_reason",BTF_KIND_ENUM);auto*t=b.type(id);auto*e=btf_enum(t);for(unsigned i=0;i<btf_vlen(t);++i){if(i)std::cout<<",";std::cout<<"\""<<e[i].val<<"\":\""<<btf__name_by_offset(b.b,e[i].name_off)<<"\"";}std::cout<<"}}\n";return 0;}
  require(!std::ifstream(argv[6]).good()&&!std::ifstream(argv[7]).good(),"output already exists");char*end=nullptr;long duration=strtol(argv[8],&end,10);require(!*end&&duration>0&&duration<=600,"duration 1..600");
  std::ifstream offsets("/proc/self/timens_offsets");std::string cname;long secs,nsecs;int clocks=0;while(offsets>>cname>>secs>>nsecs){require(!secs&&!nsecs,"nonzero time namespace");++clocks;}require(clocks==2,"clock proof");
  struct stat st{};require(!stat("/proc/self/ns/net",&st)&&st.st_ino<=UINT32_MAX,"net namespace");uint32_t netns=st.st_ino,index=if_nametoindex(argv[1]);require(index,"interface");
@@ -97,7 +103,7 @@ int main(int argc,char**argv){try{
  // All links owned here; close even on exceptions/partial attachment.
  std::vector<int> links;struct Links {std::vector<int>&v;~Links(){for(int fd:v)close(fd);}} guard{links};
  for(const auto&h:hooks){auto p=program(h,l,stats.value,ring.value,tracked.value,netns,index,header);std::array<char,262144> log{};bpf_prog_load_opts opt{};opt.sz=sizeof(opt);opt.log_buf=log.data();opt.log_size=log.size();opt.log_level=1;Fd prog(bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,"arp_lifecycle","GPL",p.code.data(),p.code.size(),&opt));if(prog.value<0){std::cerr<<log.data();throw std::runtime_error(std::string("load ")+h.name+": "+strerror(errno));}int fd=bpf_raw_tracepoint_open(h.name,prog.value);require(fd>=0,std::string("attach ")+h.name+": "+strerror(errno));links.push_back(fd);}
- signal(SIGINT,stop);signal(SIGTERM,stop);auto ready=mono();{std::ofstream out(argv[7]);out<<"{\"version\":1,\"ready_ns\":"<<ready<<",\"netns\":"<<netns<<",\"ifindex\":"<<index<<",\"hooks\":6,\"clock\":\"kernel_monotonic\"}\n";require(out.good(),"ready write");}
+ signal(SIGINT,stop);signal(SIGTERM,stop);auto ready=mono();{std::ofstream out(argv[7]);out<<"{\"version\":2,\"ready_ns\":"<<ready<<",\"netns\":"<<netns<<",\"ifindex\":"<<index<<",\"hooks\":6,\"clock\":\"kernel_monotonic\"}\n";require(out.good(),"ready write");}
  bool poll_failed=false;while(!stopping&&mono()-ready<uint64_t(duration)*1000000000){int rc=ring_buffer__poll(buffer,100);if(rc<0&&rc!=-EINTR){poll_failed=true;break;}}
  bool deadline=!stopping;uint64_t detach_before=mono();for(int fd:links)close(fd);links.clear();for(int i=0;i<4;++i)if(ring_buffer__poll(buffer,100)<0)poll_failed=true;
  uint32_t key=0;Stats a{},later{};require(!bpf_map_lookup_elem(stats.value,&key,&a),"stats");if(ring_buffer__poll(buffer,100)<0)poll_failed=true;require(!bpf_map_lookup_elem(stats.value,&key,&later),"stats reread");ring_buffer__free(buffer);sink.out.flush();uint64_t previous=0,next=0,pending=0;int rc=bpf_map_get_next_key(tracked.value,nullptr,&next);while(!rc){++pending;previous=next;rc=bpf_map_get_next_key(tracked.value,&previous,&next);}require(errno==ENOENT,"map enumeration");

@@ -13,7 +13,7 @@ def lifecycles(events,status,ready,reasons):
     for field in ('reserve_failed','map_failed','read_failed','collision','pending'):
         if status.get(field)!=0:raise ValueError('trace loss or censored '+field)
     if status.get('records')!=len(events) or status.get('emitted')!=len(events):raise ValueError('trace event population mismatch')
-    if ready.get('hooks')!=6 or ready.get('clock')!='kernel_monotonic' or ready.get('ready_ns')!=status.get('ready_ns'):raise ValueError('trace readiness')
+    if ready.get('version')!=2 or ready.get('hooks')!=6 or ready.get('clock')!='kernel_monotonic' or ready.get('ready_ns')!=status.get('ready_ns'):raise ValueError('trace readiness')
     groups=defaultdict(list)
     for event in events:
         if set(event)!=set(('ns','cookie','kind','aux','handle','parent')) or any(type(v)!=int or v<0 for v in event.values()):raise ValueError('trace event schema')

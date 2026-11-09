@@ -96,6 +96,7 @@ def main():
     for profile in ('N0','N5'):
         row=dict(profile=profile,status='not_executed');report['rows'].append(row)
         if failed:row['why']='prior failure; no retry';write(out/'execution.json',report);continue
+        row['status']='running';write(out/'execution.json',report)
         try:
             result=run_case(out/profile,profile);row.update(status=result['status'],error=result.get('error'));failed=result['status']!='passed' or bool(result.get('cleanup_errors'))
             if any(sha(ROOT/n)!=h for n,h in before.items()) or any(sha(ROOT/n)!=h for n,h in sources.items()):raise ValueError('frozen source/binary changed')
