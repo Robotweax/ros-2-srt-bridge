@@ -4022,3 +4022,46 @@ The comparison/acceptance reporting request is complete; open qualification is
 not hidden and no new experiment is queued automatically. M0–M2 retain recorded
 acceptance; PR2draft/M3open/Intrinsic-M4untouched. Future scope/source-slot changes
 must be explicit/prospective and cannot retrospectively reclassify failed cases.
+
+
+### 2026-11-09 — Concrete N3/current-build closure plan, no execution
+
+- User requests concrete remaining-M3 plan starting N3/current-build coverage,
+  without tuning/new experiments. `M3_CLOSURE_PLAN.md` and
+  `evidence/m3-closure-plan-2026-11-09/{plan,coverage-ledger,readiness}.json`
+  are prepared planning artifacts, execution disabled/not scheduled. No runtime
+  build/test/traffic/capture/journal recovery/expiry/replay or threshold change.
+- Fixed planning candidate sender-reconcile-929d1f7c7727; full manifest SHA
+ 929d1f7c7727b6c9ba363762074557873d0ffeb6ed6a2b4ab75957d341ee0fc7.
+  Read-only matched/preserved-chain check:13 binary/archive/test entries match,
+ 86 recorded native inputs unchanged, provider clean at52be7c86. SDK81/ROS41/
+  host413 retained, not rerun. Future harness changes need a fresh driver freeze;
+  no production native rebuild required merely to select the existing candidate.
+- Applied current zero-skip window guard to9 hash-checked original N3 result
+  JSONs, offline only. First5 remain qualifying prefix; case6threeIMUskips is
+  rejected; last3 individual window checks pass but remain outside_stop_boundary.
+  No cohort splice/resumption/retroactive9of9PASS, no relaxed gate. Future strict
+  route, if explicitly authorized, is one new9-case30s baseline/one/two-loss
+  cohort at1701,2903,4211; stop first failed gate, no retry-until-pass.
+- Concrete current-build readiness blockers: tools/m3_n4.py still binds oldSDK/
+  peer executable; tools/m3_n4_ros.py binds oldROS. Need isolated currentIPC4 peer
+  link and explicit SDK/worker/ROS child prefix checks before N4 current-build
+  claims. All-stage strict orchestrator also not ready; raw run_m3 exit0 must not
+  schedule later slots before independent progress/source/capture/cleanup checks.
+  No adapter/assessor implementation or fixture build performed in this task.
+- Proposed future order/counts, not authorization: N3x9, combinedN0/300sx1,
+  N4x19 (4native phasesx3directions+QUERYx1+ROSsensorx3+ROScrashx3),
+  N1x3/600s,N2x3/600s,N5x3/300s.38 cases total; N3+combined nominal source5070s/
+ 84.5min excludes N4/all overhead, not wallclock promise. N4 sensor adds45 nominal
+  source seconds. No six-second expiry experiment, no newDDS candidate/cold run.
+- Gates and outputs fixed: N3 zero skips/1%/30..31s, original trace budgets and
+  selected SDK source/parity identities; combined full populations/age<=250ms/
+  sixbalances/positive strict closed-success progress; phase-specific N4 safe
+  outcomes remain separate from all-success progress. First failed declared gate,
+  hash drift, timeout or cleanup failure stops all later work; actually executed
+  after missed gate remains explicit. No tuning/retry/fallback/old4211resume.
+
+The concrete planning request is complete; no new experiment follows automatically.
+Further prep can remain offline, but current no-new-experiments scope must be
+explicitly changed before live execution. Current M3notaccepted/PR2draft/M4untouched
+and comparison limits remain. This plan creates no waiver or merge permission.

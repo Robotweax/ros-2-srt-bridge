@@ -3,6 +3,8 @@
 Final comparison and acceptance conclusion:
 [M3_COMPARISON_AND_ACCEPTANCE.md](M3_COMPARISON_AND_ACCEPTANCE.md).
 The reporting task is complete; the qualification status below remains open.
+The concrete [N3/current-build closure plan](M3_CLOSURE_PLAN.md) is prepared,
+with execution disabled and fixture/orchestrator readiness blockers explicit.
 
 **M3 is not ready to mark complete or merge.** The current evidence supports a
 local Linux amd64/Jazzy simulator development result, with explicit failed and

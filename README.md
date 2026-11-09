@@ -33,7 +33,8 @@ The [comparison and acceptance statement](M3_COMPARISON_AND_ACCEPTANCE.md) is
 complete: no general SRT superiority or DDS equivalence is established; M3 remains
 not accepted as complete under the unchanged plan. No new experiment, tuning,
 threshold waiver, N3 retry, DDS fallback, forced expiry or historical118 replay.
-PR2 stays draft;
+The [closure plan](M3_CLOSURE_PLAN.md) now specifies the strict N3/current-build
+sequence and readiness gaps; it starts no experiments. PR2 stays draft;
 Intrinsic/M4 has not started. Older entries below retain their historical scope
 and are not the current work queue.
 

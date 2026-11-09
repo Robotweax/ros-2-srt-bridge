@@ -6,6 +6,8 @@ implementation and qualification are described by the latest HANDOFF entries.
 The current comparison and acceptance decision is in
 `M3_COMPARISON_AND_ACCEPTANCE.md`: reporting complete, M3 completion not accepted
 under the unchanged plan. No new experiment or waiver is queued.
+`M3_CLOSURE_PLAN.md` now gives the concrete N3/current-build closure sequence;
+it is a planning artifact, with execution disabled and readiness blockers explicit.
 
 ## Execution rules
 
@@ -107,6 +109,26 @@ that all bridge properties fail or that DDS must be tuned until successful.
 No source-slot waiver, runtime threshold change, merge, M4 start or automatic
 new experiment follows. Any future scope/contract proposal must be explicit and
 prospective; the current reporting request is complete.
+
+### Concrete N3/current-build closure plan prepared
+
+`M3_CLOSURE_PLAN.md` targets the existing sender-reconcile candidate identified by
+manifest929d1f7c7727, not a moving HEAD or a mixture of build variants. Read-only
+checks verify13 manifest entries and86 unchanged native build inputs. The current
+zero-skip guard still rejects retained N3 case6; old later cases stay excluded.
+No threshold relaxation, cohort splice, runtime test, build or experiment occurs.
+
+Preparation must bind the old N4 fixtures to the matched IPC4 SDK/worker/ROS paths
+and supply a shared strict all-stage assessor. Neither is represented as ready.
+If explicitly authorized later, order is strict9-case N3, combined300s N0,
+19 bounded N4 cases, six600s N1/N2 and three300s N5 cases. All38 proposed cases are
+not scheduled/not authorized; first failed declared gate stops later work, no
+retry-until-pass. The source-time sum84.5minutes excludes N4 and all overhead,
+not a duration promise. No new DDS or forced-expiry case is proposed.
+
+This request's deliverable is the concrete plan/coverage ledger/readiness record.
+M3 remains not accepted as complete/PR2draft/M4untouched. Further planning or
+preparation does not silently lift the user's no-new-experiments instruction.
 
 ### Implemented contract: authoritative sender submission receipt
 
