@@ -104,6 +104,7 @@ class Benchmark(Driver):
             **({'start_diagnostics':'true'} if getattr(self.args,'start_diagnostics',False) else {}),
             **({'sender_diagnostics':'true'} if getattr(self.args,'sender_diagnostics',False) else {}),
             **({'probe_diagnostics':'true'} if getattr(self.args,'probe_diagnostics',False) else {}),
+            **({'shutdown_diagnostics':'true','shutdown_trace_path':str(self.run/(self.args.role+'-shutdown-stages.jsonl'))} if getattr(self.args,'shutdown_diagnostics',False) else {}),
             'command_diagnostics': str(self.args.command_diagnostics).lower()})
 
     def spin(self, seconds=.05):

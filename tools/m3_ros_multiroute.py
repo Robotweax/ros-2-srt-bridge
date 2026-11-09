@@ -21,7 +21,8 @@ from m3_multiroute_window import budget, verify_window
 from m3_runtime_layout import matched, LAYOUTS
 
 
-def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline'):
+def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline',shutdown_diagnostics=False,shutdown_stacks=False,shutdown_stack_mode='procfs'):
+    if shutdown_stack_mode not in ('procfs','gdb') or (shutdown_stack_mode!='procfs' and not shutdown_stacks):raise ValueError('GDB requires explicit shutdown stack observer')
     layout=matched(ROOT,runtime_layout)
     limits=budget(seconds)
     if type(losses) is not int or losses not in (0,1,2) or (losses and not capture):raise ValueError("source faults require independent capture")
@@ -34,7 +35,7 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline
         paths+=layout['runtime_paths'][:-1]
     if capture:paths += ['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
     inventory={p:sha(ROOT/p) for p in paths}
-    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,source_sha256=source_inventory(ROOT),runtime_sha256=inventory,runtime_layout=layout,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,capture=capture,losses=losses,base_seed=seed))
+    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,source_sha256=source_inventory(ROOT),runtime_sha256=inventory,runtime_layout=layout,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,shutdown_diagnostics=shutdown_diagnostics,shutdown_stacks=shutdown_stacks,shutdown_stack_mode=shutdown_stack_mode,capture=capture,losses=losses,base_seed=seed))
     lab=NetworkLab(ROOT,out,IMAGE,monotonic_capture=capture);peers=[];captures=[];fault=None;key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32));result=dict(status='running',qualification=False,capture=capture,losses=losses,base_seed=seed,seconds=seconds,scope='bounded source/accounting fixture; no full seeded N3/M3, physical age or resource qualification')
     try:
         lab.start(key)
@@ -49,6 +50,7 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline
         for role,name in lab.containers.items():
             log=(out/(role+'-scenario.log')).open('w')
             command='source /opt/ros/jazzy/setup.bash && source '+shlex.quote(layout['ros']+'/setup.bash')+' && exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py --role '+role+' --run '+shlex.quote(inside)+' --peer '+lab.addresses['operator']+' --seconds '+str(seconds)+' --ros-install '+shlex.quote(layout['ros'])
+            command+=(' --shutdown-diagnostics' if shutdown_diagnostics else '')+(' --shutdown-stacks --shutdown-stack-mode '+shutdown_stack_mode if shutdown_stacks else '')
             peers.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT),log))
         wait_files(out,[r+'-multiroute-ready.json' for r in lab.containers],peers)
         if capture:
@@ -115,4 +117,4 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);p.add_argument('--capture',action='store_true');p.add_argument('--losses',type=int,choices=(0,1,2),default=0);p.add_argument('--seed',type=int,choices=SEEDS,default=1701);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();result=run(a.output.resolve(),a.capture,a.losses,a.seed,a.seconds,a.runtime_layout);print(json.dumps(dict(status=result['status'],error=result.get('error'),assessment=result.get('assessment',{}).get('window')),indent=2));raise SystemExit(result['status']!='passed')
+    p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);p.add_argument('--capture',action='store_true');p.add_argument('--losses',type=int,choices=(0,1,2),default=0);p.add_argument('--seed',type=int,choices=SEEDS,default=1701);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--shutdown-diagnostics',action='store_true');p.add_argument('--shutdown-stacks',action='store_true');p.add_argument('--shutdown-stack-mode',choices=('procfs','gdb'),default='procfs');p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();result=run(a.output.resolve(),a.capture,a.losses,a.seed,a.seconds,a.runtime_layout,a.shutdown_diagnostics,a.shutdown_stacks,a.shutdown_stack_mode);print(json.dumps(dict(status=result['status'],error=result.get('error'),assessment=result.get('assessment',{}).get('window')),indent=2));raise SystemExit(result['status']!='passed')

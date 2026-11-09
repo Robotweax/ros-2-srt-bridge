@@ -12,8 +12,10 @@ planning snapshots. Neither the new8-case passing prefix nor the old5-case prefi
 closes N3. No automatic retry, cohort splice, threshold relaxation or stage
 advancement follows. The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
 is complete to its observation limit: no post-signal stage/stack data, hence no
-uniquely identified blocked function. No patch or further experiment is queued;
-further visibility needs a separate scope decision before fix/qualification.
+uniquely identified blocked function. Default-off stage and independent-stack visibility is now implemented and
+offline-tested with isolated compilation, but not live calibrated. Sources have
+changed: any live use requires a new matched-build/prospective freeze and explicit
+scope. No corrective patch, retry or further experiment is queued.
 
 ## 1. One candidate, with a concrete coverage ledger
 

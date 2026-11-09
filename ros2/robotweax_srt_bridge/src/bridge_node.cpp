@@ -30,6 +30,7 @@ std::string credential(const std::string& path){struct stat st{};if(stat(path.c_
 bool final(const Status& status){return status.found&&status.state!=Status::LOCAL_QUEUED&&status.state!=Status::ACCEPTED&&status.state!=Status::DISPATCHING&&!(status.state==Status::UNKNOWN&&status.reason==unsigned(core::CommandReason::reconcile_required));}
 class BridgeNode final:public rclcpp::Node {
     std::unique_ptr<core::CommandEndpoint> endpoint_;
+    std::shared_ptr<core::ShutdownTrace> shutdown_trace_;
     bool caller_=false,sensor_qos_verified_=false;
     std::shared_ptr<core::CommandTrace> command_trace_;
     std::shared_ptr<core::ProviderDiagnostics> provider_diagnostics_,sensor_provider_diagnostics_;
@@ -197,7 +198,11 @@ public:
         core::Route command{100,core::RouteKind::command,core::Direction::listener_to_caller,core::QosMapping::request_status,true,4000,5000,0,1,"robotweax.srt_bridge.v1.SetMeasurementRateCommand",core::rate_command_schema_hash()};const std::array routes{imu,joints,command};auto manifest=core::make_manifest(routes);if(!manifest)throw std::runtime_error("invalid ROS route manifest");
         const auto clock_width=declare_parameter<int>("max_clock_interval_ms",50);if(clock_width<1||clock_width>1000)throw std::runtime_error("invalid maximum clock interval");max_clock_interval_ms_=std::uint32_t(clock_width);
         core::SessionConfig session{caller_?core::Role::caller:core::Role::listener,peer,remote,core::random_identity(),std::uint32_t(domain),*manifest.value,{1000,1000000,5000000000ULL,std::uint64_t(max_clock_interval_ms_)*1000000}};
-        core::TransportConfig transport{session,{address,std::uint16_t(control_port)},{address,std::uint16_t(sensor_port)},key};core::WorkerOptions worker;worker.executable=worker_path;worker.journal.path=journal;worker.journal.local_peer_id=peer;worker.journal.remote_peer_id=remote;worker.journal.process_epoch=session.local_epoch;worker.journal.side=caller_?core::JournalSide::receiver:core::JournalSide::sender;worker.external_rate_handler=caller_;
+        const auto shutdown_enabled=declare_parameter<bool>("shutdown_diagnostics",false);
+        const auto shutdown_path=declare_parameter<std::string>("shutdown_trace_path","");
+        if(shutdown_enabled){if(shutdown_path.empty())throw std::runtime_error("shutdown diagnostics require a fresh trace path");shutdown_trace_=std::make_shared<core::ShutdownTrace>(shutdown_path);}
+        else if(!shutdown_path.empty())throw std::runtime_error("shutdown trace path requires shutdown diagnostics");
+        core::TransportConfig transport{session,{address,std::uint16_t(control_port)},{address,std::uint16_t(sensor_port)},key};transport.shutdown_trace=shutdown_trace_;core::WorkerOptions worker;worker.executable=worker_path;worker.journal.path=journal;worker.journal.local_peer_id=peer;worker.journal.remote_peer_id=remote;worker.journal.process_epoch=session.local_epoch;worker.journal.side=caller_?core::JournalSide::receiver:core::JournalSide::sender;worker.external_rate_handler=caller_;
         local_epoch_=session.local_epoch;
         if(declare_parameter<bool>("command_diagnostics",false)){command_trace_=std::make_shared<core::CommandTrace>();transport.command_trace=command_trace_;}
         transport.start_diagnostics=declare_parameter<bool>("start_diagnostics",false);
@@ -221,11 +226,26 @@ public:
         metrics_=create_service<msgs::srv::GetBridgeMetrics>("/bridge/get_metrics",[this](msgs::srv::GetBridgeMetrics::Request::SharedPtr, msgs::srv::GetBridgeMetrics::Response::SharedPtr response){response->snapshot=metrics();response->monotonic_ns=core::TransportOwner::monotonic_ns();});
         diagnostics_=create_publisher<msgs::msg::BridgeState>("/bridge/state",rclcpp::QoS(1).reliable().durability_volatile());pump_=create_wall_timer(std::chrono::milliseconds(1),[this]{pump();});state_timer_=create_wall_timer(std::chrono::milliseconds(100),[this]{state();});
     }
-    ~BridgeNode()override{pump_.reset();state_timer_.reset();if(endpoint_){endpoint_->request_stop();endpoint_->join();command_trace();provider_diagnostics();sample_trace();
+    std::shared_ptr<core::ShutdownTrace> shutdown_trace()const{return shutdown_trace_;}
+    ~BridgeNode()override{
+        core::shutdown_stage(shutdown_trace_,"node_destructor_begin");pump_.reset();state_timer_.reset();
+        core::shutdown_stage(shutdown_trace_,"node_timers_reset");
+        if(endpoint_){core::shutdown_stage(shutdown_trace_,"node_endpoint_stop_begin");endpoint_->request_stop();
+            core::shutdown_stage(shutdown_trace_,"node_endpoint_stop_end");core::shutdown_stage(shutdown_trace_,"node_endpoint_join_begin");endpoint_->join();
+            core::shutdown_stage(shutdown_trace_,"node_endpoint_join_end");core::shutdown_stage(shutdown_trace_,"node_trace_drain_begin");command_trace();provider_diagnostics();sample_trace();
             if(sample_trace_)std::cout<<"SAMPLE_TRACE_STATUS {\"schema_version\":2,\"attempted\":"<<sample_trace_->attempted()<<",\"dropped\":"<<sample_trace_->dropped()<<",\"exhausted\":"<<sample_trace_->exhausted()<<",\"limit\":"<<sample_trace_->limit()<<"}"<<std::endl;
             if(provider_diagnostics_)std::cout<<"PROVIDER_STATS_STATUS {\"attempted\":"<<provider_diagnostics_->attempted()<<",\"dropped\":"<<provider_diagnostics_->dropped()<<",\"exhausted\":"<<provider_diagnostics_->exhausted()<<",\"limit\":"<<provider_diagnostics_->limit()<<"}"<<std::endl;
             if(sensor_provider_diagnostics_)std::cout<<"SENSOR_PROVIDER_STATS_STATUS {\"schema_version\":1,\"channel\":1,\"attempted\":"<<sensor_provider_diagnostics_->attempted()<<",\"dropped\":"<<sensor_provider_diagnostics_->dropped()<<",\"exhausted\":"<<sensor_provider_diagnostics_->exhausted()<<",\"limit\":"<<sensor_provider_diagnostics_->limit()<<"}"<<std::endl;
-            if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}}
+            if(command_trace_)std::cout<<"COMMAND_TRACE_STATUS {\"attempted\":"<<command_trace_->attempted()<<",\"dropped\":"<<command_trace_->dropped()<<"}"<<std::endl;}
+        core::shutdown_stage(shutdown_trace_,"node_trace_drain_end");core::shutdown_stage(shutdown_trace_,"node_destructor_body_end");}
 };
 }
-int main(int argc,char** argv){rclcpp::init(argc,argv);try{auto node=std::make_shared<BridgeNode>();rclcpp::spin(node);node.reset();rclcpp::shutdown();return 0;}catch(const std::exception& e){std::cerr<<"bridge startup failed: "<<e.what()<<'\n';rclcpp::shutdown();return 1;}}
+int main(int argc,char** argv){
+    rclcpp::init(argc,argv);std::shared_ptr<core::ShutdownTrace> trace;
+    try{auto node=std::make_shared<BridgeNode>();trace=node->shutdown_trace();
+        if(trace){std::weak_ptr<core::ShutdownTrace> weak=trace;rclcpp::on_shutdown([weak]{core::shutdown_stage(weak.lock(),"ros_context_shutdown_callback");});}
+        core::shutdown_stage(trace,"main_spin_begin");rclcpp::spin(node);core::shutdown_stage(trace,"main_spin_end");
+        core::shutdown_stage(trace,"main_node_reset_begin");node.reset();core::shutdown_stage(trace,"main_node_reset_end");
+        core::shutdown_stage(trace,"main_context_shutdown_begin");rclcpp::shutdown();core::shutdown_stage(trace,"main_context_shutdown_end");return 0;
+    }catch(const std::exception& e){core::shutdown_stage(trace,"main_exception");std::cerr<<"bridge startup failed: "<<e.what()<<'\n';rclcpp::shutdown();return 1;}
+}

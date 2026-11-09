@@ -4,9 +4,10 @@ The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
 remaining campaign cases stay disabled. M3 remains open and PR2 stays draft.
-The [retained shutdown diagnosis](evidence/m3-n3-shutdown-diagnosis-2026-11-09/README.md)
-confirms a pre-signal observation cutoff: the blocked function remains unknown.
-No tuning, retry, patch or new experiment followed.
+[Default-off shutdown visibility](evidence/m3-shutdown-visibility-preparation-2026-11-09/README.md)
+is now implemented: independent stack observer, isolated SDK/ROS compilation,
+456 Python tests and one file-only native test pass. No live observer, bridge,
+retry or experiment ran; the blocked function remains unknown.
 
 
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small

@@ -4210,3 +4210,49 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   separate explicit scope decision. Not implemented/scheduled/executed now.
 - Keep cohort8PASS/1FAIL, case9 measurement gates not reached remain unqualified,
   all29 other cases disabled, no retry/splice. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Default-off shutdown visibility prepared; no experiments
+
+- User explicitly authorizes default-off shutdown-stage tracing and independent
+  blocked-stack observer, no tuning/new experiments; remaining29 stages disabled.
+  Implemented native source/ROS and N3 harness flags, no actual bridge/worker/
+  observer-target/GDB attach/campaign launch. Prior8PASS/1FAIL unchanged.
+- New ShutdownTrace header: empty TransportConfig pointer by default; explicit
+  ROS shutdown_diagnostics=false/pathempty. Enabled trace uses exclusive0600
+  separate regularfile, cap256, bounded formatting/write/drop counts, Linux PID/
+  TID/monotonic/sequence/stage/socket handle. No stdout dependency or raw signal
+  handler. Weak ROS context shutdown callback only when opted in. Stage seams:
+  spin/destructor/timers, endpoint worker stop/join, transport session/socket/
+  epoll/run-local Provider cleanup and join, trace drain and node reset. No IPC,
+  journal/ticket/context/outcome authority; frame4/CLI-v3 unchanged. File I/O may
+  still block; enabled observations add workload, not real-time guarantees.
+- Independent Python observer owns a separate session/group, arms beforeSIGINT,
+  follows registered PID+start_ticks tree only (8process/64thread/16KiBread/
+ 48samples/250ms/12s budget), captures task stat/wchan/syscall/kernel stacks and
+  time/identity proof. Denied stacks/reuse/truncation/budget explicit. Parent's
+  unchanged5s child wait does not drive observer; observer teardown excluded from
+  child timing, readiness errors never prevent child cleanup. Opted-in diagnostic
+  control failures remain failed, not fake command outcomes or stack availability.
+- Optional explicit GDB mode after2s, no automatic install/caps/ptrace relaxation;
+  no auto-load/init/debuginfod, frameargsnone,32frames/64KiB, watchdog and isolated
+  group cleanup. Attach brackets intrusive, resumption not verified; cannot infer
+  unchanged production timing. Kernel-only procfs remains observer default.
+- Defaults: all flags false; campaign invocations unchanged/no diagnostics enabled.
+  N3 source runner/scenario forward only explicitly requested shutdown flags;
+  demo installs observer/helper. No calibrated runtime layout/grant added.
+-456 Python tests PASS (fake proc/child and mocked GDB/group signals). One native
+  file-only primitive contract PASS. Isolated SDK/ROS bridge compile prefixes
+  install/bridge-shutdown-trace-compile and install/m3-shutdown-trace-ros-compile
+  verified importing newSDK and containing stage markers. Message underlay reused.
+  New unit had Werror indentation issue, fixed and failedlog retained. No SDK/
+  ROS runtime suite or live observer/calibration; historicalSDK81/ROS41 not promoted.
+- Old13 candidate binaries/preserved chain and913rawfiles verify unchanged. New
+  sources intentionally drift old full freeze; refusal verified, not rewritten.
+  Public TransportConfig C++ layout changes require matched consumer rebuild;
+  compile-only prefixes are not campaign candidates. Any future run needs new
+  verified/calibrated matched build+prospective freeze and separate explicit scope.
+- Evidence: evidence/m3-shutdown-visibility-preparation-2026-11-09/README.md,
+  verification/source-snapshot/compilation-artifacts and validationlogs. Rootcause
+  still unknown; new visibility is preparation only. No case9retry/splice or
+  N0/N4/N1/N2/N5 advance. M3notaccepted/PR2draft/M4untouched.

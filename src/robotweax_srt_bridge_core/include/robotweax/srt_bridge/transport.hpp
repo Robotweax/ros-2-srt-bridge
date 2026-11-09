@@ -10,6 +10,7 @@
 #include <robotweax/srt_bridge/sample_trace.hpp>
 #include <robotweax/srt_bridge/session.hpp>
 #include <memory>
+#include <robotweax/srt_bridge/shutdown_trace.hpp>
 
 namespace robotweax::srt_bridge {
 struct Endpoint { std::string address; std::uint16_t port=0; };
@@ -25,6 +26,7 @@ struct TransportConfig {
     bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
     bool sender_diagnostics=false; // Requires command_trace; no outcome/replay authority.
     bool probe_diagnostics=false; // Requires command_trace; per-probe lifecycle only.
+    std::shared_ptr<ShutdownTrace> shutdown_trace{}; // Opt-in lifecycle only; no IPC or outcome authority.
     bool test_hold_command_handoff=false; // Test-only context-loss fixture; never ROS/CLI/env configured.
 };
 struct TransportContext {

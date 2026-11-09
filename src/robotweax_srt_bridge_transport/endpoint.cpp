@@ -349,15 +349,24 @@ struct CommandEndpoint::Impl {
             }
         }catch(...){fail(EndpointFault::internal);}
         trace(CommandTracePoint::endpoint_stopping,CommandTraceReason::shutdown,unsigned(current.fault));
+        shutdown_stage(options.transport.shutdown_trace,"endpoint_shutdown_begin");
         transport.request_stop();
-        if(worker){worker->request_stop();if(!worker->join())current.fault=EndpointFault::shutdown_timeout;}
-        transport.join();
+        if(worker){
+            shutdown_stage(options.transport.shutdown_trace,"worker_stop_begin");worker->request_stop();
+            shutdown_stage(options.transport.shutdown_trace,"worker_stop_end");
+            shutdown_stage(options.transport.shutdown_trace,"worker_join_begin");
+            if(!worker->join())current.fault=EndpointFault::shutdown_timeout;
+            shutdown_stage(options.transport.shutdown_trace,"worker_join_end");
+        }
+        shutdown_stage(options.transport.shutdown_trace,"endpoint_transport_join_begin");transport.join();
+        shutdown_stage(options.transport.shutdown_trace,"endpoint_transport_join_end");
         {std::lock_guard lock(mutex);if(!zero(job.task.id)){
             if(job.entry&&terminal(*job.entry)&&job.error==JournalError::none)shutdown_event=CommandEvent{job.entry->request_id,job.entry->route,JournalError::none,job.entry};
             else shutdown_event=CommandEvent{job.task.id,job.task.route,job.error==JournalError::none?JournalError::context_lost:job.error,{},job.received_error,job.received_error?job.message.context:TransportContext{}};
         }}
         trace(CommandTracePoint::endpoint_stopped,CommandTraceReason::shutdown,unsigned(current.fault));
         job={};current.running=false;publish(worker.get());
+        shutdown_stage(options.transport.shutdown_trace,"endpoint_shutdown_body_end");
     }
     SubmitResult enqueue(Task task){
         if(stopping.load())return SubmitResult::stopped;

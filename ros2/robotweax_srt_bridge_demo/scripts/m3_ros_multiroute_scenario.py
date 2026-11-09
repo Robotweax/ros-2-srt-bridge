@@ -13,7 +13,10 @@ from scenario_processes import stop_children
 
 class Multiroute(Finite):
     def cleanup(self):
-        report=stop_children(self.processes)
+        report=stop_children(self.processes,observer_directory=self.run if getattr(self.args,'shutdown_stacks',False) else None,stack_mode=getattr(self.args,'shutdown_stack_mode','procfs'))
+        if getattr(self.args,'shutdown_stacks',False):
+            report['stack_observer_controls_complete']=all(c.get('stack_observer',{}).get('complete',False) for c in report['children'])
+            report['passed']=report['passed'] and report['stack_observer_controls_complete']
         try:
             self.resources.close();self.endpoint_sampler.close()
         except Exception as error:
@@ -66,7 +69,8 @@ class Multiroute(Finite):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--shutdown-diagnostics',action='store_true');p.add_argument('--shutdown-stacks',action='store_true');p.add_argument('--shutdown-stack-mode',choices=('procfs','gdb'),default='procfs');p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros');a=p.parse_args()
+    if a.shutdown_stack_mode!='procfs' and not a.shutdown_stacks:p.error('GDB requires explicit shutdown stack observer')
     a.clock_width_ms=200;a.provider_diagnostics=False;a.command_diagnostics=False;a.sample_diagnostics=True
     rclpy.init();driver=Multiroute(a)
     try:driver.measure()

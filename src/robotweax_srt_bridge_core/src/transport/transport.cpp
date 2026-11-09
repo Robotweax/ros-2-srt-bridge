@@ -18,8 +18,14 @@ constexpr std::uint64_t second=1000000000;
 std::mutex provider_mutex;
 unsigned provider_users=0;
 struct Provider {
-    Provider(){std::lock_guard lock(provider_mutex);if(!provider_users&&srt_startup()==SRT_ERROR)throw std::runtime_error("SRT startup failed");++provider_users;}
-    ~Provider(){std::lock_guard lock(provider_mutex);if(!--provider_users)srt_cleanup();}
+    std::shared_ptr<ShutdownTrace> diagnostic;
+    explicit Provider(std::shared_ptr<ShutdownTrace> trace):diagnostic(std::move(trace)){std::lock_guard lock(provider_mutex);if(!provider_users&&srt_startup()==SRT_ERROR)throw std::runtime_error("SRT startup failed");++provider_users;}
+    ~Provider(){
+        shutdown_stage(diagnostic,"provider_release_begin");
+        std::lock_guard lock(provider_mutex);shutdown_stage(diagnostic,"provider_release_locked");
+        if(!--provider_users){shutdown_stage(diagnostic,"provider_cleanup_begin");srt_cleanup();shutdown_stage(diagnostic,"provider_cleanup_end");}
+        shutdown_stage(diagnostic,"provider_release_end");
+    }
 };
 void require(bool ok){if(!ok)throw std::runtime_error("transport provider operation failed");}
 template<class T> void set(SRTSOCKET s,SRT_SOCKOPT option,T value){require(srt_setsockflag(s,option,&value,sizeof(value))!=SRT_ERROR);}
@@ -215,7 +221,14 @@ struct TransportOwner::Impl {
         current.sensor_replaced+=shared.sensor_replaced;shared=current;current.sensor_replaced=0;
     }
     void close_fd(SRTSOCKET& fd){
-        if(fd!=SRT_INVALID_SOCK){srt_epoll_remove_usock(epoll,fd);srt_close(fd);fd=SRT_INVALID_SOCK;}
+        if(fd!=SRT_INVALID_SOCK){
+            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_epoll_remove_begin",fd);
+            srt_epoll_remove_usock(epoll,fd);
+            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_close_begin",fd);
+            srt_close(fd);
+            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_close_end",fd);
+            fd=SRT_INVALID_SOCK;
+        }
     }
     SRTSOCKET create(unsigned i){
         const auto fd=srt_create_socket();require(fd!=SRT_INVALID_SOCK);
@@ -657,7 +670,7 @@ struct TransportOwner::Impl {
     }
     void run() noexcept {
         try{
-            Provider provider;
+            Provider provider(config.shutdown_trace);
             try{
                 epoll=srt_epoll_create();require(epoll>=0);require(srt_epoll_set(epoll,SRT_EPOLL_ENABLE_EMPTY)!=SRT_ERROR);
                 if(config.session.role==Role::listener){listen(0);listen(1);}
@@ -687,12 +700,20 @@ struct TransportOwner::Impl {
                     }
                 }
             }catch(...){current.fault=TransportFault::io;}
+            shutdown_stage(config.shutdown_trace,"transport_shutdown_begin");
             shutting_down=true;trace(CommandTracePoint::transport_stopping,CommandTraceReason::shutdown,{},0,unsigned(current.fault));
-            apply(session.stop());queues.stop();links[0].retry.cancel();links[1].retry.cancel();
-            for(auto& link:links){close_fd(link.fd);close_fd(link.listener);}
+            shutdown_stage(config.shutdown_trace,"transport_session_stop_begin");
+            apply(session.stop());shutdown_stage(config.shutdown_trace,"transport_session_stop_end");queues.stop();links[0].retry.cancel();links[1].retry.cancel();
+            for(unsigned i=0;i<2;++i){auto& link=links[i];
+                shutdown_stage(config.shutdown_trace,i?"sensor_close_begin":"control_close_begin");close_fd(link.fd);close_fd(link.listener);
+                shutdown_stage(config.shutdown_trace,i?"sensor_close_end":"control_close_end");
+            }
+            shutdown_stage(config.shutdown_trace,"epoll_release_begin");
             if(epoll>=0){srt_epoll_release(epoll);epoll=-1;}
+            shutdown_stage(config.shutdown_trace,"epoll_release_end");
         }catch(...){current.fault=TransportFault::provider;}
         stopping=true;current.running=false;publish();
+        shutdown_stage(config.shutdown_trace,"transport_thread_body_end");
     }
     SubmitResult enqueue_check(TransportContext context,const Envelope& command,std::uint64_t token,std::shared_ptr<execution_detail::Record> proof={}){
         if(stopping.load())return SubmitResult::stopped;
