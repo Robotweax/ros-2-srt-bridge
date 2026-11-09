@@ -4,7 +4,7 @@ import sys
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from m3_multiroute_window import budget,verify_window
-from m3_multiroute_cohort import short_cases,execute
+from m3_multiroute_cohort import short_cases,thirty_second_cases,execute
 
 
 def assessment():
@@ -51,6 +51,14 @@ class CohortTests(unittest.TestCase):
         self.assertEqual(invoked,['baseline-1701','baseline-2903']);self.assertEqual(result['status'],'failed')
         self.assertEqual([c['status'] for c in result['cases']],['passed','failed']+['not_executed']*4)
         self.assertEqual(result['cases'][1]['error'],'original failure');self.assertFalse(result['full_N3_qualification'])
+
+    def test_thirty_second_matrix_is_fixed_and_stops_without_adapting(self):
+        cases=thirty_second_cases()
+        self.assertEqual([(c['seed'],c['losses'],c['seconds']) for c in cases],[(s,n,30) for s in (1701,2903,4211) for n in (0,1,2)])
+        invoked=[]
+        result=execute(cases,lambda c:invoked.append(c['name']) or dict(status='failed'),lambda value:None)
+        self.assertEqual(invoked,['baseline-1701'])
+        self.assertEqual([c['status'] for c in result['cases']],['failed']+['not_executed']*8)
 
     def test_exception_stops_cohort_and_all_success_completes_without_retry(self):
         def fail(case):raise ValueError('fixture exception')

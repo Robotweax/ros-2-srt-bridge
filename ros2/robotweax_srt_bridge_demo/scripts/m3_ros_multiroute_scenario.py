@@ -66,7 +66,7 @@ class Multiroute(Finite):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--role',choices=('robot','operator'),required=True);p.add_argument('--run',required=True);p.add_argument('--peer',required=True);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--ros-install',choices=('install/m3-ros','install/m3-start-trace-ros','install/m3-sender-visibility-ros','install/m3-probe-tracing-ros','install/m3-sender-reconcile-ros'),default='install/m3-ros');a=p.parse_args()
     a.clock_width_ms=200;a.provider_diagnostics=False;a.command_diagnostics=False;a.sample_diagnostics=True
     rclpy.init();driver=Multiroute(a)
     try:driver.measure()

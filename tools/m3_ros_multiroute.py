@@ -18,21 +18,29 @@ from m3_source_trace import summarize as source_trace
 from m3_sample_trace import summarize as sample_trace
 from m3_multiroute_accounting import assess
 from m3_multiroute_window import budget, verify_window
+from m3_runtime_layout import matched, LAYOUTS
 
 
-def run(out,capture=False,losses=0,seed=1701,seconds=10):
+def run(out,capture=False,losses=0,seed=1701,seconds=10,runtime_layout='baseline'):
+    layout=matched(ROOT,runtime_layout)
     limits=budget(seconds)
     if type(losses) is not int or losses not in (0,1,2) or (losses and not capture):raise ValueError("source faults require independent capture")
     if type(seed) is not int or seed not in SEEDS:raise ValueError("predeclared base seed required")
     selected_numbers=() if not losses else (8,) if losses==1 else (7,8)
     out.mkdir(parents=True,exist_ok=False);inside='/workspace/'+str(out.relative_to(ROOT))
     paths=['install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator','install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node','install/bridge-m3/lib/librobotweax_srt_bridge_transport.a','install/bridge-m3/lib/librobotweax_srt_bridge_endpoint.a','install/srt-m0/lib/librobotweax-srt.a']
+    if runtime_layout!='baseline':
+        paths=[p.replace('install/m3-ros/',layout['ros']+'/',1).replace('install/bridge-m3/',layout['sdk']+'/',1) for p in paths]
+        paths+=layout['runtime_paths'][:-1]
     if capture:paths += ['build/m3-monotonic-capture/monotonic_capture','build/m3-netdev-features/netdev_features']
     inventory={p:sha(ROOT/p) for p in paths}
-    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,capture=capture,losses=losses,base_seed=seed))
+    write(out/'provenance.json',dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),image=IMAGE,runtime_sha256=inventory,runtime_layout=layout,seconds=seconds,window_budget=limits,sample_diagnostics=True,source_diagnostics=True,capture=capture,losses=losses,base_seed=seed))
     lab=NetworkLab(ROOT,out,IMAGE,monotonic_capture=capture);peers=[];captures=[];fault=None;key=out/'passphrase';key.touch(mode=0o600);key.write_text(secrets.token_urlsafe(32));result=dict(status='running',qualification=False,capture=capture,losses=losses,base_seed=seed,seconds=seconds,scope='bounded source/accounting fixture; no full seeded N3/M3, physical age or resource qualification')
     try:
         lab.start(key)
+        for role in lab.containers:
+            prefix=lab.inside(role,role+'-selected-ros-prefix',['bash','-c','source /opt/ros/jazzy/setup.bash && source '+shlex.quote(layout['ros']+'/setup.bash')+' && ros2 pkg prefix robotweax_srt_bridge']).strip()
+            if prefix!='/workspace/'+layout['ros']+'/robotweax_srt_bridge':raise ValueError('selected ROS prefix mismatch')
         result['clock_proof']={r:lab.inside(r,r+'-clock-proof',['sh','-c','cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets']) for r in lab.containers};common_clock(result['clock_proof'])
         configure(lab,'permanent');lab.apply('N0',seed)
         if capture:
@@ -40,7 +48,7 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10):
             captures=capture_start(lab,out/'identity','packet-socket')
         for role,name in lab.containers.items():
             log=(out/(role+'-scenario.log')).open('w')
-            command='source /opt/ros/jazzy/setup.bash && source install/m3-ros/setup.bash && exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py --role '+role+' --run '+shlex.quote(inside)+' --peer '+lab.addresses['operator']+' --seconds '+str(seconds)
+            command='source /opt/ros/jazzy/setup.bash && source '+shlex.quote(layout['ros']+'/setup.bash')+' && exec python3 ros2/robotweax_srt_bridge_demo/scripts/m3_ros_multiroute_scenario.py --role '+role+' --run '+shlex.quote(inside)+' --peer '+lab.addresses['operator']+' --seconds '+str(seconds)+' --ros-install '+shlex.quote(layout['ros'])
             peers.append((subprocess.Popen(['docker','exec',name,'bash','-c',command],stdout=log,stderr=subprocess.STDOUT),log))
         wait_files(out,[r+'-multiroute-ready.json' for r in lab.containers],peers)
         if capture:
@@ -83,6 +91,7 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10):
                 result['two_loss']=verify_two_loss(source,local,remote,receiver,result['identity'],result['measurement_captures']['operator']['selected_parity_ns'],max(item['end_ns'] for item in fault['install']),fault['remove']['begin_ns'])
                 if result['assessment']['sdk_without_receiver_decision']!=[7,8] or result['assessment']['window']['losses']['srt_accept_to_receiver_gap']!=2:raise ValueError('two-loss accounting gap mismatch')
             elif losses==1:result['recovery']=verify_recovery(source,local,remote,receiver,result['identity'],result['measurement_captures']['operator']['selected_parity_ns'],fault['install'][0]['end_ns'],fault['remove']['begin_ns'])
+        if matched(ROOT,runtime_layout)!=layout:raise ValueError('matched runtime chain changed during measurement')
         result['status']='passed' if result['assessment']['passed'] else 'failed'
         if result['status']=='failed':result['error']='measured source cadence outside predeclared tolerance'
     except Exception as error:result.update(status='failed',error=str(error))
@@ -106,4 +115,4 @@ def run(out,capture=False,losses=0,seed=1701,seconds=10):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);p.add_argument('--capture',action='store_true');p.add_argument('--losses',type=int,choices=(0,1,2),default=0);p.add_argument('--seed',type=int,choices=SEEDS,default=1701);p.add_argument('--seconds',type=int,choices=(10,30),default=10);a=p.parse_args();result=run(a.output.resolve(),a.capture,a.losses,a.seed,a.seconds);print(json.dumps(dict(status=result['status'],error=result.get('error'),assessment=result.get('assessment',{}).get('window')),indent=2));raise SystemExit(result['status']!='passed')
+    p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);p.add_argument('--capture',action='store_true');p.add_argument('--losses',type=int,choices=(0,1,2),default=0);p.add_argument('--seed',type=int,choices=SEEDS,default=1701);p.add_argument('--seconds',type=int,choices=(10,30),default=10);p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();result=run(a.output.resolve(),a.capture,a.losses,a.seed,a.seconds,a.runtime_layout);print(json.dumps(dict(status=result['status'],error=result.get('error'),assessment=result.get('assessment',{}).get('window')),indent=2));raise SystemExit(result['status']!='passed')

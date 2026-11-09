@@ -6,10 +6,15 @@ from pathlib import Path
 from m3_network import SEEDS
 from m3_source_preflight import write
 from m3_ros_multiroute import run
+from m3_runtime_layout import LAYOUTS
 
 
 def short_cases():
     return [dict(name=('baseline' if losses==0 else 'one-loss')+'-'+str(seed),losses=losses,seed=seed,seconds=10) for losses in (0,1) for seed in SEEDS]
+
+
+def thirty_second_cases():
+    return [dict(name=('baseline','one-loss','two-loss')[losses]+'-'+str(seed),losses=losses,seed=seed,seconds=30) for seed in SEEDS for losses in (0,1,2)]
 
 
 def execute(cases,invoke,record):
@@ -30,14 +35,14 @@ def execute(cases,invoke,record):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--coverage',choices=('short','thirty-second'),default='short');p.add_argument('--runtime-layout',choices=tuple(LAYOUTS),default='baseline');a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     def invoke(case):
         print(json.dumps(dict(event='start',**case)),flush=True)
-        return run(out/case['name'],capture=True,losses=case['losses'],seed=case['seed'],seconds=case['seconds'])
+        return run(out/case['name'],capture=True,losses=case['losses'],seed=case['seed'],seconds=case['seconds'],runtime_layout=a.runtime_layout)
     def record(value):
         write(out/'cohort.json',value)
         print(json.dumps(dict(event='progress',status=value['status'],case=value['cases'][-1])),flush=True)
-    result=execute(short_cases(),invoke,record);return result['status']!='passed'
+    result=execute(thirty_second_cases() if a.coverage=='thirty-second' else short_cases(),invoke,record);return result['status']!='passed'
 
 
 if __name__=='__main__':raise SystemExit(main())
