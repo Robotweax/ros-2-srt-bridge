@@ -25,6 +25,7 @@ import m3_provider_stats
 import m3_control_fault
 import m3_neighbor_diagnostics as neighbor_diagnostics
 import m3_qdisc_diagnostics as qdisc_diagnostics
+import m3_arp_reply_diagnostics as arp_reply_diagnostics
 import m3_root_loss_burst
 from m3_accounting import summarize_window
 from m3_results import summarize_resources, summarize_commands, summarize_gaps
@@ -45,6 +46,7 @@ def main():
     parser.add_argument('--recorder-diagnostics',action='store_true',help='development-only 100ms /proc recorder observations; changes observer workload')
     parser.add_argument('--root-loss-burst',choices=['operator','robot'],help='known two-second N5 child loss; requires permanent neighbors and all diagnostics, >=60s')
     parser.add_argument('--capture-drain-check',action='store_true',help='experimental bounded stable-equal tcpdump snapshots before stop; final capture gate unchanged')
+    parser.add_argument('--arp-reply-diagnostics',action='store_true',help='bounded software owned ARP reply PIPE/PASS observer; adds work')
     parser.add_argument('--control-qdisc-diagnostics',action='store_true',help='experimental CONTROL tc PASS counters plus root polling; N0/N5 only, observer intervention')
     parser.add_argument('--neighbor-diagnostics',action='store_true',help='bounded read-only neighbor-table polling; observer workload')
     parser.add_argument('--neighbor-mode',choices=['dynamic','permanent'],default='dynamic',help='permanent is a separate owned-lab L2 diagnostic candidate, not default baseline')
@@ -64,6 +66,8 @@ def main():
         parser.error('CONTROL qdisc diagnostics require N0/N5 and no injected classifier fault')
     if args.root_loss_burst and (args.profile!='N5' or duration<60 or args.neighbor_mode!='permanent' or not all((args.neighbor_diagnostics,args.monotonic_capture,args.command_diagnostics,args.provider_diagnostics,args.control_qdisc_diagnostics,args.capture_drain_check)) or args.control_egress_fault):
         parser.error('root loss burst requires N5 >=60s, permanent neighbors, drain check and all diagnostics')
+    if args.arp_reply_diagnostics and (args.profile not in ('N0','N5') or args.neighbor_mode!='dynamic' or args.control_egress_fault or args.root_loss_burst or not all((args.neighbor_diagnostics,args.control_qdisc_diagnostics,args.monotonic_capture,args.capture_drain_check,args.command_diagnostics,args.provider_diagnostics,args.sensor_provider_diagnostics))):
+        parser.error('loaded ARP observer requires N0/N5, dynamic neighbors, all diagnostics/drain, no faults')
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run=ROOT/'.local/m3'/stamp;run.mkdir(parents=True)
     inside='/workspace/'+str(run.relative_to(ROOT))
@@ -75,9 +79,10 @@ def main():
             for p in sorted((ROOT/folder).rglob('*')) if p.is_file() and '__pycache__' not in str(p)},
         missing_gates=['DDS Best Effort/fully journaled Reliable command baseline','deterministic N3 DATA/FEC loss selector',
                        'N4 timing at admission/dispatch/result commit','full three-seed duration matrix'])
-    processes=[];captures=[];recorder_processes=[];neighbor_processes=[];qdisc_processes=[];lab=None;competitor=None;competitor_alive_checks=0
+    processes=[];captures=[];recorder_processes=[];neighbor_processes=[];qdisc_processes=[];arp_reply_processes=[];lab=None;competitor=None;competitor_alive_checks=0
     report['root_loss_burst_requested']=args.root_loss_burst
     report['capture_drain_check_enabled']=args.capture_drain_check
+    report['arp_reply_diagnostics_enabled']=args.arp_reply_diagnostics
     report['control_qdisc_diagnostics_enabled']=args.control_qdisc_diagnostics
     report['neighbor_mode']=args.neighbor_mode
     report['neighbor_diagnostics_enabled']=args.neighbor_diagnostics
@@ -126,6 +131,7 @@ def main():
         if args.neighbor_diagnostics:report['neighbor_configuration']=neighbor_diagnostics.configure(lab,args.neighbor_mode)
         lab.apply('N0' if args.profile=='N4' else args.profile,args.seed)
         if args.control_qdisc_diagnostics:report['qdisc_observer_configuration']=qdisc_diagnostics.install(lab)
+        if args.arp_reply_diagnostics:report['arp_reply_configuration']=arp_reply_diagnostics.install(lab,report['neighbor_configuration']['peer_macs'])
         for role,name in lab.containers.items():
             log=(run/(role+'-capture.log')).open('w')
             argv=['docker','exec',name]+pcap_options()+pcap_rotation_options()+[
@@ -138,6 +144,7 @@ def main():
         if args.monotonic_capture:
             report['monotonic_capture_config']['features_before']=mono_capture.feature_snapshot(lab,'features-before')
             mono_capture.start(run,inside,lab,captures)
+        if args.arp_reply_diagnostics:arp_reply_diagnostics.start(lab,run,inside,report['arp_reply_configuration'],arp_reply_processes)
         if args.profile=='N5':
             lab.inside('operator','competitor-server',['iperf3','-s','-D'])
             log=(run/'competitor-process.log').open('w')
@@ -210,6 +217,9 @@ def main():
                 try:p.wait(timeout=5)
                 except subprocess.TimeoutExpired:p.terminate()
                 log.close()
+            if arp_reply_processes:
+                try:report['arp_reply_diagnostics']=arp_reply_diagnostics.stop(lab,run,arp_reply_processes)
+                except Exception as error:report['status']='failed';report['arp_reply_diagnostics_error']=str(error)
             if qdisc_processes:
                 try:report['qdisc_diagnostics']=qdisc_diagnostics.stop(lab,run,qdisc_processes)
                 except Exception as error:report['status']='failed';report['qdisc_diagnostics_error']=str(error)
