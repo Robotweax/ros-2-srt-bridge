@@ -1,11 +1,12 @@
 # ROS 2 SRT Bridge
 
-A [single two-loss seed4211 shutdown diagnostic](evidence/m3-two-loss-4211-preparation-2026-11-10/README.md)
-is prepared offline, not executed:30s/messages7/8, exact current14-entry build,
-tracing and observer validated on N0/2903, unchanged5s waits. All503 Python tests
-pass; native inputs and prior evidence verify, no rebuild or tuning. No execution
-authorization exists; a future grant must explicitly permit seed4211. Original
-4211 failure remains unchanged, and all29 remaining campaign stages stay disabled.
+The [single explicitly authorized seed4211/30s shutdown diagnostic](evidence/m3-two-loss-4211-execution-2026-11-10/README.md)
+passes on the frozen14-entry build: selected drops/restoration, strict SENSOR/
+capture/accounting, observer lifecycle/socket stages and cleanup all pass. Both
+bridges exit0/unforced within original5s waits. The historical hang is not
+reproduced or explained, and the old N3 8PASS/1FAIL remains unchanged. No tuning,
+automatic retry or further case; all29 remaining campaign stages stay disabled,
+M3 open/PR2 draft/M4 untouched.
 
 
 The [single authorized two-loss seed2903/30s shutdown diagnostic](evidence/m3-two-loss-2903-execution-2026-11-10/README.md)
