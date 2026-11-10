@@ -5744,3 +5744,55 @@ alloldrawpublic (238files927231952bytes)+previousdiagnosisinputs PASS. Candidate
 binding/inputhashes/postflight/publicindex/logsretained. No build/Docker/live
 observer/processkill/permissionsyscall/experiments/retry, no failedrecord relabel.
 Remainingseven/otherstagesdisabled,29completedexcluded; M3open/PR2draft/M4untouched.
+
+
+## 2026-11-10 — Bounded task-visibility calibration prepared, not run
+
+The [bounded visibility calibration](evidence/m3-task-visibility-calibration-corrected-preparation-2026-11-10/README.md)
+is prepared in corrected freeze6357a2c0f58d: one native readiness check then one
+controlled task fixture, exact candidate6deab3c5e83e/private host binding, unchanged
+policy/budgets. **Not run; no grant, tuning, retries or N1/2903 rerun.**23 offline
+preparation tests pass; unchanged28 candidate/511 existing results retained. Earlier
+freeze4e8c9ee78f1f failed host-import verification and is preserved. N1 failure/
+1PASS1FAIL7unexecuted unchanged; all38 campaign IDs disabled, M3 open/PR2 draft.
+
+Correctedfreeze6357a2c0f58d5c40751a7e96e52d6825ade3a29b2ad03bc6bcef0ca903474f9c
+binds candidate6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e.
+Exactfuturegrant required:1 nativeobserver --self-check (hash/import/bootstrap,
+no target collection), then1 controlled Python parent/worker fixture on pinned
+amd64 image; nativeARMobserver in exactownedtargetPIDnamespace. Two live matched
+workerstacksbefore release, recordedjoin+matchingabsence whileparentalive, then
+controlledSIGINT/normalexit underoriginal5s childwait. CANDconfirmed_exitfalse
+retained, no blanketmissingstackwaiver. No exactN1race/overhead/SDK/ROS/campaign
+qualification, no N1/2903 rerun. Source/targetfilters/caps/budgetsunchanged.
+
+Ninefilebundle readonly444/555; observerSYS_ADMINonly/NNP/defaultdenyseccomp/
+readonlyroot/networknone, target/supervisorcap0/NNP/defaultseccomp/readonlyroot/
+networknone. Original48/.25s/12s/8proc/64task/16Kbreadlimits, fixed6s hostphase,
+8MiBsnapshotguard/20scommandcaps andboundedhandshakes. Freshprefix
+tvis-cal-20261110t170526723486z; output.local/task-visibility-calibration-20261110T170526723486Z
+absent, no grant. One-shot exact2-stage driver stopsfirstfailedgate, no subset/
+resume/retry; boundedownedcleanup/closedexports/postflight. All38campaignIDs
+explicitdisabled, remaining7 unchanged, oldcampaigngrantsrefused.
+
+Firstprep4e8c9ee78f1fc1f0c698384dbb6535e54bfe36404ef8e57b17244d295d6043d3
+stoppedfinalhostimport beforeDockerverification/grant/nativeexecution: combined
+assessor import made genericROS shutdown_observer win, task_identity unavailable.
+Immutablefirstfreeze/source/bundle/failure/publicindex retained. Correctedcal
+assessor binds exactcollectorpath/SHAcheckedbytes toprivatemodule, ignorescached
+ROS anddoesnotaltergenericcache.23rdregressionactualhostimportorder/cachedROS/
+wrongbyte refusalpasses. Nativecollector/entry/fixture/policy/budgets same; no
+campaignassessorchange. Initialoffline threadbootstrap/pathaliasmodel failures
+remainfirstprepvalidationlogs; correctedmodelsfinalpassing, notnativeattempts.
+
+23preparation tests PASS inclfullmockedDocker orchestration/actualfixturemethods
+againsttemporaryprocfs/mockedsignals/unitPythonthread/freshbundleandhostimports,
+firstreadinessfailbeforetarget, schemafailbeforerelease, foreignnamespacebefore
+observerstart, changedidentity/access/clock/footer/stage/grant refusal/cleanup.
+28candidate+511existing logsreusedbyteidentical (unchangedsource), notlivecredit.
+Finalreadonlydriver.verify source/inputs/current14/preserved13/fullchain/provider/
+native87/allpriorrawpublic/previousdiagnosis+candidate+firstfailedprep/bundle and
+originalN1/2903assessmentSHA PASS. Publicindex/finalverification recordprepared
+only. No builds/Dockermutation/liveprocfs/permissionsyscall/campaign/experiments.
+N1/2903 FAIL/1PASS1FAIL7notexecuted retained; no tuning/retry/newexecutiongrant/
+M3acceptance/merge/IntrinsicM4, no nextcasequeued.

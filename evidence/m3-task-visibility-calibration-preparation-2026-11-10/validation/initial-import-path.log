@@ -1,0 +1,47 @@
+test_actual_fixture_methods_complete_with_temp_procfs_and_mock_signal (test_preparation.PreparationTests.test_actual_fixture_methods_complete_with_temp_procfs_and_mock_signal) ... ok
+test_assessor_uses_real_candidate_records_from_temp_procfs (test_preparation.PreparationTests.test_assessor_uses_real_candidate_records_from_temp_procfs) ... ok
+test_collector_and_filter_bytes_exact_bound_candidates (test_preparation.PreparationTests.test_collector_and_filter_bytes_exact_bound_candidates) ... ok
+test_exact_grant_excludes_all_campaigns_and_failed_case (test_preparation.PreparationTests.test_exact_grant_excludes_all_campaigns_and_failed_case) ... ok
+test_first_stage_failure_never_calls_target (test_preparation.PreparationTests.test_first_stage_failure_never_calls_target) ... ok
+test_fixture_controls_refuse_foreign_identity_and_scope (test_preparation.PreparationTests.test_fixture_controls_refuse_foreign_identity_and_scope) ... ok
+test_foreign_PID_namespace_refused_before_observer_start (test_preparation.PreparationTests.test_foreign_PID_namespace_refused_before_observer_start) ... ok
+test_fresh_interpreter_bundle_imports_exact_collector_and_wrappers (test_preparation.PreparationTests.test_fresh_interpreter_bundle_imports_exact_collector_and_wrappers) ... FAIL
+test_full_mocked_driver_readiness_then_single_fixture_with_cleanup (test_preparation.PreparationTests.test_full_mocked_driver_readiness_then_single_fixture_with_cleanup) ... ok
+test_full_readiness_failure_stops_before_target (test_preparation.PreparationTests.test_full_readiness_failure_stops_before_target) ... ok
+test_full_schema_failure_stops_before_worker_release (test_preparation.PreparationTests.test_full_schema_failure_stops_before_worker_release) ... ok
+test_insufficient_present_or_absence_population_refused (test_preparation.PreparationTests.test_insufficient_present_or_absence_population_refused) ... ok
+test_missing_grant_never_calls_Docker (test_preparation.PreparationTests.test_missing_grant_never_calls_Docker) ... usage: run.py [-h] --authorization AUTHORIZATION
+run.py: error: the following arguments are required: --authorization
+ok
+test_mutated_task_schema_access_identity_times_refused (test_preparation.PreparationTests.test_mutated_task_schema_access_identity_times_refused) ... ok
+test_native_entry_forwards_explicit_flag_and_bound_collector (test_preparation.PreparationTests.test_native_entry_forwards_explicit_flag_and_bound_collector) ... {"stage": "exec", "type": "RuntimeError", "errno": null, "message": "modeled exec boundary", "traceback": "Traceback (most recent call last):\n  File \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-task-visibility-calibration-preparation-2026-11-10/observer_entry.py\", line 44, in main\n    os.execv(sys.executable,argv)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1176, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1180, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1241, in _execute_mock_call\n    raise effect\nRuntimeError: modeled exec boundary\n"}
+ok
+test_native_entry_readiness_imports_without_collector_exec (test_preparation.PreparationTests.test_native_entry_readiness_imports_without_collector_exec) ... ok
+test_native_entry_rejects_missing_activation (test_preparation.PreparationTests.test_native_entry_rejects_missing_activation) ... {"stage": "activation", "type": "ValueError", "errno": null, "message": "explicit task visibility calibration activation required", "traceback": "Traceback (most recent call last):\n  File \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-task-visibility-calibration-preparation-2026-11-10/observer_entry.py\", line 37, in main\n    if sys.argv[1:]!=['--task-visibility']:raise ValueError('explicit task visibility calibration activation required')\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: explicit task visibility calibration activation required\n"}
+ok
+test_native_entry_rejects_stale_collector_before_exec (test_preparation.PreparationTests.test_native_entry_rejects_stale_collector_before_exec) ... {"stage": "collector_binding", "type": "ValueError", "errno": null, "message": "collector binding differs", "traceback": "Traceback (most recent call last):\n  File \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-task-visibility-calibration-preparation-2026-11-10/observer_entry.py\", line 31, in main\n    if collector_sha!=binding['sha256'] or binding['task_visibility'] is not True:raise ValueError('collector binding differs')\n                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: collector binding differs\n"}
+ok
+test_old_campaign_grants_not_accepted (test_preparation.PreparationTests.test_old_campaign_grants_not_accepted) ... ok
+test_one_shot_output_refuses_resume (test_preparation.PreparationTests.test_one_shot_output_refuses_resume) ... ok
+test_second_stage_failure_has_no_retry (test_preparation.PreparationTests.test_second_stage_failure_has_no_retry) ... ok
+test_snapshot_ignores_only_incomplete_last_line (test_preparation.PreparationTests.test_snapshot_ignores_only_incomplete_last_line) ... ok
+
+======================================================================
+FAIL: test_fresh_interpreter_bundle_imports_exact_collector_and_wrappers (test_preparation.PreparationTests.test_fresh_interpreter_bundle_imports_exact_collector_and_wrappers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-task-visibility-calibration-preparation-2026-11-10/validation/test_preparation.py", line 123, in test_fresh_interpreter_bundle_imports_exact_collector_and_wrappers
+    lines=subprocess.check_output([sys.executable,'-c',code,str(bundle)],text=True).splitlines();self.assertEqual(lines,[str(bundle/name) for name in ('shutdown_observer.py','observer_entry.py','target_entry.py','task_target.py')]+[plan.CANDIDATE_SHA])
+                                                                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['/private/var/folders/2d/n26zdh7d4js6rgw5nc[433 chars]72e'] != ['/var/folders/2d/n26zdh7d4js6rgw5ncwy94x400[401 chars]72e']
+
+First differing element 0:
+'/private/var/folders/2d/n26zdh7d4js6rgw5nc[57 chars]r.py'
+'/var/folders/2d/n26zdh7d4js6rgw5ncwy94x400[49 chars]r.py'
+
+Diff is 947 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.440s
+
+FAILED (failures=1)

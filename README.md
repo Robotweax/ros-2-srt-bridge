@@ -1,5 +1,13 @@
 # ROS 2 SRT Bridge
 
+The [bounded visibility calibration](evidence/m3-task-visibility-calibration-corrected-preparation-2026-11-10/README.md)
+is prepared in corrected freeze6357a2c0f58d: one native readiness check then one
+controlled task fixture, exact candidate6deab3c5e83e/private host binding, unchanged
+policy/budgets. **Not run; no grant, tuning, retries or N1/2903 rerun.**23 offline
+preparation tests pass; unchanged28 candidate/511 existing results retained. Earlier
+freeze4e8c9ee78f1f failed host-import verification and is preserved. N1 failure/
+1PASS1FAIL7unexecuted unchanged; all38 campaign IDs disabled, M3 open/PR2 draft.
+
 The [per-task visibility candidate](evidence/m3-task-identity-visibility-2026-11-10/README.md)
 adds default-off, bounded task identity/read/absence records with28 offline
 regressions and511 existing tests PASS. One stack attempt; explicit missing,
