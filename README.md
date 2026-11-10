@@ -1,5 +1,13 @@
 # ROS 2 SRT Bridge
 
+The [fresh N4 freeze](evidence/m3-current-n4-corrected-preparation-2026-11-10/README.md)
+is prepared with the corrected assessor: freezeecb0d1346932 binds all19 original
+ordered cases and exact assessordd1fa84dc1ed on the unchanged matched build/fixture.
+**Execution disabled: no grant, live run, rebuild, tuning or automatic retry.**
+8 binding,20 preparation,10 JSON regression and511 existing tests PASS. Prior
+16PASS/1FAIL/2not-executed stays unchanged; nine other unexecuted cases disabled,
+ten completed N0/N3 excluded. M3 open/PR2 draft/M4 untouched.
+
 The [N4 assessor JSON fix](evidence/m3-current-n4-assessor-json-fix-2026-11-10/README.md)
 is verified offline:10 regressions,20 preparation tests and511 existing tests PASS.
 The separate candidate normalizes recomputed crash proofs at the JSON boundary;

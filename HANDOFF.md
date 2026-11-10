@@ -5516,3 +5516,37 @@ pass before/after; originalcohort/17strictdecisions unchanged. No new liveaccept
 No executiondriver/newfreeze/grant in candidatepackage, no Docker/build/livecase.
 Future liveuse requires explicit separate preparation binding exact candidateSHA;
 oldstoppeddriver cannot silently select it. No automatic resume/retry or laterstage.
+
+
+## 2026-11-10 — Fresh corrected-assessor N4 freeze prepared only
+
+The [fresh N4 freeze](evidence/m3-current-n4-corrected-preparation-2026-11-10/README.md)
+is prepared with the corrected assessor: freezeecb0d1346932 binds all19 original
+ordered cases and exact assessordd1fa84dc1ed on the unchanged matched build/fixture.
+**Execution disabled: no grant, live run, rebuild, tuning or automatic retry.**
+8 binding,20 preparation,10 JSON regression and511 existing tests PASS. Prior
+16PASS/1FAIL/2not-executed stays unchanged; nine other unexecuted cases disabled,
+ten completed N0/N3 excluded. M3 open/PR2 draft/M4 untouched.
+
+Freezeecb0d134693279a679907d6791c0518bfe85308d9146c69f83f3a4f2e3aafef1
+binds candidate assessordd1fa84dc1ed576ee607c78e584002662575af19ce1f3e19d479f87e1257671e
+byte-for-byte. New packageevidence/m3-current-n4-corrected-preparation-2026-11-10/
+contains exact19-case plan, correctedassessor binding, unchanged sequentialdriver
+and scopedadapters; onlyROSscript paths rebase to identical scripts in newpackage.
+Native13 uses original2s holds; freshness3 uses15s source/2s cut; crash3 retains
+original before/effect/committed sequencing. Phase/deadline/outcome/freshness/
+replay/shutdown/cleanup gates unchanged. Everystrictresult+postflight beforeadvance;
+firstfailure stopslaterrows. Oldgrantrefused against actualnewfreezeSHA, newgrant
+notcreated. Freshoutput.local/current-n4-corrected-cohort-20261110T144156203713Z
+absent, all19 newrows unexecuted; noresume/retry orcaseautomaticallyscheduled.
+
+New8 bindingtests cover actualfreshinterpreter importorder selecting exactcorrected
+assessor, origin/localhashdrift andoldgrant/replacementrefusal, unchangedboundaries
+andpriorstop preservation. Copied20 preparationtests,10 JSONregressions and511
+existingtestsPASS. Finalreadonlydriver.verify passes frozeninputs/source/current14/
+preserved13/fullchain/provider/native87/fixture37/oldbuildartifacts andallprior
+rawpublicindexes includingstopped1018raw andofflinefix. Onlymanifestpath changes,
+manifest/buildSHA unchanged. Dockermetadata inspected only; no build/container/
+network/fixture/worker/ROS launch. Newpublicindex bindsfullpackage/readiness/postflight.
+Priorfreeze/grant/failedcase/17strictdecisions/16PASS1FAIL2notexecuted unchanged.
+M3notaccepted, PR2draft, no merge/IntrinsicM4 orotherstage progression.
