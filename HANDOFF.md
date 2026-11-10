@@ -4449,3 +4449,43 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   executable-but-disabled driver, scenario/capdrop/sidecar/assessor, immutable
   freeze/readiness/postflight and test reports. No authorization file or live
   result. Original N3 8PASS/1FAIL/unknowncause unchanged; M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Authorized N0/1701/10s bridge diagnostic; observer gate FAIL
+
+- User authorized exactly prepared single N0 seed1701/10s, stop first failed
+  gate, no tuning or two-loss4211 retry, all29 remaining campaign cases disabled.
+  Separate exact authorization binds prepared freeze aa167cf71bc3; preparation
+  freeze/scripts/bundle unchanged. All13matched/preserved chain, source/inputs,
+  runtime/image and retained raw indexes pass preflight; no live container overlap.
+- Exactly one attempt .local/bridge-shutdown-diagnostic-20261110T073724485219Z:
+  both bridge capdrop/identity proofs allcapsets inclbounding0/NNP1/Seccomp2.
+  Session/SENSOR ready and both result barriers reached; source fence duration
+  10.053922838s. Measurement capture closes and interface features match.
+- FIRST FAIL: observer isolation mismatch. Raw Docker CapAdd ['CAP_SYS_ADMIN']
+  versus prepared literal ['SYS_ADMIN']; all other combined check fields match.
+  Normalized role is exactly intended SYS_ADMIN. I missed CAP_ normalization
+  in this separate sidecar gate, though prior synthetic driver normalizes it.
+  Observer created/inspected only, no docker start/entry/exec/ready/stacks. No
+  denied-stack, kernel/filter or broader-permission failure can be inferred.
+- Driver exits1. Secondary assessor missing operator-observer-ready is downstream
+  of primary gate, explicitly mapped in gate-report. No source/cadence/typed/age/
+  packet qualification after this gate; barrier results alone are not full PASS.
+  No fix, changed freeze/profile/capability, retry or next case executed.
+- Abort/release cleanup uses unchanged5s child waits. Operator bridge exits0,
+  unforced223.895250ms; robot source172.833417ms, robot bridge326.048375ms, both
+  exits0/unforced. Operator51/robot39stage records, zero drops, lastpoint
+  main_context_shutdown_end. No observer during cleanup; real stack integration
+  remains unvalidated, original hang cause unknown. Prior synthetic PASS retained.
+- Two lab containers, created-unstarted observer, internal network and output
+  volume removed/absent, credential deleted. Source/inputs/matched13/preserved
+  chain and original913N3raw/219oldcalibration/previousobserverindexes unchanged.
+  No native/SDK/ROS rebuild or heavy tests overlapped run. Offline475 result not
+  rerun or extended into a live integration claim.109closed local artifacts hashed.
+- Evidence evidence/m3-bridge-shutdown-diagnostic-2026-11-10: prospective PLAN,
+  authorization/preflight, primary/secondary gate reports, child/stage/identity/
+  policy/commands, postflight/raw index. Prepared one-shot output now exists;
+  cannot re-run it. Next prerequisite is narrow capability-name normalization
+  with regression control/new freeze, not a runtime tuning change. No automatic
+  follow-up authorization or attempt. OriginalN3 8PASS/1FAIL, all29disabled,
+  M3open/PR2draft/M4untouched; no two-loss4211/expiry/replay/commands.
