@@ -4997,3 +4997,46 @@ Frozen source/inputs/current14/native87 and prior raw/public indexes verify,
 including64 failed N0 artifacts and1,092 fresh N3 artifacts. Diagnosis input/public
 hashes and small retained record copies published; old artifacts unchanged.
 Other28 stages stay disabled, M3 open/PR2 draft/M4 untouched; no next case queued.
+
+
+## 2026-11-10 — Launch-specific readiness corrected; offline verification PASS
+
+User authorizes fixing launch identity and retaining failed capability snapshots,
+o N0 rerun/tuning/automatic retries, other stages disabled. New candidate harness
+at evidence/m3-current-n0-readiness-fix-2026-11-10/ preserves the old frozen N0
+preparation, execution failure and diagnosis unchanged. It contains corrected
+scenario/wrapper, pure readiness helper, selected host adapter and offline tests.
+No new campaign freeze or execution grant is made. Old driver remains bound to
+old inputs; it cannot silently select this revision. Future live qualification
+requires separately preparing the corrected freeze and explicit authorization.
+
+Every bridge launch including wrong-hash gets a unique token and record path.
+Parent registers PID/start_ticks/PPid; wrapper atomically publishes a complete
+capabilities_reduced_preexec record with launch context and bracketed identity.
+Parent checks exact token/name/role/binary and process identity before applying
+unchanged zero-capability/NNP/seccomp checks to a single retained status read.
+Negative-test/legacy markers cannot release the current child. Foreign records,
+PID reuse, identity change, partial/wrong-phase records and child exit fail closed.
+Absent record waits within original5s budget; no new delay or capability waiver.
+
+First per-launch/per-side failure stores exact evaluated permissions, identity
+brackets, expected identity, launch/phase/error; read errors explicit. Wrapper
+reduction/exec, registration, timeout and early-exit failures retain snapshots.
+Readiness is explicitly pre-exec wrapper evidence, not execed-bridge attestation;
+existing ROS session/clock/typed-stream gates remain application readiness.
+Original reduce and Benchmark ASTs unchanged; no policy/rate/clock/queue/wait/
+observer change or native rebuild. Host adapter selects the corrected scenario.
+
+All21 targeted offline tests and511 existing tests pass; compile-only syntax
+checks pass. Synthetic procfs/mocked child/reduce/exec and actual extracted
+Diagnostic methods verify stale negative/legacy marker rejection, unique launch
+contexts, wait-before-current-ready, wrong PID/token/phase, PID reuse/change,
+partial record, failed cap/NNP snapshot retention, exit/unavailable/timeout,
+atomic publication/no overwrite and reduce→publish→exec order. No Docker call,
+Linux capability syscall, bridge/capture/observer process or live experiment.
+
+Original frozen source/inputs/current14/preserved13/full runtime chain/native87
+and prior raw/public indexes verify, including failed N0 and fresh N3 nine-case
+PASS. Package input/public hashes and validation logs retained. No N0 retry,
+new freeze or further case. N0 remains unqualified; other28 stages disabled,
+M3 open/PR2 draft/M4 untouched. Live behavior remains unvalidated for this fix.

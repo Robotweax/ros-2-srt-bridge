@@ -1,5 +1,14 @@
 # ROS 2 SRT Bridge
 
+The [launch-specific N0 readiness fix](evidence/m3-current-n0-readiness-fix-2026-11-10/README.md)
+is implemented in a separate candidate harness and passes21 targeted plus511
+existing offline tests. Unique per-launch token/path and PID/start_ticks binding
+prevent stale negative-test readiness; failures retain the exact checked status
+and identity brackets. Native builds, policy and workloads remain unchanged.
+No live run, new campaign freeze or authorization; N0 FAIL preserved and other28
+stages disabled. M3 open, PR2 draft, M4 untouched.
+
+
 The [retained N0 capability diagnosis](evidence/m3-current-n0-capability-diagnosis-2026-11-10/README.md)
 identifies a readiness identity defect: the deliberate wrong-hash robot bridge
 and real bridge share one pre-exec marker, and the real start trusts existence
