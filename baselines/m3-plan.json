@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Bounded native integrated SDKROS calibration prepared on freeze4d64d753f6eb;NOT RUN/executiondisabled/no grant.1native readiness+1N0/1701/10s fixture,28preparation tests PASS, unchangedcandidate/builds/policy/5schildwait;runtimequiescentreadonlypreflight. No tuning/retries/live run/build. N1/2903 FAIL/cohort1PASS1FAIL7unexecuted preserved;all38campaignIDs/stagesdisabled. Shortdiagnostic notcampaigncoverage,actualSDKROSgates unqualified. M3open/PR2draft/M4untouched.",
+  "current_priority": "Integrated native SDKROS calibration PASS on freeze4d64d753f6eb:1readiness+1realN0/1701/10s fixture;100stackOK0unavailable/19postSIGINTenumabsences;5commands/effects and6SENSORbalances0;source10.15686s;cleanup/integrityPASS. No tuning/retry/N1rerun;itsFAIL/cohort1PASS1FAIL7unexecuted preserved,all38campaignIDs/stagesdisabled. Not300sN0/LONGcoverage/exactmissingreadrace/overhead/M3acceptance; no automaticnextfreeze/grant/case/merge/M4.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -5028,5 +5028,205 @@
     "all_campaign_stages_disabled": true,
     "no_tuning": true,
     "no_retries": true
+  },
+  "SDKROS_task_calibration_execution": {
+    "status": "passed_bounded_native_SDKROS_calibration_only",
+    "driver_exit_code": 0,
+    "freeze_sha256": "4d64d753f6ebe398a28cf447cbcc1632170facd0f3b6b0726a86c7c55aa5222a",
+    "source_commit": "3047c86bb2d0e70fe905f782d072af426e5a938e",
+    "readiness_checks": 1,
+    "SDKROS_fixture_runs": 1,
+    "profile": "N0",
+    "seed": 1701,
+    "source_seconds": 10,
+    "qualification": "bounded_SDKROS_calibration_only",
+    "SDK_provider_visibility": {
+      "samples": 4,
+      "provider_names": [
+        "rwx-readiness",
+        "rwx-shard-0",
+        "rwx-shard-1"
+      ],
+      "first_begin_ns": 38615584141,
+      "last_end_ns": 39389862017,
+      "scope": "readable registered bridge/root and named SDK provider tasks before shutdown release; not performance or exit proof"
+    },
+    "operator_observer_summary": {
+      "task_metadata_status": "consistent_metadata_only",
+      "confirmed_task_exits": 0,
+      "raw_stack_reads_ok": 100,
+      "raw_stack_reads_unavailable": 0,
+      "samples": 5,
+      "post_signal_samples": 1,
+      "nonempty_kernel_stacks": 100,
+      "confirmed_worker_exits": [
+        {
+          "pid": 127,
+          "start_ticks": 1600
+        }
+      ],
+      "worker_join_end_ns": 39501931309,
+      "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+      "clean_fast_exit_may_have_no_post_signal_sample": true
+    },
+    "observed_task_disappearances": 19,
+    "observer_footer": {
+      "kind": "status",
+      "completed": true,
+      "reason": "all_owned_processes_gone",
+      "samples": 6,
+      "sample_limit": 48,
+      "budget_exhausted": false,
+      "kernel_stack_reads_ok": 100,
+      "kernel_stack_reads_unavailable": 0,
+      "userspace_stacks_requested": false,
+      "end_ns": 39910177059,
+      "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+    },
+    "command_audit": {
+      "attempts": 5,
+      "confirmed_successes": 5,
+      "unknown": 0,
+      "effects": 5,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "SENSOR_window": {
+      "source_produced": 2539,
+      "observer_received": 2449,
+      "missing": 90,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 5,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 85,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 10.156861921,
+      "source_actual_hz": {
+        "imu": 199.9633366877588,
+        "joints": 50.01544807355071
+      },
+      "published": 2449,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 1946,
+          "rounding": "up to 1ms",
+          "maximum_ms": 15,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 503,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "profile_readback": {
+      "profile": "N0",
+      "seed": 1701,
+      "original_commands_and_kernel_settings_verified": true
+    },
+    "signal_end_to_reap_ns": 235964375,
+    "child_exit": 0,
+    "forced_kill": false,
+    "raw_files": 114,
+    "raw_bytes": 11799641,
+    "normal_observer_readiness_copy_misses": 1,
+    "driver_failed_commands": [],
+    "network_failed_commands": [],
+    "N1_2903_rerun": false,
+    "N1_2903_failure_preserved": true,
+    "original_results": {
+      "passed": 1,
+      "failed": 1,
+      "not_executed": 7
+    },
+    "disabled_case_ids": [
+      "N3-baseline-1701",
+      "N3-one-loss-1701",
+      "N3-two-loss-1701",
+      "N3-baseline-2903",
+      "N3-one-loss-2903",
+      "N3-two-loss-2903",
+      "N3-baseline-4211",
+      "N3-one-loss-4211",
+      "N3-two-loss-4211",
+      "N0-combined-1701",
+      "N4-admission-both",
+      "N4-admission-to-robot",
+      "N4-admission-to-operator",
+      "N4-dispatch-both",
+      "N4-dispatch-to-robot",
+      "N4-dispatch-to-operator",
+      "N4-started-both",
+      "N4-started-to-robot",
+      "N4-started-to-operator",
+      "N4-committed-both",
+      "N4-committed-to-robot",
+      "N4-committed-to-operator",
+      "N4-query-both",
+      "N4-ROS-freshness-both",
+      "N4-ROS-freshness-to-robot",
+      "N4-ROS-freshness-to-operator",
+      "N4-ROS-crash-before",
+      "N4-ROS-crash-effect",
+      "N4-ROS-crash-committed",
+      "N1-combined-1701",
+      "N1-combined-2903",
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "remaining_case_ids_disabled": [
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "no_tuning": true,
+    "no_retries": true,
+    "stop_first_failed_gate": true,
+    "M3_complete": false,
+    "limitations": [
+      "10s diagnostic, not 300s N0 or long campaign coverage",
+      "no exact mid-read ENOENT task read occurred",
+      "no unseen reuse or observer overhead equivalence",
+      "no M3 acceptance or historical requalification"
+    ]
   }
 }

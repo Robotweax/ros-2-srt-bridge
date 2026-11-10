@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [integrated native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-execution-2026-11-10/README.md)
+PASSES both gates on one invocation of freeze4d64d753f6eb: actual N0/1701/10s
+SDK/ROS startup/warmup/restart, source/command/capture/profile and calibrated
+observer/lifecycle gates.100 stacks OK/0unavailable,19 post-SIGINT enumeration
+absences; five commands/effects and six SENSOR balances zero. Cleanup/integrity
+PASS; no tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted preserved;
+all38 campaign IDs/stages disabled. Short calibration is not campaign coverage
+or exact missing-read-race qualification. M3 open/PR2 draft/M4 untouched.
+
 The [bounded native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-preparation-2026-11-10/README.md)
 is prepared on freeze4d64d753f6eb, **not run; execution disabled, no grant**.
 One native readiness check then one N0/1701/10s diagnostic on unchanged matched

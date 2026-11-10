@@ -6069,3 +6069,54 @@ all38campaignIDs disabled.0 native readiness/SDKfixtures/builds/Dockermutations;
 M3open/PR2draft/IntrinsicM4untouched. No queuedrun or nextcase. ActualSDK provider
 names/shortwindowcadence/nativeaccess/SDKshutdown remainfuturegates; exactmidread
 ENOENT/unseenreuse/overhead notguaranteed, fastnormalshutdownmayhavenopostSPIabsence.
+
+
+## 2026-11-10 — Integrated native SDK/ROS calibration PASS
+
+The [integrated native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-execution-2026-11-10/README.md)
+PASSES both gates on one invocation of freeze4d64d753f6eb: actual N0/1701/10s
+SDK/ROS startup/warmup/restart, source/command/capture/profile and calibrated
+observer/lifecycle gates.100 stacks OK/0unavailable,19 post-SIGINT enumeration
+absences; five commands/effects and six SENSOR balances zero. Cleanup/integrity
+PASS; no tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted preserved;
+all38 campaign IDs/stages disabled. Short calibration is not campaign coverage
+or exact missing-read-race qualification. M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze4d64d753f6eb/base3047c86; driver0.
+Quiescentruntime/frozeninputs preflightPASS andverifybeforefixture.1nativeARM
+readinessselfcheck then1 pinnedamd64SDKROS N0/1701/10s actualdiagnostic; no builds/
+tests/tuning/retry/watchdog escalation. Existing--rm versionscontainer inventory
+precedesownedfixture. Nativeentry/collector6deab3c5e83e/metadata409a8812042b/
+lifecycle4fafc85e3d4d/source/policies/budgets/buildsunchanged.
+
+Host2SDKproviderobservationsbeforerelease; final4preSIGINT samples showall3
+rwx-shard-0/rwx-shard-1/rwx-readiness. Root111/start1537, journalworker127/start1600.
+SIGINT39482225892..39482340725, workerjoinend39501931309; post samplecompleteenum
+absence39648475850..39648541475 omits19previousrootTIDs inclall3providerthreads,
+rootstillmatching; workerprocessmissingafterregisteredjoin. Reap39718305100,
+rootmissingonlyafterreap nextsample. Exit0/unforced235.964375msfromsignalend<5s.
+Footer6total/5prereap/1postsignal/100stackOK0unavailable/noexhaustion/
+all_owned_processes_gone.600contentOK/100directorypresent.19taskobservations
+not_attempted/0confirmedtaskexits, workerprocessabsenceproofseparate/noexitcause.
+No exactmidreadENOENT/unseenreuse/overheadequivalence qualification.
+
+Actualsourcewindow10.156861921s,imu199.963337Hz/joints50.015448Hz.2539produced/
+2449observed,90accounted(5admission+85outboundreplacement); all6balances0 and
+SRTaccept-receivergap0. Publicationageuppermax15msimu/29msjoint<original250ms.
+5commands/5confirmedsuccesses/effects,0UNKNOWN/unresolved/skippedslots, journals
+andcapturegatespass. No old600sevidencerelabeled, actualrealcombinedgatepassed.
+Operatorfinal+robotwarmup/final all51shutdownrecords; negativehashasdeclared.
+OneSDKfixture/observer/normalwarmup, no retry.1normalreadyfilecopymissretained,
+no driver/networkcommandfailures or failedgates. Original NetworkLab privileges/
+cap0bridgeattestation/nativeobserverSYS_ADMINonlyNNP/filter/readonly/networknone/
+exactPIDnamespace unchanged. Readiness/endpoints/observer/network/volumesremoved,
+credentialdeleted; readonlysource/fullmatchedchain/native87/oldindexes/input/
+preparationindex/originalN1assessmenthashPASS; sevenlaterdirsabsent.
+
+114rawfiles11799641bytes indexedandbytecopiedpublicrun/ inclpcaps/monotonic
+captures/journals/catalogs/traces/assessment. Gatereport/schema-summary/postflight
+andgrant retained. No testsrun duringcalibration or extraqualification credit.
+N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved;all38campaignIDs/stagesdisabled.
+This10sSDKROScalibration isnot300sN0/newLONGcoverage/M3acceptance. No nextcase/new
+campaigngrant/retry/merge/IntrinsicM4; PR2draft/M3open. Futurecampaignpreparation
+requires separateexplicit scope/authorization; historicalfailure notoverwritten.
