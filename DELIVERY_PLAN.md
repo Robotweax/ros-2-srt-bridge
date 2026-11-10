@@ -1,5 +1,15 @@
 # Delivery focus — 2026-11-09
 
+The [native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-execution-2026-11-10/README.md)
+PASSES readiness and one controlled fixture on freeze8acc653d87ad. Two post-signal
+readable worker observations precede controlled join and supported enumeration
+absence while parent lives; exact candidate lifecycle gate passes.9 raw stacks
+OK/0unavailable, child exit0/unforced/747.3345ms signal-end-to-reap. Cleanup and
+integrity PASS. No tuning/retries/N1 rerun; its FAIL and1PASS/1FAIL/7unexecuted
+remain unchanged, all38 campaign IDs disabled. This qualifies one controlled
+post-signal absence path; exact mid-read race/SDK/ROS/overhead remain unqualified.
+M3 open/PR2 draft/M4 untouched.
+
 The [bounded native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-preparation-2026-11-10/README.md)
 is prepared on freeze8acc653d87ad, **not run; execution disabled and no grant**.
 33 offline preparation tests pass. Exact assessment candidate; two pre-signal

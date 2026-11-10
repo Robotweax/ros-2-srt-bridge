@@ -5924,3 +5924,46 @@ No Docker mutation/liveprocfs/experiments/tuning/retry/newgrant. Remaining38IDs
 explicitdisabled; N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved. PR2 draft,
 M3 open/IntrinsicM4 untouched. Future explicitgrant mustbind thisnewfreeze and
 postSIGINTscope+candidatehashes; runtime mustbequiescentbeforeanycreation.
+
+
+## 2026-11-10 — Native post-SIGINT per-thread calibration PASS
+
+The [native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-execution-2026-11-10/README.md)
+PASSES readiness and one controlled fixture on freeze8acc653d87ad. Two post-signal
+readable worker observations precede controlled join and supported enumeration
+absence while parent lives; exact candidate lifecycle gate passes.9 raw stacks
+OK/0unavailable, child exit0/unforced/747.3345ms signal-end-to-reap. Cleanup and
+integrity PASS. No tuning/retries/N1 rerun; its FAIL and1PASS/1FAIL/7unexecuted
+remain unchanged, all38 campaign IDs disabled. This qualifies one controlled
+post-signal absence path; exact mid-read race/SDK/ROS/overhead remain unqualified.
+M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze8acc653d87ad/basecf603b9, driver0.
+Runtimequiescent/source/input/fullbuild/native87/preparationindex preflight PASS;
+priorunrelatedCI absent, no unrelatedobjectstop. NativeARMreadiness --self-check
+then1 pinnedamd64controlledPythontarget. Exactcollector6deab3c5e83e pluscandidate
+metadata409a8812042b/lifecycle4fafc85e3d4d, no script/filter/budget/config changes.
+
+ParentPID7/start769 workerTID8/start785; sharedboot/zerooffsets. Prelive2samples
+8260212753..8511473462ns. SIGINT8632200837..8632290170; waitwitness8632295462,
+handlerseen8632702878; postlive2samples8763077170..9017513712. Release9105082587,
+return9105331879, joined9106451629; completeenumabsence9269246545..9269270045
+matchesreconstructedpriorworkeridentity whileparentstable. Ack9324531629,
+exitstage9324679212, reap9379624670. Exit0/unforced, signalend-to-reap747.3345ms
+<original5s. Scopedfixturetiming only; no bridgeperformancecredit.
+
+Final5samples/9stackOK0unavailable/noexhaustion/parent_stop/noGDB.9taskrecords,
+54contentOK/9directorypresent. Candidate9readable/1observeddisappearance,
+3postsignalsamples/0confirmedtaskexits/no workerprocessexitclaim. Omittedworker
+rawstacknot_attempted, neverfakeOK. No actualmidreadENOENT/forcedreuse/SDK/ROS/SRT/
+overheadequivalence qualification, no oldN1schema retrofit/assessor replacement.
+
+3containers/2volumescreatedonce+removed; observerSYS_ADMINonlyNNP/unchangedfilter/
+readonly/networknone/exactownedPIDnamespace, target+supervisorcap0NNP/seccomp.
+5ordinaryreadinessfilecopymissesretained; nofailedgate/retry/restart/tuning.
+89rawfiles779775bytes indexed andbytecopiedpublicrun/, exactgrant/log/preflight/
+gatereport/schema-summary/postflight/publicindex. No build/testoverlap/testsrun.
+Finalreadonlysource/current14/preserved13/fullchain/native87/alloldpublicraw/
+preparationindex/owncleanup PASS, originalN1assessmentSHA unchanged, sevenlaterdirs
+absent.1PASS1FAIL7notexecuted/all38IDsdisabled; no nextcase/newcampaigngrant/M3
+acceptance/merge/IntrinsicM4. Preparation remains immutable history, not reused.
