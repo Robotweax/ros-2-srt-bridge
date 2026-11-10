@@ -1,5 +1,12 @@
 # ROS 2 SRT Bridge
 
+The [fresh corrected-assessor N4 cohort](evidence/m3-current-n4-corrected-execution-2026-11-10/README.md)
+**PASSES19/19** on freezeecb0d1346932:13 native,3 ROS freshness and3 crash/restart
+cases. Driverexit0, all19 strict/cleanup/integrity gates pass; no tuning or retries.
+Original crash uncertainty/committed-result/no-replay semantics retained. Previous
+N4 failure unchanged. Current-build N0, fresh N3 and bounded N4 now pass within
+recorded scope; nine N1/N2/N5 cases remain disabled. M3 open/PR2 draft/M4 untouched.
+
 The [fresh N4 freeze](evidence/m3-current-n4-corrected-preparation-2026-11-10/README.md)
 is prepared with the corrected assessor: freezeecb0d1346932 binds all19 original
 ordered cases and exact assessordd1fa84dc1ed on the unchanged matched build/fixture.

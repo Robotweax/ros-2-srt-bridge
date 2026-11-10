@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Fresh corrected-assessor N4 freezeecb0d1346932 prepared only:19 original cases, exact assessordd1fa84dc1ed, unchanged matched build/fixture.8 binding+20 preparation+10 JSON+511 existing tests PASS; final read-only integrity verifies. No grant/live run/rebuild/tuning/automatic retries; other9 cases disabled, completed10 excluded. Prior16PASS/1FAIL/2not-executed preserved. M3 open/PR2 draft/M4 untouched.",
+  "current_priority": "Fresh corrected-assessor N4 cohort19/19 PASS (13native+3freshness+3crash), driver0/no tuning/no retries, all cleanup/integrity verified. Current-build N0 and fresh N3 also passed within scope; historical failures preserved. Nine N1/N2/N5 cases remain unexecuted/disabled; separate preparation next. No automatic later run, M3 acceptance, merge or M4 start.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4378,5 +4378,54 @@
       "not_executed": 2
     },
     "M3_complete": false
+  },
+  "current_build_n4_corrected_execution": {
+    "status": "passed_fresh19_current_build_N4",
+    "driver_exit_code": 0,
+    "freeze_sha256": "ecb0d134693279a679907d6791c0518bfe85308d9146c69f83f3a4f2e3aafef1",
+    "source_commit": "10e4895ed1652642dbb7192805fee568102048a5",
+    "cases_declared": 19,
+    "cases_started": 19,
+    "passed": 19,
+    "failed": 0,
+    "not_executed": 0,
+    "native_passed": 13,
+    "ROS_freshness_passed": 3,
+    "ROS_crash_passed": 3,
+    "raw_files": 1140,
+    "raw_bytes": 30643570,
+    "other_unexecuted_cases_disabled": 9,
+    "completed_cases_excluded": 10,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "stop_first_failed_gate": true,
+    "historical_failures_preserved": true,
+    "M3_complete": false,
+    "evidence": "evidence/m3-current-n4-corrected-execution-2026-11-10/README.md",
+    "postflight": "passed_integrity_and_owned_object_absence",
+    "previous_failed_cohort_preserved": true
+  },
+  "current_build_closure_coverage": {
+    "N0": {
+      "passed": 1,
+      "scope": "single300s simulator case"
+    },
+    "N3": {
+      "passed": 9,
+      "scope": "fresh strict30s cases; historical failure preserved"
+    },
+    "N4": {
+      "passed": 19,
+      "scope": "fresh bounded native/ROS phase/freshness/crash cases; historical failure preserved"
+    },
+    "remaining_unexecuted_cases_disabled": 9,
+    "remaining_stages": [
+      "N1",
+      "N2",
+      "N5"
+    ],
+    "M3_complete": false,
+    "PR2_draft": true,
+    "M4_started": false
   }
 }

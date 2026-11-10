@@ -5550,3 +5550,37 @@ manifest/buildSHA unchanged. Dockermetadata inspected only; no build/container/
 network/fixture/worker/ROS launch. Newpublicindex bindsfullpackage/readiness/postflight.
 Priorfreeze/grant/failedcase/17strictdecisions/16PASS1FAIL2notexecuted unchanged.
 M3notaccepted, PR2draft, no merge/IntrinsicM4 orotherstage progression.
+
+
+## 2026-11-10 — Fresh corrected-assessor N4 cohort19/19 PASS
+
+The [fresh corrected-assessor N4 cohort](evidence/m3-current-n4-corrected-execution-2026-11-10/README.md)
+**PASSES19/19** on freezeecb0d1346932:13 native,3 ROS freshness and3 crash/restart
+cases. Driverexit0, all19 strict/cleanup/integrity gates pass; no tuning or retries.
+Original crash uncertainty/committed-result/no-replay semantics retained. Previous
+N4 failure unchanged. Current-build N0, fresh N3 and bounded N4 now pass within
+recorded scope; nine N1/N2/N5 cases remain disabled. M3 open/PR2 draft/M4 untouched.
+
+One authorized invocation at source10e4895/freezeecb0d1346932, driver0.
+All19 original rows11–29 strictpassed plus cleanup/integrity beforeadvance.
+Native13 allstate4/reason0/validproof/1effect/1COMMAND, originalphase/2soutage/
+5sdeadline/conservativereceiver/journalproof/queryretrieval gatespass.
+Freshness3 sixbalances0each, modeleduppermax72/87,28/32,75/75ms<250; produced/
+observed3765/2841,3765/3622,3764/2942 with924/143/822accountedmissing retained.
+No physicalage/losslessavailability/packetobserver/capability/hardware equivalence.
+
+Crashbefore UNKNOWN8/reason2/invalidproof/0effects/receiverempty/NOT_FOUND beyond
+originaldeadline; effect UNKNOWN8/reason1/invalidproof/1effect; committed
+SUCCEEDED4/reason0/validproof/1effect. Originalowner/session/trace/onehandoff/
+noreplay gatespass. Expectedbridge/worker fault events separated from final
+normalchildshutdown; simulatornotphysicalproof. No replay/forcedexpiry authority.
+
+Finalreadonlychecks source/inputs/current14/preserved13/fullchain/native87/
+fixture37/correctedassessordd1fa84dc1ed/preparationpublic/alloldrawpublic PASS;
+all19 ownedcontainer/networkabsence andcredentialdeleted. No tuning/build/tests
+orchecker/helper/trace/budget/clock/rate/queue/wait/filter changesduringcohort.
+Publicgrant/driverlog/cohort/gatereport/caseproofs/shutdown/crash/postflight and
+1140rawfile/30,643,570byte index retained. Previous16PASS1FAIL2notexecuted N4
+andallhistoricalfailures unchanged. Scopecloses currentbuildboundedN4only.
+Remaining9 N1/N2/N5 unexecuteddisabled; nextstepseparatepreparation, notautomatic
+runornewgrant. M3open/PR2draft/no merge/IntrinsicM4.
