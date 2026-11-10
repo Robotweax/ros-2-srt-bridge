@@ -1,5 +1,12 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [per-task visibility candidate](evidence/m3-task-identity-visibility-2026-11-10/README.md)
+adds default-off, bounded task identity/read/absence records with28 offline
+regressions and511 existing tests PASS. One stack attempt; explicit missing,
+reuse/error/truncation evidence,512-entry bounded history. No gate/filter/driver
+change, live experiment, tuning, retry or new freeze/grant. N1/2903 remains FAIL,
+cohort1PASS/1FAIL/7not-executed unchanged; remaining cases/stages disabled. M3 open.
+
 The [offline N1/2903 diagnosis](evidence/m3-n1-2903-thread-evidence-diagnosis-2026-11-10/README.md)
 identifies a task enumeration/read race during provider cleanup:3 named SRT
 threads have12 ENOENT file reads while their parent remains alive. The assessor

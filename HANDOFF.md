@@ -5703,3 +5703,44 @@ current14/preserved13/fullchain/native87/allrawpublic PASS, originalcohort/stric
 hashesunchanged, sevenoutputdirsabsent. Evidenceanalyze.py/report/timelines/
 sourceexcerpts+SHA/log/inputindex/postflight/publicindex retained. M3open/PR2draft,
 no merge/IntrinsicM4, no latercasequeued.
+
+
+## 2026-11-10 — Default-off per-task visibility, offline only
+
+The [per-task visibility candidate](evidence/m3-task-identity-visibility-2026-11-10/README.md)
+adds default-off, bounded task identity/read/absence records with28 offline
+regressions and511 existing tests PASS. One stack attempt; explicit missing,
+reuse/error/truncation evidence,512-entry bounded history. No gate/filter/driver
+change, live experiment, tuning, retry or new freeze/grant. N1/2903 remains FAIL,
+cohort1PASS/1FAIL/7not-executed unchanged; remaining cases/stages disabled. M3 open.
+
+Separatecandidate shutdown_observer.py at evidence/m3-task-identity-visibility-2026-11-10/,
+SHA6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e.
+--task-visibility requiresprocfs, defaultoff. Existingcollect/identity/read/GDB/
+parentObserver ASTunchanged; oldsidecar/entry/filter/bundle/driver/assessoruntouched.
+No livebinding, newfreeze/grant, calibration or casequeued. No budget/period/
+permission/transport/profile/queue/clock/wait tuning. Extra diagnosticwork not
+claimedoldobserveroverheadequivalent.
+
+Optinrecords enumeratebracket, pertask5readbrackets/results, finalstatidentity,
+finaldirectorypresence, before/afterTID+startticks/name/state, parentidentityfinal,
+boundedpriorhint/reuseflag/lifetimestatus. 65directoryentriesmaximum,64sampled
+threads×8processes,512historyentries onepastonly; old16Kbread/48samples/.25s/12s
+unchanged. Fixed7owntaskfileoperations including2newchecks; childidentityreads
+unchanged/outside7. Stackattempt1, no stack retry/poll/backoff. Overflowexplicit,
+notgloballylowest64; oldthreads_truncatedfailurepreserved. Priorhintsnotexitproof.
+Everynewrecord confirmed_exitfalse; rawerrno/unavailable/truncation andfooter
+countsretained; disappearance/status neverconvertedintoOK, no blanketENOENTwaiver.
+
+28temporaryprocfs/deterministicmutationregressionsPASS inclenum/stat/stackexit,
+TIDreuse/reappearance, invalid/truncatedidentity, denied/I/O/ENOTDIRreads,
+parentreuse/missing, histories/pruning/caps, boundedscan/scope/overflow/error,
+actualmodelloop/defaultCLIoff/flagrefusal/ASTconstants. Existing511testsalsoPASS;
+notnative/syscall/filter/realprocfs/loadedtimingqualification. Unchangedfrozen
+coverage againrejectsretainedN1/2903; failure/1PASS1FAIL7notexecuted preserved.
+
+Integritysource/inputs/current14/preserved13/fullchain/provider/native87/oldbundle/
+alloldrawpublic (238files927231952bytes)+previousdiagnosisinputs PASS. Candidate
+binding/inputhashes/postflight/publicindex/logsretained. No build/Docker/live
+observer/processkill/permissionsyscall/experiments/retry, no failedrecord relabel.
+Remainingseven/otherstagesdisabled,29completedexcluded; M3open/PR2draft/M4untouched.
