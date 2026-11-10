@@ -11,13 +11,14 @@ blocked target exited0 and the capability container/volume were removed. No retr
 production tuning or two-loss4211 run; all29 campaign cases remain disabled.
 
 
-The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
-then failed before Python entry: OCI reports fstatfs operation not permitted while
-reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
-ARM64/native-policy selection and explicit exec diagnostics are implemented,
-but runtime compatibility and stack access remain unqualified. Stop at that gate:
-zero blocked targets launched, no retry/tuning, readiness container/volume removed.
-All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+The [reviewed native observer calibration](evidence/m3-observer-bootstrap-calibration-2026-11-10/README.md)
+passes readiness and one unchanged blocked fixture after adding only fstatfs and
+openat2 for the runtime bootstrap path. It captures24 nonempty kernel stacks in12
+post-signal blocked samples, with no denied reads; target exits0/unforced in3.053s
+under the unchanged5s wait. Synthetic ARM64 kernel-stack capture is calibrated;
+original bridge-hang causality remains unknown. Previous failed attempts remain
+recorded. No tuning or two-loss4211 retry; all29 campaign cases remain disabled,
+M3 open, PR2 draft and M4 untouched.
 
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small
 samples; CONTROL carries acknowledged application commands.

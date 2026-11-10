@@ -22,6 +22,12 @@ class NativeFilterTests(unittest.TestCase):
         for name in ('mount','umount2','unshare','setns','clone','clone3','fork','vfork','socket','connect','ptrace','process_vm_readv','bpf','reboot','capset','prctl','clock_settime','init_module'):
             self.assertNotIn(name,allowed)
         for name in ('openat','read','write','getdents64','clock_nanosleep','execve','exit_group'):self.assertIn(name,allowed)
+    def test_bootstrap_delta_is_only_two_file_validation_calls(self):
+        old=json.loads((Path(__file__).resolve().parents[1]/'evidence/m3-observer-native-filter-2026-11-10/observer-seccomp.json').read_text())
+        updated=policy.profile('aarch64','arm64')
+        self.assertEqual(set(updated['syscalls'][0]['names'])-set(old['syscalls'][0]['names']),{'fstatfs','openat2'})
+        self.assertEqual(set(old['syscalls'][0]['names'])-set(updated['syscalls'][0]['names']),set())
+        self.assertEqual({k:v for k,v in updated.items() if k!='syscalls'},{k:v for k,v in old.items() if k!='syscalls'})
     def test_target_has_no_bounding_or_active_capability(self):
         f=dict(CapEff='0',CapPrm='0',CapBnd='0',CapAmb='0',CapInh='0',NoNewPrivs='1',Seccomp='2');policy.require_role(f,0)
         with self.assertRaises(ValueError):policy.require_role(dict(f,CapBnd='200000'),0)

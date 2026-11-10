@@ -15,19 +15,20 @@ is complete to its observation limit: no post-signal stage/stack data, hence no
 uniquely identified blocked function. The separate [bounded shutdown calibration](evidence/m3-shutdown-live-calibration-2026-11-09/README.md)
 on a new matched build passes default-off, healthy stages and independent wait
 sampling, but fails kernel-stack access (22 denied post-signal reads). No two-loss
-4211 retry or permission change occurred. Stack capture remains uncalibrated;
+4211 retry or permission change occurred. At that point stack capture was uncalibrated;
 all29 remaining campaign cases remain disabled and no corrective patch/experiment is queued.
 A later scoped-permission blocked-target attempt failed before observer arming;
 the old native-x86 filter/ARM64 daemon path remains unqualified. No retry followed;
 its capability container and output volume were removed.
 
-The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
-then failed before Python entry: OCI reports fstatfs operation not permitted while
-reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
-ARM64/native-policy selection and explicit exec diagnostics are implemented,
-but runtime compatibility and stack access remain unqualified. Stop at that gate:
-zero blocked targets launched, no retry/tuning, readiness container/volume removed.
-All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+The [reviewed native observer calibration](evidence/m3-observer-bootstrap-calibration-2026-11-10/README.md)
+passes readiness and one unchanged blocked fixture after adding only fstatfs and
+openat2 for the runtime bootstrap path. It captures24 nonempty kernel stacks in12
+post-signal blocked samples, with no denied reads; target exits0/unforced in3.053s
+under the unchanged5s wait. Synthetic ARM64 kernel-stack capture is calibrated;
+original bridge-hang causality remains unknown. Previous failed attempts remain
+recorded. No tuning or two-loss4211 retry; all29 campaign cases remain disabled,
+M3 open, PR2 draft and M4 untouched.
 
 
 ## 1. One candidate, with a concrete coverage ledger

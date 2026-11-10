@@ -2,10 +2,11 @@
 import errno
 from pathlib import Path
 
+# runc post-seccomp FIFO/procfs validation also needs fstatfs/openat2.
 # Single-threaded native Python/procfs collector only. No sockets, ptrace,
 # process-memory, mounts, namespaces, BPF, credentials, clocks or child creation.
-OBSERVER_SYSCALLS=set('''read write readv writev pread64 pwrite64 close close_range lseek fstat newfstatat statx
-access faccessat faccessat2 openat readlink readlinkat getdents64 getcwd
+OBSERVER_SYSCALLS=set('''read write readv writev pread64 pwrite64 close close_range lseek fstat fstatfs newfstatat statx
+access faccessat faccessat2 openat openat2 readlink readlinkat getdents64 getcwd
 mmap mprotect munmap mremap madvise brk
 rt_sigaction rt_sigprocmask rt_sigreturn sigaltstack restart_syscall
 futex set_tid_address set_robust_list rseq

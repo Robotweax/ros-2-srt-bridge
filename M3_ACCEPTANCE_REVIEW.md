@@ -1,12 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
-The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
-then failed before Python entry: OCI reports fstatfs operation not permitted while
-reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
-ARM64/native-policy selection and explicit exec diagnostics are implemented,
-but runtime compatibility and stack access remain unqualified. Stop at that gate:
-zero blocked targets launched, no retry/tuning, readiness container/volume removed.
-All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+The [reviewed native observer calibration](evidence/m3-observer-bootstrap-calibration-2026-11-10/README.md)
+passes readiness and one unchanged blocked fixture after adding only fstatfs and
+openat2 for the runtime bootstrap path. It captures24 nonempty kernel stacks in12
+post-signal blocked samples, with no denied reads; target exits0/unforced in3.053s
+under the unchanged5s wait. Synthetic ARM64 kernel-stack capture is calibrated;
+original bridge-hang causality remains unknown. Previous failed attempts remain
+recorded. No tuning or two-loss4211 retry; all29 campaign cases remain disabled,
+M3 open, PR2 draft and M4 untouched.
 
 
 The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
@@ -68,9 +69,10 @@ numerical superiority claim.
    retry or permission fallback. A subsequent one-shot permission attempt failed before observer arming;
    native-x86-64 in-process filter versus ARM64 daemon is an unchecked
    compatibility blocker, while exact pre-exec errno is unavailable. Target
-   cleanup and permission-container removal pass. Stack capture remains
-   uncalibrated; a compatible observer policy and explicit pre-exec diagnostics
-   are prerequisites, with no automatic further run or timeout change. Keep8 strict PASS/1 FAIL, the5s
+   cleanup and permission-container removal pass. The later reviewed native
+   profile passes synthetic kernel-stack calibration (24/24 nonempty reads in12
+   post-signal samples), preserving these earlier failures. Real bridge shutdown
+   stacks and hang attribution remain unperformed; no automatic run or timeout change. Keep8 strict PASS/1 FAIL, the5s
    lifecycle gate and all29 remaining stages disabled; no retry or cohort splice.
 3. The retained-run N5 publication-age assessment is now complete in the
    [offline audit](evidence/m3-n5-sensor-retained-audit-2026-11-09/README.md).

@@ -1,12 +1,13 @@
 # Delivery focus — 2026-11-09
 
-The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
-then failed before Python entry: OCI reports fstatfs operation not permitted while
-reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
-ARM64/native-policy selection and explicit exec diagnostics are implemented,
-but runtime compatibility and stack access remain unqualified. Stop at that gate:
-zero blocked targets launched, no retry/tuning, readiness container/volume removed.
-All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+The [reviewed native observer calibration](evidence/m3-observer-bootstrap-calibration-2026-11-10/README.md)
+passes readiness and one unchanged blocked fixture after adding only fstatfs and
+openat2 for the runtime bootstrap path. It captures24 nonempty kernel stacks in12
+post-signal blocked samples, with no denied reads; target exits0/unforced in3.053s
+under the unchanged5s wait. Synthetic ARM64 kernel-stack capture is calibrated;
+original bridge-hang causality remains unknown. Previous failed attempts remain
+recorded. No tuning or two-loss4211 retry; all29 campaign cases remain disabled,
+M3 open, PR2 draft and M4 untouched.
 
 
 The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
@@ -29,13 +30,12 @@ under the unchanged plan. No new experiment or waiver is queued.
 `M3_CLOSURE_PLAN.md` now gives the concrete N3/current-build closure sequence;
 the authorized N3-only execution is now recorded as8 strict passes/final shutdown FAIL,
 with every later stage disabled. Retained diagnosis now locates the observation gap but cannot name the blocked
-function. Any further stage/stack visibility needs a separate scope decision;
-default-off behavior/stages and independent wait sampling now pass bounded live
-calibration on a new matched build, but kernel stacks fail access/errno13. No
-permission fallback, retry, corrective patch or shutdown-budget increase is queued.
-The later one-shot scoped-permission attempt failed before observer arming:
-ARM64 daemon/native-x86 filter compatibility was missed in preflight. Cleanup
-passed; no subsequent attempt or broader permission grant followed.
+function. Default-off behavior/stages and independent wait sampling passed the
+initial bounded live calibration. Earlier stack-access and observer startup
+failures remain retained. The latest native bootstrap policy passes readiness
+and synthetic kernel-stack capture; real bridge stage/stack capture and hang
+attribution are still unperformed. No corrective patch, timeout change, original
+case retry or campaign advancement is queued.
 
 ## Execution rules
 

@@ -1,0 +1,14 @@
+..........................usage: python3.14 -m unittest [-h] --freeze FREEZE [--execute]
+                              [--authorization AUTHORIZATION]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: execution requires a separate authorization file and fresh output
+.........................................................................................................baseline failed
+baseline passed
+fragment-cut passed
+................................................................................................................................................................................................................................................................................................................{"stage": "native_architecture", "type": "ValueError", "errno": null, "message": "observer architecture is not daemon-native", "traceback": "Traceback (most recent call last):\n  File \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-observer-native-filter-2026-11-10/observer_entry.py\", line 25, in main\n    if architecture(platform.machine())!=expected['native'] or architecture(expected['daemon'])!=expected['native']:raise ValueError('observer architecture is not daemon-native')\n                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: observer architecture is not daemon-native\n"}
+.{"stage": "exec", "type": "FileNotFoundError", "errno": 2, "message": "[Errno 2] missing interpreter", "traceback": "Traceback (most recent call last):\n  File \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-observer-native-filter-2026-11-10/observer_entry.py\", line 39, in main\n    os.execv(sys.executable,argv)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1176, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1180, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py\", line 1241, in _execute_mock_call\n    raise effect\nFileNotFoundError: [Errno 2] missing interpreter\n"}
+................................
+----------------------------------------------------------------------
+Ran 468 tests in 3.428s
+
+OK

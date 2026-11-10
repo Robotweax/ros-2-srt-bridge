@@ -4369,3 +4369,43 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   unqualified. Next prerequisite is offline OCI-bootstrap syscall review and a
   separate frozen readiness check. No next attempt queued. Original N3 8PASS/1FAIL,
   unknown hang cause; all29 remaining campaign cases disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Reviewed OCI bootstrap; native readiness and blocked stacks PASS
+
+- User authorized runtime-bootstrap review, observer filter update, readiness,
+  then only blocked-thread calibration. No tuning/two-loss4211 retry; all29
+  remaining campaign cases disabled. New prospective one-shot freeze; prior
+  failed profiles/freezes/attempts unchanged.
+- Daemon runc1.5.2/v1.5.2-0-g29dd3dc2, nativeARM64. Upstream tag path applies
+  NNP seccomp before FIFO reopen; safe procfs validates fstatfs/fstat then uses
+  openat2 on supported kernels. Descriptor cleanup uses the same wrapper. Added
+  only fstatfs/openat2; previous common IO/memory/clock/signal/exec calls retained.
+  No mount/namespace/credential/ptrace/network/process-memory/fork/clone grants.
+  Source-review correspondence, not runtime binary reproducibility. References
+  and local source hashes retained; all468Python tests PASS before freeze.
+- Native ARM64 pinned observer, original amd64 image/fixture/13matched entries,
+  original3s hold/5s wait unchanged; no SDK/ROS/native rebuild. Minimal RO helper
+  bundle/root, networknone, fresh output volume. Observer-only SYS_ADMIN,NNP1,
+  exact custom native policy; target/supervisor all capability sets inclbounding0
+  and default seccomp. No hostPID/proc/socket/workspace exposure/global change.
+- Exactly1readiness PASS (entry/preexec_verified/self_check_passed,exit0), then
+  exactly1unchangedtarget PASS. Native sidecar joins only ownedtarget privatePID,
+  identity PID7/start_ticks435,observerPID9,ready beforeSIGINT. SharedbootID,
+  zero time offsets. Explicit entry/verification/exec records survive.
+- Target exits0/unforced3.053350251s; all5original markers correct/zero drops.
+  12fully-contained post-signal blocked samples/24nonempty stack reads, both
+  original TIDs7/8, no denied/truncated/identity/budget failures. Both ARM64 futex
+  kernel waits; total13samples26reads0unavailable, complete parent_stopfooter.
+  No GDB/attach/userspace stacks or overhead-equivalence claim. Kernel stacks
+  belong to ARM64 Linux executing the amd64 fixture through emulation.
+- All3owned containers/bothvolumes removed/absent, no forcedcleanup. Source,
+  input/helper/profile and matched13/preserved build chain verify unchanged.
+  Prior913N3 raw files,219oldcalibration files and previousobserverattempts match
+  retained indexes. 97local artifacts/helper/reviewedsourcefiles hash-indexed;
+  actualstackJSONL and gate/caps/stage/child/ready/exec/postflight published under
+  evidence/m3-observer-bootstrap-calibration-2026-11-10.
+- Synthetic kernel-stack capture calibrated on this host/policy. No original
+  bridge hang attribution, real shutdown failure reproduction, user frames or
+  N3 closure. Original8PASS/1FAIL unchanged. No next experiment queued, no4211
+  retry/tuning/expiry/replay. All29disabled/M3open/PR2draft/M4untouched.
