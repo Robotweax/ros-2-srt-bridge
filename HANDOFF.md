@@ -4696,3 +4696,41 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   newfreeze/readiness/postflight/testlogs. Future one-shot muststopfirstfailedgate,
   restoreselectors/captures/children/sidecar/labobjects/credential and preserve raw
   failures; no fallback/retry. All29remainingstagesdisabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — One authorized two-loss2903/30s shutdown diagnostic PASS
+
+- User authorizes exactly prepared single2903/30s/two-loss case, stopfirstfailedgate,
+  no tuning/two-loss4211, allremainingstagesdisabled. Separateexactauth binds
+  preparedfreezeb9edfe65b927; source/input/helper/tracing/filter/14matched/old13/
+  fullpreservedchain/provider/87nativeinputs and oldrawindexes passpreflight.
+- One output .local/two-loss-2903-shutdown-20261110T083854934922Z. Freshbinding
+  ISN/socket/tuple mapsrow1positions2/3source msgs7/8;2u32initialcounters0, each
+  exactly1packet/drop494/438bytes. Ownedhookrestored/emptyreadback beforecapture
+  closure/observerarm. SDK/native/PCAP/parity/typed two-loss proofPASS, exact
+  receiverdecisionmissingmsgs[7,8], SRTgap2. No randomloss/parameterchange.
+- Source30.053584597s,200.009419/50.010673Hz,0skips,sixbalances0,ageuppermax26/41ms.
+  7514produced7254observed:260accounted upstreamDDS8/admission19/outboundreplace230/
+  selectedSRTgap2/receivereplace1. Latest-only, not lossless/physicalage/N3fullclaim.
+- Observer nativeentry/exec/permission/identity/clock/ready beforeSIGINT PASS,
+  25successfulstackreads0unavailable,24nonemptyinsidewait/1containedpostsignal,
+  confirmedregisteredworker absenceafterjoin, completeboundedfooter. NoGDB/SYS_PTRACE/
+  overheadclaim, unchangednativepolicy/image/caps/NNP/budgets/privatePID/ROhelper.
+- Stage/dispositionPASS operator59/robot43zero-droprecords. Robot4slots-1/no local
+  close; operator2datacloses during sessionstop plus2listenercloses atfinalsweep,
+  all4tracedreturns0. No inferredearlierrobotcloseresult/everyhandleleakproof.
+  Operator exits0/unforced216.091042ms, robotbridge316.515126ms, source167.677083ms;
+  original5swaits unchanged. Both adapter/finaldiagnosticPASS/driver0, nofailedgate.
+- Allselectors/captures/children/observer/labcontainers/network/volume cleanedup,
+  credentialdeleted, absenceverified/noforce. Source/input/14matched/old13/provider/
+  fullchain/native87/previousrawindexes matchpostflight.124newclosedrawfiles hashed.
+  No nativebuild/heavychecks/othercase overlapped; prior497offline tests notrerun.
+- Evidence evidence/m3-two-loss-2903-execution-2026-11-10 includesprospectivePLAN/
+  auth/preflight, fullresult/assessment/selectedcounter-restorationproof, exact
+  stage/slot/result/observer/child/ready/exec/policy, postflight/index. Faultlogs
+  copied fromactualmeasurement subdir after routinepublishpath correction; raw
+  case and statuses untouched/no rerun. Preparedfiles immutable; one-shotconsumed.
+- This is one newdiagnosticPASS, not originalN3splice/fullqualification/oldFAIL
+  promotion or original4211hang reproduction/attribution. No followingcasequeued;
+  all29remain disabled, no tuning/4211/expiry/replay/commands,
+  originalN3 8PASS/1FAIL/unknowncause/M3open/PR2draft/M4untouched.

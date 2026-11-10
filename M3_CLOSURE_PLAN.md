@@ -1,11 +1,11 @@
 # M3 acceptance closure plan — 2026-11-09
 
-A [single two-loss seed2903 shutdown diagnostic](evidence/m3-two-loss-2903-preparation-2026-11-10/README.md)
-is prepared offline with execution disabled:30s, selected SENSOR messages7/8,
-exact current14-entry matched build/tracing/observer and original5s waits. All497
-Python tests pass; native inputs and prior evidence verify, with no rebuild or
-live run. No authorization file exists;4211 and broader case tuples are refused.
-No tuning or campaign advancement; all29 remaining cases stay disabled.
+The [single authorized two-loss seed2903/30s shutdown diagnostic](evidence/m3-two-loss-2903-execution-2026-11-10/README.md)
+passes on the frozen14-entry build: exactly one drop each for messages7/8,
+verified selector restoration, strict SENSOR/capture/accounting, lifecycle/socket
+and cleanup gates. Both bridges exit0/unforced under unchanged5s waits. No tuning,
+4211 retry, additional case or historical FAIL relabeling; all29 campaign stages
+remain disabled, M3 open/PR2 draft/M4 untouched.
 
 
 The [explicit socket-disposition diagnostic](evidence/m3-socket-disposition-2026-11-10/README.md)
