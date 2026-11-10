@@ -5040,3 +5040,43 @@ and prior raw/public indexes verify, including failed N0 and fresh N3 nine-case
 PASS. Package input/public hashes and validation logs retained. No N0 retry,
 new freeze or further case. N0 remains unqualified; other28 stages disabled,
 M3 open/PR2 draft/M4 untouched. Live behavior remains unvalidated for this fix.
+
+
+## 2026-11-10 — Corrected-readiness N0 freeze prepared, not run
+
+User authorizes new N0/1701/300s freeze with corrected launch readiness only;
+no execution/tuning/automatic retry, other stages disabled. Package:
+ evidence/m3-current-n0-corrected-preparation-2026-11-10/.
+Freeze SHA2567b5c7d9222062c86b9447cbd6c2d430138f3b4574c5a66b16cee637409386f69.
+Execution disabled, authorization absent, zero live runs. Output reserved but
+absent: .local/corrected-n0-coverage-20261110T104303571352Z. Fresh read-only local
+observer bundle/prefix bound; no Docker object or readiness experiment started.
+
+Exactly campaign ordinal10/N0-combined-1701/300s,28 other unexecuted cases explicitly
+disabled and completed N3 excluded. New scope current-build-N0-combined-launch-
+readiness-v2-socket-disposition plus required launch-specific-v1 grant revision
+refuses old N0/N3 grants. Future explicit grant must bind exact new freeze/order/
+disabled IDs/history/no-tuning/no-retry; no grant made. Old driver/failure stay
+immutable and cannot silently use corrected code. Stop first failed gate, no
+resume or later-stage dispatch; full cleanup/integrity required before acceptance.
+
+Local host adapter is byte-identical to corrected harness workload.py and selects
+its exact scenario.py/bridge_exec.py/launch_readiness.py. All corrected public
+inputs and immutable calibrated observer/lifecycle/socket/assessor components
+hash-bound. Same SDK/ROS current14/preserved13/full chain/provider/native87,
+pinned target/native observer images/runtime; no source/build/policy/budget/rate/
+clock/queue change. Dynamic-neighbor N0 combined workload unchanged. Wrapper
+pre-exec readiness is not execed-bridge or successful application readiness.
+
+Nine new preparation and21 readiness tests pass offline with mocked callbacks/
+processes and temporary metadata; no fixture. Original511 existing-test PASS log
+is retained/hash-bound, not rerun or given new live scope. Syntax plus original
+source/inputs/build/full prior raw/public indexes verify before freeze and again
+through the disabled driver's read-only verify. Docker version/info/image/list
+calls only; no create/start/pull/build or mutation. New bundle is local files only.
+
+Public package hashes/readiness/postflight and logs published. N0 remains failed/
+unqualified until a separately authorized future run passes. Fresh N3 stays9/9,
+historical failures unchanged. Combined corrected-harness live behavior remains
+unvalidated. Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued,
+Intrinsic/M4 untouched.

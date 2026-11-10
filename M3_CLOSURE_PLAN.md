@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [new corrected-readiness N0 freeze](evidence/m3-current-n0-corrected-preparation-2026-11-10/README.md)
+is prepared for exactly seed1701/300s, binding the verified launch-specific harness
+and unchanged matched build. Freeze7b5c7d922206 is execution-disabled with no grant
+or live run. Nine preparation and21 readiness tests pass offline; retained511
+existing-test PASS keeps its original scope. Runtime/image metadata and retained
+source/input/build/public/raw evidence verify. No tuning/retry/native rebuild;
+other28 stages disabled, N0 still unqualified, M3 open/PR2 draft/M4 untouched.
+
+
 The [launch-specific N0 readiness fix](evidence/m3-current-n0-readiness-fix-2026-11-10/README.md)
 is implemented in a separate candidate harness and passes21 targeted plus511
 existing offline tests. Unique per-launch token/path and PID/start_ticks binding
