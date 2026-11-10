@@ -1,5 +1,12 @@
 # ROS 2 SRT Bridge
 
+The [nine remaining current-build cases](evidence/m3-current-long-preparation-2026-11-10/README.md)
+are prepared in freeze868a21578a61: N1/N2 three seeds each at600s, then N5 three
+seeds at300s, unchanged matched build and stabilized lifecycle/observer. **No live
+run or grant; execution disabled, no tuning or automatic retries.** All29 completed
+N0/N3/N4 IDs are excluded/disabled.21 preparation,39 lifecycle,4 import and511
+existing tests PASS. Prior failures unchanged; M3 open/PR2 draft/M4 untouched.
+
 The [fresh corrected-assessor N4 cohort](evidence/m3-current-n4-corrected-execution-2026-11-10/README.md)
 **PASSES19/19** on freezeecb0d1346932:13 native,3 ROS freshness and3 crash/restart
 cases. Driverexit0, all19 strict/cleanup/integrity gates pass; no tuning or retries.

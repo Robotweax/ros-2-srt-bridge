@@ -5584,3 +5584,46 @@ Publicgrant/driverlog/cohort/gatereport/caseproofs/shutdown/crash/postflight and
 andallhistoricalfailures unchanged. Scopecloses currentbuildboundedN4only.
 Remaining9 N1/N2/N5 unexecuteddisabled; nextstepseparatepreparation, notautomatic
 runornewgrant. M3open/PR2draft/no merge/IntrinsicM4.
+
+
+## 2026-11-10 — Nine remaining N1/N2/N5 cases prepared only
+
+The [nine remaining current-build cases](evidence/m3-current-long-preparation-2026-11-10/README.md)
+are prepared in freeze868a21578a61: N1/N2 three seeds each at600s, then N5 three
+seeds at300s, unchanged matched build and stabilized lifecycle/observer. **No live
+run or grant; execution disabled, no tuning or automatic retries.** All29 completed
+N0/N3/N4 IDs are excluded/disabled.21 preparation,39 lifecycle,4 import and511
+existing tests PASS. Prior failures unchanged; M3 open/PR2 draft/M4 untouched.
+
+Freeze868a21578a61a3d5e67d047fa76c95c24ea70c1965c5b71d6f9f5902d292d12e
+binds exact originalrows30–38: N1 seeds1701/2903/4211×600s, N2 same×600s,
+N5 same×300s.4500s nominalsource only, notwallclockestimate. Allnine unexecuted;
+all29completedN0/N3/N4 IDs disabled/excluded, no rerun/subset/smoke/resume/batch.
+Futureoutput.local/current-long-cohort-20261110T152312809927Z absent. Prefix
+current-long-20261110t152312809927z pluscaseID givesfreshobservernames/volumes;
+readonly5-filebundlebound. Exactfuturegrant required, oldN0/N3/N4 grantsrefused.
+
+Reuseoriginal200/50Hz,2scommandperiod,5sbudget,250msSENSOR,200msclockinterval,
+N1(20/5ms,1%) N2(60/15ms,3%) queues256, N5roots512kbit/s/4096burst/32768limit,
+children16 andUDP128K competitor1024bytes/source+60s, dynamicneighbors. Original
+capture/diagnostics/5swaits/filter/budgets unchanged. Onlyhostallowedprofile/
+seed/durationguard+identicalscenario-path rebase; scenario/wrapper/lifecycle/
+readiness/identity/stage/socket/observer componentsbyteidenticaltostabilizedN0.
+Existingstrictcombinedage/accounting/capture/frame/cadence/closedjournals/
+positiveprogress/shutdown gatesretained. Additionalclosedprofilegate checksexact
+installcommands/kernelsettings; missing/changedreadback fails, nogatewaived.
+Strictassessment andpostflightmustfinishbeforeadvance, firstfailure stopsalltail;
+assessmentexceptions stillpostflight, hostexceptions boundedownedcleanup/noretry.
+
+21preparation+39lifecycle+4freshidentity/import+511existing testsPASSoffline.
+Wholelifecyclerebasednewpackage; combined/profilegatesmockedoutside lifecycle
+model, profilechecksseparatelytested. Notlive600s/load/capture/observerqualification.
+Initialpreparationonlycheck wronglyread N3cohort.json andstoppedbeforeDocker/
+freeze/bundle/output; correctedtopublishedgate-report.json withactual9/9status
+andnewregression. validation/preparation-correction.json retainslookupfailure.
+
+Finalreadonlydriver.verify source/frozeninputs/current14/preserved13/fullSDK/
+ROS/provider/native87/oldfixture/everypriorpublicrawindex (inclN4new1140files)
+PASS; no build/Dockermutation/containers/network/worker/ROS/experiment. New
+publicindex/readiness/postflight/finalverification/caseplan/settings bound. Existing
+N0/N3/N4 passes andalloldfailuresimmutable. No M3acceptance/merge/laterstage/M4.
