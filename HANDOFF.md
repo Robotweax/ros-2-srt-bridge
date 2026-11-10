@@ -4409,3 +4409,43 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   bridge hang attribution, real shutdown failure reproduction, user frames or
   N3 closure. Original8PASS/1FAIL unchanged. No next experiment queued, no4211
   retry/tuning/expiry/replay. All29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Prepared one operator bridge shutdown diagnostic; execution disabled
+
+- User requested preparation only. No bridge, sidecar, capture, Docker object or
+  network mutation started; no execution authorization file created. New disabled
+  prospective freeze binds one healthy N0 SENSOR1701/10s, capture/trace enabled,
+  matched shutdown-tracing SDK/ROS13 and original5s stop_children wait. No selected
+  losses/commands, tuning/expiry/replay/two-loss4211 retry or campaign dispatch.
+- Evidence-local N0-only adapter removes selected-loss branches; CLI requires a
+  separate exact scope/freeze-SHA authorization and refuses other cases/options,
+  changed source/build/runtime/profile, existing output or unrelated live containers.
+  Default scenario/campaign adapters unchanged; all29 remaining cases disabled.
+- Stage tracing both roles; native ARM64 calibrated observer only on operator
+  bridge/plain SDK journal-worker descendants. Host arms sidecar after SENSOR
+  capture/result barriers and before release/SIGINT. Explicit entry/preexec/exec,
+  ready, identity/boot/time and permission gates; no extended child wait/hold.
+- Same calibrated profile/image/minimal RO5file bundle; sidecar SYS_ADMIN only,
+  NNP, default-deny/native filter, networknone/private ownedPID/rootFSRO, private
+  outputvolume. No SYS_PTRACE/GDB/privileged/host namespaces/proc/socket/workspace
+  or credential exposure. Lab NET_ADMIN/BPF remain as existing capture fixture.
+- New bridge-only exec wrapper drops bounding and all active/inheritable/ambient
+  capabilities, enables NNP/same-UID dumpability. Bridge/worker credentials and
+  journal/trace access must qualify live; no fallback if unavailable. This wrapper
+  and bridge sidecar integration are offline prepared, not already live validated.
+- Healthy shutdown needs original complete stages/zero drops, exit0/unforced,
+  source/typed/capture/accounting/cadence gates and bounded observer finalization.
+  Fast clean exit may have zero post-signal samples; at least1 real bridge kernel
+  stack required. Forced child kill stays FAIL, with >=2post-signal samples and
+  nonempty stacks needed for complete hang observation. Raw failures retained;
+  sidecar exported/reaped before lab PID namespace removal. No inferred cause.
+- 475Python tests PASS (7new authorization/scope/no-Docker/capdrop/cleanup/coverage
+  controls); ctypes Linux calls and ROS bridge execution mocked or unexecuted.
+  Prepared freeze/helper/source and13matched/preserved chain verify unchanged.
+  All913originalN3raw/219oldcalibration/bothfailedobserver/latestPASS artifacts
+  retain indexed hashes. No native/SDK/ROS rebuild. Prefix objects/output absent.
+- Package evidence/m3-bridge-shutdown-preparation-2026-11-10 includes PLAN,
+  executable-but-disabled driver, scenario/capdrop/sidecar/assessor, immutable
+  freeze/readiness/postflight and test reports. No authorization file or live
+  result. Original N3 8PASS/1FAIL/unknowncause unchanged; M3open/PR2draft/M4untouched.

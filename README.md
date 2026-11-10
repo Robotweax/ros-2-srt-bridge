@@ -1,5 +1,14 @@
 # ROS 2 SRT Bridge
 
+A [single bridge shutdown diagnostic](evidence/m3-bridge-shutdown-preparation-2026-11-10/README.md)
+is now prepared offline, with execution disabled: healthy N0 SENSOR1701/10s,
+tracing on both bridges and the calibrated native observer on the operator bridge
+and worker descendants before SIGINT. No losses/commands, tuning or two-loss4211
+retry. All475 Python tests pass; bridge capability reduction and sidecar wiring
+remain untested live. A separate exact authorization is required to run it;
+all29 campaign cases stay disabled and no diagnostic has been launched.
+
+
 The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29

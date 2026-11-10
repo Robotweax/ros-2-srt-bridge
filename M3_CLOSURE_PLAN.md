@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+A [single bridge shutdown diagnostic](evidence/m3-bridge-shutdown-preparation-2026-11-10/README.md)
+is now prepared offline, with execution disabled: healthy N0 SENSOR1701/10s,
+tracing on both bridges and the calibrated native observer on the operator bridge
+and worker descendants before SIGINT. No losses/commands, tuning or two-loss4211
+retry. All475 Python tests pass; bridge capability reduction and sidecar wiring
+remain untested live. A separate exact authorization is required to run it;
+all29 campaign cases stay disabled and no diagnostic has been launched.
+
+
 **Latest authorized N3 execution: FAIL,8 strict passes then a shutdown failure.**
 See [the frozen current-build cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md).
 The exact9-case N3-only scope was authorized and executed once, without tuning,
