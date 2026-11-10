@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Current-build N4:19 cases prepared on unchanged matched socket-disposition SDK/ROS; freeze513f13066b30, execution disabled/no grant.20 offline preparation tests+511 existing PASS, standalone fixture compile/static link only. Other9 unexecuted cases disabled; completed10 N0/N3 excluded. No tuning, automatic retries, M3 acceptance, merge or M4 start.",
+  "current_priority": "Current-build N4 stopped at first failed strict gate:16PASS (13native+3ROSfreshness),1FAIL crash-before audit int/string JSON key mismatch,2not-executed. Preserve failure; offline assessor serialization fix/regressions next. No tuning, automatic retry, remaining N4/N1/N2/N5 execution, M3 acceptance, merge or M4 start.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4279,5 +4279,37 @@
       "N0-combined-1701"
     ],
     "M3_complete": false
+  },
+  "current_build_n4_execution": {
+    "status": "failed_stopped_at_first_strict_gate",
+    "driver_exit_code": 1,
+    "freeze_sha256": "513f13066b304490c89a36a288ec4839a08ec780d8ede21269885eeb4b665b10",
+    "source_commit": "12ec0195404ab0edc3b8c03a5880779bf422b414",
+    "cases_declared": 19,
+    "cases_started": 17,
+    "passed": 16,
+    "failed": 1,
+    "not_executed": 2,
+    "first_failed_case": "N4-ROS-crash-before",
+    "failed_gate": "ROS crash audit differs",
+    "native_passed": 13,
+    "ROS_freshness_passed": 3,
+    "ROS_crash_strict_passed": 0,
+    "raw_files": 1018,
+    "raw_bytes": 28981196,
+    "other_unexecuted_cases_disabled": 9,
+    "completed_cases_excluded": 10,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "stop_first_failed_gate": true,
+    "historical_failures_preserved": true,
+    "M3_complete": false,
+    "evidence": "evidence/m3-current-n4-execution-2026-11-10/README.md",
+    "failure_comparison": "evidence/m3-current-n4-execution-2026-11-10/failure-comparison.json",
+    "postflight": "passed_integrity_and_owned_object_absence",
+    "remaining_N4_cases_disabled": [
+      "N4-ROS-crash-effect",
+      "N4-ROS-crash-committed"
+    ]
   }
 }

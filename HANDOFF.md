@@ -5455,3 +5455,34 @@ IPC/ROS startup, command outcomes, crash recovery or teardown. N4 retains its
 original fixture diagnostics; no N0 stack-observer/capability equivalence claim.
 Read-only final driver verification PASS; no case scheduled or automatically
 advanced. Prior N0/N3 results and failures unchanged; no M3 acceptance/merge/M4.
+
+
+## 2026-11-10 — N4 cohort stopped:16PASS/1FAIL/2not-executed
+
+The [current-build N4 execution](evidence/m3-current-n4-execution-2026-11-10/README.md)
+stopped at the first failed gate: **16 PASS / 1 FAIL / 2 NOT EXECUTED**. All13
+native and3 ROS freshness cases pass; crash-before-admission fails strict audit
+comparison. Retained proofs differ only in trace-name map integer versus JSON
+string keys; JSON-round-tripped proofs match, but the case remains FAIL. All17
+cleanup/integrity postflights pass. No tuning/retry/fix or further run; two N4
+crash cases and nine other unexecuted cases stay disabled, completed10 N0/N3
+excluded. M3 open/PR2 draft/M4 untouched.
+
+Exactly one authorized invocation of preparedfreeze513f13066b30 at source12ec019.
+Driverexit1,17 started rows11–27; rows28/29 never started, no directories.13 native
+successes each1effect/1originalCOMMAND, durable journal/deadline/phase/query proof.
+Three freshness cases sixbalances0 each, modeled age maxima18/29ms; losses884,
+138,796 respectively retained. Original N4 diagnostics/scope, not N0 observer,
+physicalage or hardware qualification.
+
+Firstfailedstrictgate ROS crash audit differs; innercrashchecks passed. Readonly
+retainedcomparison finds only sender_trace.point_names/reason_names intkeys versus
+JSONstrkeys; normalizedJSONexactmatch. Frozenassessor untouched and failedstatus
+preserved; no protocol-defect claim. Innerstate8/reason2/invalidproof/0effects,
+receiverempty/NOT_FOUND beyondoriginaldeadline/1handoff remain observations only.
+No replay/forcedexpiry or acceptancewaiver. All17 cleanup/integrity postflights
+and final source/inputs/current14/preserved13/fullchain/native87/fixture37/prior
+archives/preparation publicindex verify. Complete1018 rawfiles/28,981,196bytes
+hash-bound; publicproofs/failurecomparison/logs/gatereport in executionpackage.
+No build/test/tuning or otherstage overlap; old freezes/failures immutable.
+Next: offline serializationfix/regressions, not automatic rerun or newgrant.

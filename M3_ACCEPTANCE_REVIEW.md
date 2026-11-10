@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [current-build N4 execution](evidence/m3-current-n4-execution-2026-11-10/README.md)
+stopped at the first failed gate: **16 PASS / 1 FAIL / 2 NOT EXECUTED**. All13
+native and3 ROS freshness cases pass; crash-before-admission fails strict audit
+comparison. Retained proofs differ only in trace-name map integer versus JSON
+string keys; JSON-round-tripped proofs match, but the case remains FAIL. All17
+cleanup/integrity postflights pass. No tuning/retry/fix or further run; two N4
+crash cases and nine other unexecuted cases stay disabled, completed10 N0/N3
+excluded. M3 open/PR2 draft/M4 untouched.
+
 The [current-build N4 preparation](evidence/m3-current-n4-preparation-2026-11-10/README.md)
 freezes exactly19 cases:13 native interruption/query,3 ROS freshness and3 ROS
 crash/restart. Freeze513f13066b30 uses the unchanged matched SDK/ROS build; the
