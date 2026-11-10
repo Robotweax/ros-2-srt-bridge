@@ -1,5 +1,13 @@
 # Delivery focus — 2026-11-09
 
+The [explicit-identity N0 freeze](evidence/m3-current-n0-bound-preparation-2026-11-10/README.md)
+is prepared for exactly seed1701/300s. Freeze66f21a2916b9 binds the intended helper
+path/SHA, verified harness, unchanged matched build and retained evidence. It is
+execution-disabled: no grant or live run. Ten preparation and30 readiness/import
+checks pass offline; prior511-test PASS retains its scope. No tuning/retry/rebuild;
+other28 stages disabled, N0 unqualified, M3 open/PR2 draft/M4 untouched.
+
+
 The [explicit identity-helper fix](evidence/m3-current-n0-identity-binding-fix-2026-11-10/README.md)
 binds the intended frozen helper by exact path/SHA and checked source bytes in a
 private module, independent of import order/cache. Snapshots retain helper origin.

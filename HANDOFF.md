@@ -5155,3 +5155,40 @@ execution grant or live output; immutable old drivers do not silently select fix
 N0 remains unqualified pending separate preparation/authorization/live gates.
 Other28 cases disabled; N3 recorded outcomes unchanged, M3 open/PR2 draft,
 no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Explicit-identity N0 freeze prepared; no live run
+
+User requests new N0/1701/300s freeze with explicitly bound helper, do not run,
+no tuning/automatic retry, other stages disabled. Package:
+ evidence/m3-current-n0-bound-preparation-2026-11-10/.
+Freeze66f21a2916b9e38ff44f65d289715f10f59f4d377d8502ffe7752eada51becc6.
+Execution disabled, authorization absent, zero live cases. Reserved output absent:
+.local/bound-n0-coverage-20261110T113643640555Z. Fresh prefix/read-only local
+observer bundle bound; no Docker object/bridge/capture/observer or experiment.
+
+One campaign ordinal10/N0-combined-1701/300s; other28 N4/N1/N2/N5 IDs disabled,
+completed N3 excluded. Scope current-build-N0-combined-explicit-identity-v3-socket-
+disposition and revision explicit-identity-v1. New exact future grant additionally
+requires intended helper SHA; old N0/N3 grants refused. No resume/retry or later
+stage dispatch. First failed gate stops; cleanup/integrity remain mandatory.
+
+Byte-identical candidate adapter selects explicit-identity fix scenario/wrapper/
+readiness helper, all frozen inputs. Exact prior N0 identity helper path and
+SHAf4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3,
+private module _robotweax_n0_launch_identity_v1 bound in freeze and verified by
+driver. No import-order/cache fallback. Per-launch atomic readiness, exact failed
+status/helper provenance, PID/start_ticks/PPid and original cap/NNP/seccomp gates
+remain. Pre-exec wrapper evidence is not execed/application readiness.
+
+Ten preparation and30 identity/readiness tests pass offline; candidate511-test
+PASS log retained/hash-bound with original scope, not rerun/live credit. Syntax
+and source/input/current14/preserved13/full chain/provider/native87/prior raw/public
+checks pass before freeze and through the disabled driver verifier. Docker only
+read-only version/info/image/list metadata; no create/start/pull/build/mutation.
+No policy/workload/rate/queue/clock/wait/filter/budget change or native rebuild.
+
+Public package hashes/readiness/postflight/logs published; both failed N0 attempts,
+old freezes and N3 outcomes immutable. Corrected combined live path remains
+unvalidated, N0 unqualified pending separate explicit live authorization/gates.
+Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued, M4 untouched.
