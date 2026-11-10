@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [bounded native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze8acc653d87ad, **not run; execution disabled and no grant**.
+33 offline preparation tests pass. Exact assessment candidate; two pre-signal
+and two post-signal readable worker samples, then controlled join/absence before
+parent exit, with unchanged five-second child wait and observer policy/budgets.
+Unrelated CI remains running and blocks future execution preflight; untouched.
+No tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted are preserved;
+all38 campaign IDs stay disabled, M3 open/PR2 draft/M4 untouched.
+
 The [offline per-thread assessment candidate](evidence/m3-task-metadata-assessment-2026-11-10/README.md)
 adds strict schema, identity, timing and prior-cache rules plus a prospective
 lifecycle adapter.42 new /28 collector /23 preparation /511 existing tests PASS.

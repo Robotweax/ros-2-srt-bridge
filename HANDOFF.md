@@ -5867,3 +5867,60 @@ indexes/raw/source/current14/preserved13/fullchain/native87/calibration77files
 600527bytes and original verdicts, seven laterdirs absent. No Docker/liveprocfs/
 experiments/tuning/build/retry/newfreeze/grant/M3acceptance/merge/IntrinsicM4.
 Next separately scoped preparation/review only, no live execution authorized.
+
+
+## 2026-11-10 — Post-SIGINT per-thread calibration prepared, not run
+
+The [bounded native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze8acc653d87ad, **not run; execution disabled and no grant**.
+33 offline preparation tests pass. Exact assessment candidate; two pre-signal
+and two post-signal readable worker samples, then controlled join/absence before
+parent exit, with unchanged five-second child wait and observer policy/budgets.
+Unrelated CI remains running and blocks future execution preflight; untouched.
+No tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted are preserved;
+all38 campaign IDs stay disabled, M3 open/PR2 draft/M4 untouched.
+
+Freeze8acc653d87ad0da691cd992b059e566d0a3c2550d93efe310202a283f7fa245e, base sourcecf603b9,
+exact collector6deab3c5e83e and byte-identical assessment409a8812042b /
+lifecycle4fafc85e3d4d. Private binding checks originals/copies; generic ROS,
+task_assessment and lifecycle caches cannot replace reviewed candidate bytes.
+Native ARM observer/pinned amd64 controlled Python target only; no SDK/ROS/SRT
+workload. One readiness --self-check then one fixture, first-failure stop, no
+subset/resume/retry. No authorization created or live calibration queued.
+
+Parent holds after SIGINT. Unchanged stop_children sends signal, records end,
+then a wrapper's wait-entry witness is emitted (regression verifies ordering
+and unchanged timeout5). Two matching readable worker samples after witness and
+handler observation precede release. Controlled worker join precedes supported
+absence; exact candidate validates cache/raw/identity/times and lifecycle window.
+Only supported absence allows parent-exit acknowledgement. Final native footer,
+normal child exit0/unforced/within5s, candidate lifecycle0confirmed-task-exits
+and separate raw/absence counters required. Synthetic task join is not SDK worker
+process-exit evidence. Exact midread race/no-unseen-reuse/SDK/ROS/overhead remain
+unqualified; no historical reclassification or M3 acceptance follows.
+
+Observer filter/SYS_ADMINonlyNNP/readonly/networknone/exactownedPIDns and target
+cap0/NNP/defaultseccomp/readonly/networknone unchanged. 48/.25s/12s/8proc/64task/
+16KiB/512history unchanged. Prephase6s, new postphase3s, childcontrol4s, original
+ownedchild5s; snapshot8MiB/commands20s. Limits do not promise overallwallclock.
+Readonly9file bundle.local/task-post-sigint-calibration-bundle-20261110T181016559412Z; future output
+.local/task-post-sigint-calibration-20261110T181016559412Z absent. Native bundle uses updated target/controller,
+unchanged collector/entry/stop/filter/policy/architecture plus activation binding;
+assessment candidates stay host-only. No native build or permission expansion.
+
+33 fresh preparation tests PASS inclfullmodeledDocker/actualfixturemethods in
+temporaryprocfs/mockedsignal/unitthread/freshimports, oldgrant/refreeze/output
+refusal, pre/post/absence firstfailure boundaries, deadline and waitwitness tests.
+42 assessment/28collector/511existing logs reusedbyteidentical, no newlivecredit.
+Initial offline genericROS fixture-control import failure retained/corrected in
+model only. Preparation then stopped beforefreeze on unrelated CI container
+codex-pr77-ci-20261110; initialblocker retained. Preparation records activity;
+executionverify stillrequireszero livecontainers (33rdtest), no quiescencewaiver.
+That CIcontainer isuntouched. Finalread-onlypreflight reportsbusy, notexecutionready.
+
+Final SHA/source/current14/preserved13/fullchain/native87/allpriorrawpublic/
+originalN1assessment/candidate/bundle checksPASS; sevenremainingdirsabsent.
+No Docker mutation/liveprocfs/experiments/tuning/retry/newgrant. Remaining38IDs
+explicitdisabled; N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved. PR2 draft,
+M3 open/IntrinsicM4 untouched. Future explicitgrant mustbind thisnewfreeze and
+postSIGINTscope+candidatehashes; runtime mustbequiescentbeforeanycreation.
