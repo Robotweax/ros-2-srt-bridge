@@ -1,5 +1,13 @@
 # Delivery focus — 2026-11-09
 
+The [offline N1/2903 diagnosis](evidence/m3-n1-2903-thread-evidence-diagnosis-2026-11-10/README.md)
+identifies a task enumeration/read race during provider cleanup:3 named SRT
+threads have12 ENOENT file reads while their parent remains alive. The assessor
+checks parent lifetime without per-task exit evidence. Normal cleanup exit is
+strongly supported, but individual exit/reuse proof is absent; failure remains.
+No fix/tuning/test/experiment/Docker/retry or new grant. Original1PASS/1FAIL/7not-
+executed unchanged; remaining cases disabled, M3 open/PR2 draft/M4 untouched.
+
 The [N1/N2/N5 cohort](evidence/m3-current-long-execution-2026-11-10/README.md)
 stopped at the first failed gate: **1 PASS /1 FAIL /7 NOT EXECUTED**. N1/1701/600s
 passes all strict gates (300/300 commands). N1/2903 inner workload passes but

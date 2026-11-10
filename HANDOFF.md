@@ -5665,3 +5665,41 @@ Full238rawfiles/927,231,952bytes indexed; bigcaptures/fullrun/endpoint/journals
 localonly/hashbound. No tuning/build/tests/source/filter/queue/clock/rate/wait/
 budget edits/retry/newexperiment. Next retainedthreadlifecyclediagnosis only,
 no fix/newfreeze/grant/automaticlatercase/merge/M3acceptance/IntrinsicM4.
+
+
+## 2026-11-10 — N1/2903 task-stack diagnosis, retained only
+
+The [offline N1/2903 diagnosis](evidence/m3-n1-2903-thread-evidence-diagnosis-2026-11-10/README.md)
+identifies a task enumeration/read race during provider cleanup:3 named SRT
+threads have12 ENOENT file reads while their parent remains alive. The assessor
+checks parent lifetime without per-task exit evidence. Normal cleanup exit is
+strongly supported, but individual exit/reuse proof is absent; failure remains.
+No fix/tuning/test/experiment/Docker/retry or new grant. Original1PASS/1FAIL/7not-
+executed unchanged; remaining cases disabled, M3 open/PR2 draft/M4 untouched.
+
+MissingTIDs128rwx-shard-0/start64890,129rwx-shard-1/start64890,
+130rwx-readiness/start64891 allhave3successfulpreSIGINTtaskstats/stacks, lastsample
+ends-221.795625ms. Failingrow4 +28.612958..30.201042ms (relativeSIGINTend) lists
+all3 butstat/wchan/syscall/stack eachENOENT; rootPID111/start64834matchingafterread.
+Sampleinsideprovider srt_cleanup bracket+24.318083..30.882958ms, afterjournalworker
+join+24.494792. Otherstacksreadable, footer5samples/88OK3missing/noexhaustion.
+Operatornormal0/unforcedreaped+237.356458ms; nextsample+281ms rootmissing.
+
+Frozencollector enumeratestaskdirectory once thenreadssequentially; keepsonlyroot
+identitypostcheck. Frozenassessor equatesrootlifetime/inwaitwithalllistedtaskstack
+availability; no per-taskgone/reuseproof. Exactpurecoveragefailure reproducedfrom
+retaineddata. Pinnedprovider52be7c86ee1f/clean/archive3fa56e487e6c namesandnormal
+stop/join pathsupportexpectedteardown. Passing1701postsample+65.527msoccursafter
+cleanup+21.904..27.918ms, skipsracewindow. NumericPID/TIDnevercompareacrosscases
+withoutnamespace/startidentity. No blanketpermissiondenial/hungthread/SRTdefect
+claim, no causal seedinference. Per-taskexit/order/reuse notconfirmed, cleanup
+returnvalueuntraced; originalFAILandlateruncreditedgatespreserved.
+
+Nextboundedtaskidentity/absencevisibility/classification+offlineregressions
+recommended only, notimplemented; do notwaiveallENOENT/countmissingasOK or
+expandpermissions/rates/queues/sampling/budgets. No tests/builds/Docker/liveprocfs/
+collector/experiments/retries ornewfreeze/grant. Before/afterfrozen source/inputs/
+current14/preserved13/fullchain/native87/allrawpublic PASS, originalcohort/strict
+hashesunchanged, sevenoutputdirsabsent. Evidenceanalyze.py/report/timelines/
+sourceexcerpts+SHA/log/inputindex/postflight/publicindex retained. M3open/PR2draft,
+no merge/IntrinsicM4, no latercasequeued.

@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Nine-case N1/N2/N5 cohort stopped1PASS/1FAIL/7not-executed on frozen868a21578a61: N1/1701 strictPASS300/300; N1/2903 strict observer kernel-stack gate fails3per-thread ENOENT after SIGINT despite normalexit0; inner combined data not strictly revalidated. Cleanup/integrity PASS. Diagnose missing per-thread evidence from retained files; no tuning/retry/fix/newfreeze/latercase/M3acceptance/merge/M4.",
+  "current_priority": "N1/2903 retained-only diagnosis complete: enumerated provider task paths disappear before stat/wchan/syscall/stack reads during srt_cleanup; root remains matching, assessor lacks task-lifetime distinction. Normal provider thread exit strongly supported, exact per-task exit/reuse proof absent. Recommend bounded task identity/absence evidence+offline regressions, not implemented. Original1PASS/1FAIL/7unexecuted preserved; no tuning/retry/newexperiment/fix/newfreeze/grant/latercase/M3acceptance/merge/M4.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4531,5 +4531,63 @@
     "evidence": "evidence/m3-current-long-execution-2026-11-10/README.md",
     "postflight": "passed_integrity_and_owned_object_absence",
     "thread_exit_cause_confirmed": false
+  },
+  "N1_2903_thread_evidence_diagnosis": {
+    "status": "offline_retained_diagnosis_complete",
+    "exact_original_failure_reproduced": true,
+    "source_inputs_matched_build_native87_and_old_public_raw_archives_unchanged": true,
+    "provider_source_revision_verified": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+    "provider_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+    "original_results_unchanged": {
+      "passed": 1,
+      "failed": 1,
+      "not_executed": 7
+    },
+    "remaining_cases_disabled": [
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "completed_campaign_cases_excluded": 29,
+    "live_cases_run": 0,
+    "Docker_calls": 0,
+    "collector_runs": 0,
+    "tests_run": 0,
+    "builds": 0,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "assessor_or_filter_changed": false,
+    "new_freeze": false,
+    "new_authorization": false,
+    "M3_complete": false,
+    "evidence": "evidence/m3-n1-2903-thread-evidence-diagnosis-2026-11-10/README.md",
+    "finding": "process-versus-task lifetime mismatch: enumerated provider task paths disappear before per-task reads during srt_cleanup",
+    "classification": "enumeration/read race observed; normal cleanup thread exit strongly supported but exact per-task exit/reuse proof unavailable",
+    "confirmed_per_task_exit_or_no_reuse": false,
+    "provider_task_names": [
+      "rwx-shard-0",
+      "rwx-shard-1",
+      "rwx-readiness"
+    ],
+    "missing_TIDs": [
+      128,
+      129,
+      130
+    ],
+    "missing_all_four_file_reads": 12,
+    "missing_stack_reads": 3,
+    "sample_ms_after_SIGINT_end": [
+      28.612958,
+      30.201042
+    ],
+    "provider_cleanup_ms_after_SIGINT_end": [
+      24.318083,
+      30.882958
+    ],
+    "recommended_next_change": "bounded per-task identity/absence evidence and offline regressions; not implemented"
   }
 }

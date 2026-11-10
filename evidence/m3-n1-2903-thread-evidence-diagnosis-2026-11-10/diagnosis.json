@@ -1,0 +1,1952 @@
+{
+  "status": "retained_only_diagnosis_complete_no_requalification",
+  "finding": "process-versus-task lifetime mismatch: enumerated provider task paths disappear before per-task reads during srt_cleanup",
+  "classification": "enumeration/read race observed; normal cleanup thread exit strongly supported but exact per-task exit/reuse proof unavailable",
+  "original_gate_failure_reproduced": "live target kernel stack unavailable",
+  "original_results": {
+    "passed": 1,
+    "failed": 1,
+    "not_executed": 7
+  },
+  "failed_case": {
+    "case": "N1-combined-2903",
+    "namespace": "ros2-srt-m3-cf499b939784",
+    "strict_status": "failed",
+    "strict_error": "live target kernel stack unavailable",
+    "child": {
+      "name": "operator-bridge-0",
+      "pid": 111,
+      "forced_kill": false,
+      "signal_begin_ns": 1262055050072,
+      "signal_end_ns": 1262055193239,
+      "passed": true,
+      "end_ns": 1262292549697,
+      "returncode": 0,
+      "launch_token": "4a312623d38c3ca4dab7a8ab44c8cec2",
+      "purpose": "measurement",
+      "start_ticks": 64834,
+      "trace_path": "launch-readiness/operator-operator-bridge-0-4a312623d38c3ca4dab7a8ab44c8cec2.shutdown.jsonl",
+      "identity_path": "launch-readiness/operator-operator-bridge-0-4a312623d38c3ca4dab7a8ab44c8cec2.identity.json"
+    },
+    "observer_begin": {
+      "kind": "begin",
+      "clock": "monotonic",
+      "boot_id": {
+        "status": "ok",
+        "text": "3ab337b8-550a-4eff-abb0-38adeaa7eb9a\n",
+        "truncated": false
+      },
+      "time_namespace_offsets": {
+        "status": "ok",
+        "text": "monotonic           0         0\nboottime            0         0\n",
+        "truncated": false
+      },
+      "pid": 135,
+      "root": {
+        "pid": 111,
+        "start_ticks": 64834
+      },
+      "mode": "procfs",
+      "observer_independent": true,
+      "kernel_stacks_only": true
+    },
+    "observer_footer": {
+      "kind": "status",
+      "completed": true,
+      "reason": "all_owned_processes_gone",
+      "samples": 5,
+      "sample_limit": 48,
+      "budget_exhausted": false,
+      "kernel_stack_reads_ok": 88,
+      "kernel_stack_reads_unavailable": 3,
+      "userspace_stacks_requested": false,
+      "end_ns": 1262336685572,
+      "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+    },
+    "samples": [
+      {
+        "row": 1,
+        "begin_ns": 1261323484822,
+        "end_ns": 1261325732739,
+        "begin_ms_after_signal": -731.708417,
+        "end_ms_after_signal": -729.4605,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1261325597405
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "begin_ns": 1261576614822,
+        "end_ns": 1261578500989,
+        "begin_ms_after_signal": -478.578417,
+        "end_ms_after_signal": -476.69225,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1261578374989
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "begin_ns": 1261831299114,
+        "end_ns": 1261833397614,
+        "begin_ms_after_signal": -223.894125,
+        "end_ms_after_signal": -221.795625,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1261833256780
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "begin_ns": 1262083806197,
+        "end_ns": 1262085394281,
+        "begin_ms_after_signal": 28.612958,
+        "end_ms_after_signal": 30.201042,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1262085362531
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130
+        ],
+        "tasks": []
+      },
+      {
+        "row": 5,
+        "begin_ns": 1262336510406,
+        "end_ns": 1262336613864,
+        "begin_ms_after_signal": 281.317167,
+        "end_ms_after_signal": 281.420625,
+        "root_status": "process_missing",
+        "root_identity_check": {
+          "status": "process_missing",
+          "errno": 2,
+          "checked_ns": 1262336585072
+        },
+        "listed_tids": [],
+        "tasks": []
+      }
+    ],
+    "stage_timeline": [
+      {
+        "point": "ros_context_shutdown_callback",
+        "monotonic_ns": 1262059346531,
+        "ms_after_signal": 4.153292,
+        "tid": 115
+      },
+      {
+        "point": "main_spin_end",
+        "monotonic_ns": 1262068032322,
+        "ms_after_signal": 12.839083,
+        "tid": 111
+      },
+      {
+        "point": "worker_join_end",
+        "monotonic_ns": 1262079688031,
+        "ms_after_signal": 24.494792,
+        "tid": 126
+      },
+      {
+        "point": "provider_cleanup_begin",
+        "monotonic_ns": 1262079511322,
+        "ms_after_signal": 24.318083,
+        "tid": 125
+      },
+      {
+        "point": "provider_cleanup_end",
+        "monotonic_ns": 1262086076197,
+        "ms_after_signal": 30.882958,
+        "tid": 125
+      },
+      {
+        "point": "transport_thread_body_end",
+        "monotonic_ns": 1262086310239,
+        "ms_after_signal": 31.117,
+        "tid": 125
+      },
+      {
+        "point": "endpoint_transport_join_end",
+        "monotonic_ns": 1262086620156,
+        "ms_after_signal": 31.426917,
+        "tid": 126
+      },
+      {
+        "point": "node_endpoint_join_end",
+        "monotonic_ns": 1262087197572,
+        "ms_after_signal": 32.004333,
+        "tid": 111
+      },
+      {
+        "point": "main_node_reset_end",
+        "monotonic_ns": 1262112763781,
+        "ms_after_signal": 57.570542,
+        "tid": 111
+      },
+      {
+        "point": "main_context_shutdown_end",
+        "monotonic_ns": 1262113402322,
+        "ms_after_signal": 58.209083,
+        "tid": 111
+      },
+      {
+        "point": "supervisor_reap",
+        "monotonic_ns": 1262292549697,
+        "ms_after_signal": 237.356458,
+        "tid": null
+      }
+    ],
+    "missing_stack_reads": [
+      {
+        "sample_row": 4,
+        "sample_begin_ns": 1262083806197,
+        "sample_end_ns": 1262085394281,
+        "root_identity": {
+          "pid": 111,
+          "start_ticks": 64834
+        },
+        "root_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1262085362531
+        },
+        "tid": 128,
+        "reads": {
+          "stat": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "wchan": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "syscall": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "kernel_stack": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          }
+        },
+        "prior_successful_task_identity": [
+          {
+            "row": 1,
+            "sample_end_ns": 1261325732739,
+            "task_identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 2,
+            "sample_end_ns": 1261578500989,
+            "task_identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 3,
+            "sample_end_ns": 1261833397614,
+            "task_identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          }
+        ],
+        "sample_within_provider_cleanup": true,
+        "sample_after_worker_join": true,
+        "sample_before_supervisor_reap": true
+      },
+      {
+        "sample_row": 4,
+        "sample_begin_ns": 1262083806197,
+        "sample_end_ns": 1262085394281,
+        "root_identity": {
+          "pid": 111,
+          "start_ticks": 64834
+        },
+        "root_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1262085362531
+        },
+        "tid": 129,
+        "reads": {
+          "stat": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "wchan": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "syscall": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "kernel_stack": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          }
+        },
+        "prior_successful_task_identity": [
+          {
+            "row": 1,
+            "sample_end_ns": 1261325732739,
+            "task_identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 2,
+            "sample_end_ns": 1261578500989,
+            "task_identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 3,
+            "sample_end_ns": 1261833397614,
+            "task_identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 64890
+            },
+            "stack_status": "ok"
+          }
+        ],
+        "sample_within_provider_cleanup": true,
+        "sample_after_worker_join": true,
+        "sample_before_supervisor_reap": true
+      },
+      {
+        "sample_row": 4,
+        "sample_begin_ns": 1262083806197,
+        "sample_end_ns": 1262085394281,
+        "root_identity": {
+          "pid": 111,
+          "start_ticks": 64834
+        },
+        "root_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 64834,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 1262085362531
+        },
+        "tid": 130,
+        "reads": {
+          "stat": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "wchan": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "syscall": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          },
+          "kernel_stack": {
+            "status": "unavailable",
+            "error": "FileNotFoundError",
+            "errno": 2
+          }
+        },
+        "prior_successful_task_identity": [
+          {
+            "row": 1,
+            "sample_end_ns": 1261325732739,
+            "task_identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 2,
+            "sample_end_ns": 1261578500989,
+            "task_identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          },
+          {
+            "row": 3,
+            "sample_end_ns": 1261833397614,
+            "task_identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 64891
+            },
+            "stack_status": "ok"
+          }
+        ],
+        "sample_within_provider_cleanup": true,
+        "sample_after_worker_join": true,
+        "sample_before_supervisor_reap": true
+      }
+    ],
+    "task_history": {
+      "128": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "129": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 64890
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "130": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "131": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "132": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "133": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "134": [
+        {
+          "row": 1,
+          "sample_end_ns": 1261325732739,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 1261578500989,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 1261833397614,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 64891
+          },
+          "stack_status": "ok"
+        }
+      ]
+    },
+    "retained_shutdown_and_cleanup_passed": true
+  },
+  "passing_case_control": {
+    "case": "N1-combined-1701",
+    "namespace": "ros2-srt-m3-3a8be3c3c323",
+    "strict_status": "passed",
+    "strict_error": null,
+    "child": {
+      "name": "operator-bridge-0",
+      "pid": 111,
+      "forced_kill": false,
+      "signal_begin_ns": 622849091993,
+      "signal_end_ns": 622850109910,
+      "passed": true,
+      "end_ns": 623028059326,
+      "returncode": 0,
+      "launch_token": "4a7285a8d06574ecc2238335d241feb1",
+      "purpose": "measurement",
+      "start_ticks": 927,
+      "trace_path": "launch-readiness/operator-operator-bridge-0-4a7285a8d06574ecc2238335d241feb1.shutdown.jsonl",
+      "identity_path": "launch-readiness/operator-operator-bridge-0-4a7285a8d06574ecc2238335d241feb1.identity.json"
+    },
+    "observer_begin": {
+      "kind": "begin",
+      "clock": "monotonic",
+      "boot_id": {
+        "status": "ok",
+        "text": "3ab337b8-550a-4eff-abb0-38adeaa7eb9a\n",
+        "truncated": false
+      },
+      "time_namespace_offsets": {
+        "status": "ok",
+        "text": "monotonic           0         0\nboottime            0         0\n",
+        "truncated": false
+      },
+      "pid": 135,
+      "root": {
+        "pid": 111,
+        "start_ticks": 927
+      },
+      "mode": "procfs",
+      "observer_independent": true,
+      "kernel_stacks_only": true
+    },
+    "observer_footer": {
+      "kind": "status",
+      "completed": true,
+      "reason": "all_owned_processes_gone",
+      "samples": 5,
+      "sample_limit": 48,
+      "budget_exhausted": false,
+      "kernel_stack_reads_ok": 76,
+      "kernel_stack_reads_unavailable": 0,
+      "userspace_stacks_requested": false,
+      "end_ns": 623174776868,
+      "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+    },
+    "samples": [
+      {
+        "row": 1,
+        "begin_ns": 622153409618,
+        "end_ns": 622155816493,
+        "begin_ms_after_signal": -696.700292,
+        "end_ms_after_signal": -694.293417,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 927,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 622155652368
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "begin_ns": 622406409868,
+        "end_ns": 622408638243,
+        "begin_ms_after_signal": -443.700042,
+        "end_ms_after_signal": -441.471667,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 927,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 622408470826
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "begin_ns": 622659451076,
+        "end_ns": 622661424534,
+        "begin_ms_after_signal": -190.658834,
+        "end_ms_after_signal": -188.685376,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 927,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 622661288243
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134
+        ],
+        "tasks": [
+          {
+            "tid": 128,
+            "identity": {
+              "tid": 128,
+              "name": "rwx-shard-0",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 129,
+            "identity": {
+              "tid": 129,
+              "name": "rwx-shard-1",
+              "state": "S",
+              "start_ticks": 981
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 130,
+            "identity": {
+              "tid": 130,
+              "name": "rwx-readiness",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 131,
+            "identity": {
+              "tid": 131,
+              "name": "rwx-worker-0",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 132,
+            "identity": {
+              "tid": 132,
+              "name": "rwx-worker-1",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 133,
+            "identity": {
+              "tid": 133,
+              "name": "rwx-worker-2",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          },
+          {
+            "tid": 134,
+            "identity": {
+              "tid": 134,
+              "name": "rwx-worker-3",
+              "state": "S",
+              "start_ticks": 982
+            },
+            "stack_status": "ok"
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "begin_ns": 622915636951,
+        "end_ns": 622916290243,
+        "begin_ms_after_signal": 65.527041,
+        "end_ms_after_signal": 66.180333,
+        "root_status": "sampled",
+        "root_identity_check": {
+          "status": "matching",
+          "observed": {
+            "pid": 111,
+            "start_ticks": 927,
+            "state": "S",
+            "ppid": 75,
+            "name": "bridge_node"
+          },
+          "checked_ns": 622916249160
+        },
+        "listed_tids": [
+          111,
+          112,
+          113,
+          114
+        ],
+        "tasks": []
+      },
+      {
+        "row": 5,
+        "begin_ns": 623174567368,
+        "end_ns": 623174700368,
+        "begin_ms_after_signal": 324.457458,
+        "end_ms_after_signal": 324.590458,
+        "root_status": "process_missing",
+        "root_identity_check": {
+          "status": "process_missing",
+          "errno": 2,
+          "checked_ns": 623174677868
+        },
+        "listed_tids": [],
+        "tasks": []
+      }
+    ],
+    "stage_timeline": [
+      {
+        "point": "ros_context_shutdown_callback",
+        "monotonic_ns": 622854392035,
+        "ms_after_signal": 4.282125,
+        "tid": 115
+      },
+      {
+        "point": "main_spin_end",
+        "monotonic_ns": 622861106993,
+        "ms_after_signal": 10.997083,
+        "tid": 111
+      },
+      {
+        "point": "worker_join_end",
+        "monotonic_ns": 622873807285,
+        "ms_after_signal": 23.697375,
+        "tid": 126
+      },
+      {
+        "point": "provider_cleanup_begin",
+        "monotonic_ns": 622872013493,
+        "ms_after_signal": 21.903583,
+        "tid": 125
+      },
+      {
+        "point": "provider_cleanup_end",
+        "monotonic_ns": 622878027868,
+        "ms_after_signal": 27.917958,
+        "tid": 125
+      },
+      {
+        "point": "transport_thread_body_end",
+        "monotonic_ns": 622878215993,
+        "ms_after_signal": 28.106083,
+        "tid": 125
+      },
+      {
+        "point": "endpoint_transport_join_end",
+        "monotonic_ns": 622878517451,
+        "ms_after_signal": 28.407541,
+        "tid": 126
+      },
+      {
+        "point": "node_endpoint_join_end",
+        "monotonic_ns": 622879125118,
+        "ms_after_signal": 29.015208,
+        "tid": 111
+      },
+      {
+        "point": "main_node_reset_end",
+        "monotonic_ns": 622904517118,
+        "ms_after_signal": 54.407208,
+        "tid": 111
+      },
+      {
+        "point": "main_context_shutdown_end",
+        "monotonic_ns": 622905091951,
+        "ms_after_signal": 54.982041,
+        "tid": 111
+      },
+      {
+        "point": "supervisor_reap",
+        "monotonic_ns": 623028059326,
+        "ms_after_signal": 177.949416,
+        "tid": null
+      }
+    ],
+    "missing_stack_reads": [],
+    "task_history": {
+      "128": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 128,
+            "name": "rwx-shard-0",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "129": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 129,
+            "name": "rwx-shard-1",
+            "state": "S",
+            "start_ticks": 981
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "130": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 130,
+            "name": "rwx-readiness",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "131": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 131,
+            "name": "rwx-worker-0",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "132": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 132,
+            "name": "rwx-worker-1",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "133": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 133,
+            "name": "rwx-worker-2",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        }
+      ],
+      "134": [
+        {
+          "row": 1,
+          "sample_end_ns": 622155816493,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 2,
+          "sample_end_ns": 622408638243,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        },
+        {
+          "row": 3,
+          "sample_end_ns": 622661424534,
+          "task_identity": {
+            "tid": 134,
+            "name": "rwx-worker-3",
+            "state": "S",
+            "start_ticks": 982
+          },
+          "stack_status": "ok"
+        }
+      ]
+    },
+    "retained_shutdown_and_cleanup_passed": true
+  },
+  "provider_source_revision": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "provider_installed_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+  "source_references": [
+    {
+      "path": "evidence/m3-current-long-preparation-2026-11-10/shutdown_observer.py",
+      "sha256": "f4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3",
+      "first_line": 19,
+      "last_line": 24,
+      "text": "def read_limited(path,limit=MAX_READ):\n    try:\n        with Path(path).open('rb') as f:data=f.read(limit+1)\n        return dict(status='ok',text=data[:limit].decode(errors='replace'),truncated=len(data)>limit)\n    except OSError as error:return dict(status='unavailable',error=type(error).__name__,errno=error.errno)\n"
+    },
+    {
+      "path": "evidence/m3-current-long-preparation-2026-11-10/shutdown_observer.py",
+      "sha256": "f4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3",
+      "first_line": 46,
+      "last_line": 72,
+      "text": "def collect(proc,known):\n    \"\"\"Only the registered process and discovered descendants; never scan global /proc.\"\"\"\n    pending=list(known.values());seen=set();rows=[];limited=False\n    while pending and len(rows)<MAX_PROCESSES:\n        expected=pending.pop(0);pid=expected['pid']\n        if pid in seen:continue\n        seen.add(pid)\n        check=identity_state(proc,expected)\n        if check['status']!='matching':\n            rows.append(dict(identity=expected,status=check['status'],identity_check=check));continue\n        task=proc/str(pid)/'task'\n        try:tasks=sorted(task.iterdir(),key=lambda p:int(p.name))\n        except OSError as error:rows.append(dict(identity=expected,status='unavailable',error=type(error).__name__));continue\n        threads=[]\n        for thread in tasks[:MAX_THREADS]:\n            threads.append(dict(tid=int(thread.name),stat=read_limited(thread/'stat'),wchan=read_limited(thread/'wchan'),syscall=read_limited(thread/'syscall'),kernel_stack=read_limited(thread/'stack')))\n            children=read_limited(thread/'children')\n            for child in children.get('text','').split():\n                try:\n                    child_id=identity(proc,int(child));key=(child_id['pid'],child_id['start_ticks'])\n                    if key not in known:\n                        if len(known)>=MAX_PROCESSES:limited=True;continue\n                        known[key]=child_id;pending.append(child_id)\n                except (OSError,ValueError,IndexError):continue\n        after=identity_state(proc,expected)\n        rows.append(dict(identity=expected,status='sampled',threads=threads,threads_truncated=len(tasks)>MAX_THREADS,identity_still_matches=after['status']=='matching',identity_check=after))\n    return dict(processes=rows,process_limit_hit=limited or bool(pending))"
+    },
+    {
+      "path": "evidence/m3-current-long-preparation-2026-11-10/lifecycle.py",
+      "sha256": "246d9463c8b3b2d8f6c385c497920e6c5ae9d44f45701696da4307239e2d02c3",
+      "first_line": 18,
+      "last_line": 53,
+      "text": "    joined=join_end(stages,root['pid']);registered=set();confirmed=set();available=0;post=[];samples=[]\n    for sample in (r for r in rows if r['kind']=='sample'):\n        if sample['process_limit_hit']:raise ValueError('observer process budget exceeded')\n        in_wait=sample['end_ns']<=child['end_ns']\n        if in_wait:\n            samples.append(sample)\n            if child['signal_end_ns']<=sample['begin_ns']:post.append(sample)\n        for process in sample['processes']:\n            expected=process['identity'];key=(expected['pid'],expected['start_ticks']);check=process.get('identity_check')\n            if not check or not sample['begin_ns']<=check['checked_ns']<=sample['end_ns']:raise ValueError('explicit identity evidence unavailable')\n            state=check['status']\n            if state in ('pid_reused','identity_unavailable'):raise ValueError('PID reuse or identity read failure: '+state)\n            if state=='process_missing':\n                if check.get('errno')!=2:raise ValueError('missing PID lacks explicit ENOENT')\n                if process['status']!='process_missing':raise ValueError('identity changed during a thread sample')\n                if key==root_key:\n                    if sample['begin_ns']<child['end_ns']:raise ValueError('root disappearance before supervisor reap')\n                    continue\n                if key not in registered or joined is None or not child['signal_end_ns']<=joined<=check['checked_ns']:raise ValueError('worker disappearance not confirmed by registered identity and join')\n                confirmed.add(key);continue\n            if state!='matching' or process['status']!='sampled' or not process['identity_still_matches'] or process['threads_truncated']:raise ValueError('live target observation incomplete')\n            if check['observed']['pid']!=expected['pid'] or check['observed']['start_ticks']!=expected['start_ticks']:raise ValueError('matching identity evidence inconsistent')\n            if sample['end_ns']<=child['signal_begin_ns'] and expected.get('ppid')==root['pid'] and expected.get('name') in WORKER_NAMES:registered.add(key)\n            if len(registered)>1:raise ValueError('ambiguous worker registration')\n            if in_wait:\n                for thread in process['threads']:\n                    stack=thread['kernel_stack']\n                    if stack['status']!='ok' or stack['truncated']:raise ValueError('live target kernel stack unavailable')\n                    if stack['text'].strip():available+=1\n    if not available:raise ValueError('no real bridge kernel-stack sample')\n    if child['forced_kill'] and (len(post)<2 or not any(t['kernel_stack'].get('text','').strip() for s in post for p in s['processes'] for t in p.get('threads',[]))):raise ValueError('shutdown failure lacks bounded post-signal stack coverage')\n    return dict(samples=len(samples),post_signal_samples=len(post),nonempty_kernel_stacks=available,confirmed_worker_exits=[dict(pid=p,start_ticks=t) for p,t in sorted(confirmed)],worker_join_end_ns=joined,scope='registered worker absent after join completion; no worker exit-code/cause claim',clean_fast_exit_may_have_no_post_signal_sample=True)"
+    },
+    {
+      "path": "src/robotweax_srt_bridge_core/src/transport/transport.cpp",
+      "sha256": "14a8bf8792538b3068df34083c02c728ac6ba93690e0928d455ae05b76fa669f",
+      "first_line": 20,
+      "last_line": 28,
+      "text": "struct Provider {\n    std::shared_ptr<ShutdownTrace> diagnostic;\n    explicit Provider(std::shared_ptr<ShutdownTrace> trace):diagnostic(std::move(trace)){std::lock_guard lock(provider_mutex);if(!provider_users&&srt_startup()==SRT_ERROR)throw std::runtime_error(\"SRT startup failed\");++provider_users;}\n    ~Provider(){\n        shutdown_stage(diagnostic,\"provider_release_begin\");\n        std::lock_guard lock(provider_mutex);shutdown_stage(diagnostic,\"provider_release_locked\");\n        if(!--provider_users){shutdown_stage(diagnostic,\"provider_cleanup_begin\");srt_cleanup();shutdown_stage(diagnostic,\"provider_cleanup_end\");}\n        shutdown_stage(diagnostic,\"provider_release_end\");\n    }"
+    },
+    {
+      "path": ".deps/srt/src/compat/srt_api.cpp",
+      "sha256": "e9038e9d3aed4c856c3c15b1dd419797b44561a70a115ac4a94ccd6f4c5da90b",
+      "first_line": 155,
+      "last_line": 169,
+      "text": "int srt_cleanup(void)\n{\n    if (!stateful_api_available()) {\n        return SRT_ERROR;\n    }\n    ROBOTWEAX_SRT_COMPAT_LOG(LOG_NOTICE, SRT_LOGFA_API_CTRL,\n        \".N\", \"SRT.ac\", \"cleanup requested\");\n    if (!robotweax::srt::compat::runtime_cleanup()) {\n        robotweax::srt::compat::set_last_error(SRT_ENOBUF);\n        return SRT_ERROR;\n    }\n    return 0;\n}\n\nSRTSOCKET srt_socket(int, int, int)"
+    },
+    {
+      "path": ".deps/srt/src/compat/socket_registry.cpp",
+      "sha256": "bfe1f7bc4e2212d11585e3531f0a5a603f36d6993ae3c31859586ac9246dcf04",
+      "first_line": 902,
+      "last_line": 959,
+      "text": "void finish_runtime_cleanup() noexcept\n{\n    auto& lifecycle = runtime_lifecycle();\n    // The handoff is published while holding this lock.\n    {\n        std::lock_guard lock(lifecycle.mutex);\n    }\n    GroupRegistry::instance().clear();\n    SocketRegistry::instance().clear();\n    stop_runtime_work_executor();\n    stop_runtime_scheduler();\n    clear_standby_rtt_service();\n    // Retiring callback workers may enter SRT from their TLS destructors.\n    // Reopen admission and detach their executor under the lifecycle lock,\n    // then join outside it so a new generation cannot inherit the old pool.\n    std::unique_lock lock(lifecycle.mutex);\n    lifecycle.cleaning = false;\n    auto retired_callbacks = retire_connect_callback_executor();\n    lock.unlock();\n    lifecycle.changed.notify_all();\n    if (retired_callbacks)\n        retired_callbacks->stop();\n}\n} // namespace\n\nbool runtime_cleanup() noexcept\n{\n    auto& lifecycle = runtime_lifecycle();\n    std::unique_lock lock(lifecycle.mutex);\n    if (lifecycle.cleaning || lifecycle.startup_count == 0U)\n        return true;\n    if (lifecycle.startup_count > 1U) {\n        --lifecycle.startup_count;\n        return true;\n    }\n    if (in_log_handler()) {\n        // Never join a protocol worker from its synchronous log handler or\n        // join a worker waiting for the handler's registration lock. Reserve\n        // a bounded callback worker before consuming the final reference.\n        const auto executor = acquire_connect_callback_executor();\n        if (!executor\n            || !executor->submit({\n                .function =\n                    [](void*, int) noexcept {\n                        finish_runtime_cleanup();\n                    },\n                .context = executor,\n            }))\n            return false;\n        lifecycle.startup_count = 0U;\n        lifecycle.cleaning = true;\n        return true;\n    }\n    lifecycle.startup_count = 0U;\n    lifecycle.cleaning = true;\n    lock.unlock();\n    finish_runtime_cleanup();\n    return true;"
+    },
+    {
+      "path": ".deps/srt/src/compat/runtime_scheduler.cpp",
+      "sha256": "e2e274407f7781a934b9ccf54421e1e3ecbdbda82dd54ebf02d7192cd52e2d10",
+      "first_line": 226,
+      "last_line": 231,
+      "text": "        for (std::size_t index = 0; index < shards_.size(); ++index) {\n            shards_[index]->worker = std::thread([this, index] {\n                name_current_thread(\"rwx-shard-\", index);\n                mark_runtime_cleanup_worker_thread();\n                run(index);\n            });"
+    },
+    {
+      "path": ".deps/srt/src/compat/runtime_scheduler.cpp",
+      "sha256": "e2e274407f7781a934b9ccf54421e1e3ecbdbda82dd54ebf02d7192cd52e2d10",
+      "first_line": 522,
+      "last_line": 570,
+      "text": "void RuntimeScheduler::stop() noexcept\n{\n    // A context destructor can reenter stop on this same thread. The outer\n    // stop still owns completion; recursively waiting would wait on itself.\n    for (auto* scope = active_stop; scope != nullptr; scope = scope->previous)\n        if (scope->owner == this)\n            return;\n    const SchedulerStopScope stop_scope {this};\n    std::unique_lock lifecycle_lock(lifecycle_mutex_);\n    lifecycle_changed_.wait(lifecycle_lock, [this] {\n        return !stop_in_progress_;\n    });\n    if (stop_complete_)\n        return;\n    stop_in_progress_ = true;\n    start_attempted_ = true;\n    accepting_.store(false, std::memory_order_release);\n    const auto readiness = socket_readiness_;\n    lifecycle_lock.unlock();\n    // Joining and context destruction must not hold the lifecycle mutex:\n    // callbacks/destructors can take it to observe fail-closed startup.\n    if (readiness != nullptr)\n        readiness->stop();\n    for (const auto& shard : shards_) {\n        std::unique_lock lock(shard->mutex);\n        shard->stop_requested = true;\n        // Admission closes immediately. Future service turns are canceled;\n        // executing callbacks retain their copied context until return.\n        for (auto& slot : shard->service_slots) {\n            slot.reserved = false;\n            slot.pending = false;\n            slot.deadline.reset();\n        }\n        shard->service_pending = 0;\n        while (!shard->timer_heap.empty()) {\n            Task canceled = shard->remove_timer(0U);\n            timers_canceled_.fetch_add(1U, std::memory_order_relaxed);\n            lock.unlock();\n            canceled = {};\n            lock.lock();\n        }\n        lock.unlock();\n        shard->ready.notify_all();\n    }\n    for (const auto& shard : shards_) {\n        if (shard->worker.joinable()) {\n            shard->worker.join();\n        }\n    }"
+    },
+    {
+      "path": ".deps/srt/src/compat/socket_readiness.cpp",
+      "sha256": "4f7d6c700c66eb41cadee1d949ee633ece4f30a33307f9cdde3a323c56000175",
+      "first_line": 493,
+      "last_line": 521,
+      "text": "void SocketReadiness::stop() noexcept\n{\n    std::lock_guard lifecycle_lock(lifecycle_mutex_);\n    {\n        std::lock_guard lock(state_->mutex);\n        state_->stopping = true;\n    }\n    state_->wake();\n    if (worker_.joinable()) {\n        if (worker_.get_id() == std::this_thread::get_id()) {\n            // A callback may release the last owner. run() owns State until\n            // it exits; it never refers to the destroyed SocketReadiness.\n            worker_.detach();\n        } else {\n            worker_.join();\n        }\n    }\n}\n\nSocketReadiness::Snapshot SocketReadiness::snapshot() const noexcept\n{\n    std::lock_guard lock(state_->mutex);\n    return state_->counters;\n}\n\n#if defined(ROBOTWEAX_READINESS_POLL)\nvoid SocketReadiness::run(std::shared_ptr<State> state) noexcept\n{\n    name_current_thread(\"rwx-readiness\");"
+    },
+    {
+      "path": ".deps/srt/src/compat/socket_readiness.cpp",
+      "sha256": "4f7d6c700c66eb41cadee1d949ee633ece4f30a33307f9cdde3a323c56000175",
+      "first_line": 604,
+      "last_line": 611,
+      "text": "}\n#else\nvoid SocketReadiness::run(std::shared_ptr<State> state) noexcept\n{\n    name_current_thread(\"rwx-readiness\");\n    for (;;) {\n        state->ready.clear();\n        state->callbacks.clear();"
+    }
+  ],
+  "missing_evidence": [
+    "no per-task read timestamps or explicit enumeration bracket",
+    "no task start_ticks in the missing-read sample",
+    "no post-failure task identity/absence check",
+    "no task-specific provider exit/join identity records",
+    "provider cleanup stage brackets return but does not record srt_cleanup return value"
+  ],
+  "unsupported_conclusions": [
+    "confirmed task exit or no TID reuse",
+    "SRT protocol/loss handling defect",
+    "global permission denial or hung provider threads",
+    "passing N1/2903 or any later strict combined gate"
+  ],
+  "original_decision_hashes_unchanged": {
+    ".local/current-long-cohort-20261110T152312809927Z/cohort.json": "3277c483ed49e5c806875d1988ec6f7f03593a155da98c8531c5ca9200ccd325",
+    ".local/current-long-cohort-20261110T152312809927Z/N1-combined-1701/strict-assessment.json": "3741135d4f3d8b1fbd00d272c26032cba4a6ec9af7d6d755294b1ae16b96405a",
+    ".local/current-long-cohort-20261110T152312809927Z/N1-combined-2903/strict-assessment.json": "e9cf84c7b6beffe584cfc06134d44c263b4884fcf166b3e113a7430cdedd7d30"
+  },
+  "verified_indexes": {
+    "evidence/m3-n3-frozen-cohort-2026-11-09/local-artifact-hashes.json": "6c47c005c34b25418fcf10824ba649c3a55b8b5d2588b6a491ddc295be63641a",
+    "evidence/m3-shutdown-live-calibration-2026-11-09/local-artifact-hashes.json": "0d601768a8bf32e21a85434f1cbce490ad6192872c76e0d6ff4b9a25e5b933fe",
+    "evidence/m3-observer-stack-permissions-2026-11-09/local-artifact-hashes.json": "6727802e7aaa2d61ee90c87ee06435657d3a0f5bf4f5b0733cae12507fe40f56",
+    "evidence/m3-observer-native-filter-2026-11-10/local-artifact-hashes.json": "c91a4e34c886e068137e5262cbab6140cead90096ba4c3f79951314c3b866073",
+    "evidence/m3-observer-bootstrap-calibration-2026-11-10/local-artifact-hashes.json": "9e2041ff5a3914219c741a71f35dfd88a2600f24686d915c6353ee4191f5cc8b",
+    "evidence/m3-bridge-shutdown-diagnostic-2026-11-10/local-artifact-hashes.json": "64fa5e41e13186ebb4c5446a52d19cac7795564bf876d0b3c47b782f0dedcd52",
+    "evidence/m3-bridge-shutdown-capability-fix-2026-11-10/local-artifact-hashes.json": "c88aff4ae37584099eced7c9538a7848b1c3ff215059e60e1b173b494a1672fc",
+    "evidence/m3-bridge-shutdown-lifecycle-2026-11-10/local-artifact-hashes.json": "ac766ca4bc6d85e0b5b970fb541f355ddb2ee808e99ae04686850bac392095d6",
+    "evidence/m3-socket-disposition-2026-11-10/local-artifact-hashes.json": "6ff73c5cde5e980155414f436bba2164682adb1116b6b5936cc9ce01944d1c07",
+    "evidence/m3-two-loss-2903-execution-2026-11-10/local-artifact-hashes.json": "3ff04464961aa793a2fa8880f3bfb733ea361d8b1707c51a4a6b545e5c724a2c",
+    "evidence/m3-two-loss-4211-execution-2026-11-10/local-artifact-hashes.json": "33f067c5d43a1ede124060b46fc3227dc016fec2f73d1166b10eab0520aea4ef",
+    "evidence/m3-strict-n3-execution-2026-11-10/local-artifact-hashes.json": "8212160366c9a6fc6e7452932cb76866b940ae65a277580f958026ce674045c3",
+    "evidence/m3-current-n0-preparation-2026-11-10/public-artifact-hashes.json": "f10b921fa07e3f47883a7a3149e1e6e0da5016f3e639649c4e23a031d53a3c89",
+    "evidence/m3-current-n0-execution-2026-11-10/public-artifact-hashes.json": "8d1aa83f2da80bd5a8d4566d8db1537b65a9127808131a5de71ef80c07a1403a",
+    "evidence/m3-current-n0-execution-2026-11-10/local-artifact-hashes.json": "314c2d24c45827049ac443bdf52170e8dbc7c50b60e5c3fbcfe56eb02bf2399f",
+    "evidence/m3-current-n0-capability-diagnosis-2026-11-10/public-artifact-hashes.json": "c3e857cd5c4c29aa89f770be1c0958a8f3a716722a0e06aa47c7bb0db08f1fe9",
+    "evidence/m3-current-n0-readiness-fix-2026-11-10/public-artifact-hashes.json": "b82e24993f2a358a50b66fb41b47835063a118a0bf6467fcd05c57bbbab10198",
+    "evidence/m3-current-n0-corrected-preparation-2026-11-10/public-artifact-hashes.json": "1ceb675962960a50e0c4ef51be597accc75df124986907e8d63fe9fa1ed80658",
+    "evidence/m3-current-n0-corrected-execution-2026-11-10/public-artifact-hashes.json": "4120b7ee0e09eac5eb0d12e1f447e4635b0822864f0cdc86214f662e97603a13",
+    "evidence/m3-current-n0-corrected-execution-2026-11-10/local-artifact-hashes.json": "8140bf0a3203e172173d67d01e6486b8d4b9198c41bb67e13217af1c5141a755",
+    "evidence/m3-current-n0-identity-binding-fix-2026-11-10/public-artifact-hashes.json": "157e5ccf2e66671754224b697224f92b1f59b1445ca3aea028a25d06a56c2035",
+    "evidence/m3-current-n0-bound-preparation-2026-11-10/public-artifact-hashes.json": "306b267754cf199c5939cbb4d50e7089a28445089d08b2b6d1f2f8b4f25727b5",
+    "evidence/m3-current-n0-bound-execution-2026-11-10/public-artifact-hashes.json": "1798d33c165b9a60618b14a3a0215010aa06af63bbadce01516ed581203586fc",
+    "evidence/m3-current-n0-bound-execution-2026-11-10/local-artifact-hashes.json": "72339df991ef4d7bef3f5e368c8cc77eadcca570276cdb4252922f73db37b6ed",
+    "evidence/m3-current-n0-trace-lifecycle-fix-2026-11-10/public-artifact-hashes.json": "ba9d648d480ce05f842a2bf83760acf2764c63f8f51a435b099ddc1c68a773d9",
+    "evidence/m3-current-n0-lifecycle-stabilization-2026-11-10/public-artifact-hashes.json": "981522f4bd548327d99218e9d5520f38fbe5be16445571bae867ecd464d15561",
+    "evidence/m3-current-n0-stable-preparation-2026-11-10/public-artifact-hashes.json": "bf320b21b2bc31ed3d50f42e0b651b723ea5a4b57f2f8c6bf51e6bca0dc9c244",
+    "evidence/m3-current-n0-stable-execution-2026-11-10/public-artifact-hashes.json": "56731af08f1c4b5c6649bd0972fb1730f892ce416df5660a82e74ff2fb9d58f5",
+    "evidence/m3-current-n0-stable-execution-2026-11-10/local-artifact-hashes.json": "6d1572f8ea194d5dfb55a2524e902d52c39568257d30eddc30c18a92ff5d97e1",
+    "evidence/m3-current-n4-preparation-2026-11-10/public-artifact-hashes.json": "03fcb39793d1a7cd70004bad2cdb8d39160ec31413c4d1ba18761b2f465259b5",
+    "evidence/m3-current-n4-execution-2026-11-10/public-artifact-hashes.json": "f9bd5ff8902cf0abb025970afaaa367a788ff3fb7740747250722d8dc082b899",
+    "evidence/m3-current-n4-execution-2026-11-10/local-artifact-hashes.json": "082678abd59d3be4663a65847e0ced9ba7c6c69d109a4385cdec7b6fa9a55f27",
+    "evidence/m3-current-n4-assessor-json-fix-2026-11-10/public-artifact-hashes.json": "0cb3ba3b1812579a96fe455f5dfb174579a9d9a91cc69e90581476da70ac8dbd",
+    "evidence/m3-current-n4-corrected-preparation-2026-11-10/public-artifact-hashes.json": "c96858ced7f23cd99321834d8b77097d170645623a835db35e35925361454b01",
+    "evidence/m3-current-n4-corrected-execution-2026-11-10/public-artifact-hashes.json": "06c1d2d5a976d6504aa813951224c04f65de0154c65596cba7552f3d17dc47d7",
+    "evidence/m3-current-n4-corrected-execution-2026-11-10/local-artifact-hashes.json": "c1c528833b5acba853e22d2920ad228dea92071a490e3b24be11c73c965d0063",
+    "evidence/m3-current-long-preparation-2026-11-10/public-artifact-hashes.json": "e850cf7502641eaa382f33414ac03633193dc50b1b2879b4fee87bda758bc863",
+    "evidence/m3-current-long-execution-2026-11-10/public-artifact-hashes.json": "9c4dd7c9035fc0792c4ad32da75571bfd47b74d485848138f744e37d05b186ad",
+    "evidence/m3-current-long-execution-2026-11-10/local-artifact-hashes.json": "74ec4fa9522cbe504d47312ecff488b4ad9906c76e6a5a0b97687d3ac67caf20"
+  },
+  "live_cases_run": 0,
+  "Docker_calls": 0,
+  "tests_run": 0,
+  "builds": 0,
+  "collector_or_policy_changes": false,
+  "assessor_changes": false,
+  "new_freeze": false,
+  "new_authorization": false,
+  "no_tuning": true,
+  "no_automatic_retries": true,
+  "remaining_cases_disabled": [
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "completed_campaign_cases_excluded": 29,
+  "M3_complete": false
+}
