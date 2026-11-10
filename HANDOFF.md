@@ -5834,3 +5834,36 @@ Scopeonecontrolledfixture nativevisibility/access only, no nativeSDK/ROS/SRT
 workload/overheadequivalence/hardware/M3acceptance. Campaignassessor/filter/driver
 unchanged, confirmedexitacceptancerulenotimplemented. Nextofflineassessmentrules
 fornewmetadata, notautomaticfreshfreeze/grant/N1retry/latercase/merge/IntrinsicM4.
+
+
+## 2026-11-10 — Offline per-thread assessment rules and regressions
+
+The [offline per-thread assessment candidate](evidence/m3-task-metadata-assessment-2026-11-10/README.md)
+adds strict schema, identity, timing and prior-cache rules plus a prospective
+lifecycle adapter.42 new /28 collector /23 preparation /511 existing tests PASS.
+Retained calibration:5 readable records and1 observed absence,0 confirmed task
+exits. Native post-SIGINT/race coverage remains unqualified; no campaign integration,
+freeze, grant or live run. N1/2903 FAIL and1PASS/1FAIL/7unexecuted remain unchanged;
+all38 campaign IDs disabled, no tuning/retries. M3 open/PR2 draft/M4 untouched.
+
+Separate evidence-local task_assessment.py recomputes calibrated schema1 raw
+identities/lifetimes, private SHA-bound parser, ordered read/parent brackets and
+exact previous-sample hint cache. Rejects unsupported/legacy metadata, denied or
+truncated reads, observed reuse, incomplete scan/history/clock/footer/populations.
+Observed absence is separate from readable stacks, raw counters and process exit;
+confirmed_task_exits remains0. No no-reuse/exact-exit/cause assertion.
+
+Separate lifecycle.py retains process/registered-worker/join/root-reap/forced-kill
+gates and allows supported task disappearance only wholly post-SIGINT/pre-reap.
+No frozen assessor/driver/filter/collector/source/build changes or runtime wiring.
+Retained native calibration parses5 readable+1 pre-SIGINT enumerationabsence;
+post-SIGINT adapter/midread race/SDK/ROS/overhead unqualified. Old N1 lacks schema,
+candidate refuses it; old frozen gate reproduces original missingstack failure.
+
+42 new,28 collector,23 preparation,511 root offline tests independently PASS.
+Initial test-model mistakes retained in logs (empty stages/aliasing/wrong worker
+ppid), corrected offline, no native failures or retries. verify.py checks all old
+indexes/raw/source/current14/preserved13/fullchain/native87/calibration77files
+600527bytes and original verdicts, seven laterdirs absent. No Docker/liveprocfs/
+experiments/tuning/build/retry/newfreeze/grant/M3acceptance/merge/IntrinsicM4.
+Next separately scoped preparation/review only, no live execution authorized.

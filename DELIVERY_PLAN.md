@@ -1,5 +1,13 @@
 # Delivery focus — 2026-11-09
 
+The [offline per-thread assessment candidate](evidence/m3-task-metadata-assessment-2026-11-10/README.md)
+adds strict schema, identity, timing and prior-cache rules plus a prospective
+lifecycle adapter.42 new /28 collector /23 preparation /511 existing tests PASS.
+Retained calibration:5 readable records and1 observed absence,0 confirmed task
+exits. Native post-SIGINT/race coverage remains unqualified; no campaign integration,
+freeze, grant or live run. N1/2903 FAIL and1PASS/1FAIL/7unexecuted remain unchanged;
+all38 campaign IDs disabled, no tuning/retries. M3 open/PR2 draft/M4 untouched.
+
 The [bounded task-visibility calibration](evidence/m3-task-visibility-calibration-execution-2026-11-10/README.md)
 PASSES readiness plus one controlled fixture on freeze6357a2c0f58d. Two matched
 worker observations then a complete-enumeration absence hint;5 native stack reads
