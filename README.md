@@ -1,5 +1,15 @@
 # ROS 2 SRT Bridge
 
+The [current-build N0 preparation](evidence/m3-current-n0-preparation-2026-11-10/README.md)
+binds the single predeclared N0-combined-1701 case (300s) to the unchanged frozen
+14-entry matched build. Execution is disabled: no authorization file or live run.
+All511 existing and8 targeted offline tests pass; retained N3 evidence and87 native
+inputs verify unchanged. The combined shutdown/observer integration remains
+prepared only. No tuning, rebuild, automatic retry or later-stage dispatch;
+other28 unexecuted cases remain disabled and completed N3 is not rerun. All29
+previously unexecuted cases remain unexecuted; M3 open, PR2 draft, M4 untouched.
+
+
 The [fresh strict N3 cohort](evidence/m3-strict-n3-execution-2026-11-10/README.md)
 passes9/9 on the frozen matched14-entry build with tracing and observer, in the
 original seed-major order. Every30s case passes strict raw evidence, shutdown,

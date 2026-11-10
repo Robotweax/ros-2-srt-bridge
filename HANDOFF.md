@@ -4891,3 +4891,42 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   closes fresh instrumentedN3 cohort outcome only, not oldhangcause, uninstrumented
   overhead, latercurrentbuildcoverage or fullM3acceptance. All29latercasesdisabled,
   no merge/nextcasequeued/M3open/PR2draft/M4untouched.
+
+
+## 2026-11-10 — Current-build N0 prepared; execution disabled
+
+Prepared exactly N0-combined-1701, campaign ordinal10, 300s combined SENSOR/COMMAND
+on the same socket-disposition matched SDK/ROS build. Scope follows the existing
+closure plan; no new seeds, shortened smoke, impairment or old diagnostic credit.
+All29 previously unexecuted cases remain unexecuted. The other28 N4/N1/N2/N5
+cases are explicitly disabled; the completed fresh N3 cohort is not reexecuted.
+
+Evidence: evidence/m3-current-n0-preparation-2026-11-10/. Disabled freeze SHA256
+1c15050c52086b710b161c28f046db416bd31361d7db1971e3c99417f01840ea binds source,
+inputs,14 current binaries/preserved13/full build chain,87 native inputs, pinned
+images/runtime, retained raw/public indexes and fresh output/read-only observer
+bundle. Exact future authorization is mandatory and was not created. No live
+fixture, Docker object, capture, bridge, observer or readiness experiment started;
+only read-only Docker metadata inspection and local offline work occurred.
+
+Evidence-local combined adapter keeps the original workload and dynamic-neighbor
+N0 path. A subclass adds calibrated bridge capability reduction/identity, actual
+signal brackets and retained child outcomes. Host arms the native observer before
+releasing the original finish request. Existing5s child waits, native observer
+policy/budgets, stages/socket gates and combined command/journal/capture/source
+assessor remain in force. Combined-path integration is not live calibrated yet.
+Any readiness, measurement, shutdown, cleanup or integrity failure ends this
+one-case sequence; no automatic retry/resume/next-stage entry point.
+
+All511 existing Python tests and8 targeted offline tests pass. Targeted tests
+cover exact scope/grant refusal, no-Docker unauthorized entry, profile/seed/duration/
+build refusal, once-only/stop/no-resume, calibrated component equality, shutdown
+success/forced-failure retention and observer-release ordering. Initial local
+wrapper import-order test failure was fixed before freeze; native source and
+installed builds were unchanged. Final syntax, source/input/build/prior-evidence
+and absent-output checks pass. Public package hashes cover validation records.
+
+No tuning or native rebuild. Fresh strict N3 stays9/9, historical N3 stays8/1 with
+unknown hang cause. Future N0 PASS would close only this current-build N0 case;
+M3 acceptance, diagnostic overhead, physical age and other profiles remain open.
+PR2 stays draft; no merge or later case queued; M4 untouched.
