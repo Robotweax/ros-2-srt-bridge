@@ -5967,3 +5967,49 @@ Finalreadonlysource/current14/preserved13/fullchain/native87/alloldpublicraw/
 preparationindex/owncleanup PASS, originalN1assessmentSHA unchanged, sevenlaterdirs
 absent.1PASS1FAIL7notexecuted/all38IDsdisabled; no nextcase/newcampaigngrant/M3
 acceptance/merge/IntrinsicM4. Preparation remains immutable history, not reused.
+
+
+## 2026-11-10 — Calibrated task assessor wired into disabled campaign harness
+
+The [campaign per-thread assessor integration](evidence/m3-campaign-task-assessment-integration-2026-11-10/README.md)
+is wired and verified offline:25 integration,42 assessor and511 existing tests
+PASS. Exact calibrated collector/assessor, explicit native activation and closed
+launch/exec/clock gates feed the unchanged campaign workload/profile checks.
+Execution remains blocked:all38 IDs/stages disabled, no freeze/grant/live run,
+tuning or retries. N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved. Native
+integrated SDK/ROS/race/overhead coverage remains open; M3 open/PR2 draft/M4 untouched.
+
+Prospective evidence-local harness copies immutable LONG launch/scenario/socket/
+stage/profile helpers, byte-identical calibrated metadata409a8812042b/
+lifecycle4fafc85e3d4d/collector6deab3c5e83e/nativeentry. Private graphmanifest
+binds all host helpers independent of generic caches. Workload references new
+scenario/sidecar. Sidecar argv explicit--task-visibility; nativeentry binding
+checks calibratedcollector; arming requires hash/activation proof. Sixfile native
+bundle descriptor includescollector-binding; no bundle actuallycreated.
+
+assess.py connects exactcandidatecoverage to observer_gate closed-file bootstrap/
+export equality, root/ready/exec/boot/zerooffset/profile/cap binding, then unchanged
+realcombined SENSOR/command/capture, profile andcleanup gates. No oldschemafallback,
+rawmissingstackwaiver/taskexitclaim. Driver.verify rejects oldfreezes absentnew
+candidate/modulemanifest/bundlebinding before any runtimequery.
+
+Driver main+dispatch/workloadmain/sidecararm unconditionallydisabled beforeIO;
+cases.authorize rejectsallgrants, allowedfalse/enabledIDsempty/all38disabled.
+Nineprofile tuples retained onlyassessmentgrammar, nofuturecohortselection.
+No freeze/authorization/readiness/nativebundle/liveoutput or campaignintegration
+into frozenoldfiles. A future explicitpreparation mustreviewinterlocks/selectscope
+andfreeze all integrationbytes; no automaticN1retry/laterstageexecution authorized.
+
+25 integrationtests PASS inclcomplete modeled assessment using unchanged real
+combined/profiles/cleanup, copied retained journals/workload andtemporary modeled
+launch/retimedobserver records. No realcasecredit or originalcapturemutation.
+Actualsidecarbody AST executed onlyinfakeDocker test; productionguard remains.
+Failuregates/oldgrants/oldfreeze/privategraph/freshimports tested. Initial overlay
+leftovertrace/listtype mistakes retained+corrected offline; existingSQLitehelper
+ResourceWarnings visible.42assessor+511existing tests independentlyrerunPASS.
+RetainednativepostSIGINT lifecycle passes unchanged, historicalN1 originalgate
+stillfails missingstack; newgate refuses schema. verify.py filesystemaudit PASS
+source/current14/preserved13/fullchain/native87/alloldpublicraw/calibrations/
+verdicts; sevenlaterdirsabsent. No Docker/liveprocfs/tuning/retries/builds/native
+experiments/newfreeze/grant/M3acceptance/merge/IntrinsicM4. ExactmidreadENOENT/
+unseenreuse/integratedSDKROS/overheadequivalence unqualified. PR2 staysdraft.

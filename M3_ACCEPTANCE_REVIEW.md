@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+The [campaign per-thread assessor integration](evidence/m3-campaign-task-assessment-integration-2026-11-10/README.md)
+is wired and verified offline:25 integration,42 assessor and511 existing tests
+PASS. Exact calibrated collector/assessor, explicit native activation and closed
+launch/exec/clock gates feed the unchanged campaign workload/profile checks.
+Execution remains blocked:all38 IDs/stages disabled, no freeze/grant/live run,
+tuning or retries. N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved. Native
+integrated SDK/ROS/race/overhead coverage remains open; M3 open/PR2 draft/M4 untouched.
+
 The [native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-execution-2026-11-10/README.md)
 PASSES readiness and one controlled fixture on freeze8acc653d87ad. Two post-signal
 readable worker observations precede controlled join and supported enumeration

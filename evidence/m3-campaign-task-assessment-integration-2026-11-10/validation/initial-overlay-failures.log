@@ -1,0 +1,84 @@
+test_all38_case_ids_disabled_and_all_old_grants_rejected (test_integration.CampaignIntegrationTests.test_all38_case_ids_disabled_and_all_old_grants_rejected) ... ok
+test_bound_collector_and_candidate_bytes_match_calibrated_originals (test_integration.CampaignIntegrationTests.test_bound_collector_and_candidate_bytes_match_calibrated_originals) ... ok
+test_changed_boot_target_profile_or_event_population_refused (test_integration.CampaignIntegrationTests.test_changed_boot_target_profile_or_event_population_refused) ... ok
+test_cleanup_credential_gate_still_required (test_integration.CampaignIntegrationTests.test_cleanup_credential_gate_still_required) ... FAIL
+test_clock_origin_or_permissions_still_fail (test_integration.CampaignIntegrationTests.test_clock_origin_or_permissions_still_fail) ... ok
+test_complete_modeled_pipeline_preserves_real_combined_profile_gates (test_integration.CampaignIntegrationTests.test_complete_modeled_pipeline_preserves_real_combined_profile_gates) ... FAIL
+test_driver_workload_sidecar_and_dispatch_disabled_before_IO (test_integration.CampaignIntegrationTests.test_driver_workload_sidecar_and_dispatch_disabled_before_IO) ... ok
+test_failed_metadata_stops_before_common_gates (test_integration.CampaignIntegrationTests.test_failed_metadata_stops_before_common_gates) ... ok
+test_legacy_capture_refused_no_common_gate_or_historical_reclassification (test_integration.CampaignIntegrationTests.test_legacy_capture_refused_no_common_gate_or_historical_reclassification) ... ok
+test_loader_rejects_changed_source_even_after_cache_hit (test_integration.CampaignIntegrationTests.test_loader_rejects_changed_source_even_after_cache_hit) ... ok
+test_missing_or_divergent_exported_exec_proof_refused (test_integration.CampaignIntegrationTests.test_missing_or_divergent_exported_exec_proof_refused) ... ok
+test_missing_warmup_launch_remains_failure (test_integration.CampaignIntegrationTests.test_missing_warmup_launch_remains_failure) ... ok
+test_original_sensor_command_capture_and_workload_gates_remain_fail_closed (test_integration.CampaignIntegrationTests.test_original_sensor_command_capture_and_workload_gates_remain_fail_closed) ... ERROR
+test_private_graph_ignores_poisoned_generic_helpers (test_integration.CampaignIntegrationTests.test_private_graph_ignores_poisoned_generic_helpers) ... ok
+test_profile_tuning_still_refused (test_integration.CampaignIntegrationTests.test_profile_tuning_still_refused) ... FAIL
+test_real_retained_calibration_passes_exact_bound_lifecycle (test_integration.CampaignIntegrationTests.test_real_retained_calibration_passes_exact_bound_lifecycle) ... ok
+test_sidecar_command_forwards_explicit_calibrated_flag_and_isolation (test_integration.CampaignIntegrationTests.test_sidecar_command_forwards_explicit_calibrated_flag_and_isolation) ... ok
+test_socket_stage_and_launch_gates_still_refuse_missing_proof (test_integration.CampaignIntegrationTests.test_socket_stage_and_launch_gates_still_refuse_missing_proof) ... ok
+test_unregistered_path_rejected (test_integration.CampaignIntegrationTests.test_unregistered_path_rejected) ... ok
+test_wrong_activation_hash_or_flags_refused (test_integration.CampaignIntegrationTests.test_wrong_activation_hash_or_flags_refused) ... 
+  test_wrong_activation_hash_or_flags_refused (test_integration.CampaignIntegrationTests.test_wrong_activation_hash_or_flags_refused) (delta={'collector_sha256': 'wrong'}) ... FAIL
+  test_wrong_activation_hash_or_flags_refused (test_integration.CampaignIntegrationTests.test_wrong_activation_hash_or_flags_refused) (delta={'task_visibility': False}) ... FAIL
+
+======================================================================
+ERROR: test_original_sensor_command_capture_and_workload_gates_remain_fail_closed (test_integration.CampaignIntegrationTests.test_original_sensor_command_capture_and_workload_gates_remain_fail_closed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 58, in test_original_sensor_command_capture_and_workload_gates_remain_fail_closed
+    if mutation=='sensor':result['results']['typed_errors']+=1
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'int' object is not iterable
+
+======================================================================
+FAIL: test_cleanup_credential_gate_still_required (test_integration.CampaignIntegrationTests.test_cleanup_credential_gate_still_required)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 69, in test_cleanup_credential_gate_still_required
+    (self.out/'passphrase').touch();proof=self.assess();self.assertEqual(proof['status'],'failed');self.assertIn('credential retained',proof['error'])
+                                                                                                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'credential retained' not found in 'missing/unlisted shutdown trace file'
+
+======================================================================
+FAIL: test_complete_modeled_pipeline_preserves_real_combined_profile_gates (test_integration.CampaignIntegrationTests.test_complete_modeled_pipeline_preserves_real_combined_profile_gates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 20, in test_complete_modeled_pipeline_preserves_real_combined_profile_gates
+    proof=self.assess();self.assertEqual(proof['status'],'passed',proof.get('error'));self.assertTrue(proof['prospective_task_assessment_only']);self.assertFalse(proof['execution_enabled']);self.assertEqual(proof['combined']['gate'],'combined_strict_success');self.assertTrue(proof['profile']['original_commands_and_kernel_settings_verified']);self.assertEqual(proof['operator_observer']['confirmed_task_exits'],0);self.assertEqual(len(proof['operator_observer']['observed_task_disappearances']),1)
+                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'failed' != 'passed'
+- failed
++ passed
+ : missing/unlisted shutdown trace file
+
+======================================================================
+FAIL: test_profile_tuning_still_refused (test_integration.CampaignIntegrationTests.test_profile_tuning_still_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 63, in test_profile_tuning_still_refused
+    path=self.out/'profile-operator-readback.log';rows=read(path);next(q for q in rows if q['kind']=='netem')['options']['limit']=999;write(path,rows);proof=self.assess();self.assertEqual(proof['status'],'failed');self.assertIn('kernel settings',proof['error'])
+                                                                                                                                                                                                                      ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'kernel settings' not found in 'missing/unlisted shutdown trace file'
+
+======================================================================
+FAIL: test_wrong_activation_hash_or_flags_refused (test_integration.CampaignIntegrationTests.test_wrong_activation_hash_or_flags_refused) (delta={'collector_sha256': 'wrong'})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 32, in test_wrong_activation_hash_or_flags_refused
+    proof=self.assess();self.assertEqual(proof['status'],'failed');self.assertIn('activation binding',proof['error']);p.write_text(original);(self.out/'native-observer/observer-exec.jsonl').write_text(original)
+                                                                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'activation binding' not found in 'missing/unlisted shutdown trace file'
+
+======================================================================
+FAIL: test_wrong_activation_hash_or_flags_refused (test_integration.CampaignIntegrationTests.test_wrong_activation_hash_or_flags_refused) (delta={'task_visibility': False})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-campaign-task-assessment-integration-2026-11-10/validation/test_integration.py", line 32, in test_wrong_activation_hash_or_flags_refused
+    proof=self.assess();self.assertEqual(proof['status'],'failed');self.assertIn('activation binding',proof['error']);p.write_text(original);(self.out/'native-observer/observer-exec.jsonl').write_text(original)
+                                                                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'activation binding' not found in 'missing/unlisted shutdown trace file'
+
+----------------------------------------------------------------------
+Ran 20 tests in 8.149s
+
+FAILED (failures=5, errors=1)
