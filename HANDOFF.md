@@ -5627,3 +5627,41 @@ ROS/provider/native87/oldfixture/everypriorpublicrawindex (inclN4new1140files)
 PASS; no build/Dockermutation/containers/network/worker/ROS/experiment. New
 publicindex/readiness/postflight/finalverification/caseplan/settings bound. Existing
 N0/N3/N4 passes andalloldfailuresimmutable. No M3acceptance/merge/laterstage/M4.
+
+
+## 2026-11-10 — Nine-case cohort stopped1PASS/1FAIL/7unexecuted
+
+The [N1/N2/N5 cohort](evidence/m3-current-long-execution-2026-11-10/README.md)
+stopped at the first failed gate: **1 PASS /1 FAIL /7 NOT EXECUTED**. N1/1701/600s
+passes all strict gates (300/300 commands). N1/2903 inner workload passes but
+strict observer coverage fails on3 ENOENT thread-stack reads after SIGINT; normal
+child exit0 does not waive missing evidence. Both cleanup/integrity postflights
+pass. No tuning/retry/fix or later case; seven remaining cases and other stages
+stay disabled. M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze868a21578a61/source71fd47c, driverexit1.
+N1/1701 strictPASS,300/300successes/effects/onehandoff,0unresolved/notadmitted/
+skipped; source600.108476067s,150027produced/110725observed/39302accountedmissing,
+sixbalances0, modeledpublicationuppermax156/165ms<250. No physicalage/lossless/
+hardmemory/diagnosticoverhead equivalence. Observer76readsOK/0unavailable.
+
+N1/2903 innerpassed600s but strict lifecycle.coverage fails live target kernel
+stack unavailable beforecombined/progress/profile revalidation. Observerfooter
+5samples/88readsOK/3unavailable/noexhaustion. PostSIGINT/prereap sample4, matching
+rootPID111 but TIDs128/129/130 kernel_stack ENOENT. Sample1262083806197–1262085394281,
+signalend1262055193239,reap1262292549697ns; child0/unforced~237ms. Missingperthread
+files compatiblewith shutdownthreadexit, notconfirmedproof, no uniquecause or
+SRTdefect established. Missingdata notwaived; caseFAILpreserved. Inner300state4/
+reason0outcomes,0unresolved/notadmitted,150032/110908/39124missing/sixbalances0/
+age126/104ms retained only, notstrictacceptance orcompletedgatecredit.
+
+Sevenlatercases nooutputdirs, noN1/4211,N2,N5 orcompletedN0/N3/N4dispatch.
+Bothcleanup/postflightandfinalfrozeninput/source/current14/preserved13/fullchain/
+native87/observerbundle/identity/preparationpublic/allpriorarchives PASS; owned
+lab/observer/network/volumeabsent,credentialsdeleted. Publicfullstrict/launch/
+readiness/stages/observerJSONL+failedreads/capturefooter/profile/operatorresults,
+selectedrunfields+omittedkeylist/hash, cohort/grant/log/gatereport/postflight bound.
+Full238rawfiles/927,231,952bytes indexed; bigcaptures/fullrun/endpoint/journals
+localonly/hashbound. No tuning/build/tests/source/filter/queue/clock/rate/wait/
+budget edits/retry/newexperiment. Next retainedthreadlifecyclediagnosis only,
+no fix/newfreeze/grant/automaticlatercase/merge/M3acceptance/IntrinsicM4.

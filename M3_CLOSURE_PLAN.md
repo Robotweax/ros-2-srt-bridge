@@ -1,5 +1,13 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [N1/N2/N5 cohort](evidence/m3-current-long-execution-2026-11-10/README.md)
+stopped at the first failed gate: **1 PASS /1 FAIL /7 NOT EXECUTED**. N1/1701/600s
+passes all strict gates (300/300 commands). N1/2903 inner workload passes but
+strict observer coverage fails on3 ENOENT thread-stack reads after SIGINT; normal
+child exit0 does not waive missing evidence. Both cleanup/integrity postflights
+pass. No tuning/retry/fix or later case; seven remaining cases and other stages
+stay disabled. M3 open/PR2 draft/M4 untouched.
+
 The [nine remaining current-build cases](evidence/m3-current-long-preparation-2026-11-10/README.md)
 are prepared in freeze868a21578a61: N1/N2 three seeds each at600s, then N5 three
 seeds at300s, unchanged matched build and stabilized lifecycle/observer. **No live

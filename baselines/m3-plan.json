@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Nine remaining current-build N1/N2/N5 cases prepared only, freeze868a21578a61: original rows30\u201338, N1/N2\u00d73seeds600s,N5\u00d73seeds300s. Unchanged matched build/stabilized lifecycle/observer/settings;21 preparation+39 lifecycle+4 import+511 existing tests PASS. No execution grant/live run/rebuild/tuning/automatic retries; all29 completed IDs disabled/excluded. Prior outcomes preserved; M3 open/PR2 draft/M4 untouched.",
+  "current_priority": "Nine-case N1/N2/N5 cohort stopped1PASS/1FAIL/7not-executed on frozen868a21578a61: N1/1701 strictPASS300/300; N1/2903 strict observer kernel-stack gate fails3per-thread ENOENT after SIGINT despite normalexit0; inner combined data not strictly revalidated. Cleanup/integrity PASS. Diagnose missing per-thread evidence from retained files; no tuning/retry/fix/newfreeze/latercase/M3acceptance/merge/M4.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4418,7 +4418,7 @@
       "passed": 19,
       "scope": "fresh bounded native/ROS phase/freshness/crash cases; historical failure preserved"
     },
-    "remaining_unexecuted_cases_disabled": 9,
+    "remaining_unexecuted_cases_disabled": 7,
     "remaining_stages": [
       "N1",
       "N2",
@@ -4426,7 +4426,15 @@
     ],
     "M3_complete": false,
     "PR2_draft": true,
-    "M4_started": false
+    "M4_started": false,
+    "LONG": {
+      "passed": 1,
+      "failed": 1,
+      "not_executed": 7,
+      "first_failed_case": "N1-combined-2903",
+      "failed_gate": "live target kernel stack unavailable",
+      "inner_PASS_not_promoted": true
+    }
   },
   "current_build_long_preparation": {
     "status": "nine_current_build_N1_N2_N5_prepared_execution_disabled",
@@ -4487,5 +4495,41 @@
     ],
     "prior_N0_N3_N4_passes_and_historical_failures_preserved": true,
     "M3_complete": false
+  },
+  "current_build_long_execution": {
+    "status": "failed_stopped_at_first_strict_gate",
+    "driver_exit_code": 1,
+    "freeze_sha256": "868a21578a61a3d5e67d047fa76c95c24ea70c1965c5b71d6f9f5902d292d12e",
+    "source_commit": "71fd47c1f3cc529369dba459b1ea2cb73cde673c",
+    "cases_declared": 9,
+    "cases_started": 2,
+    "passed": 1,
+    "failed": 1,
+    "not_executed": 7,
+    "first_failed_case": "N1-combined-2903",
+    "failed_gate": "live target kernel stack unavailable",
+    "inner_workload_passed_but_not_strictly_accepted": true,
+    "observer_unavailable_reads": 3,
+    "observer_error": "FileNotFoundError/ENOENT",
+    "remaining_case_ids_disabled": [
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "completed_campaign_cases_excluded": 29,
+    "raw_files": 238,
+    "raw_bytes": 927231952,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "stop_first_failed_gate": true,
+    "historical_failures_preserved": true,
+    "M3_complete": false,
+    "evidence": "evidence/m3-current-long-execution-2026-11-10/README.md",
+    "postflight": "passed_integrity_and_owned_object_absence",
+    "thread_exit_cause_confirmed": false
   }
 }

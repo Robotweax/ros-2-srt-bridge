@@ -1,0 +1,410 @@
+{
+  "status": "failed_stopped_at_first_strict_gate",
+  "driver_exit_code": 1,
+  "freeze_sha256": "868a21578a61a3d5e67d047fa76c95c24ea70c1965c5b71d6f9f5902d292d12e",
+  "source_commit": "71fd47c1f3cc529369dba459b1ea2cb73cde673c",
+  "cases_declared": 9,
+  "cases_started": 2,
+  "passed": 1,
+  "failed": 1,
+  "not_executed": 7,
+  "first_failed_case": "N1-combined-2903",
+  "failed_gate": "live target kernel stack unavailable",
+  "inner_workload_passed_but_not_strictly_accepted": true,
+  "observer_unavailable_reads": 3,
+  "observer_error": "FileNotFoundError/ENOENT",
+  "remaining_case_ids_disabled": [
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "completed_campaign_cases_excluded": 29,
+  "raw_files": 238,
+  "raw_bytes": 927231952,
+  "no_tuning": true,
+  "no_automatic_retries": true,
+  "stop_first_failed_gate": true,
+  "historical_failures_preserved": true,
+  "M3_complete": false,
+  "rows": [
+    {
+      "id": "N1-combined-1701",
+      "ordinal": 30,
+      "status": "passed",
+      "inner_status": "passed",
+      "strict_status": "passed",
+      "strict_error": null,
+      "command_summary": {
+        "attempts": 300,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 300,
+          "p50": 259.53975,
+          "p95": 263.785083,
+          "p99": 275.329791,
+          "maximum": 286.722959
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 300,
+            "p50": 259.53975,
+            "p95": 263.785083,
+            "p99": 275.329791,
+            "maximum": 286.722959
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "measurement_window": {
+        "source_produced": 150027,
+        "observer_received": 110725,
+        "missing": 39302,
+        "losses": {
+          "upstream_dds": 113,
+          "validation": 0,
+          "admission": 234,
+          "ingress_replaced": 11,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 4739,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 259,
+          "receiver_rejected": 22567,
+          "receive_replaced": 11247,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 132
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 600.108476067,
+        "source_actual_hz": {
+          "imu": 199.99884152044552,
+          "joints": 50.000960154160424
+        },
+        "published": 110857,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 81344,
+            "rounding": "up to 1ms",
+            "maximum_ms": 156,
+            "p50_ms": 43,
+            "p95_ms": 52,
+            "p99_ms": 55
+          },
+          "joint": {
+            "count": 29513,
+            "rounding": "up to 1ms",
+            "maximum_ms": 165,
+            "p50_ms": 52,
+            "p95_ms": 66,
+            "p99_ms": 70
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "postflight": {
+        "frozen_integrity_passed": true,
+        "owned_objects_absent": true,
+        "credential_deleted": true
+      },
+      "observer": {
+        "footer": {
+          "kind": "status",
+          "completed": true,
+          "reason": "all_owned_processes_gone",
+          "samples": 5,
+          "sample_limit": 48,
+          "budget_exhausted": false,
+          "kernel_stack_reads_ok": 76,
+          "kernel_stack_reads_unavailable": 0,
+          "userspace_stacks_requested": false,
+          "end_ns": 623174776868,
+          "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+        },
+        "unavailable_threads": []
+      },
+      "strict_command_audit": {
+        "attempts": 300,
+        "confirmed_successes": 300,
+        "unknown": 0,
+        "effects": 300,
+        "unresolved": 0,
+        "not_admitted": 0,
+        "all_succeeded": true,
+        "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+      }
+    },
+    {
+      "id": "N1-combined-2903",
+      "ordinal": 31,
+      "status": "failed",
+      "inner_status": "passed",
+      "strict_status": "failed",
+      "strict_error": "live target kernel stack unavailable",
+      "command_summary": {
+        "attempts": 300,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 300,
+          "p50": 259.300625,
+          "p95": 263.297625,
+          "p99": 265.906875,
+          "maximum": 269.448
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 300,
+            "p50": 259.300625,
+            "p95": 263.297625,
+            "p99": 265.906875,
+            "maximum": 269.448
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "measurement_window": {
+        "source_produced": 150032,
+        "observer_received": 110908,
+        "missing": 39124,
+        "losses": {
+          "upstream_dds": 93,
+          "validation": 0,
+          "admission": 241,
+          "ingress_replaced": 3,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 4757,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 296,
+          "receiver_rejected": 22639,
+          "receive_replaced": 10958,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 137
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 600.12647327,
+        "source_actual_hz": {
+          "imu": 199.99950901349445,
+          "joints": 50.00112698994316
+        },
+        "published": 111045,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 81535,
+            "rounding": "up to 1ms",
+            "maximum_ms": 126,
+            "p50_ms": 44,
+            "p95_ms": 52,
+            "p99_ms": 55
+          },
+          "joint": {
+            "count": 29510,
+            "rounding": "up to 1ms",
+            "maximum_ms": 104,
+            "p50_ms": 53,
+            "p95_ms": 66,
+            "p99_ms": 71
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "postflight": {
+        "frozen_integrity_passed": true,
+        "owned_objects_absent": true,
+        "credential_deleted": true
+      },
+      "observer": {
+        "footer": {
+          "kind": "status",
+          "completed": true,
+          "reason": "all_owned_processes_gone",
+          "samples": 5,
+          "sample_limit": 48,
+          "budget_exhausted": false,
+          "kernel_stack_reads_ok": 88,
+          "kernel_stack_reads_unavailable": 3,
+          "userspace_stacks_requested": false,
+          "end_ns": 1262336685572,
+          "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+        },
+        "unavailable_threads": [
+          {
+            "sample_row": 4,
+            "sample_begin_ns": 1262083806197,
+            "sample_end_ns": 1262085394281,
+            "process_identity": {
+              "pid": 111,
+              "start_ticks": 64834
+            },
+            "identity_check": {
+              "status": "matching",
+              "observed": {
+                "pid": 111,
+                "start_ticks": 64834,
+                "state": "S",
+                "ppid": 75,
+                "name": "bridge_node"
+              },
+              "checked_ns": 1262085362531
+            },
+            "tid": 128,
+            "thread_stat": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            },
+            "kernel_stack": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            }
+          },
+          {
+            "sample_row": 4,
+            "sample_begin_ns": 1262083806197,
+            "sample_end_ns": 1262085394281,
+            "process_identity": {
+              "pid": 111,
+              "start_ticks": 64834
+            },
+            "identity_check": {
+              "status": "matching",
+              "observed": {
+                "pid": 111,
+                "start_ticks": 64834,
+                "state": "S",
+                "ppid": 75,
+                "name": "bridge_node"
+              },
+              "checked_ns": 1262085362531
+            },
+            "tid": 129,
+            "thread_stat": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            },
+            "kernel_stack": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            }
+          },
+          {
+            "sample_row": 4,
+            "sample_begin_ns": 1262083806197,
+            "sample_end_ns": 1262085394281,
+            "process_identity": {
+              "pid": 111,
+              "start_ticks": 64834
+            },
+            "identity_check": {
+              "status": "matching",
+              "observed": {
+                "pid": 111,
+                "start_ticks": 64834,
+                "state": "S",
+                "ppid": 75,
+                "name": "bridge_node"
+              },
+              "checked_ns": 1262085362531
+            },
+            "tid": 130,
+            "thread_stat": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            },
+            "kernel_stack": {
+              "status": "unavailable",
+              "error": "FileNotFoundError",
+              "errno": 2
+            }
+          }
+        ],
+        "supervised_child": {
+          "name": "operator-bridge-0",
+          "pid": 111,
+          "forced_kill": false,
+          "signal_begin_ns": 1262055050072,
+          "signal_end_ns": 1262055193239,
+          "passed": true,
+          "end_ns": 1262292549697,
+          "returncode": 0,
+          "launch_token": "4a312623d38c3ca4dab7a8ab44c8cec2",
+          "purpose": "measurement",
+          "start_ticks": 64834,
+          "trace_path": "launch-readiness/operator-operator-bridge-0-4a312623d38c3ca4dab7a8ab44c8cec2.shutdown.jsonl",
+          "identity_path": "launch-readiness/operator-operator-bridge-0-4a312623d38c3ca4dab7a8ab44c8cec2.identity.json"
+        }
+      }
+    },
+    {
+      "id": "N1-combined-4211",
+      "ordinal": 32,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N2-combined-1701",
+      "ordinal": 33,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N2-combined-2903",
+      "ordinal": 34,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N2-combined-4211",
+      "ordinal": 35,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N5-combined-1701",
+      "ordinal": 36,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N5-combined-2903",
+      "ordinal": 37,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    },
+    {
+      "id": "N5-combined-4211",
+      "ordinal": 38,
+      "status": "not_executed",
+      "reason": "previous declared gate failed; no retry"
+    }
+  ]
+}
