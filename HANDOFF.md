@@ -5374,3 +5374,46 @@ behavior or Docker teardown. Prior freezes and all3 failed N0 runs immutable,
 N3 recorded outcomes preserved. New code still needs separate explicit live
 execution authorization and all gates. Other28 stages disabled; N0 unqualified,
 M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Stabilized N0 seed1701/300s PASS; other28 disabled
+
+Exact user grant for freeze98a357e418c2 recorded in
+ evidence/m3-current-n0-stable-execution-2026-11-10/. Unchanged driver invoked once,
+exit0, one strict PASS/no failure/retry/tuning. No other case or N3 rerun. Source/
+harness/assessor/native build/policy/clock/rate/queue/wait/filter/budget unchanged;
+no tests/builds overlap measurement. Scenario300.005754387s, source300.111622428s.
+
+150commands/150confirmed successes/150effects, zero UNKNOWN/unresolved/notadmitted/
+skippedslots. Exactly1SDKhandoff each, matching closed durable sender/receiver
+journal proof. SENSOR75,028produced/72,513SDKaccepted+received/72,497published/
+72,464typedobserved, sixbalances0.2,564 accounted latest-only/upstream/observer
+losses retained, not losslessavailability. WindowSRTgap0, receiveageunknown/stale0.
+Cadence199.998918784HzIMU/50.001395743Hzjoints. Modeled publication histogram maxima
+47msIMU/38msjoints; exact in-window bounds46.665179/37.079002ms <250. Not physical/
+observerarrivalage or queuehighwater/hardmemory acceptance.
+
+PCAP156,712each reconciled/zero drops/unaccounted; native156,757/156,758complete
+zero reserve/copy errors, source-window interpretation/clock gates pass. Provider/
+command footers complete/no drops or exhaustion. Different recorder populations
+not equated. Four unique readiness contexts with explicit helper/identity/caps;
+expected negative test1, all3positive launches51stages each. Warmup retained and
+ends before final; new per-launch child/token/time/stage/socket gates pass.
+All6 locally traced closes return0; explicit slot dispositions, no leak claim.
+All4 owned children exit0/unforced under original5s waits. Signal-to-reapoperator
+241.640125ms,warmuprobot322.600958ms,finalrobot369.551792ms; simulator0/unforced.
+
+Native observer ready before shutdown, exact finaloperator PID/startticks/boot/
+cap/filter/exec proof and worker lifecycle pass. Footer5bounded samples/76kernel
+readsOK/0unavailable/noexhaustion; coverage4inwait/1postsignal. Registeredworker
+missing afterjoin confirmed, no worker-exitcode/userspace/GDB/overhead equivalence.
+Normalcleanup only; labcontainers/observer/network/volume absent, credentialdeleted.
+Postflight/source/inputs/current14/preserved13/fullchain/provider/native87 and
+prior raw/public hashes verify unchanged.112newrawfiles233,284,411bytes indexed.
+Public fullstrictassessment/commandresult/catalog/readiness/identity/traces/child/
+observer/capture/provider/authorization/cleanup proofs and summaries published.
+
+Single current-build instrumented N0 coverage now closes; old3N0FAILs and original
+N3failure/unknownhang remain unchanged, fresh N3 stays9/9. No fullM3/hardware/
+physicalage/diagnosticoverhead acceptance or futurecase authorization. Other28
+N4/N1/N2/N5 cases disabled; M3 open, PR2 draft, no merge/nextcase queued, M4 untouched.

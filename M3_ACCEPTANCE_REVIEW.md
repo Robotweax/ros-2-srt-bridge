@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+The [stabilized current-build N0 case](evidence/m3-current-n0-stable-execution-2026-11-10/README.md)
+PASSES seed1701/300s:150/150 commands, no unresolved/skipped slots, six SENSOR
+balances0, modeled age bounds below250ms, complete capture/provider and per-launch
+lifecycle/native-observer gates. All4 children exit0/unforced; cleanup/integrity
+verify. One fresh case, no tuning/retry. Other28 stages remain disabled, historical
+failures preserved, M3 open/PR2 draft/M4 untouched.
+
+
 The [stabilized-lifecycle N0 freeze](evidence/m3-current-n0-stable-preparation-2026-11-10/README.md)
 is prepared for exactly seed1701/300s. Freeze98a357e418c2 binds stabilized harness,
 matching per-launch assessor/helper SHAs and unchanged matched build. Execution
