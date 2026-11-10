@@ -5285,3 +5285,50 @@ old frozen drivers cannot silently select this revision. Future live run needs
 separate preparation and explicit authorization; live behavior still unvalidated.
 Other28 stages disabled, N0 unqualified, historical/new N3 outcomes preserved,
 M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Whole Python lifecycle stabilized and verified offline
+
+User authorizes complete startup/warmup/restart/shutdown offline stabilization;
+no N0 rerun/tuning/automatic retries, other stages disabled. Candidate:
+ evidence/m3-current-n0-lifecycle-stabilization-2026-11-10/.
+39 lifecycle tests (26 prior +13 whole-flow),4 fresh runtime-import and511 existing
+tests PASS; syntax/integrity audit PASS. No Linux capability syscall, Docker call,
+ROS node, bridge/capture/observer/N0 or native build. Ordinary offline Python
+interpreters/threads, virtual clocks and temporary files only.
+
+Whole-flow model executes actual inherited Driver.robot and all6 actual operator
+file-RPC requests/replies, Benchmark start/reset/stop, Diagnostic launch/readiness/
+stop/cleanup and wrapper main with native boundaries mocked. Profile test confirms
+production methods and host arm-release/observer-finally/lab/credential cleanup
+AST blocks execute. Success covers operator/simulator/negative startup, real
+warmup startup/pause/shutdown, one fresh replacement, resume/pause, observer before
+finish RPC, final robot/simulator/operator shutdown and owned cleanup. Real
+per-launch lifecycle assessor consumes generated records. Full assessor test uses
+modeled observer and excludes combined SENSOR/command validation; failed host
+result cannot pass just because children exited cleanly.
+
+Injected spawn refusal, capability failure, unexpected negative success, trace
+collision, warmup/final timeout and observer arm/close faults stop without extra
+startup/replacement retry. No finish RPC without release. Failures survive cleanup
+and cannot pass assessment. Owned children terminate, modeled lab/observer/credential
+cleanup checked. Virtual5s stop timeout is original, not tuning. Real worker,
+SRT/ROS scheduling, kernel stacks and300s measurement loop are not qualified by
+this model; helper provenance root only rebased in temporary test metadata.
+
+Production hardening limited to Diagnostic.start closing its log/retaining a
+spawn-phase failure with no invented PID if Popen fails, and Diagnostic.cleanup
+saving final catalogs even after error cleanup. Missing normal child evidence
+stays failed, not synthesized PASS. Readiness/wrapper/launch planning/lifecycle/
+stage/socket assessors byte-identical to prior candidate; Benchmark AST unchanged.
+Host adapter changes only scenario selection. No native/policy/rate/queue/clock/
+wait/filter/sampling change. Initial model-only coordination/fixture issues were
+resolved before final tests; historical packages never modified.
+
+Frozen source/inputs/current14/preserved13/full chain/native87 and retained raw/
+public indexes verify, including all3 failed N0 attempts and prior N3 outcomes.
+Candidate input/public hashes/logs/audit published. No new freeze/grant/live output;
+old drivers do not silently select revision. Offline complete control-lifecycle
+coverage is not live N0/M3 acceptance. Future live qualification still requires
+separate preparation and explicit instruction. Other28 stages disabled, N0
+unqualified, M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.

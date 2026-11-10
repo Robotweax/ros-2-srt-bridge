@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [complete offline lifecycle verification](evidence/m3-current-n0-lifecycle-stabilization-2026-11-10/README.md)
+passes39 lifecycle tests (including13 whole-flow tests),4 runtime-import checks
+and511 existing tests. Actual robot/RPC/wrapper/start-reset-stop methods and host
+release/cleanup blocks run against modeled dependencies. Spawn failures now close
+logs/retain evidence, and cleanup refreshes final catalogs. No N0/live fixture,
+new freeze/grant, tuning or retry; old inputs/builds/failures unchanged, other28
+stages disabled, N0 unqualified and M3 open/PR2 draft/M4 untouched.
+
+
 The [per-launch trace/lifecycle fix](evidence/m3-current-n0-trace-lifecycle-fix-2026-11-10/README.md)
 gives warmup/final bridges separate exclusive trace paths, catalogs and attested
 identities. Child outcomes and stage/socket proofs bind to each launch; native
