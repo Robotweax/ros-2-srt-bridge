@@ -6013,3 +6013,59 @@ source/current14/preserved13/fullchain/native87/alloldpublicraw/calibrations/
 verdicts; sevenlaterdirsabsent. No Docker/liveprocfs/tuning/retries/builds/native
 experiments/newfreeze/grant/M3acceptance/merge/IntrinsicM4. ExactmidreadENOENT/
 unseenreuse/integratedSDKROS/overheadequivalence unqualified. PR2 staysdraft.
+
+
+## 2026-11-10 — Bounded integrated SDK/ROS calibration prepared, not run
+
+The [bounded native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze4d64d753f6eb, **not run; execution disabled, no grant**.
+One native readiness check then one N0/1701/10s diagnostic on unchanged matched
+SDK/ROS builds, integrated per-thread/launch/workload gates and original five-second
+child waits.28 preparation tests PASS; runtime read-only preflight quiescent.
+All38 campaign IDs/stages disabled, N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved.
+No tuning/retries/builds/live run. Short diagnostic is not campaign coverage;
+actual SDK/ROS gates remain unqualified until run. M3 open/PR2 draft/M4 untouched.
+
+Freeze4d64d753f6ebe398a28cf447cbcc1632170facd0f3b6b0726a86c7c55aa5222a, base3047c86.
+Exactly1 nativeARM readinessselfcheck +1 pinnedamd64 LinuxSDKROSunderemulation
+N0/1701/10source seconds. CalibrationslotSDKROS-calibration-N0-1701-10s distinct
+fromall38campaignIDs inclN0/1701/300. No N1/2903 retry, no campaign stage enabled.
+Exactfuturegrant required scope+freeze+manifest+1readiness/1fixture+all exclusions;
+oldgrants refused. Process-local guard verifies grant/files and exactfixtureout/
+bundle/prefix; originalofflineintegrationblockers untouched. No grant created.
+
+Privategraph exactcollector6deab3c5e83e/metadata409a8812042b/lifecycle4fafc85e3d4d,
+nativeentry/stabilizedscenario/bridgewrapper/launch/socket/stage/profile helpers
+byteidentical. SDKphase requires2preSPI readablematchingroot/namedSDKprovider
+(rwx-shard-0/rwx-shard-1/rwx-readiness, anyone perqualifyingsample) before original
+normalshutdownrelease. No postsignalhold/forcedabsence/childwaitextension. Exact
+integratedclosedmetadata/execclock/provenance/combinedSENSORcommandcapture/profile/
+cleanup gates; onlyboundedSDKROScalibrationqualification. No fakelegacy metadata.
+
+Sixfile nativebundle.local/sdkros-task-calibration-bundle-20261110T195336822172Z readonly444/555;
+futureoutput.local/sdkros-task-calibration-20261110T195336822172Z absent. ObserverSYS_ADMINonlyNNP/defaultdeny/
+readonly/networknone/exactoperatorPIDnamespace; NetworkLab NET_ADMIN+BPF/root
+mountpolicy unchanged, bridgechildcap0NNP/seccomp. No permission or runtime tuning.
+48/.25s/12s/8proc/64task/512history/16KiB unchanged; SDKvisibility6s/snapshot8MiB,
+originalbarrier15s/scenario130s/childwait5s. Newhostfixturewatchdog240s withowned
+processgroup TERM/2s/KILL/5s onalreadyfailedboundary andscopedemergencycleanup.
+Readiness20s/sidecar15scommandcaps; boundedphases nottotalwallclockguarantee.
+
+28fresh preparation tests PASS: exactscope/oldgrant/inactiveoutputguard/private
+imports, fullfakeDocker readiness-beforefixture/firstfailure cleanup, ownedwatchdog,
+SDKpresence/schema/error/deadline, preservedbytes anddirectprivatebuildmanifest.
+SDKassessor testreal launch/socket/lifecycle/bootstrap/provider/profile/cleanup;
+unchangedcommoncombinedcallbackmocked because retained600sN1 evidence isnot10s
+SDKproof.25integration/42assessor/511existing logs reusedbyteidentical; notnative
+credit. Initialfakepolicyfile omission retained/corrected offline. Preparation
+stoppedbeforefreeze/runtimequeries onmissinglocalbinarymanifest; exactLONGmanifest
+copied, pathrelocationnormed explicitly, missing/pathmodel failures retained.
+All14matched/13preserved/fullchain/native87 hashesunchanged. No nativeattempt/retry.
+
+Read-onlyruntime/images/source/build/priorindex/input verificationPASS, quiescent;
+finalprivatebinding/readinessgrantabsence/futureoutputabsence/readonlybundle/
+originalN1assessmentSHA/sevenlaterdirsabsence PASS. Originalfailedcohortunchanged,
+all38campaignIDs disabled.0 native readiness/SDKfixtures/builds/Dockermutations;
+M3open/PR2draft/IntrinsicM4untouched. No queuedrun or nextcase. ActualSDK provider
+names/shortwindowcadence/nativeaccess/SDKshutdown remainfuturegates; exactmidread
+ENOENT/unseenreuse/overhead notguaranteed, fastnormalshutdownmayhavenopostSPIabsence.

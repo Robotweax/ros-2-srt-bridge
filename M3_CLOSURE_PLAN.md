@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [bounded native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze4d64d753f6eb, **not run; execution disabled, no grant**.
+One native readiness check then one N0/1701/10s diagnostic on unchanged matched
+SDK/ROS builds, integrated per-thread/launch/workload gates and original five-second
+child waits.28 preparation tests PASS; runtime read-only preflight quiescent.
+All38 campaign IDs/stages disabled, N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved.
+No tuning/retries/builds/live run. Short diagnostic is not campaign coverage;
+actual SDK/ROS gates remain unqualified until run. M3 open/PR2 draft/M4 untouched.
+
 The [campaign per-thread assessor integration](evidence/m3-campaign-task-assessment-integration-2026-11-10/README.md)
 is wired and verified offline:25 integration,42 assessor and511 existing tests
 PASS. Exact calibrated collector/assessor, explicit native activation and closed
