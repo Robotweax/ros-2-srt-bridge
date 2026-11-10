@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [seven remaining N1/N2/N5 cases](evidence/m3-current-remaining-preparation-2026-11-10/README.md)
+are prepared on freeze df3cfbabfe3b, **not run; execution disabled, no grant**.
+Order:N1/4211;N2/1701,2903,4211;N5/1701,2903,4211, with original600s/300s source
+windows (3,300s nominal).25 offline preparation tests PASS; calibrated SDK/ROS
+harness/builds/visibility/profile settings unchanged; read-only preflight quiescent.
+N1/1701 PASS and N1/2903 FAIL excluded and preserved; other N0/N3/N4 stages disabled.
+No tuning/retries/builds/live cases. Stop first failed gate if later authorized.
+M3 open/PR2 draft/M4 untouched.
+
 The [integrated native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-execution-2026-11-10/README.md)
 PASSES both gates on one invocation of freeze4d64d753f6eb: actual N0/1701/10s
 SDK/ROS startup/warmup/restart, source/command/capture/profile and calibrated

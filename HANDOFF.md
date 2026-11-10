@@ -6120,3 +6120,61 @@ N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved;all38campaignIDs/stagesdisab
 This10sSDKROScalibration isnot300sN0/newLONGcoverage/M3acceptance. No nextcase/new
 campaigngrant/retry/merge/IntrinsicM4; PR2draft/M3open. Futurecampaignpreparation
 requires separateexplicit scope/authorization; historicalfailure notoverwritten.
+
+
+## 2026-11-10 — Seven remaining calibrated LONG cases prepared, not run
+
+The [seven remaining N1/N2/N5 cases](evidence/m3-current-remaining-preparation-2026-11-10/README.md)
+are prepared on freeze df3cfbabfe3b, **not run; execution disabled, no grant**.
+Order:N1/4211;N2/1701,2903,4211;N5/1701,2903,4211, with original600s/300s source
+windows (3,300s nominal).25 offline preparation tests PASS; calibrated SDK/ROS
+harness/builds/visibility/profile settings unchanged; read-only preflight quiescent.
+N1/1701 PASS and N1/2903 FAIL excluded and preserved; other N0/N3/N4 stages disabled.
+No tuning/retries/builds/live cases. Stop first failed gate if later authorized.
+M3 open/PR2 draft/M4 untouched.
+
+Freezedf3cfbabfe3bf4f3a1cc77a280454bdea021501cad410c5acdb320ec94b0a65e, base685e1bf.
+ExactorderedIDs N1-combined-4211,N2-combined-1701,N2-combined-2903,
+N2-combined-4211,N5-combined-1701,N5-combined-2903,N5-combined-4211; ordinals32..38.
+4x600s+3x300s=3300source seconds, no wallclockestimate.31IDs excluded:29completed
+N0/N3/N4 plusoriginalN1/1701PASS andN1/2903FAIL. Otherstagesdisabled; prepared7
+alsoexecutiondisabled until exactfuturegrant. No subset/reorder/resume/retry,
+no newreadiness/calibration stage, no grantcreated, no casequeued.
+
+ExactnativeSDKROScalibration4d64d753f6eb PASS +114rawfiles/closedjournals/indexes
+bound prerequisite; originalcalibration/historicalcohort/verdicts untouched.
+Collector6deab3c5e83e/metadata409a8812042b/lifecycle4fafc85e3d4d/SDKvisibility/
+bootstrapclock/stabilizedscenario/launch/socket/stage/profile helpers byteidentical.
+Privategraph/6file readonlynativebundle; onlycasegrammar/grant/casecontext/dispatch/
+qualificationlabels changed. Workloadguard checksprofile/seed/duration aswellas
+exactselectedoutput/bundle/prefix. Oldgrants andoldN1/N0-cal slots refused.
+
+Beforeeachfuturecase verifyquiescentruntime/images/source/fullmatchedbuild/
+native87/frozeninputs/allretainedindexes andfreshoutput. Existingstrictreal
+SENSORcommandcapture/profile/launch/stage/socket/metadata/join/execclock/cleanup
+gates mandatory. TwoSDKprovider observations before normal shutdownrelease.
+Original5schildwait/48samples/.25s/12s/8proc/64task/512history/16KiBread/6svisibility/
+8MiBsnapshot/permissions/isolations unchanged. Original settings.json exactcopy
+inclN5UDP128Kcompetitor/dynamicneighbors/profilecommands. Hostwatchdogsource+240s
+(840sN1N2/540sN5), ownedgroupTERM/2s/KILL/5s onalreadyfailedboundary+ownedcleanup;
+noextensiontochild/observer/command/SENSOR budgets or overallwallclockguarantee.
+
+25preparationtests PASS: scopedgrant/7order/31exclusions/oldgrants/inactiveguard/
+parameters/privateimports/buildmanifest, fullfake7dispatchonce, strict/producer/
+postflight/provenance failures stopeachunexecutedtail, hostwatchdogs,7original
+profile readbacks+mutation refusal, integratedmetadata gate/labels andcal-slot
+refusal. Temporaryoverlays/mockunchangedcombinedcallback notrealLONGcredit.
+28SDKprep/25integration/42assessor/511existing logs reusedbyteidentical, notrerun.
+Initialpreparationstoppedbeforefreeze/runtimequeries onstaleSDKcalstate guard;
+explicit7prepared/31excluded/0enabled IDs added+directregression, failure retained.
+No nativeattempt/retry/tuning/build. Finalreadonlyruntime/source/current14/
+preserved13/fullchain/native87/oldrawpublic/SDKprerequisite/input verificationPASS,
+quiescent. Newlocalbuildmanifestpath only; identicalbinarymanifestSHA/buildbytes.
+
+Readonlybundle.local/current-remaining-observer-bundle-20261110T212827698078Z (6files444/dir555);
+futureoutput.local/current-remaining-cohort-20261110T212827698078Z absent. No authorization/readiness execution/
+case/native experiment; oldsevenunexecuteddirsabsent andoriginalN1assessmentSHA/
+oldcohortSHA unchanged. Original1PASS1FAIL7NOTEXECUTED remains; freshfuturecohort
+wouldwrite separatepath, neveroverwriteoldresults. ExactmidreadENOENT/unseenreuse/
+overheadequivalence/longprofile coverage remainunqualified; N1/2903 failure still
+anexplicitgap. No M3acceptance/merge/IntrinsicM4. PR2draft; futureexactgrantrequired.

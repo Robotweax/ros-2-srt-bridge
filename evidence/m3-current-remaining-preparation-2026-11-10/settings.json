@@ -1,0 +1,55 @@
+{
+  "profiles": {
+    "N1": {
+      "name": "N1",
+      "delay_ms": 20,
+      "jitter_ms": 5,
+      "loss_percent": 1,
+      "rate_kbit": 0,
+      "queue_packets": 256
+    },
+    "N2": {
+      "name": "N2",
+      "delay_ms": 60,
+      "jitter_ms": 15,
+      "loss_percent": 3,
+      "rate_kbit": 0,
+      "queue_packets": 256
+    },
+    "N5": {
+      "name": "N5",
+      "delay_ms": 0,
+      "jitter_ms": 0,
+      "loss_percent": 0,
+      "rate_kbit": 512,
+      "queue_packets": 16
+    }
+  },
+  "N5_competitor": {
+    "protocol": "UDP",
+    "bitrate_cli": "128K",
+    "target_bitrate": 128000,
+    "payload_bytes": 1024,
+    "duration": "source_seconds+60",
+    "must_remain_alive": true
+  },
+  "imu_hz": 200,
+  "joint_hz": 50,
+  "command_period_seconds": 2,
+  "command_budget_ms": 5000,
+  "sensor_budget_ms": 250,
+  "clock_width_ms": 200,
+  "neighbor_mode": "dynamic",
+  "pcap": {
+    "mode": "immediate",
+    "buffer_kib": 32768,
+    "snapshot_option": 0,
+    "rotation": {
+      "file_megabytes": 16,
+      "file_count": 16,
+      "nominal_retention_bytes": 256000000
+    }
+  },
+  "shutdown_child_wait_seconds": 5,
+  "scope": "original settings recorded, not changed; capture/trace exhaustion remains failure, no retention or performance guarantee"
+}
