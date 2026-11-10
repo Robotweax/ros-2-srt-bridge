@@ -4658,3 +4658,41 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   observer/child/capture/proofs, gate/postflight/index. One-shotconsumed; no further
   runqueued. OriginalN3 8PASS/1FAIL/unknownhang retained, no4211retry/tuning/expiry/
   replay/all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Two-loss seed2903 shutdown diagnostic prepared; execution disabled
+
+- User requests preparation only using newmatchedbuild/tracing/observer, no tuning/
+  two-loss4211, remainingcampaignstages disabled. No fault/source/bridge/capture/
+  observer/nativefixture/build/Docker object started or configured, no authfile.
+- Fixed one-two-loss-2903-30s-operator-bridge-shutdown-diagnostic scope. Existing
+  30s N3 fixture duration, seed2903, firstmixedrow1positions2/3/source msgs7/8,
+  current socket-disposition14/oldshutdown13/fullchain/provider unchanged.
+  Nativebuildinputs and capturehelpers match prior healthyN0PASS; no rebuild.
+- Evidence-local adapter derives fresh ISN/socketID/SENSOR UDPtuple after binding
+  capture, installs exactexistingu32rules beforepublicationarm; initialcounters0,
+  exactly1packet/drop eachafterbarriers, restoreownedhook beforecaptureclosure/
+  observerarm. Existing parity/SDK/typed/timing/two-loss proof and strictsource/
+  cadence/zero-skips/accounting/age/capture gates retained. No randomloss/tuning/
+  addedload/commands/expiry/replay or generaldispatcher/campaignresumption.
+- Newfixeddriver refuses allotherlosses/seeds/durations/capture/tracingmodes incl
+ 4211 and requires exactscope/freezeSHA separatefutureauthorization. Missinggrant,
+  runtime/input/native drift, unrelatedlivecontainers/existingoutput fail before
+  labcreation. No case splicing or retrospective promotion of older2903/4211.
+- Exact calibrated scenario/capdrop/sidecar/observer/lifecycle/socket-gate bytes
+  retained. Stage tracingbothroles, nativeobserver operator/plain SDKworkeronly,
+  arm before release/SIGINT, samepermissions/filter/budgets/privatePID/output/
+  ROminimalhelper/NNP and bridgecapsets0. Original5swaits, no timeoutstretch.
+- 497Python testsPASS (6new exactscope/4211refusal/broadgrant/freshselection/control-
+  tuplerejection/no-Docker-withoutauth/calibratedbytes controls). These do not
+  execute packetdrops or liveintegration. Two-loss on thisbuild remainsunvalidated.
+- prepare.py verifies14matched/old13/preservedchain, nativebuildsources/capture
+  helpers and allpriorrawindexes, readsdaemonversion, writes disablednewfreeze/
+  localROhelperbundle only. Postflight source/inputfreeze/nativebuild/oldrawverify,
+  output/authorization/prefixobjects absent, live_runs0. FrozenN0PASS remainsvalid
+  in recorded scope; oldN3 8PASS/1FAIL/unknowncause preserved. No experimentqueued.
+- Package evidence/m3-two-loss-2903-preparation-2026-11-10 includes PLAN/README,
+  fixedfault/shutdown hostadapter+originalvalidators, exactcomponents/manifests,
+  newfreeze/readiness/postflight/testlogs. Future one-shot muststopfirstfailedgate,
+  restoreselectors/captures/children/sidecar/labobjects/credential and preserve raw
+  failures; no fallback/retry. All29remainingstagesdisabled/M3open/PR2draft/M4untouched.

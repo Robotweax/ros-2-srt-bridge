@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+A [single two-loss seed2903 shutdown diagnostic](evidence/m3-two-loss-2903-preparation-2026-11-10/README.md)
+is prepared offline with execution disabled:30s, selected SENSOR messages7/8,
+exact current14-entry matched build/tracing/observer and original5s waits. All497
+Python tests pass; native inputs and prior evidence verify, with no rebuild or
+live run. No authorization file exists;4211 and broader case tuples are refused.
+No tuning or campaign advancement; all29 remaining cases stay disabled.
+
+
 The [explicit socket-disposition diagnostic](evidence/m3-socket-disposition-2026-11-10/README.md)
 passes one new N0/seed1701/10s run on an isolated matched SDK/ROS build. All491
 Python tests and the native trace contract pass. Robot explicitly reports four
