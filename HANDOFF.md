@@ -5417,3 +5417,41 @@ Single current-build instrumented N0 coverage now closes; old3N0FAILs and origin
 N3failure/unknownhang remain unchanged, fresh N3 stays9/9. No fullM3/hardware/
 physicalage/diagnosticoverhead acceptance or futurecase authorization. Other28
 N4/N1/N2/N5 cases disabled; M3 open, PR2 draft, no merge/nextcase queued, M4 untouched.
+
+
+## 2026-11-10 — Current-build N4 prepared; no live cases
+
+The [current-build N4 preparation](evidence/m3-current-n4-preparation-2026-11-10/README.md)
+freezes exactly19 cases:13 native interruption/query,3 ROS freshness and3 ROS
+crash/restart. Freeze513f13066b30 uses the unchanged matched SDK/ROS build; the
+standalone peer alone passed isolated compilation and static link inspection.
+20 preparation tests and511 existing tests PASS offline. **No N4 case run or
+execution grant:** all19 remain disabled, with first-failure stop/no automatic
+retries/no tuning. Other9 unexecuted N1/N2/N5 cases stay disabled; completed10
+N0/N3 cases are excluded. Runtime qualification remains pending; M3 open/PR2 draft.
+
+Exact original ordinals11–29 retained, native holds2s; freshness15s/existing2s
+cut and original crash sequencing. Frozen package at
+ evidence/m3-current-n4-preparation-2026-11-10/ includes exact case plan,
+current-only adapters/ROS install guard, sequential strict assessor, bounded
+owned cleanup, separate exact-grant requirement and fresh-output/no-resume checks.
+Each strict assessment plus cleanup/provenance verification precedes advancement;
+all later rows remain not_executed on any failure. No grant file or run output.
+
+Freeze513f13066b304490c89a36a288ec4839a08ec780d8ede21269885eeb4b665b10 binds
+current14/preserved13/full matched chain,87 native inputs,37 fixture files,
+24 installed-to-source header matches,7 static archives, link/build artifacts,
+original plan and all historical raw/public hashes. Isolated standalone peer
+compile/link in pinned network-none amd64 container only; no peer/worker/ROS
+execution, outage or readiness experiment. Existing production/old fixture
+prefixes unchanged and build container removed. IPC4/existing worker flag kept.
+Public metadata/build/ELF summary logs and exact local-log hashes retained.
+
+20 new offline tests include full mocked dispatch, all19 failure boundaries,
+strict+postflight ordering, grant/scope/prefix/hold refusal, cleanup/hash checks,
+unchanged original phase/network/crash functions and ROS workload class ASTs.
+All511 existing tests PASS. Static build and mocked controls do not prove real
+IPC/ROS startup, command outcomes, crash recovery or teardown. N4 retains its
+original fixture diagnostics; no N0 stack-observer/capability equivalence claim.
+Read-only final driver verification PASS; no case scheduled or automatically
+advanced. Prior N0/N3 results and failures unchanged; no M3 acceptance/merge/M4.

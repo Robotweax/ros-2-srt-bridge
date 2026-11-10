@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [current-build N4 preparation](evidence/m3-current-n4-preparation-2026-11-10/README.md)
+freezes exactly19 cases:13 native interruption/query,3 ROS freshness and3 ROS
+crash/restart. Freeze513f13066b30 uses the unchanged matched SDK/ROS build; the
+standalone peer alone passed isolated compilation and static link inspection.
+20 preparation tests and511 existing tests PASS offline. **No N4 case run or
+execution grant:** all19 remain disabled, with first-failure stop/no automatic
+retries/no tuning. Other9 unexecuted N1/N2/N5 cases stay disabled; completed10
+N0/N3 cases are excluded. Runtime qualification remains pending; M3 open/PR2 draft.
+
 The [stabilized current-build N0 case](evidence/m3-current-n0-stable-execution-2026-11-10/README.md)
 PASSES seed1701/300s:150/150 commands, no unresolved/skipped slots, six SENSOR
 balances0, modeled age bounds below250ms, complete capture/provider and per-launch
