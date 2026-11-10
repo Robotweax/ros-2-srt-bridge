@@ -1,0 +1,495 @@
+{
+  "network": "ros2-srt-m3-63c971967636",
+  "containers": {
+    "operator": "ros2-srt-m3-63c971967636-operator",
+    "robot": "ros2-srt-m3-63c971967636-robot"
+  },
+  "addresses": {
+    "operator": "172.19.0.2",
+    "robot": "172.19.0.3"
+  },
+  "commands": [
+    {
+      "label": "network-create",
+      "argv": [
+        "docker",
+        "network",
+        "create",
+        "--internal",
+        "ros2-srt-m3-63c971967636"
+      ],
+      "started_monotonic_ns": 5443249169286458,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249206430750
+    },
+    {
+      "label": "operator-create",
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "ros2-srt-m3-63c971967636",
+        "--name",
+        "ros2-srt-m3-63c971967636-operator",
+        "--cap-add",
+        "NET_ADMIN",
+        "--cap-add",
+        "BPF",
+        "-e",
+        "ROS_DOMAIN_ID=42",
+        "-e",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST",
+        "-e",
+        "RMW_IMPLEMENTATION=rmw_fastrtps_cpp",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/current-n0-coverage-20261110T100843729802Z/N0-combined-1701/passphrase:/run/bridge/passphrase:ro",
+        "-w",
+        "/workspace",
+        "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+        "sleep",
+        "infinity"
+      ],
+      "started_monotonic_ns": 5443249209926083,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249490398333
+    },
+    {
+      "label": "operator-inspect",
+      "argv": [
+        "docker",
+        "inspect",
+        "ros2-srt-m3-63c971967636-operator"
+      ],
+      "started_monotonic_ns": 5443249490981583,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249517060166
+    },
+    {
+      "label": "operator-environment",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "sh",
+        "-c",
+        "uname -a; tc -V; cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets; ip -j address show eth0"
+      ],
+      "started_monotonic_ns": 5443249517796083,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249674949333
+    },
+    {
+      "label": "robot-create",
+      "argv": [
+        "docker",
+        "run",
+        "-d",
+        "--pull=never",
+        "--platform",
+        "linux/amd64",
+        "--network",
+        "ros2-srt-m3-63c971967636",
+        "--name",
+        "ros2-srt-m3-63c971967636-robot",
+        "--cap-add",
+        "NET_ADMIN",
+        "--cap-add",
+        "BPF",
+        "-e",
+        "ROS_DOMAIN_ID=41",
+        "-e",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST",
+        "-e",
+        "RMW_IMPLEMENTATION=rmw_fastrtps_cpp",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+        "-v",
+        "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/current-n0-coverage-20261110T100843729802Z/N0-combined-1701/passphrase:/run/bridge/passphrase:ro",
+        "-w",
+        "/workspace",
+        "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+        "sleep",
+        "infinity"
+      ],
+      "started_monotonic_ns": 5443249675579541,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249830488916
+    },
+    {
+      "label": "robot-inspect",
+      "argv": [
+        "docker",
+        "inspect",
+        "ros2-srt-m3-63c971967636-robot"
+      ],
+      "started_monotonic_ns": 5443249831127166,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443249858129083
+    },
+    {
+      "label": "robot-environment",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "sh",
+        "-c",
+        "uname -a; tc -V; cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets; ip -j address show eth0"
+      ],
+      "started_monotonic_ns": 5443249859012875,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250023748041
+    },
+    {
+      "label": "operator-clock-proof",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "sh",
+        "-c",
+        "cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets"
+      ],
+      "started_monotonic_ns": 5443250024821625,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250127384041
+    },
+    {
+      "label": "robot-clock-proof",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "sh",
+        "-c",
+        "cat /proc/sys/kernel/random/boot_id; cat /proc/self/timens_offsets"
+      ],
+      "started_monotonic_ns": 5443250128303666,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250229128375
+    },
+    {
+      "label": "profile-operator-0",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "tc",
+        "qdisc",
+        "replace",
+        "dev",
+        "eth0",
+        "root",
+        "handle",
+        "1:",
+        "netem",
+        "limit",
+        "256",
+        "seed",
+        "1702"
+      ],
+      "started_monotonic_ns": 5443250229872458,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250295151125
+    },
+    {
+      "label": "profile-operator-readback",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "tc",
+        "-j",
+        "-s",
+        "qdisc",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250295814416,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250361295541
+    },
+    {
+      "label": "profile-robot-0",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "tc",
+        "qdisc",
+        "replace",
+        "dev",
+        "eth0",
+        "root",
+        "handle",
+        "1:",
+        "netem",
+        "limit",
+        "256",
+        "seed",
+        "1701"
+      ],
+      "started_monotonic_ns": 5443250362200541,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250426844500
+    },
+    {
+      "label": "profile-robot-readback",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "tc",
+        "-j",
+        "-s",
+        "qdisc",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250427501708,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250490676666
+    },
+    {
+      "label": "features-before-operator",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "build/m3-netdev-features/netdev_features",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250602609750,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250668320958
+    },
+    {
+      "label": "features-before-robot",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "build/m3-netdev-features/netdev_features",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250669166375,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250731391833
+    },
+    {
+      "label": "before-operator",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "tc",
+        "-j",
+        "-s",
+        "qdisc",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250821147250,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250886952458
+    },
+    {
+      "label": "before-operator-links",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "ip",
+        "-j",
+        "-s",
+        "link",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250887690625,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443250949602000
+    },
+    {
+      "label": "before-robot",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "tc",
+        "-j",
+        "-s",
+        "qdisc",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443250950395041,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443251015769041
+    },
+    {
+      "label": "before-robot-links",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "ip",
+        "-j",
+        "-s",
+        "link",
+        "show",
+        "dev",
+        "eth0"
+      ],
+      "started_monotonic_ns": 5443251016503958,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443251080085958
+    },
+    {
+      "label": "competitor-stop",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "python3",
+        "-c",
+        "import pathlib,os,signal\nfor p in pathlib.Path(\"/proc\").glob(\"[0-9]*/comm\"):\n try:\n  if p.read_text().strip() in ('iperf3',):os.kill(int(p.parent.name),signal.SIGINT)\n except (FileNotFoundError,ProcessLookupError):pass\n"
+      ],
+      "started_monotonic_ns": 5443256397341708,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443256576661041
+    },
+    {
+      "label": "operator-capture-stop",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-operator",
+        "python3",
+        "-c",
+        "import pathlib,os,signal\nfor p in pathlib.Path(\"/proc\").glob(\"[0-9]*/comm\"):\n try:\n  if p.read_text().strip() in ('tcpdump', 'm3_mono_cap'):os.kill(int(p.parent.name),signal.SIGINT)\n except (FileNotFoundError,ProcessLookupError):pass\n"
+      ],
+      "started_monotonic_ns": 5443257828656166,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443258006334416
+    },
+    {
+      "label": "robot-capture-stop",
+      "argv": [
+        "docker",
+        "exec",
+        "ros2-srt-m3-63c971967636-robot",
+        "python3",
+        "-c",
+        "import pathlib,os,signal\nfor p in pathlib.Path(\"/proc\").glob(\"[0-9]*/comm\"):\n try:\n  if p.read_text().strip() in ('tcpdump', 'm3_mono_cap'):os.kill(int(p.parent.name),signal.SIGINT)\n except (FileNotFoundError,ProcessLookupError):pass\n"
+      ],
+      "started_monotonic_ns": 5443258007224291,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443258176543541
+    },
+    {
+      "label": "robot-remove",
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "ros2-srt-m3-63c971967636-robot"
+      ],
+      "started_monotonic_ns": 5443258623387375,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443258792754458
+    },
+    {
+      "label": "operator-remove",
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "ros2-srt-m3-63c971967636-operator"
+      ],
+      "started_monotonic_ns": 5443258793567375,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443258956508958
+    },
+    {
+      "label": "network-remove",
+      "argv": [
+        "docker",
+        "network",
+        "rm",
+        "ros2-srt-m3-63c971967636"
+      ],
+      "started_monotonic_ns": 5443258957384250,
+      "exit_code": 0,
+      "finished_monotonic_ns": 5443259061336833
+    }
+  ],
+  "events": [
+    {
+      "role": "operator",
+      "profile": "N0",
+      "seed": 1702,
+      "readback": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "root": true,
+          "refcnt": 21,
+          "options": {
+            "limit": 256,
+            "seed": 1702,
+            "ecn": false,
+            "gap": 0
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        }
+      ],
+      "monotonic_ns": 5443250362032000
+    },
+    {
+      "role": "robot",
+      "profile": "N0",
+      "seed": 1701,
+      "readback": [
+        {
+          "kind": "netem",
+          "handle": "1:",
+          "root": true,
+          "refcnt": 21,
+          "options": {
+            "limit": 256,
+            "seed": 1701,
+            "ecn": false,
+            "gap": 0
+          },
+          "bytes": 0,
+          "packets": 0,
+          "drops": 0,
+          "overlimits": 0,
+          "requeues": 0,
+          "backlog": 0,
+          "qlen": 0
+        }
+      ],
+      "monotonic_ns": 5443250491409500
+    }
+  ],
+  "isolation": "internal Docker bridge; separate ROS domains; localhost DDS"
+}

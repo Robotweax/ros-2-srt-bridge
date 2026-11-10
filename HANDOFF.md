@@ -4930,3 +4930,33 @@ No tuning or native rebuild. Fresh strict N3 stays9/9, historical N3 stays8/1 wi
 unknown hang cause. Future N0 PASS would close only this current-build N0 case;
 M3 acceptance, diagnostic overhead, physical age and other profiles remain open.
 PR2 stays draft; no merge or later case queued; M4 untouched.
+
+
+## 2026-11-10 — Authorized N0 attempt failed at startup; no retry
+
+User explicitly authorizes exactly prepared N0-combined-1701/300s on freeze
+1c15050c52086b710b161c28f046db416bd31361d7db1971e3c99417f01840ea, stop first
+failed gate, no tuning/automatic retries, other stages disabled. Exact separate
+grant/preflight in evidence/m3-current-n0-execution-2026-11-10/. Unchanged driver
+invoked once; exit1, one failed row, zero passed rows or retries.
+
+Robot Diagnostic.start_bridge fails require_role(status(self.bridge.pid),0):
+role capability set differs from declared scope. Both pre-exec records attest
+zero capability sets/NNP1; actual failing /proc values were not retained and robot
+identity write was not reached. No unique cause or permission change inferred.
+Operator bridge identity and partial stages retained without qualification.
+300s measurement-start, full results, normal release/observer-ready and strict
+assessment are absent. No observer was started. Secondary capture/final trace/
+provider status failures retained. No N0 or clean shutdown qualification credit.
+
+Frozen failure path invokes owned emergency cleanup. Both container removals0;
+observer/volume absent, network already absent. Final independent absence checks
+confirm all owned objects absent and credential deleted. Source/input/preparation
+public/current14/preserved13/full chain/native87 unchanged; all prior raw indexes
+verify, including fresh N3 nine-case PASS and historical failures. New raw archive
+64 files/387,888bytes hash-indexed; public failure evidence and summary retained.
+No source/helper/gate/tuning/build change, tests during run, retry, new freeze or
+further experiment. N0 remains an acceptance gap; other28 unexecuted cases disabled.
+Fresh N3 remains9/9, historical8/1 unknown hang preserved. M3 open, PR2 draft,
+no merge/next case queued, M4 untouched. Next unresolved step is retained-evidence
+startup capability-attestation diagnosis; no repair or rerun was made here.

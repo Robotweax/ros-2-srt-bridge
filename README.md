@@ -1,5 +1,14 @@
 # ROS 2 SRT Bridge
 
+The [authorized current-build N0 attempt](evidence/m3-current-n0-execution-2026-11-10/README.md)
+failed at robot startup capability attestation before the300s measurement began.
+One attempt, zero retries/tuning; the failing /proc capability values were not
+retained, so cause remains unresolved despite zero-capability pre-exec records.
+Owned emergency cleanup and final absence/integrity checks pass; no N0 coverage
+or clean shutdown is credited. All28 other unexecuted cases stay disabled;
+fresh N3 remains9/9, historical failures preserved, M3 open/PR2 draft/M4 untouched.
+
+
 The [current-build N0 preparation](evidence/m3-current-n0-preparation-2026-11-10/README.md)
 binds the single predeclared N0-combined-1701 case (300s) to the unchanged frozen
 14-entry matched build. Execution is disabled: no authorization file or live run.
