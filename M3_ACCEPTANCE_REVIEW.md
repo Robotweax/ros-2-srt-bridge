@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [explicit identity-helper fix](evidence/m3-current-n0-identity-binding-fix-2026-11-10/README.md)
+binds the intended frozen helper by exact path/SHA and checked source bytes in a
+private module, independent of import order/cache. Snapshots retain helper origin.
+All30 targeted and511 existing tests pass offline, including fresh parent/wrapper
+imports with the actual ROS helper cached first. No N0 rerun/new freeze/grant,
+tuning or retry; original inputs/builds/failures unchanged, other28 stages disabled,
+N0 unqualified and M3 open/PR2 draft/M4 untouched.
+
+
 The [corrected-readiness N0 attempt](evidence/m3-current-n0-corrected-execution-2026-11-10/README.md)
 failed during launch registration before measurement: both roles hit missing
 identity.ppid. Separate per-launch failure snapshots were retained. The runtime

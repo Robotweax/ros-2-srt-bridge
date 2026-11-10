@@ -5117,3 +5117,41 @@ No retry/new freeze/nativebuild/further case. Next correction would explicitly
 bind identity helper and test real runtime import order; it was not made here.
 Original N0 FAIL and both old/new N3 outcomes preserved; other28 stages disabled,
 M3 open, PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Explicit identity binding and runtime-import regressions PASS
+
+User authorizes helper binding/runtime-order regressions/offline verification only;
+no N0 rerun/tuning/automatic retry, other stages disabled. New candidate at
+ evidence/m3-current-n0-identity-binding-fix-2026-11-10/.
+launch_readiness now loads exact frozen prior N0 shutdown_observer.py bytes,
+SHAf4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3,
+compiles the checked bytes in private _robotweax_n0_launch_identity_v1 and binds
+identity. No unqualified helper import/cache/bytecode fallback; missing/changed
+intended helper fails closed. ppid/name schema preserved, not replaced or waived.
+
+Snapshots/exported identity retain intended helper path/SHA/private module/schema;
+readiness claiming another binding refused. Per-launch token/PID/start_ticks/PPid,
+atomic readiness, exact failed status and unchanged capability/NNP/seccomp/phase
+checks remain. Scenario/wrapper byte-identical to prior fix; host adapter changes
+only scenario path. No native/build/workload/policy/budget/clock/rate/queue tuning.
+Wrapper readiness is still pre-exec, application ROS gates unchanged.
+
+All30 targeted and511 existing tests pass offline.22 readiness controls plus8
+binding/import tests include4 fresh Python interpreters with actual runtime
+search order and actual ROS shutdown_observer cached first, then poisoned cache
+variants for both actual parent scenario and wrapper imports. Scenario only maps
+/workspace root to checkout and stubs ROS-facing dependencies; remaining imports
+execute as written. Synthetic procfs registration/publication/attestation passes
+withppid/name; failed cap snapshots retain actual status and helper provenance.
+Missing/changed helper and foreign provenance fail; original reduce/Benchmark/
+Diagnostic ASTs unchanged. No capability syscall/bridge/capture/observer/N0 fixture,
+Docker call or new live experiment. Ordinary offline Python test interpreters only.
+
+Syntax/frozen source/inputs/current14/preserved13/full chain/native87 and prior
+public/raw indexes verify unchanged, including both failed N0 archives. Candidate
+input/public hashes, validation logs and audit retained. No new campaign freeze,
+execution grant or live output; immutable old drivers do not silently select fix.
+N0 remains unqualified pending separate preparation/authorization/live gates.
+Other28 cases disabled; N3 recorded outcomes unchanged, M3 open/PR2 draft,
+no merge/next case queued, Intrinsic/M4 untouched.
