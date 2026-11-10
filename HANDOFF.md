@@ -4572,3 +4572,44 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   retained-evidence robot socket-close trace coverage review, no autorun. Original
   N3 8PASS/1FAIL/unknowncause; no replay/expiry/tuning/4211/all29disabled,
   M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Retained robot socket-marker diagnosis; no runtime work
+
+- User authorizes retained-evidence diagnosis only, no tuning/two-loss4211/new
+  experiments, all29 remaining campaign cases disabled. No Docker/bridge/source/
+  observer/capture, testfixture/build, native/source/harness/gate/filter change.
+- Source transport.cpp close_fd only executes for valid SRTSOCKET; each inner
+  epoll-remove/closebegin/closeend marker further requires stopping||shutting_down.
+  It calls srt_close then sets slotinvalid; returnvalue unlogged/unchecked. Normal
+  lost/apply/drop/reconnect close paths beforelocalstop are untraced. Caller
+  listener slots nevercreated; unconditional finalCONTROL/SENSOR wrappers can
+  execute with allslotsinvalid. Assessor requires socketclose markers globally
+  withoutdispositioncondition: contract mismatch, not evidence of actualhang/leak.
+- Compared8retained roletraces across originalenabledcalibration and3later N0
+  attempts. All have identical39non-socket pointmultisets/contiguoussequence/
+  zero reported drops. Operators51=39+4triplets; oldrobot42=39+1; laterrobots39
+  have0triplets. Latestrobot completeouter session/CONTROL/SENSOR/epoll/provider/
+  transport/endpoint/node/context boundaries. Source-supported inference: final
+  caller linkslotsalreadyinvalid, not missing outercleanup execution. No fdentry
+  snapshot or srtclose-result proof; no every-handle/no-leak success assertion.
+- Timeline operator lastsocketclose31119523430ns, source reap31266105055ns,
+  robotSIGINT31266139055ns, transportshutdown31280543847ns. Peer-last-close to
+  robotSIGINT146.615625ms. Reverse childcleanup stops/reaps robot source before
+  bridgeSIGINT. Peer-loss close beforelocalstop is stronglyconsistent; exact
+  event/timestamp/provider/session/error path unavailable, not uniquely proven.
+- Robot readybarrier27790434388ns/sampletrace25525464178ns and packet stop-before
+ 29999485972ns precede peer shutdown. Endpointprocess sample30944188055ns also
+  beforepeerclose and containsno socketstate. No robotstack observer or enabled
+  command/provider close log. Cannot reconstruct earlier fdtransitions from these.
+- Offline analyze.py/report.json reproducecounts/timing/observationbounds and
+  sourcehashbinding; latestsource/inputfreeze, matched13/preservedbuildchain and
+  oldrawindexes including latest116 records verify. Transport source also matches
+  original shutdown-build freeze. Prior484tests retained scope; no tests/build run.
+- Future correction scope (unimplemented): explicit per-channel valid-close vs
+  alreadyinvalid disposition/phase/FD and close outcome where available, with
+  conditional gate requiring positive disposition evidence and missing/error
+  controls. Do not simply remove mandatorymarkers or inferclose success. No
+  prospective run prepared/queued/authorized by this analysis. Evidence under
+  evidence/m3-robot-socket-close-diagnosis-2026-11-10; priorN0 stageFAIL unchanged,
+  originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.

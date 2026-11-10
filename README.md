@@ -1,5 +1,15 @@
 # ROS 2 SRT Bridge
 
+The [retained robot socket-marker diagnosis](evidence/m3-robot-socket-close-diagnosis-2026-11-10/README.md)
+finds an instrumentation/gate mismatch: socket-close markers require a valid
+handle during local shutdown, but the gate requires them for every role. All8
+retained traces share39 non-socket-specific records; extra records are exactly
+per-fd close triplets. Already-invalid robot link slots explain the local marker
+absence; peer-first closure is consistent with timing, while exact earlier close
+cause/result is unobserved. No gate or runtime change, new experiment or PASS
+promotion; all29 campaign cases remain disabled.
+
+
 The [worker lifecycle distinction and new N0 diagnostic](evidence/m3-bridge-shutdown-lifecycle-2026-11-10/README.md)
 pass484 tests and the worker-exit observation gate using explicit ENOENT,
 registered PID/start_ticks/parent/name and ordered join markers; PID reuse and
