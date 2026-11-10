@@ -1,0 +1,239 @@
+{
+  "Id": "cd6a7a9bb724a0be35983564dc9c91bfe9ef5ffe1251d9c19925911021828582",
+  "Created": "2026-11-10T17:23:44.247934293Z",
+  "Path": "/usr/bin/python3",
+  "Args": [
+    "/cal/target_entry.py",
+    "tvis-cal-20261110t170526723486z"
+  ],
+  "State": {
+    "Status": "created",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "0001-01-01T00:00:00Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+  "ResolvConfPath": "",
+  "HostnamePath": "",
+  "HostsPath": "",
+  "LogPath": "",
+  "Name": "/tvis-cal-20261110t170526723486z-target",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "local",
+      "Config": {}
+    },
+    "NetworkMode": "none",
+    "PortBindings": {},
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": true,
+    "SecurityOpt": [
+      "no-new-privileges=true"
+    ],
+    "Tmpfs": {
+      "/tmp": "rw,noexec,nosuid,nodev,size=16m"
+    },
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 0,
+    "MemorySwappiness": null,
+    "OomKillDisable": false,
+    "PidsLimit": null,
+    "Ulimits": null,
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/task-visibility-calibration-bundle-20261110T170526723486Z",
+        "Target": "/cal",
+        "ReadOnly": true
+      },
+      {
+        "Type": "volume",
+        "Source": "tvis-cal-20261110t170526723486z-out",
+        "Target": "/out"
+      }
+    ],
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  },
+  "Storage": {
+    "RootFS": {
+      "Snapshot": {
+        "Name": "overlayfs"
+      }
+    }
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/task-visibility-calibration-bundle-20261110T170526723486Z",
+      "Destination": "/cal",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "volume",
+      "Name": "tvis-cal-20261110t170526723486z-out",
+      "Source": "/var/lib/docker/volumes/tvis-cal-20261110t170526723486z-out/_data",
+      "Destination": "/out",
+      "Driver": "local",
+      "Mode": "z",
+      "RW": true,
+      "Propagation": ""
+    }
+  ],
+  "Config": {
+    "Hostname": "cd6a7a9bb724",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "AttachStderr": true,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PYTHONDONTWRITEBYTECODE=1",
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "LANG=C.UTF-8",
+      "LC_ALL=C.UTF-8",
+      "ROS_DISTRO=jazzy"
+    ],
+    "Cmd": [
+      "/cal/target_entry.py",
+      "tvis-cal-20261110t170526723486z"
+    ],
+    "Image": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+    "Volumes": null,
+    "WorkingDir": "/cal",
+    "Entrypoint": [
+      "/usr/bin/python3"
+    ],
+    "Labels": {
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "NetworkSettings": {
+    "SandboxID": "",
+    "SandboxKey": "",
+    "Ports": {},
+    "Networks": {
+      "none": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "DriverOpts": null,
+        "GwPriority": 0,
+        "NetworkID": "",
+        "EndpointID": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "MacAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "DNSNames": null
+      }
+    }
+  },
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:53b49a94ab2e46600a0037c29e2b9d5f56a7c505d6d4a3308584c007b219d268",
+    "size": 2588,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  }
+}

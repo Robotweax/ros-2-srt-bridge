@@ -1,0 +1,136 @@
+{
+  "status": "passed_bounded_task_visibility_calibration_only",
+  "driver_exit_code": 0,
+  "freeze_sha256": "6357a2c0f58d5c40751a7e96e52d6825ade3a29b2ad03bc6bcef0ca903474f9c",
+  "source_commit": "1970eaa28701607cb78ce67b2fb62cffc73659ff",
+  "readiness_checks": 1,
+  "controlled_target_runs": 1,
+  "observer_containers": 2,
+  "target_containers": 1,
+  "readiness_passed": true,
+  "controlled_task_visibility_passed": true,
+  "assessment": {
+    "status": "passed",
+    "scope": "one controlled task and schema/access only; no N1 rerun, race guarantee or campaign qualification",
+    "live_task": {
+      "samples": 2,
+      "first_begin_ns": 6661634919,
+      "last_end_ns": 6912879252
+    },
+    "controlled_absence": {
+      "kind": "not_in_complete_enumeration",
+      "sample_begin_ns": 7164042710,
+      "sample_end_ns": 7164353294,
+      "candidate_confirmed_exit": false
+    },
+    "candidate_confirmed_exit": false,
+    "post_signal_task_read_availability_not_qualified": true
+  },
+  "observer_footer": {
+    "kind": "status",
+    "completed": true,
+    "reason": "parent_stop",
+    "samples": 3,
+    "sample_limit": 48,
+    "budget_exhausted": false,
+    "kernel_stack_reads_ok": 5,
+    "kernel_stack_reads_unavailable": 0,
+    "userspace_stacks_requested": false,
+    "end_ns": 7424585919,
+    "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+  },
+  "controlled_identity": {
+    "calibration_id": "tvis-cal-20261110t170526723486z",
+    "target_pid": 7,
+    "target_start_ticks": 609,
+    "worker_tid": 8,
+    "worker_start_ticks": 625
+  },
+  "child_exit": 0,
+  "child_forced_kill": false,
+  "signal_to_reap_ns": 18381750,
+  "normal_readiness_poll_misses": [
+    {
+      "label": "poll-target-info.json",
+      "exit_code": 1
+    },
+    {
+      "label": "poll-target-info.json",
+      "exit_code": 1
+    },
+    {
+      "label": "poll-target-info.json",
+      "exit_code": 1
+    },
+    {
+      "label": "poll-target-info.json",
+      "exit_code": 1
+    },
+    {
+      "label": "poll-blocked-target-shutdown-stacks.ready.json",
+      "exit_code": 1
+    }
+  ],
+  "raw_files": 77,
+  "raw_bytes": 600527,
+  "N1_2903_rerun": false,
+  "N1_2903_failed_assessment_unchanged": true,
+  "original_campaign_results_unchanged": {
+    "passed": 1,
+    "failed": 1,
+    "not_executed": 7
+  },
+  "disabled_case_ids": [
+    "N3-baseline-1701",
+    "N3-one-loss-1701",
+    "N3-two-loss-1701",
+    "N3-baseline-2903",
+    "N3-one-loss-2903",
+    "N3-two-loss-2903",
+    "N3-baseline-4211",
+    "N3-one-loss-4211",
+    "N3-two-loss-4211",
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "remaining_case_ids_disabled": [
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "no_tuning": true,
+  "no_retries": true,
+  "stop_first_failed_gate": true,
+  "M3_complete": false
+}

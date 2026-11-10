@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Bounded task-visibility calibration prepared only on correctedfreeze6357a2c0f58d:1 native readiness +1 controlled parent/worker fixture, candidate6deab3c5e83e, explicitactivation/privatehostbinding, unchangedpolicy/budgets.23offlinepreparationPASS;28candidate/511existing retained. First4e8c import-failed prep preserved. No grant/live run/build/tuning/retry/N1rerun; all38campaign IDs disabled,1PASS1FAIL7unexecuted unchanged, M3open/PR2draft/M4untouched.",
+  "current_priority": "Bounded native task-visibility calibration PASS (one readiness+one controlledfixture) on freeze6357a2c0f58d, exactcandidate6deab3c5e83e.2live observations then matching enumerationabsence,5stackOK0unavailable, cleanup/integrity verified. No tuning/retry/N1rerun. OriginalN1FAIL/1PASS1FAIL7unexecuted preserved; all38campaignIDs disabled. Next offline assessment rules for calibrated metadata, no automaticfix/newcampaignfreeze/grant/case/M3acceptance/merge/M4.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4665,5 +4665,82 @@
       "not_executed": 7
     },
     "M3_complete": false
+  },
+  "task_visibility_calibration_execution": {
+    "status": "passed_bounded_task_visibility_calibration_only",
+    "driver_exit_code": 0,
+    "freeze_sha256": "6357a2c0f58d5c40751a7e96e52d6825ade3a29b2ad03bc6bcef0ca903474f9c",
+    "source_commit": "1970eaa28701607cb78ce67b2fb62cffc73659ff",
+    "readiness_checks": 1,
+    "controlled_target_runs": 1,
+    "observer_containers": 2,
+    "target_containers": 1,
+    "readiness_passed": true,
+    "controlled_task_visibility_passed": true,
+    "assessment": {
+      "status": "passed",
+      "scope": "one controlled task and schema/access only; no N1 rerun, race guarantee or campaign qualification",
+      "live_task": {
+        "samples": 2,
+        "first_begin_ns": 6661634919,
+        "last_end_ns": 6912879252
+      },
+      "controlled_absence": {
+        "kind": "not_in_complete_enumeration",
+        "sample_begin_ns": 7164042710,
+        "sample_end_ns": 7164353294,
+        "candidate_confirmed_exit": false
+      },
+      "candidate_confirmed_exit": false,
+      "post_signal_task_read_availability_not_qualified": true
+    },
+    "observer_footer": {
+      "kind": "status",
+      "completed": true,
+      "reason": "parent_stop",
+      "samples": 3,
+      "sample_limit": 48,
+      "budget_exhausted": false,
+      "kernel_stack_reads_ok": 5,
+      "kernel_stack_reads_unavailable": 0,
+      "userspace_stacks_requested": false,
+      "end_ns": 7424585919,
+      "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+    },
+    "controlled_identity": {
+      "calibration_id": "tvis-cal-20261110t170526723486z",
+      "target_pid": 7,
+      "target_start_ticks": 609,
+      "worker_tid": 8,
+      "worker_start_ticks": 625
+    },
+    "child_exit": 0,
+    "child_forced_kill": false,
+    "signal_to_reap_ns": 18381750,
+    "raw_files": 77,
+    "raw_bytes": 600527,
+    "N1_2903_rerun": false,
+    "N1_2903_failed_assessment_unchanged": true,
+    "original_campaign_results_unchanged": {
+      "passed": 1,
+      "failed": 1,
+      "not_executed": 7
+    },
+    "remaining_case_ids_disabled": [
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "no_tuning": true,
+    "no_retries": true,
+    "stop_first_failed_gate": true,
+    "M3_complete": false,
+    "evidence": "evidence/m3-task-visibility-calibration-execution-2026-11-10/README.md",
+    "postflight": "passed_read_only_integrity_and_owned_object_absence",
+    "campaign_assessor_changed": false
   }
 }

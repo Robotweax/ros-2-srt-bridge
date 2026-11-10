@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+The [bounded task-visibility calibration](evidence/m3-task-visibility-calibration-execution-2026-11-10/README.md)
+PASSES readiness plus one controlled fixture on freeze6357a2c0f58d. Two matched
+worker observations then a complete-enumeration absence hint;5 native stack reads
+OK/0unavailable, all task/read/schema/policy gates and cleanup/integrity pass.
+No tuning/retry/N1 rerun; its FAIL and1PASS1FAIL7unexecuted remain unchanged, all38
+campaign IDs disabled. This calibrates visibility only, not a new acceptance rule.
+M3 open/PR2 draft/M4 untouched.
+
 The [bounded visibility calibration](evidence/m3-task-visibility-calibration-corrected-preparation-2026-11-10/README.md)
 is prepared in corrected freeze6357a2c0f58d: one native readiness check then one
 controlled task fixture, exact candidate6deab3c5e83e/private host binding, unchanged

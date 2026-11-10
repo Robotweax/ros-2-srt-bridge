@@ -5796,3 +5796,41 @@ originalN1/2903assessmentSHA PASS. Publicindex/finalverification recordprepared
 only. No builds/Dockermutation/liveprocfs/permissionsyscall/campaign/experiments.
 N1/2903 FAIL/1PASS1FAIL7notexecuted retained; no tuning/retry/newexecutiongrant/
 M3acceptance/merge/IntrinsicM4, no nextcasequeued.
+
+
+## 2026-11-10 — Bounded native task visibility calibration PASS
+
+The [bounded task-visibility calibration](evidence/m3-task-visibility-calibration-execution-2026-11-10/README.md)
+PASSES readiness plus one controlled fixture on freeze6357a2c0f58d. Two matched
+worker observations then a complete-enumeration absence hint;5 native stack reads
+OK/0unavailable, all task/read/schema/policy gates and cleanup/integrity pass.
+No tuning/retry/N1 rerun; its FAIL and1PASS1FAIL7unexecuted remain unchanged, all38
+campaign IDs disabled. This calibrates visibility only, not a new acceptance rule.
+M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze6357a2c0f58d/source1970eaa, driver0.
+One nativeARMreadinesscheck thenone controlledamd64Pythontarget (parentPID7/start609,
+workerTID8/start625), exactcandidate6deab3c5e83e+activation/privatehostbinding.
+Live2samples6661634919..6912879252ns; release7028505960, workerreturn7029026044,
+joined7030193752; latercompleteenumabsence7164042710..7164353294 (priorhintmatches),
+SIGINTbegin7234302919. Candidateconfirmed_exitfalseallrecords, no stackwaiver.
+Footer3samples/5stackOK0unavailable/noexhaustion/parent_stop/noGDB.5taskrecords,
+30contentOK+5directorypresent; allboundidentity/read/stage/clock/schema gatespass.
+Childexit0/unforced/18.381750ms signalend-to-reap<original5s; notbridgeperformance.
+AllsamplespreSIGINT, no exactmidreadrace/TIDreuse/postSIGINT availabilityvalidation.
+
+3containers/2volumes createdonce, nativeobserverSYS_ADMINonlyNNP/unchangedfilter/
+readonlyroot+bundle/networknone/exactownedPIDns; target+supervisorcap0/NNP/seccomp.
+No permission/period/budget/transport/settings/build/testoverlap/tuning/retry.
+5normalpredeclaredreadinessfilecopymisses retained, no gatefail/restart.
+Bothcleanup/postflightandfinalreadonlysource/inputs/current14/preserved13/full
+chain/native87/bundle/privatehelper/alloldpublicraw/preparationindex PASS.
+ExactN1/2903assessmentSHA andold1PASS1FAIL7notexecuted immutable, sevenlaterdirs
+absent; no38campaigncase invoked.77rawfiles600527bytes indexed, allrawoutputs
+bytecopiedpublic run/ +grant/preflight/log/gatereport/schema-summary/postflight.
+Earlierimport-failedpreparation preserved; no testsreruncredited.
+
+Scopeonecontrolledfixture nativevisibility/access only, no nativeSDK/ROS/SRT
+workload/overheadequivalence/hardware/M3acceptance. Campaignassessor/filter/driver
+unchanged, confirmedexitacceptancerulenotimplemented. Nextofflineassessmentrules
+fornewmetadata, notautomaticfreshfreeze/grant/N1retry/latercase/merge/IntrinsicM4.
