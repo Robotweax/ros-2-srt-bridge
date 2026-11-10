@@ -5332,3 +5332,45 @@ old drivers do not silently select revision. Offline complete control-lifecycle
 coverage is not live N0/M3 acceptance. Future live qualification still requires
 separate preparation and explicit instruction. Other28 stages disabled, N0
 unqualified, M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Stabilized-lifecycle N0 freeze prepared, not run
+
+User requests new seed1701/300s N0 freeze with stabilized lifecycle harness,
+do not run/no tuning/automatic retries/other stages disabled. Package:
+ evidence/m3-current-n0-stable-preparation-2026-11-10/.
+Freeze98a357e418c22d67b1f46df9e44eaa33f24b66e11b2d1ce0eea3e1ebbd8c28d6.
+Execution disabled, authorization absent, zero live cases. Reserved output absent:
+.local/stable-n0-coverage-20261110T132415333712Z. Fresh prefix/read-only local
+observer bundle bound; no Docker object or bridge/capture/observer/readiness run.
+
+Exactly ordinal10/N0-combined-1701/300s; other28 IDs disabled, completed N3 excluded.
+Scope current-build-N0-combined-stabilized-lifecycle-v4-socket-disposition and
+revision stabilized-lifecycle-v1. Future grant requires exact new freeze/case/
+disabled list, identity-helper and lifecycle-assessor SHAs, historical failure
+preservation/no tuning/no retries; old grants refused. No resume/later dispatcher.
+First failed gate stops; complete cleanup/integrity still required.
+
+Host adapter selects actual stabilized scenario/wrapper. Local assess.py plus
+launch_assessment/records/readiness and calibrated stage/socket/observer lifecycle
+helpers byte-identical to verified stabilized candidate. Explicit helper source
+path/SHA/private module and per-launch assessor path/SHA frozen and checked by
+driver. This binds new catalog/token/time-based assessment, not old first-child/
+role-trace gate. Warmup/final positive traces/outcomes required; final operator
+observer selected. Negative startup and planned warmup reset unchanged. Spawn
+failure evidence/log closure and final cleanup catalog hardening retained.
+
+12 preparation and39 lifecycle tests (13 whole-flow included),4 fresh runtime-
+import tests PASS offline. Candidate511-test PASS retained/hash-bound within
+original scope, not rerun/live credit. Syntax/source/input/current14/preserved13/
+full chain/provider/native87 and historical raw/public archives verify before
+freeze and through disabled driver verifier. Docker only read-only version/info/
+image/list metadata; no create/start/pull/build/mutation. Same pinned images,
+workload/rates/queues/clocks/crypto/waits/filter/sampling settings; no native build.
+
+Public package hashes/logs/readiness/postflight published. Offline modeled Python
+lifecycle does not qualify live300s ROS/SRT data plane, worker/kernel/observer
+behavior or Docker teardown. Prior freezes and all3 failed N0 runs immutable,
+N3 recorded outcomes preserved. New code still needs separate explicit live
+execution authorization and all gates. Other28 stages disabled; N0 unqualified,
+M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.

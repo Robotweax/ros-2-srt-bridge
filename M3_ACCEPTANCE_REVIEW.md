@@ -1,5 +1,14 @@
 # M3 acceptance review — 2026-11-09
 
+The [stabilized-lifecycle N0 freeze](evidence/m3-current-n0-stable-preparation-2026-11-10/README.md)
+is prepared for exactly seed1701/300s. Freeze98a357e418c2 binds stabilized harness,
+matching per-launch assessor/helper SHAs and unchanged matched build. Execution
+disabled, no grant/live run.12 preparation,39 lifecycle and4 runtime-import tests
+pass offline; prior511-test PASS retains its scope. Runtime/images and retained
+hashes verify. No tuning/retry/rebuild; other28 stages disabled, N0 unqualified,
+M3 open/PR2 draft/M4 untouched.
+
+
 The [complete offline lifecycle verification](evidence/m3-current-n0-lifecycle-stabilization-2026-11-10/README.md)
 passes39 lifecycle tests (including13 whole-flow tests),4 runtime-import checks
 and511 existing tests. Actual robot/RPC/wrapper/start-reset-stop methods and host
