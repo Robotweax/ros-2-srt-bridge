@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+A [single two-loss seed4211 shutdown diagnostic](evidence/m3-two-loss-4211-preparation-2026-11-10/README.md)
+is prepared offline, not executed:30s/messages7/8, exact current14-entry build,
+tracing and observer validated on N0/2903, unchanged5s waits. All503 Python tests
+pass; native inputs and prior evidence verify, no rebuild or tuning. No execution
+authorization exists; a future grant must explicitly permit seed4211. Original
+4211 failure remains unchanged, and all29 remaining campaign stages stay disabled.
+
+
 The [single authorized two-loss seed2903/30s shutdown diagnostic](evidence/m3-two-loss-2903-execution-2026-11-10/README.md)
 passes on the frozen14-entry build: exactly one drop each for messages7/8,
 verified selector restoration, strict SENSOR/capture/accounting, lifecycle/socket

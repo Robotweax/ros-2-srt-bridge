@@ -4734,3 +4734,43 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   promotion or original4211hang reproduction/attribution. No followingcasequeued;
   all29remain disabled, no tuning/4211/expiry/replay/commands,
   originalN3 8PASS/1FAIL/unknowncause/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Narrow two-loss4211 diagnostic prepared only; execution prohibited
+
+- User explicitly requests preparing seed4211 using matchedbuild/tracing/observer,
+  do NOT runyet/no tuning/allremainingstagesdisabled. Earlier4211 exclusion is
+  superseded only for preparation, not liveexecution. No authfile/process/drop/
+  classifier/capture/bridge/observer/nativefixture/build/Dockerobject ornetwork
+  mutation created/started. Localmetadata/ROhelperbundle only; daemonmetadata read.
+- Scope one-two-loss-4211-30s-operator-bridge-shutdown-diagnostic. Same30s source
+  window, row1positions2/3msgs7/8, freshbindingISN/socket/SENSORtuple, original
+  counters0->1each, restoration/two-lossparity/SDK/native/PCAP/typed/conservation/
+  cadence/age/zero-skips/5swait gates as passing2903. No othercase/load/commands/
+  expiry/replay/campaignresumption/historicalprefixsplice or acceptancepromotion.
+- Reuses exact14matched/oldshutdown13/provider/fullchain/87nativeinputs/capture
+  helpers; no rebuild/sourcepolicychange. Scenario/capdrop/nativeobserver/filter/
+  lifecycle/socketgate bytes identical to validated N0/two-loss2903. Newhostcode
+  only changes fixedseed/scope/path/assessmentcase/provenance. Seed4211 integration
+  on thisbuild remainsunexecuted; originalarchived4211hang/failure unknown/preserved.
+- Observability fixed: tracebothroles, native ARM64 observer operator/plainjournal
+  workerdescendants only, readybeforeSIGINT, samePID/startticks/clocks/capsNNP/
+  minimalRO/privatePID/output/networknone. Same confirmedworkerexit-vs-reuse and
+  positive4socketdispositions/actualtracedreturns. Samebudgets; no GDB/SYS_PTRACE/
+  unconfined/privileged/hostnamespace/socket/globalsetting or shutdownwaitstretch.
+- Futuredriver needs exactscope/freeze-SHA AND execute=true AND explicit
+  seed4211_execution_authorized=true, retaininghistorical4211failure/no_tuning/
+  all29disabled. No suchrecordexists. OldN0/2903/broader/prepgrants, wrongtuple,
+  runtime/source/input/native drift, existingoutput/unrelatedlivecontainers refuse
+  beforelabcreation. No automatic readiness/experiment/secondcase.
+- 503Python testsPASS (6new seed4211scope/explicitgrant/history-preservation/
+  missinggrant-beforeDocker/tuple-selection/componentbyte controls). Tests mocked/
+  offline, no nativefixture or packetdrop. Prepare/postflightsource/input/14matched/
+  old13/native87/provider/earlierraw indexes including latest2903PASS124rawfiles
+  verifyunchanged. OriginalN3raw913 and allpriorFAILs preserved.
+- Package evidence/m3-two-loss-4211-preparation-2026-11-10 includes PLAN/README,
+  fixeddisabledadapter/gates/exactcomponents/manifests, newfreeze/readiness/
+  postflight/tests. Sourceoutput/auth/prefixobjects absent, live_runs0. A future
+  explicitlyauthorized one-shot muststopfirstfailedgate and restoreselectors/
+  captures/children/observer/lab/credential preservingrawFAILs; no fallback/retry.
+  All29disabled/originalN3 8PASS/1FAIL/unknowncause/M3open/PR2draft/M4untouched.
