@@ -4531,3 +4531,44 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   prerequisite is separately reviewed owned-worker exit versus PIDreuse lifecycle
   handling using retained join/stack evidence; no automaticfix/rerun. OriginalN3
   8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Explicit worker exit/reuse distinction; robot stage gate FAIL
+
+- User authorizes lifecycle distinction/regressions and one new N0seed1701/10s
+  freeze, first failed gate stops; no tuning/two-loss4211, all29stages disabled.
+- Evidence-local collector copy adds explicit matching/process_missing(ENOENT)/
+  pid_reused(differentstartticks)/identity_unavailable outcomes, observed identity/
+  name/parent/checktimestamp. Original collector and all earlier freezes/captures
+  preserved. Exact calibrated native policy/image/permissions/sample budgets and
+  original5s child wait remain; no SDK/ROS/native rebuild or runtime tuning.
+- Only pre-signal sampled unique journal-worker identity with direct rootparent/
+  name, ordered unique same-thread/root/sequence/drop-checked workerjoin markers,
+  then ENOENT within sample time can confirm workertermination. No workerexitcode/
+  cause claim (joinend records completion irrespective return). PIDreuse/readerror
+  before or afterrootreap, missingjoin/wrongworker/premature/rootdisappearance,
+  identity race/ambiguouslegacy/budget/truncation remainfailed. Six new regressions
+  plus full484Python PASS beforefreeze, no tests/build overlap livecapture.
+- Freeze178e40eebcab, exactauth, one output
+  .local/bridge-shutdown-lifecycle-20261110T080138295230Z. All13matched/preserved
+  builds/currentruntime/newsource-input and previous rawindexes verifiedbefore.
+- Native observer startup/clock/permissions/identity/ready beforeSIGINT PASS.
+  Three samples26successful stack reads0denied, finalall_owned_processes_gone/
+  no budgetfailure. Withinchildwait2samples25nonempty reads/1postsignal sample;
+  workerPID158/startticks1123 explicitlyENOENT afterjoinend31113468430ns, accepted
+  lifecycle proof. No PIDreuse or identity-readfailure. PriorambiguousFAIL intact.
+- FIRST FAIL next full-stage gate: robot missing socket_close_begin/end. Operator
+ 51/robot39zero-drop records end main_context_shutdown_end. No marker substitute,
+  stagegate relaxation, patch/fallback or retry followed. Missingmarkersalone
+  do not prove leak/hang. Underlying SENSOR adapterPASS separate from final
+  diagnosticFAIL/exit1; later diagnostic SENSOR/capture assessmentnotreached.
+- Operator exits0/unforced220.430292ms, robotbridge334.928375ms, source167.202875ms;
+  original5swait unchanged. Allownedcontainers/network/observervolume removed/
+  absent, credentialdeleted, noforcedcleanup. Newsource/input/helper/matched13/
+  preservedchain and everyprior rawindex matchpostflight;116newrawfiles hashed.
+- Evidence evidence/m3-bridge-shutdown-lifecycle-2026-11-10 includesexplicit
+  collector/assessor, tests/PLAN/newfreeze/auth/proof, rawobserver/stage/child/
+  policy/entry/exec/ready, bothstatuses/gate/postflight/index. Next prerequisite:
+  retained-evidence robot socket-close trace coverage review, no autorun. Original
+  N3 8PASS/1FAIL/unknowncause; no replay/expiry/tuning/4211/all29disabled,
+  M3open/PR2draft/M4untouched.

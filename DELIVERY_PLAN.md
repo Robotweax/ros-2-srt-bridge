@@ -1,12 +1,13 @@
 # Delivery focus — 2026-11-09
 
-The [capability validation correction and new N0 diagnostic](evidence/m3-bridge-shutdown-capability-fix-2026-11-10/README.md)
-pass the capability gate with478 tests and one new seed1701/10s freeze. Observer
-captures28 successful kernel stacks, but the diagnostic stops at the unchanged
-coverage gate when a registered worker is gone_or_reused after worker_join_end.
-Both bridges exit0/unforced; cleanup and evidence integrity pass. Overall FAIL
-is preserved without gate changes or another attempt. No tuning/two-loss4211;
-all29 campaign cases stay disabled, M3 open, PR2 draft and M4 untouched.
+The [worker lifecycle distinction and new N0 diagnostic](evidence/m3-bridge-shutdown-lifecycle-2026-11-10/README.md)
+pass484 tests and the worker-exit observation gate using explicit ENOENT,
+registered PID/start_ticks/parent/name and ordered join markers; PID reuse and
+read errors remain failures. One new seed1701/10s attempt then stops at robot
+stage coverage: missing socket_close_begin/end. Both bridges exit0/unforced;
+cleanup and frozen evidence verify. Overall FAIL retained, no gate waiver,
+tuning/two-loss4211 or further attempt; all29 campaign cases remain disabled,
+M3 open, PR2 draft and M4 untouched.
 
 
 The [reviewed native observer calibration](evidence/m3-observer-bootstrap-calibration-2026-11-10/README.md)

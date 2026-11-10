@@ -1,0 +1,90 @@
+{
+  "status": "failed_robot_shutdown_stage_gate",
+  "driver_exit_code": 1,
+  "live_runs": 1,
+  "seed": 1701,
+  "seconds": 10,
+  "losses": 0,
+  "python_tests": 484,
+  "lifecycle_regression_tests": 6,
+  "operator_observer_lifecycle": "passed",
+  "observer_proof": {
+    "samples": 2,
+    "post_signal_samples": 1,
+    "nonempty_kernel_stacks": 25,
+    "confirmed_worker_exits": [
+      {
+        "pid": 158,
+        "start_ticks": 1123
+      }
+    ],
+    "worker_join_end_ns": 31113468430,
+    "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+    "clean_fast_exit_may_have_no_post_signal_sample": true
+  },
+  "identity_outcomes": "matching/process_missing/pid_reused/identity_unavailable",
+  "total_kernel_stack_reads_ok": 26,
+  "unavailable_reads": 0,
+  "observer_completed": true,
+  "observer_budget_exhausted": false,
+  "primary_failure": "missing shutdown stage: {'socket_close_end', 'socket_close_begin'}",
+  "failed_role": "robot",
+  "stages": {
+    "operator": {
+      "records": 51,
+      "dropped": 0,
+      "socket_close_markers": [
+        "socket_close_begin",
+        "socket_close_end",
+        "socket_close_begin",
+        "socket_close_end",
+        "socket_close_begin",
+        "socket_close_end",
+        "socket_close_begin",
+        "socket_close_end"
+      ],
+      "last_point": "main_context_shutdown_end"
+    },
+    "robot": {
+      "records": 39,
+      "dropped": 0,
+      "socket_close_markers": [],
+      "last_point": "main_context_shutdown_end"
+    }
+  },
+  "underlying_sensor_adapter_status": "passed",
+  "final_diagnostic_status": "failed",
+  "later_diagnostic_sensor_assessment_reached": false,
+  "cleanup": {
+    "operator": [
+      {
+        "name": "operator-bridge-0",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 220430292
+      }
+    ],
+    "robot": [
+      {
+        "name": "robot-source",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 167202875
+      },
+      {
+        "name": "robot-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 334928375
+      }
+    ]
+  },
+  "no_tuning": true,
+  "retry_two_loss_4211": false,
+  "remaining_campaign_cases_disabled": 29,
+  "original_hang_cause": "unknown",
+  "M3_complete": false
+}
