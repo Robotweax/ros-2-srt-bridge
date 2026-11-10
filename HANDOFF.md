@@ -4853,3 +4853,41 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   disabledcase-plan, fixedadapter/strictassessor/sequence/cleanup, exactcomponents/
   manifests, newfreeze/readiness/postflight/tests. HistoricalN3 8PASS/1FAIL/unknown
   hang unchanged; no autorunqueued. All29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Fresh strict nine-case N3 cohort PASS9/9; later29 remain disabled
+
+- User authorizes preparedexact9N3 onfrozenmatchedbuild/tracing/observer, first
+  failedgate stops/no tuning/automaticretries/alllaterstagesdisabled. Exactgrant
+  bindsfreeze45036de78761/all9orderedIDs/all29disabledIDs/explicit4211/history
+  preservation. Newoutput .local/strict-n3-cohort-20261110T093928707959Z only.
+- All9freshcasesPASS in historicalseed-majororder baseline/one/two1701,2903,4211.
+  No isolatedPASS credit/oldprefixsplice/subset/retry orfailedgate. Driver0. Each
+  sourcewindow30.053486889..30.059827848s,0skips/1%cadence/sixbalances0/modelage<=250,
+  completefooters and strict source/SDK/payload/typed/nativePCAP revalidationPASS.
+  Globalpublishedageuppermax43msIMU/57msjoints, not physicalages.67,630produced/
+  65,076observed;2,554accounted delivery-stage differences, not losslessavailability.
+- Baselines no selector. One-loss8 eachfreshbinding/1drop/restored/parity/SDK/typed
+  repairPASS. Two-loss7/8 eachfreshbinding/1dropeach/restored/mixedrow/parity/exact
+  receivergap2PASS. Counter/capture/actualpopulation independentlyreparsed percase.
+- Allroles stagePASS operator59/robot43each/zero drops; commonandexplicit4slot/
+  fd/thread/phase/close-result gatesPASS. Operator4tracedreturns0each, robotfinal
+  slots-1; no earlierclose/no-leakclaim. CalibratednativeobserverreadybeforeSIGINT,
+  identity/clocks/capsNNP/filter/budgets, registeredworkermissing-afterjoin vsPID
+  reuse/readfailure controlsPASS.28stackreads/case252total0unavailable,boundedfooter.
+  No GDB/userframes/overheadequivalenceclaim; originalhangnotreproduced/attributed.
+- Allchildrenexit0/unforced, unchanged5s waits. Maxoperator223.085584ms, robotbridge
+  351.491750ms. Eachcase fullassessment+cleanup/hash/absence PASS BEFOREnextproduce.
+  All18labcontainers/9observers/9networks/9volumes removed/absent,9credentialsdeleted,
+  selectorrestoration/captureclosure confirmed, noforced/emergencycleanup.
+- No nativebuild/source/helper/gate/policy/rate/queue/clock/timeout change orheavy
+  checkoverlap. Source/input/new14/old13/native87/provider/fullchain/previousraw
+  indexes verifythroughout+finalarchiveaudit.1,092newrawfiles302,649,191bytes hashed.
+  Prior511offline tests retain theirscope, not rerun as extralivequalification.
+- Evidence evidence/m3-strict-n3-execution-2026-11-10 hasPLAN/auth/preflight/exact
+  executionlog, compactall9gate summary/rawcohortSHA, percasefullstrictassessments/
+  stage/observer/child/ready/exec/postflight, archivehashes andfinalintegritycleanup.
+  OriginalN3old8PASS/1FAIL and oldercohort/diagnosticFAILs unchanged. Thisnew9/9
+  closes fresh instrumentedN3 cohort outcome only, not oldhangcause, uninstrumented
+  overhead, latercurrentbuildcoverage or fullM3acceptance. All29latercasesdisabled,
+  no merge/nextcasequeued/M3open/PR2draft/M4untouched.

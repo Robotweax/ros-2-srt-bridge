@@ -1,0 +1,1326 @@
+{
+  "status": "passed",
+  "qualification": "strict_N3_case_with_shutdown_controls",
+  "original_hang_cause": "unknown",
+  "remaining_campaign_cases_disabled": 29,
+  "fresh_N3_case": true,
+  "historical_4211_failure_preserved": true,
+  "no_tuning": true,
+  "operator_observer": {
+    "samples": 2,
+    "post_signal_samples": 1,
+    "nonempty_kernel_stacks": 28,
+    "confirmed_worker_exits": [
+      {
+        "pid": 157,
+        "start_ticks": 12440
+      }
+    ],
+    "worker_join_end_ns": 167960463368,
+    "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+    "clean_fast_exit_may_have_no_post_signal_sample": true
+  },
+  "operator_stages_observed": [
+    "main_spin_begin",
+    "ros_context_shutdown_callback",
+    "main_spin_end",
+    "main_node_reset_begin",
+    "node_destructor_begin",
+    "node_timers_reset",
+    "node_endpoint_stop_begin",
+    "node_endpoint_stop_end",
+    "node_endpoint_join_begin",
+    "endpoint_shutdown_begin",
+    "worker_stop_begin",
+    "worker_stop_end",
+    "worker_join_begin",
+    "worker_join_end",
+    "endpoint_transport_join_begin",
+    "transport_shutdown_begin",
+    "transport_session_stop_begin",
+    "socket_epoll_remove_begin",
+    "socket_close_begin",
+    "socket_close_result",
+    "socket_close_end",
+    "socket_epoll_remove_begin",
+    "socket_close_begin",
+    "socket_close_result",
+    "socket_close_end",
+    "transport_session_stop_end",
+    "control_close_begin",
+    "control_fd_disposition",
+    "control_listener_disposition",
+    "socket_epoll_remove_begin",
+    "socket_close_begin",
+    "socket_close_result",
+    "socket_close_end",
+    "control_close_end",
+    "sensor_close_begin",
+    "sensor_fd_disposition",
+    "sensor_listener_disposition",
+    "socket_epoll_remove_begin",
+    "socket_close_begin",
+    "socket_close_result",
+    "socket_close_end",
+    "sensor_close_end",
+    "epoll_release_begin",
+    "epoll_release_end",
+    "provider_release_begin",
+    "provider_release_locked",
+    "provider_cleanup_begin",
+    "provider_cleanup_end",
+    "provider_release_end",
+    "transport_thread_body_end",
+    "endpoint_transport_join_end",
+    "endpoint_shutdown_body_end",
+    "node_endpoint_join_end",
+    "node_trace_drain_begin",
+    "node_trace_drain_end",
+    "node_destructor_body_end",
+    "main_node_reset_end",
+    "main_context_shutdown_begin",
+    "main_context_shutdown_end"
+  ],
+  "stages": {
+    "operator": {
+      "records": 59,
+      "points": [
+        "control_close_begin",
+        "control_close_end",
+        "control_fd_disposition",
+        "control_listener_disposition",
+        "endpoint_shutdown_begin",
+        "endpoint_shutdown_body_end",
+        "endpoint_transport_join_begin",
+        "endpoint_transport_join_end",
+        "epoll_release_begin",
+        "epoll_release_end",
+        "main_context_shutdown_begin",
+        "main_context_shutdown_end",
+        "main_node_reset_begin",
+        "main_node_reset_end",
+        "main_spin_begin",
+        "main_spin_end",
+        "node_destructor_begin",
+        "node_destructor_body_end",
+        "node_endpoint_join_begin",
+        "node_endpoint_join_end",
+        "node_endpoint_stop_begin",
+        "node_endpoint_stop_end",
+        "node_timers_reset",
+        "node_trace_drain_begin",
+        "node_trace_drain_end",
+        "provider_cleanup_begin",
+        "provider_cleanup_end",
+        "provider_release_begin",
+        "provider_release_end",
+        "provider_release_locked",
+        "ros_context_shutdown_callback",
+        "sensor_close_begin",
+        "sensor_close_end",
+        "sensor_fd_disposition",
+        "sensor_listener_disposition",
+        "socket_close_begin",
+        "socket_close_end",
+        "socket_close_result",
+        "socket_epoll_remove_begin",
+        "transport_session_stop_begin",
+        "transport_session_stop_end",
+        "transport_shutdown_begin",
+        "transport_thread_body_end",
+        "worker_join_begin",
+        "worker_join_end",
+        "worker_stop_begin",
+        "worker_stop_end"
+      ],
+      "rows": [
+        {
+          "schema_version": 1,
+          "sequence": 1,
+          "monotonic_ns": 124446981806,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_spin_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 2,
+          "monotonic_ns": 167944105243,
+          "pid": 141,
+          "tid": 145,
+          "point": "ros_context_shutdown_callback",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 3,
+          "monotonic_ns": 167949317493,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_spin_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 4,
+          "monotonic_ns": 167949483660,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_node_reset_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 5,
+          "monotonic_ns": 167949758826,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_destructor_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 6,
+          "monotonic_ns": 167952407410,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_timers_reset",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 7,
+          "monotonic_ns": 167952550660,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 8,
+          "monotonic_ns": 167952898160,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 9,
+          "monotonic_ns": 167952967618,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 10,
+          "monotonic_ns": 167953755785,
+          "pid": 141,
+          "tid": 156,
+          "point": "endpoint_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 11,
+          "monotonic_ns": 167953883160,
+          "pid": 141,
+          "tid": 156,
+          "point": "worker_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 12,
+          "monotonic_ns": 167954934910,
+          "pid": 141,
+          "tid": 156,
+          "point": "worker_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 13,
+          "monotonic_ns": 167955099285,
+          "pid": 141,
+          "tid": 156,
+          "point": "worker_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 14,
+          "monotonic_ns": 167960463368,
+          "pid": 141,
+          "tid": 156,
+          "point": "worker_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 15,
+          "monotonic_ns": 167960605410,
+          "pid": 141,
+          "tid": 156,
+          "point": "endpoint_transport_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 16,
+          "monotonic_ns": 167961976660,
+          "pid": 141,
+          "tid": 155,
+          "point": "transport_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 17,
+          "monotonic_ns": 167962251160,
+          "pid": 141,
+          "tid": 155,
+          "point": "transport_session_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 18,
+          "monotonic_ns": 167962617868,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_epoll_remove_begin",
+          "detail": 695853059,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 19,
+          "monotonic_ns": 167962981410,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_begin",
+          "detail": 695853059,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 20,
+          "monotonic_ns": 167965809785,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_result",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 21,
+          "monotonic_ns": 167965930535,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_end",
+          "detail": 695853059,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 22,
+          "monotonic_ns": 167965995451,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_epoll_remove_begin",
+          "detail": 426956423,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 23,
+          "monotonic_ns": 167966077910,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_begin",
+          "detail": 426956423,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 24,
+          "monotonic_ns": 167966228076,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_result",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 25,
+          "monotonic_ns": 167966304368,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_end",
+          "detail": 426956423,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 26,
+          "monotonic_ns": 167966410910,
+          "pid": 141,
+          "tid": 155,
+          "point": "transport_session_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 27,
+          "monotonic_ns": 167966655243,
+          "pid": 141,
+          "tid": 155,
+          "point": "control_close_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 28,
+          "monotonic_ns": 167966733493,
+          "pid": 141,
+          "tid": 155,
+          "point": "control_fd_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 29,
+          "monotonic_ns": 167966842868,
+          "pid": 141,
+          "tid": 155,
+          "point": "control_listener_disposition",
+          "detail": 982441795,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 30,
+          "monotonic_ns": 167967164535,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_epoll_remove_begin",
+          "detail": 982441795,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 31,
+          "monotonic_ns": 167967249910,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_begin",
+          "detail": 982441795,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 32,
+          "monotonic_ns": 167969527910,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_result",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 33,
+          "monotonic_ns": 167969639243,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_end",
+          "detail": 982441795,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 34,
+          "monotonic_ns": 167969714410,
+          "pid": 141,
+          "tid": 155,
+          "point": "control_close_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 35,
+          "monotonic_ns": 167969777785,
+          "pid": 141,
+          "tid": 155,
+          "point": "sensor_close_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 36,
+          "monotonic_ns": 167969873868,
+          "pid": 141,
+          "tid": 155,
+          "point": "sensor_fd_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 37,
+          "monotonic_ns": 167969966285,
+          "pid": 141,
+          "tid": 155,
+          "point": "sensor_listener_disposition",
+          "detail": 107559482,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 38,
+          "monotonic_ns": 167970088326,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_epoll_remove_begin",
+          "detail": 107559482,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 39,
+          "monotonic_ns": 167970176743,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_begin",
+          "detail": 107559482,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 40,
+          "monotonic_ns": 167970326035,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_result",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 41,
+          "monotonic_ns": 167970371326,
+          "pid": 141,
+          "tid": 155,
+          "point": "socket_close_end",
+          "detail": 107559482,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 42,
+          "monotonic_ns": 167970422410,
+          "pid": 141,
+          "tid": 155,
+          "point": "sensor_close_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 43,
+          "monotonic_ns": 167970480535,
+          "pid": 141,
+          "tid": 155,
+          "point": "epoll_release_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 44,
+          "monotonic_ns": 167970774660,
+          "pid": 141,
+          "tid": 155,
+          "point": "epoll_release_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 45,
+          "monotonic_ns": 167970841785,
+          "pid": 141,
+          "tid": 155,
+          "point": "provider_release_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 46,
+          "monotonic_ns": 167970921368,
+          "pid": 141,
+          "tid": 155,
+          "point": "provider_release_locked",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 47,
+          "monotonic_ns": 167970998285,
+          "pid": 141,
+          "tid": 155,
+          "point": "provider_cleanup_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 48,
+          "monotonic_ns": 167976962910,
+          "pid": 141,
+          "tid": 155,
+          "point": "provider_cleanup_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 49,
+          "monotonic_ns": 167977088451,
+          "pid": 141,
+          "tid": 155,
+          "point": "provider_release_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 50,
+          "monotonic_ns": 167977218076,
+          "pid": 141,
+          "tid": 155,
+          "point": "transport_thread_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 51,
+          "monotonic_ns": 167977366035,
+          "pid": 141,
+          "tid": 156,
+          "point": "endpoint_transport_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 52,
+          "monotonic_ns": 167977632243,
+          "pid": 141,
+          "tid": 156,
+          "point": "endpoint_shutdown_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 53,
+          "monotonic_ns": 167977905410,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 54,
+          "monotonic_ns": 167977974201,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_trace_drain_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 55,
+          "monotonic_ns": 167978205535,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_trace_drain_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 56,
+          "monotonic_ns": 167978264785,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_destructor_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 57,
+          "monotonic_ns": 168000853493,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_node_reset_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 58,
+          "monotonic_ns": 168001020410,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_context_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 59,
+          "monotonic_ns": 168001616118,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_context_shutdown_end",
+          "detail": 0,
+          "dropped_before": 0
+        }
+      ],
+      "sockets": {
+        "slots": {
+          "control_fd_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          },
+          "control_listener_disposition": {
+            "fd": 982441795,
+            "disposition": "closed",
+            "close_result": 0
+          },
+          "sensor_fd_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          },
+          "sensor_listener_disposition": {
+            "fd": 107559482,
+            "disposition": "closed",
+            "close_result": 0
+          }
+        },
+        "traced_successful_close_fds": [
+          695853059,
+          426956423,
+          982441795,
+          107559482
+        ],
+        "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+      }
+    },
+    "robot": {
+      "records": 43,
+      "points": [
+        "control_close_begin",
+        "control_close_end",
+        "control_fd_disposition",
+        "control_listener_disposition",
+        "endpoint_shutdown_begin",
+        "endpoint_shutdown_body_end",
+        "endpoint_transport_join_begin",
+        "endpoint_transport_join_end",
+        "epoll_release_begin",
+        "epoll_release_end",
+        "main_context_shutdown_begin",
+        "main_context_shutdown_end",
+        "main_node_reset_begin",
+        "main_node_reset_end",
+        "main_spin_begin",
+        "main_spin_end",
+        "node_destructor_begin",
+        "node_destructor_body_end",
+        "node_endpoint_join_begin",
+        "node_endpoint_join_end",
+        "node_endpoint_stop_begin",
+        "node_endpoint_stop_end",
+        "node_timers_reset",
+        "node_trace_drain_begin",
+        "node_trace_drain_end",
+        "provider_cleanup_begin",
+        "provider_cleanup_end",
+        "provider_release_begin",
+        "provider_release_end",
+        "provider_release_locked",
+        "ros_context_shutdown_callback",
+        "sensor_close_begin",
+        "sensor_close_end",
+        "sensor_fd_disposition",
+        "sensor_listener_disposition",
+        "transport_session_stop_begin",
+        "transport_session_stop_end",
+        "transport_shutdown_begin",
+        "transport_thread_body_end",
+        "worker_join_begin",
+        "worker_join_end",
+        "worker_stop_begin",
+        "worker_stop_end"
+      ],
+      "rows": [
+        {
+          "schema_version": 1,
+          "sequence": 1,
+          "monotonic_ns": 124460162306,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_spin_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 2,
+          "monotonic_ns": 168155231951,
+          "pid": 141,
+          "tid": 148,
+          "point": "ros_context_shutdown_callback",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 3,
+          "monotonic_ns": 168162134451,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_spin_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 4,
+          "monotonic_ns": 168163038410,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_node_reset_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 5,
+          "monotonic_ns": 168163309451,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_destructor_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 6,
+          "monotonic_ns": 168164258326,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_timers_reset",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 7,
+          "monotonic_ns": 168164304035,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 8,
+          "monotonic_ns": 168164365701,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 9,
+          "monotonic_ns": 168164399326,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 10,
+          "monotonic_ns": 168166154868,
+          "pid": 141,
+          "tid": 170,
+          "point": "endpoint_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 11,
+          "monotonic_ns": 168166271451,
+          "pid": 141,
+          "tid": 170,
+          "point": "worker_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 12,
+          "monotonic_ns": 168166506910,
+          "pid": 141,
+          "tid": 170,
+          "point": "worker_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 13,
+          "monotonic_ns": 168166995785,
+          "pid": 141,
+          "tid": 170,
+          "point": "worker_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 14,
+          "monotonic_ns": 168174483826,
+          "pid": 141,
+          "tid": 169,
+          "point": "transport_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 15,
+          "monotonic_ns": 168174843201,
+          "pid": 141,
+          "tid": 169,
+          "point": "transport_session_stop_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 16,
+          "monotonic_ns": 168174934743,
+          "pid": 141,
+          "tid": 169,
+          "point": "transport_session_stop_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 17,
+          "monotonic_ns": 168175114910,
+          "pid": 141,
+          "tid": 169,
+          "point": "control_close_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 18,
+          "monotonic_ns": 168175176951,
+          "pid": 141,
+          "tid": 169,
+          "point": "control_fd_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 19,
+          "monotonic_ns": 168175274576,
+          "pid": 141,
+          "tid": 169,
+          "point": "control_listener_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 20,
+          "monotonic_ns": 168175331701,
+          "pid": 141,
+          "tid": 169,
+          "point": "control_close_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 21,
+          "monotonic_ns": 168175387993,
+          "pid": 141,
+          "tid": 169,
+          "point": "sensor_close_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 22,
+          "monotonic_ns": 168175444035,
+          "pid": 141,
+          "tid": 169,
+          "point": "sensor_fd_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 23,
+          "monotonic_ns": 168175502951,
+          "pid": 141,
+          "tid": 169,
+          "point": "sensor_listener_disposition",
+          "detail": -1,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 24,
+          "monotonic_ns": 168175557951,
+          "pid": 141,
+          "tid": 169,
+          "point": "sensor_close_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 25,
+          "monotonic_ns": 168175613410,
+          "pid": 141,
+          "tid": 169,
+          "point": "epoll_release_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 26,
+          "monotonic_ns": 168175890035,
+          "pid": 141,
+          "tid": 169,
+          "point": "epoll_release_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 27,
+          "monotonic_ns": 168175972035,
+          "pid": 141,
+          "tid": 169,
+          "point": "provider_release_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 28,
+          "monotonic_ns": 168176059326,
+          "pid": 141,
+          "tid": 169,
+          "point": "provider_release_locked",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 29,
+          "monotonic_ns": 168176199243,
+          "pid": 141,
+          "tid": 169,
+          "point": "provider_cleanup_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 30,
+          "monotonic_ns": 168182911910,
+          "pid": 141,
+          "tid": 169,
+          "point": "provider_cleanup_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 31,
+          "monotonic_ns": 168183133118,
+          "pid": 141,
+          "tid": 169,
+          "point": "provider_release_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 32,
+          "monotonic_ns": 168183262410,
+          "pid": 141,
+          "tid": 169,
+          "point": "transport_thread_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 33,
+          "monotonic_ns": 168311609118,
+          "pid": 141,
+          "tid": 170,
+          "point": "worker_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 34,
+          "monotonic_ns": 168311692868,
+          "pid": 141,
+          "tid": 170,
+          "point": "endpoint_transport_join_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 35,
+          "monotonic_ns": 168311858035,
+          "pid": 141,
+          "tid": 170,
+          "point": "endpoint_transport_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 36,
+          "monotonic_ns": 168312168743,
+          "pid": 141,
+          "tid": 170,
+          "point": "endpoint_shutdown_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 37,
+          "monotonic_ns": 168312499618,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_endpoint_join_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 38,
+          "monotonic_ns": 168312583451,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_trace_drain_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 39,
+          "monotonic_ns": 168312705035,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_trace_drain_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 40,
+          "monotonic_ns": 168312736368,
+          "pid": 141,
+          "tid": 141,
+          "point": "node_destructor_body_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 41,
+          "monotonic_ns": 168339676451,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_node_reset_end",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 42,
+          "monotonic_ns": 168340088951,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_context_shutdown_begin",
+          "detail": 0,
+          "dropped_before": 0
+        },
+        {
+          "schema_version": 1,
+          "sequence": 43,
+          "monotonic_ns": 168340663160,
+          "pid": 141,
+          "tid": 141,
+          "point": "main_context_shutdown_end",
+          "detail": 0,
+          "dropped_before": 0
+        }
+      ],
+      "sockets": {
+        "slots": {
+          "control_fd_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          },
+          "control_listener_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          },
+          "sensor_fd_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          },
+          "sensor_listener_disposition": {
+            "fd": -1,
+            "disposition": "already_invalid",
+            "close_result": null
+          }
+        },
+        "traced_successful_close_fds": [],
+        "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+      }
+    }
+  },
+  "sensor": {
+    "gate": "N3_strict_window_and_recorded_capture",
+    "window": {
+      "source_produced": 7515,
+      "observer_received": 7237,
+      "missing": 278,
+      "losses": {
+        "upstream_dds": 11,
+        "validation": 0,
+        "admission": 16,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 242,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 4,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.055681389,
+      "source_actual_hz": {
+        "imu": 200.02873740205126,
+        "joints": 50.007184350512816
+      },
+      "published": 7240,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5755,
+          "rounding": "up to 1ms",
+          "maximum_ms": 21,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1485,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 27
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    }
+  }
+}
