@@ -1,0 +1,59 @@
+{
+  "scope": "unexpected exception cleanup only; case remains failed",
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "corrected-n0-20261110t104303571352z-observer"
+      ],
+      "exit_code": 1,
+      "stdout": "[]\n",
+      "stderr": "error: no such object: corrected-n0-20261110t104303571352z-observer\n"
+    },
+    {
+      "argv": [
+        "docker",
+        "volume",
+        "rm",
+        "corrected-n0-20261110t104303571352z-observer-output"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error response from daemon: get corrected-n0-20261110t104303571352z-observer-output: no such volume\n"
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "ros2-srt-m3-42446154e1ad-operator"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "ros2-srt-m3-42446154e1ad-robot"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "network",
+        "rm",
+        "ros2-srt-m3-42446154e1ad"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error response from daemon: network ros2-srt-m3-42446154e1ad not found\nexit status 1\n"
+    }
+  ]
+}

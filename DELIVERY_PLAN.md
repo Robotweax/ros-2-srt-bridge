@@ -1,5 +1,14 @@
 # Delivery focus — 2026-11-09
 
+The [corrected-readiness N0 attempt](evidence/m3-current-n0-corrected-execution-2026-11-10/README.md)
+failed during launch registration before measurement: both roles hit missing
+identity.ppid. Separate per-launch failure snapshots were retained. The runtime
+import order exposes a three-field identity helper while the validator expects
+ppid; offline tests used the richer evidence-local helper. No capability check,
+observer or300s measurement was reached. One attempt, no tuning/retry; cleanup/
+integrity verify. Other28 stages disabled, N0 unqualified, M3 open/PR2 draft.
+
+
 The [new corrected-readiness N0 freeze](evidence/m3-current-n0-corrected-preparation-2026-11-10/README.md)
 is prepared for exactly seed1701/300s, binding the verified launch-specific harness
 and unchanged matched build. Freeze7b5c7d922206 is execution-disabled with no grant

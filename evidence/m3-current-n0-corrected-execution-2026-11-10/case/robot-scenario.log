@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/launch_readiness.py", line 52, in register
+    expected=current['identity_before'];stable(current,expected)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/launch_readiness.py", line 39, in stable
+    if any(row[k]!=expected[k] for k in ('pid','start_ticks','ppid')) or row['state'] in ('Z','X'):raise ValueError('child identity changed, exited or unavailable')
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/launch_readiness.py", line 39, in <genexpr>
+    if any(row[k]!=expected[k] for k in ('pid','start_ticks','ppid')) or row['state'] in ('Z','X'):raise ValueError('child identity changed, exited or unavailable')
+           ~~~^^^
+KeyError: 'ppid'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/scenario.py", line 403, in <module>
+    main()
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/scenario.py", line 335, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 207, in robot
+    negative = self.start('bridge_node', 'wrong-hash', {'expected_imu_hash': 'RIHS01_' + '0'*64})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/scenario.py", line 353, in start
+    self.bridge_launches[child]=register(child,launch)
+                                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/evidence/m3-current-n0-readiness-fix-2026-11-10/launch_readiness.py", line 55, in register
+    failure(launch,'parent',error,current,phase='registration');raise ValueError('launch registration failed; snapshot retained') from error
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: launch registration failed; snapshot retained

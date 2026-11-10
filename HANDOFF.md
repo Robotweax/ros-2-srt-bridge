@@ -5080,3 +5080,40 @@ unqualified until a separately authorized future run passes. Fresh N3 stays9/9,
 historical failures unchanged. Combined corrected-harness live behavior remains
 unvalidated. Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued,
 Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Corrected N0 attempt fails registration; snapshots retained
+
+Explicit user authorization recorded for the new7b5c7d922206 freeze, exactly
+N0-combined-1701/300s, first failed gate/no tuning/no automatic retry/other28 disabled.
+Unchanged driver invoked once, exit1, one failed row and no passing coverage.
+Evidence: evidence/m3-current-n0-corrected-execution-2026-11-10/.
+
+Both concurrent role startups fail register→stable KeyError:'ppid'. Operator
+snapshot first: PID111; robot negative wrong-hash launch PID133. New unique
+launch tokens/paths and exact parent failure snapshots retained. Identity brackets
+have pid/start_ticks/state only; permissions contain PPid75 and capability/NNP
+fields. Initial caps nonzero/NNP0 are pre-reduction registration observations;
+zero-cap attestation was not reached, not a capability-policy violation claim.
+
+Retained source shows unqualified shutdown_observer identity import; runtime
+scenario puts ROS demo scripts before evidence helper. ROS identity returns the
+exact observed3fields; evidence helper includesppid/name. Offline tests used the
+latter, missing runtime import-path/schema integration. Runtime module __file__
+not recorded, so origin is a supported static inference; immediate missing-field
+failure and exact snapshots are direct evidence. No new experiment/reproduction,
+code fix, tuning or test was run during/after this attempt.
+
+Robot-ready/measurement-start/fullresults/normalrelease/observerready/strictassessment
+absent; no observer started. No N0 measurement or shutdown qualification credit.
+Secondary capture reconciliation/command/provider final-status errors preserved.
+Owned normal/emergency cleanup records retained; final independent metadata
+confirms lab containers/network/observer/volume absent, credential deleted. No
+clean child-exit claim. Frozen source/inputs/corrected harness/current14/preserved13/
+fullchain/native87 and all historical raw/public indexes verify. New archive
+57files/286,585bytes hash-bound; public tracebacks and launch snapshots published.
+
+No retry/new freeze/nativebuild/further case. Next correction would explicitly
+bind identity helper and test real runtime import order; it was not made here.
+Original N0 FAIL and both old/new N3 outcomes preserved; other28 stages disabled,
+M3 open, PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.

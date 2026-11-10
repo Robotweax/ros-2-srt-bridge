@@ -3461,5 +3461,164 @@
     "no_tuning": true,
     "no_automatic_retries": true,
     "M3_complete": false
+  },
+  "current_build_n0_corrected_execution": {
+    "status": "failed_launch_registration_identity_schema",
+    "driver_exit_code": 1,
+    "case_id": "N0-combined-1701",
+    "seed": 1701,
+    "planned_source_seconds": 300,
+    "measurement_started": false,
+    "measurement_completed": false,
+    "live_attempts": 1,
+    "passed_cases": 0,
+    "failed_cases": 1,
+    "retries": 0,
+    "first_retained_failure": "operator launch registration KeyError: 'ppid'; robot negative launch fails same check",
+    "retained_failure_snapshots": [
+      {
+        "role": "operator",
+        "name": "operator-bridge-0",
+        "token": "324479e611e03c437b305b3e21afa13c",
+        "snapshot": {
+          "pid": 111,
+          "begin_ns": 286380030505,
+          "identity_before": {
+            "pid": 111,
+            "start_ticks": 28637,
+            "state": "R"
+          },
+          "permissions": {
+            "Name": "python3",
+            "Pid": "111",
+            "PPid": "75",
+            "Uid": "0\t0\t0\t0",
+            "Gid": "0\t0\t0\t0",
+            "CapInh": "0000000000000000",
+            "CapPrm": "00000080a80435fb",
+            "CapEff": "00000080a80435fb",
+            "CapBnd": "00000080a80435fb",
+            "CapAmb": "0000000000000000",
+            "NoNewPrivs": "0",
+            "Seccomp": "2",
+            "Seccomp_filters": "1"
+          },
+          "identity_after": {
+            "pid": 111,
+            "start_ticks": 28637,
+            "state": "R"
+          },
+          "end_ns": 286381876005
+        }
+      },
+      {
+        "role": "robot",
+        "name": "wrong-hash",
+        "token": "79d8a4a8377e206533968fd154739cf3",
+        "snapshot": {
+          "pid": 133,
+          "begin_ns": 286870719172,
+          "identity_before": {
+            "pid": 133,
+            "start_ticks": 28686,
+            "state": "R"
+          },
+          "permissions": {
+            "Name": "python3",
+            "Pid": "133",
+            "PPid": "75",
+            "Uid": "0\t0\t0\t0",
+            "Gid": "0\t0\t0\t0",
+            "CapInh": "0000000000000000",
+            "CapPrm": "00000080a80435fb",
+            "CapEff": "00000080a80435fb",
+            "CapBnd": "00000080a80435fb",
+            "CapAmb": "0000000000000000",
+            "NoNewPrivs": "0",
+            "Seccomp": "2",
+            "Seccomp_filters": "1"
+          },
+          "identity_after": {
+            "pid": 133,
+            "start_ticks": 28686,
+            "state": "R"
+          },
+          "end_ns": 286871275922
+        }
+      }
+    ],
+    "failure_mechanism": "stable expects identity.ppid; runtime identity snapshots have pid/start_ticks/state only",
+    "static_import_findings": {
+      "readiness_import": "from shutdown_observer import identity",
+      "scenario_path_precedence": "tools then ROS demo scripts before evidence-local observer helper",
+      "ros_helper": "ros2/robotweax_srt_bridge_demo/scripts/shutdown_observer.py",
+      "ros_identity_fields": [
+        "pid",
+        "start_ticks",
+        "state"
+      ],
+      "intended_helper": "evidence/m3-current-n0-preparation-2026-11-10/shutdown_observer.py",
+      "intended_identity_extra_fields": [
+        "ppid",
+        "name"
+      ],
+      "module_file_retained": false
+    },
+    "capability_check_reached": false,
+    "snapshot_retention_worked": true,
+    "pre_reduction_capabilities_not_an_attestation_failure": true,
+    "strict_assessment_reached": false,
+    "shutdown_qualification": false,
+    "observer_started": false,
+    "secondary_failures": [
+      "unreconciled tcpdump counters",
+      "missing or duplicate final command trace status",
+      "missing or duplicate provider final status"
+    ],
+    "cleanup": "owned emergency removal recorded; final absence verified, no clean child-exit claim",
+    "freeze_sha256": "7b5c7d9222062c86b9447cbd6c2d430138f3b4574c5a66b16cee637409386f69",
+    "raw_cohort_sha256": "2039a320f5d819beef885aa9058474affb1ea529b8e3a94120539df33b3f81fd",
+    "matched_entries": 14,
+    "preserved_shutdown_entries": 13,
+    "reused_native_inputs": 87,
+    "raw_files": 57,
+    "raw_bytes": 286585,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "disabled_case_ids": [
+      "N4-admission-both",
+      "N4-admission-to-robot",
+      "N4-admission-to-operator",
+      "N4-dispatch-both",
+      "N4-dispatch-to-robot",
+      "N4-dispatch-to-operator",
+      "N4-started-both",
+      "N4-started-to-robot",
+      "N4-started-to-operator",
+      "N4-committed-both",
+      "N4-committed-to-robot",
+      "N4-committed-to-operator",
+      "N4-query-both",
+      "N4-ROS-freshness-both",
+      "N4-ROS-freshness-to-robot",
+      "N4-ROS-freshness-to-operator",
+      "N4-ROS-crash-before",
+      "N4-ROS-crash-effect",
+      "N4-ROS-crash-committed",
+      "N1-combined-1701",
+      "N1-combined-2903",
+      "N1-combined-4211",
+      "N2-combined-1701",
+      "N2-combined-2903",
+      "N2-combined-4211",
+      "N5-combined-1701",
+      "N5-combined-2903",
+      "N5-combined-4211"
+    ],
+    "remaining_campaign_cases_disabled": 28,
+    "completed_N3_not_reexecuted": true,
+    "historical_failures_preserved": true,
+    "M3_complete": false,
+    "evidence": "evidence/m3-current-n0-corrected-execution-2026-11-10/README.md"
   }
 }
