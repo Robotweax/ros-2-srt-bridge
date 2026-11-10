@@ -5231,3 +5231,57 @@ No retry/newfreeze/further experiment. Future trace-lifecycle repair would need
 per-launch paths and matching assessment; not implemented/authorized here. N0
 unqualified, N3 original/new outcomes preserved, other28 stages disabled, M3 open,
 PR2 draft, no merge/next case queued and M4 untouched.
+
+
+## 2026-11-10 — Per-launch trace/lifecycle correction verified offline
+
+User authorizes per-launch shutdown traces and matching lifecycle assessment,
+offline only/no N0 rerun/tuning/automatic retries, other stages disabled. New
+candidate: evidence/m3-current-n0-trace-lifecycle-fix-2026-11-10/.
+Diagnostic assigns each positive launch a trace path from role/name/token beside
+its unique readiness record; does not unlink/truncate/reassign old traces.
+Original native O_CREAT|O_EXCL/256limit retained. Expected wrong-hash negative
+startup unchanged, no successful-shutdown trace required for intentional exit1.
+
+Per-role catalog records negative/warmup/measurement context, registered
+PID/start_ticks/PPid, readiness/identity/trace paths, attestation and return code.
+Each positive gets unique identity export; role compatibility identity remains
+for unchanged sidecar but must equal final measurement launch. Child outcomes
+carry token/start_ticks/purpose/paths; early exits remain failed outcomes and
+recorded children are not duplicated. Original SIGINT/5s/force-failure stop owns
+process handling. Unexpected extra positive launches refused.
+
+launch_assessment validates exact catalog/topology and negative outcome, all
+readiness/helper provenance and per-token child identities. Both warmup/final
+robot and final operator independently pass unchanged stage/socket gates. Trace
+clock window bound to its pre-exec snapshot/reap/SIGINT, warmup precedes final,
+so same-PID stale-trace substitution fails. Missing/extra/reordered/duplicate
+launches, child outcomes or traces, foreign/legacy/reused paths and mixed stage
+identity fail closed. assess.py takes final operator child/identity/trace for
+existing native observer/worker-stack coverage; no warmup/robot stack claim.
+Combined SENSOR/command/journal/capture/provider/cleanup gates unchanged.
+
+26 lifecycle/trace tests and4 fresh-interpreter runtime-import tests plus all511
+existing tests pass offline. Mocked Popen models exclusive file creation and
+preserves first trace through planned warmup replacement. Synthetic catalogs
+exercise missing/swapped/reused-PID traces, child reorder/token/ticks mismatch,
+negative/early/forced exits, wrong compatibility identity, existing socket errors,
+unique/current identity exports and full assessor observer selection. Retained
+closed traces/stacks are fixture data only; synthetic robot clocks offset to be
+disjoint. No live qualification credit or old FAIL replacement. Actual import
+order/ROS cached-helper controls retained for both new parent/wrapper.
+
+launch_readiness.py/bridge_exec.py byte-identical to explicit-identity fix;
+Benchmark and reduce ASTs unchanged; stage/socket/observer lifecycle gate copies
+byte-identical to calibrated originals. Host adapter changes only scenario path.
+No native source/build, policy/rate/queue/clock/wait/filter/sampling tuning. Tests
+use temporary files/mocked children and ordinary Python interpreters; no Docker,
+capability syscall, ROS node, bridge/capture/observer/N0 workload or experiment.
+
+Syntax/source/inputs/current14/preserved13/full chain/native87 and retained public/
+raw indexes verify unchanged, including all3 failed N0 attempts. Candidate input/
+public hashes/logs/audit published. No new campaign freeze/grant/live output;
+old frozen drivers cannot silently select this revision. Future live run needs
+separate preparation and explicit authorization; live behavior still unvalidated.
+Other28 stages disabled, N0 unqualified, historical/new N3 outcomes preserved,
+M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.

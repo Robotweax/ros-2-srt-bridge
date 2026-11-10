@@ -1,5 +1,14 @@
 # ROS 2 SRT Bridge
 
+The [per-launch trace/lifecycle fix](evidence/m3-current-n0-trace-lifecycle-fix-2026-11-10/README.md)
+gives warmup/final bridges separate exclusive trace paths, catalogs and attested
+identities. Child outcomes and stage/socket proofs bind to each launch; native
+observer assessment selects the final operator, not the first child.26 lifecycle,
+4 runtime-import and511 existing tests pass offline. No N0 rerun/new freeze/grant,
+tuning or retry; old inputs/builds/failures unchanged, other28 stages disabled,
+N0 unqualified and M3 open/PR2 draft/M4 untouched.
+
+
 The [explicit-identity N0 attempt](evidence/m3-current-n0-bound-execution-2026-11-10/README.md)
 passes initial identity/capability readiness but fails the planned warmup reset:
 replacement robot exits1 with cannot create shutdown trace. The retained trace
