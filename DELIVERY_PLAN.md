@@ -1,5 +1,14 @@
 # Delivery focus — 2026-11-09
 
+The [retained N0 capability diagnosis](evidence/m3-current-n0-capability-diagnosis-2026-11-10/README.md)
+identifies a readiness identity defect: the deliberate wrong-hash robot bridge
+and real bridge share one pre-exec marker, and the real start trusts existence
+without matching the launch/PID. Stale readiness can trigger premature capability
+checking. Exact failing capability values/transition remain unobserved. Diagnosis
+only: no fix, tuning, retry, new test or experiment; N0 FAIL retained, other28
+cases disabled, M3 open/PR2 draft/M4 untouched.
+
+
 The [authorized current-build N0 attempt](evidence/m3-current-n0-execution-2026-11-10/README.md)
 failed at robot startup capability attestation before the300s measurement began.
 One attempt, zero retries/tuning; the failing /proc capability values were not

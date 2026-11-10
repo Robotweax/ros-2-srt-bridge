@@ -4960,3 +4960,40 @@ further experiment. N0 remains an acceptance gap; other28 unexecuted cases disab
 Fresh N3 remains9/9, historical8/1 unknown hang preserved. M3 open, PR2 draft,
 no merge/next case queued, M4 untouched. Next unresolved step is retained-evidence
 startup capability-attestation diagnosis; no repair or rerun was made here.
+
+
+## 2026-11-10 — Retained N0 diagnosis: stale per-role readiness marker
+
+Diagnosed only retained evidence; no runtime/helper/gate edit, test run, Docker
+call, tuning, retry, new freeze or experiment. Evidence at
+ evidence/m3-current-n0-capability-diagnosis-2026-11-10/.
+Inherited combined Driver.robot first launches wrong-hash bridge_node, confirms
+expected exit/type-hash error, then accepts real start. Diagnostic.start wraps
+both launches with the same robot-bridge-preexec.json destination. start_bridge
+checks existence only: no marker PID/token/start_ticks or exec-phase binding.
+Thus the negative launch leaves a stale readiness file able to bypass waiting
+for the real child to reduce capabilities. This confirmed harness defect is the
+best-supported failure mechanism; the actual transient capability state is not
+captured and runtime causality remains limited, not proven privilege escalation.
+
+Retained wrong-hash.log/robot-ready.json/control.json confirm the sequence. Saved
+pre-exec PID127/zero capabilities precedes real start request by1.512270762s in
+retained filesystem mtimes, corroborative metadata rather than original hash-bound
+kernel-monotonic lifecycle trace. Real robot bridge log empty, no refreshed marker
+or robot identity; failing status/PID/start_ticks absent. Operator Name=python3
+snapshot and source predicate do not attest the execed bridge phase. No differing
+capability field, cap-drop syscall failure or later privileged execution inferred.
+N3 measure path starts one bridge per role without inherited negative-test robot
+sequence. Previous511+8 offline tests omitted that multi-launch readiness path.
+N3 nine-case PASS preserved; failed N0 remains failed/no coverage or clean shutdown.
+
+Future repair proposal only: immutable per-launch negative/positive attestation,
+current token/PID/start_ticks, atomic complete record, exact retained status and
+exec-phase distinction; stale/wrong-PID/partial/pre-drop/exit/phase regression
+controls before separately authorized calibration. Do not relax capabilities or
+substitute a fixed delay. No implementation/test/experiment authorized here.
+
+Frozen source/inputs/current14/native87 and prior raw/public indexes verify,
+including64 failed N0 artifacts and1,092 fresh N3 artifacts. Diagnosis input/public
+hashes and small retained record copies published; old artifacts unchanged.
+Other28 stages stay disabled, M3 open/PR2 draft/M4 untouched; no next case queued.

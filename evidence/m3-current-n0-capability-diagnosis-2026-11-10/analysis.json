@@ -1,0 +1,117 @@
+{
+  "status": "retained_evidence_diagnosis_complete_to_observation_limit",
+  "classification": "stale_per_role_preexec_marker_allows_premature_current_child_attestation",
+  "runtime_root_cause_proven": false,
+  "observed_failure": "robot startup require_role rejects one or more capability fields",
+  "confirmed_harness_defects": [
+    "Diagnostic.start wraps every bridge_node including the deliberate wrong-hash negative launch",
+    "all robot bridge launches share robot-bridge-preexec.json",
+    "negative launch completes and is removed from process list before the real start request",
+    "start_bridge tests file existence without reading its PID, launch token, start_ticks or exec phase",
+    "saved preexec marker precedes real start request; no fresh real-child marker retained",
+    "operator identity Name=python3 demonstrates readiness does not require the execed bridge phase"
+  ],
+  "best_supported_failure_mechanism": "stale negative-launch marker bypassed readiness wait; immediate status check could see current child before capability reduction",
+  "inference_limits": [
+    "failing /proc status values and actual current robot child PID/start_ticks were not saved",
+    "cannot prove which capability field differed or exact scheduler/exec transition",
+    "no observation of later privileged bridge operation or failed reduction syscall",
+    "retained filesystem mtimes corroborate ordering but are not kernel-monotonic lifecycle trace"
+  ],
+  "retained_facts": {
+    "negative_log": "bridge startup failed: ROS type hash mismatch",
+    "negative_ready": {
+      "source_samples": 27,
+      "wrong_hash_rejected": true
+    },
+    "real_request": {
+      "sequence": 1,
+      "action": "start"
+    },
+    "saved_robot_preexec": {
+      "pid": 127,
+      "permissions": {
+        "Name": "python3",
+        "Pid": "127",
+        "PPid": "75",
+        "Uid": "0\t0\t0\t0",
+        "Gid": "0\t0\t0\t0",
+        "CapInh": "0000000000000000",
+        "CapPrm": "0000000000000000",
+        "CapEff": "0000000000000000",
+        "CapBnd": "0000000000000000",
+        "CapAmb": "0000000000000000",
+        "NoNewPrivs": "1",
+        "Seccomp": "2",
+        "Seccomp_filters": "1"
+      }
+    },
+    "operator_identity": {
+      "pid": 112,
+      "start_ticks": 882,
+      "state": "R",
+      "permissions": {
+        "Name": "python3",
+        "Pid": "112",
+        "PPid": "76",
+        "Uid": "0\t0\t0\t0",
+        "Gid": "0\t0\t0\t0",
+        "CapInh": "0000000000000000",
+        "CapPrm": "0000000000000000",
+        "CapEff": "0000000000000000",
+        "CapBnd": "0000000000000000",
+        "CapAmb": "0000000000000000",
+        "NoNewPrivs": "1",
+        "Seccomp": "2",
+        "Seccomp_filters": "1"
+      },
+      "monotonic_ns": 8978900878,
+      "boot_id": "a9547da4-4092-4a3e-b1af-ce17c409e173",
+      "time_namespace_offsets": "monotonic           0         0\nboottime            0         0\n"
+    },
+    "filesystem_metadata": {
+      "robot-bridge-preexec.json": {
+        "bytes": 328,
+        "mtime_ns": 1794305598573280450
+      },
+      "wrong-hash.log": {
+        "bytes": 46,
+        "mtime_ns": 1794305598889918123
+      },
+      "robot-ready.json": {
+        "bytes": 58,
+        "mtime_ns": 1794305599052758960
+      },
+      "control.json": {
+        "bytes": 41,
+        "mtime_ns": 1794305600085551212
+      },
+      "robot-bridge-1.log": {
+        "bytes": 0,
+        "mtime_ns": 1794305600135636896
+      },
+      "robot-failure.json": {
+        "bytes": 1056,
+        "mtime_ns": 1794305600154996920
+      }
+    },
+    "marker_to_real_control_ns": 1512270762
+  },
+  "proposed_future_repair_only": [
+    "separate negative-test and positive-launch readiness records using immutable per-launch identity/token",
+    "require valid atomic complete attestation for exact current child and PID/start_ticks before evaluating capability snapshot",
+    "retain one exact status snapshot and identity/phase at failure; do not read then discard",
+    "distinguish capability-reduced wrapper readiness from execed bridge readiness",
+    "add offline stale-marker, wrong-PID, partial-record, pre-drop, child-exit and post-exec phase regression controls before considering a separately authorized live run"
+  ],
+  "no_runtime_or_harness_modification": true,
+  "no_tuning": true,
+  "no_retry": true,
+  "no_new_experiment": true,
+  "no_new_test_or_fixture": true,
+  "remaining_campaign_cases_disabled": 28,
+  "N0_status": "failed_startup_no_coverage",
+  "fresh_N3_status": "9/9 unchanged",
+  "historical_failures_preserved": true,
+  "M3_complete": false
+}
