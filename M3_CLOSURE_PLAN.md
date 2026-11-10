@@ -1,5 +1,13 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [explicit-identity N0 attempt](evidence/m3-current-n0-bound-execution-2026-11-10/README.md)
+passes initial identity/capability readiness but fails the planned warmup reset:
+replacement robot exits1 with cannot create shutdown trace. The retained trace
+path belongs to its prior launch and is reused despite O_EXCL creation. No300s
+measurement or observer; one case/no tuning/retry, all28 other stages disabled.
+Cleanup and frozen integrity verify; N0 remains unqualified, M3 open/PR2 draft.
+
+
 The [explicit-identity N0 freeze](evidence/m3-current-n0-bound-preparation-2026-11-10/README.md)
 is prepared for exactly seed1701/300s. Freeze66f21a2916b9 binds the intended helper
 path/SHA, verified harness, unchanged matched build and retained evidence. It is

@@ -5192,3 +5192,42 @@ Public package hashes/readiness/postflight/logs published; both failed N0 attemp
 old freezes and N3 outcomes immutable. Corrected combined live path remains
 unvalidated, N0 unqualified pending separate explicit live authorization/gates.
 Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued, M4 untouched.
+
+
+## 2026-11-10 — Explicit-identity N0 fails warmup trace creation; no retry
+
+Exact user grant for new66f21a2916b9 freeze/N0-combined-1701/300s recorded in
+ evidence/m3-current-n0-bound-execution-2026-11-10/. Unchanged driver invoked once,
+exit1, one failed row/no passing coverage. Stop first failure, no tuning/automatic
+retry, all28 other IDs disabled and completed N3 excluded. No code/helper/gate/
+build or policy change; prior failures immutable.
+
+Identity-helper fix passes registration/startup. Four unique pre-exec launches
+(operator, wrong-hash negative robot, initial robot, planned warmup robot reset)
+retain bound helper SHA/private module/ppid/name and zero caps/NNP1. Operator and
+replacement robot parent identity exports retain bound helper/zero caps. Negative
+type-hash test passes; warmup initial robot PID141 exits0/unforced with51stages.
+The existing reset_link warmup transition then starts PID177, whose complete log
+says cannot create shutdown trace; exits1 in fresh-link readiness wait. Last
+control sequence3 reset_link; measurement-start absent. These launches are one
+planned case, not automatic retries; no extra case/reset after failure.
+
+Retained source: Benchmark gives every robot launch robot-shutdown-stages.jsonl;
+reset_link stop/start reuses it; ShutdownTrace requires O_CREAT|O_EXCL. Existing
+trace contains PID141, replacementPID177 fails creation. Exact open errno not
+logged, no syscall reconstruction/experiment. No trace-path or gate repair here.
+No fullresults/end-release/observerready/strictassessment; no observer started,
+N0measurement or final shutdown qualification. Warmup0 exit is partial evidence.
+Secondary endpoint_measurements/capture/final-command/provider errors retained.
+
+Owned normal/emergency cleanup recorded, final independent Docker metadata
+confirms lab containers/network/observer/volume absent and credential deleted.
+No complete clean-child claim. Source/input/explicit harness/current14/preserved13/
+fullchain/native87 and preparation/old raw/public indexes unchanged.74 newrawfiles/
+703,520bytes indexed, public four launch records/identities/traceback/exit/stages/
+child/cleanup and authorization/provenance retained. No tests/nativebuild duringrun.
+
+No retry/newfreeze/further experiment. Future trace-lifecycle repair would need
+per-launch paths and matching assessment; not implemented/authorized here. N0
+unqualified, N3 original/new outcomes preserved, other28 stages disabled, M3 open,
+PR2 draft, no merge/next case queued and M4 untouched.
