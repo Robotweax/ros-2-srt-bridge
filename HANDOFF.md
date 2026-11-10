@@ -4489,3 +4489,45 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   with regression control/new freeze, not a runtime tuning change. No automatic
   follow-up authorization or attempt. OriginalN3 8PASS/1FAIL, all29disabled,
   M3open/PR2draft/M4untouched; no two-loss4211/expiry/replay/commands.
+
+
+### 2026-11-10 — Capability-name correction; new N0 diagnostic lifecycle gate FAIL
+
+- User authorizes narrow capability validation fix/regression and one new frozen
+  N0seed1701/10s attempt, first failed gate stops, no tuning/two-loss4211, all29
+  remaining cases disabled. Copied evidence-local harness preserves old scripts/
+  freeze/109raw records. Sidecar normalizes optional CAP_ before exactSYS_ADMIN
+  set check; all other isolation gates unchanged. Three regression controls use
+  retained Docker policy, both spellings/no mutation, missing/wrong/extra caps,
+  and each other isolation mismatch. All478Python PASS before freeze; no overlap.
+- New freeze ef3b21177073, matched13/preserved builds, exact calibrated observer
+  policy/image/helper/runtime and all prior raw indexes verify. No SDK/ROS/native
+  rebuild or production-source/filter/budget change. Separate exact authorization
+  permits one new output .local/bridge-shutdown-capability-fix-20261110T075305613021Z.
+- Capability/config gate nowPASS; native observer entry/preexec/exec/ready before
+  SIGINT with exactidentity/sharedclock/capsNNPseccomp. RootbridgePID141 and plain
+  journalworkerPID157 observed. Three samples/28nonempty stacks/0denials; initial
+  23bridge+1worker reads, then1containedpostsignal sample with4bridge stacks and
+  worker gone_or_reused, finalsample afterrootreap. No truncation/budgetfailure,
+  complete all_owned_processes_gone footer, observerexit0/unforced.
+- FIRST FAIL at unchanged coverage assessor: live target observation incomplete.
+  It rejects every registered non-sampled process before rootreap, including that
+  workergone row. Actual worker_join_end34558644098ns precedes samplebegin
+  34697387390ns, consistent with ordinary workerexit during teardown. Raw status
+  conflates gone/reused, so no unique PIDreuse/crash assertion or retrospective
+  gate waiver. No postfailure source/rule change, fallback or furtherattempt.
+- Underlying SENSOR adapterPASS retained separately; finaldiagnosticFAIL/exit1.
+  Later diagnostic full-stage checks not reached. Operator exits0/unforced
+  221.450875ms, robotbridge320.953167ms, source167.404875ms; original5swait unchanged.
+  Real kernel capture works on this root; full lifecycle acceptance stillFAIL.
+  Originalfaultedhang not reproduced/attributed; no userspace/GDB/overhead claim.
+- Two lab containers+observer/network/outputvolume removed/absent, credential
+  deleted, allsupervisedchildren/observerreaped noforce. New source/input/helper/
+  matched13/preserved chain and all old indexed raw records match postflight.
+  116closedlocal artifacts hash-indexed; source/profile notedited afterattempt.
+- Evidence evidence/m3-bridge-shutdown-capability-fix-2026-11-10 includesPLAN,
+  regression/fulltests, newfreeze/auth/preflight, exactobserverJSONL/caps/ready/
+  exec/stage/child/policy, both result statuses, gate/postflight/rawindex. Next
+  prerequisite is separately reviewed owned-worker exit versus PIDreuse lifecycle
+  handling using retained join/stack evidence; no automaticfix/rerun. OriginalN3
+  8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.

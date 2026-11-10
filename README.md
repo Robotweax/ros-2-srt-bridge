@@ -1,12 +1,12 @@
 # ROS 2 SRT Bridge
 
-The [single authorized N0 bridge shutdown diagnostic](evidence/m3-bridge-shutdown-diagnostic-2026-11-10/README.md)
-ran once on seed1701/10s and stopped at observer configuration validation: Docker
-returns CAP_SYS_ADMIN, while the prepared check literally expects SYS_ADMIN.
-Observer was created but never started; no stacks. Both bridges exited0/unforced
-during cleanup, and all owned objects/credential are removed. No fix, tuning or
-retry followed. All29 campaign cases stay disabled, original N3 remains8 PASS/
-1 FAIL, M3 open, PR2 draft and M4 untouched.
+The [capability validation correction and new N0 diagnostic](evidence/m3-bridge-shutdown-capability-fix-2026-11-10/README.md)
+pass the capability gate with478 tests and one new seed1701/10s freeze. Observer
+captures28 successful kernel stacks, but the diagnostic stops at the unchanged
+coverage gate when a registered worker is gone_or_reused after worker_join_end.
+Both bridges exit0/unforced; cleanup and evidence integrity pass. Overall FAIL
+is preserved without gate changes or another attempt. No tuning/two-loss4211;
+all29 campaign cases stay disabled, M3 open, PR2 draft and M4 untouched.
 
 
 The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
