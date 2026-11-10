@@ -11,6 +11,14 @@ blocked target exited0 and the capability container/volume were removed. No retr
 production tuning or two-loss4211 run; all29 campaign cases remain disabled.
 
 
+The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
+then failed before Python entry: OCI reports fstatfs operation not permitted while
+reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
+ARM64/native-policy selection and explicit exec diagnostics are implemented,
+but runtime compatibility and stack access remain unqualified. Stop at that gate:
+zero blocked targets launched, no retry/tuning, readiness container/volume removed.
+All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+
 Selective WAN bridge for ROS 2: Robotweax SRT SENSOR carries current small
 samples; CONTROL carries acknowledged application commands.
 

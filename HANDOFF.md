@@ -4339,3 +4339,33 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   orlaunched now. Prioroff/healthy-stage/waitsamplingPASS retained, prior22stack
   readsdeniedFAIL unchanged, thissetupFAIL separate. Stackaccess uncalibrated,
   originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Native observer filtering; OCI readiness FAIL before target
+
+- User authorized architecture-compatible observer filtering, explicit pre-exec
+  diagnostics and only blocked-thread calibration. Predeclared exactly one
+  native readiness check, then one unchanged target only if readiness passed.
+- tools/m3_observer_filtering.py selects daemon-native named allowlist/default
+  deny; rejects emulated observers. ARM64 observer pinned ROS digest, original
+  amd64 target/13 matched entries untouched. No SDK/ROS rebuild or tuning.
+- Native observer sidecar alone configured SYS_ADMIN/NNP/custom filter, minimal
+  RO bundle/root, private output volume/network-none. Planned target/supervisor
+  capability sets including bounding zero; private-PID join only. No SYS_PTRACE,
+  host namespace/socket, privileged/unconfined or global permission change.
+- Explicit launcher stages, errno/type/message/traceback and execv replace
+  preexec_fn. Docker stderr/State.Error cover pre-interpreter failures. Offline
+  467 tests PASS, including four policy and two error-path controls, before freeze.
+- Exactly one readiness attempt: OCI exit1, 'reopen exec fifo: get safe
+  /proc/thread-self/fd handle: fstatfs fsmount:fscontext:proc: operation not
+  permitted'. Frozen allowlist omits fstatfs. No Python entry or observer ready;
+  cannot claim the single missing call is the entire bootstrap gap. Zero blocked
+  target runs, no policy relaxation or retry after the first failed gate.
+- Readiness container/output volume removed/absent. Sources/helper/profile and
+  full preserved build chain match freeze; original 913 N3 raw files, 219 older
+  calibration artifacts and previous permission attempt unchanged. Raw evidence
+  and helper bundle indexed under evidence/m3-observer-native-filter-2026-11-10.
+- Native selection implemented; runtime filter compatibility/stack access still
+  unqualified. Next prerequisite is offline OCI-bootstrap syscall review and a
+  separate frozen readiness check. No next attempt queued. Original N3 8PASS/1FAIL,
+  unknown hang cause; all29 remaining campaign cases disabled/M3open/PR2draft/M4untouched.

@@ -18,8 +18,17 @@ sampling, but fails kernel-stack access (22 denied post-signal reads). No two-lo
 4211 retry or permission change occurred. Stack capture remains uncalibrated;
 all29 remaining campaign cases remain disabled and no corrective patch/experiment is queued.
 A later scoped-permission blocked-target attempt failed before observer arming;
-native-x86 filter/ARM64 daemon compatibility remains unresolved. No retry followed;
+the old native-x86 filter/ARM64 daemon path remains unqualified. No retry followed;
 its capability container and output volume were removed.
+
+The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
+then failed before Python entry: OCI reports fstatfs operation not permitted while
+reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
+ARM64/native-policy selection and explicit exec diagnostics are implemented,
+but runtime compatibility and stack access remain unqualified. Stop at that gate:
+zero blocked targets launched, no retry/tuning, readiness container/volume removed.
+All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+
 
 ## 1. One candidate, with a concrete coverage ledger
 

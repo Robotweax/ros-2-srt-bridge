@@ -1,5 +1,14 @@
 # Delivery focus — 2026-11-09
 
+The [native observer readiness check](evidence/m3-observer-native-filter-2026-11-10/README.md)
+then failed before Python entry: OCI reports fstatfs operation not permitted while
+reopening its exec FIFO; the frozen native allowlist omits fstatfs. The new
+ARM64/native-policy selection and explicit exec diagnostics are implemented,
+but runtime compatibility and stack access remain unqualified. Stop at that gate:
+zero blocked targets launched, no retry/tuning, readiness container/volume removed.
+All 29 campaign cases stay disabled; M3 open, PR2 draft and M4 untouched.
+
+
 The authorized [frozen N3 cohort](evidence/m3-n3-frozen-cohort-2026-11-09/README.md)
 finished with8 strict passes and a final-case shutdown FAIL: the operator bridge
 exceeded its5s SIGINT wait and required forced kill. No retry or tuning; all29
