@@ -1,5 +1,13 @@
 # M3 acceptance review — 2026-11-09
 
+The [N4 assessor JSON fix](evidence/m3-current-n4-assessor-json-fix-2026-11-10/README.md)
+is verified offline:10 regressions,20 preparation tests and511 existing tests PASS.
+The separate candidate normalizes recomputed crash proofs at the JSON boundary;
+all17 retained started cases reassess consistently, while the original failure
+reproduces. Original live result remains16 PASS/1 FAIL/2 NOT EXECUTED. No live
+run, Docker call, build, new freeze/grant, tuning or retry; two remaining N4 and
+nine other unexecuted cases stay disabled. M3 open/PR2 draft/M4 untouched.
+
 The [current-build N4 execution](evidence/m3-current-n4-execution-2026-11-10/README.md)
 stopped at the first failed gate: **16 PASS / 1 FAIL / 2 NOT EXECUTED**. All13
 native and3 ROS freshness cases pass; crash-before-admission fails strict audit

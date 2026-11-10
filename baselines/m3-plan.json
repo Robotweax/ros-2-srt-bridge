@@ -1776,7 +1776,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Current-build N4 stopped at first failed strict gate:16PASS (13native+3ROSfreshness),1FAIL crash-before audit int/string JSON key mismatch,2not-executed. Preserve failure; offline assessor serialization fix/regressions next. No tuning, automatic retry, remaining N4/N1/N2/N5 execution, M3 acceptance, merge or M4 start.",
+  "current_priority": "N4 assessor JSON boundary fix verified offline:10 regression+20 preparation+511 existing tests PASS;17 retained cases consistent with candidate, original assessor failure reproduced. Original live result16PASS/1FAIL/2not-executed preserved. Candidate not selected by live driver; separate future freeze/preparation needed. No tuning, automatic retry, remaining N4/N1/N2/N5 execution, M3 acceptance, merge or M4 start.",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4311,5 +4311,35 @@
       "N4-ROS-crash-effect",
       "N4-ROS-crash-committed"
     ]
+  },
+  "current_build_n4_assessor_json_fix": {
+    "status": "offline_fix_and_retained_verification_passed",
+    "new_regression_tests": 10,
+    "prepared_N4_tests": 20,
+    "existing_tests": 511,
+    "retained_started_cases_consistent": 17,
+    "original_assessor_failure_reproduced": true,
+    "original_live_results_unchanged": {
+      "passed": 16,
+      "failed": 1,
+      "not_executed": 2
+    },
+    "frozen_sources_inputs_builds_fixture_and_retained_archives_verified": true,
+    "live_cases_run": 0,
+    "Docker_calls": 0,
+    "builds": 0,
+    "new_freeze": false,
+    "new_authorization": false,
+    "no_tuning": true,
+    "no_automatic_retries": true,
+    "remaining_N4_cases_disabled": 2,
+    "other_unexecuted_cases_disabled": 9,
+    "completed_cases_excluded": 10,
+    "M3_complete": false,
+    "evidence": "evidence/m3-current-n4-assessor-json-fix-2026-11-10/README.md",
+    "candidate_binding": "evidence/m3-current-n4-assessor-json-fix-2026-11-10/assessor-binding.json",
+    "candidate_assessor_sha256": "dd1fa84dc1ed576ee607c78e584002662575af19ce1f3e19d479f87e1257671e",
+    "original_failed_run_preserved": true,
+    "candidate_bound_to_live_driver": false
   }
 }

@@ -5486,3 +5486,33 @@ archives/preparation publicindex verify. Complete1018 rawfiles/28,981,196bytes
 hash-bound; publicproofs/failurecomparison/logs/gatereport in executionpackage.
 No build/test/tuning or otherstage overlap; old freezes/failures immutable.
 Next: offline serializationfix/regressions, not automatic rerun or newgrant.
+
+
+## 2026-11-10 — N4 crash proof JSON boundary fixed offline
+
+The [N4 assessor JSON fix](evidence/m3-current-n4-assessor-json-fix-2026-11-10/README.md)
+is verified offline:10 regressions,20 preparation tests and511 existing tests PASS.
+The separate candidate normalizes recomputed crash proofs at the JSON boundary;
+all17 retained started cases reassess consistently, while the original failure
+reproduces. Original live result remains16 PASS/1 FAIL/2 NOT EXECUTED. No live
+run, Docker call, build, new freeze/grant, tuning or retry; two remaining N4 and
+nine other unexecuted cases stay disabled. M3 open/PR2 draft/M4 untouched.
+
+Evidence-local candidate assess.py changes only crash proof representation:
+json.loads(json.dumps(check_crash(...),allow_nan=False)) before saved-proof equality.
+No frozen or baseline file edited. No proof fields removed, changed semantics,
+waiver, replay/expiry authority or journal outcome substitution. Original phase,
+provenance/outcome/deadline/onehandoff/crash/shutdown/cleanup remain unchanged.
+
+10 regression methods reproduce oldfailure and persisted comparisons for all3
+modes (synthetic effect/committed proof boundaries only), actual trace schema,
+changed/missing/extra/reordered evidence refusal, exception/inner/shutdown refusal,
+nonfinite refusal and returnedproof stability.20 original preparation and511
+existing tests also PASS. Actual offline candidate reassessment over all17 retained
+outputs passes; oldassessor stillfails ROS crash audit differs. Source/build/full
+chain/native87/fixture37/alloldrawpublic/priorpreparation/execution index checks
+pass before/after; originalcohort/17strictdecisions unchanged. No new liveacceptance.
+
+No executiondriver/newfreeze/grant in candidatepackage, no Docker/build/livecase.
+Future liveuse requires explicit separate preparation binding exact candidateSHA;
+oldstoppeddriver cannot silently select it. No automatic resume/retry or laterstage.
