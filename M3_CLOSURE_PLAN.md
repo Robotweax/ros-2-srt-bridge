@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+The [explicit socket-disposition diagnostic](evidence/m3-socket-disposition-2026-11-10/README.md)
+passes one new N0/seed1701/10s run on an isolated matched SDK/ROS build. All491
+Python tests and the native trace contract pass. Robot explicitly reports four
+already-invalid final slots; operator closes four traced handles with return0.
+Lifecycle/stage/SENSOR/capture/cleanup gates pass. Old failures and original
+N3 8PASS/1FAIL remain unchanged; no tuning/two-loss4211 or stage advancement,
+all29 remaining campaign cases disabled, M3 open/PR2 draft/M4 untouched.
+
+
 The [retained robot socket-marker diagnosis](evidence/m3-robot-socket-close-diagnosis-2026-11-10/README.md)
 finds an instrumentation/gate mismatch: socket-close markers require a valid
 handle during local shutdown, but the gate requires them for every role. All8

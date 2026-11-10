@@ -23,5 +23,20 @@ int main(){
     std::ifstream log(file);std::string line;std::set<std::uint64_t> seq;unsigned lines=0;
     while(std::getline(log,line)){++lines;check(line.size()<384&&line.front()=='{'&&line.back()=='}');const auto start=line.find("\"sequence\":")+11;seq.insert(std::stoull(line.substr(start)));check(line.find("\"point\":\"unit_stage\"")!=std::string::npos);}
     check(lines==ShutdownTrace::limit&&seq.size()==lines&&*seq.begin()==1&&*seq.rbegin()==ShutdownTrace::limit);
+    {
+        const auto path=root/"socket.jsonl";auto trace=std::make_shared<ShutdownTrace>(path.string());int calls=0;
+        check(shutdown_socket_close({},17,true,[&]{++calls;return 0;})==0&&calls==1);
+        check(trace->attempted()==0);
+        check(shutdown_socket_close(trace,17,false,[&]{++calls;return -1;})==-1&&calls==2);
+        check(trace->attempted()==0);
+        shutdown_stage(trace,"control_fd_disposition",-1); // explicit already-invalid slot
+        check(shutdown_socket_close(trace,19,true,[&]{++calls;return 0;})==0);
+        check(shutdown_socket_close(trace,20,true,[&]{++calls;return -1;})==-1&&calls==4);
+        check(trace->attempted()==7&&trace->dropped()==0);trace.reset();
+        std::ifstream socket_log(path);std::string contents((std::istreambuf_iterator<char>(socket_log)),{});
+        check(contents.find("\"point\":\"control_fd_disposition\",\"detail\":-1")!=std::string::npos);
+        check(contents.find("\"point\":\"socket_close_result\",\"detail\":0")!=std::string::npos);
+        check(contents.find("\"point\":\"socket_close_result\",\"detail\":-1")!=std::string::npos);
+    }
     std::filesystem::remove_all(root);std::cout<<"PASS default-off, exclusive output, concurrent records and bounded loss accounting\n";
 }

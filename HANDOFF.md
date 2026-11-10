@@ -4613,3 +4613,48 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   prospective run prepared/queued/authorized by this analysis. Evidence under
   evidence/m3-robot-socket-close-diagnosis-2026-11-10; priorN0 stageFAIL unchanged,
   originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Explicit socket dispositions/results; new bounded N0 diagnostic PASS
+
+- User authorizes explicit socket tracing/matching gates/regressions and one new
+  N0seed1701/10s freeze, stop firstfailedgate, no tuning/two-loss4211, all29disabled.
+- Native transport emits control/sensor data/listener fd dispositions unconditionally
+  at final sweep. -1alreadyinvalid; validfd actualclosebracket includes original
+  srt_close return. Header helper callscloseexactlyonce/preservesresult, same
+  runtimeinvalidation/count/order; no queue/clock/rate/crypto/retry/5swait change.
+  One observation decision perclosecall avoids partial diagnosticflag races.
+- Matching gate demands4unique correctlyphased/threaded dispositions, validfd
+  close/result0/end, no orphan/missing/duplicate/wrongfd/thread/phase/drops. All
+  common stages retained; positive already-invalid evidence replaces unconditional
+  socketpresence. Record sequence population not concurrentfilewriteorder; same
+  threadjoin/close order stillstrict.7newPython regression controls/full491PASS;
+  extendednativefile tracecontractPASS defaultoff/onecall/success/erroroutcomes.
+- Separate Release SDK build/install bridge-socket-disposition and ROS3packages
+  m3-socket-disposition-ros in unchanged pinnedamd64image/networknone/provider.
+  Matched14 inventory includes nativecontractbinary/provider; oldshutdown13/full
+  earlierchain verifiedpreserved. OnlyexpectedmessagesCMakeunusedSDK/SRTvarwarning.
+  No olderprefixoverwrite. Evidence-localruntimeverifier; scenarioaddsnewROSchoice
+  withoutdefaultchange, no generalcampaignadapter/IPC4 --worker-ipc-v3 change.
+- Freeze bc59e3d73dc0, exactauth, one output
+  .local/socket-disposition-20261110T082437633698Z. No heavychecks/build overlap.
+  Observer calibratednativeimage/policy/permissions/budgets unchanged, operatoronly.
+- FINAL PASS: operator59/robot43zero-drop stages, all lifecycle/common/slot/result
+  gates. Robot4slots explicit-1/no locallytracedclose. Operator datafdslots-1 at
+  finalsweep with2earliersessionstop closes,2listeners validclosedthen; all4close
+  returns0. No inference about pre-stopclose outcome/everyhandleleakfreedom, no
+  retrospective promotion of missingmarkersFAIL. Observer27nonemptyreads/0denied,
+  1containedpostsignal sample, registeredworker exit proof andboundedfooterPASS.
+- Strict SENSOR accounting/capturePASS:10.054288796s,200.014147/50.028402Hz,
+  zerosourceskips, sixbalances0, ageuppermax69/80ms.2514produced2394observed,
+  120accounted upstream/admission/replacement/publication/observer-stage differences.
+  Latest-only delivery, not lossless/physicalage/N3 qualification or generalcompare.
+- Operator exits0/unforced215.842500ms, robotbridge326.124084ms, source165.464791ms;
+  original5swaits. Allcontainers/network/volume removed/absent, credentialdeleted,
+  noforcedcleanup. Source/input/new14/old13/provider/fullchain/previousrawindexes
+  matchpostflight;116newrawfileshashed. Both adapter/finalassessmentPASS/driver0.
+- Evidence evidence/m3-socket-disposition-2026-11-10 has source/build recipe,
+  native/Pythonvalidation, manifests/newfreeze/auth/PLAN, exactslot/outcome/stage/
+  observer/child/capture/proofs, gate/postflight/index. One-shotconsumed; no further
+  runqueued. OriginalN3 8PASS/1FAIL/unknownhang retained, no4211retry/tuning/expiry/
+  replay/all29disabled/M3open/PR2draft/M4untouched.

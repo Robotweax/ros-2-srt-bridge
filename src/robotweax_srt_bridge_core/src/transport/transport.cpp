@@ -222,11 +222,10 @@ struct TransportOwner::Impl {
     }
     void close_fd(SRTSOCKET& fd){
         if(fd!=SRT_INVALID_SOCK){
-            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_epoll_remove_begin",fd);
+            const bool observing=stopping.load()||shutting_down;
+            if(observing)shutdown_stage(config.shutdown_trace,"socket_epoll_remove_begin",fd);
             srt_epoll_remove_usock(epoll,fd);
-            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_close_begin",fd);
-            srt_close(fd);
-            if(stopping.load()||shutting_down)shutdown_stage(config.shutdown_trace,"socket_close_end",fd);
+            shutdown_socket_close(config.shutdown_trace,fd,observing,[&]{return srt_close(fd);});
             fd=SRT_INVALID_SOCK;
         }
     }
@@ -705,7 +704,9 @@ struct TransportOwner::Impl {
             shutdown_stage(config.shutdown_trace,"transport_session_stop_begin");
             apply(session.stop());shutdown_stage(config.shutdown_trace,"transport_session_stop_end");queues.stop();links[0].retry.cancel();links[1].retry.cancel();
             for(unsigned i=0;i<2;++i){auto& link=links[i];
-                shutdown_stage(config.shutdown_trace,i?"sensor_close_begin":"control_close_begin");close_fd(link.fd);close_fd(link.listener);
+                shutdown_stage(config.shutdown_trace,i?"sensor_close_begin":"control_close_begin");
+                shutdown_stage(config.shutdown_trace,i?"sensor_fd_disposition":"control_fd_disposition",link.fd);close_fd(link.fd);
+                shutdown_stage(config.shutdown_trace,i?"sensor_listener_disposition":"control_listener_disposition",link.listener);close_fd(link.listener);
                 shutdown_stage(config.shutdown_trace,i?"sensor_close_end":"control_close_end");
             }
             shutdown_stage(config.shutdown_trace,"epoll_release_begin");

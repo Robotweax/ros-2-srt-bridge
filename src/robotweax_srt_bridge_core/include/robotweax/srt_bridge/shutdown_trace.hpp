@@ -47,4 +47,13 @@ public:
     }
 };
 inline void shutdown_stage(const std::shared_ptr<ShutdownTrace>& trace,const char* point,long detail=0)noexcept{if(trace)trace->stage(point,detail);}
+// Bracket exactly one close call; diagnostic output never changes its result.
+template<class Close>
+inline int shutdown_socket_close(const std::shared_ptr<ShutdownTrace>& trace,long fd,bool observing,Close close){
+    if(observing)shutdown_stage(trace,"socket_close_begin",fd);
+    const int result=close();
+    if(observing){shutdown_stage(trace,"socket_close_result",result);shutdown_stage(trace,"socket_close_end",fd);}
+    return result;
+}
+
 }
