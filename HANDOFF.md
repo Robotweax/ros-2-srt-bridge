@@ -4812,3 +4812,44 @@ and comparison limits remain. This plan creates no waiver or merge permission.
   do not infer same-instrumentation-free overhead or a deterministicfix. Original
   N3 8PASS/1FAIL/unknownhang and alloldFAILs/raw preserved, no passingsplice,
   all29disabled/M3open/PR2draft/M4untouched. No automaticexperiment queued.
+
+
+### 2026-11-10 — Fresh strict nine-case N3 cohort prepared only; execution disabled
+
+- User requests freshstrict9N3 onmatchedbuild withtracing/observer, doNOT runyet,
+  no tuning/automaticretries, firstfailedgate stops, allremainingstagesdisabled.
+  No grantfile/cohortcase/bridge/source/capture/observer/fault/nativefixture/build/
+  Dockerobject/networkmutation started. Read-onlymetadata/hashes/localROhelpers.
+- Fixed historicalseed-major order: baseline/one/two losses1701 cases1..3,
+  2903cases4..6,4211cases7..9, all30s. Baseline no selector; one msg8 row1pos3,
+  two msgs7/8pos2/3; freshbinding/ISN/socket/tuple/counters/credential/journal/
+  lab/observer eachcase. No isolatedsinglePASS or olderprefixcredit/splice.
+  All29later IDs explicitlybound/notdispatched; no general38-case controller.
+- Reuse14matchedsocket-disposition/old13/fullchain/provider/native87/capturehelpers,
+  exactcalibratedscenario/capdrop/nativeobserver/filter/lifecycle/socket gates.
+  No rebuild/parameter/IPC4 --worker-ipc-v3 change. Newmatrix/one-loss integration
+  withthistracing context offlineprepared, notliverevalidated/full9PASS.
+- Strictsource0skips/1%cadence/30..31s/modelage<=250/sixbalances0/sourceSDKtyped/
+  nativePCAPidentity/count/footer/rawreparse/faultrestoration/parity/one-repair/
+  two-gap2 gates unchanged. Stagebothroles/operator-onlydescendantstacks before
+  releaseSIGINT, exactclock/PIDstartticks/capsNNP/ready, workerENOENTjoinproof/
+  reusefail,4positivefd dispositions/results. Original5swait/budgets, noholds.
+- Caseproduction thenfullassessment includingresourceabsence/hashpostflight
+  BEFOREnextcase. Firstproduction/evidence/shutdown/cleanup/hashfailure yields
+  FAIL/laternot_executed; no repeat/resume/subset/reorder. Existingparentoutput
+  refused. Unexpectedexceptions best-effortcleanup frozenuniquecaseobserver/
+  recordedownedlabnames, preservepartialexports/forcedcleanupFAIL. No cleanup
+  exception/absence assumption canbePASS. No nextstage after9/9 or M3acceptance.
+- Newexactgrantmustlistall9ordered IDs/all29disabled IDs/freezeSHA/explicit4211/
+  historypreservation/no_tuning/no_auto_retry; oldsingle/original/fullcampaign
+  grants refused. Nonecreated. Source/input/runtime/image/native/build/oldraw/
+  unrelatedlive/oldprefixobjects checkedbeforecohort/beforecase/aftercase.
+- 511Python testsPASS (8new order/grant/legacy/no-Docker/scope/selection/stop-boundary/
+  all-nine-once/noresume/componentidentity/ownedemergencycleanup controls). Mocked
+  callbacks/selections/tempmetadata only, no nativefixtures/packetdrops. Postflight
+  confirms source/inputfreeze/14matched/old13/native87/priorrawindexesincllatest4211
+  PASS124files, output/auth/prefixobjects absent/live_cases0.
+- Package evidence/m3-strict-n3-preparation-2026-11-10 includes PLAN/cases and
+  disabledcase-plan, fixedadapter/strictassessor/sequence/cleanup, exactcomponents/
+  manifests, newfreeze/readiness/postflight/tests. HistoricalN3 8PASS/1FAIL/unknown
+  hang unchanged; no autorunqueued. All29disabled/M3open/PR2draft/M4untouched.

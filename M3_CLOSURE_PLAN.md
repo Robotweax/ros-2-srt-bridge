@@ -1,5 +1,14 @@
 # M3 acceptance closure plan — 2026-11-09
 
+A [fresh strict nine-case N3 cohort](evidence/m3-strict-n3-preparation-2026-11-10/README.md)
+is prepared offline with execution disabled: baseline/one-loss/two-loss for1701,
+then2903, then4211, each30s on the matched14-entry build with tracing and observer.
+All511 Python tests pass; no cases, faults, native builds or authorization file.
+First failed production/assessment/cleanup/hash gate stops the sequence; no resume,
+automatic retry, old-PASS credit or later-stage dispatch. All29 remaining cases
+stay disabled; historical failures/M3 open/PR2 draft/M4 untouched.
+
+
 The [single explicitly authorized seed4211/30s shutdown diagnostic](evidence/m3-two-loss-4211-execution-2026-11-10/README.md)
 passes on the frozen14-entry build: selected drops/restoration, strict SENSOR/
 capture/accounting, observer lifecycle/socket stages and cleanup all pass. Both
