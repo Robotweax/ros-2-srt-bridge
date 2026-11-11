@@ -63,6 +63,8 @@ Maintained by **Robotweax GmbH** — [info@robotweax.ai](mailto:info@robotweax.a
 
 Use [GitHub Issues](https://github.com/Robotweax/ros-2-srt-bridge/issues) for general questions and reproducible bugs. Email suspected security issues privately with the subject `ROS 2 SRT Bridge security report`; include the affected commit and a minimal reproducer, with secrets and confidential payloads removed. Do not put sensitive reports or credentials in public issues.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, verification and evidence preservation, and [THIRD_PARTY.md](THIRD_PARTY.md) for dependency licenses and distribution boundaries.
+
 ## License
 
-[MIT](LICENSE), copyright 2026 Robotweax GmbH and contributors. Third-party dependencies retain their respective licenses.
+[MIT](LICENSE), copyright 2026 Robotweax GmbH and contributors. [Third-party dependencies](THIRD_PARTY.md) retain their respective licenses.
