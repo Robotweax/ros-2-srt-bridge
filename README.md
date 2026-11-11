@@ -8,7 +8,7 @@ SENSOR uses bounded, latest-sample queues with freshness checks. CONTROL uses a 
 
 - **M3 accepted within its documented simulator/build scope:** 38 distinct planned case IDs have passing evidence across separate freezes and harness revisions. Historical failures and intent 118 UNKNOWN remain preserved.
 - [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2), [MIT licensing PR4](https://github.com/Robotweax/ros-2-srt-bridge/pull/4) and [disclosure-review PR5](https://github.com/Robotweax/ros-2-srt-bridge/pull/5) are merged.
-- Source-publication preparation is in progress; the repository remains private. The owner chose to [retain the reviewed history and evidence](PUBLICATION_RETENTION_DECISION.md). Wiki confirmation and final publication preparation remain open.
+- Source-publication preparation is in progress; the repository remains private. The owner chose to [retain the reviewed history and evidence](PUBLICATION_RETENTION_DECISION.md). The [authenticated wiki review](PUBLICATION_WIKI_REVIEW.md) confirmed no existing pages; final publication preparation remains open.
 - **Intrinsic integration is paused.** Its separate repository and draft PR1 do not provide runtime qualification or an active M4 implementation.
 
 Start with the [formal M3 decision](M3_ACCEPTANCE_DECISION.md), [scoped acceptance](M3_SCOPED_ACCEPTANCE.md) and [disclosure review](PUBLICATION_DISCLOSURE_REVIEW.md). Acceptance applies to the exact retained simulator/build artifacts. New builds have their own provenance and do not inherit that qualification.
