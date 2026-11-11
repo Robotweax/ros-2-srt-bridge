@@ -6230,3 +6230,11 @@ Originalsnapshot1PASS1FAIL7NOT_EXECUTED immutable; sevenoldunexecuteddirsabsent,
 fresh7outputsseparate. CurrentdistinctLONGcoverage8passingIDs incloldN1/1701;
 N1/2903originalFAIL excludednotrerun/notrequalified, remainsacceptancegap. NoM3
 acceptance/merge/IntrinsicM4. PR2draft; no automaticnewfreeze/grant/extraexperiment.
+
+## 2026-11-11 — Consolidated acceptance and fresh N1 preparation
+
+The [consolidated acceptance record](evidence/m3-acceptance-consolidation-2026-11-11/README.md) maps all 38 planned M3 case IDs to retained verdicts: **37 passing IDs and the original N1/2903 strict failure**. Results span multiple freezes and harness revisions. M3 remains open; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) stays draft/unmerged. M0–M2 retain their recorded simulator acceptance; M4/Intrinsic has not started.
+
+A separate [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-preparation-2026-11-11/README.md) is **prepared, not run**, on freeze `b3609d03e5ac`. It uses the unchanged matched build and calibrated harness. No authorization grant exists; all other 37 case IDs and other campaign stages are disabled. No tuning, automatic retries, or historical failure revision is authorized. Execution must await a separate instruction and stop at the first failed gate.
+
+27 offline preparation regressions pass. Preparation performed read-only runtime/image metadata queries and verified retained hashes; the runtime was quiescent. No live workload, build, tuning, retry or authorization grant. Full freeze `b3609d03e5ac4976f04b5067df68c6b8d94b38390052217d1221c856709232bb`; future output `.local/fresh-n1-2903-qualification-20261111T084548314895Z`. The separate original failed capture and original one-pass/one-fail/seven-not-executed cohort remain immutable. See current acceptance and closure documents rather than older chronological status paragraphs.
