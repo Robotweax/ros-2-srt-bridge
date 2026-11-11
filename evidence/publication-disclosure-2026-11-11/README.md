@@ -1,0 +1,7 @@
+# Publication disclosure review evidence — 2026-11-11
+
+Current report: [PUBLICATION_DISCLOSURE_REVIEW.md](../../PUBLICATION_DISCLOSURE_REVIEW.md). Source reviewed: bridge merge 00d01e1cdb146e268bdd529dea251744f9f04735; PR4 licensing is merged. The repository remains private.
+
+scope.json binds source/ref/tool populations and review boundaries. scanner-summary.json records six offline scans and raw redacted report/log hashes; the raw files stay ignored locally. candidate-triage.json records every candidate's location/category without Secret/Match fields; both 418-finding scanner exits remain nonzero. privacy-summary.json contains counts and relative example paths, not private values. binary-review.json and capture-review.json describe read-only retained evidence inspection. remote-surfaces.json distinguishes zero inventories from disabled/unverified surfaces. preservation.json records immutable pre-review Git trees/root blobs. verification.json covers document/data/hash/scope checks; public-artifact-hashes.json binds this package and the root report, excluding itself.
+
+No credential values, extracted row data, scanner binaries, original capture bytes, owner-private inventory or raw local scanner reports are added. No existing evidence is changed or suppressed. No network/runtime campaign, build, tuning, journal recovery, history rewrite, visibility/settings change, release or Intrinsic work occurred. This review identifies publication choices and limits; it does not clear or authorize public visibility.

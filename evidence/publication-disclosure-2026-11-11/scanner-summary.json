@@ -1,0 +1,125 @@
+{
+  "tool": "Gitleaks",
+  "version": "8.30.1",
+  "platform": "darwin-arm64",
+  "official_release": "https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1",
+  "archive": {
+    "name": "gitleaks_8.30.1_darwin_arm64.tar.gz",
+    "sha256": "b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5",
+    "bytes": 7897593
+  },
+  "checksum_manifest": {
+    "name": "gitleaks_8.30.1_checksums.txt",
+    "sha256": "061476c21adaf5441516f96f185c1a4706a83cd6329b9b38762271b3d4a52fae"
+  },
+  "download_and_manifest_digests_verified": true,
+  "checksums_are_upstream_metadata_not_a_signed_build_attestation": true,
+  "configuration": {
+    "extend_useDefault": true,
+    "baseline": null,
+    "external_ignore_entries": 0,
+    "ignore_gitleaks_allow_comments": true,
+    "redact_percent": 100,
+    "max_target_megabytes": 0,
+    "timeout_seconds": 600,
+    "other_rules_allowlists_decoders": "tool bundled defaults",
+    "history_log_opts": "--all --full-history"
+  },
+  "config_sha256": "27630a96d6c55755cc37620f3933d5cab94b1eb78a726a32e11212972525d76e",
+  "offline_scans": {
+    "history": {
+      "surface": "history",
+      "exit_code": 1,
+      "finding_count": 418,
+      "rules": {
+        "generic-api-key": 418
+      },
+      "elapsed_seconds": 42.26,
+      "redacted_report_local_only": {
+        "sha256": "93962dd6f560ea84269088b16790edfdd0272a1225e8a0f52be521bf1d3a8b84",
+        "bytes": 450914
+      },
+      "log_local_only": {
+        "sha256": "4c1f2aa34478fa9d2ea652e37daf3f047eacc2149a613c36eab51bd4e3803ba1",
+        "bytes": 115
+      }
+    },
+    "snapshot": {
+      "surface": "snapshot",
+      "exit_code": 1,
+      "finding_count": 418,
+      "rules": {
+        "generic-api-key": 418
+      },
+      "elapsed_seconds": 46.29,
+      "redacted_report_local_only": {
+        "sha256": "678de715e2724b5cb6ded1dbed3dfff5c325a83a725221c5c69028929cba68d8",
+        "bytes": 374362
+      },
+      "log_local_only": {
+        "sha256": "2d183f6c527b3ea18dd2fc8879234c8287c3202234b2821d281492df76d16580",
+        "bytes": 85
+      }
+    },
+    "remote": {
+      "surface": "remote",
+      "exit_code": 0,
+      "finding_count": 0,
+      "rules": {},
+      "elapsed_seconds": 0.38,
+      "redacted_report_local_only": {
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      "log_local_only": {
+        "sha256": "abfa6d38c9adef0b849bd08ba74eba90ad5f1ec0a7982beb4aa761a73af1a0a1",
+        "bytes": 79
+      }
+    },
+    "sqlite": {
+      "surface": "sqlite-extracted-values",
+      "exit_code": 0,
+      "finding_count": 0,
+      "redacted_report_local_only": {
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      "log_local_only": {
+        "sha256": "22838e0d11ca4616f626d35b4a9ac37a3d7ad76fd46560f5f4825745eb1f068c",
+        "bytes": 81
+      }
+    },
+    "binary-strings": {
+      "surface": "all-reachable-binary-printable-ASCII-strings",
+      "exit_code": 0,
+      "finding_count": 0,
+      "bounds": "ASCII sequences of length >=6; not decryption, UTF16 or binary format exhaustiveness",
+      "redacted_report_local_only": {
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      "log_local_only": {
+        "sha256": "4848ba9811ac444fd977043ee774116ec6bf1dc882ddc3dbecf28b5a14de1426",
+        "bytes": 79
+      }
+    },
+    "commit-metadata": {
+      "surface": "all-reachable-commit-messages-author-committer-metadata",
+      "exit_code": 0,
+      "finding_count": 0,
+      "redacted_report_local_only": {
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      "log_local_only": {
+        "sha256": "31d58551e7c2d5e58798c245686d81556b6a08cb6fa454700a568b68d4151b04",
+        "bytes": 79
+      }
+    }
+  },
+  "confirmed_credentials": 0,
+  "unresolved_reported_candidates": 0,
+  "absence_of_unknown_secrets_proved": false,
+  "credential_validation_calls": 0,
+  "repo_ignore_rules_added": 0
+}
