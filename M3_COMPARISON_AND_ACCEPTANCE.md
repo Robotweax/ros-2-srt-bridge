@@ -1,6 +1,6 @@
 # Historical comparison with current acceptance reference
 
-The 2026-11-09 comparison below is retained as a dated evidence statement. Current coverage and next scope are maintained in [M3_ACCEPTANCE_REVIEW.md](M3_ACCEPTANCE_REVIEW.md). Later SRT results do not create a matched DDS comparison or remove the limitations below.
+The 2026-11-09 comparison below is retained as a dated evidence statement. Current coverage and next scope are maintained in [M3_ACCEPTANCE_REVIEW.md](M3_ACCEPTANCE_REVIEW.md); the subsequent [scoped acceptance recommendation](M3_SCOPED_ACCEPTANCE.md) is prepared with formal approval pending. Later SRT results do not create a matched DDS comparison or remove the limitations below.
 
 # M3 comparison and acceptance statement — 2026-11-09
 

@@ -1,0 +1,7 @@
+# Scoped M3 acceptance review — retained evidence only
+
+The [canonical statement](../../M3_SCOPED_ACCEPTANCE.md) recommends accepting the recorded local simulator qualification on the exact pinned instrumented build, carrying historical failures and limitations. Formal milestone approval remains pending. PR2 stays draft/unmerged, all campaign execution and M4 remain disabled.
+
+`review.py` performs only filesystem hash and JSON-verdict checks. It reverified 10,085 unique retained artifacts (4,908,067,685 bytes), 60 indexes, all 38 latest distinct passing IDs, identical 14 matched build entries and 87 native inputs across six series, and the unchanged original N1/2903 failed assessment/cohort. It also binds the historical comparison reports and failure records. No Docker calls, network experiment, native run, build, test execution, tuning, journal recovery or replay occurred. It does not reexecute raw packet validators or reinterpret historical verdicts.
+
+`source-reports.json` identifies selected review sources; `reviewed-indexes.json` binds the wider retained evidence indexes; `matched-build.json` records exact binaries/native inputs and series identities; `verification.json` records the read-only audit. `statement.json` records recommendation and authority boundaries. The public artifact index binds this review package and the canonical statement. Large original raw files remain in their previously indexed local locations, with selected proofs already public. This review does not change earlier freezes, ledgers, grants or failure evidence.
