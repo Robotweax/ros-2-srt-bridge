@@ -1,0 +1,15 @@
+# Fresh N1/2903/600s — strict PASS
+
+One invocation of freeze `b3609d03e5ac4976f04b5067df68c6b8d94b38390052217d1221c856709232bb` passed the single predeclared case; driver exit 0. Preflight was quiescent. All other 37 case IDs and campaign stages stayed disabled. No tuning, automatic retry, build, test, extra calibration or case was run.
+
+The source window was 600.123054899 seconds. All 300 attempts have matching durable successful outcomes and effects, zero UNKNOWN/unresolved/not-admitted and zero skipped slots. Maximum adjacent intent gap was 2025.902376 ms; this is an observed interval, not a universal timing guarantee.
+
+All six SENSOR conservation balances are zero. Of 150,031 produced samples, 110,605 reached the typed observer and 110,786 were published; all 39,426 missing typed observations remain itemized by the retained accounting. Maximum publication-age upper bounds are 224 ms IMU and 235 ms joints, under the unchanged 250 ms gate. Zero imbalance does not mean loss-free delivery, and these are bridge publication ages rather than physical source or typed-arrival ages. See `gate-report.json` for full populations and losses.
+
+The calibrated observer records 100 readable kernel stacks, zero unavailable reads, 19 supported task-absence observations and zero confirmed task exits. Registered worker process absence after its SDK join is separate proof. Four pre-release SDK-provider visibility samples qualified. Operator signal-end-to-reap was 172.176667 ms, exit 0 without forced termination; all positive launches passed normal shutdown checks. This does not reconstruct the original missing stack, identify the old hang cause, prove unseen thread exit causes or bound observer overhead.
+
+Strict launch/exec/clock, startup/warmup/restart, socket/stage, command/journal, real SENSOR/capture, original N1 kernel-profile readback and owned cleanup gates passed. Independent read-only final checks reverified frozen inputs, matched builds, native inputs and retained evidence indexes; runtime is quiescent, owned containers/network/observer volume absent and credential deleted.
+
+All 124 raw files (464,909,973 bytes) remain locally indexed. `cases/` holds 90 selected byte-identical exports; large packet captures, monotonic traces, full run JSON and long logs remain local-only. `export-map.json` and `local-artifact-hashes.json` document this boundary. Closed synthetic command journals are included. The original N1/2903 failure and original cohort remain byte-for-byte unchanged, and no historical directory is repopulated.
+
+`acceptance-update.json` adds this fresh pass to the retained matrix: all 38 distinct planned IDs now have passing evidence across separate freezes and harness revisions. Historical failed attempts remain failed. M3 acceptance is still a separate scoped decision; PR2 stays draft/unmerged and M4/Intrinsic stays disabled. N5 cadence/skipped-slot, DDS population/security/resources, emulation/hardware/cross-host/real-time and tracing-overhead limitations remain explicit. No general SRT-over-DDS conclusion follows.

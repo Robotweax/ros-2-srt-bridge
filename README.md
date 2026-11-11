@@ -1,10 +1,10 @@
 # ROS 2 SRT Bridge
 
-The [consolidated acceptance record](evidence/m3-acceptance-consolidation-2026-11-11/README.md) maps all 38 planned M3 case IDs to retained verdicts: **37 passing IDs and the original N1/2903 strict failure**. Results span multiple freezes and harness revisions. M3 remains open; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) stays draft/unmerged. M0–M2 retain their recorded simulator acceptance; M4/Intrinsic has not started.
+The [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-execution-2026-11-11/README.md) **passed** on one invocation of freeze `b3609d03e5ac`. The latest [acceptance update](evidence/m3-fresh-n1-2903-execution-2026-11-11/acceptance-update.json) now records passing evidence for **all 38 planned distinct M3 case IDs**, across separate freezes and harness revisions. The original N1/2903 strict failure and original one-pass/one-fail/seven-not-executed cohort remain immutable. Historical failures are not overwritten.
 
-A separate [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-preparation-2026-11-11/README.md) is **prepared, not run**, on freeze `b3609d03e5ac`. It uses the unchanged matched build and calibrated harness. No authorization grant exists; all other 37 case IDs and other campaign stages are disabled. No tuning, automatic retries, or historical failure revision is authorized. Execution must await a separate instruction and stop at the first failed gate.
+M3 remains open pending an explicit scoped acceptance decision; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) remains draft/unmerged, and M4/Intrinsic has not started. No next run or stage is enabled. No tuning or automatic retries occurred.
 
-See [acceptance review](M3_ACCEPTANCE_REVIEW.md), [closure plan](M3_CLOSURE_PLAN.md) and [delivery plan](DELIVERY_PLAN.md). The previous status chronology is [archived](evidence/m3-acceptance-consolidation-2026-11-11/prior-root-documents/README.md); the usage and implementation notes below retain their original historical context.
+See [acceptance review](M3_ACCEPTANCE_REVIEW.md), [closure plan](M3_CLOSURE_PLAN.md) and [delivery plan](DELIVERY_PLAN.md). Historical status chronology is archived under [acceptance consolidation](evidence/m3-acceptance-consolidation-2026-11-11/README.md). Usage and implementation notes below retain their original historical context.
 
 ## Run M0
 
