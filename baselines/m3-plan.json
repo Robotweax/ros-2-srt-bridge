@@ -1,6 +1,6 @@
 {
   "milestone": "M3",
-  "status": "in_progress",
+  "status": "accepted_within_documented_scope",
   "base_commit": "32c53b27839182ec45c448694c60fe1691466118",
   "base_pr": "https://github.com/Robotweax/ros-2-srt-bridge/pull/1",
   "platform": "Linux amd64 ROS Jazzy under Docker Desktop emulation",
@@ -531,14 +531,8 @@
     "actual simulator source rates with phase-preserving schedule",
     "bounded command result drain with per-row cutoff flag"
   ],
-  "pending_gates": [
-    "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
-    "N3 ROS publication/age/accounting with trusted connection identity and validated source-DATA selector",
-    "complete three-seed full-duration comparison matrix",
-    "matched-window CPU and wire-byte measurements; controlled resource comparison",
-    "further reduce and qualify strict-pacing replacements at actual 200/50 Hz; N5 command outcome qualification"
-  ],
-  "qualification": "Development evidence only; no M3 acceptance or SRT performance advantage claimed",
+  "pending_gates": [],
+  "qualification": "M3 formally accepted only within documented simulator/build scope; historical failures and all limitations attached; no general SRT/DDS superiority",
   "environment": {
     "image_reference": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
     "image_platform_id": "sha256:53b49a94ab2e46600a0037c29e2b9d5f56a7c505d6d4a3308584c007b219d268",
@@ -1776,7 +1770,7 @@
     "remaining N3 duration/fault coverage and delivery targets",
     "matched clock/security/resource comparison"
   ],
-  "current_priority": "Scoped M3 acceptance recommendation prepared; formal approval pending; PR2 draft; all execution and M4 disabled",
+  "current_priority": "M3 accepted within documented simulator/build scope; PR2 draft; all campaign execution and M4 disabled; no automatic next action",
   "n5_progress_cold_start_followup": {
     "evidence": "evidence/m3-n5-progress-2026-11-08/README.md",
     "source_commit": "57f415b",
@@ -4407,34 +4401,26 @@
   },
   "current_build_closure_coverage": {
     "N0": {
-      "passed": 1,
-      "scope": "single300s simulator case"
+      "passed": 1
     },
     "N3": {
-      "passed": 9,
-      "scope": "fresh strict30s cases; historical failure preserved"
+      "passed": 9
     },
     "N4": {
-      "passed": 19,
-      "scope": "fresh bounded native/ROS phase/freshness/crash cases; historical failure preserved"
+      "passed": 19
     },
-    "remaining_unexecuted_cases_disabled": 7,
-    "remaining_stages": [
-      "N1",
-      "N2",
-      "N5"
-    ],
-    "M3_complete": false,
-    "PR2_draft": true,
-    "M4_started": false,
     "LONG": {
-      "passed": 1,
-      "failed": 1,
-      "not_executed": 7,
-      "first_failed_case": "N1-combined-2903",
-      "failed_gate": "live target kernel stack unavailable",
-      "inner_PASS_not_promoted": true
-    }
+      "passed_distinct_ids": 9
+    },
+    "unclosed_case_slots": 0,
+    "remaining_stages": [],
+    "M3_complete": true,
+    "completion_scope": "pinned Linux amd64/Jazzy simulator under Docker emulation; native ARM64 observer where qualified; per-series harness and assessor identities retained",
+    "historical_failures_preserved": true,
+    "campaign_execution_enabled": false,
+    "enabled_case_ids": [],
+    "PR2_draft": true,
+    "M4_started": false
   },
   "current_build_long_preparation": {
     "status": "nine_current_build_N1_N2_N5_prepared_execution_disabled",
@@ -8563,10 +8549,11 @@
     ]
   },
   "current_acceptance_record": {
-    "path": "evidence/m3-fresh-n1-2903-execution-2026-11-11/acceptance-update.json",
+    "path": "baselines/m3-acceptance.json",
     "passing_distinct_ids": 38,
     "unclosed_case_slots": 0,
-    "M3_complete": false,
+    "M3_complete": true,
+    "completion_scope": "pinned Linux amd64/Jazzy simulator under Docker emulation; native ARM64 observer where qualified; per-series harness and assessor identities retained",
     "original_failure_preserved": true
   },
   "fresh_N1_2903_preparation": {
@@ -8656,5 +8643,85 @@
     "M4_enabled": false,
     "new_experiments": 0,
     "tuning": false
-  }
+  },
+  "M3_complete": true,
+  "completion_scope": "pinned Linux amd64/Jazzy simulator under Docker emulation; native ARM64 observer where qualified; per-series harness and assessor identities retained",
+  "formal_acceptance_decision": {
+    "record": "baselines/m3-acceptance.json",
+    "statement": "M3_ACCEPTANCE_DECISION.md",
+    "evidence_record": "evidence/m3-acceptance-decision-2026-11-11/decision.json",
+    "status": "accepted_within_documented_scope",
+    "formal_acceptance_granted": true,
+    "M3_complete": true,
+    "completion_scope": "pinned Linux amd64/Jazzy simulator under Docker emulation; native ARM64 observer where qualified; per-series harness and assessor identities retained",
+    "historical_failures_preserved": true,
+    "limitations_incorporated": true,
+    "campaign_execution_enabled": false,
+    "enabled_case_ids": [],
+    "PR2_keep_draft": true,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "M4_enabled": false
+  },
+  "historical_pre_acceptance_plan_fields": {
+    "qualification": "Development evidence only; no M3 acceptance or SRT performance advantage claimed",
+    "pending_gates": [
+      "DDS combined readiness/completion under N1/N2/N5 and clock/security equivalence",
+      "N3 ROS publication/age/accounting with trusted connection identity and validated source-DATA selector",
+      "complete three-seed full-duration comparison matrix",
+      "matched-window CPU and wire-byte measurements; controlled resource comparison",
+      "further reduce and qualify strict-pacing replacements at actual 200/50 Hz; N5 command outcome qualification"
+    ],
+    "current_acceptance_record": {
+      "path": "evidence/m3-fresh-n1-2903-execution-2026-11-11/acceptance-update.json",
+      "passing_distinct_ids": 38,
+      "unclosed_case_slots": 0,
+      "M3_complete": false,
+      "original_failure_preserved": true
+    },
+    "current_build_closure_coverage": {
+      "N0": {
+        "passed": 1,
+        "scope": "single300s simulator case"
+      },
+      "N3": {
+        "passed": 9,
+        "scope": "fresh strict30s cases; historical failure preserved"
+      },
+      "N4": {
+        "passed": 19,
+        "scope": "fresh bounded native/ROS phase/freshness/crash cases; historical failure preserved"
+      },
+      "remaining_unexecuted_cases_disabled": 7,
+      "remaining_stages": [
+        "N1",
+        "N2",
+        "N5"
+      ],
+      "M3_complete": false,
+      "PR2_draft": true,
+      "M4_started": false,
+      "LONG": {
+        "passed": 1,
+        "failed": 1,
+        "not_executed": 7,
+        "first_failed_case": "N1-combined-2903",
+        "failed_gate": "live target kernel stack unavailable",
+        "inner_PASS_not_promoted": true
+      }
+    }
+  },
+  "pending_gates_scope": "No remaining acceptance gate within the approved scope; excluded claims remain unqualified and are not enabled work",
+  "remaining_limitations": [
+    "N5 skipped83 command slots and roughly6s adjacent intent gaps; no continuous2s service guarantee",
+    "zero SENSOR imbalance is not loss-free delivery; original age/admission bounds apply",
+    "observer-supported DDS ENOENT does not reconstruct original SRT-provider task metadata or prove no unseen reuse",
+    "DDS age/capture-population/security/resource comparison remains scoped; failed loaded cold startup supplies no steady-window denominator",
+    "no general transport superiority, observer-overhead equivalence, physical-robot, hard-real-time or cross-host-clock qualification",
+    "original shutdown hang root cause unknown; fresh passes do not prove removal",
+    "N4 has its recorded fixture/ROS gates, not uniform independent native stack/packet/overhead coverage",
+    "same native build across different harness revisions is not a single frozen statistical campaign",
+    "large raw captures and full traces remain indexed local-only; public export is selected",
+    "continuous queue high-water, whole-stack hard memory peaks and general security certification unqualified"
+  ]
 }
