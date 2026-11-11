@@ -82,5 +82,50 @@ void run(bool ipv6){
     check(op.submit_command(context,std::move(*ticket.ticket))==SubmitResult::obsolete,"stopped worker ticket remained live");
     check(sender.join(),"sender worker stop failed");robot.request_stop();robot.join();
 }
+
+void clock_deferral(bool ipv6){
+    const auto ip=ipv6?"::1":"127.0.0.1";const auto key=secret();
+    auto oc=config(Role::listener,ip,key);oc.session.clock.max_probe_age_ns=150000000;
+    oc.command_trace=std::make_shared<CommandTrace>();TransportOwner op(oc);
+    until([&]{return op.snapshot().control_port&&op.snapshot().sensor_port;},"clock fixture listen failed");
+    auto rc=config(Role::caller,ip,key);rc.control.port=op.snapshot().control_port;rc.sensor.port=op.snapshot().sensor_port;TransportOwner robot(rc);
+    until([&]{return op.snapshot().clock_qualified&&op.snapshot().state==SessionState::active&&robot.snapshot().state==SessionState::active;},"clock fixture not active");
+    const auto directory=std::filesystem::current_path()/("clock-deferral-"+std::to_string(getpid()));
+    JournalWorker sender(options(directory,oc,JournalSide::sender));ready(sender);
+    until([&]{return !op.snapshot().clock_qualified;},"clock fixture did not expire");
+    const auto context=op.snapshot().context;const auto origin=now();
+    WorkerRequest q;q.operation=WorkerOperation::admit;q.request_id=random_identity();q.route=100;q.command={100,5000,0,1};q.context={context.session,oc.session.local_epoch,origin,origin+5000000000ULL};
+    auto reply=rpc(sender,q);check(reply.ticket.has_value(),"clock fixture ticket missing");
+    until([&]{return op.submit_command(context,std::move(*reply.ticket))==SubmitResult::queued;},"clock fixture enqueue failed");
+    CommandTraceEvent e;bool deferred=false;unsigned sent=0;
+    until([&]{while(oc.command_trace->poll(e)){if(e.point==CommandTracePoint::clock_deferred&&e.request==q.request_id)deferred=true;if(e.point==CommandTracePoint::provider_sent&&e.request==q.request_id)++sent;}return deferred;},"command was discarded instead of waiting for clock");
+    check(op.snapshot().control_ingress>=1,"deferred command not charged to ingress capacity");
+    check(op.submit_command(context,std::move(*reply.ticket))==SubmitResult::invalid,"deferred ticket could be reused");
+    TransportMessage message;
+    until([&]{return robot.poll_control(message);},"deferred command never resumed");
+    check(message.envelope.kind==Kind::command&&message.envelope.request_id==q.request_id,"wrong deferred command");
+    check(message.envelope.source_monotonic_ns==origin&&message.envelope.valid_for_ms==5000,"deferral renewed command origin/budget");
+    check(now()<q.context.deadline_ns,"deferred command arrived past original deadline");
+    const auto drain_end=now()+250000000;
+    while(now()<drain_end){check(!robot.poll_control(message),"deferred command sent twice");std::this_thread::sleep_for(std::chrono::milliseconds(1));}
+    // A second deferred command must still honor immediate worker revocation.
+    until([&]{return !op.snapshot().clock_qualified;},"clock did not expire for revocation control");
+    auto revoked=q;revoked.request_id=random_identity();revoked.context.source_monotonic_ns=now();revoked.context.deadline_ns=now()+5000000000ULL;
+    auto second=rpc(sender,revoked);check(second.ticket.has_value(),"revocation control ticket missing");
+    until([&]{return op.submit_command(context,std::move(*second.ticket))==SubmitResult::queued;},"revocation control enqueue failed");
+    bool held=false,discarded=false;
+    until([&]{while(oc.command_trace->poll(e)){
+        if(e.point==CommandTracePoint::provider_sent&&e.request==q.request_id)++sent;
+        if(e.point==CommandTracePoint::clock_deferred&&e.request==revoked.request_id)held=true;
+    }return held;},"revocation control not deferred");
+    sender.request_stop();
+    until([&]{while(oc.command_trace->poll(e))if(e.point==CommandTracePoint::input_dropped&&e.reason==CommandTraceReason::proof_revoked&&e.request==revoked.request_id)discarded=true;return discarded;},"deferred revoked proof was not discarded");
+    const auto recovered=now()+1100000000;
+    while(now()<recovered){check(!robot.poll_control(message),"revoked deferred command reached peer");std::this_thread::sleep_for(std::chrono::milliseconds(1));}
+    op.join();robot.join();check(sender.join(),"clock fixture worker stop failed");
+    while(oc.command_trace->poll(e)){if(e.point==CommandTracePoint::provider_sent&&e.request==q.request_id)++sent;check(e.point!=CommandTracePoint::provider_sent||e.request!=revoked.request_id,"revoked deferred command handed to SDK");}
+    check(sent==1&&oc.command_trace->dropped()==0,"deferred handoff count/diagnostics incomplete");
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");run(std::string(argv[1])=="ipv6");std::cout<<"PASS worker transport "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+
+}
+int main(int argc,char** argv){try{check(argc==2,"family required");run(std::string(argv[1])=="ipv6");clock_deferral(std::string(argv[1])=="ipv6");std::cout<<"PASS worker transport "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}

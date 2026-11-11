@@ -18,3 +18,12 @@ TEST(SensorCodec,AllFieldAlignments){
         sensor_msgs::msg::JointState copy;ASSERT_TRUE(rb::decode(std::span(b.bytes).first(b.size),copy));EXPECT_EQ(m,copy);
     }
 }
+
+#include <robotweax_srt_bridge/publication_metrics.hpp>
+TEST(PublicationMetrics,BoundariesAndPopulation){
+    rb::PublicationMetrics m;
+    for(auto value:{0ULL,1ULL,1000000ULL,1000001ULL,249999999ULL,250000000ULL}){ASSERT_TRUE(m.observe(value));}
+    EXPECT_FALSE(m.observe(250000001));EXPECT_FALSE(m.observe(UINT64_MAX));
+    EXPECT_EQ(m.count,6U);EXPECT_EQ(m.maximum_ns,250000000U);
+    EXPECT_EQ(m.age_upper_ms[0],1U);EXPECT_EQ(m.age_upper_ms[1],2U);EXPECT_EQ(m.age_upper_ms[2],1U);EXPECT_EQ(m.age_upper_ms[250],2U);
+}

@@ -1,0 +1,1526 @@
+{
+  "status": "passed_fresh_strict_N3_9_of_9",
+  "driver_exit_code": 0,
+  "executed_cases": 9,
+  "passed_cases": 9,
+  "failed_cases": 0,
+  "automatic_retries": 0,
+  "case_order": [
+    "N3-baseline-1701",
+    "N3-one-loss-1701",
+    "N3-two-loss-1701",
+    "N3-baseline-2903",
+    "N3-one-loss-2903",
+    "N3-two-loss-2903",
+    "N3-baseline-4211",
+    "N3-one-loss-4211",
+    "N3-two-loss-4211"
+  ],
+  "rows": [
+    {
+      "id": "N3-baseline-1701",
+      "seed": 1701,
+      "losses": 0,
+      "status": "passed",
+      "source_seconds": 30.059308722,
+      "source_hz": {
+        "imu": 200.0045994271285,
+        "joints": 50.00114985678213
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7515,
+      "observer_received": 7229,
+      "modeled_age_upper_max_ms": {
+        "imu": 24,
+        "joint": 29
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 10,
+        "validation": 0,
+        "admission": 12,
+        "ingress_replaced": 2,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 259,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "selected_drop_counters": [],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 1172
+          }
+        ],
+        "worker_join_end_ns": 54488837441,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 542442261,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 566761214,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            444325538,
+            64670291,
+            542442261,
+            566761214
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 215331875
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 165110042
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 322582959
+          }
+        ]
+      },
+      "result_sha256": "5a21ab52dfb03f50f524404812ab1c7fbcc11538fca2bf9af2529807a1c411e4",
+      "strict_assessment_sha256": "54167f82526d7538151aaf53a82332867157e6184ae9b054287700d6dc0a9bf2"
+    },
+    {
+      "id": "N3-one-loss-1701",
+      "seed": 1701,
+      "losses": 1,
+      "status": "passed",
+      "source_seconds": 30.053486889,
+      "source_hz": {
+        "imu": 200.01006945387462,
+        "joints": 50.01083586577501
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7514,
+      "observer_received": 7242,
+      "modeled_age_upper_max_ms": {
+        "imu": 26,
+        "joint": 28
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 13,
+        "validation": 0,
+        "admission": 15,
+        "ingress_replaced": 1,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 239,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 2,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 159,
+            "start_ticks": 6903
+          }
+        ],
+        "worker_join_end_ns": 109605297008,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 461265825,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 511177128,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            1035061603,
+            235114763,
+            461265825,
+            511177128
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 143,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 222497209
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 143,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 171325292
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 322289417
+          }
+        ]
+      },
+      "result_sha256": "89d8466634c2266b110d4aed82ef8ac6f8d989577adfa1035be5aea8062526b2",
+      "strict_assessment_sha256": "9bcf6bae70c9cf1ab2c47cca44163bdb7bfb1bf08c27fb426ba6dc9b0c815cb0"
+    },
+    {
+      "id": "N3-two-loss-1701",
+      "seed": 1701,
+      "losses": 2,
+      "status": "passed",
+      "source_seconds": 30.055681389,
+      "source_hz": {
+        "imu": 200.02873740205126,
+        "joints": 50.007184350512816
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7515,
+      "observer_received": 7237,
+      "modeled_age_upper_max_ms": {
+        "imu": 21,
+        "joint": 29
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 11,
+        "validation": 0,
+        "admission": 16,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 242,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 4,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 12440
+          }
+        ],
+        "worker_join_end_ns": 167960463368,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 982441795,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 107559482,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            695853059,
+            426956423,
+            982441795,
+            107559482
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 216077375
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 216761500
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 351491750
+          }
+        ]
+      },
+      "result_sha256": "ffb128e704a4300e68d8880717778f75861dbcc298a946fa85f87452b205c30b",
+      "strict_assessment_sha256": "75175166786b842d7d2fe8df9050c46343c9777700c192994253e54f830041e1"
+    },
+    {
+      "id": "N3-baseline-2903",
+      "seed": 2903,
+      "losses": 0,
+      "status": "passed",
+      "source_seconds": 30.057365555,
+      "source_hz": {
+        "imu": 200.0175294471179,
+        "joints": 50.00438236177948
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7515,
+      "observer_received": 7221,
+      "modeled_age_upper_max_ms": {
+        "imu": 43,
+        "joint": 57
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 12,
+        "validation": 0,
+        "admission": 15,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 261,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 3,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "selected_drop_counters": [],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 18228
+          }
+        ],
+        "worker_join_end_ns": 224739319977,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 615416660,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 380257926,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            997253924,
+            576269364,
+            615416660,
+            380257926
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 215536542
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 166970625
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 319364125
+          }
+        ]
+      },
+      "result_sha256": "d420603408857975ad4812bbdf1791f87ae12c8c60933887e19c973fb2fa004a",
+      "strict_assessment_sha256": "993144a7b9a4c191afdb6e6d1e151a9e54101d3194adcdcd72726a16cc1425ac"
+    },
+    {
+      "id": "N3-one-loss-2903",
+      "seed": 2903,
+      "losses": 1,
+      "status": "passed",
+      "source_seconds": 30.059827848,
+      "source_hz": {
+        "imu": 200.00114539578118,
+        "joints": 50.000286348945295
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7515,
+      "observer_received": 7220,
+      "modeled_age_upper_max_ms": {
+        "imu": 28,
+        "joint": 33
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 17,
+        "validation": 0,
+        "admission": 21,
+        "ingress_replaced": 5,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 243,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 3,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 6
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 23943
+          }
+        ],
+        "worker_join_end_ns": 280624779377,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 616233259,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 50785614,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            449275657,
+            877948025,
+            616233259,
+            50785614
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 219112000
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 167090042
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 320743959
+          }
+        ]
+      },
+      "result_sha256": "d06d5076d41ce9c443c437db152c6f8d4b2351fd038df3ce24e3720d49b27edf",
+      "strict_assessment_sha256": "96e09918f12d7e5d9dbd31013f50ba661d4431124839503f989d46064211bfb4"
+    },
+    {
+      "id": "N3-two-loss-2903",
+      "seed": 2903,
+      "losses": 2,
+      "status": "passed",
+      "source_seconds": 30.054111639,
+      "source_hz": {
+        "imu": 200.00591174352894,
+        "joints": 50.00979626526768
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7514,
+      "observer_received": 7230,
+      "modeled_age_upper_max_ms": {
+        "imu": 25,
+        "joint": 31
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 8,
+        "validation": 0,
+        "admission": 19,
+        "ingress_replaced": 3,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 247,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 3,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 158,
+            "start_ticks": 29569
+          }
+        ],
+        "worker_join_end_ns": 339456597821,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 695800295,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 977897028,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            872735069,
+            236998769,
+            695800295,
+            977897028
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 216721709
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 165615042
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 315857542
+          }
+        ]
+      },
+      "result_sha256": "44e50ce051a9e98e6a563ccdbff4a074630f618c124b227db687a719598ff829",
+      "strict_assessment_sha256": "1396f10cd3b2d022a4a0826fee04b5031a56ed2a0e9ceb9099b161ae1ecad67f"
+    },
+    {
+      "id": "N3-baseline-4211",
+      "seed": 4211,
+      "losses": 0,
+      "status": "passed",
+      "source_seconds": 30.054898305,
+      "source_hz": {
+        "imu": 200.00067672829215,
+        "joints": 50.008487293732
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7514,
+      "observer_received": 7234,
+      "modeled_age_upper_max_ms": {
+        "imu": 29,
+        "joint": 29
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 5,
+        "validation": 0,
+        "admission": 15,
+        "ingress_replaced": 3,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 254,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 2,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "selected_drop_counters": [],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 35448
+          }
+        ],
+        "worker_join_end_ns": 397287720597,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 704869493,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 161244660,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            296056905,
+            982077775,
+            704869493,
+            161244660
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 221857751
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 178943917
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 331123083
+          }
+        ]
+      },
+      "result_sha256": "21d76d79a16fa58cceff3be610e719852dcf0699143640f6cd5ab217936c689d",
+      "strict_assessment_sha256": "e6fb73b8cbce08438f05c5e09bed24c97ea528f48113662d754438fb7a961eec"
+    },
+    {
+      "id": "N3-one-loss-4211",
+      "seed": 4211,
+      "losses": 1,
+      "status": "passed",
+      "source_seconds": 30.054958597,
+      "source_hz": {
+        "imu": 200.00027551526892,
+        "joints": 50.008386973789584
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7514,
+      "observer_received": 7227,
+      "modeled_age_upper_max_ms": {
+        "imu": 16,
+        "joint": 28
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 12,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 268,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 6
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 41523
+          }
+        ],
+        "worker_join_end_ns": 458665063000,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 359193863,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 356127269,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            440685704,
+            848426366,
+            359193863,
+            356127269
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 223085584
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 170084209
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 337842625
+          }
+        ]
+      },
+      "result_sha256": "3e56cc89aae88c903b8c2a59818275606811f0a0ecd32bfc2d5fbe50b2b96eb0",
+      "strict_assessment_sha256": "5f1ec1e10770ff196813a1edb8c284475f51419e29430f0aee36049342fcce7a"
+    },
+    {
+      "id": "N3-two-loss-4211",
+      "seed": 4211,
+      "losses": 2,
+      "status": "passed",
+      "source_seconds": 30.054720222,
+      "source_hz": {
+        "imu": 200.00186179074657,
+        "joints": 50.008783608632854
+      },
+      "source_skipped_slots": {
+        "1": 0,
+        "2": 0
+      },
+      "source_produced": 7514,
+      "observer_received": 7236,
+      "modeled_age_upper_max_ms": {
+        "imu": 15,
+        "joint": 29
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "loss_accounting": {
+        "upstream_dds": 2,
+        "validation": 0,
+        "admission": 14,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 258,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "selected_drop_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        },
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 438
+        }
+      ],
+      "fault_restored": true,
+      "observer": {
+        "samples": 2,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 28,
+        "confirmed_worker_exits": [
+          {
+            "pid": 157,
+            "start_ticks": 47496
+          }
+        ],
+        "worker_join_end_ns": 519239266861,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "total_kernel_stack_reads_ok": 28,
+      "unavailable_stack_reads": 0,
+      "stage_records": {
+        "operator": 59,
+        "robot": 43
+      },
+      "slot_proofs": {
+        "operator": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 286483990,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 155410082,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            1054581463,
+            358494060,
+            286483990,
+            155410082
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        },
+        "robot": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "cleanup": {
+        "operator": [
+          {
+            "name": "operator-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 218509250
+          }
+        ],
+        "robot": [
+          {
+            "name": "robot-source",
+            "pid": 142,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 166661292
+          },
+          {
+            "name": "robot-bridge-0",
+            "pid": 141,
+            "returncode": 0,
+            "forced_kill": false,
+            "signal_to_reap_ns": 330266501
+          }
+        ]
+      },
+      "result_sha256": "37da2d69bc81dddfa5547f5af7f9e9ff4438b4679c510f96a9563f394437a30f",
+      "strict_assessment_sha256": "75ca10581b06bcaae6f235ac1a5ed3398c6ebbafb605b90319ca7abb07beabcc"
+    }
+  ],
+  "freeze_sha256": "45036de78761b3c60eecf0fef60c228495bde023ca739d01639ae6f077339b10",
+  "raw_cohort_sha256": "016a7a020f9b5f43ac905961612a4095cf25cdedf9a3de9bcb1e9bd200fcb48d",
+  "matched_entries": 14,
+  "preserved_shutdown_entries": 13,
+  "remaining_campaign_cases_disabled": 29,
+  "disabled_case_ids": [
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "no_tuning": true,
+  "no_native_rebuild": true,
+  "historical_failures_preserved": true,
+  "historical_hang_cause": "unknown",
+  "M3_complete": false
+}

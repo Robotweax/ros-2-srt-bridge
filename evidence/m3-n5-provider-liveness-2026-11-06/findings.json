@@ -1,0 +1,234 @@
+{
+  "qualification": false,
+  "original_status": "passed",
+  "source_commit": "e29412c",
+  "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T230052361493Z",
+  "executions": 1,
+  "no_injected_fault": true,
+  "original_errors": {},
+  "analysis_complete": true,
+  "analysis_error": null,
+  "journal_audit_error": null,
+  "command_summary": {
+    "attempts": 126,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 126,
+      "p50": 1114.351542,
+      "p95": 3800.860627,
+      "p99": 5030.966753,
+      "maximum": 5524.245711
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 126,
+        "p50": 1114.351542,
+        "p95": 3800.860627,
+        "p99": 5030.966753,
+        "maximum": 5524.245711
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "skipped_command_slots": 24,
+  "device": {
+    "sequence": 10,
+    "ok": true,
+    "rate": 200,
+    "generation": 126,
+    "effects": 126
+  },
+  "active_control_events": [],
+  "source_gaps": 4,
+  "gap_classifications": {
+    "selected_send_counters_flat_not_udp_absence_proof": 1,
+    "selected_send_counters_increased_without_old_flow_egress_observation": 3
+  },
+  "loss_window_classifications": {},
+  "provider": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "status": {
+        "attempted": 2993,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 560833,
+      "max_sample_start_gap_ns": 113664291
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "status": {
+        "attempted": 24,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 622834,
+      "max_sample_start_gap_ns": 107038667
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "status": {
+        "attempted": 3054,
+        "dropped": 0,
+        "exhausted": 0,
+        "limit": 75000
+      },
+      "max_read_duration_ns": 623041,
+      "max_sample_start_gap_ns": 112071959
+    }
+  },
+  "command_diagnostics": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "attempted": 397,
+      "dropped": 0
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "attempted": 5,
+      "dropped": 0
+    }
+  },
+  "pcap": {
+    "operator": {
+      "records": 121477,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    },
+    "robot": {
+      "records": 121477,
+      "tcpdump_kernel_drops": 0,
+      "tcpdump_population_reconciled": true
+    }
+  },
+  "monotonic_statuses": {
+    "operator": {
+      "complete": true,
+      "records": 121569,
+      "seen": 121569,
+      "submitted": 121569,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 6184518168,
+      "stop_before_ns": 324453958397,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "robot": {
+      "complete": true,
+      "records": 121567,
+      "seen": 121567,
+      "submitted": 121567,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 6180767960,
+      "stop_before_ns": 324614551855,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "measurement_window": {
+    "source_produced": 75024,
+    "observer_received": 23030,
+    "missing": 51994,
+    "losses": {
+      "upstream_dds": 2,
+      "validation": 0,
+      "admission": 68,
+      "ingress_replaced": 5,
+      "ingress_flushed": 768,
+      "input_rejected": 5,
+      "outbound_replaced": 2493,
+      "outbound_expired": 0,
+      "outbound_flushed": 8,
+      "srt_accept_to_receiver_gap": 48354,
+      "receiver_rejected": 289,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 2
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 300.101074262,
+    "source_actual_hz": {
+      "imu": 199.99261964521304,
+      "joints": 50.00315322729959
+    },
+    "published": 23032,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 19046,
+        "rounding": "up to 1ms",
+        "maximum_ms": 171,
+        "p50_ms": 105,
+        "p95_ms": 132,
+        "p99_ms": 144
+      },
+      "joint": {
+        "count": 3986,
+        "rounding": "up to 1ms",
+        "maximum_ms": 182,
+        "p50_ms": 112,
+        "p95_ms": 141,
+        "p99_ms": 155
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "competitor_check": {
+    "protocol": "UDP",
+    "target_bitrate": 128000,
+    "block_bytes": 1024,
+    "bytes": 5067776,
+    "seconds": 316.678631,
+    "offered_bits_per_second": 128023.18827758227,
+    "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+    "alive_poll_checks": 1235
+  },
+  "limits": [
+    "Single diagnostic execution, not full N5/M3 acceptance",
+    "All qualifying source gaps and active CONTROL events retained, censored boundaries explicit",
+    "Selected counter growth is not unique cause attribution; flat counters do not prove UDP absence",
+    "No physical delivery, nonexecution, performance or historical cause inference",
+    "Earlier failures and UNKNOWNs unchanged"
+  ],
+  "host_tests_before_measurement": 120,
+  "host_tests_after_exploratory_arp_parser": 124,
+  "exploratory_arp_association": {
+    "largest_gap_seconds": 4.237048752,
+    "operator_outgoing_arp_requests": 5,
+    "operator_arp_reply_before_control_resume_ns": 19792,
+    "interpretation": "suggests neighbor-resolution involvement in this run; neighbor-table state and kernel pre-qdisc/drop stages were not sampled; not historical cause attribution",
+    "artifact": "arp-gap-observations.json",
+    "post_hoc": true
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "scope": "post-hoc diagnostic of unchanged failed20Hz attempt; no receiver-replay qualification or internal expiry counter",
+  "selected_message": 5,
+  "selected_callback_origin_ns": 399138979265,
+  "sender_trace": {
+    "schema_version": 2,
+    "attempted": 39,
+    "dropped": 0,
+    "exhausted": 0,
+    "limit": 75000
+  },
+  "receiver_trace": {
+    "schema_version": 2,
+    "attempted": 18,
+    "dropped": 0,
+    "exhausted": 0,
+    "limit": 75000
+  },
+  "receiver_message_numbers": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "receiver_results": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "captures": {
+    "robot": {
+      "native_status": {
+        "complete": true,
+        "records": 186,
+        "seen": 186,
+        "submitted": 186,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 398313215890,
+        "stop_before_ns": 404746067851,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 23,
+        "filtered_records": 23,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      },
+      "source_records": 18,
+      "parity_records": 5
+    },
+    "operator": {
+      "native_status": {
+        "complete": true,
+        "records": 186,
+        "seen": 186,
+        "submitted": 186,
+        "reserve_failed": 0,
+        "copy_failed": 0,
+        "ready_ns": 398309424348,
+        "stop_before_ns": 404580315476,
+        "ifindex": 11,
+        "time_namespace_zero": true,
+        "ring_bytes": 16777216,
+        "clock": "kernel_monotonic",
+        "artifact_version": 2,
+        "mtu": 1500,
+        "record_bytes": 168,
+        "prefix_bytes": 128
+      },
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 23,
+        "filtered_records": 23,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      },
+      "source_records": 18,
+      "parity_records": 5
+    }
+  },
+  "first_successor_incoming_ns": 399190523974,
+  "parity_incoming_ns": 399293771682,
+  "successor_to_parity_native_ns": 103247708,
+  "callback_to_parity_VM_ns": 154792417,
+  "window": {
+    "source_produced": 19,
+    "observer_received": 18,
+    "missing": 1,
+    "losses": {
+      "upstream_dds": 0,
+      "validation": 0,
+      "admission": 0,
+      "ingress_replaced": 0,
+      "ingress_flushed": 0,
+      "input_rejected": 0,
+      "outbound_replaced": 0,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 1,
+      "receiver_rejected": 0,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 0
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 1.002691501,
+    "source_actual_hz": {
+      "imu": 18.94899875091292,
+      "joints": 0.0
+    },
+    "published": 18,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 18,
+        "rounding": "up to 1ms",
+        "maximum_ms": 9,
+        "p50_ms": 7,
+        "p95_ms": 9,
+        "p99_ms": 9
+      },
+      "joint": {
+        "count": 0,
+        "rounding": "up to 1ms",
+        "maximum_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "source_note": "Pinned src/session.cpp sensor_repair_deadline_microseconds=20000; mark_gap when later source reveals a hole; expire_sensor_receive_gaps drops expired gaps. RowFecDecoder receives current buffer floor. Native103ms interval and missing receiver message are consistent with this mechanism; no precise internal expiry event measured."
+}

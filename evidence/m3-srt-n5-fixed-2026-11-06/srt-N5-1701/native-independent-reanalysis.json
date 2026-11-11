@@ -1,0 +1,324 @@
+{
+  "original_status": "passed",
+  "scope": "independent native observations do not rescue failed PCAP or command/overall gates",
+  "statuses": {
+    "operator": {
+      "complete": true,
+      "records": 108795,
+      "seen": 108795,
+      "submitted": 108795,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 5768312918,
+      "stop_before_ns": 324140704689,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    },
+    "robot": {
+      "complete": true,
+      "records": 108791,
+      "seen": 108791,
+      "submitted": 108791,
+      "reserve_failed": 0,
+      "copy_failed": 0,
+      "ready_ns": 5772253043,
+      "stop_before_ns": 324308991647,
+      "ifindex": 11,
+      "time_namespace_zero": true,
+      "ring_bytes": 16777216,
+      "clock": "kernel_monotonic",
+      "artifact_version": 2,
+      "mtu": 1500,
+      "record_bytes": 168,
+      "prefix_bytes": 128
+    }
+  },
+  "windows": {
+    "source_enabled": {
+      "operator": {
+        "qualified": true,
+        "frame_interpretation": {
+          "qualified": true,
+          "metadata_available": true,
+          "gso_observations": 0,
+          "vlan_observations": 0,
+          "over_mtu_observations": 0,
+          "mtu": 1500,
+          "scope": "no indicated segmentation/VLAN/over-MTU skb in measured IPv4 UDP observations; not physical frame/delivery qualification; legacy ethernet_bytes keys contain observed skb lengths"
+        },
+        "clock": "kernel_monotonic",
+        "window_monotonic_ns": [
+          17512307632,
+          317636707894
+        ],
+        "total_records": 108795,
+        "inside_records": 107567,
+        "ignored_non_udp_records": 51,
+        "classes": {
+          "in/sensor_source_data": {
+            "packets": 27565,
+            "ethernet_bytes": 13353462,
+            "udp_payload_bytes": 12195732
+          },
+          "out/sensor_srt_control": {
+            "packets": 50377,
+            "ethernet_bytes": 3881702,
+            "udp_payload_bytes": 1765868
+          },
+          "in/sensor_srt_control": {
+            "packets": 14510,
+            "ethernet_bytes": 904812,
+            "udp_payload_bytes": 295392
+          },
+          "in/sensor_fec_parity": {
+            "packets": 2069,
+            "ethernet_bytes": 2362798,
+            "udp_payload_bytes": 2275900
+          },
+          "out/control_source_data": {
+            "packets": 2713,
+            "ethernet_bytes": 474042,
+            "udp_payload_bytes": 360096
+          },
+          "in/other_udp": {
+            "packets": 1663,
+            "ethernet_bytes": 1772758,
+            "udp_payload_bytes": 1702912
+          },
+          "in/control_srt_control": {
+            "packets": 2265,
+            "ethernet_bytes": 164866,
+            "udp_payload_bytes": 69736
+          },
+          "out/control_srt_control": {
+            "packets": 3822,
+            "ethernet_bytes": 296132,
+            "udp_payload_bytes": 135608
+          },
+          "in/control_source_data": {
+            "packets": 2532,
+            "ethernet_bytes": 543742,
+            "udp_payload_bytes": 437398
+          }
+        },
+        "byte_unit": "observed_skb_length_bytes",
+        "scope": "AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; GSO/VLAN metadata gates frame interpretation; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load"
+      },
+      "robot": {
+        "qualified": true,
+        "frame_interpretation": {
+          "qualified": true,
+          "metadata_available": true,
+          "gso_observations": 0,
+          "vlan_observations": 0,
+          "over_mtu_observations": 0,
+          "mtu": 1500,
+          "scope": "no indicated segmentation/VLAN/over-MTU skb in measured IPv4 UDP observations; not physical frame/delivery qualification; legacy ethernet_bytes keys contain observed skb lengths"
+        },
+        "clock": "kernel_monotonic",
+        "window_monotonic_ns": [
+          17512307632,
+          317636707894
+        ],
+        "total_records": 108791,
+        "inside_records": 107560,
+        "ignored_non_udp_records": 44,
+        "classes": {
+          "out/sensor_source_data": {
+            "packets": 27565,
+            "ethernet_bytes": 13353462,
+            "udp_payload_bytes": 12195732
+          },
+          "in/sensor_srt_control": {
+            "packets": 50377,
+            "ethernet_bytes": 3881702,
+            "udp_payload_bytes": 1765868
+          },
+          "out/sensor_srt_control": {
+            "packets": 14510,
+            "ethernet_bytes": 904812,
+            "udp_payload_bytes": 295392
+          },
+          "out/sensor_fec_parity": {
+            "packets": 2069,
+            "ethernet_bytes": 2362798,
+            "udp_payload_bytes": 2275900
+          },
+          "in/control_source_data": {
+            "packets": 2713,
+            "ethernet_bytes": 474042,
+            "udp_payload_bytes": 360096
+          },
+          "out/other_udp": {
+            "packets": 1663,
+            "ethernet_bytes": 1772758,
+            "udp_payload_bytes": 1702912
+          },
+          "out/control_srt_control": {
+            "packets": 2265,
+            "ethernet_bytes": 164866,
+            "udp_payload_bytes": 69736
+          },
+          "in/control_srt_control": {
+            "packets": 3822,
+            "ethernet_bytes": 296132,
+            "udp_payload_bytes": 135608
+          },
+          "out/control_source_data": {
+            "packets": 2532,
+            "ethernet_bytes": 543742,
+            "udp_payload_bytes": 437398
+          }
+        },
+        "byte_unit": "observed_skb_length_bytes",
+        "scope": "AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; GSO/VLAN metadata gates frame interpretation; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load"
+      }
+    },
+    "fenced_observation": {
+      "operator": {
+        "qualified": true,
+        "frame_interpretation": {
+          "qualified": true,
+          "metadata_available": true,
+          "gso_observations": 0,
+          "vlan_observations": 0,
+          "over_mtu_observations": 0,
+          "mtu": 1500,
+          "scope": "no indicated segmentation/VLAN/over-MTU skb in measured IPv4 UDP observations; not physical frame/delivery qualification; legacy ethernet_bytes keys contain observed skb lengths"
+        },
+        "clock": "kernel_monotonic",
+        "window_monotonic_ns": [
+          17475255799,
+          320492777478
+        ],
+        "total_records": 108795,
+        "inside_records": 108185,
+        "ignored_non_udp_records": 51,
+        "classes": {
+          "in/other_udp": {
+            "packets": 1709,
+            "ethernet_bytes": 1821794,
+            "udp_payload_bytes": 1750016
+          },
+          "in/sensor_source_data": {
+            "packets": 27577,
+            "ethernet_bytes": 13359222,
+            "udp_payload_bytes": 12200988
+          },
+          "out/sensor_srt_control": {
+            "packets": 50628,
+            "ethernet_bytes": 3897576,
+            "udp_payload_bytes": 1771200
+          },
+          "in/sensor_srt_control": {
+            "packets": 14754,
+            "ethernet_bytes": 920856,
+            "udp_payload_bytes": 301188
+          },
+          "in/sensor_fec_parity": {
+            "packets": 2070,
+            "ethernet_bytes": 2363940,
+            "udp_payload_bytes": 2277000
+          },
+          "out/control_source_data": {
+            "packets": 2721,
+            "ethernet_bytes": 475528,
+            "udp_payload_bytes": 361246
+          },
+          "in/control_srt_control": {
+            "packets": 2290,
+            "ethernet_bytes": 166728,
+            "udp_payload_bytes": 70548
+          },
+          "out/control_srt_control": {
+            "packets": 3847,
+            "ethernet_bytes": 297970,
+            "udp_payload_bytes": 136396
+          },
+          "in/control_source_data": {
+            "packets": 2538,
+            "ethernet_bytes": 544846,
+            "udp_payload_bytes": 438250
+          }
+        },
+        "byte_unit": "observed_skb_length_bytes",
+        "scope": "AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; GSO/VLAN metadata gates frame interpretation; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load"
+      },
+      "robot": {
+        "qualified": true,
+        "frame_interpretation": {
+          "qualified": true,
+          "metadata_available": true,
+          "gso_observations": 0,
+          "vlan_observations": 0,
+          "over_mtu_observations": 0,
+          "mtu": 1500,
+          "scope": "no indicated segmentation/VLAN/over-MTU skb in measured IPv4 UDP observations; not physical frame/delivery qualification; legacy ethernet_bytes keys contain observed skb lengths"
+        },
+        "clock": "kernel_monotonic",
+        "window_monotonic_ns": [
+          17475255799,
+          320492777478
+        ],
+        "total_records": 108791,
+        "inside_records": 108178,
+        "ignored_non_udp_records": 44,
+        "classes": {
+          "out/other_udp": {
+            "packets": 1709,
+            "ethernet_bytes": 1821794,
+            "udp_payload_bytes": 1750016
+          },
+          "out/sensor_source_data": {
+            "packets": 27577,
+            "ethernet_bytes": 13359222,
+            "udp_payload_bytes": 12200988
+          },
+          "in/sensor_srt_control": {
+            "packets": 50628,
+            "ethernet_bytes": 3897576,
+            "udp_payload_bytes": 1771200
+          },
+          "out/sensor_srt_control": {
+            "packets": 14754,
+            "ethernet_bytes": 920856,
+            "udp_payload_bytes": 301188
+          },
+          "out/sensor_fec_parity": {
+            "packets": 2070,
+            "ethernet_bytes": 2363940,
+            "udp_payload_bytes": 2277000
+          },
+          "in/control_source_data": {
+            "packets": 2721,
+            "ethernet_bytes": 475528,
+            "udp_payload_bytes": 361246
+          },
+          "out/control_srt_control": {
+            "packets": 2290,
+            "ethernet_bytes": 166728,
+            "udp_payload_bytes": 70548
+          },
+          "in/control_srt_control": {
+            "packets": 3847,
+            "ethernet_bytes": 297970,
+            "udp_payload_bytes": 136396
+          },
+          "out/control_source_data": {
+            "packets": 2538,
+            "ethernet_bytes": 544846,
+            "udp_payload_bytes": 438250
+          }
+        },
+        "byte_unit": "observed_skb_length_bytes",
+        "scope": "AF_PACKET observation timestamps and skb frame lengths; 128-byte validated header prefixes; not physical wire overhead/delivery or source-population attribution; GSO/VLAN metadata gates frame interpretation; capture process excluded from endpoint CPU; kernel observer work may be charged to endpoint tasks; observer changes host load"
+      }
+    }
+  }
+}

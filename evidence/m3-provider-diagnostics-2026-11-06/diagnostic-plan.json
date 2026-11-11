@@ -1,0 +1,9 @@
+{
+  "purpose": "Validate opt-in bounded CONTROL provider statistics and enable future provider-versus-egress triangulation",
+  "qualification": false,
+  "prerequisites": ["105 host tests", "full SDK suite including SPSC contract and IPv4/IPv6 directional CONTROL silence", "rebuild/install SDK and all ROS packages", "ROS tests", "one N0 15-second instrumentation smoke"],
+  "measurement": {"profile": "N5", "seed": 1701, "seconds": 90, "attempts": 1, "command_diagnostics": true, "provider_diagnostics": true, "recorder_diagnostics": true, "monotonic_capture": true},
+  "retention": "Retain smoke and diagnostic manifests, original verdicts and all failures; no retry or replacement with favorable runs",
+  "analysis": ["Require all process incarnations, final accounting, zero overflow and no budget exhaustion", "Preserve unavailable reads, sampling gaps, API read brackets and socket generations", "If CONTROL loss recurs, compare selected cumulative provider counters to separately qualified native egress flow observations on the same owner/generation; preserve censored intervals", "If no CONTROL loss recurs, report instrumentation validation only; historical initiating cause stays unresolved"],
+  "limits": ["100ms target sampling is owner-scheduled, not guaranteed cadence", "SDK mutex and bookkeeping add observer cost", "Selected counters exclude keepalive, handshake and ACKACK", "No delivery inference from provider counters", "Single 90-second run does not replace the failed N5 qualification cohort", "Do not change transport policy or dependency pin"]
+}

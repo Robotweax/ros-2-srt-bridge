@@ -1,0 +1,3267 @@
+{
+  "status": "completed",
+  "retrospective": true,
+  "original_run": ".local/m3-dds-combined/20261108T113346564620Z",
+  "source_commit": "438ae9dd6027f8cf62dde4d0b439e0f209d44120",
+  "adapter_sha256": "9ac3f991edbaefe90b1b8e85b3850144f19f7570d79992a95c892f75f37d4a13",
+  "commands": [
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-b71fbc3b16",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "sh",
+      "-c",
+      "tshark --version; dpkg-query -W tshark libwireshark17t64; sha256sum /usr/bin/tshark /usr/lib/x86_64-linux-gnu/libwireshark.so.17"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-4d90bf3f25",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-16b72757c0",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113346564620Z/robot.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ]
+  ],
+  "tool_image_id": "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+  "original_status": "failed",
+  "addresses": {
+    "robot": "172.19.0.2",
+    "operator": "172.19.0.3"
+  },
+  "inputs": {
+    "operator": {
+      "path": ".local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "sha256": "ec5009199d8d7be32ee7344736b2d32e39635069c295c19160d2a974a5b6cb1b",
+      "integrity": {
+        "records": 7114,
+        "first_timestamp_ns": 1794137628215807000,
+        "last_timestamp_ns": 1794137676283951000,
+        "classes": {
+          "in/other_udp": {
+            "packets": 269,
+            "ethernet_bytes": 285734,
+            "udp_payload_bytes": 274436
+          },
+          "out/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "out/dds_rtps": {
+            "packets": 1236,
+            "ethernet_bytes": 400032,
+            "udp_payload_bytes": 348120
+          },
+          "in/dds_rtps": {
+            "packets": 5502,
+            "ethernet_bytes": 2618804,
+            "udp_payload_bytes": 2387720
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 74,
+            "ethernet_bytes": 81564,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 79048
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 32,
+            "ethernet_bytes": 36504,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 35416
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 7114,
+        "tcpdump_reported_filtered_packets": 7114,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    },
+    "robot": {
+      "path": ".local/m3-dds-combined/20261108T113346564620Z/robot.pcap00",
+      "sha256": "c4a388a9fc319bdc17c16670f35257276a4ac1d7e1c5a7e3a1002201dbd733e0",
+      "integrity": {
+        "records": 7086,
+        "first_timestamp_ns": 1794137628215793000,
+        "last_timestamp_ns": 1794137676283932000,
+        "classes": {
+          "out/other_udp": {
+            "packets": 269,
+            "ethernet_bytes": 285734,
+            "udp_payload_bytes": 274436
+          },
+          "in/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "in/dds_rtps": {
+            "packets": 1199,
+            "ethernet_bytes": 379682,
+            "udp_payload_bytes": 329324
+          },
+          "out/dds_rtps": {
+            "packets": 5508,
+            "ethernet_bytes": 2622104,
+            "udp_payload_bytes": 2390768
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 70,
+            "ethernet_bytes": 75508,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 73128
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 39,
+            "ethernet_bytes": 47102,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 45776
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 7086,
+        "tcpdump_reported_filtered_packets": 7086,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    }
+  },
+  "decoded_summary": {
+    "operator": {
+      "packets": 7114,
+      "fragment_frames": 106,
+      "fragments": [
+        {
+          "frame": 124,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a6",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "126",
+          "reassembled_length": null
+        },
+        {
+          "frame": 126,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a6",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2896"
+        },
+        {
+          "frame": 128,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a8",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "129",
+          "reassembled_length": null
+        },
+        {
+          "frame": 129,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a8",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 130,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8b69",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "131",
+          "reassembled_length": null
+        },
+        {
+          "frame": 131,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8b69",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2320"
+        },
+        {
+          "frame": 299,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "301",
+          "reassembled_length": null
+        },
+        {
+          "frame": 300,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "301",
+          "reassembled_length": null
+        },
+        {
+          "frame": 301,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3576"
+        },
+        {
+          "frame": 302,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 305,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 306,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d63",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "307",
+          "reassembled_length": null
+        },
+        {
+          "frame": 307,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d63",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2424"
+        },
+        {
+          "frame": 310,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "370",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 314,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "555",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 317,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "740",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 318,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "925",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "8772"
+        },
+        {
+          "frame": 322,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8da0",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "323",
+          "reassembled_length": null
+        },
+        {
+          "frame": 323,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8da0",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2924"
+        },
+        {
+          "frame": 325,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd844",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 329,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd859",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 388,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "390",
+          "reassembled_length": null
+        },
+        {
+          "frame": 389,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "390",
+          "reassembled_length": null
+        },
+        {
+          "frame": 390,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3540"
+        },
+        {
+          "frame": 391,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "397",
+          "reassembled_length": null
+        },
+        {
+          "frame": 392,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e6e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "393",
+          "reassembled_length": null
+        },
+        {
+          "frame": 393,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e6e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2440"
+        },
+        {
+          "frame": 396,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "397",
+          "reassembled_length": null
+        },
+        {
+          "frame": 397,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3540"
+        },
+        {
+          "frame": 400,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e71",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "401",
+          "reassembled_length": null
+        },
+        {
+          "frame": 401,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e71",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1820"
+        },
+        {
+          "frame": 405,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "411",
+          "reassembled_length": null
+        },
+        {
+          "frame": 406,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e74",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "407",
+          "reassembled_length": null
+        },
+        {
+          "frame": 407,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e74",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 409,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "411",
+          "reassembled_length": null
+        },
+        {
+          "frame": 411,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2992"
+        },
+        {
+          "frame": 415,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "418",
+          "reassembled_length": null
+        },
+        {
+          "frame": 417,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "418",
+          "reassembled_length": null
+        },
+        {
+          "frame": 418,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2992"
+        },
+        {
+          "frame": 426,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd947",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 444,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8f0a",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "445",
+          "reassembled_length": null
+        },
+        {
+          "frame": 445,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8f0a",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1844"
+        },
+        {
+          "frame": 475,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda43",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "476",
+          "reassembled_length": null
+        },
+        {
+          "frame": 476,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda43",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2400"
+        },
+        {
+          "frame": 477,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda44",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "478",
+          "reassembled_length": null
+        },
+        {
+          "frame": 478,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda44",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2400"
+        },
+        {
+          "frame": 491,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda53",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "493",
+          "reassembled_length": null
+        },
+        {
+          "frame": 493,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda53",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 494,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda54",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "499",
+          "reassembled_length": null
+        },
+        {
+          "frame": 495,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "496",
+          "reassembled_length": null
+        },
+        {
+          "frame": 496,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2924"
+        },
+        {
+          "frame": 499,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda54",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 503,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda58",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "504",
+          "reassembled_length": null
+        },
+        {
+          "frame": 504,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda58",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 505,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "507",
+          "reassembled_length": null
+        },
+        {
+          "frame": 506,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "507",
+          "reassembled_length": null
+        },
+        {
+          "frame": 507,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3016"
+        },
+        {
+          "frame": 510,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda59",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "512",
+          "reassembled_length": null
+        },
+        {
+          "frame": 512,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda59",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 520,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda5d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "521",
+          "reassembled_length": null
+        },
+        {
+          "frame": 521,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda5d",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1808"
+        },
+        {
+          "frame": 551,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf5",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "552",
+          "reassembled_length": null
+        },
+        {
+          "frame": 552,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf5",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1844"
+        },
+        {
+          "frame": 556,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf9",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "557",
+          "reassembled_length": null
+        },
+        {
+          "frame": 557,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf9",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1892"
+        },
+        {
+          "frame": 576,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "577",
+          "reassembled_length": null
+        },
+        {
+          "frame": 577,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2440"
+        },
+        {
+          "frame": 580,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb04",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "581",
+          "reassembled_length": null
+        },
+        {
+          "frame": 581,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb04",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1804"
+        },
+        {
+          "frame": 582,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb05",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "583",
+          "reassembled_length": null
+        },
+        {
+          "frame": 583,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb05",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1804"
+        },
+        {
+          "frame": 584,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "585",
+          "reassembled_length": null
+        },
+        {
+          "frame": 585,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 594,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb06",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 642,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9164",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "643",
+          "reassembled_length": null
+        },
+        {
+          "frame": 643,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9164",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 660,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "661",
+          "reassembled_length": null
+        },
+        {
+          "frame": 661,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 666,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe2",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "667",
+          "reassembled_length": null
+        },
+        {
+          "frame": 667,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe2",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 669,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe3",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "670",
+          "reassembled_length": null
+        },
+        {
+          "frame": 670,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe3",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 684,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe8",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "685",
+          "reassembled_length": null
+        },
+        {
+          "frame": 685,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe8",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 732,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc72",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "733",
+          "reassembled_length": null
+        },
+        {
+          "frame": 733,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc72",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 739,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc73",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "740",
+          "reassembled_length": null
+        },
+        {
+          "frame": 740,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc73",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 744,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc74",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "745",
+          "reassembled_length": null
+        },
+        {
+          "frame": 745,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc74",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 754,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc79",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "755",
+          "reassembled_length": null
+        },
+        {
+          "frame": 755,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc79",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 757,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7a",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "758",
+          "reassembled_length": null
+        },
+        {
+          "frame": 758,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7a",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 762,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "763",
+          "reassembled_length": null
+        },
+        {
+          "frame": 763,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 778,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x926e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "779",
+          "reassembled_length": null
+        },
+        {
+          "frame": 779,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x926e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 834,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "835",
+          "reassembled_length": null
+        },
+        {
+          "frame": 835,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 836,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9c",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "837",
+          "reassembled_length": null
+        },
+        {
+          "frame": 837,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9c",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 840,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "841",
+          "reassembled_length": null
+        },
+        {
+          "frame": 841,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9d",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 980,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x94a1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "981",
+          "reassembled_length": null
+        },
+        {
+          "frame": 981,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x94a1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1772"
+        }
+      ],
+      "submessages": {
+        "0x9": 5746,
+        "0x15": 5746,
+        "0x80": 6698,
+        "0xe": 5531,
+        "0x7": 727,
+        "0x6": 429,
+        "0x8": 5
+      }
+    },
+    "robot": {
+      "packets": 7086,
+      "fragment_frames": 109,
+      "fragments": [
+        {
+          "frame": 124,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a6",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "125",
+          "reassembled_length": null
+        },
+        {
+          "frame": 125,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a6",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2896"
+        },
+        {
+          "frame": 127,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8b69",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "130",
+          "reassembled_length": null
+        },
+        {
+          "frame": 128,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a8",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "129",
+          "reassembled_length": null
+        },
+        {
+          "frame": 129,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd6a8",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 130,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8b69",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2320"
+        },
+        {
+          "frame": 294,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "296",
+          "reassembled_length": null
+        },
+        {
+          "frame": 295,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "296",
+          "reassembled_length": null
+        },
+        {
+          "frame": 296,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d60",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3576"
+        },
+        {
+          "frame": 299,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d63",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "300",
+          "reassembled_length": null
+        },
+        {
+          "frame": 300,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8d63",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2424"
+        },
+        {
+          "frame": 308,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8da0",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "318",
+          "reassembled_length": null
+        },
+        {
+          "frame": 309,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "314",
+          "reassembled_length": null
+        },
+        {
+          "frame": 310,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "314",
+          "reassembled_length": null
+        },
+        {
+          "frame": 311,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "370",
+          "more": "True",
+          "reassembled_in": "314",
+          "reassembled_length": null
+        },
+        {
+          "frame": 312,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "555",
+          "more": "True",
+          "reassembled_in": "314",
+          "reassembled_length": null
+        },
+        {
+          "frame": 313,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "740",
+          "more": "True",
+          "reassembled_in": "314",
+          "reassembled_length": null
+        },
+        {
+          "frame": 314,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd833",
+          "offset": "925",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "8772"
+        },
+        {
+          "frame": 318,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8da0",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2924"
+        },
+        {
+          "frame": 320,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8db4",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 382,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "384",
+          "reassembled_length": null
+        },
+        {
+          "frame": 383,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "384",
+          "reassembled_length": null
+        },
+        {
+          "frame": 384,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93d",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3540"
+        },
+        {
+          "frame": 385,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e6e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "386",
+          "reassembled_length": null
+        },
+        {
+          "frame": 386,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e6e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2440"
+        },
+        {
+          "frame": 389,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e71",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "395",
+          "reassembled_length": null
+        },
+        {
+          "frame": 390,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "392",
+          "reassembled_length": null
+        },
+        {
+          "frame": 391,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "392",
+          "reassembled_length": null
+        },
+        {
+          "frame": 392,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd93e",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3540"
+        },
+        {
+          "frame": 395,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e71",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1820"
+        },
+        {
+          "frame": 399,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e74",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "400",
+          "reassembled_length": null
+        },
+        {
+          "frame": 400,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8e74",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 403,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "405",
+          "reassembled_length": null
+        },
+        {
+          "frame": 404,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "405",
+          "reassembled_length": null
+        },
+        {
+          "frame": 405,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd942",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2992"
+        },
+        {
+          "frame": 410,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "412",
+          "reassembled_length": null
+        },
+        {
+          "frame": 411,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "412",
+          "reassembled_length": null
+        },
+        {
+          "frame": 412,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xd943",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2992"
+        },
+        {
+          "frame": 416,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ec3",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 427,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ef0",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 437,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ef4",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 440,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8f0a",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "441",
+          "reassembled_length": null
+        },
+        {
+          "frame": 441,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8f0a",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1844"
+        },
+        {
+          "frame": 471,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda43",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "472",
+          "reassembled_length": null
+        },
+        {
+          "frame": 472,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda43",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2400"
+        },
+        {
+          "frame": 473,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda44",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "474",
+          "reassembled_length": null
+        },
+        {
+          "frame": 474,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda44",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2400"
+        },
+        {
+          "frame": 488,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda53",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "489",
+          "reassembled_length": null
+        },
+        {
+          "frame": 489,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda53",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 490,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "491",
+          "reassembled_length": null
+        },
+        {
+          "frame": 491,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2924"
+        },
+        {
+          "frame": 494,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda54",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "495",
+          "reassembled_length": null
+        },
+        {
+          "frame": 495,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda54",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 499,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "503",
+          "reassembled_length": null
+        },
+        {
+          "frame": 500,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda58",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "501",
+          "reassembled_length": null
+        },
+        {
+          "frame": 501,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda58",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 502,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "185",
+          "more": "True",
+          "reassembled_in": "503",
+          "reassembled_length": null
+        },
+        {
+          "frame": 503,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x8ff4",
+          "offset": "370",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "3016"
+        },
+        {
+          "frame": 507,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda59",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "508",
+          "reassembled_length": null
+        },
+        {
+          "frame": 508,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda59",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1876"
+        },
+        {
+          "frame": 516,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda5d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "517",
+          "reassembled_length": null
+        },
+        {
+          "frame": 517,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xda5d",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1808"
+        },
+        {
+          "frame": 547,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf5",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "548",
+          "reassembled_length": null
+        },
+        {
+          "frame": 548,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf5",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1844"
+        },
+        {
+          "frame": 552,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf9",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "553",
+          "reassembled_length": null
+        },
+        {
+          "frame": 553,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdaf9",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1892"
+        },
+        {
+          "frame": 572,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "573",
+          "reassembled_length": null
+        },
+        {
+          "frame": 573,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2440"
+        },
+        {
+          "frame": 576,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb04",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "577",
+          "reassembled_length": null
+        },
+        {
+          "frame": 577,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb04",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1804"
+        },
+        {
+          "frame": 578,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "581",
+          "reassembled_length": null
+        },
+        {
+          "frame": 579,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb05",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "580",
+          "reassembled_length": null
+        },
+        {
+          "frame": 580,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdb05",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1804"
+        },
+        {
+          "frame": 581,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x907e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "2416"
+        },
+        {
+          "frame": 637,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9164",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "638",
+          "reassembled_length": null
+        },
+        {
+          "frame": 638,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9164",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 655,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "656",
+          "reassembled_length": null
+        },
+        {
+          "frame": 656,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 661,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe2",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "662",
+          "reassembled_length": null
+        },
+        {
+          "frame": 662,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe2",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 664,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe3",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "665",
+          "reassembled_length": null
+        },
+        {
+          "frame": 665,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe3",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1720"
+        },
+        {
+          "frame": 679,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe8",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "680",
+          "reassembled_length": null
+        },
+        {
+          "frame": 680,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdbe8",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 727,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc72",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "728",
+          "reassembled_length": null
+        },
+        {
+          "frame": 728,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc72",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 734,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc73",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "735",
+          "reassembled_length": null
+        },
+        {
+          "frame": 735,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc73",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 739,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc74",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "740",
+          "reassembled_length": null
+        },
+        {
+          "frame": 740,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc74",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1832"
+        },
+        {
+          "frame": 749,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc79",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "750",
+          "reassembled_length": null
+        },
+        {
+          "frame": 750,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc79",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 752,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7a",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "753",
+          "reassembled_length": null
+        },
+        {
+          "frame": 753,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7a",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 757,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "758",
+          "reassembled_length": null
+        },
+        {
+          "frame": 758,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdc7b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1840"
+        },
+        {
+          "frame": 772,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9248",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 774,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x926e",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "775",
+          "reassembled_length": null
+        },
+        {
+          "frame": 775,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x926e",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 830,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "831",
+          "reassembled_length": null
+        },
+        {
+          "frame": 831,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9b",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 832,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9c",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "833",
+          "reassembled_length": null
+        },
+        {
+          "frame": 833,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9c",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 836,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9d",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "837",
+          "reassembled_length": null
+        },
+        {
+          "frame": 837,
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "ip_id": "0xdd9d",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1812"
+        },
+        {
+          "frame": 977,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x94a1",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": "978",
+          "reassembled_length": null
+        },
+        {
+          "frame": 978,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x94a1",
+          "offset": "185",
+          "more": "False",
+          "reassembled_in": null,
+          "reassembled_length": "1772"
+        },
+        {
+          "frame": 1354,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9b0b",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        },
+        {
+          "frame": 1472,
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "ip_id": "0x9d19",
+          "offset": "0",
+          "more": "True",
+          "reassembled_in": null,
+          "reassembled_length": null
+        }
+      ],
+      "submessages": {
+        "0x9": 5715,
+        "0x15": 5715,
+        "0x80": 6667,
+        "0xe": 5531,
+        "0x7": 727,
+        "0x6": 429,
+        "0x8": 5
+      }
+    }
+  },
+  "assessment": {
+    "topics": {
+      "rt/dds/commands/operator": {
+        "advertisements": {
+          "operator": {
+            "observations": 5,
+            "rows": [
+              {
+                "frame": 318,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 411,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 418,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 3305,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 5458,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": "010f8e234d007a0100000000",
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f3dea7300721f0000000000001504",
+                "submessage_sha256": "67845aaf264cc5e21e515ba04774554bf274fb30cc7cade87c740d465885fe9a",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 5,
+            "rows": [
+              {
+                "frame": 314,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 405,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 412,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 3294,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 5438,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": "010f8e234d007a0100000000",
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f3dea7300721f0000000000001504",
+                "submessage_sha256": "67845aaf264cc5e21e515ba04774554bf274fb30cc7cade87c740d465885fe9a",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/robot": {
+        "advertisements": {
+          "operator": {
+            "observations": 7,
+            "rows": [
+              {
+                "frame": 162,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f3dea7300721f0000000000001403",
+                "submessage_sha256": "cb4de79eee79815a816addd6dd8cd025439410d357913e80b7fdd21f9db33962",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 521,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 581,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 583,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 627,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 628,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 1654,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 7,
+            "rows": [
+              {
+                "frame": 159,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f3dea7300721f0000000000001403",
+                "submessage_sha256": "cb4de79eee79815a816addd6dd8cd025439410d357913e80b7fdd21f9db33962",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 517,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 577,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 580,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 622,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 623,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 1650,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/operator_hello": {
+        "advertisements": {
+          "operator": {
+            "observations": 4,
+            "rows": [
+              {
+                "frame": 318,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 476,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 478,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 3305,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 4,
+            "rows": [
+              {
+                "frame": 314,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 472,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 474,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 3294,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "publication_binding_available": true,
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/robot_hello": {
+        "advertisements": {
+          "operator": {
+            "observations": 6,
+            "rows": [
+              {
+                "frame": 581,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 583,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 629,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 631,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 634,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 1663,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 6,
+            "rows": [
+              {
+                "frame": 577,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 580,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 624,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 626,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 629,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 1659,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "publication_binding_available": false,
+            "observations": null,
+            "by_direction": {},
+            "unique_writer_sequences": null,
+            "rows": []
+          },
+          "robot": {
+            "publication_binding_available": false,
+            "observations": null,
+            "by_direction": {},
+            "unique_writer_sequences": null,
+            "rows": []
+          }
+        }
+      }
+    },
+    "cross_capture_advertisement_presence": {
+      "operator": {
+        "source_unique": 4,
+        "peer_unique": 4,
+        "present_both": 4,
+        "source_only": [],
+        "peer_only": []
+      },
+      "robot": {
+        "source_unique": 2,
+        "peer_unique": 2,
+        "present_both": 2,
+        "source_only": [],
+        "peer_only": []
+      }
+    },
+    "binding_count": 6,
+    "unbound_data_submessages": {
+      "operator": 5746,
+      "robot": 5715
+    },
+    "scope": "retrospective decoded capture observations and union GUID directory; missing observations never prove middleware absence, execution outcome or unique kernel loss cause; DATA_FRAG counts are submessages, not reconstructed application callbacks"
+  },
+  "original_analysis_source_commit": "830fc3af0e69354f7270f94086c92f8d7932e019",
+  "recheck_scope": "offline final reparse of six hash-verified original PDML files; no new scenario or changed workload verdict",
+  "pdml_inputs": {
+    "operator": {
+      "path": ".local/m3-rtps-discovery-2026-11-08/schema-revision/dds-system-simultaneous/operator.pdml",
+      "sha256": "995387d270e4f7471d6a29040d9204f3aafc1916f214db8d1dd3f9dec825d999"
+    },
+    "robot": {
+      "path": ".local/m3-rtps-discovery-2026-11-08/schema-revision/dds-system-simultaneous/robot.pdml",
+      "sha256": "107f38642f131e80cff677c089255c74e374d0729b6494091c67c19f88abf3e7"
+    }
+  }
+}

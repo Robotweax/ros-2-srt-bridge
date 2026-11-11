@@ -1,0 +1,126 @@
+{
+  "status": "passed",
+  "scope": "one-readiness-one-controlled-task-visibility-calibration",
+  "readiness_limit": 1,
+  "controlled_target_limit": 1,
+  "N1_2903_rerun": false,
+  "no_tuning": true,
+  "no_retries": true,
+  "stages": {
+    "status": "passed",
+    "rows": [
+      {
+        "slot": {
+          "id": "observer-readiness"
+        },
+        "status": "passed",
+        "produced": {
+          "status": "passed",
+          "target_launched": false
+        },
+        "assessment": {
+          "status": "passed",
+          "proof": {
+            "status": "passed",
+            "target_launched": false
+          }
+        }
+      },
+      {
+        "slot": {
+          "id": "controlled-task-visibility"
+        },
+        "status": "passed",
+        "produced": {
+          "status": "passed",
+          "scope": "one controlled task and schema/access only; no N1 rerun, race guarantee or campaign qualification",
+          "live_task": {
+            "samples": 2,
+            "first_begin_ns": 6661634919,
+            "last_end_ns": 6912879252
+          },
+          "controlled_absence": {
+            "kind": "not_in_complete_enumeration",
+            "sample_begin_ns": 7164042710,
+            "sample_end_ns": 7164353294,
+            "candidate_confirmed_exit": false
+          },
+          "candidate_confirmed_exit": false,
+          "post_signal_task_read_availability_not_qualified": true
+        },
+        "assessment": {
+          "status": "passed",
+          "proof": {
+            "status": "passed",
+            "scope": "one controlled task and schema/access only; no N1 rerun, race guarantee or campaign qualification",
+            "live_task": {
+              "samples": 2,
+              "first_begin_ns": 6661634919,
+              "last_end_ns": 6912879252
+            },
+            "controlled_absence": {
+              "kind": "not_in_complete_enumeration",
+              "sample_begin_ns": 7164042710,
+              "sample_end_ns": 7164353294,
+              "candidate_confirmed_exit": false
+            },
+            "candidate_confirmed_exit": false,
+            "post_signal_task_read_availability_not_qualified": true
+          }
+        }
+      }
+    ],
+    "complete_M3_acceptance": false
+  },
+  "disabled_case_ids": [
+    "N3-baseline-1701",
+    "N3-one-loss-1701",
+    "N3-two-loss-1701",
+    "N3-baseline-2903",
+    "N3-one-loss-2903",
+    "N3-two-loss-2903",
+    "N3-baseline-4211",
+    "N3-one-loss-4211",
+    "N3-two-loss-4211",
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "remaining_case_ids_disabled": [
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "historical_failure_preserved": true,
+  "M3_complete": false
+}

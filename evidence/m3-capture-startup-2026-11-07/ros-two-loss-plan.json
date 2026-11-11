@@ -1,0 +1,16 @@
+{
+  "status": "prospective after all three controlled recorder probes passed",
+  "purpose": "one separately planned finite ROS two-loss attempt with opt-in filter-before-bind recorder; not a retry/replacement of earlier tcpdump capture failures",
+  "executions": 1,
+  "no_further_retry_planned": true,
+  "command_mode": "--trace-losses --trace-loss-count2 --capture-backend packet-socket",
+  "source": "19 IMU publish calls requested20Hz; existing traced SDK/ROS runtime, permanent-neighbor fixture",
+  "fault": "exact SDK messages7/8, row1 positions2/3; map actual admitted source IDs via trace; any BUSY admission remains separate",
+  "PCAP_scope": "same finite SENSOR DATA/parity/handshake filter, compiled on dead libpcap handle; final BPF attached to protocol0 AF_PACKET socket before ETH_P_ALL bind. Native observers start first and close after PCAP sockets",
+  "recorder_gates": ["disabled-socket protocol0 and initial accepted count0", "attach-before-bind monotonic brackets, bound protocol3", "kernel SO_TIMESTAMPNS present, no truncation/budget exhaustion", "bounded stable equal records/kernel snapshots and zero kernel drops", "record count agrees with parsed PCAP, file hash/length agree with immutable final status", "native/PCAP exact source/parity identities agree with actual SDK accepted sources minus selected targets"],
+  "ROS_gates": "unchanged traced-loss payload ID/order/hash, SDK/admission identity, two selected drops/removal, six conservation balances zero, only BUSY admission and exact2 transport gap, qualified clock/QoS/session and publication age-upper<=250ms",
+  "expected": "all admitted typed samples except the two actual selected source IDs are observed; all completed-row parity retained; no source/SDK replay; features and six installed/runtime hashes unchanged",
+  "qualification_limit": "finite20Hz IMU candidate only; backend and capture workload changed, no performance equivalence to tcpdump, no historical counter correction or full N3/M3 acceptance",
+  "host_tests_before_attempt": 186,
+  "runtime": "SDK70/ROS36 previously validated binaries unchanged; no fresh full SDK/ROS tests claimed"
+}

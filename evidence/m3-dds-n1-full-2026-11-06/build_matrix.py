@@ -1,0 +1,12 @@
+from pathlib import Path
+import json
+root=Path('evidence');current=root/'m3-dds-n1-full-2026-11-06';rows=[]
+for transport,profile,name in [('srt','N1','m3-srt-n1-full-2026-11-06'),('srt','N2','m3-srt-n2-full-2026-11-06'),('dds','N1','m3-dds-n1-full-2026-11-06'),('dds','N2','m3-dds-n2-full-2026-11-06')]:
+ folder=root/name;study=json.loads((folder/'study.json').read_text());plan=json.loads((folder/'plan.json').read_text());totals=json.loads((folder/'totals.json').read_text());sensors=json.loads((folder/'sensor-populations.json').read_text());configs=[]
+ for row in study['rows']:
+  r=json.loads((folder/row['slot']['label']/'run.json').read_text());configs.append(dict(seed=row['slot']['seed'],pcap_config=r['pcap_capture_config'],image=r['image_platform_id']))
+ durations=[s['measurement']['source_enabled_seconds'] if transport=='srt' else s['source_enabled_seconds'] for s in sensors]
+ age=({str(s['seed']):dict(age_upper_histograms=s['measurement']['age_upper_histograms'],origin='bridge ingress under conservative clock assumptions') for s in sensors} if transport=='srt' else {str(s['seed']):dict(age_estimates_qualified=s['age_estimates_qualified'],clock_rejected=sum(r['clock_rejected'] for r in s['routes'].values()),origin=s['age_scope']) for s in sensors})
+ rows.append(dict(transport=transport,profile=profile,evidence=name,frozen_plan_status=study['status'],full_duration_seed_execution=study['status']=='passed' and len(study['rows'])==3 and {r['slot']['seed'] for r in study['rows']}=={1701,2903,4211} and all(r['slot']['seconds']==600 for r in study['rows']) and len(durations)==3 and min(durations)>=600,source_enabled_seconds=durations,base_commit=plan['base_commit'],tested_source_inventory=str(folder/'plan.json'),totals=totals,age_by_seed=age,capture_configs=configs))
+value=dict(scope='execution coverage only; does not close age, clock, security, fairness or full M3 acceptance; separate cohorts, no cross-transport performance inference',all_four_duration_seed_cohorts_executed=all(r['full_duration_seed_execution'] for r in rows),cohorts=rows,remaining=['DDS age/clock qualification gaps','realtime packet-window clock qualification','long v2 N5','deterministic N3 DATA/FEC selector','N4 command-phase barriers','other devices/offloads','controlled resources and semantic/security alignment'],complete_m3_acceptance=False)
+(current/'execution-matrix.json').write_text(json.dumps(value,indent=2)+'\n');print('all four duration/seed cohorts executed:',value['all_four_duration_seed_cohorts_executed'])

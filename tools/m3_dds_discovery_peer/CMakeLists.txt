@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+project(m3_dds_discovery_peer LANGUAGES CXX)
+find_package(fastrtps REQUIRED)
+add_executable(m3_dds_discovery_peer main.cpp)
+target_compile_features(m3_dds_discovery_peer PRIVATE cxx_std_20)
+target_link_libraries(m3_dds_discovery_peer fastrtps)
+target_compile_options(m3_dds_discovery_peer PRIVATE -Wall -Wextra -Wpedantic -Werror)

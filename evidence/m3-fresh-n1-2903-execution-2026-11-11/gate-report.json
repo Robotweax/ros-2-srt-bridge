@@ -1,0 +1,577 @@
+{
+  "status": "passed_single_fresh_N1_2903_600s_qualification",
+  "driver_exit_code": 0,
+  "freeze_sha256": "b3609d03e5ac4976f04b5067df68c6b8d94b38390052217d1221c856709232bb",
+  "passed": 1,
+  "failed": 0,
+  "not_executed": 0,
+  "cases": [
+    {
+      "id": "N1-combined-2903",
+      "status": "passed",
+      "qualification": "strict_LONG_combined_case_with_calibrated_task_visibility",
+      "source_enabled_seconds": 600.123054899,
+      "command_audit": {
+        "attempts": 300,
+        "confirmed_successes": 300,
+        "unknown": 0,
+        "effects": 300,
+        "unresolved": 0,
+        "not_admitted": 0,
+        "all_succeeded": true,
+        "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+      },
+      "skipped_slots": 0,
+      "maximum_adjacent_intent_gap_ms": 2025.902376,
+      "SENSOR_window": {
+        "source_produced": 150031,
+        "observer_received": 110605,
+        "missing": 39426,
+        "losses": {
+          "upstream_dds": 224,
+          "validation": 0,
+          "admission": 213,
+          "ingress_replaced": 3,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 4819,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 305,
+          "receiver_rejected": 22412,
+          "receive_replaced": 11268,
+          "receive_flushed": 0,
+          "poll_expired": 1,
+          "publication_rejected": 0,
+          "observer_dds": 181
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 600.123054899,
+        "source_actual_hz": {
+          "imu": 199.99898190913513,
+          "joints": 50.001411802201375
+        },
+        "published": 110786,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 81290,
+            "rounding": "up to 1ms",
+            "maximum_ms": 224,
+            "p50_ms": 43,
+            "p95_ms": 52,
+            "p99_ms": 55
+          },
+          "joint": {
+            "count": 29496,
+            "rounding": "up to 1ms",
+            "maximum_ms": 235,
+            "p50_ms": 52,
+            "p95_ms": 66,
+            "p99_ms": 70
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "SENSOR_publication_age": {
+        "imu": {
+          "histogram": {
+            "count": 81290,
+            "rounding": "up to 1ms",
+            "maximum_ms": 224,
+            "p50_ms": 43,
+            "p95_ms": 52,
+            "p99_ms": 55
+          },
+          "cumulative_begin_max_ns": 73254510,
+          "cumulative_end_max_ns": 223997402,
+          "exact_window_max_ns": 223997402,
+          "exact_max_scope": "new cumulative maximum belongs to checkpoint interval",
+          "nonempty": true,
+          "freshness_gate": "supported"
+        },
+        "joint": {
+          "histogram": {
+            "count": 29496,
+            "rounding": "up to 1ms",
+            "maximum_ms": 235,
+            "p50_ms": 52,
+            "p95_ms": 66,
+            "p99_ms": 70
+          },
+          "cumulative_begin_max_ns": 71304823,
+          "cumulative_end_max_ns": 234585865,
+          "exact_window_max_ns": 234585865,
+          "exact_max_scope": "new cumulative maximum belongs to checkpoint interval",
+          "nonempty": true,
+          "freshness_gate": "supported"
+        }
+      },
+      "SDK_provider_visibility": {
+        "samples": 4,
+        "provider_names": [
+          "rwx-readiness",
+          "rwx-shard-0",
+          "rwx-shard-1"
+        ],
+        "first_begin_ns": 622456646159,
+        "last_end_ns": 623226083201,
+        "scope": "readable registered bridge/root and named SDK provider tasks before shutdown release; not performance or exit proof"
+      },
+      "operator_observer": {
+        "task_metadata_status": "consistent_metadata_only",
+        "observed_task_disappearances": [
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 116,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 116,
+              "start_ticks": 994,
+              "name": "bridge_node",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 117,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 117,
+              "start_ticks": 997,
+              "name": "dds.shm.wdog",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 118,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 118,
+              "start_ticks": 997,
+              "name": "dds.ev.0",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 119,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 119,
+              "start_ticks": 998,
+              "name": "dds.udp.17912",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 120,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 120,
+              "start_ticks": 998,
+              "name": "dds.shm.17913",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 121,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 121,
+              "start_ticks": 998,
+              "name": "dds.udp.17913",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 122,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 122,
+              "start_ticks": 999,
+              "name": "dds.asyn.0.0",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 123,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 123,
+              "start_ticks": 1006,
+              "name": "dds.shm.7001",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 124,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 124,
+              "start_ticks": 1006,
+              "name": "dds.udp.7001",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 125,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 125,
+              "start_ticks": 1007,
+              "name": "bridge_node",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 126,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 126,
+              "start_ticks": 1016,
+              "name": "bridge_node",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 127,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 127,
+              "start_ticks": 1016,
+              "name": "bridge_node",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 129,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 129,
+              "start_ticks": 1018,
+              "name": "rwx-shard-0",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 130,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 130,
+              "start_ticks": 1018,
+              "name": "rwx-shard-1",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 131,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 131,
+              "start_ticks": 1019,
+              "name": "rwx-readiness",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 132,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 132,
+              "start_ticks": 1019,
+              "name": "rwx-worker-0",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 133,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 133,
+              "start_ticks": 1019,
+              "name": "rwx-worker-1",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 134,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 134,
+              "start_ticks": 1019,
+              "name": "rwx-worker-2",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          },
+          {
+            "process_identity": {
+              "pid": 112,
+              "start_ticks": 961
+            },
+            "tid": 135,
+            "classification": "not_enumerated_after_prior_identity",
+            "task_identity": {
+              "tid": 135,
+              "start_ticks": 1019,
+              "name": "rwx-worker-3",
+              "state": "S"
+            },
+            "raw_stack_status": "not_attempted",
+            "nonempty_readable_stack": false,
+            "confirmed_exit": false,
+            "observed_begin_ns": 623478204451,
+            "observed_end_ns": 623478247035
+          }
+        ],
+        "confirmed_task_exits": 0,
+        "raw_stack_reads_ok": 100,
+        "raw_stack_reads_unavailable": 0,
+        "samples": 5,
+        "post_signal_samples": 1,
+        "nonempty_kernel_stacks": 100,
+        "confirmed_worker_exits": [
+          {
+            "pid": 128,
+            "start_ticks": 1017
+          }
+        ],
+        "worker_join_end_ns": 623408514868,
+        "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+        "clean_fast_exit_may_have_no_post_signal_sample": true
+      },
+      "operator_exit": 0,
+      "operator_forced_kill": false,
+      "operator_signal_end_to_reap_ns": 172176667,
+      "profile": {
+        "profile": "N1",
+        "seed": 2903,
+        "original_commands_and_kernel_settings_verified": true
+      }
+    }
+  ],
+  "raw_files": 124,
+  "raw_bytes": 464909973,
+  "selected_public_raw_exports": 90,
+  "selected_public_raw_bytes": 2632087,
+  "all_raw_retained_locally": true,
+  "original_failure_reference": {
+    "path": "evidence/m3-current-long-execution-2026-11-10/cases/N1-combined-2903/strict-assessment.json",
+    "sha256": "e9cf84c7b6beffe584cfc06134d44c263b4884fcf166b3e113a7430cdedd7d30",
+    "cohort_path": "evidence/m3-current-long-execution-2026-11-10/cohort.json",
+    "cohort_sha256": "3277c483ed49e5c806875d1988ec6f7f03593a155da98c8531c5ca9200ccd325"
+  },
+  "original_failure_preserved": true,
+  "resume_original_run": false,
+  "disabled_case_ids": [
+    "N3-baseline-1701",
+    "N3-one-loss-1701",
+    "N3-two-loss-1701",
+    "N3-baseline-2903",
+    "N3-one-loss-2903",
+    "N3-two-loss-2903",
+    "N3-baseline-4211",
+    "N3-one-loss-4211",
+    "N3-two-loss-4211",
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "other_stages_enabled": false,
+  "no_tuning": true,
+  "no_retries": true,
+  "stop_first_failed_gate": true,
+  "tests_run": 0,
+  "builds": 0,
+  "M3_complete": false
+}

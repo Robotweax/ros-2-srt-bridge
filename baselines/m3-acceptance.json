@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "milestone": "M3",
+  "date": "2026-11-11",
+  "status": "accepted_within_documented_scope",
+  "formal_acceptance_granted": true,
+  "M3_complete": true,
+  "completion_scope": "pinned Linux amd64/Jazzy simulator under Docker emulation; native ARM64 observer where qualified; per-series harness and assessor identities retained",
+  "unrestricted_or_hardware_acceptance": false,
+  "authority": "explicit user instruction",
+  "authorization": "Ok, formally accept M3 within the documented simulator/build scope and record the decision. Preserve historical failures and remaining limitations; keep PR2 draft and M4 disabled.",
+  "reviewed_commit": "a99d7ba",
+  "accepted_statement": {
+    "path": "M3_SCOPED_ACCEPTANCE.md",
+    "sha256": "0f92a8b80c52ca9498d45560da753277c52fe2bee261dc313909cb3cbbd4f1c7"
+  },
+  "review_record": {
+    "path": "evidence/m3-scoped-acceptance-2026-11-11/statement.json",
+    "sha256": "a01f784104d0372ec512d578a8ab561d049f1ef38b84e8898282207fcc0e7a9a"
+  },
+  "review_verification": {
+    "path": "evidence/m3-scoped-acceptance-2026-11-11/verification.json",
+    "sha256": "9f9b915848a8f3a975a47d7e00fc5c2a7bef36fa951b429f9c9ef44cbd35963b"
+  },
+  "matched_build_record": {
+    "path": "evidence/m3-scoped-acceptance-2026-11-11/matched-build.json",
+    "sha256": "c7b97e41b7b301d79ab13f5e03e09ab0fac29bf3fbb4ad30a7c424bf0d5a13f2"
+  },
+  "matched_build_sha256": {
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_journal.a": "34a9411e6d6e5d25e2e3fb8a8b72dec16a81193fbd37ccc810eea9145d1ba4ab",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_core.a": "eadf9fb33f9933f0760ab5386808964f676f99353c51e782b6b509a021439295",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_worker.a": "3d61beea60e13b6fa4aee5700406b1fe49939a17c7eb04a86a9c703e38cfb708",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_endpoint.a": "7479bc8cfd4b99bdfaf04abdbba75e976e1a25b81a22a62ed5a6be2f2548d0d3",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_management.a": "90d165c41acf9e0115e4999475e9052b232bd7c8e460d1b74fd1c466bb8db0bf",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_worker_runtime.a": "8f95824a0f5e8878675f69184615b7b32aeb4fc6006cd0b1fb69329f0fe89a1b",
+    "install/bridge-socket-disposition/lib/librobotweax_srt_bridge_transport.a": "6622b0b59ef533ab8115e5d9078569c8f585b314185b2916e9aef57a3920354d",
+    "install/bridge-socket-disposition/bin/robotweax-journal-worker": "24831e82aaf30ae05c8b970cf4888533f5f939612f4eba7ad160271fc0efe1a0",
+    "build/m3-socket-disposition/shutdown_trace_tests": "8f81d2dbda3fe6b7779ee6fed3a70fff59111c1eae92a98687cefe46c974b70b",
+    "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+    "install/m3-socket-disposition-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "3737c698199cb2c26ff698320e97259dc8edcb472d4cff5cbe6b88474ff9d3d3",
+    "install/m3-socket-disposition-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "2e4c999aaa2a2125d044363c8a6c842b53965fc3d789d0087a2fe966f744451d",
+    "install/m3-socket-disposition-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "1e002022c8d05b89ae4e0b8b909f59a24a0f882c7289d9d489df2a1284f0d2a6",
+    "install/m3-socket-disposition-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "ff969f2ac5a971003ce61dee540a4feb3bfad8118c2bb19a52f947808f11b5aa"
+  },
+  "target_image": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+  "observer_image": "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+  "provider_revision": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "provider_archive_sha256": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673",
+  "coverage": {
+    "N0": 1,
+    "N3": 9,
+    "N4": 19,
+    "LONG": 9
+  },
+  "passing_distinct_case_ids": 38,
+  "separate_frozen_series": [
+    {
+      "path": "evidence/m3-strict-n3-execution-2026-11-10",
+      "freeze_sha256": "45036de78761b3c60eecf0fef60c228495bde023ca739d01639ae6f077339b10",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    },
+    {
+      "path": "evidence/m3-current-n0-stable-execution-2026-11-10",
+      "freeze_sha256": "98a357e418c22d67b1f46df9e44eaa33f24b66e11b2d1ce0eea3e1ebbd8c28d6",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    },
+    {
+      "path": "evidence/m3-current-n4-corrected-execution-2026-11-10",
+      "freeze_sha256": "ecb0d134693279a679907d6791c0518bfe85308d9146c69f83f3a4f2e3aafef1",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    },
+    {
+      "path": "evidence/m3-current-long-execution-2026-11-10",
+      "freeze_sha256": "868a21578a61a3d5e67d047fa76c95c24ea70c1965c5b71d6f9f5902d292d12e",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    },
+    {
+      "path": "evidence/m3-current-remaining-execution-2026-11-11",
+      "freeze_sha256": "df3cfbabfe3bf4f3a1cc77a280454bdea021501cad410c5acdb320ec94b0a65e",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    },
+    {
+      "path": "evidence/m3-fresh-n1-2903-execution-2026-11-11",
+      "freeze_sha256": "b3609d03e5ac4976f04b5067df68c6b8d94b38390052217d1221c856709232bb",
+      "matched_build_entries": 14,
+      "native_inputs": 87,
+      "scope": "separate historical series; original failed LONG cohort retains failure"
+    }
+  ],
+  "harness_revisions_keep_recorded_scope": true,
+  "all_historical_attempts_passed": false,
+  "original_failure_reference": {
+    "path": "evidence/m3-current-long-execution-2026-11-10/cases/N1-combined-2903/strict-assessment.json",
+    "sha256": "e9cf84c7b6beffe584cfc06134d44c263b4884fcf166b3e113a7430cdedd7d30",
+    "cohort_path": "evidence/m3-current-long-execution-2026-11-10/cohort.json",
+    "cohort_sha256": "3277c483ed49e5c806875d1988ec6f7f03593a155da98c8531c5ca9200ccd325"
+  },
+  "historical_failures_preserved": true,
+  "historical_UNKNOWN_replayed_or_resolved": false,
+  "limitations": [
+    "N5 skipped83 command slots and roughly6s adjacent intent gaps; no continuous2s service guarantee",
+    "zero SENSOR imbalance is not loss-free delivery; original age/admission bounds apply",
+    "observer-supported DDS ENOENT does not reconstruct original SRT-provider task metadata or prove no unseen reuse",
+    "DDS age/capture-population/security/resource comparison remains scoped; failed loaded cold startup supplies no steady-window denominator",
+    "no general transport superiority, observer-overhead equivalence, physical-robot, hard-real-time or cross-host-clock qualification",
+    "original shutdown hang root cause unknown; fresh passes do not prove removal",
+    "N4 has its recorded fixture/ROS gates, not uniform independent native stack/packet/overhead coverage",
+    "same native build across different harness revisions is not a single frozen statistical campaign",
+    "large raw captures and full traces remain indexed local-only; public export is selected",
+    "continuous queue high-water, whole-stack hard memory peaks and general security certification unqualified"
+  ],
+  "comparison_conclusion": "documented recorded benefit with no general SRT superiority or matched DDS equivalence claim; failed/unqualified DDS evidence retained",
+  "campaign_execution_enabled": false,
+  "enabled_case_ids": [],
+  "new_execution_grants": 0,
+  "PR2_keep_draft": true,
+  "merge_authorized": false,
+  "release_authorized": false,
+  "M4_enabled": false,
+  "M4_started": false,
+  "live_runs": 0,
+  "Docker_calls": 0,
+  "tuning": false,
+  "retries": false,
+  "builds": 0,
+  "native_tests_run": 0,
+  "canonical_decision": "M3_ACCEPTANCE_DECISION.md"
+}

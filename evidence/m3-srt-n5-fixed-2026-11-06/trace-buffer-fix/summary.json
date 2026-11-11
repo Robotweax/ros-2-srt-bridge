@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "scope": "15-second N0 smoke of rebuilt SPSC trace; not a replacement N5 run",
+  "source_commit": "0a1c1b0789de9c5b7eba93bf10dc45dbf13e8e12",
+  "commands": {
+    "attempts": 8,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 8,
+      "p50": 258.935417,
+      "p95": 259.355708,
+      "p99": 259.355708,
+      "maximum": 259.355708
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 8,
+        "p50": 258.935417,
+        "p95": 259.355708,
+        "p99": 259.355708,
+        "maximum": 259.355708
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "effects": 8,
+  "traces": {
+    "operator-bridge-0.log": {
+      "complete": true,
+      "records": 34,
+      "dropped": 0
+    },
+    "robot-bridge-1.log": {
+      "complete": true,
+      "records": 4,
+      "dropped": 0
+    },
+    "robot-bridge-2.log": {
+      "complete": true,
+      "records": 4,
+      "dropped": 0
+    }
+  },
+  "pcap_drops": {
+    "operator": 0,
+    "robot": 0
+  }
+}

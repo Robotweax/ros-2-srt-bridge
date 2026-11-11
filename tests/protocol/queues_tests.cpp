@@ -40,7 +40,7 @@ void contract(){
     const auto* front=q.sensor_front(1000000);check(front&&front->envelope.route_id==1&&front->envelope.sequence==2,"latest-only");
     check(front->bytes[96]==std::byte{2}&&sensor_ttl_ms(*front,1000000)==249,"payload ownership / TTL");
     q.sensor_sent(1);check(q.sensor_front(1000000)->envelope.route_id==2,"route fairness");
-    check(!q.sensor_front(249000001)&&q.stats().sensor_expired==1,"sub-ms budget sent");
+    check(!q.sensor_front(249000001)&&q.stats().sensor_expired==1&&q.stats().sensor_enqueue_expired==0,"sub-ms queued expiry classification");
     e=envelope(Kind::sample,1,3);e.source_monotonic_ns=250000000;
     check(q.sensor({Channel::sensor,1},e,sample,250000000)==QueueError::none,"queue before loss");
     std::array<std::byte,512> bytes{};const auto encoded=encode_management(Bind{id(1),id(2),id(3)},bytes);
@@ -52,6 +52,10 @@ void contract(){
     check(q.control({Channel::control,1},envelope(Kind::command,100,1),{})==QueueError::none,"queued command");
     loss.close_control=true;const auto removed=q.apply(loss);check(removed.count==1&&removed.ids[0]==id(2),"unresolved command ID lost");
     check(q.control_count()==0&&q.open({Channel::control,2})==QueueError::none,"CONTROL loss cleanup");
+    OutboundQueues expired(manifest());expired.open({Channel::control,1});expired.open({Channel::sensor,1});
+    auto late=envelope(Kind::sample,1,1);
+    check(expired.sensor({Channel::sensor,1},late,sample,249000001)==QueueError::expired,"stale admission accepted");
+    check(expired.sensor_count()==0&&expired.stats().sensor_expired==1&&expired.stats().sensor_enqueue_expired==1,"admission expiry counted as queued expiry");
     q.stop();check(q.open({Channel::control,3})==QueueError::stopped,"stop revived queue");
     check(q.stats().sensor_replaced==1&&q.stats().sensor_flushed==1,"drop counters");
 }
@@ -59,8 +63,9 @@ void rate_gate(){
     OutboundQueues q(manifest());q.open({Channel::control,1});q.open({Channel::sensor,1});
     std::array<std::byte,4> payload{};auto e=envelope(Kind::sample,1,1);
     check(q.sensor({Channel::sensor,1},e,payload,0)==QueueError::none&&q.sensor_front(0),"rate initial burst");
-    q.sensor_sent(1);e.sequence=2;e.source_monotonic_ns=1;
+    check(q.sensor_due_ns(0)==0,"initial send hint missing");q.sensor_sent(1);check(!q.sensor_due_ns(0),"empty queue retained send hint");e.sequence=2;e.source_monotonic_ns=1;
     check(q.sensor({Channel::sensor,1},e,payload,1)==QueueError::none&&!q.sensor_front(4999999),"route exceeded 200 Hz");
+    check(q.sensor_due_ns(1)==5000000,"paced sample wake deadline wrong");
     check(q.sensor_front(5000000)!=nullptr,"rate boundary delayed");q.sensor_sent(1);
     SessionAction lost;lost.close_sensor=true;q.apply(lost);q.open({Channel::sensor,2});
     e.sequence=3;e.source_monotonic_ns=5000001;

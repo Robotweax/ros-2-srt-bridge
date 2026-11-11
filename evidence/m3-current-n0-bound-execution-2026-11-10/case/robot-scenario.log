@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/workspace/evidence/m3-current-n0-identity-binding-fix-2026-11-10/scenario.py", line 403, in <module>
+    main()
+  File "/workspace/evidence/m3-current-n0-identity-binding-fix-2026-11-10/scenario.py", line 335, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 262, in robot
+    elif self.robot_action(action, request, response):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/evidence/m3-current-n0-identity-binding-fix-2026-11-10/scenario.py", line 150, in robot_action
+    self.wait(lambda:self.state and self.state.ready and self.state.clock_qualified,'fresh source link ready',30)
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 115, in wait
+    self.check_processes()
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m2_scenario.py", line 123, in check_processes
+    raise RuntimeError('bridge exited ' + str(self.bridge.returncode))
+RuntimeError: bridge exited 1

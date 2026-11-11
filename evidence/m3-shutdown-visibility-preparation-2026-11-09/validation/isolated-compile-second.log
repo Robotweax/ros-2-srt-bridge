@@ -1,0 +1,16 @@
+-- Configuring done (0.2s)
+-- Generating done (0.2s)
+-- Build files have been written to: /workspace/build/m3-shutdown-trace-compile
+[1/6] Building CXX object src/robotweax_srt_bridge_core/CMakeFiles/shutdown_trace_tests.dir/__/__/tests/protocol/shutdown_trace_tests.cpp.o
+FAILED: src/robotweax_srt_bridge_core/CMakeFiles/shutdown_trace_tests.dir/__/__/tests/protocol/shutdown_trace_tests.cpp.o
+/usr/bin/c++  -I/workspace/src/robotweax_srt_bridge_core/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT src/robotweax_srt_bridge_core/CMakeFiles/shutdown_trace_tests.dir/__/__/tests/protocol/shutdown_trace_tests.cpp.o -MF src/robotweax_srt_bridge_core/CMakeFiles/shutdown_trace_tests.dir/__/__/tests/protocol/shutdown_trace_tests.cpp.o.d -o src/robotweax_srt_bridge_core/CMakeFiles/shutdown_trace_tests.dir/__/__/tests/protocol/shutdown_trace_tests.cpp.o -c /workspace/tests/protocol/shutdown_trace_tests.cpp
+/workspace/tests/protocol/shutdown_trace_tests.cpp: In function ‘int main()’:
+/workspace/tests/protocol/shutdown_trace_tests.cpp:18:9: error: this ‘for’ clause does not guard... [-Werror=misleading-indentation]
+   18 |         for(auto& t:threads)t.join();check(trace->attempted()==64&&trace->dropped()==0);
+      |         ^~~
+/workspace/tests/protocol/shutdown_trace_tests.cpp:18:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   18 |         for(auto& t:threads)t.join();check(trace->attempted()==64&&trace->dropped()==0);
+      |                                      ^~~~~
+cc1plus: all warnings being treated as errors
+[2/6] Building CXX object src/robotweax_srt_bridge_transport/CMakeFiles/robotweax_srt_bridge_transport.dir/__/robotweax_srt_bridge_core/src/transport/transport.cpp.o
+ninja: build stopped: subcommand failed.

@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "source_commit": "deedc5468be73f93b9e8b59c8378b4b5eae8f9e4",
+  "protocol_cases": [
+    {
+      "case": "control",
+      "admitted": true
+    },
+    {
+      "case": "expired",
+      "session_error": 13,
+      "age_error": 2,
+      "clock_error": 2,
+      "query_admitted": true,
+      "duplicate_replay_rejected": true,
+      "reopened_unknown": true
+    },
+    {
+      "case": "future",
+      "session_error": 13,
+      "age_error": 9,
+      "clock_error": 0,
+      "query_admitted": true,
+      "duplicate_replay_rejected": true,
+      "reopened_unknown": true
+    }
+  ],
+  "native_cases": [
+    {
+      "age_error": 2,
+      "clock_error": 2,
+      "local_before_after_deadline": 1,
+      "live_after_restart": 8,
+      "reason": 2,
+      "sdk_handoffs": 1,
+      "effects": 0,
+      "original_budget_ms": 5000,
+      "query_not_found": true,
+      "closed_unknown": true
+    },
+    {
+      "age_error": 2,
+      "clock_error": 2,
+      "local_before_after_deadline": 1,
+      "live_after_restart": 8,
+      "reason": 2,
+      "sdk_handoffs": 1,
+      "effects": 0,
+      "original_budget_ms": 5000,
+      "query_not_found": true,
+      "closed_unknown": true
+    }
+  ],
+  "scope": "controlled protocol and real SRT loopback uncertainty contracts, not N5 cause reproduction/acceptance",
+  "sdk_tests": 71,
+  "host_tests": 267,
+  "ros_tests_new": false,
+  "prior_ros_tests": 41
+}

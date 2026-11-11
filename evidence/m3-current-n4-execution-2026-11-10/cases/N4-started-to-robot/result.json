@@ -1,0 +1,278 @@
+{
+  "status": "passed",
+  "phase": "started",
+  "direction": "to-robot",
+  "hold_seconds": 2,
+  "qualification": false,
+  "clock_proof": {
+    "operator": "bd97e393-2447-4ff4-9e3d-9ac400685f9e\nmonotonic           0         0\nboottime            0         0\n",
+    "robot": "bd97e393-2447-4ff4-9e3d-9ac400685f9e\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "barrier": {
+    "snapshot": {
+      "ns": 81911634453,
+      "session": "8805a1e9da43d712f2a7f35aac925a50",
+      "ready": 1,
+      "clock": 1,
+      "paused": 1,
+      "effects": 0,
+      "generation": 0,
+      "rate_hz": 200,
+      "commands_sent": 0,
+      "queries_sent": 0,
+      "fault": 0,
+      "worker_fault": 0,
+      "running": 1,
+      "worker": 1,
+      "transport_running": 1
+    },
+    "visible_journal": {
+      "id": "01000000000000000000000000000000",
+      "state": 3,
+      "result_valid": false,
+      "finished_ns": 0
+    }
+  },
+  "outage_install": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 82285940286,
+        "end_ns": 82307355286,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "loss",
+          "random",
+          "100%",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 4701,
+        "packets": 32,
+        "drops": 0,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "hold": {
+    "begin_ns": 82538697536,
+    "end_ns": 84539295037
+  },
+  "outage_final": {
+    "operator": [
+      {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "loss-random": {
+            "loss": 1,
+            "correlation": 0
+          },
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 4701,
+        "packets": 32,
+        "drops": 315,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    ]
+  },
+  "outage_restore": {
+    "operator": {
+      "bracket": {
+        "begin_ns": 84783673538,
+        "end_ns": 84804972288,
+        "argv": [
+          "tc",
+          "qdisc",
+          "replace",
+          "dev",
+          "eth0",
+          "root",
+          "handle",
+          "1:",
+          "netem",
+          "limit",
+          "256",
+          "seed",
+          "1702"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "qdisc": {
+        "kind": "netem",
+        "handle": "1:",
+        "root": true,
+        "refcnt": 21,
+        "options": {
+          "limit": 256,
+          "seed": 1702,
+          "ecn": false,
+          "gap": 0
+        },
+        "bytes": 6305,
+        "packets": 44,
+        "drops": 350,
+        "overlimits": 0,
+        "requeues": 0,
+        "backlog": 0,
+        "qlen": 0
+      }
+    }
+  },
+  "guaranteed_outage_ns": [
+    82307355286,
+    84783673538
+  ],
+  "outcome": {
+    "state": 4,
+    "reason": 0,
+    "effects": 1,
+    "command_sends": 1,
+    "sender_deadline_ns": 86832477078,
+    "receiver_deadline_ns": 86826685418,
+    "deadline_conservative_margin_ns": 5791660,
+    "journal_proof_match": true,
+    "scope": "controlled packet interruption, live same-owner endpoint/worker; temporary UNKNOWN allowed during outage, final durable evidence required; no replay, crash-recovery or ROS sensor-age qualification"
+  },
+  "withheld_direct_result": false,
+  "stopped": {
+    "operator": {
+      "stop_begin_ns": 87012370205,
+      "stop_end_ns": 87027275580,
+      "trace_records": 8,
+      "trace_attempted": 8,
+      "dropped": 0,
+      "provider_command_sends": 1,
+      "snapshot": {
+        "ns": 87027265789,
+        "session": "00000000000000000000000000000000",
+        "ready": 0,
+        "clock": 0,
+        "paused": 0,
+        "effects": 0,
+        "generation": 0,
+        "rate_hz": 0,
+        "commands_sent": 1,
+        "queries_sent": 4,
+        "fault": 0,
+        "worker_fault": 0,
+        "running": 0,
+        "worker": 4,
+        "transport_running": 0
+      }
+    },
+    "robot": {
+      "stop_begin_ns": 87013349039,
+      "stop_end_ns": 87026535539,
+      "trace_records": 15,
+      "trace_attempted": 15,
+      "dropped": 0,
+      "provider_command_sends": 0,
+      "snapshot": {
+        "ns": 87026524705,
+        "session": "00000000000000000000000000000000",
+        "ready": 0,
+        "clock": 0,
+        "paused": 0,
+        "effects": 1,
+        "generation": 1,
+        "rate_hz": 100,
+        "commands_sent": 0,
+        "queries_sent": 0,
+        "fault": 0,
+        "worker_fault": 0,
+        "running": 0,
+        "worker": 4,
+        "transport_running": 0
+      }
+    }
+  },
+  "journals": {
+    "sender": {
+      "sha256": "5ea85dafee092da52effb97c2e5b80cb51a3a6e56c81b1cf95b1041c51603288",
+      "entries": {
+        "01000000000000000000000000000000": {
+          "state": 4,
+          "reason": 0,
+          "revision": 3,
+          "route": 100,
+          "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+          "source_epoch": "b8ee7dcc8605a3911fef02f401ecf455",
+          "session": "8805a1e9da43d712f2a7f35aac925a50",
+          "owner_epoch": "b8ee7dcc8605a3911fef02f401ecf455",
+          "source_ns": 81832477078,
+          "admitted_ns": 81837826036,
+          "dispatched_ns": 0,
+          "finished_ns": 84901212288,
+          "deadline_ns": 86832477078,
+          "result_valid": true,
+          "result_generation": 1
+        }
+      }
+    },
+    "receiver": {
+      "sha256": "6e4d271ce2521805fa2016ee402201fdc4584095a4d2c92b8a597bc7bc01f1f5",
+      "entries": {
+        "01000000000000000000000000000000": {
+          "state": 4,
+          "reason": 0,
+          "revision": 3,
+          "route": 100,
+          "payload_hash": "6db1fde47af8dac79675dec540948020cf09a87eb920a7cc71d811b7d5574c67",
+          "source_epoch": "b8ee7dcc8605a3911fef02f401ecf455",
+          "session": "8805a1e9da43d712f2a7f35aac925a50",
+          "owner_epoch": "393507b0ee4d0d9466e2d13bc936f6bf",
+          "source_ns": 81832477078,
+          "admitted_ns": 81867209703,
+          "dispatched_ns": 81891537411,
+          "finished_ns": 84892669121,
+          "deadline_ns": 86826685418,
+          "result_valid": true,
+          "result_generation": 1
+        }
+      }
+    }
+  }
+}

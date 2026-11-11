@@ -4,7 +4,7 @@
 #include <array>
 
 namespace robotweax::srt_bridge {
-enum class WorkerOperation : std::uint16_t { admit=1,get,begin_dispatch,finish,invalidate_session,observe_remote,sender_may_transmit,execute,handler_snapshot,decline };
+enum class WorkerOperation : std::uint16_t { admit=1,get,begin_dispatch,finish,invalidate_session,observe_remote,sender_may_transmit,execute,handler_snapshot,decline,reconcile_sender };
 struct WorkerRequest {
     WorkerOperation operation=WorkerOperation::get;
     Identity request_id{},session{};
@@ -33,6 +33,7 @@ struct WorkerReply {
     std::optional<DispatchTicket> dispatch{};
     RateResult device{};
     std::uint64_t effects=0;
+    std::optional<WorkerStartObservation> start_observation{};
 };
 struct WorkerOptions {
     std::string executable; // Absolute path to the installed/built worker executable.
@@ -41,6 +42,7 @@ struct WorkerOptions {
     std::optional<JournalPoint> test_pause_at{};
     std::optional<JournalFaults> test_faults{};
     bool simulated_rate_handler=false,external_rate_handler=false;
+    bool start_diagnostics=false; // Local shared-mapping diagnostics only, default off.
     // 1: before atomic start, 2: after start, 3: after simulated effect.
     unsigned test_handler_pause=0;
 };
@@ -56,6 +58,7 @@ public:
     JournalWorker& operator=(const JournalWorker&)=delete;
     WorkerSubmission submit(const WorkerRequest& request);
     WorkerSubmission submit_execute(DispatchTicket&& ticket);
+    WorkerSubmission submit_reconcile(SenderSubmissionReceipt& receipt);
     bool poll(WorkerReply& reply);
     bool resume_test_barrier() noexcept;
     WorkerState state() const noexcept;

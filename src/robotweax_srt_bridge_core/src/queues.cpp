@@ -72,7 +72,7 @@ QueueError OutboundQueues::sensor(Connection c,const Envelope& e,std::span<const
     const auto budget=static_cast<std::uint64_t>(e.valid_for_ms)*1000000;
     if(e.source_monotonic_ns>std::numeric_limits<std::uint64_t>::max()-budget)return QueueError::invalid_time;
     const auto deadline=e.source_monotonic_ns+budget;
-    if(now>=deadline||deadline-now<1000000){++stats_.sensor_expired;return QueueError::expired;}
+    if(now>=deadline||deadline-now<1000000){++stats_.sensor_expired;++stats_.sensor_enqueue_expired;return QueueError::expired;}
     const auto index=static_cast<std::size_t>(route-manifest_.routes().data());
     if(occupied_[index]&&e.source_epoch==sensor_[index].envelope.source_epoch&&
        e.session_id==sensor_[index].envelope.session_id&&e.sequence<=sensor_[index].envelope.sequence){
@@ -109,6 +109,15 @@ void OutboundQueues::sensor_sent(std::uint32_t route) noexcept {
         rate_started_[i]=true;occupied_[i]=false;sensor_[i]={};sensor_cursor_=(i+1)%sensor_.size();return;
     }
 }
+std::optional<std::uint64_t> OutboundQueues::sensor_due_ns(std::uint64_t now) const noexcept {
+    std::optional<std::uint64_t> due;
+    for(std::size_t i=0;i<occupied_.size();++i)if(occupied_[i]){
+        const auto at=rate_started_[i]?std::max(now,next_sample_ns_[i]):now;
+        if(!due||at<*due)due=at;
+    }
+    return due;
+}
+std::size_t OutboundQueues::sensor_count() const noexcept {return std::count(occupied_.begin(),occupied_.end(),true);}
 void OutboundQueues::flush_sensor() noexcept {
     for(std::size_t i=0;i<occupied_.size();++i)if(occupied_[i]){++stats_.sensor_flushed;occupied_[i]=false;sensor_[i]={};}
 }

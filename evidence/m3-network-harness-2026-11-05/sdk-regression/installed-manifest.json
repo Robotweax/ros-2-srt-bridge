@@ -1,0 +1,85 @@
+{
+  "status": "passed",
+  "commands": [
+    [
+      "cmake",
+      "--install",
+      "/workspace/build/m1-native",
+      "--prefix",
+      "/workspace/.local/m1/20261105T124908573510Z/installed-smoke/original-prefix"
+    ],
+    [
+      "cmake",
+      "-S",
+      "/workspace/tests/installed",
+      "-B",
+      "/workspace/.local/m1/20261105T124908573510Z/installed-smoke/consumer-build",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF",
+      "-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF",
+      "-DCMAKE_PREFIX_PATH=/workspace/.local/m1/20261105T124908573510Z/installed-smoke/relocated-prefix;/workspace/install/srt-m0",
+      "-DEXPECTED_PREFIX=/workspace/.local/m1/20261105T124908573510Z/installed-smoke/relocated-prefix"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/workspace/.local/m1/20261105T124908573510Z/installed-smoke/consumer-build",
+      "--parallel",
+      "2"
+    ],
+    [
+      "cmake",
+      "-S",
+      "/workspace/tests/installed/missing-component",
+      "-B",
+      "/workspace/.local/m1/20261105T124908573510Z/installed-smoke/missing-component-build",
+      "-G",
+      "Ninja",
+      "-DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF",
+      "-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF",
+      "-DCMAKE_PREFIX_PATH=/workspace/.local/m1/20261105T124908573510Z/installed-smoke/relocated-prefix;/workspace/install/srt-m0"
+    ],
+    [
+      "/workspace/.local/m1/20261105T124908573510Z/installed-smoke/consumer-build/installed_bridge_consumer"
+    ]
+  ],
+  "runtime_dependencies": "\tlibprotobuf.so.32 => /lib/x86_64-linux-gnu/libprotobuf.so.32 (0x00007fffff34b000)\n\tlibcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007ffffee37000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007ffffebb9000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007ffffead0000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007ffffeaa2000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffffe88f000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007ffffffc6000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007ffffe871000)\n",
+  "missing_component_rejected": true,
+  "files_sha256": {
+    "bin/robotweax-journal-worker": "86573a71a22e03841158853d7bb458573bc524c83fd59d156a6cbad25c8ac62f",
+    "include/robotweax/srt_bridge/bandwidth.hpp": "c3070d87afa4c69a359f4c5c6e37642a43f892dfbe7b895c8ec7389a080bc6fe",
+    "include/robotweax/srt_bridge/clock.hpp": "ae0c7529bcb8fee6852915596bc949e4962566030a50c6e3dec58a39ff4b0f21",
+    "include/robotweax/srt_bridge/commands.hpp": "485c84b55759b3c86c62cc46889bace0f8681d85b10190776e4d2982fe5ad89e",
+    "include/robotweax/srt_bridge/endpoint.hpp": "49809fab8272c48a473ae4d066a26ee083b2fa50cb114e24895e5766c0d0bc23",
+    "include/robotweax/srt_bridge/errors.hpp": "c66b4ca00380d668196ba11b13634028fbc7fdb2b39419c6a6b1360127cdbb44",
+    "include/robotweax/srt_bridge/execution.hpp": "25cc318b9be7fb5c5312b41eac70421c93ad403841866bc9341e5a564203a774",
+    "include/robotweax/srt_bridge/handler.hpp": "14569db4634199059fd7de772f97718af72cf65c95a4162fbae83d30b063dd9f",
+    "include/robotweax/srt_bridge/journal.hpp": "971c7b180a9246cf0b25365d85d29e207f0b4a4a62919215b7d33f94cabb4fca",
+    "include/robotweax/srt_bridge/management.hpp": "b3e33d39d93bd09767518c0a55d4330a6033ad2e8c0d77c7c06bf11d2dbce1c3",
+    "include/robotweax/srt_bridge/queues.hpp": "c1ee01cb57e4cb83f3ca2e629dde044dbb2747937aef965928fdc11035a0bad4",
+    "include/robotweax/srt_bridge/reconnect.hpp": "0485e110e21f75e9a20d3edcfcdf24054d964c04a2ba9b86df12797ad5a5eb69",
+    "include/robotweax/srt_bridge/routes.hpp": "f62fccfa5d173a14280336f0eccb250c878039b328d732b0dfadd7b1bc6c2ccf",
+    "include/robotweax/srt_bridge/session.hpp": "a7862058f7a26e03a7e95f653a1af7a56513f65d8ac3c57d93c143d0d02545ad",
+    "include/robotweax/srt_bridge/ticket.hpp": "5b8ac376e990a738c6aa1d93700d50119a5f0ed182af6e1b215cc5428c7e4489",
+    "include/robotweax/srt_bridge/transport.hpp": "fbfa848c51cfee58b225443e27216bc45d3d549ecbe660ed1434c09f920c9e41",
+    "include/robotweax/srt_bridge/wire.hpp": "7e71d05cd154890d04686f6a1f152039ce774ee0bdf238523dcf0fdf8ce03b82",
+    "include/robotweax/srt_bridge/worker.hpp": "cd809d5ef8f4fd09a3c271808196d75cd49ddacebab74d6318e82c0edc3fdb36",
+    "lib/cmake/RobotweaxBridge/RobotweaxBridgeConfig.cmake": "7a2218dfd60647b2507f998b4e42439ffe822d1ae3027dad3ac91366efbe8385",
+    "lib/cmake/RobotweaxBridge/RobotweaxBridgeConfigVersion.cmake": "6cecb804c170b7d5262a13684a8949f8d1c01a5d72898b1cd64f9e3ebfe448dd",
+    "lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets-release.cmake": "40ac4cb4a26afe9f1c0c6335002f59330048989becdef86cb3c97bcb07687377",
+    "lib/cmake/RobotweaxBridge/RobotweaxBridgeTargets.cmake": "67025c31df4c5b077a32b10b36b63ddafe924cc5614e932a22712972c35bf7c1",
+    "lib/librobotweax_srt_bridge_core.a": "eadf9fb33f9933f0760ab5386808964f676f99353c51e782b6b509a021439295",
+    "lib/librobotweax_srt_bridge_endpoint.a": "8df7f9ff60ba59ca651a21dc3a4d784f44839d3edc63a455915b0b3450597af3",
+    "lib/librobotweax_srt_bridge_journal.a": "f8da60da7299b898f149de58474d67354c85967deaef0239b6bf0296f911d66c",
+    "lib/librobotweax_srt_bridge_management.a": "88f61b6e980e8b414c314672609a6d115d55789b0b7ef5e447c953d8eb70466d",
+    "lib/librobotweax_srt_bridge_transport.a": "b412210c4dccd41752dced8a58dd00286cc266d583678e2f8990a6a721db9f1b",
+    "lib/librobotweax_srt_bridge_worker.a": "83307a7f1596c0e86e1dbef46e593ff6e8deaa4240458b3b7834d21cf1179206",
+    "lib/librobotweax_srt_bridge_worker_runtime.a": "810c4dd3bcabcd7f509f5b1c9b2ddf5f503964c5f2d33959832cf756ce9657b8",
+    "share/robotweax-srt-bridge/proto/commands_v1.proto": "f7ec0e910e6e06e3c7ae319d07525da7930e94d9394ea81aa6769536c6729f67",
+    "share/robotweax-srt-bridge/proto/errors_v1.proto": "837ae8d0a49b121811e020bfbb8c93051b1f7dcdaebaa9858c490aacbfda5744",
+    "share/robotweax-srt-bridge/proto/management_v1.proto": "51c60db1278d0d22bb76ca9163afac0df4dda136064cf747b736963250110b15"
+  }
+}

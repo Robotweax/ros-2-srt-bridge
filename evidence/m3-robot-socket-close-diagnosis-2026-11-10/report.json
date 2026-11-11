@@ -1,0 +1,146 @@
+{
+  "status": "retained_diagnosis_complete_to_observation_limit",
+  "comparison": [
+    {
+      "case": "m3-shutdown-live-calibration-2026-11-09",
+      "role": "operator",
+      "records": 51,
+      "common_records": 39,
+      "conditional_close_triplets": 4,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": [
+        856853874,
+        402004429,
+        631293271,
+        358593755
+      ]
+    },
+    {
+      "case": "m3-shutdown-live-calibration-2026-11-09",
+      "role": "robot",
+      "records": 42,
+      "common_records": 39,
+      "conditional_close_triplets": 1,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": [
+        893331744
+      ]
+    },
+    {
+      "case": "m3-bridge-shutdown-diagnostic-2026-11-10",
+      "role": "operator",
+      "records": 51,
+      "common_records": 39,
+      "conditional_close_triplets": 4,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": [
+        1039793004,
+        178329301,
+        49669081,
+        754398148
+      ]
+    },
+    {
+      "case": "m3-bridge-shutdown-diagnostic-2026-11-10",
+      "role": "robot",
+      "records": 39,
+      "common_records": 39,
+      "conditional_close_triplets": 0,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": []
+    },
+    {
+      "case": "m3-bridge-shutdown-capability-fix-2026-11-10",
+      "role": "operator",
+      "records": 51,
+      "common_records": 39,
+      "conditional_close_triplets": 4,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": [
+        48665168,
+        977127646,
+        875153163,
+        783925808
+      ]
+    },
+    {
+      "case": "m3-bridge-shutdown-capability-fix-2026-11-10",
+      "role": "robot",
+      "records": 39,
+      "common_records": 39,
+      "conditional_close_triplets": 0,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": []
+    },
+    {
+      "case": "m3-bridge-shutdown-lifecycle-2026-11-10",
+      "role": "operator",
+      "records": 51,
+      "common_records": 39,
+      "conditional_close_triplets": 4,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": [
+        1047748447,
+        831449824,
+        382798614,
+        148209931
+      ]
+    },
+    {
+      "case": "m3-bridge-shutdown-lifecycle-2026-11-10",
+      "role": "robot",
+      "records": 39,
+      "common_records": 39,
+      "conditional_close_triplets": 0,
+      "sequence_complete": true,
+      "reported_drops": 0,
+      "closed_fd_details": []
+    }
+  ],
+  "timing": {
+    "operator_sigint_begin_ns": 31095331722,
+    "operator_last_socket_close_end_ns": 31119523430,
+    "robot_source_signal_begin_ns": 31098791430,
+    "robot_source_reap_ns": 31266105055,
+    "robot_bridge_sigint_begin_ns": 31266139055,
+    "robot_transport_shutdown_begin_ns": 31280543847,
+    "robot_control_close_begin_ns": 31280990430,
+    "robot_sensor_close_end_ns": 31281238763
+  },
+  "peer_last_close_to_robot_sigint_ns": 146615625,
+  "observation_boundaries": {
+    "last_robot_sample_trace_end_ns": 25525464178,
+    "last_robot_ready_barrier_ns": 27790434388,
+    "last_robot_endpoint_sample_end_ns": 30944188055,
+    "measurement_capture_stop_before_ns": {
+      "operator": 29820668639,
+      "robot": 29999485972
+    },
+    "sender_sensor_socket_ids": [
+      539812666
+    ]
+  },
+  "established": "Marker gate is unconditional but actual socket-close markers require valid fd AND local stopping/shutting_down. Latest robot executes complete unconditional cleanup with no conditional triplets.",
+  "source_supported_inference": "Robot caller handles are already invalid when final close_fd runs; caller listener handles were never created. Link slots observed active earlier were invalidated before locally traced shutdown; close_fd is the source path clearing a valid slot after an srt_close attempt. Return values and every handle lifetime are not logged.",
+  "not_established": [
+    "exact earlier close timestamp and reason",
+    "which peer-loss/provider/timer path triggered closure",
+    "successful srt_close return/kernel descriptor release",
+    "socket leak or original two-loss hang cause"
+  ],
+  "likely_mechanism": "Peer-first shutdown with source-first robot child cleanup gives robot an untraced pre-stop link-loss cleanup interval; timing supports but does not independently prove exact trigger.",
+  "historical_failed_gate_preserved": true,
+  "new_experiments": 0,
+  "tuning_changes": 0,
+  "tests_or_native_builds_run": 0,
+  "remaining_campaign_cases_disabled": 29,
+  "retry_two_loss_4211": false,
+  "M3_complete": false
+}

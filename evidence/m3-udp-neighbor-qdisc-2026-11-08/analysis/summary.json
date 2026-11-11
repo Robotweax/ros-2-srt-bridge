@@ -1,0 +1,896 @@
+[
+  {
+    "label": "srt-N0-2903",
+    "status": "passed",
+    "harness_status": "passed",
+    "audit": {
+      "attempts": 8,
+      "confirmed_successes": 8,
+      "unknown": 0,
+      "effects": 8,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 0,
+    "durable": {
+      "complete": true,
+      "verified_expired": 0,
+      "all_success": true,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "application": {
+      "source_produced": 3778,
+      "observer_received": 3658,
+      "missing": 120,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 5,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 115,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 15.111706257,
+      "source_actual_hz": {
+        "imu": 199.97741807614597,
+        "joints": 50.02744145121322
+      },
+      "published": 3658,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 2909,
+          "rounding": "up to 1ms",
+          "maximum_ms": 15,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 749,
+          "rounding": "up to 1ms",
+          "maximum_ms": 30,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "analysis_status": {
+      "path": "passed",
+      "sensor": "passed",
+      "telemetry": "passed"
+    },
+    "windows": []
+  },
+  {
+    "label": "srt-N5-2903",
+    "status": "passed",
+    "harness_status": "passed",
+    "audit": {
+      "attempts": 126,
+      "confirmed_successes": 126,
+      "unknown": 0,
+      "effects": 126,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 24,
+    "durable": {
+      "complete": true,
+      "verified_expired": 0,
+      "all_success": true,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "application": {
+      "source_produced": 75033,
+      "observer_received": 8640,
+      "missing": 66393,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 73,
+        "ingress_replaced": 1,
+        "ingress_flushed": 1371,
+        "input_rejected": 17,
+        "outbound_replaced": 2244,
+        "outbound_expired": 0,
+        "outbound_flushed": 16,
+        "srt_accept_to_receiver_gap": 61602,
+        "receiver_rejected": 1067,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 1,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 300.131730178,
+      "source_actual_hz": {
+        "imu": 199.99884705425916,
+        "joints": 50.00137769871834
+      },
+      "published": 8640,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 7172,
+          "rounding": "up to 1ms",
+          "maximum_ms": 166,
+          "p50_ms": 109,
+          "p95_ms": 136,
+          "p99_ms": 148
+        },
+        "joint": {
+          "count": 1468,
+          "rounding": "up to 1ms",
+          "maximum_ms": 164,
+          "p50_ms": 115,
+          "p95_ms": 143,
+          "p99_ms": 156
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "analysis_status": {
+      "path": "passed",
+      "sensor": "passed",
+      "telemetry": "passed"
+    },
+    "windows": [
+      {
+        "family": "adjacent_gap",
+        "sender": "operator",
+        "window_ns": [
+          84981612247,
+          86510045122
+        ],
+        "flow": {
+          "direction": "out",
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "source_port": 10080,
+          "destination_port": 54845,
+          "destination_socket_id": 1055321053
+        },
+        "primary_classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+        "stage_classification": "provider_growth_without_pass_counter_growth",
+        "identity_stable": true,
+        "provider_totals": {
+          "data_sent": 91,
+          "data_received": 50,
+          "retransmitted": 75,
+          "ack_sent": 23,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 13094,
+          "bytes_received": 9374
+        },
+        "qdisc_totals": {
+          "pass_packets": 0,
+          "pass_bytes": 0,
+          "root_packets": 75,
+          "root_bytes": 5686,
+          "root_drops": 0,
+          "root_overlimits": 0
+        },
+        "tc_pairs": 7,
+        "max_root_backlog": 0,
+        "max_root_qlen": 0,
+        "all_selected_source_control_observations": 0,
+        "neighbor_states": {
+          "operator": {
+            "PROBE": 4,
+            "INCOMPLETE": 11
+          },
+          "robot": {
+            "PROBE": 4,
+            "STALE": 1,
+            "DELAY": 10
+          }
+        },
+        "arp_counts": {
+          "operator": {
+            "outgoing_local_request": 2,
+            "reflected_local_request": 2,
+            "incoming_peer_reply": 1
+          },
+          "robot": {
+            "incoming_peer_request": 2,
+            "outgoing_local_reply": 1
+          }
+        },
+        "common_interval_witness": {
+          "qualified": true,
+          "between_filter_read_brackets_ns": [
+            85066198080,
+            86446045581
+          ],
+          "pass_packets": 0,
+          "pass_bytes": 0,
+          "fully_contained_provider_pairs": 12,
+          "provider": {
+            "adjacent_pairs": [
+              {
+                "previous_read_ns": [
+                  85130193413,
+                  85130205163
+                ],
+                "current_read_ns": [
+                  85236909872,
+                  85236921997
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85236909872,
+                  85236921997
+                ],
+                "current_read_ns": [
+                  85346414955,
+                  85346424955
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85346414955,
+                  85346424955
+                ],
+                "current_read_ns": [
+                  85448428455,
+                  85448437913
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85448428455,
+                  85448437913
+                ],
+                "current_read_ns": [
+                  85549148372,
+                  85549156705
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85549148372,
+                  85549156705
+                ],
+                "current_read_ns": [
+                  85650140747,
+                  85650150039
+                ],
+                "counters": {
+                  "data_sent": 4,
+                  "data_received": 12,
+                  "retransmitted": 0,
+                  "ack_sent": 5,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 612,
+                  "bytes_received": 2176
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85650140747,
+                  85650150039
+                ],
+                "current_read_ns": [
+                  85755571039,
+                  85755580164
+                ],
+                "counters": {
+                  "data_sent": 9,
+                  "data_received": 3,
+                  "retransmitted": 0,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1267,
+                  "bytes_received": 551
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85755571039,
+                  85755580164
+                ],
+                "current_read_ns": [
+                  85859397247,
+                  85859411164
+                ],
+                "counters": {
+                  "data_sent": 15,
+                  "data_received": 7,
+                  "retransmitted": 14,
+                  "ack_sent": 3,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2159,
+                  "bytes_received": 1317
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85859397247,
+                  85859411164
+                ],
+                "current_read_ns": [
+                  85962041664,
+                  85962050164
+                ],
+                "counters": {
+                  "data_sent": 14,
+                  "data_received": 0,
+                  "retransmitted": 14,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2019,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  85962041664,
+                  85962050164
+                ],
+                "current_read_ns": [
+                  86065440622,
+                  86065452330
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 140,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  86065440622,
+                  86065452330
+                ],
+                "current_read_ns": [
+                  86172393455,
+                  86172402414
+                ],
+                "counters": {
+                  "data_sent": 15,
+                  "data_received": 5,
+                  "retransmitted": 15,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2159,
+                  "bytes_received": 975
+                }
+              },
+              {
+                "previous_read_ns": [
+                  86172393455,
+                  86172402414
+                ],
+                "current_read_ns": [
+                  86275292039,
+                  86275302831
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 7,
+                  "retransmitted": 16,
+                  "ack_sent": 3,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2439,
+                  "bytes_received": 1317
+                }
+              },
+              {
+                "previous_read_ns": [
+                  86275292039,
+                  86275302831
+                ],
+                "current_read_ns": [
+                  86387078872,
+                  86387090872
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 9,
+                  "retransmitted": 0,
+                  "ack_sent": 4,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 1673
+                }
+              }
+            ],
+            "totals": {
+              "data_sent": 75,
+              "data_received": 44,
+              "retransmitted": 59,
+              "ack_sent": 20,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 10795,
+              "bytes_received": 8204
+            }
+          },
+          "why": null,
+          "scope": "Successful provider DATA submission or selected control accounting inside an observed counter-flat software-PASS read interval, and no selected source hook observation in the enclosing window. Aggregate port/peer selection, not per-packet identity, exact neighbor transition or unique kernel cause."
+        }
+      },
+      {
+        "family": "adjacent_gap",
+        "sender": "operator",
+        "window_ns": [
+          242763415527,
+          243765141027
+        ],
+        "flow": {
+          "direction": "out",
+          "source": "172.19.0.2",
+          "destination": "172.19.0.3",
+          "source_port": 10080,
+          "destination_port": 54845,
+          "destination_socket_id": 1055321053
+        },
+        "primary_classification": "selected_send_counters_flat_not_udp_absence_proof",
+        "stage_classification": "selected_counters_flat_not_udp_absence_proof",
+        "identity_stable": true,
+        "provider_totals": {
+          "data_sent": 0,
+          "data_received": 0,
+          "retransmitted": 0,
+          "ack_sent": 0,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 0,
+          "bytes_received": 0
+        },
+        "qdisc_totals": {
+          "pass_packets": 0,
+          "pass_bytes": 0,
+          "root_packets": 180,
+          "root_bytes": 12624,
+          "root_drops": 0,
+          "root_overlimits": 0
+        },
+        "tc_pairs": 4,
+        "max_root_backlog": 0,
+        "max_root_qlen": 0,
+        "all_selected_source_control_observations": 0,
+        "neighbor_states": {
+          "operator": {
+            "REACHABLE": 10
+          },
+          "robot": {
+            "DELAY": 10
+          }
+        },
+        "arp_counts": {
+          "operator": {},
+          "robot": {}
+        },
+        "common_interval_witness": {
+          "qualified": false,
+          "between_filter_read_brackets_ns": [
+            242815512235,
+            243594587652
+          ],
+          "pass_packets": 0,
+          "pass_bytes": 0,
+          "fully_contained_provider_pairs": 7,
+          "provider": {
+            "adjacent_pairs": [
+              {
+                "previous_read_ns": [
+                  242839746485,
+                  242839760985
+                ],
+                "current_read_ns": [
+                  242944452360,
+                  242944461402
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  242944452360,
+                  242944461402
+                ],
+                "current_read_ns": [
+                  243050893735,
+                  243050903610
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  243050893735,
+                  243050903610
+                ],
+                "current_read_ns": [
+                  243153486443,
+                  243153499485
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  243153486443,
+                  243153499485
+                ],
+                "current_read_ns": [
+                  243255450485,
+                  243255460277
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  243255450485,
+                  243255460277
+                ],
+                "current_read_ns": [
+                  243357749319,
+                  243357758069
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  243357749319,
+                  243357758069
+                ],
+                "current_read_ns": [
+                  243460216902,
+                  243460226485
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  243460216902,
+                  243460226485
+                ],
+                "current_read_ns": [
+                  243565933610,
+                  243565942860
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              }
+            ],
+            "totals": {
+              "data_sent": 0,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 0,
+              "bytes_received": 0
+            }
+          },
+          "why": "no fully contained positive selected provider increment",
+          "scope": "Successful provider DATA submission or selected control accounting inside an observed counter-flat software-PASS read interval, and no selected source hook observation in the enclosing window. Aggregate port/peer selection, not per-packet identity, exact neighbor transition or unique kernel cause."
+        }
+      },
+      {
+        "family": "adjacent_gap",
+        "sender": "robot",
+        "window_ns": [
+          165144468867,
+          166476474451
+        ],
+        "flow": {
+          "direction": "out",
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "source_port": 54845,
+          "destination_port": 10080,
+          "destination_socket_id": 828726458
+        },
+        "primary_classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+        "stage_classification": "pass_counter_growth_without_source_control_tap",
+        "identity_stable": true,
+        "provider_totals": {
+          "data_sent": 126,
+          "data_received": 46,
+          "retransmitted": 120,
+          "ack_sent": 19,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 23865,
+          "bytes_received": 6629
+        },
+        "qdisc_totals": {
+          "pass_packets": 30,
+          "pass_bytes": 6064,
+          "root_packets": 102,
+          "root_bytes": 20328,
+          "root_drops": 1390,
+          "root_overlimits": 1589
+        },
+        "tc_pairs": 6,
+        "max_root_backlog": 6692,
+        "max_root_qlen": 16,
+        "all_selected_source_control_observations": 0,
+        "neighbor_states": {
+          "operator": {
+            "REACHABLE": 13
+          },
+          "robot": {
+            "PROBE": 2,
+            "INCOMPLETE": 10,
+            "REACHABLE": 1
+          }
+        },
+        "arp_counts": {
+          "operator": {
+            "incoming_peer_request": 1,
+            "outgoing_local_reply": 1
+          },
+          "robot": {
+            "outgoing_local_request": 1,
+            "reflected_local_request": 1,
+            "incoming_peer_reply": 1
+          }
+        },
+        "common_interval_witness": {
+          "qualified": false,
+          "why": "PASS executions observed",
+          "pass_packets": 30,
+          "pass_bytes": 6064
+        }
+      },
+      {
+        "family": "adjacent_gap",
+        "sender": "robot",
+        "window_ns": [
+          242806475943,
+          244155592944
+        ],
+        "flow": {
+          "direction": "out",
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "source_port": 54845,
+          "destination_port": 10080,
+          "destination_socket_id": 828726458
+        },
+        "primary_classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+        "stage_classification": "pass_counter_growth_without_source_control_tap",
+        "identity_stable": true,
+        "provider_totals": {
+          "data_sent": 24,
+          "data_received": 0,
+          "retransmitted": 24,
+          "ack_sent": 0,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 3696,
+          "bytes_received": 0
+        },
+        "qdisc_totals": {
+          "pass_packets": 20,
+          "pass_bytes": 3680,
+          "root_packets": 292,
+          "root_bytes": 64232,
+          "root_drops": 9491,
+          "root_overlimits": 10325
+        },
+        "tc_pairs": 5,
+        "max_root_backlog": 3768,
+        "max_root_qlen": 16,
+        "all_selected_source_control_observations": 0,
+        "neighbor_states": {
+          "operator": {
+            "REACHABLE": 14
+          },
+          "robot": {
+            "DELAY": 14
+          }
+        },
+        "arp_counts": {
+          "operator": {},
+          "robot": {}
+        },
+        "common_interval_witness": {
+          "qualified": false,
+          "why": "PASS executions observed",
+          "pass_packets": 20,
+          "pass_bytes": 3680
+        }
+      }
+    ]
+  }
+]

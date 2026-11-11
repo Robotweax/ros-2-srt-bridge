@@ -1,0 +1,3451 @@
+{
+  "status": "passed",
+  "image": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+  "cases": [
+    {
+      "status": "passed",
+      "losses": 1,
+      "trace_diagnostic": false,
+      "trace_loss": false,
+      "late_repair": true,
+      "sample_period_ms": 5,
+      "capture_backend": "packet-socket",
+      "pcap_filter": "udp port 10081 and (udp[8] & 128 = 0 or udp[8:2] = 32768)",
+      "qualification": false,
+      "scope": "finite IMU at requested200.0Hz, explicit permanent-neighbor fixture, two separate closed capture phases; not full200/50Hz N3 matrix or CONTROL/M3 acceptance",
+      "clock_proof": {
+        "operator": "d03b27a7-0460-42dc-84ad-d01adaa5bb7b\nmonotonic           0         0\nboottime            0         0\n",
+        "robot": "d03b27a7-0460-42dc-84ad-d01adaa5bb7b\nmonotonic           0         0\nboottime            0         0\n"
+      },
+      "features_before": {
+        "operator": {
+          "interface": "eth0",
+          "mtu": 1500,
+          "read_only": true,
+          "features": {
+            "tx-scatter-gather": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv4": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-ip-generic": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv6": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "highdma": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-scatter-gather-fraglist": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-vlan-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "vlan-challenged": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": true
+            },
+            "tx-generic-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-gro": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-lro": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-robust": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-ecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-mangleid-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-fcoe-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-gre-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gre-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip4-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-partial": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tunnel-remcsum-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-sctp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-esp-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-udp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-list": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-accecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-fcoe-crc": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-sctp": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-ntuple-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-hashing": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-checksum": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-nocache-copy": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "loopback": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-fcs": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-all": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-vlan-stag-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "l2-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hw-tc-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-tx-csum-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp_tunnel-port-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-tx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-rx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-hw": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-record": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-list": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "macsec-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp-gro-forwarding": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-ins-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-rm-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-dup-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            }
+          }
+        },
+        "robot": {
+          "interface": "eth0",
+          "mtu": 1500,
+          "read_only": true,
+          "features": {
+            "tx-scatter-gather": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv4": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-ip-generic": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv6": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "highdma": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-scatter-gather-fraglist": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-vlan-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "vlan-challenged": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": true
+            },
+            "tx-generic-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-gro": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-lro": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-robust": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-ecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-mangleid-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-fcoe-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-gre-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gre-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip4-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-partial": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tunnel-remcsum-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-sctp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-esp-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-udp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-list": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-accecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-fcoe-crc": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-sctp": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-ntuple-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-hashing": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-checksum": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-nocache-copy": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "loopback": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-fcs": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-all": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-vlan-stag-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "l2-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hw-tc-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-tx-csum-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp_tunnel-port-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-tx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-rx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-hw": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-record": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-list": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "macsec-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp-gro-forwarding": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-ins-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-rm-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-dup-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            }
+          }
+        }
+      },
+      "identity": {
+        "binding": {
+          "direction": "out",
+          "source": "172.19.0.3",
+          "destination": "172.19.0.2",
+          "source_port": 59103,
+          "destination_port": 10081,
+          "sequence": 1382662493,
+          "message_number": 1,
+          "socket_id": 274854646,
+          "retransmitted": false,
+          "control": false,
+          "monotonic_ns": 7936634002
+        },
+        "initial_sequence": 1382662493,
+        "origin_evidence": "closed same-fixture handshake and exact single binding at both taps; outer headers are routing observations, not cryptographic identity proof",
+        "capture_stop_before_ns": 10521292920
+      },
+      "identity_captures": {
+        "operator": {
+          "status": {
+            "complete": true,
+            "records": 81,
+            "seen": 81,
+            "submitted": 81,
+            "reserve_failed": 0,
+            "copy_failed": 0,
+            "ready_ns": 4150438417,
+            "stop_before_ns": 10359657212,
+            "ifindex": 11,
+            "time_namespace_zero": true,
+            "ring_bytes": 16777216,
+            "clock": "kernel_monotonic",
+            "artifact_version": 2,
+            "mtu": 1500,
+            "record_bytes": 168,
+            "prefix_bytes": 128
+          },
+          "footer": {
+            "capture_backend": "filtered_packet_socket",
+            "captured_records": 8,
+            "filtered_records": 8,
+            "kernel_drops": 0,
+            "file_integrity_valid": true,
+            "population_reconciled": true
+          },
+          "known_source_parity_records": 1
+        },
+        "robot": {
+          "status": {
+            "complete": true,
+            "records": 83,
+            "seen": 83,
+            "submitted": 83,
+            "reserve_failed": 0,
+            "copy_failed": 0,
+            "ready_ns": 4160304334,
+            "stop_before_ns": 10521292920,
+            "ifindex": 11,
+            "time_namespace_zero": true,
+            "ring_bytes": 16777216,
+            "clock": "kernel_monotonic",
+            "artifact_version": 2,
+            "mtu": 1500,
+            "record_bytes": 168,
+            "prefix_bytes": 128
+          },
+          "footer": {
+            "capture_backend": "filtered_packet_socket",
+            "captured_records": 8,
+            "filtered_records": 8,
+            "kernel_drops": 0,
+            "file_integrity_valid": true,
+            "population_reconciled": true
+          },
+          "known_source_parity_records": 1
+        }
+      },
+      "selection": {
+        "initial_sequence": 1382662493,
+        "row": 1,
+        "positions": [
+          0
+        ],
+        "message_numbers": [
+          5
+        ],
+        "socket_id": 274854646,
+        "source_port": 59103,
+        "destination_port": 10081
+      },
+      "fault": {
+        "targets": [
+          {
+            "position": 0,
+            "sequence": 1382662497,
+            "message_number": 5
+          }
+        ],
+        "install": [
+          {
+            "begin_ns": 11654856462,
+            "end_ns": 11676103796,
+            "argv": [
+              "tc",
+              "filter",
+              "add",
+              "dev",
+              "eth0",
+              "egress",
+              "protocol",
+              "ip",
+              "pref",
+              "49149",
+              "u32",
+              "match",
+              "u8",
+              "0x45",
+              "0xff",
+              "at",
+              "0",
+              "match",
+              "ip",
+              "protocol",
+              "17",
+              "0xff",
+              "match",
+              "u16",
+              "0",
+              "0x3fff",
+              "at",
+              "6",
+              "match",
+              "ip",
+              "src",
+              "172.19.0.3/32",
+              "match",
+              "ip",
+              "dst",
+              "172.19.0.2/32",
+              "match",
+              "ip",
+              "sport",
+              "59103",
+              "0xffff",
+              "match",
+              "ip",
+              "dport",
+              "10081",
+              "0xffff",
+              "match",
+              "u32",
+              "0x5269c161",
+              "0xffffffff",
+              "at",
+              "28",
+              "match",
+              "u32",
+              "0x5",
+              "0x3ffffff",
+              "at",
+              "32",
+              "match",
+              "u32",
+              "0x1061f2f6",
+              "0xffffffff",
+              "at",
+              "40",
+              "action",
+              "drop"
+            ],
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "restored": true,
+        "initial_counters": [
+          {
+            "packets": 0,
+            "drops": 0,
+            "bytes": 0
+          }
+        ],
+        "remove": {
+          "begin_ns": 14463278505,
+          "end_ns": 14482688214,
+          "argv": [
+            "tc",
+            "qdisc",
+            "del",
+            "dev",
+            "eth0",
+            "clsact"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "final_counters": [
+        {
+          "packets": 1,
+          "drops": 1,
+          "bytes": 494
+        }
+      ],
+      "outcome": {
+        "diagnostic_window": {
+          "source_produced": 19,
+          "observer_received": 18,
+          "missing": 1,
+          "losses": {
+            "upstream_dds": 0,
+            "validation": 0,
+            "admission": 0,
+            "ingress_replaced": 0,
+            "ingress_flushed": 0,
+            "input_rejected": 0,
+            "outbound_replaced": 0,
+            "outbound_expired": 0,
+            "outbound_flushed": 0,
+            "srt_accept_to_receiver_gap": 0,
+            "receiver_rejected": 1,
+            "receive_replaced": 0,
+            "receive_flushed": 0,
+            "poll_expired": 0,
+            "publication_rejected": 0,
+            "observer_dds": 0
+          },
+          "balances": {
+            "typed_ingress": 0,
+            "ingress_mailbox": 0,
+            "outbound_queue": 0,
+            "receive_mailbox": 0,
+            "publication": 0,
+            "end_to_end": 0
+          },
+          "source_enabled_seconds": 0.122260166,
+          "source_actual_hz": {
+            "imu": 155.4062997100789,
+            "joints": 0.0
+          },
+          "published": 18,
+          "age_upper_histograms": {
+            "imu": {
+              "count": 18,
+              "rounding": "up to 1ms",
+              "maximum_ms": 11,
+              "p50_ms": 7,
+              "p95_ms": 11,
+              "p99_ms": 11
+            },
+            "joint": {
+              "count": 0,
+              "rounding": "up to 1ms",
+              "maximum_ms": null,
+              "p50_ms": null,
+              "p95_ms": null,
+              "p99_ms": null
+            }
+          },
+          "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+        }
+      },
+      "features_after": {
+        "operator": {
+          "interface": "eth0",
+          "mtu": 1500,
+          "read_only": true,
+          "features": {
+            "tx-scatter-gather": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv4": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-ip-generic": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv6": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "highdma": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-scatter-gather-fraglist": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-vlan-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "vlan-challenged": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": true
+            },
+            "tx-generic-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-gro": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-lro": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-robust": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-ecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-mangleid-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-fcoe-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-gre-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gre-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip4-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-partial": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tunnel-remcsum-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-sctp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-esp-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-udp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-list": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-accecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-fcoe-crc": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-sctp": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-ntuple-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-hashing": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-checksum": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-nocache-copy": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "loopback": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-fcs": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-all": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-vlan-stag-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "l2-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hw-tc-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-tx-csum-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp_tunnel-port-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-tx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-rx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-hw": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-record": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-list": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "macsec-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp-gro-forwarding": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-ins-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-rm-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-dup-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            }
+          }
+        },
+        "robot": {
+          "interface": "eth0",
+          "mtu": 1500,
+          "read_only": true,
+          "features": {
+            "tx-scatter-gather": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv4": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-ip-generic": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-ipv6": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "highdma": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-scatter-gather-fraglist": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-vlan-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "vlan-challenged": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": true
+            },
+            "tx-generic-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-gro": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-lro": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-robust": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tcp-ecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-mangleid-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-fcoe-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-gre-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gre-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip4-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-ipxip6-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-udp_tnl-csum-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-partial": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-tunnel-remcsum-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-sctp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-esp-segmentation": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-udp-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-gso-list": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-tcp-accecn-segmentation": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-checksum-fcoe-crc": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-checksum-sctp": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-ntuple-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-hashing": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-checksum": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "tx-nocache-copy": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "loopback": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-fcs": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-all": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tx-vlan-stag-hw-insert": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-hw-parse": {
+              "active": true,
+              "available": true,
+              "requested": true,
+              "fixed": false
+            },
+            "rx-vlan-stag-filter": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "l2-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hw-tc-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "esp-tx-csum-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp_tunnel-port-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-tx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-rx-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-hw": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "tls-hw-record": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-gro-list": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "macsec-hw-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "rx-udp-gro-forwarding": {
+              "active": false,
+              "available": true,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-ins-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-tag-rm-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-fwd-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            },
+            "hsr-dup-offload": {
+              "active": false,
+              "available": false,
+              "requested": false,
+              "fixed": false
+            }
+          }
+        }
+      },
+      "sample_correlation": {
+        "late_repair": {
+          "selected_source": {
+            "source_id": 3,
+            "origin_ns": 11832671337,
+            "envelope_sequence": 4,
+            "message_number": 5,
+            "wire_sequence_candidate": 1382662497
+          },
+          "receiver_decision": {
+            "sequence": 6,
+            "point": 4,
+            "begin_ns": 11853494671,
+            "end_ns": 11853502587,
+            "origin_ns": 11832671337,
+            "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+            "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+            "control_generation": 1,
+            "sensor_generation": 1,
+            "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+            "envelope_sequence": 4,
+            "callback_sequence": 0,
+            "route": 1,
+            "bytes": 420,
+            "kind": 5,
+            "result": 12,
+            "stamp_sec": 0,
+            "stamp_nanosec": 0,
+            "socket": 274854646,
+            "message_number": 5,
+            "initial_sequence": -1,
+            "initial_sequence_available": 0
+          },
+          "newer_observed_before_parity": [
+            4,
+            5
+          ],
+          "parity_incoming_ns": 11851552046,
+          "callback_ingress_to_parity_VM_ns": 18880709,
+          "scope": "direct replay classification before Session age evaluation; actual VM elapsed under250ms is not an evaluated conservative age bound or physical sensor age",
+          "first_successor_incoming_ns": 11839932462,
+          "successor_to_parity_native_ns": 11619584
+        },
+        "sender_trace": {
+          "complete": true,
+          "status": {
+            "schema_version": 2,
+            "attempted": 39,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "events": [
+            {
+              "sequence": 1,
+              "point": 2,
+              "begin_ns": 7936437669,
+              "end_ns": 7936485085,
+              "origin_ns": 7935729460,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 5,
+              "callback_sequence": 0,
+              "route": 0,
+              "bytes": 150,
+              "kind": 4,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 1,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 2,
+              "point": 1,
+              "begin_ns": 11811510796,
+              "end_ns": 11811761337,
+              "origin_ns": 11810355921,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 1,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 35275880,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 3,
+              "point": 2,
+              "begin_ns": 11812774504,
+              "end_ns": 11812793421,
+              "origin_ns": 11810355921,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 1,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 2,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 4,
+              "point": 1,
+              "begin_ns": 11820855587,
+              "end_ns": 11820857754,
+              "origin_ns": 11820750212,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 2,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 47595255,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 5,
+              "point": 2,
+              "begin_ns": 11821879671,
+              "end_ns": 11821891921,
+              "origin_ns": 11820750212,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 2,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 3,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 6,
+              "point": 1,
+              "begin_ns": 11826738046,
+              "end_ns": 11826740129,
+              "origin_ns": 11826708212,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 3,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 53548255,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 7,
+              "point": 2,
+              "begin_ns": 11827227004,
+              "end_ns": 11827237421,
+              "origin_ns": 11826708212,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 3,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 4,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 8,
+              "point": 1,
+              "begin_ns": 11832703004,
+              "end_ns": 11832704837,
+              "origin_ns": 11832671337,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 4,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 59550172,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 9,
+              "point": 2,
+              "begin_ns": 11833438046,
+              "end_ns": 11833445421,
+              "origin_ns": 11832671337,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 4,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 5,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 10,
+              "point": 1,
+              "begin_ns": 11838816462,
+              "end_ns": 11838818087,
+              "origin_ns": 11838789921,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 5,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 65675588,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 11,
+              "point": 2,
+              "begin_ns": 11839853546,
+              "end_ns": 11839862046,
+              "origin_ns": 11838789921,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 5,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 6,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 12,
+              "point": 1,
+              "begin_ns": 11844797004,
+              "end_ns": 11844799212,
+              "origin_ns": 11844757629,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 6,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 71606797,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 13,
+              "point": 2,
+              "begin_ns": 11845934837,
+              "end_ns": 11845944087,
+              "origin_ns": 11844757629,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 6,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 7,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 14,
+              "point": 1,
+              "begin_ns": 11851092754,
+              "end_ns": 11851095337,
+              "origin_ns": 11851063087,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 7,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 77879005,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 15,
+              "point": 2,
+              "begin_ns": 11851318712,
+              "end_ns": 11851339712,
+              "origin_ns": 11851063087,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 7,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 8,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 16,
+              "point": 1,
+              "begin_ns": 11856894504,
+              "end_ns": 11856897462,
+              "origin_ns": 11856855671,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 8,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 83699338,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 17,
+              "point": 2,
+              "begin_ns": 11857646004,
+              "end_ns": 11857656004,
+              "origin_ns": 11856855671,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 8,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 9,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 18,
+              "point": 1,
+              "begin_ns": 11862917087,
+              "end_ns": 11862921212,
+              "origin_ns": 11862889046,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 9,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 89736463,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 19,
+              "point": 2,
+              "begin_ns": 11863087504,
+              "end_ns": 11863098171,
+              "origin_ns": 11862889046,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 9,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 10,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 20,
+              "point": 1,
+              "begin_ns": 11869129462,
+              "end_ns": 11869131629,
+              "origin_ns": 11869098087,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 10,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 95944672,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 21,
+              "point": 2,
+              "begin_ns": 11869406337,
+              "end_ns": 11869415212,
+              "origin_ns": 11869098087,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 10,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 11,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 22,
+              "point": 1,
+              "begin_ns": 11874907587,
+              "end_ns": 11874909546,
+              "origin_ns": 11874878504,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 11,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 101732713,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 23,
+              "point": 2,
+              "begin_ns": 11875478004,
+              "end_ns": 11875492462,
+              "origin_ns": 11874878504,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 11,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 12,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 24,
+              "point": 1,
+              "begin_ns": 11880936087,
+              "end_ns": 11880938046,
+              "origin_ns": 11880906587,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 12,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 107771380,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 25,
+              "point": 2,
+              "begin_ns": 11881771796,
+              "end_ns": 11881780337,
+              "origin_ns": 11880906587,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 12,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 13,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 26,
+              "point": 1,
+              "begin_ns": 11887113296,
+              "end_ns": 11887115462,
+              "origin_ns": 11887081796,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 13,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 113932547,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 27,
+              "point": 2,
+              "begin_ns": 11887754962,
+              "end_ns": 11887766046,
+              "origin_ns": 11887081796,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 13,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 14,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 28,
+              "point": 1,
+              "begin_ns": 11892786504,
+              "end_ns": 11892788546,
+              "origin_ns": 11892752796,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 14,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 119639255,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 29,
+              "point": 2,
+              "begin_ns": 11893603212,
+              "end_ns": 11893612671,
+              "origin_ns": 11892752796,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 14,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 15,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 30,
+              "point": 1,
+              "begin_ns": 11899315962,
+              "end_ns": 11899317796,
+              "origin_ns": 11899284379,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 15,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 126142463,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 31,
+              "point": 2,
+              "begin_ns": 11899532254,
+              "end_ns": 11899548962,
+              "origin_ns": 11899284379,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 15,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 16,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 32,
+              "point": 1,
+              "begin_ns": 11906103504,
+              "end_ns": 11906105421,
+              "origin_ns": 11906076671,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 16,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 132918672,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 33,
+              "point": 2,
+              "begin_ns": 11906271379,
+              "end_ns": 11906279671,
+              "origin_ns": 11906076671,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 16,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 17,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 34,
+              "point": 1,
+              "begin_ns": 11912830921,
+              "end_ns": 11912833879,
+              "origin_ns": 11912804046,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 17,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 139678213,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 35,
+              "point": 2,
+              "begin_ns": 11913710504,
+              "end_ns": 11913723796,
+              "origin_ns": 11912804046,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 17,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 18,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 36,
+              "point": 1,
+              "begin_ns": 11918722837,
+              "end_ns": 11918724629,
+              "origin_ns": 11918695296,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 18,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 145558005,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 37,
+              "point": 2,
+              "begin_ns": 11919147921,
+              "end_ns": 11919156337,
+              "origin_ns": 11918695296,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 18,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 19,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            },
+            {
+              "sequence": 38,
+              "point": 1,
+              "begin_ns": 11924601754,
+              "end_ns": 11924603421,
+              "origin_ns": 11924579837,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 0,
+              "callback_sequence": 19,
+              "route": 1,
+              "bytes": 324,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 1794122394,
+              "stamp_nanosec": 151470922,
+              "socket": -1,
+              "message_number": 0,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 39,
+              "point": 2,
+              "begin_ns": 11925267879,
+              "end_ns": 11925275462,
+              "origin_ns": 11924579837,
+              "owner_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 19,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 340324603,
+              "message_number": 20,
+              "initial_sequence": 1382662493,
+              "initial_sequence_available": 1
+            }
+          ],
+          "scope": "loss-checked local observation; origin/route/owner/context joins; no delivery/absence or cryptographic identity authority, no cross-lane sequence causality; one ROS executor and one transport producer"
+        },
+        "receiver_trace": {
+          "complete": true,
+          "status": {
+            "schema_version": 2,
+            "attempted": 19,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "events": [
+            {
+              "sequence": 1,
+              "point": 4,
+              "begin_ns": 11813317587,
+              "end_ns": 11813608462,
+              "origin_ns": 11810355921,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 1,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 2,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 2,
+              "point": 4,
+              "begin_ns": 11822195379,
+              "end_ns": 11822205671,
+              "origin_ns": 11820750212,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 2,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 3,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 3,
+              "point": 4,
+              "begin_ns": 11827430504,
+              "end_ns": 11827434046,
+              "origin_ns": 11826708212,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 3,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 4,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 4,
+              "point": 4,
+              "begin_ns": 11840523212,
+              "end_ns": 11840567629,
+              "origin_ns": 11838789921,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 5,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 6,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 5,
+              "point": 4,
+              "begin_ns": 11848601754,
+              "end_ns": 11848608712,
+              "origin_ns": 11844757629,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 6,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 7,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 6,
+              "point": 4,
+              "begin_ns": 11853494671,
+              "end_ns": 11853502587,
+              "origin_ns": 11832671337,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 4,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 12,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 5,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 7,
+              "point": 4,
+              "begin_ns": 11853538254,
+              "end_ns": 11853544754,
+              "origin_ns": 11851063087,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 7,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 8,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 8,
+              "point": 4,
+              "begin_ns": 11857916462,
+              "end_ns": 11857923837,
+              "origin_ns": 11856855671,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 8,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 9,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 9,
+              "point": 4,
+              "begin_ns": 11863369962,
+              "end_ns": 11863376671,
+              "origin_ns": 11862889046,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 9,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 10,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 10,
+              "point": 4,
+              "begin_ns": 11869637004,
+              "end_ns": 11869642254,
+              "origin_ns": 11869098087,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 10,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 11,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 11,
+              "point": 4,
+              "begin_ns": 11875706587,
+              "end_ns": 11875713671,
+              "origin_ns": 11874878504,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 11,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 12,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 12,
+              "point": 4,
+              "begin_ns": 11881971754,
+              "end_ns": 11881978296,
+              "origin_ns": 11880906587,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 12,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 13,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 13,
+              "point": 4,
+              "begin_ns": 11887985712,
+              "end_ns": 11887992962,
+              "origin_ns": 11887081796,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 13,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 14,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 14,
+              "point": 4,
+              "begin_ns": 11893833837,
+              "end_ns": 11893840587,
+              "origin_ns": 11892752796,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 14,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 15,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 15,
+              "point": 4,
+              "begin_ns": 11899815546,
+              "end_ns": 11899823004,
+              "origin_ns": 11899284379,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 15,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 16,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 16,
+              "point": 4,
+              "begin_ns": 11906583129,
+              "end_ns": 11906590879,
+              "origin_ns": 11906076671,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 16,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 17,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 17,
+              "point": 4,
+              "begin_ns": 11913945712,
+              "end_ns": 11913954087,
+              "origin_ns": 11912804046,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 17,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 18,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 18,
+              "point": 4,
+              "begin_ns": 11919331004,
+              "end_ns": 11919337046,
+              "origin_ns": 11918695296,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 18,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 19,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            },
+            {
+              "sequence": 19,
+              "point": 4,
+              "begin_ns": 11925494921,
+              "end_ns": 11925501921,
+              "origin_ns": 11924579837,
+              "owner_epoch": "f070fd85de8714f925c1b170f0fd8c13",
+              "session": "2bd6d35c9f7b078be9a78c8aceb16a8c",
+              "control_generation": 1,
+              "sensor_generation": 1,
+              "source_epoch": "2c4f561df3765f3d24318d23210ad3d6",
+              "envelope_sequence": 19,
+              "callback_sequence": 0,
+              "route": 1,
+              "bytes": 420,
+              "kind": 5,
+              "result": 0,
+              "stamp_sec": 0,
+              "stamp_nanosec": 0,
+              "socket": 274854646,
+              "message_number": 20,
+              "initial_sequence": -1,
+              "initial_sequence_available": 0
+            }
+          ],
+          "scope": "loss-checked local observation; origin/route/owner/context joins; no delivery/absence or cryptographic identity authority, no cross-lane sequence causality; one ROS executor and one transport producer"
+        },
+        "mapped": [
+          {
+            "source_id": 0,
+            "origin_ns": 11810355921,
+            "envelope_sequence": 1,
+            "message_number": 2,
+            "wire_sequence_candidate": 1382662494
+          },
+          {
+            "source_id": 1,
+            "origin_ns": 11820750212,
+            "envelope_sequence": 2,
+            "message_number": 3,
+            "wire_sequence_candidate": 1382662495
+          },
+          {
+            "source_id": 2,
+            "origin_ns": 11826708212,
+            "envelope_sequence": 3,
+            "message_number": 4,
+            "wire_sequence_candidate": 1382662496
+          },
+          {
+            "source_id": 3,
+            "origin_ns": 11832671337,
+            "envelope_sequence": 4,
+            "message_number": 5,
+            "wire_sequence_candidate": 1382662497
+          },
+          {
+            "source_id": 4,
+            "origin_ns": 11838789921,
+            "envelope_sequence": 5,
+            "message_number": 6,
+            "wire_sequence_candidate": 1382662498
+          },
+          {
+            "source_id": 5,
+            "origin_ns": 11844757629,
+            "envelope_sequence": 6,
+            "message_number": 7,
+            "wire_sequence_candidate": 1382662499
+          },
+          {
+            "source_id": 6,
+            "origin_ns": 11851063087,
+            "envelope_sequence": 7,
+            "message_number": 8,
+            "wire_sequence_candidate": 1382662500
+          },
+          {
+            "source_id": 7,
+            "origin_ns": 11856855671,
+            "envelope_sequence": 8,
+            "message_number": 9,
+            "wire_sequence_candidate": 1382662501
+          },
+          {
+            "source_id": 8,
+            "origin_ns": 11862889046,
+            "envelope_sequence": 9,
+            "message_number": 10,
+            "wire_sequence_candidate": 1382662502
+          },
+          {
+            "source_id": 9,
+            "origin_ns": 11869098087,
+            "envelope_sequence": 10,
+            "message_number": 11,
+            "wire_sequence_candidate": 1382662503
+          },
+          {
+            "source_id": 10,
+            "origin_ns": 11874878504,
+            "envelope_sequence": 11,
+            "message_number": 12,
+            "wire_sequence_candidate": 1382662504
+          },
+          {
+            "source_id": 11,
+            "origin_ns": 11880906587,
+            "envelope_sequence": 12,
+            "message_number": 13,
+            "wire_sequence_candidate": 1382662505
+          },
+          {
+            "source_id": 12,
+            "origin_ns": 11887081796,
+            "envelope_sequence": 13,
+            "message_number": 14,
+            "wire_sequence_candidate": 1382662506
+          },
+          {
+            "source_id": 13,
+            "origin_ns": 11892752796,
+            "envelope_sequence": 14,
+            "message_number": 15,
+            "wire_sequence_candidate": 1382662507
+          },
+          {
+            "source_id": 14,
+            "origin_ns": 11899284379,
+            "envelope_sequence": 15,
+            "message_number": 16,
+            "wire_sequence_candidate": 1382662508
+          },
+          {
+            "source_id": 15,
+            "origin_ns": 11906076671,
+            "envelope_sequence": 16,
+            "message_number": 17,
+            "wire_sequence_candidate": 1382662509
+          },
+          {
+            "source_id": 16,
+            "origin_ns": 11912804046,
+            "envelope_sequence": 17,
+            "message_number": 18,
+            "wire_sequence_candidate": 1382662510
+          },
+          {
+            "source_id": 17,
+            "origin_ns": 11918695296,
+            "envelope_sequence": 18,
+            "message_number": 19,
+            "wire_sequence_candidate": 1382662511
+          },
+          {
+            "source_id": 18,
+            "origin_ns": 11924579837,
+            "envelope_sequence": 19,
+            "message_number": 20,
+            "wire_sequence_candidate": 1382662512
+          }
+        ],
+        "busy_source_ids": [],
+        "selected_sources": [
+          {
+            "source_id": 3,
+            "origin_ns": 11832671337,
+            "envelope_sequence": 4,
+            "message_number": 5,
+            "wire_sequence_candidate": 1382662497
+          }
+        ],
+        "expected_observed_ids": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "captures": {
+          "operator": {
+            "status": {
+              "complete": true,
+              "records": 145,
+              "seen": 145,
+              "submitted": 145,
+              "reserve_failed": 0,
+              "copy_failed": 0,
+              "ready_ns": 11083494420,
+              "stop_before_ns": 16470778506,
+              "ifindex": 11,
+              "time_namespace_zero": true,
+              "ring_bytes": 16777216,
+              "clock": "kernel_monotonic",
+              "artifact_version": 2,
+              "mtu": 1500,
+              "record_bytes": 168,
+              "prefix_bytes": 128
+            },
+            "footer": {
+              "capture_backend": "filtered_packet_socket",
+              "captured_records": 23,
+              "filtered_records": 23,
+              "kernel_drops": 0,
+              "file_integrity_valid": true,
+              "population_reconciled": true
+            },
+            "source_records": 18,
+            "parity_records": 5
+          },
+          "robot": {
+            "status": {
+              "complete": true,
+              "records": 155,
+              "seen": 155,
+              "submitted": 155,
+              "reserve_failed": 0,
+              "copy_failed": 0,
+              "ready_ns": 11083423087,
+              "stop_before_ns": 16636633173,
+              "ifindex": 11,
+              "time_namespace_zero": true,
+              "ring_bytes": 16777216,
+              "clock": "kernel_monotonic",
+              "artifact_version": 2,
+              "mtu": 1500,
+              "record_bytes": 168,
+              "prefix_bytes": 128
+            },
+            "footer": {
+              "capture_backend": "filtered_packet_socket",
+              "captured_records": 23,
+              "filtered_records": 23,
+              "kernel_drops": 0,
+              "file_integrity_valid": true,
+              "population_reconciled": true
+            },
+            "source_records": 18,
+            "parity_records": 5
+          }
+        },
+        "selected_source_delivery": "reconstructed source explicitly rejected as replay after newer publications",
+        "qualification": false,
+        "scope": "finite traced ROS case; actual SDK identity to selected source and typed publication, with independent BUSY retained; not replacement baseline, physical delivery or full N3/M3 acceptance"
+      }
+    }
+  ]
+}

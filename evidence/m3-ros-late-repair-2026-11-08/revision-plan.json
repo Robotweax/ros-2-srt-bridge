@@ -1,0 +1,15 @@
+{
+  "status": "prospective after original20Hz late-repair plan failed",
+  "original_failed_case_unchanged": true,
+  "original_observation": "19 admitted,18 decoded/published/observed, no receiver event for SDK message5; one gap before Session admission, not replay rejection. Native incoming parity ~103ms after successor message6",
+  "pinned_source": "SRT src/session.cpp sensor_repair_deadline_microseconds=20000, gap marked on later source and expired in expire_sensor_receive_gaps; recovery constrained by receive floor. Consistent explanation, no internal expiry counter captured",
+  "revision": "explicit nominal200Hz IMU burst via5ms requested period, unchanged20ms provider repair policy. Require native successor6-to-parity strictly under20ms and direct selected SessionError::replay receiver event after newer typed publication",
+  "executions": 1,
+  "no_further_retry_planned": true,
+  "source_calls": 19,
+  "fault": "same SDK message5 / row1 position0 / one source drop, preserve parity",
+  "gates": "all prior trace, payload, source identity, source/BUSY accounting, stable same-session/QoS/clock, strict recorder/native populations/hash/drain and one receiver replay rejection retained; no accepted sample replay",
+  "age_limit": "ordering check precedes age evaluation; selected rejected sample has no evaluated conservative age bound. Native arrival interval and callback elapsed are separate observations, not physical age",
+  "runtime": "same receiver-trace runtime built/validated70 SDK+36 ROS tests before original run; only source scheduling/harness changes in this revision,191 host tests",
+  "scope": "finite single-route burst, not full200/50Hz multiroute/rate/seed qualification or N4/M3 acceptance"
+}

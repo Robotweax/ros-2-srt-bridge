@@ -1,0 +1,146 @@
+[
+  {
+    "label": "pre-fix",
+    "source_commit": "381dfa8",
+    "harness_status": "failed",
+    "original_diagnostic_error": "command diagnostics incomplete",
+    "command_summary": {
+      "attempts": 11,
+      "not_admitted": 0,
+      "unresolved": 1,
+      "terminal_observation_latency_ms": {
+        "count": 10,
+        "p50": 1308.226709,
+        "p95": 3193.770794,
+        "p99": 3193.770794,
+        "maximum": 3193.770794
+      },
+      "by_state_reason": {
+        "4/0": {
+          "count": 10,
+          "p50": 1308.226709,
+          "p95": 3193.770794,
+          "p99": 3193.770794,
+          "maximum": 3193.770794
+        }
+      },
+      "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+    },
+    "skipped": 34,
+    "cutoff_ns": 609893441734,
+    "trace_incarnations": 3,
+    "all_traces_complete": true,
+    "points": {
+      "clock_deferred": 0,
+      "make_rejected": 1,
+      "provider_sent": 10,
+      "worker_unknown": 0,
+      "invalidate_requested": 2
+    },
+    "clock_events": [
+      {
+        "sequence": 37,
+        "monotonic_ns": 547851173247,
+        "point": 22,
+        "reason": 7,
+        "request": "0b000000000000000000000000000000",
+        "session": "6201f95e7519bdcfc596d4d7dc65d825",
+        "owner_epoch": "dcc3514cd8661502df9ad2597c4da4f2",
+        "control_generation": 2,
+        "sensor_generation": 2,
+        "route": 100,
+        "value": 13,
+        "entry_owner_epoch": "00000000000000000000000000000000"
+      }
+    ],
+    "sender_only": [
+      "0b000000000000000000000000000000"
+    ],
+    "sender_unknown": [
+      "0b000000000000000000000000000000"
+    ],
+    "receiver_successes": 10,
+    "pcap_drops": {
+      "operator": 0,
+      "robot": 0
+    },
+    "scope": "separate development cases; pre-fix manifest remains failed, not replaced or reclassified; no full N5/M3 acceptance"
+  },
+  {
+    "label": "post-fix",
+    "source_commit": "899a6eb56d3d64bdefd8799d944b5f6e0d42ba69",
+    "harness_status": "passed",
+    "original_diagnostic_error": null,
+    "command_summary": {
+      "attempts": 32,
+      "not_admitted": 0,
+      "unresolved": 0,
+      "terminal_observation_latency_ms": {
+        "count": 32,
+        "p50": 1532.916959,
+        "p95": 4068.602127,
+        "p99": 4589.18821,
+        "maximum": 4589.18821
+      },
+      "by_state_reason": {
+        "4/0": {
+          "count": 32,
+          "p50": 1532.916959,
+          "p95": 4068.602127,
+          "p99": 4589.18821,
+          "maximum": 4589.18821
+        }
+      },
+      "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+    },
+    "skipped": 13,
+    "cutoff_ns": 1199680878422,
+    "trace_incarnations": 3,
+    "all_traces_complete": true,
+    "points": {
+      "clock_deferred": 2,
+      "make_rejected": 0,
+      "provider_sent": 32,
+      "worker_unknown": 0,
+      "invalidate_requested": 2
+    },
+    "clock_events": [
+      {
+        "sequence": 25,
+        "monotonic_ns": 1125700026596,
+        "point": 29,
+        "reason": 7,
+        "request": "07000000000000000000000000000000",
+        "session": "2230ca00f343eef2ea484b79b194c428",
+        "owner_epoch": "051edad6ae9cf6583e8397119f8972e9",
+        "control_generation": 2,
+        "sensor_generation": 2,
+        "route": 100,
+        "value": 13,
+        "entry_owner_epoch": "00000000000000000000000000000000"
+      },
+      {
+        "sequence": 80,
+        "monotonic_ns": 1175712658827,
+        "point": 29,
+        "reason": 7,
+        "request": "19000000000000000000000000000000",
+        "session": "2230ca00f343eef2ea484b79b194c428",
+        "owner_epoch": "051edad6ae9cf6583e8397119f8972e9",
+        "control_generation": 2,
+        "sensor_generation": 2,
+        "route": 100,
+        "value": 13,
+        "entry_owner_epoch": "00000000000000000000000000000000"
+      }
+    ],
+    "sender_only": [],
+    "sender_unknown": [],
+    "receiver_successes": 32,
+    "pcap_drops": {
+      "operator": 0,
+      "robot": 0
+    },
+    "scope": "separate development cases; pre-fix manifest remains failed, not replaced or reclassified; no full N5/M3 acceptance"
+  }
+]

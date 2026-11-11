@@ -560,3 +560,5713 @@ CONTROL-Latenzen erfassen und eine vergleichbare DDS-Baseline bauen. Keine
 SRT-Überlegenheit aus M2 ableiten. Der Simulator hält Gerätehistorie nur flüchtig;
 physische Geräte, Power-Cut-Qualifikation, lokale DDS-Authentisierung und M4
 Intrinsic sind nicht abgenommen. Die ursprüngliche Übernahme bis M2 ist erfüllt.
+
+### M3 begonnen — isolierter Netz-Harness, 2026-11-05
+
+- PR #1 auf ausdrücklichen Nutzerwunsch gemergt: Main-Commit
+  `32c53b27839182ec45c448694c60fe1691466118`. Weiterentwicklung auf
+  `dev/m3-network-qualification`.
+- `tools/run_m3.py` baut ein eigenes SDK-/ROS-Präfix, erzeugt ein internes
+  Docker-Netz und neue Endpunkt-Container mit NET_ADMIN; keine Host-qdisc.
+  N0/N1/N2/N4/N5 werden als SRT-Entwicklungsläufe unterstützt. Kernel-Readbacks
+  prüfen Seeds, Queuegrenzen und Rate. Alte `tc`-Version ohne Seed ersetzt durch
+  hash-geprüftes iproute2 6.17.0 im gepinnten ROS-Basisimage.
+- ROS-Diagnose ergänzt begrenzte 1-ms-Histogramme konservativer Altersobergrenzen,
+  Maximum und separate Sample-Admission-Zähler für Stale/Unknown-Age. Clock-
+  Intervallbreite ist konfigurierbar (M2 weiterhin 50 ms, M3 explizit 200 ms bei
+  unverändertem 250-ms-SENSOR-Budget). Wire 1 und privates IPC 3 unverändert.
+- Stetiger Test hält Sollrate 200 Hz; absolute 200-Hz-Aufträge alle 2 s ändern
+  die Generation. UNKNOWN pausiert weitere Aufträge statt eine Generation zu
+  raten. Nicht abgeschlossene Aufträge werden getrennt von Latenzperzentilen
+  gezählt. Ressourcenbeobachter und rotierte, auf Vollständigkeit geprüfte
+  Ethernet-PCAPs zählen DATA/Parität/SRT-Controls getrennt. Kein DDS-Bypass.
+- Fünfminütiges N0: `.local/m3/20261105T130451724258Z`, 300,009 s, 150 bestätigte
+  Aufträge und genau 150 Effekte; 27.569 Imu/13.709 JointState beobachtet.
+  Altersobergrenze IMU p99 15 ms/Max 17,62 ms, Gelenke p99 28 ms/Max 32,65 ms.
+  Gleichzeitig fehlen 26.742 IMU im beobachteten Quellzähler-Span von 54.311.
+  Capture vor/nach WAN passt; Senke meldet keine Rejections/Ersetzungen. Verlust
+  vor WAN (lokaler DDS-Ingress bzw. Latest-only-/Send-Pump-Kadenz) muss vor
+  Durchsatzqualifikation genauer zugeordnet werden. 200 Hz sind konfiguriert,
+  kein belegtes Erreichen der Sollrate in dieser emulierten Umgebung.
+- N1/N2/N4/N5-Smokes bestanden, nur Seedbasis 1701. N4 ist derzeit mittiges
+  Kernel-Outage, keine Admission-/Dispatch-/Ergebnis-Commit-Barriere. N5-Prototyp
+  mit 256-Paket-Kindqueue hatte Stale/Unknown-Drops und einen offenen Auftrag;
+  korrigierte 16-Paket-Kindqueue bestätigte alle acht Aufträge. TBF allein begrenzt
+  einen ersetzten Netem-Child nicht auf die angegebene Bytezahl. Paritäts-/DATA-
+  Frame-Byte-Verhältnis tatsächlich etwa 0,60 bei kleinen Messages, nicht aus
+  einem nominellen 4:1-Paketschema als 0,25 angenommen.
+- SDK-Regressionslauf `.local/m1/20261105T124908573510Z`: 15 Debug, 15 ASan/UBSan,
+  67 native, 10 native ASan/UBSan und installierter Consumer bestanden.
+  Originale M2-Demo `.local/m2/20261105T131111749554Z` ebenfalls bestanden.
+  Sieben ROS-GTests plus Wrapper, sechs Python-Harness-Tests bestanden.
+- Evidenz/Fehlversuche: `evidence/m3-network-harness-2026-11-05/`; Plan und
+  tatsächlich verwendetes Image: `baselines/m3-plan.json`. Roh-PCAPs/JSONL und
+  Journale bleiben ignoriert lokal; Artefakthashes liegen in der Evidenz.
+
+**M3 bleibt offen:** N0-Lücken zuordnen und Quellrate/Zeitschnitt/Diagnose-Tail
+vollständig zählen; DDS Best Effort und Reliable mit demselben Journalvertrag
+implementieren; N3 DATA-/FEC-selektive deterministische Verluste und N4-Barrieren
+bauen; vollständige Dauer-/Seed-Matrix ausführen. Keine Leistungsüberlegenheit
+behaupten. M4 unverändert später; Parent-SRT nicht verändert.
+
+### M3 N0-Sensorlücken: Hauptursache behoben — 2026-11-05
+
+- 30-s-Attribution mit Quell-Diagnose: 5.461 IMU-/1.481 Joint-Ingress-Callbacks,
+  nur zwei BUSY-Abgaben, aber 2.633 Ersetzungen in der Sender-Mailbox. Im
+  beobachteten IMU-Span fehlen 2.650 Samples. Der 10-ms-Owner-Wait reduziert
+  eine 200-Hz-Quelle im Latest-only-Slot auf ungefähr 100 Hz.
+- Native 200-Hz-Regression reproduziert den alten Fehler (100 admitted,
+  48 delivered). Aktive Caller fordern jetzt 1 ms Epoll-Timeout an, Listener und
+  nicht aktive Caller weiter 10 ms (keine Scheduler-Laufzeitgarantie). Kein Busy-Spin, keine Queue-Vergrößerung,
+  keine gelockerten Clock-/Session-/Bandbreiten-/250-ms-Altersgates. Der gepinnte
+  SRT-Provider pollt System-Wake-Deskriptoren selbst nur alle 10 ms; der Parent-
+  SRT-Code und das qualifizierte Archiv wurden nicht verändert.
+- Neue ROS-Diagnose: Ingress pro Route und BUSY/obsolete-Abgaben. Der M3-Observer
+  bewahrt Quell-/Senken-/Simulator-Snapshots vor Stop. `gap_attribution` zeigt die
+  Stufen, ohne unterschiedlich getimte kumulative Zähler exakt zu bilanzieren.
+- Neuer Fünfminutenlauf `.local/m3/20261105T140142459719Z` bestanden:
+  IMU 52.793 erhalten, 741/53.534 im beobachteten Quellspan fehlen (1,38% statt
+  49,24%); Joint 29/14.576 fehlen (0,20% statt 6,27%). 150 Aufträge bestätigt,
+  genau 150 Effekte. Quelle zuletzt 48 BUSY und vier Mailbox-Ersetzungen;
+  Senke ohne Admission-Rejection/Stale/Unknown/Ersetzung. Restlücken bleiben offen.
+- CPU-Beobachtung auf derselben emulierten Linux-amd64-Baseline: Quelle etwa
+  17,35→22,39%, Senke 7,75→10,87% eines VM-Kerns bei erheblich mehr zugestellten
+  Daten. Keine kontrollierte Hardware-/DDS-Leistungsvergleichsaussage ableiten.
+- SDK-Vollregression `.local/m1/20261105T135638164666Z`: 15 Debug, 15 ASan/UBSan,
+  67 native, 10 native ASan/UBSan und Consumer bestanden. Erster San-Lauf blieb
+  an einer alten BUSY-Testannahme hängen, nicht an einem Sanitizer-Speicherfehler.
+  Reconnect-Negativtests wiederholen nur BUSY und verlangen den ersten anderen
+  Rückgabewert OBSOLETE; QUEUED alter Arbeit bleibt Fehler.
+- Originale M2-Demo `.local/m2/20261105T135416286568Z` bestanden. Sieben ROS- und
+  sieben Python-Tests bestanden. N5-Smoke unter höherer angebotener Last: sechs
+  von sieben Aufträgen vor Cutoff bestätigt, sieben Effekte, ein Ergebnis explizit
+  offen/zensoriert; keine falsche Erfolgsaussage und kein blindes Replay.
+- Evidenz inklusive fehlgeschlagener Regression und Vorher/Nachher-Runs:
+  `evidence/m3-sensor-cadence-2026-11-05/`. Source-/Artefakthashes erhalten;
+  neue vollständige N0-/SDK-/M2-Manifeste stimmen mit aktuellem Code überein.
+
+**Weiter offen:** verbleibende Rate-/Outbound-Queue-Verluste, exakter Diagnose-
+Tail und erreichte Quellrate; danach DDS-Baseline mit gleichem Journalvertrag,
+N3-Selektor, N4-Auftragsphasen und volle Seed-/Dauermatrix. M3 bleibt in Arbeit;
+Wire 1, privates IPC 3, M4 unverändert. Draft-PR #2 wird mit diesem Fix fortgeführt.
+
+### M3 exakte Sensorfenster und Quellphase — 2026-11-05
+
+- Sensor-Stufenzähler, Pending-Slots und Owner-Epoch per lokalem read-only
+  `/bridge/get_metrics`; `/robot/set_publishing` pausiert mit Callback-Fence.
+  Frische SRT-Session vor Messbeginn entfernt Warmup-SAMPLE-/FEC-Historie.
+  Stabile leere Checkpoints, unveränderte Epochen und sechs Nullresiduen sind
+  Pflicht. Fenster-Histogramme stimmen mit Publikationspopulation überein.
+- Sender wartet bis zu nahen Pacing-Terminen unter 1 ms, ohne Busy-Spin. Simulator
+  erhält Zeitphase, vermeidet Catch-up-Bursts und Phasenreset bei gleicher Rate.
+  Strict pacing, Latest-only, Queue-/250-ms-Grenzen und Kryptografie unverändert.
+- N0 `.local/m3/20261105T153616391199Z`: 300,097 s, Ist 199,959/49,997 Hz,
+  75.011 produziert, 72.372 beobachtet; 2.639 fehlen, alle zugeordnet: 2.542
+  Outbound-Ersetzungen, 91 Admission, drei DDS-Ingress, je eine Ingress- und
+  Empfangsersetzung sowie ein DDS-Observer-Verlust. Kein SRT-Akzeptanz/Empfang-Gap,
+  aber kein Beweis für physisch verlustfreies WAN. 150 bestätigt/150 Effekte.
+- N4-Smoke `20261105T154538668977Z`: sieben bestätigt/ sieben Effekte. N5-Smoke
+  `20261105T154456488682Z`: zwei bestätigt/zwei Effekte, ein Auftrag offen;
+  Bilanz-Pass ist keine Auftragsabnahme. Ergebnisse werden bis acht Sekunden nach
+  Cutoff abgefragt und pro Zeile markiert; gepoolte Latenzen enthalten Drain.
+- SDK `.local/m1/20261105T145359704756Z`: 15/15/67/10 Tests und Consumer bestanden.
+  M2 `.local/m2/20261105T154053788107Z` bestanden; sieben Codec-/vier Schedule-
+  GTests, elf Python-Tests. Finale Source-Hashes geprüft. Ein vorheriger M2-Lauf
+  scheiterte an Image-Pin-Preflight; spätere Inspects und unveränderter Retry
+  bestanden. Ursache unbekannt, Assertion nicht gelockert; Evidenz erhalten.
+- Evidenz `evidence/m3-window-accounting-2026-11-05/` bewahrt finale Manifeste,
+  Entwicklungsläufe, Tests, Artefakthashes und Grenzen. CPU/Wire umfasst weiterhin
+  Gesamtbeobachtung; N0 überlappte teilweise mit M2 in derselben VM. Keine
+  kontrollierte CPU- oder Überlegenheitsaussage. Frühere Marker-Spans bei ~178 Hz
+  sind nicht direkt mit dem neuen 200-Hz-Fenster vergleichbar.
+
+**Nächster Schritt:** DDS Best Effort + Reliable mit gleichem Journalvertrag und
+Messfenster implementieren; CPU/Wire zeitlich angleichen, N3-DATA/FEC-Selektor,
+N4-Auftragsphasen und volle Seed-/Dauermatrix. Outbound-Ersetzungen bei echter
+200-Hz-Last und N5-Auftragsabschluss weiter qualifizieren. M3 bleibt in Arbeit,
+Draft-PR #2 bleibt offen. Parent-SRT, Wire 1, privates IPC 3 und M4 unverändert.
+
+### M3 DDS-Sensorpfad implementiert — 2026-11-05
+
+- `tools/run_m3_dds.py` und separater DDS-Driver betreiben direkte typisierte
+  Best-Effort/Volatile/KeepLast(1)-Sensoren in internem Docker-Netz, Domäne 60,
+  explizite statische Peers. Multicast allein lieferte in diesem Lab keine
+  Discovery; Timeout ist erhalten. Kein SRT-Prozess, keine Host-qdisc/Ports.
+- Source-Fences und stabile Observer-Snapshots bilanzieren tatsächlich erzeugte,
+  empfangene, akzeptierte, stale/invalid/clock-rejected Samples. Fehlend vor
+  Callback umfasst Middleware/Kernel/Netz/History, keinen isolierten WAN-Verlust.
+  Discovery prüft Best Effort/Volatile; History/Depth kann UNKNOWN sein.
+- N0 30 s `.local/m3-dds/20261105T161851009485Z`: 6.023 IMU + 1.507 Joints erzeugt
+  und alle empfangen, Ist 199,891/50,014 Hz. Gemeldeter Mindest-Offset-Schritt
+  1.281.694 ns disqualifiziert Altersmetriken; 3.152 folgende Samples am Clock-
+  Gate verworfen. Ursache nicht belegt. Count-Pass ist keine Altersabnahme.
+- N1-Smoke `.local/m3-dds/20261105T161943936259Z`: 3.022/756 erzeugt, 2.079/746
+  empfangen/akzeptiert; 943/10 vor Callback fehlen. Lokale Shared-VM-Alterschecks
+  bestanden, aber weder konservative SRT-Clock-Grenze noch gleicher Zeitursprung:
+  DDS nutzt Simulator-Header, SRT Bridge-Ingress. Kein Leistungsvergleich.
+- Ungeklammerte Clock-Reads hatten Scheduling als Sprung fehlklassifiziert;
+  geklammerte Intervalle trennen Read-Unsicherheit, Drift und gemeldete Schritte.
+  Ein Fünfminutenversuch scheiterte am ursprünglichen harten Clock-Gate und
+  bewahrte keine finalen Zähler: daraus keine Sample-Zahlen ableiten. Der finale
+  Runner bewahrt Zähler und begrenzte Sprungdiagnose, markiert Alter separat.
+- DDS-Capture zählt IPv4-Fragment-Frames separat ohne RTPS-Payload-Zuordnung.
+  SRT bleibt standardmäßig strikt; Reparse des alten vollen N0 ergibt identisch
+  156.443 Frames je Endpunkt und identische Summary-Felder. Beide finalen DDS-
+  Captures vollständig und ohne Kernel-Capture-Drops. 19 Python-Tests bestanden;
+  installierter Driver/Helper bytegleich und Import/Help bestanden. Keine SDK-
+  oder ROS-C++-Änderung, außer Installation der neuen Python-Tools.
+- Evidenz: `evidence/m3-dds-sensors-2026-11-05/`. Finale Läufe wiederverwenden
+  Simulator-Binary explizit, Hash erhalten; alle 124 Inventar-Sourcehashes passen.
+  Fehlversuche und Rohcapture-Hashes erhalten, PCAPs bleiben ignoriert lokal.
+
+**Weiter:** vollständig journalisierten Reliable-DDS-Auftragskoordinator bauen,
+mit dauerhaftem Sender-Admission vor Send, frischer Session/Clock-Autorisierung
+vor DISPATCHING/Handler-Start, identischem Journal/Handler, QUERY/UNKNOWN und
+keinem Replay alter Absicht nach Reconnect/Crash. Direkter Apply-Service-Aufruf
+ist kein Ersatz. Sensor-Runner sendet keine Aufträge und nutzt keine DDS-Krypto;
+Command-/Security-/Age-/CPU-/Wire-Vergleich und voller Seed-/Dauerlauf fehlen.
+N2/N5 sind im neuen Runner implementiert, hier noch nicht ausgeführt; N3 und N4-
+Auftragsphasen weiterhin offen. PR #2 bleibt Draft, M3 nicht abgenommen.
+
+### M3 Reliable-DDS-Auftragsjournal implementiert — 2026-11-05
+
+- `dds_command_node` + `tools/run_m3_dds_commands.py`: feste Reliable/Volatile/
+  KeepLast(64)-Frames, pro Endpunkt eigener Journal-Thread, Route 100, Budget
+  5.000 ms. SDK-`CommandJournal` unverändert; `RosRateBackend` in geteilten Header
+  verschoben und identisch vom bisherigen SRT-Worker und DDS genutzt.
+- Neue Sender-Admission vor einzigem COMMAND; Duplikat/Recovery nur GET/QUERY.
+  Empfänger committet Admission/DISPATCHING, prüft vor atomarem Start unter dem
+  Session-Mutex Live-Lease, Epochen, Deadline. Kein Disk-/Handler-Aufruf unter
+  diesem Mutex. Bereits beanspruchter Start kann bei späterer Revokation Effekte
+  haben; fehlendes Resultat bleibt UNKNOWN. SRT-Ticket-/IPC-Fences unverändert.
+- Common-VM-only: lokaler Boot-/Time-Namespace-Digest muss auf beiden Seiten
+  passen. Acknowledged Session aus Prozess-/Link-Nonces, Sequenz-/Frischechecks,
+  1,5-s-Lease; Ablauf ändert lokale Link-Nonce. 64 retired Peer-Nonces verhindern
+  Rollback; Kapazität erschöpft → Fail-Closed. Keine DDS-Krypto-/Cross-Host-
+  Authentisierungs-/Clock-Abnahme. Keine vorgetäuschten SRT-Security-Flags.
+- Final `.local/m3-dds-commands/20261105T175009991487Z` bestanden: ID 1 100 Hz
+  SUCCEEDED, Duplikat ohne neuen Send/Effekt, andere Payload desselben IDs meldet
+  lokalen Konflikt. ID 2 75 Hz bewirkt Effekt, verspätete Antwort → UNKNOWN.
+  ID 3 50 Hz bewirkt Effekt, Receiver SIGKILL und Sender SIGKILL vor Reconciliation;
+  nach Reopen QUERY → UNKNOWN/context_lost, kein altes COMMAND. Nach expliziter
+  Device-Reconciliation und Reset der Fault-Verzögerung neue ID 4 200 Hz SUCCEEDED.
+  Insgesamt vier Absichten/vier Effekte; drei COMMANDs vor Sender-Crash, danach
+  ein QUERY und nur das neue COMMAND ID 4. Zwei UNKNOWN haben kein gültiges Resultat.
+- Read-only SQLite quick_check nach Cleanup auf beiden Journals bestanden:
+  identische vier IDs, Payload-Hashes, Revision 3, Status-/Result-Felder. Captures
+  vollständig: Robot 5.107 / Operator 5.081 Frames, keine unzugeordneten Frames
+  oder Kernel-Capture-Drops. Sender meldet nach Restart einen Callback-Admission-
+  Drop, Typ unbekannt; nicht als WAN-Verlust oder garantiertes Admission auslegen.
+  Handler/Journal können ausgehende HELLOs verzögern und konservativ Lease drehen.
+- Sieben neue Session-GTests + sieben Codec + vier Schedule bestanden (18 echte,
+  21 inklusive Wrapper). 19 Python-Tests bestanden. Originales vollständiges M2
+  `.local/m2/20261105T175011079038Z` nach Handler-Extraktion bestanden. Finale
+  DDS-/M2-Source-Inventare 132/81 Dateien passen. SDK-Source/Wire 1/IPC 3 unverändert.
+- Evidenz `evidence/m3-dds-commands-2026-11-05/` inklusive Journal-Inspektion,
+  Artefakthashes und früherem Fault-Test, der UNKNOWN korrekt lieferte, weil die
+  Testverzögerung für neue Arbeit noch aktiv war. Test setzt sie jetzt explizit
+  zurück. Roh-Journale/PCAPs bleiben lokal ignoriert. Auftragsresultate stammen
+  aus DDS-Status; Dateien tragen Teststeuerung und Geräte-Diagnosen.
+
+**Nächster Schritt:** diesen journalisierten Koordinator mit stetiger 200/50-Hz-
+DDS-Sensorlast und absoluten 200-Hz-Absichten alle 2 s zusammenführen. Danach
+N0/N1/N2/N4/N5 mit denselben Fenstern, CPU-/Wire-Scope und Ergebnis-Drain wie SRT
+qualifizieren; Clock-Ursprung/-Grenzen und Kryptografie vergleichbar machen.
+N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-Barrieren und volle
+Seed-/Dauermatrix offen. M3 bleibt in Arbeit, PR #2 Draft; keine M4-Änderung.
+
+### M3 stetige DDS-Sensor-/Auftragslast zusammengeführt — 2026-11-05
+
+- `tools/run_m3_dds.py --commands`: Quelle 200/50 Hz, absolute 200-Hz-Aufträge
+  alle 2 s. Ein Pending, keine Catch-up-Bursts, UNKNOWN/Pending blockiert weitere
+  Absichten. Freie Slots fragen Execute trotz NOT_READY-Diagnose an; explizite
+  Non-Admissions werden gezählt. Sensor-only ohne Flag bleibt erhalten.
+- Vor Beginn beide Journal-Koordinatoren bereit, keine Auftragshistorie/Effekte.
+  Sensor-Fences unverändert; Cutoff stoppt neue Aufträge, Ergebnisbeobachtung
+  maximal bis Cutoff+8 s, danach eingefroren. Separate letzte Device-Fence für
+  Effekte/Generation; Sensorzähler dürfen nicht mehr steigen. Owner-Epochen
+  müssen gleich bleiben. Auftragsdiagnosen behalten 100-ms-Snapshot-Scope.
+- Erster langer Lauf `20261105T181542377101Z`: nur zwei bestätigt/ein offener
+  Auftrag, Sender/Empfänger mit 30/18 Callback-Drops. Code konnte schon empfangene
+  Reliable-Frames bei Try-Lock-Contention verlieren. Kurze Validierungs-/Kopier-
+  abschnitte serialisieren jetzt, ohne Disk/Handler/Netz unter Mutex. Inbox bleibt
+  64; voller Puffer zählt Drop. Lokale Service-Admission bleibt Try-Lock/BUSY.
+  Neuer Parallelproduzenten-Test prüft 64 Aufnahmen ohne Contention-Verlust.
+  Keine Queue-, Lease-, Clock- oder Deadline-Lockerung und kein Intent-Replay.
+- N1-Capture deckte gültiges 4-Byte-Endfragment auf: es besitzt keinen UDP-Header.
+  Parser prüft IP-/Fragment-Länge und MF-Ausrichtung, verlangt UDP-Header nur wo
+  vorhanden. Regression getestet; alte SRT-N0-Summaries weiter identisch. Alte
+  Manifeste unverändert; separate Reanalyse dokumentiert den Fix.
+- Finales N0 `.local/m3-dds-combined/20261105T183834692545Z`: 300,127 s, Ist
+  199,978/50,002 Hz, 75.026 erzeugt/75.025 empfangen, ein IMU fehlt vor Callback.
+  150/150 bestätigt und 150 Effekte, keine Inbox-Drops. Beide geschlossenen
+  Journale quick_check ok, dieselben 150 Payload-Hashes/Revisionen 3/SUCCEEDED,
+  Rate 200 und Generationen 1–150. Alter nach Clock-Schritt unqualifiziert:
+  54.313 IMU/13.580 Joint-Callbacks clock-rejected; empfangene Callbacks, kein
+  isoliertes Netzverlustmaß.
+- Finale Smokes, jeweils 15 s und Seed 1701:
+  N1 `20261105T184311488522Z`: 7/8 bestätigt, eine Non-Admission, sieben Effekte.
+  N2 `20261105T184014775290Z`: 1/2 bestätigt, ein Pending, sechs Slots blockiert.
+  N4 `20261105T184051558249Z`: 4/5 bestätigt, ein Pending, drei Slots blockiert;
+  mittiges Kernel-Outage, keine präzisen Auftragsphasen-Barrieren.
+  N5 `20261105T184126432851Z`: fehlgeschlagen nach 45 s Sender-Ready-Wartezeit im
+  Cold-Start unter dem unveränderten 512-kbit/128K-Konkurrenz-Profil; kein Messfenster.
+  Nicht als vollständige Auftrags-/M3-Abnahme auslegen, keine Nullwerte erfinden.
+- Korrigierter C++-Build `20261105T182432483577Z`: 19 echte ROS-GTests, 22 mit
+  Wrappern bestanden. 27 Python-Tests bestanden. Finale Sensor-only-Regresssion
+  `.local/m3-dds/20261105T184339550820Z` und DDS-Fault-Acceptance
+  `.local/m3-dds-commands/20261105T184405437225Z` bestanden. Finale Läufe verwenden
+  dieses aufgezeichnete Binary wieder; alle 136 Sourcehashes passen, installierte
+  Python-Dateien bytegleich. SDK/SRT-Source und Wire 1/IPC 3 unverändert.
+- Evidenz `evidence/m3-dds-combined-2026-11-05/`: auch Fehlversuche, Parser-Reanalyse,
+  Journalprüfung und Rohartefakthashes. N0 lief zeitweise parallel zu Entwicklungs-
+  fixtures; keine kontrollierte CPU-/Hardware-Aussage, keine Überlegenheit.
+
+**Weiter:** DDS-Ready-/Completion-Grenzen unter N1/N2/N5 untersuchen, ohne die
+Sicherheitsgates oder No-Replay zu lockern. Altersursprung/-Qualifikation und
+Kryptografie vergleichbar machen; CPU/Wire an dieselben Fenster koppeln. Danach
+volle Seed-/Dauermatrix, N3-DATA/FEC-Selektor, N4-Admission/Dispatch/Result-Commit-
+Barrieren. M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+### M3 DDS-Readiness und Lifecycle nachgebessert — 2026-11-05
+
+- Nach Lease-Ablauf fehlte die erneute Zielsuche: beide Enden konnten HELLOs an
+  pensionierte Peer-Links senden. Jetzt zunächst leeres Discovery-Ziel, dann
+  weiterhin gegenseitige Bestätigung der aktuellen Nonces; alte Links bleiben
+  retired. Simultane und einseitige Abläufe durch deterministische GTests geprüft.
+- HELLO auf separater BestEffort/Volatile/KeepLast(1)-Spur mit eigenem 100-ms-
+  Thread. Reliable/Volatile/KeepLast(64) für COMMAND/QUERY/STATUS/ERROR bleibt.
+  Strenge Replay-Cursor pro Spur verhindern, dass neue HELLOs ältere gültige
+  Controls verwerfen. Tatsächliche lokale QoS beim Start geprüft. Beide DDS-
+  Enden gemeinsam neu bauen (neues owner_ready-Feld), SDK-Wire 1/IPC 3 gleich.
+- Journal-/ROS-Handler-Eligibility ist Teil der Bereitschaft und wird im HELLO
+  gemeldet; lokale Start-Prüfung bleibt. Diagnosen für Matches, HELLOs, Ablehnung,
+  Lease-Abläufe und Epochen ergänzt. Kein Lock über Journal, Handler oder Netz.
+- Shutdown-Repeats fanden einen intermittierenden >5-s-Timeout. Pre-Shutdown
+  stoppt/ joint Threads vor Middleware-Shutdown; verschachtelter Handler-Context
+  gehört jetzt der Node und wird außerhalb des gejointen Workers zerstört.
+  Drei aufeinanderfolgende finale Fault-Läufe bestehen inklusive 5-s-Gate,
+  Duplikat/Konflikt, verzögerter Antwort UNKNOWN, Receiver-/Sender-SIGKILL,
+  Reopen/QUERY ohne altes COMMAND und neuer Absicht nach Device-Reconciliation.
+  Beim blockierten Handler bleiben beide Lease-Zähler 0 → 0. Vorherige Timeouts
+  bleiben Evidenz; kein Debugger-Stack beweist einen bestimmten Middleware-Lock.
+- Testharness wartet auf kumulative Diagnosen vor Send-Assertions. Atomare
+  Phase-Dateien tolerieren kurz fehlende Datei beim Lesen, kein exists/open-Race;
+  kaputtes JSON bleibt Fehler. Phasen-ID steigt im Speicher. Dateien sind kein
+  Ersatz für DDS-Auftragsresultate. 23 echte ROS-GTests/26 mit Wrappern und
+  30 Python-Tests bestanden; vollständiges originales M2 erneut gebaut/bestanden.
+- Finaler N1-Smoke 8/8 bestätigt. N2 (60 s) 17/18 bestätigt, ein offen/17 Effekte,
+  zwölf Slots blockiert; beide Enden am Ende ready, keine Lease-Abläufe. N4-Smoke
+  4/5 bestätigt/ein offen/vier Effekte, beide Enden nach je einem Lease-Ablauf
+  wieder ready. Kein Replay der offenen Absichten. Früherer N2-Entwicklungslauf
+  schaffte 28/28; variable Completion bleibt sichtbar, keine Vollabnahme.
+- Explizites `--startup control-first`: Sensorquelle bleibt bis Ready aus,
+  Nullproduktion geprüft, dann Warmup und gleiche Fences. Impairment und N5-
+  Konkurrent schon aktiv. Finaler N5-Smoke zwei bestätigt/zwei Effekte, sechs
+  Slots blockiert. Kein Nachweis für Beitritt bei bereits laufender Telemetrie.
+  Default bleibt simultaneous. `--dds-profile udp1200` ist zweite explizite
+  Variante; keine IP-Fragmente im Entwicklungscapture, N5-Start trotzdem gescheitert.
+  Default bleibt system. Keine Queue-/Lease-/Frische-/Deadline-Lockerung.
+- Evidenz `evidence/m3-dds-readiness-2026-11-05/`: finale Manifeste/Sourceprüfung,
+  vorherige Fehlversuche, gemischte Completion, Paketfeld-Analyse, Rohartefakthashes.
+  Roh-PCAPs/Journale lokal; ältere Evidenz unverändert. Zwei M2-Aufrufe scheiterten
+  vor Build am unveränderten Image-ID-Gate; Read-only-Rechecks passen, unveränderte
+  vollständige Wiederholungen bestanden. Ursache unbewiesen, Gate bleibt streng.
+
+- Finales fünfminütiges N0 `20261105T201220121826Z`: 150/150 bestätigt, 150 Effekte,
+  Ist 199,976/50,002 Hz; 75.025 produziert/75.022 empfangen, drei IMU vor Callback
+  fehlen. Lokale Alterschecks bestanden, keine Cross-Host-Aussage. Beide Journale
+  quick_check ok, identische 150 SUCCEEDED/Revision-3-Records und Generationen
+  1–150. Inbox-Drops/Lease-Abläufe jeweils null. Finale elf Manifeste (inklusive
+  N5-Fehler) passen: DDS 138/M2 86 Source-Dateien, installierte Python-Dateien
+  bytegleich. Binary-Build `201016201590Z`, Fault-Repeats `201144179119Z` und
+  `201202123026Z`; M2 `201220118978Z`. Keine kontrollierte CPU-/Hardware-Messung.
+
+**Weiter:** offene DDS-Aufträge trotz bestehender Readiness unter N2 und belasteten
+simultaneous-N5-Start untersuchen; keine Absichten blind erneut senden. Clock-/
+Crypto-Gleichheit und gemeinsame CPU-/Wire-Fenster qualifizieren, danach volle
+Seed-/Dauermatrix, N3-DATA/FEC-Selektor und N4-Auftragsphasen-Barrieren. M3 bleibt
+in Arbeit, PR #2 Draft, SRT/SDK unverändert, Intrinsic/M4 weiterhin unberührt.
+
+
+### M3 offene DDS-Aufträge auf Paketfrische zurückgeführt — 2026-11-05
+
+- Frühere N2-Captures/geschlossene Journale read-only analysiert: ID 18 lokal
+  LOCAL_QUEUED/Revision 0, kein Empfängereintrag; erster beobachteter COMMAND
+  relativ zum lokalen HELLO-Zeitoffset etwa 2,13 s alt, danach NOT_FOUND-ERRORs.
+  Das isoliert keinen Netzanteil. Originale Evidenz und Rohartefakthashes erhalten.
+- Neue Session-Validierungsdiagnosen mit erstem Ablehnungsgrund: accepted,
+  session, peer, clock, sequence, invalid_time, stale. Letzter stale COMMAND
+  erhält ID/Send-/Ingresszeit. accepted ist weder Journal-Admission noch Start.
+  Receipt-gematchte NOT_FOUND-Antworten und maximale Reliable-Publish-Aufrufdauer
+  getrennt gezählt. Feste Counter/Snapshots, kein unbegrenztes Event-Logging.
+- Workload speichert letzte lokale Status-/Fehlerbeobachtung auch beim offenen
+  Intent. found bezieht sich auf lokales Journal; NOT_FOUND kann vom Peer gecacht
+  sein. budget_elapsed meint 5 s seit lokalem Client-Aufruf, keine autoritative
+  Empfänger-Expiration. Timeout/NOT_FOUND erzeugen keinen Terminalzustand und
+  erlauben kein Replay. Der einzelne offene Auftrag blockiert weiter neue Slots.
+- Drei finale N2-Probes je 60 s: Seed 1701 2/3 bestätigt, ein offen/zwei Effekte;
+  Seed 2903 28/28 bestätigt/28 Effekte; Seed 4211 11/12 bestätigt, ein offen/elf
+  Effekte. Bei 1701/4211 je ein COMMAND direkt am Callback mit 2.212,649 bzw.
+  2.474,505 ms Alter verworfen, noch vor der 5-s-Startdeadline. Stale-ID entspricht
+  offenem Intent; kein Empfängereintrag, später 247/171 gematchte NOT_FOUNDs.
+  Beide Enden bleiben ready. Maximale Sender-Publish-Aufrufe unter 1 ms; kein
+  Beleg für blockierenden Publish als Ursache dieser beiden Fälle. Middleware-
+  Repair/Queue/Transport/Executor noch nicht einzeln isoliert. Kein 600-s-Gate.
+- N0 30 s: 15/15 bestätigt/15 Effekte, keine stale Commands. N4-Smoke 4/5/ein
+  offen, beide Enden wieder ready; Kontextablehnungen während Outage, kein
+  stale-COMMAND-Inkrement. N5 simultaneous erneut vor Fenster gescheitert:
+  beide Enden ohne Matches/empfangene HELLOs. Discovery bleibt offen.
+- Vollständige DDS-Fault-Acceptance nach Build `20261105T203710218043Z` bestanden,
+  einschließlich Duplikat/Konflikt, verlorener Antwort UNKNOWN, Receiver-/Sender-
+  SIGKILL, Reopen/QUERY ohne Intent-Replay, neuer Absicht nach Reconciliation und
+  5-s-Shutdown. 24 echte ROS-GTests/27 mit Wrappern und 32 Python-Tests bestanden.
+  Deterministischer Test prüft jeden Rejection-Grund, exakte Stale-Grenze, lebende
+  HELLOs und unveränderten Replay-Cursor nach Ablehnung. Beobachtungstests erzeugen
+  keinen Terminal-/Result-/Nichtausführungsnachweis aus NOT_FOUND oder Timeout.
+- Evidenz `evidence/m3-dds-completion-2026-11-05/`: sieben finale Source-Inventare
+  und Binaryhashes passen, installierte Python-Dateien bytegleich. SDK/SRT/Wire 1/
+  IPC 3 unverändert. Die volle M2-/5-min-N0-Evidenz bleibt historisch bei 940b4cb;
+  diese Diagnose-Stufe wiederholt sie nicht. Keine Clock-/Crypto-/CPU-/Wire-Parität.
+
+**Weiter:** belastbare empfangsseitige Reconciliation für nie admittierte Absichten
+spezifizieren/prüfen; bloßer Timeout oder NOT_FOUND reicht nicht. Keine alte
+Absicht erneut senden, keine Frische-/Start-Gates lockern. N5-Discovery, dann
+vergleichbare Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix. PR #2 bleibt Draft,
+M3 offen, Intrinsic/M4 unverändert.
+
+### M3 DDS-Protokoll v2: empfangsseitige Expiry-Versiegelung — 2026-11-05
+
+- `SEAL_EXPIRED` ist strikt nicht ausführend. Der Sender kann es nur für
+  LOCAL_QUEUED/Revision 0 ohne bestätigte Receiver-Admission in ursprünglichem
+  Owner/Prozess und derselben live Session senden, strikt nach gespeicherter
+  5-s-Deadline. Nach Prozess-/Session-Wechsel bleiben alte Absichten QUERY-only.
+  Alle DDS-Frames einschließlich HELLO verlangen Protokollversion 2; beide Enden
+  neu bauen, kein Downgrade. Keine SDK-Wire-/IPC-/SRT-Änderung.
+- Neuer ROS-Helper nutzt ausschließlich die öffentliche, unveränderte SDK-
+  Journal-API. Existierender Record wird unverändert geliefert (auch ACCEPTED,
+  DISPATCHING, SUCCEEDED, UNKNOWN); widersprüchliche Metadaten sind Konflikte.
+  Nur fehlende ID nach Deadline erzeugt per vorhandener FULL-synchroner Admission
+  EXPIRED/START_DEADLINE, Revision 1, ohne Dispatch/Resultat. Commit vor STATUS.
+  Kein Handlerpfad; späteres COMMAND findet das ID-/Hash-Tombstone und startet
+  nicht. Journal-Records werden in der Session nicht eviziert. Context-Verlust
+  während Commit kann nichts ausführen; unbekannte Historie in neuem Kontext
+  wird nicht als Expiry ausgegeben. Bestehendes Tombstone bleibt per QUERY lesbar.
+- Separate Seal-Sent/Received/Inserted/Existing/Rejected-Zähler. Vorhandener
+  Record ist keine neue Expiry. Ausführbares COMMAND wird nicht erneut publiziert;
+  Reliable-DDS-Paketretransmission bleibt erlaubt. Timeout/NOT_FOUND allein sind
+  weiterhin kein Terminalresultat. Erst bestätigter Receiver-Status beendet die
+  Unsicherheit; Lab-Cadence darf danach neue ID ohne Generationserhöhung anbieten.
+- Drei N2-Probes je 60 s: 1701 24 SUCCEEDED/24 Intents; 2903 28 SUCCEEDED plus
+  eine EXPIRED/29; 4211 24 SUCCEEDED plus eine EXPIRED/25. Alle ohne offene Intents.
+  Beide Expiry-IDs auf beiden Seiten Revision 1, identische Hashes/Generation,
+  keine Dispatch-Zeit/kein Resultat; Receiver-Admission strikt nach Deadline.
+  Bei 4211 verfällt ID 20, neue geplante ID 21 gelingt mit expected generation 19
+  und result generation 20. Insgesamt 25 COMMAND-Publikationen/25 neue Intents,
+  nur 24 Starts/Effekte. Bei 1701 liefert Seal echten schon committeten Erfolg;
+  keinerlei Überschreiben nach Deadline. Kein deterministischer Paket-Replay-
+  Vergleich mit alten Seeds und kein 600-s-Abnahmegate.
+- Fünfminütiges N0 `20261105T205705247794Z`: 150/150 SUCCEEDED/150 Effekte,
+  keine Seals. Ist 199,984/50,001 Hz; 75.024 produziert/75.002 empfangen, 20 IMU-
+  und zwei Joint-Gaps vor Callback. Lokale Shared-VM-Alterschecks bestanden,
+  keine isolierte WAN-Verlust-/Cross-Host-/Hardware-Aussage. Beide Journale stimmen
+  in allen 150 Resultaten überein, quick_check bestanden.
+- N4-Smoke bleibt 4/5 SUCCEEDED/ein offen, beide Enden nach Outage wieder ready;
+  keine Seals über den Context-Wechsel. N5 control-first zwei SUCCEEDED/zwei
+  Effekte, 31 Seals auf vorhandene Records, kein falsches EXPIRED, sechs Slots
+  blockiert. N5 simultaneous erneut fehlgeschlagen vor Messfenster; Discovery offen.
+- Acht neue tatsächliche SDK-Journal-GTests: Deadline-Grenze, Metadaten/Context,
+  Tombstone/Duplikat/später Dispatch, vorhandene Zustände, Konflikte, Sender-
+  Eligibility, verlorener Reply mit Owner-Reopen/QUERY, Speicherfehler. Insgesamt
+  32 echte ROS-GTests/36 mit Wrappern und 33 Python-Tests bestanden. DDS-Fault-
+  Acceptance einschließlich Receiver-/Sender-SIGKILL/UNKNOWN/No-Replay und volle
+  originale M2-Neubau-/Runtime-Regression bestanden.
+- Evidenz `evidence/m3-dds-expiry-seal-2026-11-05/`: neun finale Source-Inventare
+  passen (DDS 140/M2 88), Binaryhash identisch, installierte Python-Dateien
+  bytegleich. C++-Build `205428937697Z` hat ausschließlich spätere nicht kompilierte
+  Änderungen an zwei Runner-Metadaten und Host-Testdatei; alle kompilierten Inputs
+  passen. Finale Fault-/M2-Läufe `205705247608Z`/`205705247870Z`. SDK-Archivhashes
+  gegen b8e198d identisch, Core/Proto und SRT-Quelle unverändert. Roh-PCAPs/Journale
+  lokal, Hashes/Größen erhalten. Frühere Evidenz unverändert.
+
+**Weiter:** Kontext-/Owner-wechselnde Unsicherheit bleibt explizit offen; keinen
+Abwesenheitsnachweis aus einem neuen leeren Journal ableiten. N5-Discovery und
+SRT-Parität der neuen Reconciliation-Semantik/-Kosten qualifizieren, danach
+Clock-/Crypto-/CPU-/Wire-Gleichheit und volle Matrix. M3 offen, PR #2 Draft,
+Intrinsic/M4 unverändert.
+
+### M3 explizites DDS-Sensor-Pacing für N5 — 2026-11-05
+
+- Neue optionale `--dds-profile paced-sensors` in Combined- und Fault-Runner.
+  Default bleibt system. Keine ROS-/Core-/SDK-/SRT-/Protokolländerung; unveränderte
+  kompilierte Inputs/Binaries seit 02d40e6. Keine Gates gelockert. Normale
+  Nicht-skip-Builds bauen die separate Native-Probe automatisch; Preflight bei
+  jeder paced-Ausführung, auch bei dokumentierter Binary-Wiederverwendung.
+- XML: gleiche UDPv4/SHM-1200-Paketisierung wie vorheriger negativer Versuch,
+  nur `/robot/imu` und `/robot/joint_states` asynchron auf gemeinsamem Controller
+  1600 Byte/50 ms pro Simulator-Participant. Kein Ethernet-/globales Budget oder
+  TC-Prioritätsbypass. Source bleibt 200/50 Hz, Sensor-QoS BE/Volatile/KeepLast(1),
+  Controls Reliable/Volatile/KeepLast(64) synchron auf Default-Controller.
+  RMW-XML-Opt-in nur für diese Variante; PREALLOCATED_WITH_REALLOC und DataSharing
+  OFF explizit erhalten, SHM-Transport weiter aktiv.
+- Standalone-C++-Probe nutzt öffentliche RMW/Fast-DDS-Handles für reale Controller-
+  und Writer-QoS. Positive Prüfung und Build-Rezept bestanden. Ohne XML-Opt-in
+  verweigert Provider die Writer-Erzeugung. Probe läuft vor Laborerzeugung in
+  eigenem network-none-Container, ohne Discovery-Warmup gemessener Peers.
+  Sie wird nicht in Bridge/Simulator gelinkt; Fast-DDS-spezifisches Lab-Werkzeug.
+- N5-Runner prüft jetzt lebenden Konkurrenten während Szenario-Polls sowie UDP,
+  Ziel 128.000 bit/s, 1024 Byte und plausibles gesamtes tatsächliches Angebot.
+  Cleanup-SIGINT akzeptiert; anderer Fehler/fehlende Last scheitert. Kein Beleg
+  fenstergenauer Zustellung. TBF 512 kbit/s/Netem 16 und Konkurrenz bleiben vor
+  Source-/Koordinatorstart aktiv; kein control-first-Publikationsstopp.
+- Fünfminütiges N5 simultaneous/paced `20261105T214042516097Z`: 150/150 bestätigt,
+  150 Effekte, keine Lease-Abläufe/Inbox-Drops/Seals, beide Enden ready. Source
+  Ist 199,993/50,002 Hz, 60.019 IMU/15.006 Joints produziert, 11.752/7.376 Callbacks.
+  Alle 19.128 empfangenen Samples bestehen lokale Alterschecks. 55.897 fehlen
+  vor Callback inklusive beabsichtigter Middleware-Pacing-/Ersetzungsanteile;
+  kein isolierter WAN-Verlust. Beide geschlossenen Journale quick_check ok,
+  identische 150 SUCCEEDED/Revision-3-Records, Resultgenerationen 1–150.
+  Konkurrenz gesamt 128.009,2 bit/s, 1250 lebende Prozess-Polls.
+- Drei paced-N5-Smokes, Seeds 1701/2903/4211, je 8/8 bestätigt/acht Effekte.
+  Frische System- und UDP1200-N5-Runs scheitern vor Messfenster trotz validierter
+  Konkurrenz. Pacing ist expliziter Baseline-Kandidat, kein Default-Fix und kein
+  verlustloses Ergebnis. N0 system, N0 paced, sensor-only paced und paced-N0-
+  Fault-Acceptance mit Duplikat/Konflikt/UNKNOWN/SIGKILL/QUERY/No-Replay/5-s-Shutdown
+  bestanden; blockierter Handler lässt Leases unverändert. 35 Python-Tests bestanden.
+  Die 32 ROS-GTests/volle M2-Regression bei 02d40e6 bleiben historische Evidenz,
+  nicht als hier erneut ausgeführt ausgeben.
+- Evidenz `evidence/m3-dds-paced-sensors-2026-11-05/`: zehn finale Source-Inventare
+  passen (143 Dateien), installierte Python-Dateien bytegleich, unveränderte
+  Bridge-/Simulator-Binaries und Native-Probe-Build-/Sourcehashes geprüft.
+  Erster Smoke vor strenger Konkurrenzprüfung separat unter development erhalten.
+  Roh-PCAPs/Journale lokal, bereinigte Resultate/Hashes/Provider-QoS gespeichert.
+  Async-Fences frieren Publish-Aufrufe ein; Restdaten bleiben durch bestehende
+  Quieszenz-/Sequenzprüfungen beobachtet, kein behaupteter physischer Wire-Flush.
+
+**Weiter:** getunte DDS-Pacing-/Reconciliation-Semantik und Kosten gegenüber SRT
+angleichen; DDS-Emissionsstufen, Clock-/Crypto-/CPU-/Wire-Fenster und volle Matrix
+qualifizieren. System-N5-Discovery und Context-wechselnde Unsicherheit bleiben
+explizit offen. M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: gemeinsame Endpoint-Messfenster
+
+- Beide Runner nutzen gemeinsamen Linux-Prozessbaum-Sampler, nominal 250 ms,
+  inklusive Observer/Sampler. Gleiche Source-enabled- und Resume-through-drain-
+  Phasen, ohne Startup/Shutdown. Innere/äußere CPU-Tickdeltas ohne Interpolation;
+  RSS-Summe nur beobachtet, mögliche Shared-Page-Doppelzählung, kein PSS/Peak.
+  Fehler/Identitätswechsel/Regression/reaped-child-CPU/Lücken verwerfen CPU.
+  Ungesehene kurzlebige Kinder nicht abgedeckt. Alte SRT-Ressourcen bleiben
+  Whole-run mit altem Scope und dürfen nicht direkt damit verglichen werden.
+- Konditionale PCAP-Zeitfenster: gemeinsame Realtime/Monotonic-Hülle beider Enden,
+  <=1000 ppm, keine versteckten Steps, <=1-s-Kalibrierlücken, <=1-ms-Read/Steps.
+  Inside/Boundary/Outside inklusive Timestamp-Quantisierung. Keine Fensterbytes
+  bei verworfener Kalibrierung; Whole-capture-Gates bleiben davor erforderlich.
+- 44 Python-Tests und Demo-Install bestanden. Fünf finale Live-Entwicklungsläufe:
+  SRT N0 30 s, DDS system N0 30 s, DDS paced N0 30 s, paced N5 60 s/30 bestätigte
+  Commands, sensor-only system N0 15 s. Alle funktional bestanden und alle CPU-
+  Fenster beider Enden qualifiziert. Alle Wire-Mappings wegen beobachteter Drift
+  über 1000 ppm verworfen, daher keine qualifizierten Wire-Fensterresultate.
+  Modell nicht lockern. Ursache noch nicht diagnostiziert.
+- Vier alte SRT/DDS-Whole-captures neu ausgewertet: alle bisherigen Felder exakt
+  identisch. Fünf Source-Inventare je 146 Dateien aktuell; installierte Scripts
+  bytegleich. 56 kompilierte Quelldateien unverändert, Command-/Simulator-Binaries
+  identisch zur historischen 02d40e6-Evidenz. Keine neuen ROS-GTest-/M2-Claims.
+- Evidenz: `evidence/m3-window-measurement-2026-11-06/`, inklusive Raw-Hashes,
+  Prozess-/Clock-Samples, Drift-Verwerfungen und Messscope. Zwei frühere Smokes
+  nur Development, vor strengerem Clock-Modell. PCAPs/Journale bleiben lokal.
+
+**Nächster Schritt:** Clock-Mapping ohne Modell-Lockerung qualifizieren; danach
+kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen. Volle
+Matrix/Emission-Stages/Crypto/Cross-session-Unsicherheit bleiben offen. M3 in
+Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Clock-Diagnose und unabhängige Kalibrierung
+
+- Neue standalone Read-only-Probe `tools/clock_probe/main.cpp` plus
+  `tools/m3_clock_probe.py`: Python, libc und direkte clock_gettime-Syscalls,
+  RAW/BOOTTIME-Diagnose und adjtimex(modes=0). 95 s/910 Samples in network-none-
+  Container mit cap-drop ALL. Native Realtime-Offsets ändern sich mindestens
+  108/137 us über ca. 107/100 ms; RAW/BOOTTIME ohne Modellverletzung. Python sieht
+  die zweite Änderung. Exit 2 ist korrektes negatives Diagnoseresultat.
+  TIME_ERROR/STA_UNSYNC (5/64), freq/offset 0. Verursachender Agent nicht belegt;
+  kein Nachweis eines Kernel-Bugs, alle Aufrufe im emulierten Linux-Kontext.
+- 250-ms-Prozess-Sampling kann kurze Steps übersehen. Dedizierte Clock-Dateien
+  nun unabhängig bei Scenario-Polls, mindestens 25 ms Abstand, maximal erlaubte
+  Lücke 100 ms. CPU/RSS-Scans unverändert nominal 250 ms. Beide aktuellen Runner
+  verlangen Clock-Dateien ohne stillen Legacy-Fallback. Historische Reanalyse
+  bleibt als legacy-process-clock gekennzeichnet. 1000-ppm-Modell unverändert;
+  auch feinere endliche Samples beweisen keine Abwesenheit versteckter Steps.
+- 51 Python-Tests und Demo-Install bestanden. Neue Regression zeigt synthetischen
+  150-us-Step: grobe Serie akzeptiert, feinere Serie verwirft. Zusätzlich echter
+  finaler SRT-N0-Lauf zeigt in beiden Phasen/beiden Enden grobe Akzeptanz gegen
+  dedizierte Drift-Verwerfung. Alte Entwicklungs-Smokes nicht als qualifizierte
+  aktuelle Wire-Kosten ausgeben. Native Probe-Verwerfung lag vor dem ersten
+  Development-SRT-Sourcefenster, kein behauptetes überlappendes Gegenbeispiel.
+- Finale Live-Läufe: SRT N0 30 s/15 bestätigt, DDS system N0 30 s/15 bestätigt,
+  DDS paced N5 60 s/30 bestätigt. Alle funktional bestanden, CPU-Fenster beider
+  Enden qualifiziert, Wire-Fenster sämtlich verworfen. 149 Source-Dateien je
+  Manifest passen; installierte Python-Dateien bytegleich; 56 Produktions-
+  Quelldateien und Command-/Simulator-Binaries unverändert. Keine neue ROS-GTest-
+  oder volle M2-Ausführung. Drei vorherige Development-Reruns separat erhalten.
+- Evidenz `evidence/m3-clock-diagnosis-2026-11-06/`: Probe-Samples/Provenienz,
+  dedizierte/Legacy-Kalibrierungen, Clock-/Prozess-Samples und Raw-Hashes.
+  Historische Evidenz unverändert, PCAPs/Journale weiter lokal.
+
+**Weiter:** stabile geeignete Linux-Clock-Umgebung oder verifizierte monotone
+Packet-Timestamp-Erfassung entwickeln, ohne Driftmodell/Unsicherheit zu lockern.
+Danach kontrollierte CPU-/Wire-Kosten und getunte DDS-/SRT-Semantik vergleichen.
+M3 bleibt in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: optionaler Kernel-Monotonic-Packet-Observer
+
+- `--monotonic-capture` in SRT-/DDS-Runner: eigener passiver AF_PACKET-Socketfilter
+  mit bpf_ktime_get_ns, skb-Länge, Interface/Richtung und 128-Byte-Prefix. Keine
+  Realtime-Konvertierung. Gemeinsame vorhandene Source-/Fenced-Phasen [start,end).
+  Eigene Ergebnisse `monotonic_captures`; Realtime-PCAP-Gates unverändert.
+- Standalone g++/libbpf-Tool erzeugt verifiergeprüfte BPF-Instruktionen direkt,
+  ohne clang/BTF/neues Image. CAP_BPF nur auf eigenen Opt-in-Endpunkten;
+  Default-Caps unverändert. Kein Host-/Privileged-/tc-/XDP-/Clock-Eingriff.
+  Zero Time-Namespace-Offsets zwingend; vorhandener gemeinsamer Boot-/Clock-Proof.
+- 16-MiB-Ring, Datei unter 128 MiB, atomare Seen-/Submitted-/Reserve-/Copy-Zähler,
+  Socket-Close/Drain/stabile Footer-Zähler plus Coverage-/Records-Gates.
+  Fehler verwerfen Resultate. Präfixparser IPv4 UDP, DDS-IPv4-Fragmente getrennt;
+  bekannte IPv6-Nicht-UDP-Ketten begrenzt prüfen/ignorieren, IPv6-UDP/unsupported
+  verwerfen. Kein behaupteter physischer Wire-/Delivery-/Population-Nachweis.
+  Kernel-Observer-Arbeit kann Endpoint-CPU belastet werden; Messvariante explizit.
+- 58 Python-Tests bestanden. Isoliert 40 Datagramme/80 Loopback-Observations:
+  Längen stimmen, sämtliche Kernelstamps innerhalb Userspace-Send/Receive-
+  Monotonic-Brackets. Gezielter 4-KiB-Overflow: 2.000 Seen, 25 Submitted,
+  1.975 Reserve-Fehler, erwarteter Exit 2/Analyzer-Reject. Ohne CAP_BPF kein Ready.
+- Vier finale Source-153-Dateien-Inventare passen: SRT N0 Smoke15s/8 bestätigt,
+  DDS N0 Smoke15s/8 bestätigt, paced N5 30s/15 bestätigt, Default-Sensor Smoke15s
+  ohne Observer/BPF-Cap. Alle funktional bestanden; alle Opt-in-Phasen beider
+  Enden CPU-/Monotonic-Capture-qualifiziert, kein Recorderverlust. Installierte
+  Scripts bytegleich; 56 Produktionsquellen und Command-/Simulator-Binaries
+  unverändert. Keine neue ROS-GTest-/volle-M2-Ausführung.
+- Evidenz `evidence/m3-monotonic-capture-2026-11-06/`: Roh-Hashes, native Provenienz,
+  Namespace-/Capability-Proofs, Counter/Phasen, synthetische Timestamp-Brackets.
+  Frühe IPv6-Parserfehler und längere Development-Runs vor CPU-Scope-Textkorrektur
+  separat erhalten. Roh-PCAPs/Prefixes/Journale lokal. Whole-capture-Korroboration
+  ist wegen verschiedener Socket-Lebensdauer keine Gleichheits-/Loss-Garantie.
+
+**Weiter:** längere Läufe/Seeds, Observer-Overhead und Tap-/Offload-Scope
+qualifizieren; danach kontrollierter SRT-/DDS-Kostenvergleich bei angeglichener
+Pacing-/Reconciliation-/Age-/Crypto-Semantik. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Cgroup-Scope und präregistrierte Observer-Studie
+
+- Read-only cgroup-v2-Counter im bestehenden 250-ms-Endpoint-Sampler: Root-/
+  Domain-/Self-PID-Prüfung, Namespace-/Device-/Inode-Identität, CPU-/Memory-Limits,
+  CPU-Mikrosekunden, charged Memory und Memory-Events. Neue unabhängige
+  `container_cgroup`-Phasen neben Prozess-CPU. Capture/Competitor enthalten,
+  außerhalb der Gruppe abgerechnete Host-/Kernelarbeit nicht garantiert erfasst.
+  Inner/outer beobachtete Deltas ohne Interpolation, keine CPU-Konfidenzintervalle.
+  Charged Memory mit Cache/Kernel, kein RSS/PSS/harter Peak. Fehler/Änderungen
+  verwerfen Ressourcenqualifikation, Ausführungsgates unverändert.
+- `tools/m3_observer_study.py` schreibt Plan/Quellen vor erstem Kind: SRT N0
+  off/on/on/off und DDS system N0 on/off/off/on, jeweils viermal 45 s/Seed1701;
+  danach paced N5/Monotonic jeweils 300 s für 1701/2903/4211. Sequentiell, frische
+  Endpoints, keine Retries/Host-Tuning. Pärchen verlangen passende Konfiguration/
+  qualifizierte Counter; negative Differenzen erhalten, Commandcounts/Effects
+  getrennt geprüft und Sensorpopulationen gespeichert. Vorhandene Builds als
+  explizite Development-Wiederverwendung; normaler separater M3-Build Voraussetzung.
+- 68 Python-Tests und Demo-Install bestanden. Alle elf Plan-Läufe ohne Retry
+  bestanden. 44 Cgroup-Fenster aus projizierten Original-Brackets exakt nachgerechnet,
+  alle 44 engeren Prozess-CPU-Fenster ebenfalls qualifiziert. Sieben Opt-in-Läufe
+  mit 28 qualifizierten Monotonic-Endpunkt-/Phasenfenstern, kein Recorderverlust.
+  Lokale Throttle-/Memory-Events null; kein Nachweis ungestörter VM-/Ancestor-CPU.
+- Drei Fünfminuten-N5-Läufe bestätigen je 150/150 Commands/150 Effekte, insgesamt
+  450. Produced/Callbacks: Seed1701 75.032/19.079, Seed2903 75.018/19.236,
+  Seed4211 75.031/19.286. 200/50-Hz-Produktion bleibt erhalten; fehlende Callback-
+  Population enthält bewusstes Pacing/Replacement und andere Stufen, kein isolierter
+  WAN-Loss. Keine N5-Randomloss-/Jitter-Konfiguration: Seeds markieren hier frische
+  Wiederholungen. System-N5-Cold-Discovery damit nicht behoben.
+- Acht N0-Paarläufe je 23 bestätigt/23 Effekte. CPU-Differenzen haben wechselnde
+  Vorzeichen, keine isolierte Observer-Overheadzahl ableiten. Beobachtete Charged-
+  Memory-Maxima on-minus-off ca. 19–23 MiB/Endpunkt; kein physischer Footprint.
+  Erster SRT-Off-Lauf IMU 198,182 statt ca. 200 Hz, Callbackpopulationen variieren;
+  keinen Lauf post hoc zum Glätten verwerfen. Tabellen/alle Paare erhalten.
+- Alle 22 geschlossenen Journale quick_check ok, passende IDs/Hashes/Ergebnisse:
+  insgesamt 634 SUCCEEDED/Revision-3-Records pro Seite, Generationen lückenlos.
+  Read-only-Audit ändert Haupt-DB-Hashes nicht; keine zusätzliche Crash-Fault-Quali.
+- Evidenz `evidence/m3-observer-study-2026-11-06/`: Plan/Studie, projizierte
+  Cgroup-Samples, vollständige Run-Manifeste, Scope-/Capability-/Namespace-Proofs,
+  Raw-Hashes und Journal-Audits. Initialer Cgroup-Smoke nur Development. Elf
+  Inventare je 156 aktuelle Source-Dateien, installierte Scripts bytegleich;
+  56 Produktionsquellen und Command-/Simulator-/Native-Capture-Binaries unverändert.
+  Keine neuen ROS-GTests/volle M2 behaupten; Roh-PCAPs/Prefixes/Journale lokal.
+
+**Weiter:** kontrollierte/geeignete Ressourcen-Umgebung und Tap-/Offload-Scope
+qualifizieren; längere SRT-/DDS-Läufe/weitere Impairment-Profile, volle Matrix und
+N3-/N4-Spezialgates. Pacing/Reconciliation/Age/Crypto-Semantik bleibt vor einem
+Transportkostenvergleich anzugleichen. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.
+
+
+## Fortsetzung 2026-11-06: Tap-/Offload-Probes und Capture-Artefakt v2
+
+- Kontrollierte synthetische UDP-Probes mit frischen eigenen Endpoint-Paaren:
+  normales UDP, 100% Egress-netem-Drop, 200-ms-Delay, gezielter Ingress-Drop,
+  UDP_SEGMENT ohne/mit netem und shaping-only 512 kbit/s. Kein ROS/SRT-App-Peer,
+  kein Konkurrent im Shaping-Probe; kein voller N5-Nachweis dadurch. Je Probe
+  positives Restoration-Control im selben offenen Observer zwingend.
+- Laufzeitbeleg: 16 normale Datagramme an beiden Taps/Empfänger. Egress-Drop:
+  16 gezielte UDP-Matches vor Root, null Tap-/App-Beobachtungen; globale Rootdrops
+  enthalten zusätzliche, nicht nach Protokoll zugeordnete Inkremente. Delay: Sender-Tap inklusive Queue-Delay,
+  finale Spanne 200,02–206,94 ms (Klassifikationsschwelle 150 ms, kein Präzisionsbound).
+  Ingress-Drop: 16 an beiden Taps, 16 gezielte Drops, null App-Receipts.
+  Historisches generisches `egress is pre-qdisc`-Label war für dieses Fixture
+  falsch. Neue Scope-Texte neutral, alte Artefakte unverändert mit Korrektur lesen.
+- UDP_SEGMENT in beiden Fällen: eine 9.642-Byte-SKB-Observation pro Seite,
+  gso_segs=8/gso_size=1200, acht 1.200-Byte-Datagramme an der App. Keine physische
+  Frame-/Datagrammzählung aus SKB-Anzahl ableiten. Native Capture-Artefakt v2 mit
+  168-Byte-Records/GSO-/VLAN-/MTU-Metadaten, 128-Byte-Prefix bleibt. Reader unterstützt
+  v1/152 Byte mit unbekannten Offloads; neue Runner verlangen v2. SDK-Wire/IPC
+  unverändert. Eigenständige GET-only-Ethtool-Probe speichert Feature-/MTU-Vorher/
+  Nachher, kein SET/keine neuen Privilegien; aktive Features allein beweisen Nutzung
+  nicht. `frame_interpretation` unabhängig von gültiger SKB-Observation und weiter
+  kein Physical-/Checksum-/Padding-/FCS-/Delivery-Nachweis.
+- Capture-Datengap entdeckt: Buffered-PCAP schrieb 16 statt 17 bekannter Beobachtungen,
+  letztes Control fehlte. Runner jetzt Immediate-Mode, Client zuerst stoppen,
+  kurze Inflight-Drainphase. Captured/File/Kerneldrop-Gates strikt. Filtercounter
+  können auch bei exakt passenden bekannten Tap-Populationen abweichen; Ursache/
+  Einheit nicht vollständig geklärt. Daher separates Population-Reconciliation-Flag,
+  keine falsche universelle Gleichheitsinvariante. Unreconciled verwirft Realtime-
+  PCAP-Fenster, nicht unabhängige native Observer-Counter. Bekannte-Probe-Tupel in
+  finalen Fällen zwischen Native/PCAP exakt identisch.
+- 74 Python-Tests bestanden, native Builds mit -Werror. V2-Loopback 40 Datagramme/
+  80 korrekte Stamps/Längen; forcierter 4-KiB-Overflow 2.000 Seen/23 Stored/
+  1.977 Reserve-Fehler, erwarteter Exit 2. Sieben kontrollierte Fälle bestanden.
+  Vier finale Live-Läufe: SRT/DDS N0 Smoke je 8 bestätigt, paced N5 30s/15 bestätigt,
+  Default-Sensor Smoke ohne BPF-Observer. Alle Opt-in-Phasen qualifiziert, keine
+  Recorderfehler/GSO/VLAN/Over-MTU-SKBs in gemessener UDP-Population; PCAP-Counter
+  hier reconciled. Feature-Snapshots stimmen. 159 aktuelle Quellen in Probe und
+  vier Manifesten; installierte Python-Dateien bytegleich, 56 Produktionsquellen
+  und Command-/Simulator-Binaries unverändert. Native Observer/Feature-Binaries neu.
+- Vier alte Classic-Captures numerisch/Klassen unverändert (nur Scope korrigiert),
+  vier v1-Endpunkt-/Phasenfenster identisch mit Offload-Metadaten unbekannt/
+  Frameinterpretation unqualifiziert. Rohdaten/alte Evidenz nicht umschreiben.
+  Neue Evidenz `evidence/m3-tap-offload-2026-11-06/` mit Feature-/Flow-/TC-Proofs,
+  Counter-Gegenbeispielen und separaten Development-Iterationen. Volle Docker-
+  Inspect-Logs nicht publiziert, nur Capability-/Namespace-Projektion. Roh-PCAPs/
+  Prefixes lokal mit Hashes. Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+
+**Weiter:** V2-/Immediate-Observer-Kosten neu qualifizieren; die vorige V1-/Buffered-
+Studie gilt dafür nicht direkt. Weitere Device-/Offload-Pfade, kontrollierte
+Ressourcen, verbleibende Profile/Dauern und N3-/N4-Gates. Pacing/Reconciliation/
+Age/Crypto vor Transportkostenvergleich angleichen. M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: V2-Observer und kurze N1/N2-Probes
+
+- Erste V2-/Immediate-Studie am achten N0-Lauf wegen echter PCAP-Kerneldrops
+  (315 Robot/322 Operator) gestoppt. Commands/Effekte und Native Recorder dort
+  bestanden. Fehlgeschlagener Plan und acht Manifeste separat archiviert;
+  kein Ersatzlauf im alten Plan, keine Lockerung des Zero-Drop-Gates.
+- Read-only setsockopt-Diagnose: libpcap 1.10.4 Immediate/TPACKET_V2 mit aktiven
+  Offloads und voller Snapshot-Länge hat beim 4.096-KiB-Request nur 64 Slots,
+  8 MiB tatsächlich alloziert. Neuer gemeinsamer 32.768-KiB-Request: 512 Slots,
+  64 MiB alloziert. Kontrollierter Reader-Stopp bei 400 Datagrammen: alt 336
+  Drops je Seite; neu alle 400 plus Recovery-Control, null Drops. Native/App
+  vollständig. Kein Offload-SET, kein Preload in normalen Läufen. Ein früher
+  OS-Signalnummern-Fehlversuch bleibt ausgeschlossenes Development.
+- Neuer eingefrorener Plan: acht N0-On/Off-Läufe je 45 s, vier SRT/DDS-N1/N2-
+  Probes je 60 s/Seed 1701, kein langes N5 in diesem Plan. Alle zwölf bestanden,
+  PCAP-Kerneldrops null, Native Reserve-/Copy-Verluste null. 299 SUCCEEDED/
+  Effekte, keine unaufgelösten Intents; 24 geschlossene Journale integral und
+  terminal identisch. DDS N2: 25 statt 30 Versuche, fünf übersprungene Slots;
+  max. Invocation-bis-Terminalbeobachtung 10.870,99 ms, kein Execution-Latency-
+  Nachweis. Keine TTL-/Lease-/Admission-/Replay-Änderung.
+- Studie bindet Immediate/Buffer/Snapshot/V2/Boot-ID sowie acht ausgewählte
+  installierte Binär-/SDK-Hashes. 159 Quellen je Manifest gleich, installierte
+  Python-Scripts bytegleich, 56 Produktionsquellen und Command-/Simulator-
+  Binaries unverändert. 75 Host-Python-Tests bestanden; 48 Cgroup-Phasen aus
+  archivierten Projektionen exakt reproduziert. CPU-Differenzen mit wechselndem
+  Vorzeichen: keine isolierte Overhead-Schätzung. Charged-Memory-Maxima On-minus-
+  Off ca. 20,56–24,19 MiB, kein RSS/PSS oder physischer Footprint.
+- Evidenz: `evidence/m3-v2-observer-impairments-2026-11-06/` inklusive fehlgeschlagener
+  Studie, Ring-Diagnose, Manifeste, Counter-Projektionen, Hashes und Journal-Audits.
+  Roh-PCAPs/Prefixes/Journale bleiben lokal; keine vollständigen Inspect-/Env-Dumps.
+  Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+
+**Weiter:** volle N1/N2-Dauern und drei Seeds, V2/langes N5, kontrollierte Ressourcen,
+weitere Device-/Offload-Pfade und N3-/N4-Spezialgates. DDS N2 zeigt weiter große
+Terminalbeobachtungs-Latenz trotz erfolgreicher Effekte; nicht als Echtzeitgarantie
+lesen. Pacing/Reconciliation/Age/Crypto vor Transportkostenvergleich angleichen.
+M3 in Arbeit, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: DDS-Status-Timeline und begrenzte Poll-Historie
+
+- Historischen N2-Intent 15 korreliert: Receiver-Finish-Zeitstempel 83,47 ms nach
+  Aufruf, danach 10.655,11 ms bis Sender-Resultbeobachtung und weitere 132,41 ms
+  bis Driver. Zeitstempel vor Journal-Mutation/Commit, kein fsync-/Handlerstart-
+  Nachweis. Empfangene SUCCEEDED-STATUS am Tap schon nach 157,52 ms; vorherige
+  Control-Sequenz 55 erstmals nach 10.735,75 ms. 51 Stale-Control-Rejections im
+  Sender. Reliable-Ordering/Retransmission-Blockade mit anschließender Freshness-
+  Ablehnung ist damit konsistent, aber keine per-Frame-Callback-Ursache bewiesen.
+- Offline Generated-CDR-Fingerprint-Probe: 516 gegen Journale validierte
+  Beobachtungen, je eindeutiger Native-Längen-/128-Byte-Prefix-Match. Kein
+  generischer RTPS-Parser/Reassembler/Population-Vollständigkeitsnachweis;
+  Serialisierungs-Roundtrip-Differenzoffsets explizit, keine volle Bytegleichheit
+  behaupten. Native-Monotonic-Stamps, keine PCAP-Realtime-Konvertierung. Rohdaten
+  lokal, Decoder-/Image-/Generated-Type-Provenienz und Hashes archiviert.
+- DDS-Driver speichert erste 32/letzte 32 Status-Service-Polls je Intent, Zähler
+  für ausgelassene Mitte. Keine Terminalerfindung aus Budgetablauf/NOT_FOUND.
+  Neue Read-only-Timeline unter tools/m3_dds_result_timeline.py verlangt geschlossene
+  checkpointed Journale, Common-VM/Zero-Offsets, Hash-/Kontext-Konsistenz und
+  passende aktuelle Owner. Unknown/fehlende/recovered Records ohne Zerlegung.
+- Drei eingefrorene neue N2-System-DDS-Läufe je 60 s/Seeds 1701, 2903, 4211:
+  84 Versuche, 82 SUCCEEDED/Effekte, zwei Receiver-EXPIRED Revision 1 ohne Dispatch,
+  keine unaufgelösten Intents. Pro Seed Erfolg/Expiry/Skipped: 27/1/2, 30/0/0,
+  25/1/4. Max. Terminalbeobachtung 5.413/1.448/8.459 ms. Beide Expiries mit einem
+  Stale-COMMAND am Receiver; Poll-Historien vollständig (27/42), spätere neue IDs
+  erfolgreich. Kein generationsändernder Effekt für die Expiries.
+- PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null; sechs Journale integral
+  und terminal identisch. 161 Quellen während aller drei Läufe unverändert,
+  acht installierte Binär-/SDK-Hashes sowie installierte Python-Scripts konstant.
+  Danach nur Offline-Analyzer/Test um Current-Owner-Guard ergänzt: eingefrorene
+  Versionen erhalten, finale Reanalyse aller Timelines identisch. 56 Produktions-
+  C++/Header/Proto-Quellen unverändert, keine neuen ROS-GTests/volle M2-Ausführung.
+  Demo-Python-Paket normal installiert, 83 finale Host-Python-Tests bestanden.
+- Evidenz: evidence/m3-dds-status-timeline-2026-11-06/ mit Histories, getrennten
+  Success-/Expiry-Ergebnissen, Source-/Owner-Guard-Provenienz und Raw-Hashes.
+  Keine vollständigen Inspect-/Env-Dumps. Deadline/Lease/Freshness/QoS/SDK/Wire/
+  IPC/Atomic-Start/Sealing/No-Replay unverändert, Intrinsic/M4 unverändert.
+
+**Weiter:** volle 600-s-N1/N2-Matrix mit drei Seeds, V2/langes N5 und kontrollierte
+Ressourcen, andere Device-/Offload-Pfade sowie N3-/N4-Spezialgates. Lange STATUS-
+Beobachtung und andere SRT-/DDS-Semantik/Security verhindern Transportkosten- oder
+Echtzeit-Überlegenheitsbehauptungen. M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Default DDS N2 je 600 s/drei Seeds
+
+- Eingefrorener Plan vor erstem Lauf: System-DDS, N2, Seeds 1701/2903/4211,
+  je 600 s, frische sequentielle eigene Container, Native Observer v2 aktiv,
+  Immediate/Full-Snapshot/32.768-KiB-PCAP-Request. Keine Retries/Ersatzläufe,
+  kein Rebuild/Policy-Wechsel. Netem-Readbacks und konkrete TC-Argumente erhalten.
+- Alle drei Source-Fenster vollständig (600,141/600,126/600,138 s), Execution- und
+  Capture-Gates bestanden. Pro Seed Versuche/Erfolge/Effekte/Expiry/Not-admitted/
+  Skipped: 282/277/277/5/0/18, 285/281/281/4/0/15, 276/272/272/3/1/24.
+  Insgesamt 843 Versuche, 830 SUCCEEDED/Effekte, zwölf Receiver-EXPIRED Revision 1
+  ohne Dispatch, ein BUSY vor Queue-Aufnahme, 57 übersprungene Slots. Keine
+  UNKNOWN/unaufgelösten Intents, keine automatischen Wiederholungen.
+- Seed 4211 Intent 268: Submission BUSY=1, kein Journal-Record an beiden Seiten,
+  Sender überträgt nur 275 der 276 Versuche. Explizite Admission-Antwort und
+  Abwesenheit getrennt halten; aus generischem NOT_FOUND keine Nichtausführung
+  ableiten. Späterer neuer Intent behält erwartete Generation. Sechs Journale
+  integral/terminal identisch; Generation-Chains ergeben 277/281/272. Dispatches
+  und atomare Startclaims entsprechen Effekten; zwölf Expiries erhöhen Generation
+  nicht. Max. Terminalbeobachtung je Seed 8.463,640/5.610,490/5.895,465 ms.
+- Sensor-Altersqualifikation: Seed 1701 **fehlgeschlagen** (sechs Clock-Steps,
+  max. 6,206431 ms, max. Offset-Abweichung 9,055105 ms). 25.435 IMU-/13.445 Joint-
+  Callbacks clock-rejected. Histogramme nicht als qualifizierte Gesamtverteilung
+  lesen. Seeds 2903/4211 Shared-VM-Age-Estimates qualifiziert; trotzdem sämtliche
+  Realtime-PCAP-Fenster wegen strengerem Clockmodell unterdrückt. Native Kernel-
+  Monotonic-Counter separat qualifiziert, kein Physical-/Delivery-Nachweis.
+- Alle PCAP-Kerneldrops/native Reserve-/Copy-Verluste null, zwölf Cgroup-Phasen
+  aus archivierten Projektionen exakt reproduziert. 161 Sources in drei Manifesten
+  und acht installierte Binär-/SDK-Hashes sowie installierte Python-Bytes konstant.
+  Seed 2903 Robot-PCAP zusätzlich Filterpopulation unreconciled: 170.340 gefiltert
+  vs. 170.338 Captured/File, null Kerneldrops; keine Ursache/Vollständigkeit daraus
+  ableiten. Realtime-Fenster ohnehin unterdrückt, Native-Gates separat.
+  56 Produktions-C++/Header/Proto-Quellen unverändert seit eb46aba. Ein gemeinsamer
+  VM-Boot in dieser Kohorte. Vorige 83 Host-Python-Tests unverändert; keine neuen
+  ROS-GTests/volle M2-Ausführung behaupten. Diese Fortsetzung ändert keine Runtime-
+  Quellen, nur Evidenz/Planungsdokumentation. Intrinsic/M4 unverändert.
+- Evidenz: evidence/m3-dds-n2-full-2026-11-06/ mit Plan, drei Manifesten, per-State-
+  Latenzen, Admission-/Generationsbelegen, Clock-/Sensorpopulationen, Journal-Audits,
+  Raw-Hashes und Cgroup-Projektionen. Keine vollen Inspect-/Env-Dumps; Roh-PCAPs,
+  Prefixes, Journale und Clocks lokal. Keine kausale Ressourcen-/Transportüberlegenheit.
+
+**Weiter:** DDS-N2-Dauer/Seed-Ausführung erledigt, **N2-Altersgate weiter offen**.
+Volle SRT-N2- und beide N1-Matrizen, V2/langes N5, deterministisches N3, N4-Phasen,
+andere Devices/Offloads, kontrollierte Ressourcen und Semantik-/Security-Parität.
+M3 in Arbeit, PR #2 bleibt Draft; keine Echtzeit-/Lossless-/Hardwarefreigabe.
+
+## Fortsetzung 2026-11-06: SRT N2 je 600 s/drei Seeds
+
+- Eingefrorener Plan vor erstem Lauf: SRT N2, Seeds 1701/2903/4211, je 600 s,
+  frische sequentielle eigene Endpoint-Paare. Bestehende Crypto-/Profile-/Deadline-/
+  Lease-/Journal-/Atomic-Start-/No-Replay-Policy, Native v2 und Immediate/Full-
+  Snapshot/32.768-KiB-PCAP unverändert. Keine Rebuilds, Retries oder Ersatzläufe.
+- Alle drei vollständigen Source-Fenster (600,149477/600,101959/600,140695 s)
+  bestanden. Je Seed 300 SUCCEEDED/Effekte, insgesamt 900; null EXPIRED/FAILED/
+  REJECTED/UNKNOWN/unaufgelöste/not-admitted/übersprungene Intents. Max. lokale
+  Invocation-bis-Terminalbeobachtung 1.106,214/1.309,764/1.110,049 ms; keine
+  Ausführungs-/Netzlaufzeitgrenze daraus ableiten. Sechs geschlossene Journale
+  integral, je Intent an beiden Seiten Revision 3/Result/Hash/Generation identisch.
+  Generation-Chains und Device-Effekte je 300, keine neue Intent-Wiederholung.
+- Alle sechs Conservation-Residuals je Source-Fenster null und exakt nachgerechnet.
+  Produced/Published/Observer je Seed: 150.036/64.233/64.176,
+  150.026/64.037/63.980, 150.036/64.183/64.125. Sämtliche lokalen Verlust-/Replace-/
+  Reject-Populationen behalten; Accept-to-Receiver-Gap nicht als isolierter WAN-
+  Verlust oder FEC-Nutzen auslegen. Nicht alle produzierten Samples werden zugestellt.
+- Source-fenced Publication-Age-Upper-Maxima (auf 1 ms aufgerundet) IMU/Joints:
+  143/168, 144/164, 141/163 ms; unter unverändertem 250-ms-Gate. Origin ist Bridge-
+  Ingress, kein physisches Sampling-to-Delivery und keine DDS-Header-Age-Parität.
+  Diagnostics-Hold-Dauern enthalten Startup/Tails/Gaps, keine exakte Window-Uptime.
+- PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null. Sechs PCAP-Populationen
+  hier reconciled, kein universeller Completeness-/Physical-Delivery-Nachweis.
+  Alle Realtime-PCAP-Fenster wegen Clock-Qualifikation unterdrückt; Native-Monotonic
+  separat qualifiziert. Zwölf Cgroup-Phasen aus archivierten Projektionen exakt
+  reproduziert. 161 Quellen und acht ausgewählte installierte Binär-/SDK-Hashes
+  sowie installierte Python-Bytes konstant; 56 Produktionsquellen unverändert seit
+  fd23de6. Ein VM-Boot in der Kohorte. Keine Runtime-Quelländerung; vorherige 83
+  Host-Python-Tests unverändert, keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+- Evidenz: evidence/m3-srt-n2-full-2026-11-06/ mit Plan, Manifesten, Journal-/Generation-
+  Belegen, Source-/Age-/Loss-Tabellen, PCAP-Populationen, Cgroup-Projektionen und
+  Raw-Hashes. Roh-PCAPs/Prefixes/Journale/Clocks lokal; keine vollen Inspect-/Env-Dumps.
+  Intrinsic/M4 unverändert. Kein kontrollierter Ressourcen-/Transportvorteil behauptet.
+
+**Weiter:** volle N2-Dauer/Seed-Ausführung für SRT und System-DDS dokumentiert;
+DDS-N2-Altersgate und Realtime-PCAP-Clockqualifikation bleiben offen. Volle N1-
+Matrizen, V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/
+Offloads, kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
+M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Capture-Retention und SRT N1 je 600 s/drei Seeds
+
+- Vor erster N1-Ausführung Retention-Preflight: SRT N2 hatte je Endpoint
+  125.447.816..125.572.581 Byte bei nominell 128.000.000 Byte rotierender Kapazität.
+  Normale SRT-/DDS-M3-Runner nutzen nun gemeinsam 16 statt 8 Dateien à 16 MB,
+  nominell 256.000.000 Byte. Rotation (Dateigröße/Anzahl/nominelle Bytes) im Manifest
+  und Vergleichsguard gebunden. Kein fehlgeschlagener N1-Lauf/Retry versteckt;
+  Kernelbuffer/Immediate/Snapshot/Offloads/Gates unverändert. Kein unbegrenzter
+  Volumennachweis; Tcpdump-Dateischwellen können um einen Record überschritten werden.
+- Separater UDP-Volumenprobe mit 1-MB-Schwellen: zwei Dateien behalten je Seite
+  1.206 von 2.001 bekannten Records, obwohl Footer 2.001 captured/null Kerneldrops
+  meldet. Bestehendes Captured/File-Gate lehnt korrekt ab. Vier Dateien behalten
+  alle 2.001 mit exakter Native-ID-/Längen-Gleichheit, null Drops; App in beiden
+  Fällen vollständig und Recovery-Control vorhanden. Kein Kernelverlust daraus
+  ableiten; kontrollierter Capture-Mechanismus-Test, keine Transportabnahme.
+- Eingefrorener SRT-N1-Plan: Seeds 1701/2903/4211 je 600 s, frische sequentielle
+  Endpunkte, keine Rebuilds/Retries/Ersatzläufe/Policy-Änderungen. Alle drei Source-
+  Fenster vollständig (600,093151/600,153512/600,141223 s). Je 300 SUCCEEDED/Effekte,
+  insgesamt 900; null Expired/Failed/Rejected/UNKNOWN/unaufgelöste/not-admitted/
+  übersprungene Intents. Max. lokale Terminalbeobachtung 923,544/264,239/467,177 ms.
+  Keine Ausführungs-/Netzlaufzeitgrenze daraus ableiten.
+- Sechs Journale integral/terminal identisch, Revision 3/Hash/Result/Generation
+  pro Intent passend; Device-Generationen/Effekte je 300. Drei Source-Zusammenfassungen
+  exakt reproduziert, alle sechs Conservation-Residuals je Fenster null. Produced/
+  Published/Observer je Seed: 149.484/110.267/110.064, 150.038/111.112/111.047,
+  150.036/111.381/111.300. Erste IMU-Quellrate 199,107 Hz, andere ca. 200 Hz;
+  Ratenvariation/Verluste behalten, nicht normalisieren oder als WAN-Loss/FEC-Nutzen
+  isoliert auslegen. Nicht alle produzierten Samples werden zugestellt.
+- Source-fenced Publication-Age-Upper-Maxima IMU/Joints: 87/119, 63/83, 63/85 ms,
+  unter unverändertem 250-ms-Gate. Origin Bridge-Ingress, keine DDS-Header-/Physical-
+  Sensor-Age-Parität. PCAP-Kerneldrops und Native Reserve-/Copy-Verluste null;
+  sechs PCAP-Populationen reconciled, kein universeller Completeness-Nachweis.
+  Alle Realtime-PCAP-Fenster wegen Clock-Qualifikation unterdrückt, Native separat.
+  Zwölf Cgroup-Phasen aus Projektionen exakt reproduziert.
+- 161 Quellen während drei Läufen konstant; gegenüber d2912fc nur Capture-Helper,
+  zwei Haupt-Runner und ein Guard-Test geändert. Acht installierte Binär-/SDK-
+  Hashes und installierte Python-Bytes konstant; 56 Produktions-C++/Header/Proto-
+  Quellen unverändert. 83 Host-Python-Tests bestanden, Retention-Mischkonfiguration
+  negativ abgedeckt. Keine neuen ROS-GTests/volle M2-Ausführung behaupten.
+  Keine SDK-/Wire-/IPC-/Deadline-/Lease-/Atomic-Start-/Replay-Policy-Änderung.
+- Evidenz: evidence/m3-srt-n1-full-2026-11-06/ mit separatem Retention-Preflight/
+  Probe, Plan, Manifesten, vollständigen Source-/Loss-/Age- und Terminalpopulationen,
+  Journal-/Generationsbelegen, Cgroup-Projektionen und Raw-Hashes. Roh-PCAPs/
+  Prefixes/Journale/Clocks lokal; keine vollen Inspect-/Env-Dumps. Intrinsic/M4
+  unverändert; keine kausale Ressourcen-/Transportüberlegenheit behauptet.
+
+**Weiter:** volle System-DDS-N1-Matrix; DDS-N2-Altersgate/Realtime-PCAP-Clockqualifikation,
+V2/langes N5, deterministisches N3, N4-Command-Phasen, andere Devices/Offloads,
+kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität bleiben
+separat offen. SRT N1/N2 und DDS N2 sind als volle Dauer/Seed-Ausführung dokumentiert.
+M3 in Arbeit, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: System-DDS N1 und N1/N2-Ausführungsmatrix
+
+- Eingefrorener Default/System-DDS-N1-Plan: Seeds 1701/2903/4211, je 600 s,
+  frische sequentielle eigene Endpunkte, Native v2/Immediate/Full-Snapshot/
+  32.768-KiB-Kernelbuffer und 16×16-MB-Retention wie e3c5c70. Keine Rebuilds,
+  Runtime-/Policy-/Capture-Änderungen, Retries oder Ersatzläufe.
+- Alle drei Source-Fenster vollständig (600,115900/600,118402/600,132039 s).
+  Pro Seed Attempts/SUCCEEDED/Effekte/Expired/Skipped: 297/296/296/1/3,
+  297/296/296/1/3, 298/298/298/0/2. Insgesamt 892 Versuche, 890 Erfolge/Effekte,
+  zwei Receiver-EXPIRED Revision 1 ohne Dispatch und acht übersprungene Slots.
+  Keine UNKNOWN/unaufgelösten/not-admitted/rejected/failed Intents. Max. lokale
+  Terminalbeobachtung 5.350,575/5.316,245/2.473,593 ms, kein Handler-/Netzlaufzeitbound.
+- Sechs geschlossene Journale integral und terminal/immutable identisch, ohne
+  fehlende/abweichende Records. Device-Generationen/Effekte 296/296/298; Expiry
+  erhöht Generation nicht, spätere neue Intents folgen dem gleichen erwarteten
+  Stand. Finale Timelines aus Original-Owner-Journalen exakt reproduziert;
+  keine DDS-Timingzerlegung für fehlende/unklare/Recovered-Records erfinden.
+- Alter: Seed 1701 **unqualifiziert**, vier beobachtete Clock-Steps, max.
+  25,965389 ms und max. Offset-Abweichung 34,616970 ms. 17.809 IMU-/6.403 Joint-
+  Callbacks clock-rejected (24.212 gesamt). Seeds 2903/4211 Shared-VM-Age-Estimates
+  qualifiziert. Vollständige Histogramme/Clock-Reject-/Missing-Populationen erhalten;
+  keine Gesamtaltersgrenze aus günstigem Teilset ableiten. N1-Altersgate bleibt offen.
+- Produced/Received je Seed 150.010/112.123, 150.024/112.928, 150.026/111.710;
+  Source-Raten und Callback-Defizite separat halten, kein isolierter WAN-Loss oder
+  Transportvorteil. Sämtliche Realtime-PCAP-Fenster wegen Clock-Qualifikation
+  unterdrückt. Native-Monotonic-Coverage separat qualifiziert. Alle PCAP-Kerneldrops/
+  Native Reserve-/Copy-Verluste null, sechs PCAP-Populationen reconciled; kein
+  universeller Completeness-/Physical-Delivery-Nachweis. Zwölf Cgroup-Phasen aus
+  Projektionen exakt reproduziert.
+- 161 Quellen entsprechen während aller Läufe und final e3c5c70. Acht ausgewählte
+  installierte Binär-/SDK-Hashes und installierte Python-Bytes konstant; 56
+  Produktions-C++/Header/Proto-Quellen unverändert. Ein VM-Boot in dieser Kohorte.
+  Vorige 83 Host-Tests unverändert, keine neuen ROS-GTests/volle M2-Ausführung
+  behaupten. Diese Fortsetzung ändert nur Evidenz/Planungsdokumentation.
+- Evidenz: evidence/m3-dds-n1-full-2026-11-06/ mit Plan, Manifesten, Journal-/Generation-
+  Audits, Original-Owner-Timelines, Source-/Age-/Clock-Populationen, Capture-Metadaten,
+  Cgroup-Projektionen und Raw-Hashes. Roh-PCAPs/Prefixes/Journale/Clocks lokal;
+  keine vollen Inspect-/Env-Dumps. Intrinsic/M4 unverändert.
+- execution-matrix.json in dieser Evidenz fasst SRT N1/N2 und System-DDS N1/N2
+  zusammen: alle vier Kohorten mit drei Seeds/je mindestens 600 s ausgeführt.
+  Nur die Dauer/Seed-Ausführung ist damit abgeschlossen. Capture-Retention,
+  Altersorigins/Modelle, Crypto, Pacing und Hostbedingungen unterscheiden sich;
+  keine kausale Kosten-/Überlegenheitsbehauptung aus getrennten Kohorten.
+
+**Weiter:** V2/langes N5, deterministisches N3 (DATA/FEC getrennt), N4-Command-Phasen,
+DDS-N1/N2-Altersgates und Realtime-PCAP-Clockqualifikation, weitere Devices/Offloads,
+kontrollierte Ressourcen und Age-/Pacing-/Reconciliation-/Security-Parität.
+N1/N2-Dauer/Seed-Ausführung komplett dokumentiert; M3 weiterhin in Arbeit,
+PR #2 Draft. Keine implizite Hardware-/Echtzeit-/Lossless-Freigabe.
+
+## Fortsetzung 2026-11-06: N5 mit aktueller Capture-Konfiguration
+
+- Separate, vor Start eingefrorene paced-DDS-N5-Kohorte: Seeds 1701/2903/4211
+  je 300 s, simultaner Start, private frische sequentielle Endpunkte. 512-kbit/s-
+  Root-TBF je Richtung, Burst 4096, Limit-Request 32768, Child-Netem-Queue 16;
+  kein stochastischer Delay/Loss, Seeds nur Wiederholungslabels. Pinned JSON zeigt
+  TBF Rate/Burst/normalisierte Latenz (448000), kein erfundenes Limit-Readback.
+- DDS-Kandidat explizit paced-sensors: nur Sensorwriter asynchron/KeepLast(1),
+  gemeinsamer 1600-Controller-Bytes/50-ms-Budget, 1200-Byte UDP/SHM. Control unverändert.
+  Native Provider-Preflight vor jedem Lab in network-none, dessen Binärhash als
+  neunter ausgewählter Hash eingefroren. XML/161 Sources/Install-Scripts konstant.
+  Quellen dieser Kohorte entsprechen 1bf9bfe vor dem späteren SRT-Tooling-Patch.
+- Alle drei paced-DDS-Läufe bestanden: je 150 SUCCEEDED/Effekte, gesamt 450;
+  null Expired/UNKNOWN/unresolved/not-admitted/Skipped. Source/Callback je Seed
+  75031/19216, 75027/19073, 75026/19188. Absichtliches Middleware-Pacing und andere
+  Stufen nicht als isolierten WAN-Loss deuten. Alle Shared-VM-Age-Estimates
+  qualifiziert, alle Realtime-PCAP-Fenster weiterhin unterdrückt. Sechs Journale
+  stimmen überein, zwölf Cgroup-Fenster exakt reproduziert. Recorderverluste null.
+- Iperf-Whole-Run-Offer ca. 128000,016/128019,300/128002,557 bit/s; Liveness-Polls
+  positiv. Intervall/Setup/Total-Projektionen und Raw-Hashes erhalten, keine
+  matched-window Delivery-/Loss-Garantie. Default/System-DDS-N5-Discovery bleibt offen.
+- SRT-Runner fehlten diese Competitor-Gates. Patch 80c5590 ergänzt Poll-Liveness
+  und denselben Offered-Load-Validator. 83 Host-Tests bestanden. Separater Negativtest
+  beendet ausschließlich den Client im eigenen Robot-Container nach echtem
+  Measurement-Marker: erwartetes failed/competitor-exited beobachtet. Zusätzlicher
+  Capture-Analysefehler wegen absichtlich fehlender Endpoint-Fenster; keine positive
+  N5-/Capture-/Journal-Abnahme aus diesem unterbrochenen Development-Fall behaupten.
+- Danach separater SRT-N5-Plan, Quellen bei 80c5590 eingefroren. Seed 1701 bestanden:
+  131 SUCCEEDED/Effekte, 19 Skipped, null unresolved. Seed 2903 **fehlgeschlagen**:
+  PCAP-Kerneldrops Robot 2672/Operator 2637. Application-Fenster endet mit 104
+  bestätigten Effekten, 105 Versuchen, 45 Skipped und einem offenen Intent 105.
+  Seed 4211 wegen Fail-fast nicht ausgeführt, kein Ersatzlauf/Retry/Gate-Waiver.
+- Intent 105: Senderjournal UNKNOWN/reconcile-required, Revision 0, ungültiges
+  Result; Receiver ohne Eintrag. 104 gemeinsame Erfolgsrecords stimmen überein,
+  final beobachtete Generation/Effekte 104. NOT_FOUND/Abwesenheit nicht als
+  Nichtausführung/Expiry/Erfolg auslegen. Reconcile-required bleibt
+  unsicher, obwohl die Verbindung später wieder ready ist; kein automatischer Replay.
+  Begin-/End-Session-IDs und Generationen sind identisch; daraus keinen belegten
+  Session-ID-Wechsel oder eindeutige UNKNOWN-Ursache behaupten.
+- Native UDP/PCAP-Multiset-Vergleich identifiziert exakt alle 2672/2637 fehlenden
+  Records eindeutig in drei späten Zeitclustern; große Cluster ca. 2,7/3,1 s.
+  Native Reserve-/Copy-Verluste null und beide Phasen unabhängig qualifiziert.
+  Das rettet keine fehlgeschlagene PCAP-/Gesamtabnahme. Sampler-Gaps beweisen keine
+  globale Pause; keine eindeutige Scheduler-/Storage-Ursache behaupten. Acht
+  Cgroup-Fenster und beide Source-Summaries der ausgeführten SRT-Fälle reproduziert,
+  fehlgeschlagenes App-Counter-Result nicht als vollständige Qualifikation verkaufen.
+- Evidenz getrennt: evidence/m3-dds-paced-n5-v2-2026-11-06/ und
+  evidence/m3-srt-n5-v2-2026-11-06/ inkl. Development-Negativfall, unverändertem
+  fehlgeschlagenem Plan, Raw-Hashes, Closed-Journal-Audit und Capture-Gap-Analyse.
+  Keine Runtime-C++-/SDK-/Wire-/IPC-/Deadline-/Lease-/Replay-Policy-Änderung,
+  keine neuen ROS-GTests/volle M2-Ausführung; Intrinsic/M4 unverändert.
+
+**Weiter:** SRT-N5-Recorderverlust untersuchen/qualifizierbare Aufnahme sicherstellen;
+Intent-105-Unsicherheit beibehalten und Kontextwechsel-/Lastverhalten gezielt
+qualifizieren. N3 deterministische DATA/FEC-Verluste, N4-Command-Phasen, Default-DDS-
+N5-Discovery, bestehende Age-/Realtime-Clock-Gaps und kontrollierte Semantik-/Security-/
+Ressourcenparität offen. M3 nicht abgeschlossen, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-06: Recorder-/Command-Diagnostik
+
+- Optional `run_m3.py --recorder-diagnostics`: begrenzte 100-ms-/proc-Beobachtungen
+  von tcpdump mit PID/Startzeit, State, Scheduler-/Context-Switch-/verfügbaren
+  I/O-Zählern und monotonen Read-Brackets. Default aus, 75000-Sample-Grenze;
+  fehlende/gesperrte Felder explizit, keine Completeness-/Ursachenbehauptung.
+- Network-none/Loopback-Kontrollen: Baseline 2076 Datagrams/Receipts/PCAP-Records,
+  null Drops. Bekannte ca. 1,5-s-SIGSTOP-Pause: 2116 Receipts, 1310 PCAP-Records,
+  Kernel-Dropzähler 1612, 14 T-State-Samples; Zero-Drop-Gate verwirft und Recovery-
+  Marker nach SIGCONT erfasst. Loopback-Filterzähler doppelt, keine Datagramm-/
+  Frame-Äquivalenz oder Erklärung des früheren N5-Verlusts ableiten.
+- Separates N5-Development bei 013927f, 60 s: beide PCAPs ohne Drops, zwei
+  bestätigte Effekte, dritter Intent unresolved/Sender UNKNOWN, Receiver ohne
+  Record, 27 Skipped. Harness-passed erlaubt Development-Uncertainty und ist keine
+  N5-Command-Abnahme. Unsicherheit damit auch ohne Recorderverlust beobachtet;
+  keine eindeutige Transition/Ursache, kein Replay/Expiry/Erfolg erfunden.
+- SRT-Driver ab 56b7b8a nutzt bestehenden bounded Status-History-Helper: erste
+  32/letzte 32 Polls, Omission-Zähler, State/Reason/Revision/Found und Local-/Peer-
+  Errors. Admission/Cadence/Terminalklassifikation unverändert. Separates 30-s-
+  N5-Development: 12 Erfolge/Effekte, drei Skipped, null unresolved, null PCAP-Drops;
+  86 Statuspolls von LOCAL_QUEUED bis SUCCEEDED erhalten. Kein Ersatz für die
+  fehlgeschlagene Frozen-Kohorte oder deren nicht ausgeführten dritten Seed.
+- Echte N5-Endpunkte verweigern /proc-I/O-Counter nach tcpdump-Privilege-Drop
+  (PermissionError), wchan=0 nicht als verfügbare Waitsite interpretieren. Kein
+  zusätzliches Capability/anderer tcpdump-User in N5. Loopback-Kontrolle mit
+  explizitem -Z root ist nur eine Diagnosekontrolle, deren I/O-Sicht nicht auf N5
+  übertragen. Scheduler/States/Samplegaps verfügbar; ein D-State-Sample beweist
+  keine Storage-Ursache. Gegenüber früheren Kohorten zusätzlicher Observer-Workload.
+- 88 Host-Python-Tests bestanden; ROS/SRT-Development validiert Adapter. Keine
+  neuen ROS-GTests/volle M2-Ausführung; acht ausgewählte installierte Dateien
+  nach Läufen unverändert zur früheren N5-Freeze geprüft. Keine Production-C++-,
+  SDK-/Wire-/Deadline-/Lease-/Replay-Änderung. Evidenz mit unveränderten Manifesten,
+  Sample-Replay, Read-only-Journal-Audits/Raw-Hashes:
+  evidence/m3-recorder-diagnostics-2026-11-06/. Rohdaten bleiben lokal.
+
+**Weiter:** Command-Invalidation-/Transport-Handoff-Grenzen gezielt instrumentieren,
+Live-/Shutdown-/Recovery-Transitions unterscheidbar machen; Recorderverluste mit
+opt-in Beobachtungen korrelieren, falls erneut beobachtet. Original-Intent 105
+bleibt unsicher; SRT-N5-Gesamtqualifikation, Default-DDS-N5, N3/N4 und bestehende
+Age-/Clock-/Security-/Ressourcengates offen. M3 in Arbeit, PR #2 Draft; M4 unverändert.
+
+## Fortsetzung 2026-11-06: Command-Handoff-Ursache beobachtet und behoben
+
+- 381dfa8 ergänzt opt-in `--command-diagnostics` / ROS-Parameter
+  `command_diagnostics`: fester 256-Event-Trace, Producer schreiben mit Try-lock
+  ohne Wait/I/O/Callbacks, Loss-Zähler explizit. ROS-Pump drainiert JSON; nach
+  Endpoint-Join finale Attempted/Dropped-Bilanz. Events für Coordinator-Invalidation
+  (Sessionwechsel vs. Abandoned-Submit), Admission/Handoff, Transportdrops,
+  SDK-Acceptance und Lifecycle. Aktuelle und gespeicherte Owner-Epochen bei
+  UNKNOWN separat. Kein Wire-/Worker-IPC-Formatwechsel; Default aus.
+- Separates vorab fixiertes 90-s-N5-Development (Seed 2903) bei 381dfa8:
+  zehn Erfolge/Effekte, ein offener Intent 11, 34 Skipped, null PCAP-Drops.
+  Trace: Envelope-Erstellung für 11 verwirft `clock_unqualified` vor SDK-Handoff.
+  Letzter Driverpoll bleibt LOCAL_QUEUED; späterer Teardown-Sessionwechsel fordert
+  Invalidation an, geschlossenes Journal danach UNKNOWN/reconcile-required.
+  Keine nachträgliche Expiry/Erfolg/Nichtausführung oder Replay erfinden.
+- Originalmanifest bleibt failed: erster Tracevalidator erwartete fälschlich
+  exakt zwei Bridge-Logs. Tatsächlicher Setup-Linkreset erzeugt drei Inkarnationen;
+  alle drei Traces integral, 43/4/4 Events, null Drops. Reanalyse getrennt, kein
+  Umetikettieren des ursprünglichen Manifests. Validator ab 899a6eb prüft jede
+  Inkarnation und beide Rollen, statt die legitime Setup-Inkarnation abzulehnen.
+- 899a6eb hält noch nicht ans SDK übergebene Commands bei softem Clock-Ausfall in
+  einem reservierten Ingress-Slot. Dieser zählt innerhalb der bestehenden 64/
+  56-Grenzen, FIFO bleibt erhalten. Original-Proof/Origin/Deadline unverändert;
+  pro Versuch Liveness/Context/Deadline prüfen. Probe-/Socket-Owner laufen weiter.
+  Expiry/Revocation/Context-Loss/andere Envelopefehler weiterhin fail closed;
+  kein neuer Admit, keine Budgetverlängerung und kein SDK-Command-Replay.
+- Kontrollierter nativer Regressionstest mit 150-ms-Probe-Lifetime schlägt mit
+  altem Transport erwartungsgemäß fehl (Command discarded statt Clock-Wait).
+  Fix auf IPv4/IPv6: Deferred/Ingress-Charge, One-shot-Ticket, genau ein späterer
+  SDK-Handoff mit Original-Origin/5000-ms-Budget. Zweites gehaltenes Command wird
+  nach Worker-Revocation verworfen und auch nach Clock-Erholung nicht gesendet.
+- Separate neue 90-s-N5-Development-Ausführung bei 899a6eb: 32 Erfolge/Effekte,
+  13 Skipped, null unresolved/UNKNOWN/PCAP-Drops. Zwei Clock-Deferrals, beide
+  Intents erfolgreich; SDK-Accepts 32. Traces 108/4/4 Events, null diagnostische
+  Drops; 32 gemeinsame Journalrecords stimmen überein, Generation/Effekte 32.
+  Geänderte kompilierte Runtime plus Trace/Recorder-Observer; keine kausale
+  Leistungs-/Kostenvergleichsbehauptung und kein Ersatz für frühere Abnahme.
+- Finale neue Builds: 68 SDK-/Native-CTests, 36 ROS-reported (32 GTests plus
+  Wrapper) und 92 Host-Python-Tests bestanden. Kein neuer voller M2-Acceptance-
+  Lauf behauptet. Consumer wegen öffentlicher Config-Layout-Erweiterung neu gebaut.
+- Historische Intents 105 und 3: Immutable/read-only Journal-Owner-Checks stimmen
+  mit jeweiligem Operator-Checkpoint überein, belegen aber keine eindeutige alte
+  Transition. SRT-Checkpointlabels sender/receiver sind Sensor-Richtung; Command-
+  Sender ist Operator/Sensor-Receiver. Historische Unsicherheit bleibt erhalten.
+- Evidenz: evidence/m3-command-handoff-2026-11-06/ mit unveränderten Manifesten,
+  Freeze/Binding, Original-Trace-Logs, Reanalyse, Journal-/Source-/Raw-Hashes,
+  Expected-Failure/positiven Tests. Roh-PCAP/Prefixes/Journale/Clocks lokal;
+  keine kompletten Inspect-/Env-Dumps/Secrets.
+
+**Weiter:** Neue Runtime in eigenständiger langer SRT-N5-Kohorte qualifizieren;
+Original-Recorderverlust und alte UNKNOWNs bleiben offen. Danach N3/N4 und
+bestehende Default-DDS-N5-/Age-/Clock-/Security-/Ressourcengates. M3 weiterhin in
+Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Lange N5-Kohorte und unabhängige Trace-Lanes
+
+- Neue eingefrorene Kohorte ffd4fb2 / Command-Fix 899a6eb: drei geplante 300-s-
+  SRT-N5-Fälle, Labels 1701/2903/4211, Command-/Recorder-Diagnostics und native
+  V2-Aufnahme explizit an. 168 Quellen, acht ausgewählte installierte Dateien
+  und installierte Scriptbytes bis Kohortenende konstant. Frische private Labs,
+  keine Retries/Ersatzfälle/Tuningänderungen. N5 ohne stochastischen Loss/Delay;
+  Labels keine unabhängigen Random-Loss-Samples.
+- 1701 bestanden: 115 SUCCEEDED/Effekte, 35 Skipped, keine Expiry/Uncertainty/
+  Nonadmission, keine PCAP-Drops. Traces 359/4/4 Records vollständig. Vier
+  Clock-Deferrals, alle entsprechenden Intents erfolgreich. Max. gemessener
+  Publikations-Age-Upper-Bucket 187 ms innerhalb 250-ms-Gate.
+- 2903 **fehlgeschlagen** wegen Diagnostic Completeness: Operatortrace 397 von
+  398 Attempts, Dropped=1, Sequenz 235 fehlt; keine Rekonstruktion. Dennoch
+  Application-Fenster vollständig: 129 SUCCEEDED/Effekte, 21 Skipped, keine
+  Expiry/Uncertainty/Nonadmission, null PCAP-Drops; ein Clock-Deferred-Intent
+  erfolgreich. Robot-Traces vollständig, je vier Records. Max. Age-Bucket 227 ms.
+- 4211 wegen Fail-fast nicht ausgeführt. 244 bestätigte Effekte, vier geschlossene
+  Journale identisch inkl. Result-Rate/Generation, acht Cgroup-Fenster und beide
+  Source-Summaries exakt reproduziert. Source/Published/Observer: 75032/26236/26236
+  und 75033/27637/27637. PCAP Captured/Filter/File je Endpoint 108712 / 109964,
+  Kerneldrops und native Reserve-/Copy-Verluste null. Realtime-PCAP-Fenster bleiben
+  clockbedingt unterdrückt. Keine Performance-/Physical-Delivery-Inferenz.
+- Archivierung erhält beide gemeldeten image_platform_id-Werte: einmal Manifest-
+  Digest, einmal Config-artig. Immutable Config.Image-Referenz und aufgezeichnete
+  Container.Image-Werte sind in beiden Fällen identisch, Boot ebenfalls. Keine
+  Rohfelder überschrieben/kanonische Config-ID erfunden; Ressourcenkosten nicht
+  unter Annahme identischer Roh-Platform-ID-Felder vergleichen. Inspect-/Env-Dumps
+  bleiben lokal, im Archiv nur selektierte Isolation-/Image-/Clock-Projektionen.
+- Alter Tracebuffer verlor bei Full ODER Mutex-Contention; kombinierter Zähler
+  belegt keinen eindeutigen Mechanismus. dc4131c entfernt den Contention-Pfad:
+  zwei feste SPSC-Lanes, jeweils 128 Records, total weiterhin 256. Je Owner genau
+  ein Producer, ein externer Consumer, Producerwechsel nur nach Join; Acquire/
+  Release-Indizes sichern Slots. Kein Producer-Mutex/Retry/Callback/I/O. Full-
+  Drops weiterhin explizit und Diagnostic-Gate unverändert strikt. Andere
+  Reservationsverteilung = neuer Observermodus, braucht eigene volle Kohorte.
+- Validiert: fünf fokussierte SDK-/Native-Tests (Trace/Overflow/Reservation,
+  IPv4/IPv6 Endpoint-Recovery und Clock-Deferral/Revocation), ergänzender Test
+  0a1c1b0 mit 2000 garantiert interleaved Observations bei maximal einem offenen
+  Event je Lane und null Loss; 36 ROS-reported Tests und 92 Hosttests bestanden.
+  Voriger voller SDK-Lauf 68 Tests gehört zum Kohortenruntime; kein erneuter
+  voller 68-Test-/M2-Acceptance-Lauf nach Trace-Patch behauptet. Consumer neu gebaut.
+- Getrennter 15-s-N0-Smoke des neuen Tracebuffers: acht Erfolge/Effekte, Traces
+  34/4/4 vollständig, null Trace-/PCAP-Drops. Keine N5-Qualifikation daraus.
+  Wire/Worker-IPC/Journal-/Command-/Deadline-/Lease-/Replay-Policy unverändert.
+- Evidenz: evidence/m3-srt-n5-fixed-2026-11-06/, Originalplan/-manifeste unverändert,
+  Raw-/Source-/Binary-Hashes, read-only Journale, Capture-/Trace-Reanalysen,
+  Cgroup-Projektionen, separater trace-buffer-fix/ mit Smoke/Tests/Freeze.
+
+**Weiter:** Neue vollständige N5-Kohorte für den unabhängigen Tracebuffer einfrieren.
+Bisherige Kohorte bleibt failed, dritter Fall unexecuted; nichts ersetzen/waiven.
+N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/Ressourcengates weiter offen.
+Historische Recorderverluste und UNKNOWNs erhalten; M3 in Arbeit, PR #2 Draft,
+Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: SPSC-N5 mit live beobachteter Unsicherheit
+
+- Neue vorab eingefrorene Kohorte 649b4ce: Labels 1701/2903/4211 je 300 s,
+  unabhängige SPSC-Lanes, beide Diagnostik-Observer und native V2-Aufnahme aktiv.
+  168 Quellen, acht ausgewählte Dateien, installierte Scriptbytes, immutable
+  Image-Referenz und gemeinsame VM-/Time-Namespace-Proof vorab fixiert.
+- Erster Fall **failed am Command-Outcomes-Gate**, weitere zwei nicht ausgeführt.
+  Originaler Harness bleibt development-passed (dort unresolved erlaubt),
+  Originalkohorte failed; keine Umklassifikation/Retry/Ersatzfälle.
+- 15 Versuche: 14 SUCCEEDED/Effekte, Intent 15 unresolved, 135 Skipped,
+  keine Nonadmission. Senderjournal 15 UNKNOWN/reconcile-required, Revision 0,
+  ungültiges Result; Receiver ohne Record. 14 gemeinsame Erfolge identisch inkl.
+  Result-Rate/Generation, Device Generation/Effekte 14. Kein Nichtausführungs-
+  beweis/Expiry/Erfolg/Replay aus NOT_FOUND oder Abwesenheit erfinden.
+- Trace: SDK-Accept 15 bei ca. 34,039 s, Robot Sessionchange/Invalidation ca.
+  37,517/37,519 s; Operator bei 42,470 s, Completion 42,478 s. Erstes beobachtetes
+  UNKNOWN 43,305 s mit passender Entry-/Current-Owner-Epoche. Live-Kontextverlust
+  innerhalb des Messfensters, nicht nur Teardown. Bestehende Events erklären
+  den initiierenden Socket-/Session-Close noch nicht; keine eindeutige Ursache.
+- Alle Traces vollständig: Operator 1496, Robot 4/7, Dropped überall 0. Beide
+  PCAPs Captured/Filter/File exakt 150432, null Kernel-/Native Reserve-/Copy-Loss.
+  Sechs Source-Bilanzen und vier Cgroup-Fenster reproduziert. Produced 74987,
+  Published 11864, Observer 11863; Stage-Defizite nicht isolierter WAN-Loss.
+  Max. gemessener Age-Upper-Bucket 238 ms innerhalb 250, Realtime-PCAP-Fenster
+  weiter clockbedingt unqualifiziert. Keine Kosten-/Performance-/Physical-Inferenz.
+- fd0107e ergänzt opt-in Cause-Events: session_action (30) mit SessionError und
+  Close-Control/Close-Sensor/Flush-Bits 1/2/4; link_lost (31) mit Channel 0/1
+  sowie Socketstate/Security-Timeout/Epoll-/Provider-/Decode-Ursache. Transport-
+  Stopping trägt TransportFault. Nur schließende Actions, kein Sensor-Error-Flood.
+  Alte Traces lesbar; Detailfeld erweitert Layout, Consumer neu gebaut. Kapazität
+  weiterhin 256 Records, 128 je Owner; keine Producer-I/O/Callbacks/Policyentscheidung.
+  Wire/IPC/Journal-/Deadline-/Lease-/Start-Fence-/Replay-Policy unverändert.
+- Fünf fokussierte SDK-/Native-Tests bestanden, inkl. kontrolliertem Peer-Close
+  auf IPv4/IPv6 mit Link-Cause und Session-Close vor Receiver-Teardown; 36 ROS-
+  reported Tests und 93 Hosttests bestanden. Kein neuer voller 68-Test-/M2-Lauf
+  behauptet. Separater 15-s-N0-Smoke: acht Effekte/Erfolge, Traces 42/5/5 integral,
+  neue Cause-Felder ausgeübt, null Trace-/PCAP-Verlust. Keine N5-Qualifikation.
+- Evidenz evidence/m3-srt-n5-spsc-2026-11-06/ mit unveränderten Plänen/Manifesten,
+  Incident-Zeitpunkten, Read-only-Journalen, Source-/Binary-/Raw-Hashes, nativer
+  Reanalyse und Cgroup-Projektionen; spätere cause-trace/ Tests/Freeze/Smoke
+  getrennt. Rohcaptures/Prefixes/Journale/Clocks lokal, keine kompletten Inspect-/
+  Env-Dumps oder Credentials publiziert.
+
+**Weiter:** Live-N5-Reset mit Cause-Events gezielt reproduzieren und Initiator
+qualifizieren, bevor erneut eine vollständige Kohorte versucht wird. Alte
+UNKNOWNs/Recorderverluste erhalten. N3/N4, Default-DDS-N5 und Age-/Clock-/Security-/
+Ressourcengates offen; M3 in Arbeit, PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Einmaliger Cause-Repro und Admission-Loss-Test
+
+- Vorab festgelegter einzelner 300-s-N5-Diagnoselauf (Label 1701) bei 4a49595,
+  getestete Cause-Event-Runtime fd0107e, native V2-Aufnahme und beide Observer an.
+  Source-/acht ausgewählte Binärinventare vor/nach Lauf konstant. Keine Wiederholung,
+  Ersatzfälle oder Tuning. Ergebnis **kein aktiver Reset beobachtet**; nicht als
+  Erklärung früherer Fehler oder komplette N5-/M3-Kohorte auslegen.
+- 133 Attempts/SUCCEEDED/Effekte, 17 Skipped, null unresolved/UNKNOWN/nonadmission;
+  Traces 417/5/5 integral und null Trace-/PCAP-Verlust. Setup-/Teardown-Close-
+  Events erhalten, aber vom aktiven Command-Fenster getrennt klassifiziert.
+  133 gemeinsame Journalrecords stimmen in Immutable-/Statusfeldern inkl. Result-
+  Rate/Generation überein, read-only/immutable mit Hashkontrolle.
+- Produced/Published/Observer 75041/2327/2327, Defizite explizit und nicht isolierter
+  WAN-Loss. Max. Publikations-Age-Upper-Buckets IMU 162 / Joint 159 ms innerhalb
+  250-ms-Modellgate. Source-Summary und vier Cgroup-Fenster exakt reproduziert,
+  sämtliche Realtime-PCAP-Fenster weiter clockbedingt unterdrückt. Keine Kosten-/
+  Performance-/Physical-Delivery-Behauptung aus diesem Einzellauf.
+- 32ccfc6 ergänzt ausschließlich einen nativen Admission-before-commit-Peer-Loss-
+  Regressionstest: Transportempfang/Receiver-Journalbarriere abwarten, Receiver
+  stoppen und neue Epoch/Session verbinden. UNKNOWN/reconcile-required Revision 0
+  ohne gültiges Result bleibt trotz Peer-NOT_FOUND und nach ursprünglichem
+  5000-ms-Budget erhalten; genau ein SDK-Handoff, kein Replay/Effekt. Kontrollierte
+  Barriere liefert bekanntes Faultmodell, keinen Initiatorbeweis für den alten
+  spontanen N5-Reset. Bestehender Worker-Hook, keine neue Produktionsschnittstelle.
+- Beide Command-Endpoint-CTests IPv4/IPv6 bestanden, jeweils 195 Checks inkl.
+  neuer Admission-Loss-Szene und bestehender Normal-/Result-Recovery-/Running-
+  UNKNOWN-/Timeout-/Shutdown-Szenen. Kein neuer kompletter SDK-/ROS-/Host-Testlauf
+  behauptet; Produktionscode/Binärinventare unverändert, nur Testquelle geändert.
+  Admission-Phasen-Faultcoverage, keine komplette N4-/ROS-/Hardware-Abnahme.
+- Evidenz evidence/m3-n5-close-cause-2026-11-06/ mit unveränderten Plänen/Manifesten,
+  aktivem Cause-Fenster (leer), ursprünglichen Trace-Logs, ausgewählten Journal-
+  Vergleichsfeldern, Cgroup-Replay und Raw-Hashes sowie separatem Native-Testlog.
+  Rohcaptures/Prefixes/Journale/Clocks lokal; keine Inspect-/Env-Dumps/Secrets.
+
+**Weiter:** Prospektiv begrenzten Diagnose-/Faultplan zur Unterscheidung Provider-
+Verlust vs. lokale Session-/Clock-Entscheidung verwenden; Initiator bleibt offen.
+Keine günstigen Läufe anstelle gescheiterter Kohorten einsetzen. Historische
+UNKNOWNs/Recorderverluste erhalten; vollständiges N5/M3, N3/N4, Default-DDS-N5 und
+Age-/Clock-/Security-/Ressourcengates offen. PR #2 Draft; Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-06: Flow-isolierte CONTROL-Stille und gerichteter Fault
+
+- Keine weitere Zufallswiederholung: Native V2-Rohdaten des gescheiterten SPSC-N5-
+  Falls read-only analysiert. Neuer Tooling-/Testcommit be70a6a:
+  tools/m3_control_liveness.py prüft Capture-/Clock-Proof, Version/Interface/
+  Counter/Hash und trennt UDP-4-Tuple plus SRT-Destination-Socket-ID. Keine
+  Payload-Entschlüsselung; ID 0 nicht etablierte Connection-Identität, Routing-
+  Identifier keine Authentizitätsgarantie. GSO/VLAN/über-MTU/kurze CONTROL-Header
+  werden verworfen, Fenstergrenzen/Zensierung explizit.
+- Alter operator→robot-Flow zuletzt an Robot bei 32,509061932 s beobachtet,
+  Robot SessionChange 37,517303435 s: 5,008241503 s beobachtete Stille.
+  Reverse-Flow zuletzt an Operator 37,468471351 s, SessionChange 42,469670811 s:
+  5,001199460 s. Voll beobachteter operator→robot-Interarrival-Gap ca. 5,127 s
+  an beiden Hooks. Neue Handshakes/Reconnect-IDs nicht dazugezählt. Native-Hashes
+  identisch zum alten Archiv, keine Rekonstruktion/Umklassifikation.
+- Passend zum Default-Peer-Idle 5000 ms im gepinnten Provider 52be7c86… . Relevante
+  Source-Dateien stimmen bytegenau mit Pin überein. Kein historischer Per-Socket-
+  Readback, keine eindeutig belegte interne Idle-Branch-/Initiatorursache.
+- Qdisc-Root-Delta über ganzen Lauf: Robot 1755730, Operator 331. Child-Counter
+  überlappen und werden nicht summiert; keine Flow-/Zeitfenster-Loss-Zuordnung.
+  Tap im qualifizierten Fixture hinter geprüftem Egress-Qdisc: SDK-Scheduling,
+  Socket-/Queue-Verhalten und Pre-Hook-Qdisc-Loss bleiben offen, nicht pauschal
+  WAN- oder Providerfehler behaupten.
+- Neuer nativer Loopback-UDP-Gate-Test: CONTROL-Handshake bidirektional, danach
+  nur listener→caller-Reply-Datagrams droppen; SENSOR direkt, beide Runtimeowner
+  bis Fault aktiv. Provider-Control-Loss vor Session-Close ohne lokale Protocol-/
+  Clock-Close-Ursache, Reverse-Forwarding bleibt positiv, Trace-Drops null.
+  IPv4/IPv6 nach jeweils beobachteten 5004 ms; 631/619 Replies gedroppt, 213/208
+  Reverse-Datagrams forwarded. Timeouts/Produktionscode/Dependency unverändert,
+  keine globalen Netzwerk-/Qdisc-Eingriffe. Bewiesener kontrollierter Mechanismus,
+  keine Gleichsetzung mit dem historischen Initiator/Pre-Hook-Ort.
+- Beide Transport-Owner-CTests bestanden inkl. bisheriger Lifecycle/Cadence/
+  Reconnect-Szenen (beobachtet 462/459 Checks); 98 Host-Python-Tests bestanden.
+  Kein neuer voller SDK-/ROS-/M2-Lauf behauptet. Nur Analyse-/Testquellen geändert.
+- Evidenz evidence/m3-control-silence-2026-11-06/ mit beidseitigen Flow-Fenstern,
+  selektierten Altflows, Quellen-/Rohhash-Prüfung, Native-/Python-Testlogs und
+  Grenzen. Keine PCAP-Payloads/Secrets/Inspect-/Env-Dumps publiziert.
+
+**Weiter:** Unter vorab begrenztem Diagnoseplan Provider-TX-/ACK-/Queue-Beobachtungen
+mit Operator-Egress korrelieren; Scheduling vs. Socket/Qdisc unterscheiden, bevor
+Verhalten geändert wird. Historischer Initiator und vollständige N5-/M3-Abnahme
+bleiben offen; alte UNKNOWNs/Fehler erhalten, N3/N4/Default-DDS-N5/Age-/Clock-/
+Security-/Resource-Gates unverändert. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: Begrenzte CONTROL-Providerdiagnostik
+
+- Neue optionale `TransportConfig::provider_diagnostics`, ROS-Parameter und
+  Runner-Flag `--provider-diagnostics`, Default aus. CONTROL alle nominell 100 ms
+  und vor Close im Drop-Pfad; `srt_bstats(...,0)` ohne Counter-Clear, tatsächliches
+  Peer-Idle-Readback, Read-Brackets, Owner/Generation/Socket, Verfügbarkeit/Fehler,
+  kumulative DATA/ACK/NAK/Bytes plus Buffer/Flight/RTT-Gauges. Separater SPSC-Puffer
+  128 Records, Lifetimebudget 75000; Verlust/Exhaustion explizit und Runnerfehler.
+  ROS serialisiert außerhalb des Owners, Finalstatus nach Join. Public Config
+  geändert, SDK und alle ROS-Consumer rebuilt. Kein Policy-/Timeout-/Pin-Change.
+- Parser hält beide Read-Brackets pro Delta, trennt Socketidentitäten und
+  unavailable Samples, prüft Accounting und meldet mögliche 32-bit-Sättigung.
+  SDK-Locks/Bookkeeping beeinflussen Timing; kein Nonblocking-/Zero-Overhead-
+  Versprechen. Counter erfassen nicht Keepalive/Handshake/ACKACK, beweisen weder
+  UDP-Stille noch Delivery. RTT 0 kann fehlender Estimate sein.
+- 105 Hosttests, voller SDK-CTest 69/69 und ROS 36 reported Tests bestanden.
+  Native gerichtete CONTROL-Stille mit Diagnostik IPv4/IPv6: 5005/5003 ms,
+  tatsächliches Idle-Readback 5000 ms, 788/781 Checks; Counterwachstum trotz
+  bekannter Gate-Drops und flacher Caller-DATA-RX nach Settling nachgewiesen.
+- Prospektiver Plan, genau ein N0-Smoke und ein N5-90-s/Seed-1701-Lauf; keine
+  Random-Retry. Quellstand 0ace537 (SDK/ROS eedf5d3), Sources/Install-Matches und
+  acht Runtimehashes vorher/nachher gleich. N0 8 Erfolge/Effekte, keine UNKNOWNs;
+  Provider 271/23/226 vollständig. N5 39 Erfolge/Effekte, 6 Slots übersprungen,
+  keine UNKNOWNs; Provider 974/24/959 und Commandtrace 135/5/5 vollständig,
+  null Drops/Exhaustion. Kein aktiver CONTROL-Loss/Close reproduziert; daher nur
+  Instrumentierungsvalidierung, keine historische Initiatorzuschreibung/Fix.
+- N5 max beobachteter Startgap 113,283167 ms, Readspan 0,673250 ms, keine Bounds.
+  PCAP 39550 Records/Filter je Endpoint, zero Kerneldrops; Native 39598/39603,
+  zero Reserve-/Copyverluste bei separaten Populationen/Intervallen. Realtime-
+  PCAP-Fenster weiter withheld. N5 Source/Published/Observer 22534/7173/7173;
+  Sensordefizit erhalten, keine Performance-/Lossless-Behauptung.
+- Evidenz evidence/m3-provider-diagnostics-2026-11-06/ mit Originalmanifesten,
+  Diagnoselogs, Outcomes, Accounting, Testlogs, Prospektivplan und Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal, keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Mit eingefrorener Diagnostik einen begrenzten Plan zur Trennung von
+Provider-Scheduling/Socket-Send und Post-Qdisc-CONTROL verfolgen. Historischer
+Initiator/UNKNOWNs, volle N5-/M3-Abnahme, N3/N4/Default-DDS-N5/Age-/Clock-/Security-/
+Ressourcengates offen. Alte Fehlläufe unverändert; PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: CONTROL-only Egress-Faultharness, Versuch fehlgeschlagen
+
+- Neuer opt-in Runner `--control-egress-fault operator|robot`, nur N0 >=45 s mit
+  Command-/Provider-/Native-Diagnostik. Dedizierter tc-egress-u32/gact-Drop auf
+  owned eth0, IPv4 UDP, Peer-/32 und CONTROL-Port 10080; SENSOR aus Selektor
+  ausgeschlossen. Nach einem Drittel der Dauer, sechs Hostsekunden bis Restore;
+  VM-Brackets um tc, Filtercounter und leeres Restore-Readback. Keine Default-/
+  Policy-/SDK-/ROS-/Provideränderung. Kein N4-Phasen-/Historischer-Ursachenbeweis.
+- Read-only-Analyzer für gepinntes Handle/Wire-ID-Mapping, alte Socket-/Tuple-
+  Identität, vollständiges Native-v2/Common-Clock-Fenster und nur benachbarte
+  verfügbare Providerdeltas mit beiden Reads komplett im aktiven VM-Intervall.
+  Reverse-CONTROL/SENSOR/Restore separat. Host-getestet, live nicht validiert.
+- Prospektiv genau ein 45-s-N0/Seed-1701-Versuch, b0e2204, alle 178 Sourcehashes
+  passend; acht Runtimehashes vorher/nachher identisch zum vorigen Testbuild.
+  Lokal .local/m3/20261106T203905001506Z. Filter erfolgreich installiert, aber
+  `tc ... filter show ... pref 49152` lässt `pref` im JSON aus. Validator nahm
+  fälschlich Pflichtfeld an: `unexpected CONTROL filter`, Abbruch vor verifiziertem
+  Sechssekundenintervall/Restore. Initialcounter 0, kein Lifetimecounterbeweis.
+- Originalmanifest FAILED erhalten, inklusive sekundärer fehlender Endpoint-
+  Measurements und finaler Command-/Providerstatus. Keine Rekonstruktion/Rescue.
+  Beide Container und Netzwerk erfolgreich entfernt. Kein zweiter Liveversuch.
+- Parser akzeptiert fehlendes pref nur im festen scoped Query; explizit falsches
+  pref/Protocol/Kind/Action/Counter weiter Fehler. Originalreadback als Fixture.
+  Install-Readbackfehler entfernt Filter vor Raise, Finalstatsfehler ebenfalls
+  im finally mit Restorecheck. Fehlerpfade getestet. 112 Hosttests vor Versuch,
+  115 nach Fix bestanden, Syntaxchecks bestanden. Keine frischen SDK-/ROS-/M2-
+  Tests behauptet; Runtime unverändert (vorherige 69 SDK/36 ROS gelten dafür).
+- Evidenz evidence/m3-control-egress-fault-2026-11-06/ mit Plan, Originalmanifest,
+  tc-/Fehler-/Diagnose-/Cleanup-Logs, Findings, Source-/Runtimeprovenienz und
+  Rohhashes. Payloads/Prefixes/Journale/WALs/Clocks lokal, keine Secrets/Inspect/
+  Env-Dumps. Kein erfolgreich validiertes Provider-vs-Egress-Signature behauptet.
+
+**Weiter:** Korrigierten Harness unter frischem prospektiv begrenztem Plan live
+validieren; alten Fehlversuch erhalten. Danach qualifiziertes Signature für N5-
+Triangulation nutzen. Historischer Initiator, volle N5-/M3-Abnahme und sonstige
+Gates offen; PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06: Korrigierter CONTROL-Faultharness live validiert
+
+- Frischer vorab commiteter Ein-Ausführungsplan cd54446, N0/45 s/Seed 1701,
+  operator→robot CONTROL-only tc-Drop. Alter FAILED-Versuch unverändert. 115
+  Hosttests/Syntaxchecks bestanden; Sourcehashes und acht Runtimehashes zum
+  vorher getesteten SDK-/ROS-Build vorher/nachher gleich. Keine Runtime-/Policy-/
+  Timeout-/Dependencyänderung, keine frischen SDK-/ROS-/M2-Tests behauptet.
+- Lokal .local/m3/20261106T213402911275Z. Filter installiert/validiert/entfernt,
+  leeres Restore-Readback. Finaler Pre-Remove-Counter 303 Drops/39356 Bytes,
+  kein garantierter Lifetimecounter. Garantiert aktives VM-Intervall 6,410313587 s,
+  angefordert sechs Hostsekunden. Keine Epoch-Subtraktion/Exaktdauerbehauptung.
+- Bekannte Signature beobachtet: operator gleiche Socketidentität, 43 verfügbare
+  benachbarte Readpaare komplett im Intervall: DATA-sent +137 inkl.135 Retransmits,
+  ACK-sent +159; Post-Filter-CONTROL out 0, Robot alter CONTROL in 0. Reverse alter
+  CONTROL am Operator 159, SENSOR-Source je Hook 1046 plus262 Parity, nach Remove
+  im Drei-Sekundenfenster CONTROL out je92. Countertypen/Zeitgrenzen verschieden,
+  keine Summierung von Retransmits auf DATA/keine exakte Dropgleichheit.
+- Robot LinkLoss 5,001006502 s nach letztem alten incoming CONTROL, dann Close
+  ohne SessionError. Operator-Loss ca.1,195 ms später. Anders als historische
+  ca.fünf Sekunden Endpoint-Close-Abstand; kein Beweis desselben N5-Initiators.
+  Bekannte Filterursache dieses Experiments, keine Rückwärtsattribution.
+- Acht bestätigte Erfolge/Effekte, Intent9 UNKNOWN/reconcile-required Revision0
+  ohne gültiges Result, 14 Slots übersprungen. Immutable geschlossene Journale:
+  neun Sender-/acht Receiverrecords, acht Erfolge/Hashes/Kontexte/Resultate passen;
+  Receiverdeadline konservativ früher, nicht Gleichheit unterstellt. Für9 genau
+  ein SDK-Handoff, Receiverrecord fehlt, Peer-NOT_FOUND und UNKNOWN nach Budget
+  erhalten. Keine Nonexecution/Expiry/Replay-/Result-Erfindung. Harness PASSED
+  erlaubt UNKNOWN und bedeutet keine Qualification-Abnahme.
+- Providerlogs643/22/604, Commandtrace371/5/10 vollständig, zero Drops/Exhaustion.
+  Max Readspan2,519750 ms/Startgap114,167500 ms beobachtet, keine Bounds. PCAP
+  23862 Records/Filter je Endpoint zero Kerneldrops, Native23879/23882 zero
+  Reserve-/Copyverluste bei separaten Populationen. Realtimefenster withheld.
+  Source/Published/Observer11291/10258/10248, alle Conservationbalances0.
+- Evidenz evidence/m3-control-egress-validation-2026-11-06/ mit neuem Plan,
+  Originalmanifest/Logs/Result, unabhängiger Provider-vs-Egress-/Flowanalyse,
+  Journalvergleich, Inventaren/Testlog/Rohhashes. Payloads/Prefixes/Journale/
+  Clocks lokal; keine Secrets/Inspect-/Env-Dumps. Historische Fehlläufe unverändert.
+
+**Weiter:** Validierte Unterscheidung in separatem prospektiv begrenztem N5-
+Diagnoseplan mit Providerdaten/Flowisolierung anwenden. Historischer Initiator,
+UNKNOWNs, volle N5-/M3- und sonstige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-06 UTC: N5 Provider-vs-Egress mit ARP-Hinweis
+
+- Neuer Read-only-Analyzer m3_control_provider_liveness.py, vorab Plan/Code
+  e29412c, 120 Hosttests/Syntaxchecks und bekannte Filter-Signature gegengeprüft.
+  Genau ein N5/300s/Seed1701 ohne Inject-Fault, Runtime/Pin/Policy/Timeouts gleich.
+  Alle Sourcehashes und acht Runtimehashes passen. Keine neuen SDK/ROS/M2-Tests.
+- Lokal .local/m3/20261106T230052361493Z: 126 bestätigte Erfolge/Effekte, 24 Slots
+  übersprungen, keine UNKNOWNs/aktiven CONTROL-Loss-/Close-Events. Kein Reset
+  reproduziert, keine alten Kohorten ersetzt. Journale126/126 immutable gelesen,
+  Erfolgs-/Kontext-/Resultfelder passen, genau ein SDK-Handoff je Intent,
+  Dispatch jeweils vor konservativer Receiverdeadline, Deadlines nicht gleichgesetzt.
+- Alle vier vollständig beobachteten alten CONTROL-Egressgaps >=1s erhalten:
+  Operator1,000311417s DATA/ACK/NAKdelta0; Operator4,237048752s DATA364 inkl350
+  Retransmits, ACK68/NAK1; Robot1,099705168s DATA15 inkl14Retransmits; Robot
+  1,054902209s DATA35 inkl28Retransmits/ACK15. Source-CONTROL out aller Flows
+  jeweils0. Peer je eine Edge-Beobachtung19–24us nach Leading Edge, keine leeren
+  Peerfenster oder sichere Paketauthentifizierung behauptet. Größter Gap39
+  benachbarte verfügbare same-identity Readpaare komplett innerhalb des Gaps.
+- Aktuelle Beobachtung grenzt Unterschied zwischen Provider-Sendaccounting und
+  Tap ein, nicht eindeutig Socket/Neighbor/Qdisc. Flatcounter kein UDP-Abwesenheits-
+  beweis; Retransmits in DATA enthalten, fehlende Kontrolldatagrammtypen beachten.
+  Whole-run Rootdrops Operator184/Robot618355 ohne Flow-/Eventattribution,
+  überlappende Childcounter nicht addieren.
+- Explorativ NACH Messung neuer ARP-Extractor m3_arp_gap_observations.py mit
+  Header-/Repräsentations-/Hashchecks; alle vier vorher ausgewählten Gaps,
+  Duplikate retained. Vier neue Parsertests, insgesamt124 Hosttests bestanden.
+  Größter Operatorgap: fünf outgoing ARP-Requests zum Robot; Robot outgoing Reply
+  30,542us und Operator observed Reply19,792us vor CONTROL-Resume. Robotgap
+  1,0549s ebenfallsReply76,375us vor Resume. Hinweis auf Neighborresolution in
+  DIESEM Lauf, keine Neighborzustände/Kernelqueues/Dropstages beobachtet und
+  keine historische Initiatorzuschreibung. Explorative Analyse keine Gateänderung.
+- Provider2993/24/3054, Trace397/5/5 vollständig, zero Drops/Exhaustion. Max
+  Readspan0,623041ms/Startgap113,664291ms beobachtet, keine Bounds. PCAP121477
+  Records/Filter je Endpoint zero Kerneldrops, Native121569/121567 zero Reserve/
+  Copyverluste bei anderen Populationen. Realtimefenster withheld. Competitor
+  ~128023bits/s whole-run angeboten, 1235Alivechecks, kein Windowdeliverybeweis.
+  Source/Published/Observer75024/23032/23030, Conservationbalances0; Defizit erhalten.
+- Evidenz evidence/m3-n5-provider-liveness-2026-11-06/ mit Prospektivplan,
+  Originalmanifest/Logs, primärer Flow-/Provideranalyse, Edge-/All-Flow-Crosscheck,
+  explorativen ARP-/Interfacebeobachtungen, Journalaudit, Tests/Inventaren/Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal, keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Begrenzte read-only Neighborzustandsbeobachtung und prospektiver
+Fixture-Kontrast zur Neighborresolution in owned N5-Lab. Jede Neighbor-Konfig-
+Änderung separater Diagnosekandidat, kein Ersatzbaseline. Historischer Initiator/
+UNKNOWNs, volle N5/M3 und übrige Gates offen. PR #2 Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-07: Neighbor-State-Paar und historische ARP-Assoziation
+
+- Opt-in --neighbor-diagnostics, read-only peer-scoped ip-neigh-show, nominell
+  100ms, Read-Brackets/Sequenz/ABSENT/Fehler, Limit75000 und Finalstatus. Keine
+  aktiven Probes, aber Subprocess/Netlink-Overhead. --neighbor-mode permanent
+  separater L2-Diagnosekandidat nur owned N0/N5 mit echten Peer-MACs, State/MAC
+  über alle Samples/Finalreadback geprüft. Dynamic bleibt Default, Host unverändert.
+- Vorab Plan41e6f60, genau ein N0-15s-Preflight permanent:8Erfolge, vollständig.
+  Danach vorab Code035100b, genau ein geordnetes Paar N5/300s/Seed1701 dynamic,
+  dann permanent. Gleicher VM-Boot, Observermethoden/Image/Runtime/Shaping gleich;
+  Reihenfolge/Scheduling weiter Confounds. Acht Runtimehashes vorher/nachher
+  gleich; gemessene Sourcehashes gegen jeweilige gefrorene Commits geprüft.
+- Dynamic lokal .local/m3/20261107T074709774864Z:130Erfolge/Effekte,20Skips,
+  keine UNKNOWNs/aktiven CONTROL-Resets. Alle3alten Egressgaps>=1s mit wachsenden
+  Sendcountern und INCOMPLETE-Samples am Sender:Operator3,232864418s (31Samples),
+  Robot1,141203625s (10),Robot1,058229125s (10). Edge-Reads getrennt, keine
+  exakten Transitions-/Kernelqueue-/Dropursachen abgeleitet.
+- Permanent lokal .local/m3/20261107T075252504462Z:132Erfolge/Effekte,18Skips,
+  keine UNKNOWNs/aktiven CONTROL-Resets. State/MAC über3167/3170Samples stabil.
+  Trotzdem2Gaps:Operator1,000092084s flatselected (kein UDP-Abwesenheitsbeweis),
+  Robot1,314880584s DATA+17 inkl16Retransmits trotz PERMANENT. Neighborresolution
+  also kein Alleinerklärungs-/Fixbeweis; keine günstigeren Ersatzbaselines.
+- Nachträglicher historischer ARP-Check des alten Fehlfalls181823876229Z:
+  Rohhashes passen altem qualifiziertem Flowarchiv. Alter Operator-Sourcegap
+  5,127369086s enthält6 outgoingARPrequests, Reply am Operator5,250us vor
+  CONTROLresume bzw119,106083ms nach Robot-SessionChange. Stärkt Hypothese
+  Neighborbeteiligung, aber alte Neighborstates/Providercounter fehlen, keine
+  exakte Kernelpfad-/Ursachen-/Nonexecutionzuschreibung. Alter UNKNOWN unverändert.
+- Journale aller bestätigten Erfolge passen, je1SDK-Handoff/Dispatch vor
+  konservativer Receiverdeadline. Neighbor/Provider/Trace/Native vollständig,
+  keine Drops/Exhaustion/Reserve-/Copyverluste; PCAP125814(dynamic)/108233(permanent)
+  Records/Filter jeEndpoint mit zeroKerneldrops. Native125902/125900 bzw108254/
+  108257 bei anderen Populationen. Source/Published/Observer75023/19805/19805
+  bzw75036/27570/27565, alle Conservationbalances0, Defizite erhalten. Realtime-
+  fenster withheld, kein Performance-/Lossless-/Securityparitätsbeweis.
+- Neighborreads bis44,683084ms/Startgap111,184208ms im Paar beobachtet, keine
+  Bounds. 134Hosttests vorPreflight,136vorPaar,138final; Syntaxchecks bestanden.
+  NachMessung nur Errorpath gehärtet: existierende Sample/Status/Ready-Dateien
+  ohne Mutation verweigern, Budgetexhaustion getestet; nicht live wiederholt,
+  erfolgreicher Messpfad unverändert. Keine neuen SDK-/ROS-/M2-Tests behauptet.
+- Evidenz evidence/m3-neighbor-contrast-2026-11-07/ mit Plan/Originalmanifesten/
+  Nachbardaten/Analysen/Journalaudits, historischer ARP-Auswahl, Provenienzen/
+  Tests/Inventaren/Rohhashes. Payloads/Prefixes/Journale/Clocks lokal, keine
+  Secrets/Inspect-/Env-Dumps. Alte Fehlläufe nicht verändert, Intrinsic/M4 unberührt.
+
+**Weiter:** Verbleibenden Permanent-Neighbor-Gap vom Neighboranteil trennen und
+Pre-Tap-Queue-/Dropstage lokalisieren, bevor Defaultfixture geändert wird.
+Historischer exakter Initiator/UNKNOWNs und volle N5/M3/übrige Gates offen.
+PR #2 bleibt Draft; kein neuer Default-/Transport-/Timeout-/Dependencyfix.
+
+## Fortsetzung 2026-11-07: TC/Root-Stage qualifiziert, N5-PCAP-Population fehlgeschlagen
+
+- Opt-in --control-qdisc-diagnostics (N0/N5, kein Classifierfault): software
+  UDP-CONTROL/Peer-u32-gact-PASS pref49150, bestehende Hooks verweigert, Root-
+  Config unverändert geprüft. Verdict/Workloadintervention, nicht passive AF_PACKET.
+  Polling200ms/Limit37500, Filter-/Rootreads separat bracketed, Errors/Finalstatus,
+  monotone Counter/Rootidentität und Gauges, Remove/emptyreadback. Default aus.
+- Ursprungsplan708af1b synthetischer Probe FAILED beim netem->TBF-Wechsel gleichen
+  Handles; Originalartefakte unverändert, ursprünglicher ROS-/N5-Plan gestoppt.
+  Nur Fixturehelper gefixt: eigenen Root bei Kindwechsel explizit löschen, Generator
+  idle, Classifier behalten; Receiver bei Fehler kooperativ stoppen. Regression.
+  Frische Revisionf2010a1 einmal qualifiziert: baseline16counter/16tap/16receiver;
+  Sensornegative4sent/0counter/4tap/4receiver; Root100%Loss16counter/0tap/0receiver;
+  N5shaped16/16/16; Restore1/1/1. Native/PCAPidentitäten vollständig/gleich,
+  Features unverändert, Filterentfernung geprüft. Nur aufgezeichnete Vethfixture.
+- ROS N0-Smoke15s (f2010a1)8Erfolge vollständig. Danach genau1 N5/300s/Seed1701
+  ohne Fault (83e9dd5), permanentNeighbor-Diagnosekandidat:129Erfolge/Effekte,
+  21Skips, keine UNKNOWNs/aktiven CONTROL-Loss/Close-Events, kein vollständiger
+  alter Sourcegap>=1s. Kein Residual-/historischer Fix, keine günstige Ersatzkohorte.
+  Sourcehashes gegen gefrorene Commits und8Runtimehashes vorher/nachher passen;
+  SDK/ROS/Pin/Timeout/Policy/defaultDynamic unverändert, keine neuen SDK/ROS/M2tests.
+- WICHTIG N5-PCAPgate FAILED: Operator110671File/Captured/Filter, Robot110671
+  File/Captured vs110673receivedbyfilter, beidezeroKerneldrops. Fileintegrität
+  gültig, Robotpopulationfalse. OriginaldevmanifestPASSED mit populationfalse
+  bleibt unverändert, keine Capturequalification/Rescue/Rekonstruktion/Retry.
+  Realtimefenster ebenfalls withheld. Ursache der2fehlenden Records offen.
+- Native110690jeEndpoint zeroReserve/Copyfailures, vollständig unabhängig von
+  PCAPgate. TC1595jeEndpoint, Provider2995/24/3057, Trace405/5/5 vollständig,
+  zeroDrops/Exhaustion. MaxTCread63,643833ms inN5/68,819250ms inklSmoke,
+  Startgap210,192542ms beobachtet, keine Bounds/Zerooverheadbehauptung.
+- Post-hoc Aggregate-Check (nicht neuer Gapgate): Counterendpunkte ganz innerhalb
+  Nativecoverage, breitere volleNativepopulation. Operator6991PASSexecutions/
+  6991selectedout, Robot14771/5122. Differenz zwischen Classifier und Tap,
+  konsistent mit späterem Removal/Withholding; keine exakte Paketlosszahl,
+  Edge/In-flight/Requeue-Semantik vorbehalten. Rootrobot92564Wholeifdrops,
+  backlog/qlen0 am letzten Sample, keine CONTROL-Zuordnung. Residualgapnichtlokalisiert.
+- Journale129Erfolge/Kontexte/Resultate passen, je1SDK-Handoff/Dispatch vor
+  konservativer Receiverdeadline. SensorSource/Published/Observer75034/27873/
+  27873, Conservationbalances0; Defizit erhalten, keine Performance-/Losslessclaims.
+  144Hosttests vorProbe,145nachFix,148vorN5,149nachexplorativemAggregate-Boundarytest;
+  Syntaxchecks bestanden. Analyseextension nachMessung separatprovenanziert.
+- Evidenz evidence/m3-qdisc-stage-2026-11-07/ mit Original-/Revisionplan,
+  erstemFAILED-Probe, qualifiziertemProbe, Smoke/N5Originalmanifesten/Logs,
+  Zähler-/Neighbor-/Flowanalysen/Journalaudits/Tests/Inventaren/Rohhashes.
+  Payloads/Prefixes/Journale/Clocks lokal; keine Secrets/Inspect-/Env-Dumps.
+
+**Weiter:** Zwei-Record-PCAP-Filter/File-Shutdown-Diskrepanz unter begrenztem
+Drain-Test prüfen und qualifizierten Stageobserver in deterministischem Queue/
+Lossintervall einsetzen, keine spontanenN5-Wiederholungen bis günstig.
+Defaultfixture/historischerexakterInitiator/volleN5-M3/übrigeGates offen,
+PR#2Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-07: Capture-Drain-Klasse und deterministischer Child-Loss
+
+- Vorab Plan/Code 23ffa00, 155 Hosttests und Syntaxchecks. Zwei frische finite
+  UDP-Probes: tcpdump pausiert, 16 bekannte Sends, Native/Receiver aktiv.
+  Abort vor Resume: File/Captured 0, Filter 16, Kernel-Drops 0, Native/Receiver 16.
+  Erwarteter negativer Population-Gate, keine Capture-Abnahme. Resume/Drain:
+  alle Populationen 16, keine Drops. Bekannte Klasse reproduziert, historische
+  Zwei-Record-Ursache und alleinige Wirkung des Zusatzguards nicht bewiesen.
+- Opt-in --capture-drain-check nach bisherigem Loadstop/1,25-s-Quiet: frische
+  SIGUSR1-Statistik, PID/Startidentität, zwei stabile captured==filter-Snapshots,
+  keine Kernel-Drops, fünf Hostsekunden Controllerbudget. VM-Signalbrackets und
+  Host-Read-Zeit getrennt. Keine zukünftige Stille garantiert; finaler File/
+  Footer/Population-Gate bleibt Pflicht. Default aus. Upstreamquellen und
+  Grenzen gegenüber Distro-Patches dokumentiert.
+- Genau ein N5/60-s/Seed-1701-Lauf, permanent-neighbor/TC/drain-Kandidaten:
+  .local/m3/20261107T090553068812Z. --root-loss-burst robot ändert nur den
+  bestehenden Child auf 100% Loss und explizit zurück auf 0%. Root/Classifier
+  bleiben erhalten. Finalread-Fehler versuchen Restore im finally (getestet).
+  Placement nach einem Drittel des Quellfensters, keine N4-Commandphasenbarriere.
+- Angefordert zwei Hostsekunden, garantiert aktiv 2,370079501 VM-Sekunden.
+  Vorab definierte +500/-100-ms-Margen ergeben 1,770079501 s Settled-Fenster.
+  Acht TC-Readpaare vollständig darin: 217 selected PASS, Root-Drops +15563
+  (ganze Schnittstelle), Robot CONTROL out 0, Operator CONTROL out 167.
+  Drei Sekunden nach Restore CONTROL out Robot/Operator 106/114. Bekannte
+  Signatur beobachtet. Der vollständige 2,578343668-s-Sourcegap umfasst auch
+  Ränder außerhalb der Konfiguration; diese nicht eindeutig zuordnen.
+  Permanent-State/MAC geprüft, keine aktiven CONTROL-Loss/Close-Events.
+- 22 Erfolge/Effekte, acht Skips, keine UNKNOWNs. Journale/Kontexte/Resultate
+  passen, je ein SDK-Handoff, Dispatch vor konservativer Receiverdeadline.
+  Source/Published/Observer 15033/1941/1941, Conservationbalances 0, Defizit
+  erhalten. Keine Physical-Delivery-/Performance-/Lossless-Behauptung.
+- Live-Drain: zwei stabile Snapshots 32118 je Endpoint; finale File/Captured/
+  Filter ebenfalls 32118, keine Kernel-Drops. Native 32144 je Endpoint ohne
+  Reserve-/Copyverlust; Populationen nicht gleichsetzen. Alte PCAP-Diskrepanz
+  110673/110671 bleibt FAILED, Realtimefenster weiter withheld. TC 404/404,
+  Provider 700/20/675, Trace 78/5/5 vollständig ohne Drops/Exhaustion.
+  Maximaler TC-Readspan 60,275959 ms/Startgap 210,175292 ms: Beobachtungen, keine Bounds.
+- Nach Messung Finalfooterparser gehärtet: Inline-SIGUSR1-Statistik kann fehlenden
+  finalen Footer nicht ersetzen. Alle Originalfooter mit strengem Parser
+  nachgeprüft, Ergebnisse gleich. 157 Tests nach Settled-Analyzer, 158 final
+  nach Footerregression, Syntaxchecks bestanden. Gemessene Sourcehashes gegen
+  23ffa00 und acht Runtimehashes vor/nach passen; spätere Analyse/Parseränderung
+  separat provenanziert. Keine frischen SDK-/ROS-/M2-Tests behauptet.
+- Evidenz evidence/m3-drain-controlled-loss-2026-11-07/: Plan, Quellnotizen,
+  Originalprobes/Livemanifeste und Logs, Pause/Signal/Readback/Drain, Analysen,
+  Journalaudits, Inventare, Testlogs und Rohhashes. Payloads/Prefixes/Journale/
+  Clocks lokal; keine Secrets/Inspect-/Env-Dumps. Intrinsic/M4 unverändert.
+
+**Weiter:** Validierte Messguards für deterministische N3-DATA/FEC-Selektion und
+N4-Commandphasenbarrieren verwenden. Spontaner Residualgap und exakte historische
+Capture-/Resetursachen bleiben offen; kein Ersatz alter Fehlkohorten und kein
+Defaultfix. Volle M3-Abnahme offen, PR #2 bleibt Draft.
+
+## Fortsetzung 2026-11-07: Expliziter N3-Source-Selector synthetisch geprüft
+
+- Code/Plan vor Messung 6990da6, 163 Hosttests und Syntaxchecks bestanden.
+  tools/m3_sensor_fault.py: ein/zwei Source-Identitäten derselben Viererreihe,
+  explizite Initialsequence/Row/Positions/Message/Socket/IPv4-UDP-Peers. Keine
+  Origininferenz aus erster DATA-Beobachtung. Fixed IHL, keine Fragmente;
+  DATA-/Message-/Socket-Matches erhalten Parität mit gleicher Last-Source-Sequence.
+  Bestehende Classifierhooks verweigern, partielle Installation räumt eigenen Hook auf.
+- Genau zwei neue finite synthetische Fixtures .local/m3-sensor-selector/1 und /2:
+  je 12 Header plus Restore-Send. Eine Sourceposition droppt zwei Transmissions,
+  zwei Positionen drei, inklusive wiederholter Identität mit Retransmitbit.
+  Parität, SRT-CONTROL, andere Row/Socket/Message/Ports bleiben erhalten.
+  Receiver/Native/PCAP identisch 11 bzw10 bekannte IDs einschließlich Restore;
+  File/Captured/Filter ebenfalls11 bzw10 je Endpoint, zero Kernel-/Nativeverluste,
+  bounded Drain stable_equal, Features unverändert, Filterentfernung geprüft.
+- Keine authentisierte FEC-Recovery-/ROS-/Performance-Abnahme; run_m3 N3 bleibt
+  gesperrt. SDK/ROS/Dependency und bisherige Fehlfälle unverändert. Quellenhashes
+  gegen 6990da6 geprüft; Originalpläne/Readbacks/Logs/Resultate/Rohhashes unter
+  evidence/m3-sensor-selector-2026-11-07/. Payloadcaptures/Secrets bleiben lokal.
+
+**Weiter:** Vertrauenswürdige Live-Sender-Origin/Row/Message/Socket-Identität vor
+Arming gewinnen, danach geplante ein/zwei DATA-Verluste mit authentisierter Parität,
+Receiverrepair/-reject und bestehenden Messguards prüfen. N4-Commandphasenbarrieren
+weiter offen; M3 nicht abgenommen, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: Authentisierte SENSOR-FEC finite Providerfixture
+
+- Neue isolierte tools/m3_sensor_peer/main.cpp gegen unverändertes installiertes
+  Providerarchiv gelinkt; öffentliche API, keine Bridge-/ROS-/SDK-Sourceänderung.
+  SENSOR/GCM/32Byte/EnforcedEncryption/SESSIONAUTH/secured keys/FEC4 arqnever
+  readbackgeprüft. Vor DATA SRTO_ISN an beiden Seiten gleich; accepted Handle ist
+  beim Pin protocol_socket_id (socket_registry.cpp), nicht allgemein portabel.
+  Source-/Message-/Socket-Identitäten und Origin per API plus Captures geprüft.
+- Vorab Code/Plan94f4ade,166 Hosttests: genau geordnete Baseline/1Loss/2Loss.
+  Baseline16Deliveries. 1Loss:15Source+4Parity je Tap, alle16Payloads vollständig,
+  genau1Providerrepair, keine Retransmits/Undecryptable. PCAP69/66jeEndpoint,
+  File/Captured/Filter gleich; Native vollständig, bounded Drain/Features passen.
+- Ursprüngliche2Loss bleibt FAILED:14Deliveries wie erwartet, aber geplanter
+  pktRcvFilterLossTotal=2 war falsch, tatsächlich0. Source: RowFecDecoder::expire_row
+  meldet irrecoverableRanges nur für arqonreq, SENSOR arqnever liefert keinen
+  generischen Unrecoverablecounter. Originalmanifest/Gate nicht umgeschrieben;
+  vor Drain/Analysepfad abgebrochen, daher keine Drainqualification dieses Falls.
+- Separat vorab Revisionplan/Code150eaf6,167Hosttests; genau1 frische2Lossfixture
+  .local/m3-sensor-live-r2/2:14Deliveries, IDs6/7 am endlichen Cutoff absent,
+  zweiTCdrops je1, 14Source+4Parity jeTap, keineRepair/Retx/Undecryptable,
+  FilterLossReport0 separat von MissingIDs. PCAP64File/Captured/FilterjeEndpoint,
+  Native/PCAP-Identitäten exakt, zeroCaptureverluste, stableDrain, Features gleich,
+  Filterremove geprüft. Kein unendlicher Nonarrival-/ROS-/Age-/Physicalclaim.
+- Original .local/m3-sensor-live/{0,1,2} bleibt unverändert. Evidenz unter
+  evidence/m3-sensor-live-2026-11-07/ mit Plänen/Originalfailed/Revision/Readbacks/
+  JournallosenPayloadresultaten/Counterlogs/Capturelogs/Provenienz/Rohhashes.
+  Provider-/Fixture-/Observer-Inventar vor/nach gleich. Keine frischen vollen
+  SDK-/ROS-/M2-Tests behauptet; Payloadcaptures/Secrets/Inspect-/Envdumps lokal.
+
+**Weiter:** Vertrauenswürdige Verbindungsidentität und Selector in ROS-N3-Fälle
+mit Windowaccounting, Publish-/Alters-/Orderingguards übernehmen. run_m3 N3 bleibt
+noch gesperrt. N4-Commandphasen, bisherige N5/Capturefehler und volle M3-Gates offen;
+PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: ROS-N3-Fixture, Baseline an Admission-BUSY gescheitert
+
+- Neue tools/m3_ros_sensor.py und m3_ros_sensor_scenario.py verwenden die
+  unveränderten installierten SDK-/Bridge-/ROS-Binaries. 19 finite IMU-Samples
+  bei angeforderten 20 Hz, mit Payloadhash-, ID-, Reihenfolge-, Alters-, QoS-,
+  Clock- und sechs Conservation-Gates. Closed-Identity-Phase vor Arming: genau
+  ein SENSOR_BIND/message1, Handshake-Origin und beide Taps stimmen überein.
+  Measurement-Capture startet separat; der Gap ist explizit, keine Continuousclaim.
+- Originalplan/Code 2f13689, 170 Hosttests: Baseline scheitert vor Arming am
+  fünfsekündigen Stable-Drain unter laufendem CONTROL-Traffic. Captured/Filter
+  jeweils gleich, aber fortlaufend steigend. Originalfehler und Cleanup bleiben
+  unverändert; keine Samples, keine Ein-/Zwei-Loss-Ausführung.
+- Separater Revisionsplan/Code f048464, 170 Tests: finite PCAP explizit nur SENSOR
+  DATA/Parity/Handshake, Native weiterhin alle Frames. Filter im Image geprüft;
+  Footer/File/Filter/Zero-Loss/Stable-Drain bleiben Pflicht für diese Population.
+  Cooperative Abort beendet Pre-Arm-Waits; Cleanup überschreibt failed Drain nicht.
+- Revision .local/m3-ros-sensor-r2/0 ebenfalls FAILED, diesmal Payloadgate:
+  19 ROS-Publishes/Ingress, ein submit BUSY, null obsolete, 18 admitted/SDK-sent/
+  decoded/published/observed. Source-ID 7 fehlt. Für Samples kommt BUSY in
+  Impl::submit nur vom Shared-Mutex-try_lock-Miss; Holder/Dauer nicht beobachtet.
+  Kein Network-Loss-, SDK-Retry- oder Republish-Fix eingeführt.
+- Post-hoc: alle sechs Bilanzen null, nur Admission=1; 18 Payloadhashes stimmen,
+  Age-Upper-Maximum 9643682 ns (Histogramm ceil10 ms). Identity-Capture geprüft;
+  tatsächliche 18 Source + vier Parity pro Measurement-Tap stimmen mit PCAP
+  überein. Zero Captureverluste, finale File/Captured/Filter gleich, Stable-Drain.
+  Das ersetzt nicht den geplanten 19-Source-Gate. Finaler Featurevergleich des
+  Successpfads wurde nicht erreicht und wird nicht behauptet.
+- Genau eine Baseline pro Plan, keine ROS-Lossfälle oder weiteren Retries.
+  evidence/m3-ros-sensor-2026-11-07/ enthält beide Originalfehler, Pläne, Logs,
+  Metriken, Analysen, Provenienz und Rohhashes. Sechs selektierte Runtimehashes
+  vor/nach gleich; keine neuen vollständigen SDK-/ROS-/M2-Tests behauptet.
+  Rawcaptures/Journale/Resource-/Clockdetails lokal, keine Credentials/Inspectdumps.
+
+**Weiter:** Bounded Sample-Admission-/SDK-Handoff-Identitäten korrelieren, damit
+N3 tatsächliche angenommene Sourcepakete trifft, ohne BUSY zu verbergen, Samples
+neu zu publizieren oder bis zu einer günstigen Baseline zu wiederholen.
+ROS-Recovery/late-repair Ordering, volle 200/50-Hz-Multiroute/Seeds und N4-Phasen
+bleiben offen. Provider-FEC-Evidenz separat, PR #2 Draft, M3 nicht abgenommen,
+Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: Bounded Sample-Admission-/SDK-Handoff-Trace validiert
+
+- Opt-in `sample_diagnostics`, Default aus. Zwei SPSC-Lanes mit je 128 Slots,
+  75000-Record-Budget, expliziten Drops/Exhaustion. Genau ein ROS-Executor-Producer
+  und ein Transport-Owner; Consumer formatiert JSON. Record ohne Allocation/I/O/
+  Mutex/Retry. Andere submit_sample-Caller schreiben die ROS-Lane nicht.
+- Admission: Original-Ingress, Headerstamp, Callbacksequenz, Route, Owner/Session/
+  Generations, Bodygröße und SubmitResult inklusive BUSY. SDK: zurückgelieferte
+  Message-Nummer, Envelope-Sequenz, Original-Ingress, Socket/Generation und
+  SRTO_ISN-Readback. Opt-in srt_sendmsg2 nutzt dieselben TTL/Ordering-Defaults wie
+  der gepinnte srt_sendmsg-Wrapper. ISN wird nach dem Send gelesen, statische
+  Verbindungsmetadaten. Keine Policy-/Wire-/Crypto-/Timeout-/Retryänderung.
+- Join über Source-Headerstamp zu Admission, dann Original-Ingress/Route/Owner/
+  Session/Generations zu SDK. Lane-Sequenz ist keine Kausalitätsordnung; SDK kann
+  vor ROS-Resultrecord fortschreiten. Kandidaten nur im ersten Single-Packet-
+  Messagezyklus und mit Native/PCAP gegenprüfen. Queued ohne beobachteten Handoff
+  bleibt unmatched; BUSY wird nicht wiederholt oder als SDK-Akzeptanz gewertet.
+- Vorab Commit/Plan125f86f, SDK70 + ROS36 reported + Host176 Tests bestanden.
+  Native IPv4/IPv6 prüft echte ISN/Message/Binding-/Sample-Metadaten und Original-
+  Ingress. Queue-/Budget-/Concurrent-FIFO-/Overflow-/Parser-/BUSY-Negativtests.
+- Genau eine neue Observervalidation .local/m3-sample-handoff/0, keine Lossfälle:
+  19 Source/Admission/SDK/Publish-Joins, kein BUSY beobachtet. Sender39 Records
+  (19 Admission +20 SDK inkl. Binding), Receiver0, keine Drops/Exhaustion.
+  Measurement je Endpoint19 Source+5Parity, PCAP24File/Captured/Filter; Native/
+  PCAP exakt, Stable-Drain, keine Captureverluste, Features vor/nach gleich.
+  Sechs Bilanzen null, Payloadhashes/Order passen, Age-Upper-Max8701792ns.
+- Nicht als Ersatz der früheren fehlgeschlagenen N3-Baseline oder BUSY-Fix werten.
+  BUSY-Zweig in kontrollierten Trace/Parserfixtures geprüft, nicht neu live
+  reproduziert. Admission-/Command-/Clock-/Pacing-/Retryvertrag unverändert.
+  Transport/ROS vor dieser Messung neu gebaut; sechs Runtimehashes während Lauf
+  gleich, nicht gleich zu altem Kohortenruntime behauptet. SRT-Archiv unverändert.
+- Evidenz evidence/m3-sample-handoff-2026-11-07/ mit Plan, Originalresultaten,
+  Trace-/Capturelogs, Build-/Testlogs, Provenienz, Inventaren und Rohhashes.
+  Rawcaptures/Journale/Resourcetraces lokal, keine Credentials/Inspect-/Envdumps.
+
+**Weiter:** Separat geplante ROS-Ein-/Zwei-Source-Lossfälle nach tatsächlicher
+SDK-Messageidentität korrelieren; fehlende/reparierte Samples zu angenommenen
+Callbacks mappen und unabhängige BUSY-Verluste erhalten. Late-repair Ordering,
+volle 200/50-Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
+PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-07: ROS-Ein-Loss-Recovery validiert, zweiter Pre-Arm-Capture fehlgeschlagen
+
+- Vorab Code/Plan38afa06,179 Hosttests und Syntaxchecks. Nur Hostharness/Tests
+  geändert; sechs Runtimehashes wie vorher und während Messung gleich. Bisherige
+  SDK70/ROS36-Validierung gilt für unveränderte Artefakte; keine neue volle Suite.
+- Traced Lossmode mappt tatsächliche SDK-Messageidentität zu ROS-Admission über
+  Original-Ingress/Route/Owner/Session/Generations und Source-Headerstamp. BUSY
+  bleibt separat, verschiebt Source-ID, verbraucht keine SRT-Message. Originaler
+  strikter19-Source-Gate unverändert. Shift-/Ambiguity-/Accounting-Regressionen.
+- Genau eine geordnete Ein-/Zwei-Loss-Fixturefolge, keine Retries. Ein-Loss
+  .local/m3-ros-traced-loss/1 PASSED:19 typed IMU bei angeforderten20Hz,19 SDK /
+  Publish / Observer, kein BUSY. Message8/Row1Position3 gehört Source-ID6,
+  Envelope7. Genau ein Classifierdrop, Wire-Source an beiden Taps absent;
+  Same-sequence-Parity bleibt erhalten und vollständiger typed Payload kommt an.
+- Measurement je Endpoint18 Source+5Parity,23 File/Captured/Filter, zero Native/
+  Kernelverluste, Stable-Drain, Features gleich. Sendertrace39/Receiver0 Records,
+  zero Drops/Exhaustion, Payloadhashes/Order passen, sechs Bilanzen null,
+  Age-Upper-Max9398555ns. Keine ROS-FEC-Supplycounter neu gemessen.
+  Post-hoc VM-Timing: SDK/Parity/ROS-Observation innerhalb garantiert aktivem
+  Filterintervall; Callback-Ingress bis Observer2587625ns. Kein Physicalclaim.
+- Zweite Fixture .local/m3-ros-traced-loss/2 FAILED VOR Arming: Robot-PCAP
+  Captured8/Filter10, Operator8/8, zero Kernel-Drops; neun frische Snapshots
+  unverändert ungleich bis Timeout. Kein armed-Marker, kein Measurementcapture,
+  keine Samples/kein Zwei-Paket-Fault. Finalfooter bleibt8/10, nicht abgenommen.
+- Post-hoc feste IPv4-Prefixpopulation: Native-selektiert8 und PCAP8 je Endpoint
+  stimmen byteprefix/length-genau. Native insgesamt155/154 vollständig. Das
+  erklärt zusätzliche Filtercounts nicht, beweist keine Abwesenheit vor Native-
+  Attachment und rettet keinen Gate. Keine Zuordnung historischer Zwei-Record-
+  Ursache, kein nachträgliches Passed/Retry/Subtrahieren/Rekonstruieren.
+- evidence/m3-ros-traced-loss-2026-11-07/ enthält Plan, beide Originalmanifeste,
+  Logs/Readbacks, Typedhash-Metriken, Timing/Capturevergleich, Provenienz,
+  Inventare und Rohhashes. Rawcaptures/Journale/Details lokal, keine Credentials/
+  Inspect-/Envdumps. Alte Fehlfälle erhalten, Intrinsic/M4 unverändert.
+
+**Weiter:** Recorder-Startup-/Filterstatistik-Populationsscope qualifizieren,
+bevor eine separat geplante Zwei-Loss-ROS-Fixture ausgeführt wird. Late-repair
+Ordering, volle200/50Hz-Multiroute/Seeds, N4-Phasen und M3-Gates bleiben offen.
+Ein-Loss-Recovery ist endliche Entwicklungsevidenz; PR #2 bleibt Draft.
+
+## Fortsetzung: Filter-Lifecycle-Klasse und ROS-Zwei-Loss mit Pre-Bind-Recorder
+
+- Vorab Probeplan/Code1b1610b,184 Hosttests: genau drei finite neue Fixtures.
+  Je zwei bekannte Negative nach UDP39782 und16 Positive nach39781; Receiver
+  bindet beide Ports, Native/Receiver sehen alle18 IDs. Installiertes libpcap:
+  broad Filter nimmt2 Negative ohne Dispatch an, Narrowing behält Stats2,
+  danach16 Positive -> File/Callbacks16 vs Receives18, zero Drops. Erwartete
+  NEGATIVE Captureklasse, keine Abnahme/Subtraktion/Zuordnung alter Ursache.
+  Final-filter-first Control und Pre-Bind-Kandidat jeweils16/16, Negative ausgeschlossen.
+- tools/m3_packet_capture.py: nur opt-in finite Linux64-Ethernet-Fixture. Finalen
+  BPF auf dead libpcap handle kompilieren, an AF_PACKET/SOCK_RAW protocol0
+  anhängen, initial kernel0 prüfen, erst dann eth0/ETH_P_ALL protocol3 binden.
+  VM-Brackets, Kernel-SO_TIMESTAMPNS, bounded128MiB/75000 Records, Truncation/
+  Budget/Drops explizit. Zwei stabile Records==Kernel-Snapshots binnen5s,
+  Schlusscheck, Filegröße/-hash und unabhängige Native-Identitäten sind Pflicht.
+  Buffer angefordert32MiB, tatsächlich8MiB beobachtet; keine Performanceparität.
+- Wahrheitsgemäße eigene Backend-Counter, alte tcpdump-Footer und Defaults
+  unverändert. Wrapper prüft alten8/10 weiter als failed. Keine neuen Statistiken
+  oder Rohdaten in alten Captureartefakten ersetzt. Historische Ursache unbewiesen.
+- Separat vorab ROS-Plan/Code6ba6562,186 Hosttests: genau eine neue Zwei-Loss-Fixture
+  .local/m3-capture-startup/ros-two-loss/2 PASSED mit explizitem packet-socket.
+  19 typed IMU bei angeforderten20Hz,19 admitted/SDK, kein BUSY. SDKmessages7/8
+  gehören IDs5/6; je ein TCdrop. Nur diese beiden IDs am endlichen Cutoff absent,
+  sonst17 Payloadhashes/Order korrekt. Kein Replay/Unrecoverablecounter-Claim.
+- Measurement je Endpoint17 Source+5Parity und22File/Dispatch/Kernel; Identity8/8.
+  Trace39/0 Records ohne Drops/Exhaustion. Sechs Bilanzen null, nur Transportgap2,
+  Age-Upper-Max8993897ns, Clock/QoS/Session/Features passen. Alle Recorder initial0,
+  BPF vor Bind, stabile gleiche Drains, zero Native/Kernelverluste. Native zuerst
+  starten, erst nach PCAP-Prozessende schließen. Getrennte Phasen, kein Continuousclaim.
+- SDK/Bridge/ROS-Binaries nicht geändert/neu gebaut; sechs Runtimehashes vor/nach
+  und zu vorheriger SDK70/ROS36-Tracevalidierung gleich. Keine neue volle SDK-/ROS-
+  oder M2-Suite behauptet. Andere Recorder-Workload, keine Ressourcenvergleichsbasis.
+- evidence/m3-capture-startup-2026-11-07/ enthält beide Vorabpläne, drei Probe-
+  Originale und ROS-Original, Counter/Lifecycle/Bytecode, Typedhash-Metriken,
+  Trace-/Capturelogs, Coverage, Tests, getrennte Provenienz, Inventare/Rohhashes.
+  Rawcaptures/Journale/Details lokal; Credentials entfernt, keine Inspect-/Envdumps.
+
+**Weiter:** Absichtlich verspätete Reparaturen und Ordering-/Reject-Grenzen prüfen,
+anschließend volle200/50Hz-Multiroute/Seeds für N3. N4-Commandphasen und übrige
+M3-Gates offen. Neue finite Zwei-Loss-Fixture ersetzt alten tcpdump-Fehlfall nicht.
+PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Receiverentscheidung und Late-Repair-Replay geprüft
+
+- SampleTrace Schema2, Punkt4 receiver_decision: tatsächliche recvmsg2-Message,
+  ursprünglicher Source-Epoch/Session/Route/Ingress/Envelope-Sequenz, lokaler
+  Receiver-Owner/Socket/Generations und SessionError vor apply. Bestehende bounded
+  SPSC-Lane/Budget/Lossgates, Default aus. Alte Schema1-Source-Traces lesbar.
+  Keine Admission-/Clock-/TTL-/Retry-/Wire-/Provideränderung.
+- Vor erster Messung SDK70, ROS36 und Host190 bestanden. Native IPv4/IPv6 prüfen
+  echte Receiver-Metadaten. Sessionregression: neueres Sample akzeptieren, älteres
+  same-session Sample als replay12 ablehnen, Session aktiv und nächstes Sample
+  akzeptiert. Source-Epoch-/Schema-/Vollständigkeits-/Timing-Negativtests.
+- Vorab01db3b8: genau eine20Hz-Fixture .local/m3-ros-late-repair/1 FAILED.
+  19 admitted,18 decoded/published, kein Receiver-Event für Message5, alle anderen
+  akzeptiert. Sechs Bilanzen null, nur SDK-to-receiver gap1 statt erwartetem Reject.
+  Native successor6->Parity103247708ns. Gepinnter Provider repariert Lücken mit
+  20ms Deadline ab späterer Source; Befund konsistent mit Expiry, kein interner
+  Expirycounter/keine exakte Retirementursache gemessen. Originalfailed erhalten.
+- Separat vorab87922c3, Host191: genau eine5ms-requested Revision
+  .local/m3-ros-late-repair-r2/1 PASSED. Gleicher Receiver-Trace-Runtime, nur Python-
+  Scheduling/Harness geändert. Keine Deadlineänderung oder weitere Retries.
+  Native successor->Parity11619584ns; ursprünglicher Callback->Parity18880709ns.
+- 19 Source/admitted/decoded, kein BUSY; Message5/SourceID3/Envelope4 wird exakt
+  als replay12 abgelehnt, nachdem IDs4/5 typed beobachtet wurden. Sonstige18
+  Payloadhashes/Order korrekt, spätere Publikationen laufen weiter. Nur
+  receiver_rejected1, SDK-to-receiver gap0, alle sechs Bilanzen null.
+- Trace39/19 vollständig ohne Drops/Exhaustion, Measurement je18 Source+5Parity,
+  23File/Dispatch/Kernel; beide Capturephasen initial0/filter-before-bind/stableDrain/
+  Hash/Native-Gates bestanden. Features/Clock/QoS/Session passen. Accepted-Publish-
+  AgeUpperMax10428575ns. Ordering wird vor Age ausgewertet: keine konservative
+  Altersentscheidung für den abgelehnten Repair behaupten; Ursprung/Budget gleich.
+- 5ms requested ist keine200Hz-Abnahme:19 Calls,18 Intervalle in116171459ns,
+  etwa154,94Hz; Median6040146ns, Max12303750ns. Nur endliche Row-/Ordering-Evidenz.
+- evidence/m3-ros-late-repair-2026-11-08/ enthält beide Pläne/Originale,
+  Post-hoc-Analyse des Fehlfalls, Cadence, Trace-/Capture-/Build-/Testlogs,
+  Inventare/Rohhashes und getrennte Provenienz. Sechs Runtimehashes über beide
+  Messungen gleich; SRT-Pin/Quellen unverändert. Rawcaptures/Journale/Details lokal,
+  Credentials entfernt, keine Inspect-/Envdumps. Kein neuer voller M2-Run.
+
+**Weiter:** Phasentreue volle200/50Hz-Multiroute-/Seed-N3-Qualifikation mit
+Admission-/SDK-Zuordnung und tatsächlicher Sourcekadenz; danach übrige N4-
+Admission/Dispatch/Result-Commit-Barrieren. Historische Capture/Reset/UNKNOWN-
+Fälle und übrige M3-Gates bleiben offen, PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Phasentreue200/50Hz-Source und N0-Multiroute-Bilanzen
+
+- Source2edfe3c: default-off source_diagnostics im bestehenden C++-Simulator.
+  Bounded10000 logische Payload-/Timingrecords; Hashing/JSON erst nach serialized
+  Pause-Fence, keine Rate-/Admission-/Mailbox-/Retry-/Provideränderung. C++/Python
+  kanonische Feldhashes ohne CDR-Padding, explizite skipped slots und Due-Phasen.
+- Ein isolierter10s-Run .local/m3-source-preflight/1 PASSED:10.001907129s,
+  IMU2001/joints501, gemessen200.061846/50.090447Hz. Keine Skips/Traceverluste/
+  Observerlücken, alle Typedhashes passen. Keine Bridge/Transportaussage.
+- Separat geplant99c4d1d, ein Run .local/m3-ros-multiroute/1 PASSED:
+ 10.057059463s,2012/503 produziert,200.058477/50.014619Hz, Skips0.
+  N0, permanente Nachbarn als explizite Fixture, getrennte ROS-Domänen/LOCALHOST,
+  gemeinsamer Boot/Time-Namespace, keine Commands/Faults/PCAP/Native-Captures.
+- Source2515 -> typed ingress2515 -> SDK2429 -> receiver2429 accepted ->
+  Typedobserver2428 (IMU1930/joints498). Fehlende87: BUSY1, ingress_replaced1,
+  outbound_replaced84, receive_replaced1; sonstige Losses0, sechs Bilanzen0,
+  leere stabile Checkpoints. BUSY IMU379 bekommt keinen SDK-Index.85 queued
+  Inputs ohne Handoff bleiben individuell unmatched; keine genaue Stage pro ID
+  aus Aggregaten erfinden. Akzeptierte IMU18 ohne Typedbeobachtung separat behalten.
+- Source-/Sender-/Receiver-Traces2515/4945/2429 vollständig, keine Drops/Exhaustion.
+  Source route/stamp -> Admission -> SDKMessage -> tatsächliche Sessionentscheidung
+  -> Typedhashes geprüft. Eine Bindingmessage, zusammenhängende SDK-Nummern/ISN;
+  keine unabhängige Paketidentitätsprüfung in diesem N0-Preflight behaupten.
+- Accepted-Publish-AgeUpperMax IMU17576587ns/joints27740143ns. Routehistogramme
+  passen zur Publikation, Clock/QoS/Session/Owner/Generations/Isolation passen.
+  Kein Physical-Age-/Lossless-/Overhead-/Transportvorteil-/N3-Abnahmeclaim.
+- Host206 Tests, ROS41 reported ohne Fehler/Skips, Syntax/diff sauber. SDK70 bleibt
+  frühere volle Validierung; keine SDKänderung/Neusuite oder volle M2-Abnahme.
+  Fünf Runtimehashes über Multiroute gleich. Owned Container/Netz entfernt,
+  Passphrase gelöscht. evidence/m3-source-preflight-2026-11-08/ enthält beide
+  Vorabpläne/Originale, Hashtraces, Metriken, Tests/Build, Inventar/Rohhashes;
+  keine Inspect-/Envdumps/Journale oder Rawresources veröffentlicht.
+
+**Weiter:** Sustained mixed-route SDK-Identitäten unabhängig capturen und N3-
+Row-Faults mit BUSY/Replacement-Zuordnung prüfen, danach geplante Seeds. Aktuelle
+Source-Traces auf10000 Records begrenzt; längere Läufe brauchen vorab deklarierte
+bounded Fenster/Budgets. N4, übrige M3-Gates und historische Unsicherheiten offen.
+PR #2 Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Captured200/50Hz und Mixed-Route-One-Loss
+
+- Vorab517a940: optional --capture / --losses1 im Multiroute-Runner. Bestehender
+  packet-socket Recorder, getrennte geschlossene Identity-/Measurementphasen,
+  Native zuerst starten/zuletzt schließen. Neue Prüfung actualSDK -> exakte
+  Native-/Full-PCAP-Source/Parity-Multimengen, Bindingoffset/Partialrow/Wrap.
+  Neue Mixedrow-/Repair-/Classifier-Zeitordnungsgates. Python-only, keine
+  Produktions-/SDK-/ROS-/Provider-/Admission-/Mailbox-/Retryänderung.
+- PLAN evidence/m3-multiroute-capture-2026-11-08/: genau ein Baseline-Run;
+  nur nach dessen PASS genau ein One-Loss-Run. Beide PASSED, keine Retries.
+  .local/m3-multiroute-capture/{baseline,one-loss}. Je Source2011IMU/503joints,
+  keine skipped slots. Gemessen200.003710/50.025791Hz bzw200.001139/50.025148Hz.
+- Baseline: Typed2426 (1928/498), Source2514 -> DDSgap2 +BUSY2 +outbound_replaced84
+  =88 missing. SDK2426/receiver2426. Measurement je2426Source+606Parity,
+  File/Dispatch/Kernel3032 gleich. Source-/Sender-/Receivertrace2514/4939/2426.
+- One-Loss: Typed2431 (1933/498), BUSY6 +outbound_replaced77 =83 missing;
+  sonstige Losses0. SDK2431/receiver2431; Measurement je2430Source+608Parity,
+  File/Dispatch/Kernel3038 gleich. Traces2514/4946/2431. Unterschiede lokaler
+  Admission/Replacement-Populationen sind keine kausale Performancevergleichsbasis.
+- Vor Source-Arming selektierte Message8/Row1Position3 genau einmal gedroppt,
+  Parity ausgenommen. Tatsächliche Row5/6/7 IMU,8 joints. Message8 mappt auf
+  Jointcounter2/Envelopeseq2: Sourcepacket an beiden Taps absent, Rowparity da,
+  explizit Session-accepted und exakter Typedhash/Stamp einmal beobachtet, während
+  Classifier noch installiert. Native parity47375327895ns -> EntscheidungEnd
+  47377568728ns -> Typed47378953561ns -> HookremoveBegin60051112984ns.
+- Sechs Bilanzen jeweils0, leere stabile Checkpoints, sämtliche Typedhashes/Order,
+  Clock/QoS/Session/Owner/Generations/Isolation passen. Alle Traces vollständig,
+  keine Drops/Exhaustion. Unmatched IDs bleiben separat; Aggregate liefern keine
+  genaue individuelle Stage. Keine lossless/PhysicalAge/Crypto-FEC-Abnahme.
+- Identity je8/8, alle Recorder initialkernel0/finalfilter-before-bind/stabile
+  gleiche Drains/Hash/Größe; keine Kernel-/Nativeverluste/Truncation/Exhaustion,
+  Features unverändert. Separate Phasen, kein Continuouscaptureclaim. PCAP-
+  Realtime nicht als qualifizierte Zeitbasis nutzen. Native ist skb, nicht Wire.
+  AgeUpperMax Baseline IMU14011182ns/joints27148919ns, OneLoss14179458/29336477ns.
+- Host210/Syntax/diff bestanden; letzte volle SDK70/ROS41 unverändert, nicht
+  neu ausgeführt. Sieben Runtimehashes über beide Fixtures gleich. Owned Netz/
+  Container entfernt, Passphrase gelöscht. Evidence enthält Pläne/Originale,
+  Hashtraces/Metriken, Capturestatus/Lifecycle/Fault/Clock/Qdisc, Tests, Inventar
+  und Rohhashes; keine Rawcaptures/Prefixes/Journale/Resources/Inspect-/Envdumps.
+
+**Weiter:** Sustained Mixedrow-Two-Loss mit tatsächlicher Source/SDK-Zuordnung,
+anschließend vorab geplante Seed-Repetitionen/übrige N3-Gates. Sourcebudget10000
+Records bei längeren Läufen vorab beachten. N4 und übrige M3-Gates/historische
+Unsicherheiten offen. PR #2 bleibt Draft, Intrinsic/M4 unberührt.
+
+## Fortsetzung 2026-11-08: Fullrate-Two-Loss und beobachtetes Child-Shutdown
+
+- Vorabcb2468b, Host215: originale Three-Seed-Two-Loss-Planung stoppt beim ersten
+  Run .local/m3-multiroute-two-loss/1701 FAILED. Sendertrace4944 vollständig,
+  Receiverprefix2427 Events OHNE final SAMPLE_TRACE_STATUS. Original2903/4211
+  NOT EXECUTED, keine spätere Fixture ersetzt diese Cases/verändert das Verdict.
+- Legacy Driver.cleanup ignoriert Exitcodes und Forced-Kill-Ausgang nach5s.
+  Kein ursprünglicher Childstatus vorhanden; kein Beweis für Crash/Kill/Timeout
+  oder konkrete Footerverlustursache. Ursache UNKNOWN lassen. Post-hoc nur:
+  source2514,SDK2429,metrics receiver2427,typed2426; BUSY3/outbound_replaced82/
+  SDKgap2/observerDDS1, sechs Bilanzen0. Capture je2427Source+607Parity3034 gleich.
+  Diese Diagnostik ersetzt NICHT fehlende Trace-Vollständigkeit.
+- Source5d9b9f3/Host218: scenario_processes.stop_children protokolliert eigenen
+  Childstatus vor SIGINT, VM-Bracket, Exitcode, ForcedKill, Endzeit. Preexisting
+  Exit auch0/nonzero/deadline/kill ->failed; andere eigene Children weiteraufräumen.
+  Fünfsekündige SIGINT-Grenze gleich, Killwait bounded5, Hostwait25 für zwei
+  Children. Python-only nach Messfenster, keine Produktions-/SDK-/ROS-C++/
+  Provider-/Source-Schedule-/Admission-/Retryänderung, kein Runtime-Rebuild.
+- Separat DIAGNOSTIC-PLAN einmal lifecycle-1701 PASSED. Danach separat vorab
+  053c9bf REPETITIONS-PLAN, je einmal lifecycle-2903/4211 beide PASSED. Keine
+  sonstigen Messungen/Retry/Selectoränderungen. Alle3 Children vorher live,
+  kontrolliert SIGINT ->exit0, keine Kills, alle finalen Tracefooter vollständig.
+  Passing erklärt/heilt den ursprünglichen unbekannten Fehler nicht.
+- Alle3 je2011IMU/503joints produziert, keine skipped slots; actualHz
+  200.011802/50.027815,200.012079/50.027885,200.016820/50.029070. N0-base/base+1
+  seeds ohne random impairment: Independent-start-Repetitionen, keine Random-
+  Loss-Abdeckung/kausale Performancevergleichsbasis aus verschiedenen Losszahlen.
+- Vor Source-Arming Message7/8 Row1Position2/3 selektiert, beide initial0/final
+  genau1drop. Tatsächliche Row5/6/7 IMU,8joint. Msg7 mappt je auf IMUcounter6/5/5,
+  Msg8 auf Jointcounter2. Beide Sourcekeys an Native/FullPCAP-Taps absent, Parity
+  da, genau receiver-gap{7,8} am drained cutoff, keine ausgewählten Typedoutputs,
+  danach beide Routen frisch beobachtet. Keine permanente Absenz/interne Expiry/
+  generischer Irrecoverablecounter-Behauptung. Alte One-Loss-Reparatur unabhängig.
+- Lifecycle1701: SDK2428/recv2426/pub2426/observer2426. DDS2/BUSY5/outbound79/
+  SDKgap2, sonst0;88 missing. Measurement je2426Source+607Parity=3033.
+  2903: SDK2432/recv2430/pub2429/observer2428. DDS1/BUSY2/outbound79/SDKgap2/
+  receive_replaced1/observerDDS1;86missing. Capture2430+608=3038.
+  4211: SDK2433/recv2431/pub2431/observer2431. DDS1/BUSY1/ingress_replaced1/
+  outbound78/SDKgap2;83missing. Capture2431+608=3039. Sechs Bilanzen je0.
+- Source/Sender/Receivertrace2514/4941/2426,2514/4946/2430,2514/4947/2431,
+  keine Drops/Exhaustion; Typedhashes/Stamp/Order, Clock/QoS/Session/Owner/
+  Generations/Isolation/leere stabile Checkpoints passen. AgeUpperMaxIMU/joints
+  21441943/32156726,14827528/28653399,15522998/30660836ns; keine PhysicalAge-Aussage.
+- Identity jeweils8/8; Native zuerst/zuletzt, Sourcewindowdeckung, Recorderinitial0/
+  finalfilter-before-bind/strictstableDrain/Hash/Size, keine Native-/Kernelverluste/
+  Truncation/Exhaustion, Features unverändert. Separate Capturephasen/PCAP-Realtime
+  keine qualifizierte Zeitbasis, Native ist skb. Sieben Runtimehashes aller4 Runs
+  gleich; Owned Container/Netze/Passphrasen entfernt. SDK70/ROS41 frühere volle
+  Validierung, nicht neu ausgeführt. Host218/Syntax/diff passen.
+- evidence/m3-multiroute-two-loss-2026-11-08/ enthält drei getrennte Pläne,
+  Originalfailed + Post-hoc separat, Diagnostic/Repetitionen, Executionmatrix,
+  Status/Lifecycle/Tracehash/Metriken, Inventare/Rohhashes und Tests. Keine
+  Rawcaptures/Prefixes/Journale/Resources/Inspect-/Envdumps veröffentlicht.
+  baselines/m3-plan.json führt neuen partial full_rate_followup, kein N3-Accept.
+
+**Weiter:** Baseline/One-Loss-Seed-Repetitionen unter beobachtetem Cleanup,
+vorab längere bounded N3-Fenster/Budgets (Source10000), übrige N4-/M3-Gates.
+Ursache originaler Footer fehlt weiterhin, historische Unsicherheiten offen.
+PR #2 bleibt Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Short-Baseline/One-Loss-Repetitionen und30s-Baseline
+
+- Vorab81a39e0, Host223: ein sechs Cases umfassender Stop-on-first-failure-Cohort
+  mit beobachtetem Child-Shutdown, Reihenfolge B1701/B2903/B4211/O1701/O2903/O4211,
+  je nominal10s. Alle sechs PASSED; nur danach genau ein vorab geplanter30s-
+  Baselinepilot PASSED. Keine Retries/Selectoränderungen/alten Verdictänderungen.
+- tools/m3_multiroute_cohort.py bewahrt Originalresultate, stoppt bei Fehler/
+  Exception und markiert Rest NOT EXECUTED. Neue explizite10/30s-Fenster:
+  sourcefence[nominal,nominal+1]s, Sourceallowance2750/7750, Sender5501/15501.
+  Hardlimits Source10000/Sample75000/PCAP75000+128MiB unverändert. Kein größerer
+  Buffer/Truncation oder heimliches Windowstitching. Nur Sourcepause-/Hostbarrier-
+  Waits folgen deklarierter Dauer; Produktionsdeadlines unverändert.
+- Fensterprüfung fordert Baseline/OneLoss SDKgap0/receiver_rejected0; TwoLoss
+  bleibt exakt{7,8}/gap2. Alle bisherigen Source/Cadence/Hash/Context/Capture/
+  Lifecycle-/Age-/Conservationgates bleiben. Python-only, keine SDK/ROS-C++/
+  Provider/Admission/Mailbox/TTL/Retry-/Sourcescheduleränderung oder Runtimebuild.
+- ShortcaseActualHz IMU/joints: B1701 200.017542/50.029251,
+  B2903 200.067455/50.016864, B4211 200.030360/50.032457,
+  O1701 200.010030/50.027372, O2903 200.054263/50.013566,
+  O4211 200.037539/50.034253. Keine Sourceskips, alle Typedhashes/Stamp/Order passen.
+- Source totals2514/2515/2514/2514/2515/2514. SDK/Receiver2432/2423/2431/
+  2435/2434/2424, Publikationen2432/2423/2430/2435/2434/2424,
+  Typedobserver2432/2423/2430/2435/2434/2423. Missing82/92/84/79/81/91 separat:
+  B1701 BUSY2/outbound80; B2903 DDS10/BUSY5/ingress1/outbound76;
+  B4211 BUSY4/outbound79/receive1; O1701 BUSY1/ingress1/outbound77;
+  O2903 BUSY3/outbound78; O4211 BUSY2/outbound88/observerDDS1. Sonst0,
+  sechs Bilanzen je0; Aggregate keine exakte individuelle Lossstage.
+- OneLoss jeSDK8 =Jointcounter2, Row5/6/7IMU/8Joint, initial0/final1drop.
+  Ausgewählte Source an beiden Native/FullPCAP-Taps absent, Parity da, explizit
+  Sessionaccepted/exakter Typedhash noch vor Classifierremove; SDKbegin nach
+  Install, Parity <=decisionEnd <=typed <remove. Keine Publishindexannahme.
+- Capture source/parity jeB:2432+608=3040,2423+606=3029,2431+608=3039;
+  jeO:2434+609=3043,2433+608=3041,2423+606=3029. AlleSDKkeys/Bindingoffset/
+  Partialrows passen. Identity je8/8 separatgeschlossen, Native zuerst/zuletzt,
+  volleSourcewindowdeckung; Recorderinitialkernel0/finalfilter-before-bind/
+  stableequalDrain/hash/size, keine Native/Kernelverluste/Truncation/Exhaustion,
+  Features gleich. Keine Continuouscapture-/PCAP-Realtime-/PhysicalWire-Aussage.
+-30s-Pilot:30.053896430s, Source6011IMU/1503joints=7514,
+  measured200.007344/50.010154Hz, Skips0. Sender14754Records<15501,
+  Source7514<7750; Status/Traces vollständig. SDK/receiver7242, published/
+  typed7241, missing273 =DDS3/BUSY9/ingress2/outbound258/receive1, sonst0,
+  sechs Bilanzen0. Capture je7242Source+1810Parity=9052 File/Dispatch/Kernel.
+  AgeUpperMax IMU23610879ns/joints28470853ns, Shortmax40929297ns (B2903 IMU).
+- Alle7 Clock/QoS/Session/Owner/Generations/Isolation/stableempty/Payload-/Age-
+  gates passend; je3Children vorherlive ->SIGINTexit0 ohne Deadline/Kill,
+  alle finalen Tracefooter vollständig. SiebenRuntimehashes über7Runs gleich.
+  SDK70/ROS41 frühere volle Validierung, nicht neu ausgeführt, keine volle M2-
+  Abnahme. Host223/Syntax/diff passen. Owned Container/Netze/Passphrasen entfernt.
+- Evidence evidence/m3-multiroute-matrix-2026-11-08/: Vorabplan, Cohort/Originale,
+  Matrix, Tracemetadata/Typedhashmetriken, Capture/Fault/Clock/Qdisc/Lifecycle/
+  Childstatus, Tests, Inventar/Rohhashes. Keine Rawcaptures/Prefixes/Journale/
+  Detailresources/Inspect-/Envdumps veröffentlicht. baselines/m3-plan.json aktualisiert.
+
+**Weiter:**30s-One/Two-Loss und vorab deklarierte längere Fenster/Budgets,
+übrige N4- und M3-Vergleichs-/Age-/Security-/Resourcegates. Kurze B/O/TwoLoss-
+Repetitionen jetzt für alle3 Basewerte aus getrennten Vorabplänen vorhanden;
+N0 ohne random impairment ist keine Random-Loss-Coverage/kausaler Vergleich.
+30s-Pilot nur Baseline, keine30sFault-/FullN3-Abnahme. Originaler fehlender
+Receiverfooter bleibt FAILED/UrsacheUNKNOWN, originale skippedCases bleiben
+unexecuted. PR #2 bleibt Draft, Intrinsic/M4 unverändert.
+
+## Fortsetzung 2026-11-08: Failure Detection und native N4-Commandphasen
+
+- Userpriorität geändert: zuerst Failure Detection/N4, danach SRT-N5/DDS-Discovery,
+  erst dann übrige N3-Dauer/Faults und matched comparison. Kein weiterer N3-Run.
+- Vorab326c2c0: genau eine echte Failure-Control-Suite PASSED9 Klassifikationen,
+  echte installierte Bridge/Recorder statt nur Processmocks. Cleanbridge SIGINT0
+  mit Footer akzeptiert; Abort-6/Kill-9/Stall(deadline0.3s, forcedKill-9) verworfen;
+  preexited0 auch mit gültigemFooter als unerwarteter Exit verworfen. Cleanlog
+  bleibt erhalten, separate Kopie ohne Footer wird abgelehnt. Witness überall0.
+  Recorder6 synthetischeUDP-Sends clean0/strict6Records; Kill-9 und RLIMIT_FSIZE64
+  nachReady/Exit120 rejected, Parent protokolliert trotz fehlendemChildstatus.
+  Core Dumps aus; keine Hostressourcen geändert. Abrupt-child Descendants werden
+  spätestens durch Owned-PID-Namespace-Teardown entfernt. Kein historischerCauseclaim.
+- N4first40bf968/admission-both FAILED vorOutage: Childguard fand Worker nicht;
+  rest8 NOT EXECUTED. Separat30441d3 guardfix: eigeneThreadchildliste+exakteWorker/
+  IPC-Args+T-State+PID/startticks, bounded1s readiness; Metadata zeigt /proc/exe
+  /run/rosetta/rosetta stattWorkerbinary. Originalrejectmetadata fehlte, keine
+  eindeutige retrospektive Ursache erfinden. Guard vorSIGCONT nochmals prüfen.
+- Identity-cohort ersterCase FAILED nachOutage: falscheFixtureAssertion gleiches
+  Deadline-NS inbeidenJournals. Tatsächlich Receiver537595890394 <Sender537601704201,
+  um5813807ns konservativer. Rest8 NOT EXECUTED. ProduktionsClockMapper korrekt,
+  Testannahme geändert: Sender exactIngress+5s; Receiver mappedExpiry>originalOrigin
+  und<=Senderexpiry auf provenCommonVMClock. Owners/SourceSession/Ingress/Hash
+  bleibengebunden, freshresume/dispatch nutzenReceiverlimit, keinBudgetextend.
+- Separat d6c2cbb CLOCK-REVISION genau9 nativeCases PASSED:
+  admission_before_commit, after_atomic_handler_start_before_effect,
+  result_committed; je both/to-robot/to-operator. Dann90d3ae4 separat3 weitere
+  dispatch_committed_BEFORE_execution_grant/start Cases allePASSED. Insgesamt12.
+  ReadonlyWALBarrier: absent /DISPATCHING-effects0 /SUCCEEDED-validResult.
+  Strictere OfflinePhaseOrderPrüfung der alten9 zusätzlich archiviert, kein neuerRun.
+- Echte installierte CommandEndpoint/Transport/JournalWorker, expliziter simulierter
+  Ratehandler. Rootnetem100% nurOwnedContainer, seed/loss/dropsReadback; VMhold2s,
+  guaranteedgemeinsamerCut wegenSetupoverhead2.483631168..2.597214710s, keine
+  Exact2.000s-Aussage. RestoreN0 vorWorkerResume. Ursprüngliche5sCommandbudget
+  unverändert;20sCoordinatorwatchdog nurTestallowance fürabsichtlichgehaltenen
+  Worker (keine Änderung anProduktionsdefaults). SDK/ROS-C++/Provider/API unverändert.
+- Alle12 SUCCEEDEDmitmatching durableproof100Hz/gen1, je1Effect/1executeSDKHandoff,
+  keineakzeptierteCommandwiederholung. SourceID/route/hash/epoch/originalsession/
+  ingress/deadline/finalstate/reason/revision/result audit; Senderdeadlineexact5s,
+  Receiver~5..6ms früher. QUERYs beobachtet; einzelneFinalProof kannSTATUS oder
+  QUERYresponse sein, kein isolierterQuerykausalitätsclaim. Zwei weitereSettlesekunden
+  ohnezweitenEffect/Handoff; restoredReady/Clock, leereOwnerfaults, boundedjoin/
+  alleTransporte/Workerstopped. Tracesattempted==recorded,dropped0. Native9StopMax
+  24.845042ms<5s, weitere3auch<5s. PositiveKürzeralsBudget-Cuts dürfenerfolgreichsein;
+  safeReject/Expiry/0Effects und deadline/proofnegative Gaten sindhostgetestet.
+- Host231/Syntax/diff und StandaloneC++Release/WerrorBuilds bestanden. KeineSDK/
+  ROS/ProviderProduktionsänderung oderRebuild: SDK70/ROS41 früherevolleValidation,
+  nichtneu ausgeführt, keinevolleM2Abnahme. FixtureELFzwischenfehlerhaftenRevs/
+  Dispatchphase neugebaut, getrennteSource/Runtimeprovenienz; installierte4
+  ProduktionArtifacts überalle12gleich. AlleOwnedNetze/Container/Secretsentfernt.
+- evidence/m3-failure-n4-2026-11-08/ enthält5vorabPlan/Gatefreeze/Revisionsdateien,
+  FailureControls/2FAILED-Cohorts samtunexecutedRest und12PASS, Journal-/Barrier-
+  Proofmetadata, Netzwerk/VMBrackets/kernelcounts, nativeEvents/Trace/Stopped,
+  Builds/Tests/Inventare/Rohhashes. KeineRawJournals/PCAPs/Core/Inspect-/Envdumps/
+  Credentials veröffentlicht. baselines/m3-plan.json N4phase_followuppartial.
+
+**Weiter:** N4 ROS-Sensorfrische, expliziterDeadlineOverrun, withheldResult/Query-
+Recovery isolieren, Crash/Restart/UNKNOWN ohneacceptedCommandReplay. DannN5-
+CONTROLProgress undDDSColdDiscovery entsprechendUserreihenfolge; N3später.
+Native12Cases sindkeinevolleN4/M3-/DDS-/Hardware-/PhysicalAge-Abnahme. Historische
+FooterursachebleibtUNKNOWN/alteFailedundSkippedCasesbleiben. PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: verbleibende bounded N4-Gates
+
+Die zuvor als nächste Schritte genannten ROS-Frische-, Deadline-Overrun-, isolierten
+QUERY- und Crash/Restart-Entwicklungstests sind jetzt ausgeführt: 4 native +3 ROS-
+Frische +3 korrigierte ROS-Restart-Cases PASS. Nachweise und Scope stehen in
+[evidence/m3-n4-remaining-2026-11-08/README.md](evidence/m3-n4-remaining-2026-11-08/README.md).
+
+- Native6s-Unterbrechungen überschreiten das ursprüngliche5s-Budget: Admission/
+  Dispatch werden sicher abgelehnt, gestartete Arbeit verfällt; jeweils0Effects.
+  Separat unterdrückte direkte Finalantwort wird per QUERY mit1Effect rekonstruiert.
+- ROS200/50Hz über15s, beide/einseitige Cuts: vollständige Tracepopulationen,
+  sechs Bilanzen0, frische Samples beider Routen nachRestore, beobachtete gemeinsame
+  VM-Ingress→Callback-Maxima25.352125/23.417917/23.454333ms <=250ms. Verluste sind
+  explizit bilanziert, keine PhysicalAge-/CrossHost-/Lossless-Aussage.
+- Realer ROS-Restart mit persistentem externem Simulator: vorAdmission UNKNOWN
+  trotzNOT_FOUND/abgelaufenerDeadline und0Effects; nachEffect/vorCommit UNKNOWN
+  mit1Effect; nachCommit dauerhaftSUCCEEDED mit1Effect. Je1SDK-Handoff, originale
+  Deadline, neuerReceiverOwner/Session, keinacceptedCommandReplay. Alle kontrolliert
+  gestoppten Inkarnationen haben vollständige Footer; absichtlich gekillte nicht.
+- Zwei frühere Restart-Fixture-Cohorts bleiben FAILED, Folgetests dort unexecuted.
+  Explizites Schließen der SQLite-Observer und Eigentümer-konforme Inspektion
+  korrigiert: keine Live-Reads gegen exklusiven Worker; nachStop oder stabile private
+  DB/WAL-Kopie beim angehaltenen eigenen Writer. Erstursache nicht eindeutig belegt.
+- Host239 PASS, StandaloneFixture Release/Werror und Syntax/diff PASS. Produktions-
+  SDK/ROS/Worker/Provider unverändert; SDK70/ROS41 bleiben frühere volle Validation.
+  Originale Rohartefakte/Fehler erhalten, Credentials und OwnedNamespaces entfernt.
+
+**Nächster Schritt:** SRT N5-CONTROL-Progress und DDS-ColdDiscovery. In dieser
+Änderung kein N5-Run. Breite N4/DDS-/kombinierteLast-/Hardware-/M3-Abnahme bleibt
+separat offen; PR2 bleibt Draft, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: N5-Progress und DDS-Coldstart
+
+Vorab gefrorener Plan/Implementierung57f415b, genau5 frische sequenzielle Slots,
+keine Wiederholung, alle ausgeführt. Siehe
+[evidence/m3-n5-progress-2026-11-08/README.md](evidence/m3-n5-progress-2026-11-08/README.md).
+
+- SRT N0/15s8Successes/Effects,0unresolved/0skipped; N5/60s23Successes/Effects,
+  0unresolved/7skipped. Default dynamische Nachbarn,512kbit/s,16Packet-ChildQueue,
+  128000bit/sCompetitor. Original5sStartbudgets und genau1SDK-Handoff jeIntent,
+  passende geschlossene Journals, komplette Traces allerBridge-Inkarnationen.
+  Keine Session-/LinkLost-Events im aktivenFenster beobachtet. Kein historischer
+  Resetfix oder vollständigeN5Abnahme. Sensor15024produziert/5543beobachtet,
+  alle6Bilanzen0, Defizite explizit. MaxTerminalObservation3421.882377ms,
+  MaxAbstandzwischenIntents4023.803085ms, kein ZweiSekunden-Erfolgsgarantieclaim.
+- DDS system/simultaneous FAILED vorMessfenster: Sender keine vollständigen
+  EndpointMatches beobachtet; Receiver Matches, aber0empfangeneHELLOs. Lokales
+  Journal/Handler/QoS bereit, keineCoordinatorFailure. Je46TimelineSnapshots.
+  Ursache inDDS-/Kernelpfad nicht eindeutig lokalisiert; keineProtokoll-Reparatur.
+- DDS system/control-first boundedPASS:2Successes/Effects,6skipped,0unresolved.
+  Sender2LeaseExpirations, beidePeers imSourceFenster einmalnotReadygesampelt;
+  eineFinalbeobachtung erst16087.948466ms nachAufruf im erlaubtenResultDrain.
+  Original5s betrifftStart, nichtFinalresultzeit. Startreihenfolge allein löst
+  kontinuierlichenProgress nicht.3772Source/1718CallbackSamples.
+- Separater bestehender paced-sensors/simultaneous Kandidat8/8Successes/Effects,
+  0skipped/unresolved/LeaseExpirations.3785Source/967Callbacks, deutliche
+  Sensorreduktion bleibt Teil desResultats. Defaultsystem bleibt unverändert.
+- Neue begrenzteDDS-Timeline2048Records:1Hz innerhalb gleicherPhase/Readiness,
+  plusTransitionen, harteExhaustion-/Footer-/Populationgates. Nur lokaleSamples,
+  keinRTPS-Decoder oderWireCauseproof. Peer/ParentAbort führt zu kontrolliertem
+  Cleanup vorNamespaceTeardown; alleDDSChildreports clean0, auchFailedStartup.
+  Der Elternprozess beendet denFailedStartup trotzdem alsFAILED.
+- Alle5PCAPpopulationen file/filter/captured konsistent; keineRT-PCAPZeitautorität.
+  Alle8Produktionshashes vorher/nachher/unabhängig gleich; Quellenmatch57f415b.
+  Host245PASS/Syntax/diff; keinSDK/ROS-C++/Provider-Rebuild, SDK70/ROS41 frühere
+  volleValidation. AlleOwnedContainer/Netze/Passphrasesentfernt. AlteFehler/UNKNOWNs
+  bleibenunverändert; neueKontrolldaten ersetzenkeinenhistorischenRun.
+
+**Weiter:** AsymmetrischeDefaultDDS-Discovery packetbezogen mit qualifizierter
+Capture und vorabdefinierterGegenprobe lokalisieren; längereSRT-N5Progress-Cohort
+vorabfestlegen. PacedKandidat separatführen, keineWiederholungbisgünstigesResultat.
+N3/Clock/Security/Resources weiterhinnachgeordnet. PR2Draft, M3offen, M4unberührt.
+
+
+## Ergänzung 2026-11-08: paketbezogene DDS-Discovery-Lokalisierung
+
+Nur retrospektive Analyse aller6Original-PCAPs der3DDS-Slots aus57f415b; keine
+neuenLiveRuns/Defaultänderungen oder geändertenWorkloadVerdikte. Siehe
+[evidence/m3-rtps-discovery-2026-11-08/README.md](evidence/m3-rtps-discovery-2026-11-08/README.md).
+
+- Isolierter tshark4.2.2 mitIPv4Reassembly, geprüfteOriginalhashes undFile/Filter/
+  Footerpopulationen; Source/Peer-Tap undCallback strikt unterscheiden.
+- DefaultFAILED hat6statt8CommandEndpointBindings: kompletteRobot-HELLO-Publication
+  undOperator-HELLO-Subscription fehlen inbeidenCaptures. Alle beobachteten
+  komplettenAdvertisements sindanbeidenTaps vorhanden; keinDatagramLossclaim.
+- Trotzdem154identischeRobotHELLOs anbeidenTaps: ursprünglicher generierterROS-
+  Deserializer, protokoll2/HELLO1/OriginalProcessUUID, semantischeReserialisierung
+  mitausgeneriertemSchema abgeleiteterCDRPaddingmaske.6positive/negativeChecks
+  vorherPASS. OpakeungebundeneDATA zunächstnull statt0zählen; Typnachweis separat.
+  Originaldiagnostik HELLOreceived0 bleibtunverändert. Das grenztDiscovery/
+  ReaderAcceptance ein, beweist aberkeineeinzigartigeKernel-/Middlewareursache.
+- Control-first undpacedje8Bindings; letztere235Robot-/209OperatorHELLOs als
+  Typkontrollenvalidiert. FragmentframesOp/Robot default106/109, control-first
+  158/212, paced0/0; ohneDecoderReassemblyReference4/7,3/57,0/0. Teilheaderaller11
+  defaultErstfragmente separat analysiert, nieGUID-Binding/komplettesAdvert daraus.
+  FehlendeRobotHELLOAdverts keinerkonkretenverlorenenFragmentgruppezugeordnet.
+- Analysekorrekturen/Fehlschläge separatarchiviert: INFO_DST-Feld, HEARTBEAT-Range,
+  synthetischesDigestfixture, ungebundeneCounts, MF=True, Containerworkdir und
+  unbestimmtesCDRPadding. Endanalysen438ae9d/Teilheader34d06a4 mitSHA-Provenienz.
+  OriginalePCAPs/Journals/WorkloadVerdikte unverändert; vollePDML bleibenlokal.
+- Host255PASS,6generierteCDRChecks, unabhängigcodiertesRTPS/PL-CDR-Paket gegen
+  externenDecoderPASS; Syntax/diffPASS. Alle8Produktionshashes und generierten
+  Messagebibliotheken unverändert; SDK70/ROS41 frühere volleValidation.
+  KeineSDK-/ROS-C++-/Provideränderung, OwnedAnalysetoolContainer entfernt.
+
+**Weiter:** KontrolliertenDDS-Discovery-Fragment-/Reliability-Verlust mitechten
+Endpoint-/Callbackbeobachtungen undRecovery vorabfestlegen, erstdanach Default-
+Änderungableiten. LängereSRT-N5ProgressCoverage separatvorabplanen. KeinLive-
+Kausalnachweis oderN5/M3AbschlussinDieserAnalyse, PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: kontrollierter nativer DDS-Fragmentverlust
+
+GefrorenerPlan d12feb5, drei frühereBaseline-Fehler bleibenFAILED undFaultcases
+jeweilsNOTEXECUTED; korrigierter5ba20c1Pair baseline+fragment-cutPASS. Nachweise:
+[evidence/m3-dds-discovery-loss-2026-11-08/README.md](evidence/m3-dds-discovery-loss-2026-11-08/README.md).
+
+- EigenständigerFastDDS-Probe, keinBridgeSDK/ROSCoordinator: UDPv4-only, festeOwned-
+  Locator26010/26011, BE/Volatile/KeepLast1,10Hz, native28ByteHELLO. Robot-Pub/Sub
+  user_data4096B erzwingtgroßeDiscovery;Operator leer. VerifiziertesN0/MTU1500,
+  permanenteOwnedNeighbors, gemeinsameVMClock. KeineN5Shaper/Competitor/Sensorlast.
+- DreiNoLossKontrollen matchen, habentrotzDATA0Callbacks. ZusätzlicheObserver
+  zeigenReaderHistoryunread1 vorCallback/Codec. FixtureParticipantListener mit
+  StatusMask::all fängtDATA_ON_READERS überleeregeerbteMethodeab; nativeMaske
+  none lässtvendorDiscovery undReaderCallbacksarbeiten. KeineWire-/QoS-/Codec-
+  oderProduktionsänderung. KeinBelegfüreinenidentischenROS/RMW-Fehler!
+- KorrigierteBaseline echteCallbacks/Codec, Qualifier→Fence30/30; striktSteady29/28. Dannvor
+  TeilnehmerstartgenauRobotUDPContinuationoffset185selektivgedroppt:18Packets/
+  27252Bytes; VMhold8.000577254s, garantierterSelectorzeitraum9.638923087s.
+  Participantdiscoverybeidseitiglive; Operator0Pub/SubMatches/0Callbacks, Robot
+  1/1Matches und78Writes. AlleOperatorMatchbeobachtungenvorRestore unqualifiziert.
+- NachHookRemovalQualifierSnapshots793.143250/804.947583ms (inklMatching,>=3Callbacks
+  undStateSampling, keinepureDiscoveryLatency). OriginalePID/Start-/Participant/
+  Writer/ReaderGUIDs bleiben;Restore→Fence33/33, strikt3sSteady28/29, invalid0.
+- Paketidentitätenanderendecodergeprüft: baseline70, fault152 anbeidenTaps gleich.
+  78RobotHELLOmitOriginsimHold/CutFensteranbeidenTaps, alleinOperatorPCAPorder
+  vorersterkompletterRobotPublication(frame175). KeinRT-PCAPArrival-/Ageclaim.
+  AlleFile/Filter/Kernel/Hash/Drain-PopulationenundNativeTrace/ShutdowngatesPASS.
+- SeparateposthocFencedprüfung5606cdf schließtShutdown-Tailsaus, Originalresult.json
+  unverändert. CLIslieferteninden3Fehlkohorten0trotzkorrekterFAILED-Matrix;
+  künftigerCLI liefertbeiFailed/Skippednonzero, nurhostgetestet/keinealtenExits
+  umgeschrieben. Host262PASS, StandaloneRelease/Werror/Syntax/diffPASS.
+  NurFixtureELFneugebaut;alle8Produktionshashes gleich. SDK70/ROS41 früherevolle
+  Validation, keinProduktionsbuild. AlleOwnedContainer/Netze/Selectorentfernt.
+
+**Weiter:** ROS/N5-spezifischeDiscoveryMitigation/Bestätigung separatvorabplanen,
+SRT-N5ProgressCoverageverlängern. DerkontrollierteMechanismusistbelegt, die
+historischeROS/N5-Ursache/DDSdefaultnichtgefixt. KeinevolleN5/M3-/Hardware-/Clock/
+Security-/ResourceAbnahme, keinacceptedCommandReplay. PR2Draft, M4unberührt.
+
+
+## Ergänzung 2026-11-08: ROS-Transferprüfung und SRT-N5-Dreiseed-Progress
+
+Gefrorener Source0641523, sechs Slots genau einmal, GesamtmatrixFAILED/Exit1.
+Keine Retries; ROS/SRT unabhängige Gruppen. Evidenz:
+[evidence/m3-ros-confirmation-srt-n5-2026-11-08/README.md](evidence/m3-ros-confirmation-srt-n5-2026-11-08/README.md).
+
+- ROS system DDS N0/control-first Kontrollslot15s:8/8 bestätigte Commands,0Skip.
+  Selektiver Fortsetzungsfragmentoffset185 vor Teilnehmerstart installiert;
+  Faultslot12Drops/8656Bytes,8.002644087s Hold. Trotzdem beide Coordinator ready,
+  alle vier Endpointzähler1, Operator HELLO83/82, Robot74/73. Vorabdefinierte
+  Blockadehypothese widersprochen; FAILED, keine Recovery-Abnahme. Selektor
+  entfernt, Restore-Barriere nie freigegeben, Workload nicht gestartet,0Execute,
+  frische geschlossene Journals leer,11Typed-Snapshots jeRolle null. Alle drei
+  nativen Kindprozesse sauber beendet. InternerStatus awaiting_recovery ist
+  letzter geschriebener Schritt vor Assertion, kein erfolgreicher Recoverybeleg.
+- N0 ohne Sensorlast/4096B Probe-Metadaten generalisiert den früheren nativen
+  Verlustmechanismus nicht automatisch auf ROS/N5. Historische Loaded-Discovery-
+  Ursache und Default-Mitigation bleiben offen; keine QoS-/Maskenänderung.
+- SRT N0 Kontrollslot15s:8/8,0Skip. N5 je300s, Seeds1701/2903:131/131 bzw130/130
+  bestätigt,19/20Skip. Seed4211:11/12 bestätigt,1unaufgelöst,138Skip. Originaler
+  Safety/Accounting-HarnessPASS, strengere Progress-GateFAILED bleibt separat.
+  Sensor Source/Observer:75028/7225,75030/12708,75034/27249; große Transportlücken
+  ausdrücklich erhalten, keine volle Sensor-/N5-Qualifikation aus Command-PASS.
+- Intent12 genau1SDK-Handoff,5sBudget unverändert. Live zuletztLOCAL_QUEUED/rev0,
+  1337Polls/172NOT_FOUND-Beobachtungen; früherPeerclock_unqualified5, RequestKind
+  nicht exponiert. Closed senderUNKNOWN/reconcile_required kann erstShutdown-
+  Invalidation sein; keinLiveUNKNOWN beobachtet, ReceiverkeinEintrag. Keine
+  Nichtausführungsaussage und keinReplay. KeineSession-/Invalidation-/Session-
+  Action-/LinkLoss-Traceevents während aktivem Fenster. ReceiverTrace hatkeinen
+  RequestAdmission-Punkt; fehlenderIntentTrace istkeinNichtempfangsnachweis.
+- Alle Capturepopulationen/Trace-/Providerfooter vollständig. Beide tcpdump
+  Listener vor Appstart bereit; kein AF_PACKET-Filter-before-bind-Claim.
+  Host265 vor/nach LivePASS;8Produktionshashes gleich, keineProduktionsbuilds.
+  SDK70/ROS41 bleibenfrühereValidierungen. PCAP/Journals/Provider-Rohsamples lokal
+  gehasht, öffentliche Selektionen und ausgelasseneFelder explizitprovenant.
+  OwnedContainer/Netze/Selektor entfernt, keineTests/Builds währendLivefenstern.
+
+**Nächste Priorität:** SRT RequestKind und ReceiverAdmission-/Clock-Rejection-
+Grenzen rein diagnostisch instrumentieren, gezieltenPlan einfrieren und die
+4211-Lücke lokalisieren. Fehlerkontext ist bisher nicht eindeutig bestimmt.
+Loaded ROS/N5-Discovery separat bestätigen; keineErfolgsretry-/Replay-/Expiryseal-
+oderTimeoutänderung. N3/Clock/Security/Resources bleiben nachgeordnet.
+PR2 bleibtDraft, M3offen, Intrinsic/M4unberührt.
+
+
+## Ergänzung 2026-11-08: SRT-Admission-/Clock-Diagnostik
+
+Source und Plan sind in b8f5418 eingefroren. Neue opt-in Beobachtungen erfassen
+Transport-Admission (32), korrelierte Peer-Errors (33) und Receiver-Worker-Ergebnisse
+(34), jeweils mit originalem COMMAND/QUERY-Kind und Sequenz. Admission erfasst
+zusätzlich Origin, Evaluation, Clock-State/Deadline und AgeResult-Fehler. Die
+bestehenden begrenzten SPSC-Lanes und Drop-Footer bleiben erhalten. Keine Änderung
+an Replay, Clock-Policy, Budgets, Journal, Wire-Format oder Provider. Evidenz:
+[evidence/m3-admission-diagnostics-2026-11-08/README.md](evidence/m3-admission-diagnostics-2026-11-08/README.md).
+
+- Finaler Release-Build und vollständige Tests: SDK70/70, ROS41/41, Host267/267
+  vor/nach Live PASS. Native IPv4/IPv6 prüfen erfolgreiche und negative Pfade,
+  COMMAND-vs-QUERY-Fehler und kontrollierte Receiver-Clock-Expiry: Rejection13,
+  Clock/Age expired2, Peer-Error5 mit derselben originalen COMMAND-Sequenz. Das
+  validiert die Diagnose, nicht die historische N5-Ursache. Der erste Build wurde
+  für die AgeResult-Ergänzung abgebrochen (137); sein Partiallog zählt nicht als
+  erfolgreiche Validation. Der finale Source wurde neu gebaut und voll getestet.
+- Zwei Slots genau einmal: N0/4211/15s bestätigt8/8,0Skip; N5/4211/300s
+  bestätigt124/124,26Skip,0unaufgelöst. Jeder Erfolg hat passende geschlossene
+  Journals, originales5sBudget, rechtzeitigen Dispatch, genau einen SDK-Handoff
+  und neue Receiver-Admission-/Worker-Beobachtungen. Receiver32/34 zählen19/19
+  bzw1006/1006 inklusive QUERY. Keine Drops, Peer-Errors, Receiver-Clock-Rejections
+  oder aktiven Kontextwechsel-Ereignisse.
+- Neuer Intent7 wurde vor dem SDK wegen Clock-Qualification gehalten:957.679ms
+  bis zu genau einem SDK-Handoff, danach qualifizierte Receiver-Admission und
+  dauerhafter Erfolg mit originalem Budget. Das übt bestehende Unsent-Retention
+  aus; kein Replay und keine Recovery des alten Intent12.
+- Der historische4211-Stall wurde nicht reproduziert und bleibt ungelöst. Alte
+  FAILED-Matrix und UNKNOWN-/NOT_FOUND-Ungewissheit bleiben unverändert; keine
+  Nichtausführungsbehauptung. Sensor Source/Observer75036/19012 enthält weiterhin
+  explizite Lücken; keine volle Sensor-/N5-Abnahme.
+- Capture-Populationen, Drain und Trace-/Provider-Footer PASS. Nur bridge_node,
+  endpoint.a und transport.a änderten sich gegenüber der alten Runtime. Alle acht
+  Hashes bleiben während/nach Live gleich, Provider-Pin unverändert. Keine Tests
+  oder Builds während Live; eigene Namespaces entfernt. Rohdaten bleiben lokal
+  gehasht; öffentliche Selektionen und normalisierte Host-Displaylogs haben
+  explizite Provenienz.
+
+Weiter: Gezielte Receiver-Clock-/Future-Age-Rejection-Coverage samt Unsicherheits-
+semantik vorab festlegen, danach eine begründete endliche instrumentierte
+Mehrseed-Cohort. Keine Deadlineverlängerung und keinen Nonrecurrence-PASS als Fix
+werten. Loaded ROS/N5-Discovery bleibt separat, N3/Clock/Security/Resources folgen.
+PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: kontrollierte Clock-Rejection und Ungewissheit
+
+Plan c9398eb, vollständige SDK-Validation deedc54:71/71 PASS, Host267/267 PASS.
+Nur Test-/Build-Testregistrierung geändert, keine Produktionsalgorithmen oder
+Runtime-Installation. Evidenz:
+[evidence/m3-controlled-clock-rejection-2026-11-08/README.md](evidence/m3-controlled-clock-rejection-2026-11-08/README.md).
+
+- Neuer direkter Session-/Journal-Vertrag: Fresh-Control akzeptiert; Receiver-
+  Clock-Expiry liefert SessionError13/AgeError2/ClockState2, Future-Age liefert
+  13/9/0. Future-Case nutzt explizite logische Zeiten mit200ms Sender-Vorsprung
+  nach Zero-Offset-Qualifikation; keine Hostclock-/SRT-/ROS-Manipulation. Beide
+  Negativfälle behalten CONTROL, konsumieren die Replay-Watermark und erlauben
+  QUERY. Budgetablauf/NOT_FOUND erzeugen kein negatives Ergebnis oder neues
+  Budget. Reopen bleibt UNKNOWN/reconcile_required ohne Senderecht.
+- Echte native SRT IPv4/IPv6 je einmal: Receiver-Testdeadline150ms bei1sProbes,
+  COMMAND-Rejection/PeerError mit originaler Sequenz korreliert. QUERY vor/nach
+  originalem5sBudget liefert lokal LOCAL_QUEUED und Peer NOT_FOUND ohne Result.
+  Receiver-Restart mit normaler Qualification lässt den lebenden Sender zu
+  UNKNOWN/reconcile_required wechseln. Existing-ID-Execute reconciliert nur;
+  genau1SDK-Handoff insgesamt, keine Trace-Drops, beobachtete Fixture-Effects0.
+- Vier geschlossene Journalpaare read-only geprüft: Sender UNKNOWN/rev0/kein
+  Result/originales5sBudget, Receiver leer. Kein Nichtausführungsbeweis aus
+  Abwesenheit und keine Replay-Freigabe. Historischer4211-Stall bleibt ungelöst.
+- Nach erfolgreicher Suite wurde nur die Ausgabeallokation des neuen direkten
+  Protokolltests von PID auf mkdtemp gehärtet (9e174d5). Dieser nichtnetzwerkende
+  Vertrag wurde einmal gezielt neu gebaut/geprüft. Ursprüngliche71er-Suite und
+  separate Revision behalten eigene Source-/Binary-/Log-Provenienz; keine native
+  Fehlersuche erneut ausgeführt. Alle8 Runtimehashes/Providerpin unverändert,
+  keine ROS-Neuvalidation (vorherige41), eigene Container entfernt.
+
+Weiter: Endliche instrumentierte Mehrseed-N5-Cohort vorab festlegen, um eine
+request-korrelierte Wiederkehr zu untersuchen; keine Deadlineänderung, kein
+Replay oder Retry bis PASS. Loaded ROS/N5-Discovery bleibt separat, ebenso die
+weiteren N3/Clock/Security/Resource-Gates. PR2 Draft, M3 offen, M4 unberührt.
+
+
+## Ergänzung 2026-11-08: request-korrelierte N5-Wiederkehr
+
+Matrix/Source a2425d0 vorab eingefroren: N0/4211/15s, dann N5 je300s mit Seeds
+4211,1701,2903; Stop nach erstem Fehler, keine Retries. N0 bestätigt8/8. N5/4211
+bestätigt18/19,1unaufgelöst,131Skip; Progress-GateFAILED/Exit1, ursprünglicher
+Safety/Accounting-HarnessPASS unverändert. Seeds1701/2903 NOT_EXECUTED. Evidenz:
+[evidence/m3-instrumented-n5-matrix-2026-11-08/README.md](evidence/m3-instrumented-n5-matrix-2026-11-08/README.md).
+
+- Intent19 genau1SDK-Handoff. Receiver COMMAND-Rejection13 mit ClockError2 und
+  AgeResult2 (expired), Sender COMMAND-PeerError5; Request/Session/Route100 und
+  Originalsequenz152 passen exakt. Keine QUERY-Verwechslung oder Future-Age-
+  Rejection in diesem beobachteten Fall. Transport verwirft vor Worker-Forwarding;
+  kein COMMAND-WorkerResult, spätere QUERYs liefern NOT_FOUND. Warum die Clock-
+  Qualification unter dieser Last abläuft, ist weiterhin nicht lokalisiert.
+- Shared-VM-Vergleich:2.807178502s von Originalorigin bis Receiver-Evaluation,
+  dabei2.192821498s des originalen5sBudgets übrig. Keine PCAP-/Crosshost-Age-
+  Garantie. Clockdeadline0 im expired-Snapshot bedeutet nicht verfügbar, nicht
+  den tatsächlichen Ablaufzeitpunkt. Keine aktiven Kontextwechsel-Traceevents.
+- Ein späterer QUERY-Snapshot zeigt Qualification192.868500ms nach Rejection und
+  noch1.999952998s Budget. Das ist eine Stichprobe, keine genaue Recovery-Latenz
+  und kein Beweis für hypothetischen Fix-Erfolg; QUERY-AgeError1 ist ungenutzt.
+- Live zuletzt LOCAL_QUEUED/rev0,1263Polls/150NOT_FOUND-Beobachtungen,1199
+  historische Polls ausgelassen. Closed senderUNKNOWN/reconcile_required kann
+  Cleanup-Invaliderung sein; kein Live-UNKNOWN daraus abgeleitet. Receiver leer,
+  kein Result. Keine Replay-/Nichtausführungsfreigabe aus Logs/NOT_FOUND/Deadline.
+- Capture-/Drain-/Trace-/Provider-Populationen PASS, Drops0. Jeder bestätigte
+  Erfolg hat genau ein originalkontextgebundenes Admission-/Worker-Paar zusätzlich
+  zu den Journal-/Dispatch-/Budget-/SDK-Beweisen. Neue negative Hosttests prüfen
+  falsche Session/Route/Origin/Sequenz und doppelte Beweispopulationen.
+- Host269 vor/nach LivePASS, Syntax/diffPASS. Alle8 Runtimehashes entsprechen der
+  vorherigen Diagnostic-Runtime und bleiben unverändert; Providerpin gleich.
+  Kein SDK-/ROS-Build (vorher SDK71/ROS41), keine Tests während Live, eigene
+  Namespaces entfernt. Sensor Source/Observer75032/24417 mit expliziten Lücken;
+  keine volle N5-/Sensor-/M3-Abnahme. Rohdaten lokal gehasht, Selektionen mit
+  dokumentierten Auslassungen und Original-/Ableitungshashes archiviert.
+
+Weiter: Begrenzte Receiver-Retention während temporärer Clock-Gaps entwerfen und
+separat vorab testen, gebunden an Originalcommand/-kontext/-deadline, einmaliges
+Forwarding ohne Sender-Replay. Spätes Expiry, Kontextverlust, Kapazität und Shutdown
+explizit abdecken; keine flüchtige Rejection zum dauerhaften Absence-Seal erklären.
+Underlying Clock-Ablauf und historische Ursachen bleiben getrennt. Loaded ROS/N5-
+Discovery separat; PR2 bleibt Draft, M3 offen, Intrinsic/M4 unberührt.
+
+
+## Ergänzung 2026-11-08: begrenzte Receiver-Retention
+
+Plan f9101a1, Build-/Live-Source4a510e7. Der Transport hält jetzt nach struktureller,
+Identitäts-, Payload- und Sequenzprüfung soft-clock-unqualifizierte COMMANDs in
+festem FIFO. Originalframe/-kontext/-timestamp/-budget bleiben unverändert;
+Session::check_command revalidiert vor einmaligem Forwarding, kein SRT-Replay.
+Future-/Hard-Errors ausgeschlossen. Ready+retained <=64, COMMANDs <=56,8Slots für
+andere CONTROL-Nachrichten,8 Revalidierungen pro Loop. Kapazität wirft älteres
+Work nicht weg; Kontextverlust/Shutdown räumen auf. Lokales Hold-Ceiling ist nur
+Ressourcenschutz, kein neues Ausführungsbudget. Evidenz:
+[evidence/m3-receiver-clock-retention-2026-11-08/README.md](evidence/m3-receiver-clock-retention-2026-11-08/README.md).
+
+- Neue Tracepunkte35/36/37/38 unterscheiden Defer/Resume/Drop/Capacity. Audit bindet
+  frische Revalidation an Originalrequest/-kontext/-origin/-sequenz und zählt
+  initiales Gate nicht doppelt. control_received enthält Ready+Retained. Fester
+  zusätzlicher Speicher für56Frames; kein Overhead-Äquivalenzclaim.
+- Release/Werror SDK72/72, ROS41/41, Host271 vor/nach LivePASS. IPv4/IPv6 jeweils
+  Recovery mit originalem5sBudget:1SDKHandoff/1Forward/1Effect/ClosedSuccess.
+  Negative Original500ms-Fixtureexpiry, CONTROL-Verlust und Shutdown: je1Handoff,
+  0Forward/Effect, ClosedUNKNOWN ohne Result. Acht geschlossene Journalpaare und
+  Tracepopulationen ohne Drops geprüft. FIFO-/Kapazitäts-/Kontext-/Future-/Hard-
+  Grenzen und frische Requalification nach ursprünglichem Deadlineablauf geprüft.
+- Zwei vorab geplante Live-Slots genau einmal: N0/4211/15s8/8,0Skip; N5/4211/300s
+  21/22 bestätigt,1unaufgelöst,128Skip. CandidateProgressFAILED/Exit1; ursprünglicher
+  Safety/Accounting-HarnessPASS bleibt. Keine Zusatzseeds/Retry.
+- Intent22 kommt bei initialer Receiver-Evaluation10.159390588s nach Origin an,
+  schon5.159390588s nach originalem5sSenderdeadline (SharedVM-Vergleich, kein
+  reiner Wire-/Networkdelayclaim). Clockexpired2 führt zu Retention, frische
+  Requalification liefert stale_sample25; Drop nach274.626125ms Traceabstand,
+  matched COMMAND START_EXPIRED6/Originalsequenz155. Kein Resume/WorkerForwarding.
+  Das ist sicheres Nichtstarten eines verspäteten Frames, kein Beleg, dass ein
+  hypothetischer Fix in einem früheren Lauf funktioniert hätte.
+- START_EXPIRED bleibt flüchtige Diagnose, kein dauerhafter Terminalstatus. Live
+  zuletztLOCAL_QUEUED/rev0,1252Polls/135NOT_FOUND-Beobachtungen,1188 ausgelassen.
+  ClosedUNKNOWN kann Cleanup sein, Receiver leer; keine Replay-/negative Outcome-
+  Freigabe. Kein aktiver Kontextverlust. Sensor Source/Observer75030/17058 enthält
+  große Lücken; volle N5-/Sensor-/M3-Abnahme bleibt offen.
+- Capture/Drain/Trace/Provider-Gates PASS; jeder bestätigte Erfolg mit Original-
+  Budget-/Dispatch-/Journal-/einmaligemSDK-Beweis. Nur bridge_node/transport.a neu;
+  alle8 rebuilt Runtimehashes während/nach Live gleich, Providerpin unverändert.
+  Keine Builds/Tests während Live, eigene Namespaces entfernt. Rohdaten lokal
+  gehasht, öffentliche Selektionen und Auslassungen explizit dokumentiert.
+
+Weiter: Dauerhaften Receiver-Expiry-Status für vollständig validierte und mit
+qualifizierter Clock beweisbar veraltete Commands entwerfen, ohne Dispatch,
+Replay, Deadlineerneuerung oder Absence-Erfindung. Bei fehlendem Clock-/Kontext-
+Beweis UNKNOWN bewahren. Terminal-Progress getrennt von All-Success-Deadlinegate
+führen; ursprüngliche FAILED-Verdikte nicht umwerten. CONTROL-Verzögerung/Clock-
+Expiry-Ursache separat untersuchen. PR2 bleibt Draft, M3 offen, M4 unberührt.
+
+
+## Ergänzung 2026-11-08: dauerhafter Receiver-Expiry-Status
+
+Plan1f11963, Build-/Live-Sourcea866505. Vollständig validierte empfangene Commands
+können jetzt EXPIRED/start_deadline dauerhaft journalisieren, wenn eine qualifizierte
+AgeResult-Untergrenze strikt über dem Originalbudget liegt. Obere Grenze allein
+oder ein straddling Intervall genügt nicht. Latest-Deadline = Evaluation minus
+(lower_age-budget), positiv und bereits vergangen. Diese Evidenz ist kein neues
+Ausführungsfenster. Interner expiry_only-Pfad darf niemals dispatchen, sendet erst
+nach Commit STATUS und lässt bestehende Records maßgeblich. Kein neues Wireformat,
+Provider-/Clock-Config-Wechsel, Replay oder Deadlineerneuerung. Fehlender Beweis
+bleibt ungewiss. Evidenz:
+[evidence/m3-durable-receiver-expiry-2026-11-08/README.md](evidence/m3-durable-receiver-expiry-2026-11-08/README.md).
+
+- Sowohl initial qualifiziert verspäteter Empfang als auch retained Revalidation
+  nutzen denselben Beweis. Straddling darf begrenzt warten; zukünftige/ungültige/
+  unqualifizierte Clock, NOT_FOUND, Timeout, Abwesenheit und Underflow beweisen
+  keine Expiry. Neuer Trace39 hält Originalkontext/-sequenz, lower/upper-Age,
+  Originalbudget und Latest-Deadline fest. Worker34 und geschlossene Journals
+  validieren den Commit unabhängig; Logs allein schaffen keine Autorität.
+- Release/Werror SDK72/72, ROS41/41, Host273 vor/nach LivePASS. Vier echte native
+  IPv4/IPv6-Delayfälle (Original500ms-Budget,650ms CONTROL-Gate): direct und
+  retained Latearrival jeweils1SDK-Handoff/0Dispatch/0Effect, ClosedEXPIRED ohne
+  Resultpayload, echter QUERY nach Receiver-Restart und Duplicate-ID ohne Replay;
+  späterer frischer IntentSUCCEEDED. Acht frühere Retention-Negative/Recovery-Cases
+  bleiben grün. Beweisschwellen/Equality/Straddle/Invalid/Future/Underflow geprüft.
+- Zwei geplante Live-Slots genau einmal: N0/4211/15s8/8; N5/4211/300s136/136
+  bestätigt,14Skip,0expired/0unaufgelöst. Sowohl striktes All-Success als auch
+  explizites neues Success-or-Verified-Expiry-CompletionPASS, Exit0. Keine echte
+  Live-Expiry in diesem Lauf; native Abdeckung nicht als Livebeweis ausgeben.
+  Default-All-Success unverändert, alte FAILED-Matrizen/UNKNOWNs nicht umgewertet.
+- Neuer LiveIntent5 hält senderseitig vor SDK (Traceabstand2.235969917s), dann
+  receiverseitig604.138208ms; Originalorigin bis frischer Receiver-Evaluation
+  2.860698626s, Ageintervall[2.851650879,2.883293135]s innerhalb5s. Genau1SDK-
+  Handoff,1Resume, rechtzeitigerDispatch und dauerhafterSuccess. Keine genaue
+  Clock-Recovery-/Wire-Latenz oder Gegenbeweis zu einem historischen Fehler.
+- Telemetrie bleibt schlecht: Source75022/Observer871, größte Kategorie71187
+  SRT-Accept-to-Receiver-Gap; alle sechs Residuen0, Source~200/50Hz. Keine eindeutige
+  physische Loss-/Providerursache und keine volle Sensor-/N5-Abnahme daraus.
+- Capture/Drain/Provider/Trace-Populationen PASS, Drops0, keine aktiven Kontext-
+  wechselereignisse. Alle Successes mit passenden Journal-/Budget-/Dispatch-/
+  Originalkontext-/Sequenz-/einmaligemSDK-Beweisen. Rebuilt bridge_node,
+  dds_command_node, endpoint.a, transport.a (auch gemeinsames Code/Header-Relinking);
+  alle8 Hashes während/nach Live fest, Providerpin unverändert. Kein DDS-Profil-
+  oder Defaultwechsel/neue DDS-N5-Qualifikation. Keine Tests/Builds während Live,
+  eigene Namespaces entfernt. Rohdaten lokal gehasht, Selektionen dokumentiert.
+
+Weiter: Breitere vorab fixierte instrumentierte N5-Seed-Abdeckung mit getrennten
+All-Success-/Verified-Expiry-Completion-Verdikten. Sensorverfügbarkeit separat
+untersuchen. Historische UNKNOWNs nicht rückwirkend ablaufen lassen; keine
+Budgetlockerung, kein Retry bis PASS. FullM3/LoadedROSDiscovery/Hardware-/Clock-/
+Security-/Resource-Gates bleiben offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Weitere N5-Seeds und Telemetrie-Diagnose
+
+- Evidenz: `evidence/m3-broader-seeds-telemetry-2026-11-08/README.md`.
+  Vorab fixierte Slots einmalig: N0/1701/15s8/8; N5/1701/300s125/125,25Skip;
+  N5/2903/300s97/98,52Skip,1unaufgelöst. Beide Command-Gates FAIL für2903,
+  CohortExit1,0verifiedExpiry. Separate vorherige4211-Kohorte bleibt136/136,
+  14Skip. Kein Retry/Umwerten/Defaultwechsel; Runtime8Hashes gleich der4211-Kohorte.
+- Intent98: genau1SDK-Handoff, Senderstate8/reason2/rev0, kein Receiverrecord und
+  kein originaler COMMAND-Admission-/Retention-/Expiry-Trace. Danach CONTROL-
+  Linkverlust/Sessioninvalidierung, neue Session/QUERY mit NOT_FOUND. Keine
+  Nichtausführung oder nachträgliche Expiry daraus ableiten, keinen Replay.
+- Geschlossene Originalcaptures aller5Vergleichsfälle: alle Rotationen/Footer/
+  Populationen vollständig, exakt gleiche UDPtuple+Payloadhash-Multimengen in
+  beiden Richtungen. Kein Beweis gegen Pretaploss. Root/Child-Drops spiegeln
+  sich: nie summieren. Robotrootdrops4211/1701/2903=2716297/116533/166531;
+  Operator0/0/396. Konkurrent tatsächlich128Kbit/s UDP, TBF512kbit/s, Childlimit16.
+- Source/Observer N5: vorher4211=75022/871, neu1701=75037/27890,
+  neu2903=75023/26465. Accept-to-Receiver-Gap71187/43674/42255, alle6Residuen0,
+  Source~200/50Hz. Observerwerte sind keine Provider- oder Sensorabnahme.
+- Wholecapture SENSOR-DROP_REQUEST39761/670/3201, davon7837/346/2211Repeats.
+  Keine DATA nach vorherigem Retirement derselben Sequenz im Capture-Dateiorder;
+  Overtakinghypothese nicht beobachtet. Später benannte DATA9673/122/317,
+  ohne Beweis für angewandte Retirements/unread-buffer-Verlust. Provider52be7c8
+  read-only: bounded10ms/32Prefix-Retrymechanismus plausibel für Feedbackdruck,
+  nicht eindeutig nachgewiesene Ursache. SENSOR-Insertion/Delivery-/Decrypt-/
+  Retirement-Innenzustände und verschlüsselte SAMPLE-Zuordnung fehlen weiterhin.
+- FrozenLiveSourceabc0ebb; nach geschlossenem Archiv separater PosthocAnalyzer
+  04c163b,4Tests. Host278 vor Live/282 nachherPASS; SDK72/ROS41 bleiben vorherige
+  Validierung, kein neuer Build. Keine Tests/Analyse/Builds während Live. Eigene
+  Namespaces/Passphrase entfernt, Rawhashes/selektierte öffentliche Artefakte und
+  Auslassungen dokumentiert. Fehlender falscher N0-Analyserpfad als failed erhalten,
+  nur read-only mit korrektem Pfad korrigiert, kein Livererun.
+
+Weiter: Separaten begrenzten Diagnoseplan einfrieren: zuerst2903 CONTROL/Session
+mit Kernelmonotonic-/Providercorrelation, separat SENSOR-Provider-Insertion,
+Delivery/Retirement/Decrypt sichtbar machen. Erst danach kontrollierte Pacing/
+Latestdata-Gegenprobe, keine Kausalbehauptung aus Packetcounts. Originalbudgets,
+beide Gates und historische Unsicherheit erhalten. FullM3/N5/LoadedROSDiscovery/
+Clock/Security/Resource/Hardware weiter offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Session2903 reproduziert, SENSOR-Provider sichtbar
+
+- Evidenz: `evidence/m3-session-sensor-visibility-2026-11-08/README.md`.
+  Plan830e427, Implementierung2810996, Fixturekorrektur/Analysea20f1ce,
+  finaler Python-Driver/Livefreeze03ffa03. Einmalig N0/2903/15s8/8,0Skip;
+  instrumentiertes N5/2903/300s11/12,138Skip,1unaufgelöst, beide GatesFAIL,
+  CohortExit1. Kein Retry/Expiry/Replay; Originalintent98 weiter unaufgelöst.
+- Neuer Intent12 genau1SDK-Handoff, Senderstate8/reason2/rev0, kein Receiverrecord
+  oder originaler COMMAND-Admission-/Retention-/Expiry-Trace. Neue Beobachterlast
+  und andere Intentnummer: gleiche Fehlerklasse, keine eindeutige historische Ursache.
+- Matched CONTROL operator→robot: nativequiet5004643627ns bis Robotlinkverlust,
+  tatsächliches Peeridle5000ms. In47vollständig enthaltenen Providermesspaaren
+  SenderDATA+309/retrans+292/ACK+42/NAK+1, aber0Source-/0Peertapbeobachtungen
+  dieser alten Flowidentität. Erfolgreiche UDP-Submission liegt laut Providercode
+  vor dem Counterincrement. Lokalisation daher Sendercompletion→Sourcehook,
+  nicht eindeutiger Provider-/Kernel-/Qdisc-/Neighborgrund. Gesamter Sourcegap
+  5.263612877s. Operatorloss15.736125ms später, vorher Shutdown; zweite Mapping-
+  Assoziation korrekt withheld, kein unabhängiger Idlebeweis.
+- Nach Sender-BROKEN-Beforeclose und No-socket-Sample weitere4DATA/2ACK der alten
+  Flowidentität an beiden Hooks. Kein neuer SDKCOMMAND-Handoff/Replaybeweis;
+  genaue Close-Drain-/Kernelqueue-/Neighbor-/Qdiscursache noch offen.
+- Separate default-off SENSOR-Stats:128SPSC/75000Cap/100ms/Beforeclose, eigene
+  Footer/Channel/Schema/Unavailable-/Saturation-/Reset-Gates. Bestehendes bstats
+  liefert DATA/Unique/Loss/Drop/Undecrypt/FEC und geglättete Buffer/Flowgauges.
+  Kein Dependencyedit. Fehlende Insertion-/Retirement-/Delivery-Reasonfelder
+  explizit unavailable, Counter überlappen und sind keine exklusiven Lossklassen.
+- N5 Source75036/SDKaccepted70889/Decoded8265/Observer7704; Gap62624,Reject559,
+  UnknownAge530/Stale0,6Residuen0,~200/50Hz. Nach Reconnect SENSORflow:20471
+  eindeutige DATA an Operator,0Retrans, ProviderDATA20832/FilterExtra361,
+  Unique5421inkl.FEC,Drop8272/Undecrypt0. Provider-Akzeptanz/Window statt nur
+  Bridgefreshness weiter eingrenzen; kein genauer Ablehnungsgrund oder SDKbugbeweis.
+- Initiale native Fixtureverwechslung available=connected:70/72,2Fehler erhalten,
+  kein Install/ROS/Live danach. Korrigiert SDK72/ROS41/Host296PASS. Verfügbare
+  Stats können BROKEN sein; Status unverändert erhalten. Rebuilt bridge_node,
+  endpoint.a,transport.a;8Runtime+2ObserverHashes fest, Provider unverändert.
+  Keine Builds/Tests/heavyAnalyse während Live; Cleanup/Rawhashes/SelektionenPASS.
+  Ein Syntaxfehler in ad-hoc Posthocimport als Vorbereitung erhalten, kein Livererun.
+
+Weiter: Separaten begrenzten UDP-/Neighbor-/CONTROL-Qdisc-Beobachterplan mit
+Monotonic und ARP-/Neighbornachweis einfrieren, dynamische Nachbarn beibehalten,
+Originalbudgets/Idlewerte nicht lockern. Danach Review einer upstreamfähigen
+SENSOR-Insertion-/Retirement-Reasonoberfläche; .deps nicht direkt ändern. Kein
+FullM3/N5/DefaultDDSDiscovery-/Clock/Security/Resource/Hardware-/Superioritätsgate
+geschlossen. PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — UDP/Neighbor/Qdisc-Stufen getrennt, kein Tuning
+
+- Evidenz: `evidence/m3-udp-neighbor-qdisc-2026-11-08/README.md`.
+  Plan68d7297, Livefreeze b9aaf03. Einmalig N0/2903/15s8/8,0Skip;
+  N5/2903/300s126/126,24Skip,0expired/unaufgelöst, beide GatesPASS,Exit0,
+  0aktive Kontext-/Linkereignisse. Zusätzliche Beobachterlast: keine Fehlerbehebung
+  bewiesen, alte Intents98/12 bleiben unaufgelöst. Kein Retry oder Tuning.
+- Bestehender ETH_P_ALL-Nativrecorder enthielt bereits ARP. Vorherige Fehlerkohorte
+  hash-guarded reanalysiert:5Requests/5reflektierte lokale Kopien,0Peerreply im
+  5.0046s-Lossfenster; im einschließenden5.2636s-Gap6Requests+1späteAntwort,
+  gefolgt von alter Flowegress5.416us später. Keine damaligen Neighbor-/TC-Samples
+  nachträglich erfinden. MAC/IP-Richtung verhindert das Zählen lokaler Spiegel
+  als Peerreply; ARPpräsenz ist keine authentifizierte Neighborannahme.
+- Neue Beobachtung dynamischer Neighbor100ms und CONTROL SoftwarePASS/Root200ms,
+  beide Providerstreams/Commandtrace/Nativev2/PCAPdrain. N0positiv240/250PASS-
+  Increments und vollständige Populationen; Rootoptionen bleiben erhalten.
+- 4prospektive>=1s-Sourcegaps, keine Losswindows. Operator1.528s: DATA+91/retrans75,
+  PASS0, Rootdrops0/qlen0, NeighborPROBE4/INCOMPLETE11. Common-read-Witness zwischen
+  Filterbrackets mit12vollständig enthaltenen Providerpaaren:75DATA/59retrans/
+  20ACK, weiterPASS0/Bytes0 und0SourceCONTROLhooks. PeerARP-Antwort vor erneutem
+  Egress53.541us. Lokalisation vor gewählter PASS-Ausführung mit Neighborlead,
+  kein eindeutiger Kernelgrund oder exakter Zustandsübergang.
+- Robot1.332s:PASS30,Rootdrops1390,qlen16, gemischtePROBE/INCOMPLETE/REACHABLE-
+  Samples. Robot1.349s:PASS20,Rootdrops9491,qlen16,DELAY14,keinARPimFenster,
+  kein ausgewählter SourceCONTROLhook. Damit auch Stufe nach PASS/Rootdruck;
+  nicht alle Gaps sind Neighborauflösung. Operator1.002s ohne Providerincrement
+  bleibt ausdrücklich kein Lossbeweis. Rootstats betreffen ganzes Interface,
+  Spiegel-Child nicht summieren; keine individuelle Paketdropzuordnung.
+- N5 Source75033/SDKaccepted71310/Decoded9708/Observer8640,Gap61602,Reject1067,
+ 6Residuen0,~200/50Hz. Keine Sensor-/FullN5/M3-Abnahme. PCAPmultisets74749/66131
+  beide Richtungen identisch, Native/Provider/Neighbor/TC/TracepopulationenPASS.
+- Host301 vor Live; erste Fixturealias-Verwechslung /var vs/private/var als1Fehler
+  erhalten, vor Live korrigiert. Nach geschlossenem Sourcearchiv Posthoc-Witness
+ 4c1e113 mit5Grenz-/Unavailable-/Identity-/Regressionsguards, Host306PASS.
+  Kein neuer SDK/ROS/Recorderbuild:72/41 frühere Validierung.8Runtime+2Observer-
+  Hashes gleich vorher/fest, Provider unverändert, keine Tests/Builds/heavyAnalyse
+  während Live. Rule/eigene Namespaces/Credentials entfernt. Vollständige öffentliche
+  Rawfile-Disposition plus Selektionsfelder/Hashes dokumentiert.
+
+Weiter: Separat qualifizierter ARP-PASS-/Preqdisc-Beobachter und kontrollierter
+ARP-Replylossfall, getrennt vom bekannten CONTROL-Rootlosskontrollfall. So erst
+ARP-Replygenerierung gegen Rootqueue/Drop abgrenzen; dynamische Defaults,Original-
+Budget/Idle unverändert lassen. Bisher nur Stufenassoziation, keine eindeutige
+historische Ursache. Alle übrigen M3/DDSDiscovery/Clock/Security/Resource/Hardware-
+und Vergleichsgates offen, PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-08 — Kontrollierter Kernel-ARP-Replyloss, kein Tuning
+
+- Evidenz: `evidence/m3-controlled-arp-reply-loss-2026-11-08/README.md`.
+  Plan20d8a38, V1Source38a6f0a; neue scoped V2Source770632a. Reine synthetische
+  UDP-/KernelARP-Fälle in frischen eigenen Namespaces, kein ROS/SRT/N5-Lauf.
+- 3Zero-Traffic-Vorbereitungen erhalten: flower nicht vorhanden→FAILED; u32install
+  klappt, JSONreadback verliert wiederholte match-Keys→FAILED; korrigierter
+  object-pairs-Parser erhält7ARP-Payloadwörter, exakter Software-u32/PIPE→DROP-
+  Readback undRemovalPASS. Keine ARP-/UDP-Probes in diesen3Namespaces.
+- V1Clean einmal ausgeführt, FAILED wegen breiter Native/PCAP-ARP-Identitätsgate:
+  extraPCAP-GARP mitSenderIP==TargetIP; eindeutiger One-recorder-Grund nicht
+  bewiesen. V1Replyloss NOT_EXECUTED. Source/Rawhashes vor Revision verifiziert;
+  nichts rückwirkend reparieren oder als akzeptierten Control ausgeben.
+- PLAN-V2 vor neuen Slots: Identitäten zwischenownedPeerIPs (ARP1/2) plus alle
+  gelabeltenUDP prüfen; kompletteNative/File/Filter/Kernel-Populationen weiter
+  strikt. Alle anderen ARPs separat mitBackgroundtabellen/Equality erhalten.
+  V2 beideSlots einmaligPASS: Clean1eligible/0drop,1Reply an beidenTaps;
+  Fault2eligible/2drop (84bytes),0Reply und0originalUDP während aktivemFault.
+- gactPIPE zählt vor gactPASS/DROP derselbenRule, kein terminalerPASS vorDROP.
+  Exact7-wordARPselectorOp2/SHA/SPA/THA/TPA; EthernetMAC/IP/Richtung separatnative
+  verifiziert. Kernel erzeugt Replies; kein UserspaceARPsender. BeideController-
+  Snapshots stabil, Rule danachleer. N0Roots identisch,Rootdrops0; keineRate/
+  Queue/Sysctl/Idle/Budget/Neighbordefaultänderung, keinPing/Flush/Permanententry.
+- FaultRemoval beginnt1.350737001s und endet1.368607751s nacherstemSend. Nächster
+  echterPeerreply danach;3originale1200ByteUDP-IDs treten erst~2.0633s nachSend
+  auf und kommen jeweils1x an, ohneSourceResend. ExtraCase1002/Seq0 alsfrischer
+  Control1x. Sourcehook4.083us nachPeerreplyhook: lokalerFixturebezug, keine
+  generelleLatenz-/Physical-Wire-Garantie oder SRTCommandauthority.
+- Operator20INCOMPLETE-Samples, später4REACHABLE; frischePeers initialABSENT,
+  Robot nachLearningSTALE. BekannteRepliesgenerierung gegen kontrolliertenDrop
+  vorAF_PACKET qualifiziert; organischeN5Rootqueue-/ARP-Ursache bleibtunbewiesen.
+- V2PCAPPopulationenClean10/9,Fault14/11,alleCaptured/File/Filtergleich0Kernel-
+  Drops; Nativevollständig0Reserve/Copyloss, ownedPeerMultisets/PayloadhashesPASS.
+  Host316vorV1/317vorV2.8Runtime+2ObserverHashes gleichvorher/fest; Provider
+  unverändert, keinSDK/ROS/Recorderbuild (72/41 frühereValidierung). KeineTests/
+  Builds/heavyAnalysewährendLive. Controller/Receiverexit0,keineForcedkills,
+  alle6eigenenNetze/Container/Credentials entfernt,309Rawfiles gehasht/Selektion
+  explizit. EinfalscherFooterkey in read-onlyConsolekorrektur ändertekeinenLauf.
+
+Weiter: Separaten geladenenN5-ARP-Preqdisc-Counterplan einfrieren; qualifizierten
+PIPE-Zähler nutzen, um Replyeligibilität gegen spätereQueue/Drop-Assoziation unter
+Last zu trennen. NochkeineDefault-Tunings oderhistorischeAuflösung. AlteIntents98/
+12, FullM3/N5/DDSDiscovery/Clock/Security/Resource/Hardware-/Vergleichsgates offen,
+PR2 Draft, Intrinsic/M4 unberührt.
+
+### 2026-11-09 — Loaded ARP reply eligibility, no tuning
+
+- Evidence: `evidence/m3-loaded-arp-eligibility-2026-11-09/README.md`.
+  Plan24062a9, frozen live source2aae62b. PASS-only exact seven-word ARP reply
+  selectors on both peers,200ms/37500-record polling; separate CONTROL preference.
+  Every read validates software selector/actions/indexes/zero drops. Non-atomic
+  PIPE/PASS counters are not exclusive drop buckets. Dynamic defaults unchanged.
+- Once each: N0/2903/15s8/8,0skips; N5/2903/300s134/134,16skips,zero expired/
+  unresolved/context-loss, both command gatesPASS/exit0. No retry or resolution
+  of prior intents98/12. Added observer work prevents a mitigation claim.
+- N0 reply counts operator1/robot2; N5 lifetime execution counts11/14. Primary
+  selection finds one1.026943917s robot CONTROL gap with10INCOMPLETE samples;
+  contained responder reads have no positive growth, but the next read includes
+  the late edge reply. Zero growth is not generation-absence proof.
+- After closed source verification:17e4e46 adds correct responder-root scope and
+  two tests;051df30 separately audits ALL positive reply steps in publication.
+  Operator10steps have replies; robot13steps have5with/8without source replies
+  in~222–224ms outer envelopes. Each missing envelope reports+1PIPE/+1PASS,
+  zero action drops. These are eight windows, not eight lost packets; later
+  observations may fall outside and ARP has no request nonce.
+- All eight have wider~645–647ms robot-root context with drops176..6089 and
+  sampled peak qlen16, requester DELAY/PROBE. Whole-interface root context is
+  not specific ARP loss. Post-eligibility absence/delay localized, exact branch
+  and historical cause unproved; no tuning.
+- Source75034/SDKaccepted72066/decoded15913/observer15850; gap56153,rejected63,
+  unknown-age19/stale0, six residuals0, sources~200/50Hz. Telemetry/fullM3 open.
+  UDP multisets67864/65672 match. Root1294240robot/0operator is not ARP loss.
+- Host322 before live/327 after posthoc guards. SDK72/ROS41 remain prior; no
+  rebuild. Eight runtime/two observer hashes fixed and equal controlled fixture,
+  provider unchanged. No tests/builds/heavy analysis during live. Raw/source
+  provenance, exact public omissions, rules/namespaces/credentials cleanup pass.
+
+Next separately calibrate packet-level queued-versus-dropped ARP observation or
+control before mitigation. Historical UNKNOWNs, fullN3/N5, default loaded DDS
+discovery, clock/security/resource/hardware and comparison gates remain open.
+PR2 draft, Intrinsic/M4 untouched.
+
+### 2026-11-09 — Packet-level ARP queue/drop tracing, no tuning
+
+- Evidence: `evidence/m3-arp-packet-tracing-2026-11-09/README.md`.
+  Plan4729f9a, V1 live88ba3f1 FAILED N0/no matches despite30 native replies;
+  N5 NOT_EXECUTED. Unsigned namespace/header JMP64 sign extension diagnosed
+  after closure. V2 JMP32 fix223d797/kernel BPF regression; V2 live38f0af4
+  calibration once each: N0 driver30, N5 known synthetic UDP load drop20/driver10.
+  First verifier failure and all original outcomes preserved, no retry.
+- New passive raw tracer validates running BTF prototypes/layout/reasons, exact
+  owned42-byte reply/netns/ifindex before creation, private skb pointer map keys,
+  local monotonic IDs; queue/enqueue/dequeue/driver-start/kfree/consume. Retire
+  at driver-start to exclude later bridge/peer frees. CAP_BPF/PERFMON only owned
+  endpoints, no privileged/global tracefs/sysctl. Bounded4096IDs/4MiB/1Mevents/600s.
+  No pre-queue classifier drop, clone/copy or physical-wire inference.
+- Separate loaded plan252ede8/live5544747: default-off --arp-packet-trace with
+  loaded ARP/all diagnostics/dynamic/N0-N5/no fault/<=480s guard. Stop load/drain,
+  detach tracer before native capture closes. Existing traffic/defaults/provider/
+  runtime unchanged. N0/2903/15s8/8PASS. N5/2903/300s121success/122attempts,28skip;
+  intent34 REJECTED/context_lost(6/1), not EXPIRED. Matching closed journals,
+  receiver dispatched,121effects,0unresolved/UNKNOWN/verified-expired. Original
+  harness/capturesPASS/exit0; outer durable and all-success gatesFAIL/exit1.
+  Zero active transport context/link events; worker/start-fence cause still open.
+- Full N5 tracer operator12driver/0drop; robot26IDs=10driver/16actual QDISC_DROP,
+  zero pending/reserve/map/read/collision/otherfree/bulk ambiguity. Source/peer
+  native reply counts equal driver counts. Ten robot successful enqueue/dequeue;
+  seven69.406–113.944ms,three<1us. Exact inner netem/TBF instruction not located.
+- Prospective all32 positive steps inside publication OP11/robot21:18robot
+  windows no source reply;13have exactdropIDs,5queued IDs4/13/18/21/22 reachdriver
+  1.082–96.874ms after window end. These are new cohort identities, not historic8.
+  Four primary>=1sCONTROLgaps remain, none with creation of dropped ARP inside;
+  ARP observations do not uniquely explain all gaps or original failures.
+- Host336V1/337V2/339loaded/341closed boundaryguards. SDK72/ROS41 prior only;
+  eight runtime/two existing observer hashes fixed; new tracer fixed V2→loaded.
+  All source verified atclosure and original Git blobs after analysis changes.
+  497rawfiles hashed, public omissions explicit;5ownednetworks/containers and
+  credentials removed. No tests/builds/heavy analysis whilelive, no tuning.
+
+Next: inspect intent34 worker/start-fence clock/grant context rejection without
+replay or tuning; then separately plan mitigation using exact ARP lifetimes.
+Original intents98/12 remain UNKNOWN. FullM3/N3/N5/DDSDiscovery/clock/security/
+resource/hardware/comparison gates open. PR2 draft, Intrinsic/M4 untouched.
+
+### 2026-11-09 — Command34 start-fence diagnosis, no tuning
+
+- Evidence: `evidence/m3-command34-start-fence-2026-11-09/README.md`; prospective
+  plan precedes read-only all122 joins and controlled checks. Original N5 stays
+  FAILED121/122,28skips;34 is REJECTED/context_lost6/1 with one SDK handoff,
+  matching closed journals/receiver dispatch, not expiry/UNKNOWN/nonexecution.
+- Original common clock/hashes verified. Relative source origin: admission eval
+  13.700375ms, observed clock deadline27.181747ms, dispatch mutation27.628416ms,
+  receiver rejection36.911291ms, sender observation936.653917ms, workload
+  observation1104.808125ms. Mutation stamps precede SQLite commit, not fsync or
+  handler start. Clock margin13.481372ms; dispatch0.446669ms past observed lease;
+  4872.252696ms original mapped budget remains at rejection. Only34 of122 crosses
+  last admission clock deadline; next-smallest margin201.803998ms, successful45.
+  Later QUERY clock_error2 expired; observation after receiver rejection.
+- Source narrows6/1 to post-dispatch coordinator start-check/submission decline
+  OR worker consume expired/revoked/invalid OR worker second pre-handler gate.
+  ROS backend cannot emit6/1. Point34 covers admission/GET, not execute. Actual
+  start grant may refresh after admission and is unlogged. No unique branch,
+  actual grant, scheduler/fsync, ARP or session-loss causality claim.
+- Separate probe against unchanged execution_pool.cpp passes9 counterfactual
+  assertions; old lease rejects at recorded dispatch while refreshed grant can
+  start at same time. Never replay/compare supplied historic times to live VM.
+  Existing built execution_contract/IPv4/IPv6 start tests once PASS5146/324/324
+  assertions, unchanged fixtures. Phase6 clock-lease lapse and phase1 revocation
+  both6/1/noeffects; original budget phase4 gives7/3/noeffects. Closed journals
+  read immutable. These controlled causes do not reproduce command34 uniquely.
+- Host350 PASS (9new guards),3focused existing native tests only; fullSDK72/ROS41
+  prior. All14 existing runtime/observer/test binaries unchanged, provider fixed;
+  only isolated diagnostic probe built.497original raw hashes reverified,66new
+  local artifacts hashed with exact public omissions. No N5 rerun, installed
+  build, defaults/policy/clock/rate/queue/neighbor/budget/timeout changes.
+
+Next: bounded default-off post-dispatch start-check/grant/execute/worker-consume
+and second-gate observations, calibrated before a new cohort. Original34 cannot
+be assigned a unique branch from old fields. Preserve one-use start fences and
+journal authority; no tuning yet. Original98/12 UNKNOWN and fullM3 gates open,
+PR2 draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Targeted start/check/grant/worker tracing, no tuning
+
+- Evidence: `evidence/m3-start-tracing-2026-11-09/README.md`; Plan0527ccf,
+  implementationd13d03e, fixture manifest-constructor correction before capture.
+  Failed build preparation retained; no case retry. Producers/C++ tests frozen
+  for full SDK75-test sequential stop-on-failure run, source/binaries verified
+  atclosure. Posthoc reader/harness guards tracked separately with Git blobs.
+- Default-off TransportConfig/ROS start_diagnostics requires CommandTrace;
+  endpoint matches WorkerOptions flag. Points40submission,41ownercheck/grant,
+  42execsubmission,43actualworkerconsume/gate,44coordinatordecline. Correlate
+  originalcontext/check/worker token/slot/generation, separate grant/command
+  deadlines; explicit unavailable. Two bounded trace lanes/counters unchanged.
+- Worker fixed POD observation in64slot sealed memfd, generation release/acquire,
+  read after matching IPC reply while record held. Private mappingversion2,
+  size/flags/version checks reject mismatches. C++ structures grow: rebuild all
+  consumers/workers together. SocketIPCv3/SRT/protobuf/CDR wire unchanged. No
+  one-use CAS/revoke/freshness/budget/timeout/default policy change.
+- New endpoint cases once each IPv4/IPv6: normal4events+success/effect1;
+  coordinatorclockdenial3events40/41error13/44,noexecute,6/1/effects0;
+  secondgate4events,consume1thenlategate,nohandler,6/1/effects0; disabled0new
+  events/success/effect1.8captures complete,0drops. Synthetic500ms/1.5s leases
+  only named fixtures, existing1s probes/3s operationtimeout/5s budget retained.
+  Test-only atomic resume API requires explicit preexisting barrier options.
+- Existing direct execution-start cases return12 observations acrossfamilies;
+  revoked-beforeconsume and clock-lease lapse bothactual3/revoked (owner may
+  revoke elapsed grant), so enum3 alone is not session-loss cause. Budget case
+ 7/3, crashcaseUNKNOWN/noinventedreply, running completion unchanged. No repeat
+  race to force2/4 samples; their pool/parser contract guards separate.
+- Reader validates bounds/enums/context/generation/availability/gate identity.
+  Handles failed execute submission/no token, decline after prior owner grant,
+  canceled-owner observation absent explicitly. Harness --start-diagnostics
+  requires --command-diagnostics and positive new start records; old ignored
+  override cannot produce false enabled report. Disabled scenario omits newparam.
+- New isolated SDK75/75, ROS41/41, host364/364 PASS. Builds use separate
+  build/install *start-trace-qualified* SDK and *m3-start-trace-ros* ROS prefixes;
+  original8runtime+2observers+ARP tracer and previous14binaries fixed. Provider
+  untouched.563old+154new raw hashes, exact omissions, closed immutable journal
+  selections, removed testcontainers. No heavy work overlaps native captures.
+
+Next: separately freeze a prospective loaded cohort with matched new SDK/ROS
+baseline and start tracing; no tuning. Original34 cannot be reclassified, earlier
+UNKNOWN98/12 retained. M3/fullmatrix/defaultloadedDDS/clock/security/resources/
+hardware/comparison open. PR2 draft, Intrinsic-M4 untouched.
+
+### 2026-11-09 — Prospective matched-build loaded start tracing, no tuning
+
+- Evidence: `evidence/m3-loaded-start-tracing-2026-11-09/README.md`; prospective
+  plan before live, frozen sourcea508d0e13ca8384c0e0b0bc97f1fa663c124bcbf.
+  Explicit fixed --runtime-layout start-trace requires --skip-build. Validates
+  all calibrated SDK/ROS/test binaries/archives and preserved baseline. ROS setup
+  prefixes/embedded listener worker path verified; scenario forwards selected
+  executable prefix. Default baseline paths unchanged; no runtime build/install
+  replacement, provider/dependency/source-policy/traffic/timeouts tuning.
+- Once each N0/2903/15s8/8,0skip; N5/2903/300s129/129,21skip. Both strict and
+  durable gatesPASS/exit0;8/129closed effects,0expired/UNKNOWN/unresolved/unadmitted,
+  zero active context/linkloss. All137 starts fully joined by originalcontext,
+  check/worker token/slot/generation to closed journals. Every branch handler
+  invoked,consume1/gatepass/returned4/0. No rejection recurrence or missing stage.
+- N5 actual minimum consume slack587.290706ms, secondgate587.290415ms; original
+  mapped budget atconsume>=4825.898982ms.121grants equal ownerclockdeadline,
+  122below original record deadline (not exclusive cause buckets). New intent48
+  admission-clock margin386.035498ms but owner has later deadline and actual
+  consume slack4827.250313ms. No dispatch past lastadmission deadline. Historical
+  34's13.48ms condition not reproduced; never borrow new grant/ID for old intent.
+- ARP N5 OP8driver/0drop,robot8driver/9actualQDISC_DROP,0pending/loss/collision/
+  unknownfree/bulk ambiguity; native source/peer counts match.23positive steps
+  OP7/robot16;11robotmissing-source envelopes=9distinctdropIDs+2latequeued7/17,
+  residence59.418/58.471ms, driver11.659/14.076ms afterouterend. Max surviving
+  robotresidence96.984ms. One1.203180126s robotCONTROLgap has OP responderreply
+  inside/no scoped drop created; no unique causal/historical claim.
+- SENSOR75029produced/10582observed,accept-to-receivergap61599/rejected128,
+  sixresiduals0,source~200/50Hz; telemetry remainsunqualified. Added observer/new
+  binarybaseline prevents mitigation/performance claims or replacing old failures.
+- Host374 beforelive; SDK75/ROS41 reused exact prior matched qualification,
+  no rebuild/retest. Source/matched/oldbaseline/3observer hashes fixed;717prior
+  plus303new raw hashes checked, exact omissions.2ownednetworks/containers and
+  credentials removed; roots/features unchanged. No tests/build/heavyanalysis
+  overlaps capture. Packet/gap/allattempt joins afterclosed sourceverification.
+
+Next predeclare broader seed coverage on same matched baseline/diagnostics and
+observe actual start-lease headroom. No tuning, retry or retroclassification.
+Original34 branch unavailable/UNKNOWN98,12 retained; fullM3/N3/N5/DDS/clock/
+security/resource/hardware/comparison gates open. PR2 draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Predeclared additional start-trace seeds, no tuning
+
+- Evidence: `evidence/m3-start-broader-seeds-2026-11-09/README.md`; frozenlive
+  58081d142ae30b52cf4bb07532b68cb3b9f3375b. Added fixed --coverage additional-seeds
+  requiring matched start+packet tracing; focused2903default unchanged. Declared
+  N0/1701/15s thenN5/1701/300s thenN5/4211/300s, stopfirstfailure/no retries.
+- N0 PASS8/8,0skip/effects8. N5/1701 FAIL117success/118attempts,32skip,1unresolved,
+  effects117. Original harness/capture gatesPASS/exit0; strict/durable gatesFAIL,
+  outerexit1. N5/4211 NOT_EXECUTED asdeclared. No new2903run or fullmatrix claim.
+- Originalintent118: source341341538487/deadline346341538487ns, Point5localqueued,
+  Point6volatileSubmitResultqueued,29clock_unqualified13 atorigin+16.960125ms,
+ 21input_dropped/deadline atdeadline+2.624127ms.0originalSDKhandoffs/point25,
+ 0receiverCOMMAND32 and0start40–44,no receiverjournal. Closed senderUNKNOWN8/
+ reconcile_required2/revision0/invalidresult. WorkloadterminalUNKNOWNcounter0 is
+ not no uncertainty: driver never got terminal status, rowunresolved.158query
+ admission/worker observations,48peererror observations,45NOT_FOUNDstatuspolls;
+ stored64/158historywith94omitted explicit. No expiry/nonexecution/replay authority.
+- Sourceinputs retains originalproof/origin/deadline onclockunqualified then
+ dropspendinginputatdeadline. Generic29doesnotlogexactClockMappererror; its
+ clock_error0default isnotqualifiedclockevidence. This0SDKpath differs fromolder
+ UNKNOWN98/12withSDK1; old34startbranch remainsunavailable. No causalARP/probe/
+ scheduler claim. No active transport context/linkloss observations.
+- All117startgroups handlerinvoked/consume1/gatepass/closed4/0,actualminconsume
+ slack38.302831ms,gate38.302581ms,commandbudget>=1341.413163ms.118explicitly
+ unavailable start, retainedinallattemptanalysis. No recorded worker rejection.
+- N5ARP OP7driver/0drop,robot9driver/18actualdrop,0pending/loss/collision/unknown
+ free/bulkambiguity; nativecounts match.32positivewindows OP6/robot26;22missing
+ robotwindows=18distinctdrops+4latequeuedIDs3/11/17/19. Maxsurvivingrobotresidence
+126.729ms. FourCONTROLgaps OP4.200145/1.306023,R1.089744/1.237644s retained.
+- SENSOR75053produced/25216observed,gap43926/rejected2760,sixresiduals0;
+ telemetry unqualified. Host376new; matchedSDK75/ROS41prior exactbinaries.
+ Allsource/matched/oldbaseline/observers/provider fixed, no build/tuning/fault.
+1020prior+303new raw hashes checked/exactomissions,2ownednetworks/containers/
+ credentials removed,roots/features stable. No heavywork overlaps live.
+
+Next: diagnose source clock qualification and pending-input/journal reconciliation
+for118's pre-SDK deadline-drop path; preserve UNKNOWN/one-useproof/no replay.
+No forceexpiry or tuning.4211 remainsunexecuted under stoppedplan; newprospective
+plan requiredbeforelatercohort. Original34/98/12,fullM3gatesopen,PR2draft,
+Intrinsic-M4 untouched.
+
+### 2026-11-09 — Intent118 sender pending-input/journal diagnosis, read-only
+
+- Evidence: `evidence/m3-sender-pending-diagnosis-2026-11-09/README.md` and
+  `analysis.json`; reusable `tools/m3_sender_pending_diagnosis.py`. No new live
+  run, build, policy change, forced expiry, command replay or journal recovery.
+- Clock point29 only logs SessionError13: current source permits ClockError
+  unqualified OR expired. Generic clock_error0/deadline0 unused; historical
+  interval-width versus probe-age cause cannot be recovered. One point29 means
+  once-per-pending notification, not one check or proof of continuous failure.
+- Pending input drops 2.624127ms after original deadline. Transport slot release
+  has no journal/endpoint completion RPC; queued submit is volatile admission.
+  GET/QUERY/NOT_FOUND do not mint tickets or invent a result. Last driver cache
+  remains local_queued at371404447417ns; observation ends374237012044ns.
+- Newly joined teardown chain for originalsession: trace2 sessionchange at
+ 374642701836, trace3 invalidate at374642706752, successful trace4 at374653670794.
+  This is after observation and28.309508180s after inputdrop. Unchanged sender
+  invalidate implementation explains closedUNKNOWN8/reconcile_required2/rev0;
+  no per-entry commit trace available. Normal journal destructor merely closes.
+  No active-window contextloss claim changes. Audit never opens application
+  journal recovery; immutable reads preserve originalfiles.
+- 303raw hashes checked before/after, source matches captured manifest, matched
+  SDK/ROS and preserved baseline verified twice. Host380 PASS (4new guards).
+  Prior exactbinarySDK75/ROS41 qualification reused; no runtime change.
+
+Next: separately calibrated sender-owner clock/defer/release/receipt visibility;
+no automatic expiry from diagnostics. UNKNOWN118/98/12 and historical34 retained;
+4211 remainsunexecuted, M3/fullmatrix gatesopen, PR2draft/Intrinsic-M4 untouched.
+
+### 2026-11-09 — Default-off sender clock/reconciliation visibility
+
+- Evidence: `evidence/m3-sender-visibility-2026-11-09/README.md`; plan before
+  edits/calibration. No loaded run, tuning, forced command expiry or118 replay.
+- New sender_diagnostics requires CommandTrace. Point45 captures actual owner
+  post-check ClockError, observed bit/probe anchor/signed offset, original
+  origin/deadline and optional pre/post clock deadlines at firstdefer/recovery.
+  No second check. Point46 distinguishes pending release branches including
+  outboundqueued versus drop/flush; no outcome or receipt authority.
+- Point47 records sender worker journal replies (operation/error/token), explicit
+  entry availability and stored state/reason/revision/context. Point48 records
+  caller-event enqueue with localerror/peererror and entry availability. No
+  transport-to-coordinator receipt channel or journal mutation is introduced.
+  Legacy29 remains unchanged; historical118 exactClockError cannot be recovered.
+- Separate `build/m3-sender-visibility`, `install/bridge-sender-visibility`,
+  `build/m3-sender-visibility-ros`, `install/m3-sender-visibility-ros`. Explicit
+  runtime layout sender-visibility requires skipbuild, verifies both old baseline
+  and start-trace baseline; default unchanged. Runner rejects old layout and
+  requires positive versioned release/journal/event records when enabled.
+- SDK77/77, ROS41/41, host387/387 PASS. Four fresh success controls: IPv4/IPv6,
+  enabled/disabled, random IDs/journals, each1effect/1SDKhandoff, original5sbudget.
+  Enabled each1release/5journal/3event,0loss; disabled0newrecords. Closed journals
+  bothsides4/succeeded/rev3/generation1. Snapshot-only fixtures distinguish
+  unobserved/qualified/expired/wide, no command in those fixtures.
+- No actual sender clockdefer/recovery occurred in healthycontrols; capture of
+  those paths and deadline-drop reconciliation with newbuild still outstanding.
+  Larger fixed POD/event and enabled observerwork mean no performance claim.
+  Existing synthetic SDK regression failure cases remain separate.
+- Both previous runtime inventories/provider fixed;20freshraw and303originalraw
+  hashes checked,4complete operatorlogs public, SQLite retainedlocal/hashed and
+  immutable entries public. No heavywork overlaps calibration; owned containers
+  removed. C++/CMake inputs fixed afterSDKinventory; scenario Pythonlayout extended
+  beforeROSbuild, explicitly recorded. No application journal recovery by audit.
+
+Next: new predeclared prospective loaded cohort with this calibrated visibility;
+do not silently resume stopped4211. Intent118UNKNOWN, historical34/98/12 retained;
+M3/fullmatrix/defaultloadedDDS/clock/security/resources/hardware gatesopen,
+PR2draft and Intrinsic/M4 untouched.
+
+### 2026-11-09 — Prospective sender cohort stopped at N0 harness bug
+
+- Evidence: `evidence/m3-sender-loaded-cohort-2026-11-09/README.md`.
+  Predeclared N0/1701/15s then N5/1701/300s on calibrated sender-visibility,
+  frozen9b221a0563d7317d759caedbabec4be59026056a, host389 before live.
+- N0 original harness/outerexit1 FAIL; N5 NOT_EXECUTED under stopfirstfailure.
+  No retry, replacement slot or loaded run. Old4211 remains stopped. Original
+  `.local/m3/20261109T134421999439Z/run.json` and allraw retain failed verdict.
+- Harness bug from9e7557d: unaliased local sender summarize import shadows
+  earlier packet summarize throughoutmain, even withsenderflagfalse. Capture
+  parsing raises UnboundLocalError. Fixed alias summarize_sender after closed
+  source verification; new compiled-scope regressionguard. Host390 PASS afterfix;
+  no end-to-end live rerun ofrepair. Runtime/provider unchanged.
+- Offline read-only decoding reconciles tcpdump populations and nativev2; original
+  failedgate is never promoted. Closedjournals8/8success/effects8/0skip/unresolved,
+  all8starts handlerinvoked. Sender45=0,46=8,47=63,48=36,0traceloss. No actual
+  senderclockdeferral or loaded telemetry/path diagnosis captured. ARP eachpeer
+ 1driver/0drop. Onlyfreshintent1–8/newjournals/session/epochs, never118context.
+- 148newraw/323priorraw hashes checked, exact public omissions. Fixed new and
+  botholdruntime inventories/3observers; oneownednetwork/2containers/credentials/
+  rules removed, roots/features unchanged. No heavywork overlapslive. Captured
+  source checked beforealiasfix and againstGitblob afterwards. SDK77/ROS41 exact
+  binary qualification reused; no rebuild/tuning/forcedexpiry/replay.
+
+Next: a NEW separately frozen cohort after harness repair; do not resume/relabel
+the failedplan. Actual loaded senderdeferral stilloutstanding.118UNKNOWN and
+historical34/98/12 retained; PR2draft/M3fullgatesopen/Intrinsic-M4 untouched.
+
+### 2026-11-09 — New repaired-harness loaded cohort captures actual sender deferral
+
+- Evidence: `evidence/m3-sender-loaded-repair-cohort-2026-11-09/README.md`.
+  New user-authorized plan/frozenb97b86b431e1894facbe87c9398b7bb35525594b,
+  exact sender-visibility build, no implementation/runtime change. Priorfailed
+  N0 remainsfailed, itsN5notexecuted; this newcohort is separate, onceperslot.
+- N0/1701/15s PASS8/8,0skip/effects8. N5/1701/300s PASS128/128,22skip/effects128.
+  Both original harness/strict/durable gatespass/exit0, no unresolved/UNKNOWN/
+  expired/unadmitted. No retry/tuning/forcedexpiry/historical118replay. Old4211
+  remainsunexecuted under stoppedplan. No fullmatrix/mitigation claim.
+- New intent3 sender45detail1 ClockError2/expired at68855687781ns; observedprobe
+ 62373601819ns, age6482085962ns versus5s; excess1482085962ns. Probeoffsetwidth
+ 6051625ns, drift-expanded19015797ns versus200ms, so recorded cause is probe-age
+  expiration atcheck. Prior/postclockdeadlines0/unavailable, never invented.
+- Sameintent recovery45detail2 at69240784239ns after385096458ns; newanchor
+ 69240717739ns, age66500ns, width14348457ns. Originalorigin68844935156/deadline
+ 73844935156ns unchanged,4604150917ns budget remains.46value4outboundqueued,
+ one25SDKhandoff69240809072ns; bothjournals4/0/rev3/validgeneration3.
+- Pending journal/event snapshotsstay1/rev0, then2/rev1 and4/rev3.49sender/75all
+  originalrequestevents retained. No input/outbounddrop. No actualdeadline-drop
+  reconciliation captured. Whyprobeupdatesgap6.482s remainsunproven; notunique
+  ARP/qdisc/provider/scheduler cause. Firstdeferonce, notcontinuousclockhistory.
+- All136attempts/startgroups joined, handlerinvoked/success;0unavailable/active
+  contextloss. N5 minconsume899.657540ms,gate899.657040ms, budget>=1229.803969ms.
+  Sendercounts N0:45=0/46=8/47=63/48=36; N5:45=2/46=128/47=3116/48=2002.
+- N5 ARP OP6driver/0drop,robot13driver/17actualQDISC_DROP,0pending/loss/other/
+  consumed ambiguity.33positive windows,22missing robot envelopes retain17
+  distinctdropIDs+5latequeued6/16/23/24/29; maxresidence124.545667ms.3CONTROLgaps:
+  OP4.118100169/1.084114958s,robot1.138184376s; no unique clock cause assigned.
+  SENSOR75026produced/27663observed,gap43709/rejected391,sixresiduals0;
+  telemetry unqualified, source~200/50Hz.
+- Host390beforelive, exactSDK77/ROS41qualification reused. Allsource/new/old
+  baseline/3observer/provider hashes fixed;303newraw/471priorraw checked, exact
+  omissions.2ownednetworks/containers/rules/credentials removed, roots/features
+  restored. No tests/builds/heavyanalysis overlapslive. Immutableclosedjournals.
+  Numericnew118 hasfreshsession/epochs/origin, old118UNKNOWN retained.
+
+Next: diagnose retained intent3 probe-renewal gap before further instrumentation;
+no historical118ClockError retroclassification. Actualdeadline-drop reconciliation
+remainsopen; old34/98/12,PR2draft/M3fullgates/Intrinsic-M4 unchanged.
+
+### 2026-11-09 — Intent3 probe-renewal gap, retained evidence only
+
+- Evidence: `evidence/m3-intent3-probe-gap-2026-11-09/README.md`, full derived
+  headers/provider/neighbor/root context inanalysis.json, read-only script/guards.
+  No newrun/build/tuning/forcedexpiry/replay or application journal recovery.
+- Old/new retained anchors62373601819/69240717739ns separate6867115920ns;
+  ageatfirstdefer6482085962ns, notsamequantity. Two snapshots notcontinuousprobe
+  history. Existing intent3 success/originalbudget/1SDKhandoff unchanged.
+- Source1s owner timer attempts begin_probe, schedulesnext evenifbusy; onepending
+  probe,2s timeout, matchingecho withage<2s required. SharedCONTROL FIFO/SDK
+  backpressure/receive-space gates; no probe-specificattempt/handoff/reject trace.
+  probe_busy/not_pending alone do notemit commandtrace. No timer-policy changes.
+- PinnedCONTROL forceswireinorder. Reply-length157byteDATA candidate443/msg29
+  atoperator65636107154ns cannot havecompleteearlier nativeprefixbefore
+ 67846142822ns (missing442), wait2210035668ns>2s. ConditionalTimeReply would
+  alreadybelate; encryptedpayloadmeansno exactkind/echo/rejection proof.
+  Candidate455/msg41 precedesnewanchor1455833ns, prefixavailableatfirsttap;
+  compatiblewithrecovery, notauthentication/SDKreadproof. Prefixguards withhold
+  missingpredecessors and refusewrap; allcapturedfirstflowpredecessors checked.
+- Fixedcontext60373601819..71240717739ns: operator104 owner providerreads,
+  maxspacing110.811500ms;robot108/max101.470292ms. No6.8swholeownerstall, but
+  shortjitter/backpressureunmeasured. Allstate5/sameidentity,0context/linkloss.
+  AllCONTROLdirections active,maxadjacentgap<0.992s; threepriorprimary>=1s
+  gapsoccurmuchlater. Retainedanchor-interval deltas OP39/robot256retransmissions,
+  OP8NAKsent/robot8received,0undecryptincrement. Contextmax robot17sendbuffer,
+  OP9receivebuffer. Aggregateobservations, notperprobe packetreceipt.
+- Both108neighborreads REACHABLE/stableMAC,0errors,0scopedARPreplylifetimes.
+  Rootwholeinterface OP0/robot2708drop increments,robot6787overlimits; notspecific
+  probedrops and no blanketARPabsenceclaim. Reliableordering/recoverydelay fits
+  failedclockrenewal despiteUDP/owneractivity; exactprobechain remainsunproven.
+- 303raw checked before/after,471otherpriorraw rechecked; allcapturedsource matches, provider52be7c8clean,
+  calibrated new/old inventories fixed. Analysis-only packet-order contractguards
+  pass; no newruntime qualification claim. Historical118UNKNOWN unchanged.
+
+Next optional diagnostic increment: separately calibrated default-off per-probe
+attempt/result/queue/handoff/correlatedecho/admission visibility, preserving1pending
+and2s/5sbounds. Do not infer historical118ClockError or forceexpiry. PR2draft,
+M3/fullgatesopen,Intrinsic/M4 untouched.
+
+### 2026-11-09 — Calibrated default-off per-probe tracing
+
+- Evidence: `evidence/m3-probe-tracing-2026-11-09/README.md`; planbeforeedits.
+  New probe_diagnostics requiresCommandTrace, defaultfalse. No1pending/1sattempt/
+ 2sreply/5sclockage/budget/rate/queue/expiry decision changes. No new loadedrun,
+  forcedliveexpiry orhistorical118replay. Priorbaselines/provider fixed.
+- Points50attempt/51queue/52SDK/53admission/54pendingclear. ExistingSessionreceive
+  optionalstackoutput exposes validatedt1/t2/t3 andactualmappercall/result; null
+  whenoff. No second decode/check, callback, allocation orownerI/O. 53evaluated=t4.
+  Managementsequence/session/owner/generation joins51to52, validatedsourceepoch/
+  t1/t2/t3 joinscrosspeer. Queue/wire/workerIPC/ROSschemas unchanged; C++objects
+  needmatchedrebuild. SDKbracket/bytes actual, acceptance notdelivery.
+- Before/after pending disambiguates busy, unmatched andlate replies. Natural
+  tickclear54, beginreplacementvisible50; no commandexpiry manufactured. Context
+  clear canhaveSID0, keptunavailable ratherthanforcedjoin. FirstEASYNCSND+finalSDK
+  recorded, repeatedwouldblock suppressed; boundedlane/dropcounts unchanged.
+- Separate SDK/ROS `build/m3-probe-tracing`, `install/bridge-probe-tracing`,
+  `build/m3-probe-tracing-ros`, `install/m3-probe-tracing-ros`. Explicitlayout
+  probe-tracing requires skipbuild, verifiesallolderbaselinechain. Runner rejects
+  oldignoredparameter layouts andrequirespositiveprobe lifecycle perendpoint.
+  Sender/start flags compatible, defaultpathsunchanged. No loadedcohort launched.
+- SDK79/79,ROS41/41,host396/396 PASS. Fourfreshcommands IPv4/IPv6 enabled/disabled,
+  each1effect/1SDKhandoff,matching4/0/rev3/gen1 journals/original5sbudget. Enabled
+  each4attempts/8queues/8SDK/8admissions/0clears; actualqualifiedmapper4each,8total
+  reciprocalexactechojoins. Disabled0newrecords.8fulltraces,0loss.
+- Session-only virtualtime busy/accepted/wrongecho/late/invalidcontext guards
+  pass, no commands there. No liveSDKwouldblock/late/clear pathwitnessed; no
+  qualificationclaimforthosebranches. BiggerPOD andenabledobserverwork preclude
+  timingcomparison/mitigationclaim. Historicalcandidatepacketsnotretrodecoded.
+-24newraw/774priorraw checked, immutableclosedjournal selections; rawSQLitelocal
+  hashed,8publictraces,exactlognormalization. Allsource/binaryinventories archived.
+  Priorbaseline/start/sender installs/provider unchanged. No heavywork overlaps
+  SDKcalibration, ownednetwork-nonecontainers removed. PR2draft/M3open/Intrinsic
+  untouched. No runtimepolicytuning orold118proofreuse.
+
+Next: separately freeze a prospective loadedprobe-tracing cohort; actualbusy/
+late/timeout paths remainuncapturedonnewbuild. Preserve1pending/2s/5s rules,
+historical118UNKNOWN andold3/34/98/12 scopes; no forcedexpiry orreplay.
+
+### 2026-11-09 — Delivery acceleration: close instrumentation, target reconciliation
+
+- User requested faster delivery. `DELIVERY_PLAN.md` replaces open-ended forensic
+  work with ordered acceptance blockers. Reuse exact builds/checks, preserve old
+  uncertainty without reconstructing missing history, publish compact gate
+  reports, and measure progress by closed gates. PR2draft/M3open/M4notstarted.
+- One final bounded cohort in this probe chain, frozen1fdf7cb9a661284ba295ca377fa3ebf22da99b25:
+  `evidence/m3-probe-loaded-cohort-2026-11-09/README.md`. N0/1701/15s8/8,
+ 0skip/effects8; N5/1701/300s128/128,22skip/effects128. Originalharness/strict/
+  durablegates PASS/exit0. No unresolved/UNKNOWN/expired/unadmitted. No retry,
+  tuning, forcedexpiry orhistorical118replay; stopped4211 unchanged.
+- N5 wholecapture615attempts:443emitted/172busy;443exactprobejoins,398qualified/
+ 45rejectedoldEchoesagainstnewpendingt1,45naturaltickclears.886SDKsuccess,
+ 0SDKerrors. Queue-to-SDK max0.950125ms, SDKend-to-peeradmission max3514.765669ms;
+  commonVM clock, includesbuffer/order/ownerinterval notuniquenetworkcause.
+  MaxacceptedRTT1934.701543ms,minrejected2009.280043ms.427emittedstartinside
+  sourcewindow; setup/drainseparate. N0 50qualified/0reject/0busy,30insource.
+- Fresh49/85 senderclockdefer/recover, originalsbudgetpreserved/success. No new
+  deadline-drop reproduction. Instrumentationloop CLOSED; no automatic newrun or
+  tracer toseekunobservedbranches. No broad ARP archaeology repeated.
+- Compact gate/493lifecycle/all136commandproofs and2fullN5probeexamples published;
+ 303newraw/798priorraw hashed/retained, explicitomissions. Allsource/binaries/
+  observersfixed,2ownednetworks/containers/rules/credentials removed,roots/features
+  restored. Host398prelive, exactSDK79/ROS41reused, no rebuild/heavyworklive.
+- NEXT IMPLEMENTATION: bounded opaque authoritative per-admission transport
+  receipt, never lossytraceauthority; exactsenderrow conservativeUNKNOWN/
+  reconcile_required ondrop, no EXPIRED/success/newticket/unrelatedinvalidation.
+  Preserve nonterminalprovisionalUNKNOWN query-first andhigher/finalpeerresults.
+  Context/reuse/result-race/restart/storage/capacity gates inDELIVERY_PLAN.md.
+
+After that fix, close remainingN3 ROS SENSOR/DDS/comparison acceptance gates.
+Historical118UNKNOWN/34/98/12 remain recorded, not repeated forensic prerequisites.
+
+
+### 2026-11-09 — Sender receipt correctness gap closed
+
+- `evidence/m3-sender-reconciliation-2026-11-09/README.md`: transport publishes
+  queued/SDK-accepted/abandoned on the original opaque one-use sender proof.
+  Coordinator retains at most64 receipts and services actual abandonment after
+  its original job completes. Not CommandTrace-derived authority. BUSY retains
+  the receipt; minting-worker generation/peers/owner/context/payload fence it.
+- Exact sender local_queued/rev0 becomes UNKNOWN/reconcile_required only; original
+  deadline/result rules preserved. Delayed receipts preserve peer acceptance and
+  final success. Unsubmitted refusal now retires its own proof and reconciles its
+  row instead of invalidating the session. Real session loss retains its existing
+  invalidation behavior. Query-first UNKNOWN stays nonterminal; no new ticket,
+  remote cancellation, EXPIRED/success fabrication or unrelated-row mutation.
+- Full tracking table now returns BUSY before durable admission. Private worker
+  IPC4/op11 rejects older workers and generic forged requests. SDK supervisors,
+  consumers and ROS workers require matched rebuild; SRT/ROS schemas unchanged.
+- Fresh IPv4/IPv6 real context loss before original5s deadline, exact-row vs
+  unrelated preservation, SDK acceptance, unclaimed/forged/foreign/reused/stale
+  receipts, paused-worker BUSY/retry, replacement generation, query after reconnect
+  without effects, and64+1 capacity pass. Journal tests cover context/payload,
+  accepted/final result races, idempotence, owner restart and storage failure.
+  Default-off C++ test-only handoff hold has no ROS/CLI/env entry point.
+- SDK81/81, ROS41/41, host399/399 PASS. Isolated bridge-sender-reconcile /
+  m3-sender-reconcile-ros installations and explicit sender-reconcile --skip-build
+  layout verify every preserved baseline in the chain. Old provider clean at
+  52be7c86; all1101 priorraw+28 newraw hashes verify,14 closed fresh DBs decoded
+  immutable. No builds/heavy tests overlap retained native fixture capture.
+- Initial fixture queried disconnected (existing API refuses); reconnect added.
+  Storage fixture initially left failure count disabled; armed to0. Initial ROS
+  test invocation selected enclosing SDK package; scoped --base-paths ros2 fixes
+  invocation, no rebuild. All failed logs retained; no production tuning.
+
+NEXT: actual ROS SENSOR N3 freshness/repair, loaded DDS discovery/comparison and
+consolidated acceptance. No new N5/deadline-drop qualification claimed for this
+build. Historical118 remains UNKNOWN, old34/98/12/stopped4211 unchanged. No tuning,
+forced expiry or historical replay. PR2 draft/M3 open/Intrinsic-M4 untouched.
+
+
+### 2026-11-09 — Thirty-second N3 matrix audited FAIL; source-slot guard corrected
+
+- Frozen plan/source b5ae42c: baseline/one-loss/two-loss30s for1701,2903,4211,
+  once each/stop first failure/no retry. Exact sender-reconcile SDK81/ROS41
+  binaries reused. Python-only matched layout/prefix verification and explicit
+  cohort selector; generic scenario parser now accepts sender-reconcile prefix.
+  Host401 PASS before capture. No rebuild/tests/heavy analysis during live.
+- Original harness reports all9 PASS/exit0, but the plan's zero-source-skip gate
+  was missing from verify_window. Audit: first5 cases PASS; case6 two-loss2903
+  FAIL with3 IMU skipped5ms slots. Average199.910322Hz stays within1%, so the old
+  rate-only check passed. Counter5605/trace7006 begins17.451971ms after due;
+  publish bracket73.708us, preceding60.125us. Late source invocation established,
+  not unique scheduler/DDS/observer causality or transport loss of unsent slots.
+- Last3 fresh4211 N3 cases actually executed after missed stop. Retain them as
+  supplementary/outside_stop_boundary, not NOT_EXECUTED or qualified continuation.
+  Original raw PASS/log unchanged; separate audited planFAIL/firstfailure recorded.
+  Earlier progress claim of9 passing cases is corrected by this final audit.
+- All9 independently measured transport/fault/freshness subgates pass: rate within
+ 1%, balances6x0, context/QoS/clock stable, no invalid/receiver rejection beyond
+  selected two-source gap, upper age max35.182399ms <250ms, complete source/sample/
+  native/PCAP diagnostics. Actual SDK8 one-loss repaired/originaltypedhash while
+  classifier installed atall3 starts; SDK7/8 two-loss absent atdrainedcutoff and
+  both routes subsequently progress. No lossless/physical-age/comparison claim.
+- verify_window now rejects positive/bool/missing skipped_slots evidence or missing
+  route even when average rate passes. Host402 PASS after post-capture guard.
+  No rerun/cohort replacement, no production source/clock/rate/queue/TTL/provider
+  tuning. Frozen111 source hashes verified before guard; original guard Git blob
+  matches frozen hash, later guard hash separately retained. Full runtime/archive/
+  observer chain fixed, provider unchanged. SDK81/ROS41 reused, notnew executions.
+- `evidence/m3-n3-thirty-second-matrix-2026-11-09/`: compact gate report, audited
+  execution matrix, exact skip neighbors, fault/capture/accounting/shutdown proof.
+ 901 newraw files hashed/local,18 closed fresh journals immutable-decoded empty.
+ 18 owned containers/9 networks/9 credentials removed; controlled children exit0,
+  no forced kill. Original historical118/34/98/12/stoppedN5/4211 untouched.
+
+N3 thirty-second matrix remains OPEN/FAIL; no automatic retry or retrospective
+zero-skip relaxation. Next ordered work: loaded DDS discovery/comparison with
+existing defaults, then consolidated acceptance decisions (including any future
+source-slot scheduling allowance). No further tracer/ARP study justified here.
+PR2draft/M3open/Intrinsic-M4untouched; no forced expiry/historical replay.
+
+
+### 2026-11-09 — Current-build default DDS cold confirmation: N0 pass, N5 fail
+
+- Frozen f54f783 two-case plan: system DDS/simultaneous N0/1701/15s then N5/1701/
+ 60s only after control passes, once each/stop failure/no retry. Python-only matched
+  layout/prefix selection for DDS coordinator and simulator, baseline builds fixed.
+ 407 host checks PASS before live, SDK81/ROS41 reused, no native rebuild/tests or
+  heavy analysis during live capture. No new tracer/fragment cut/pacing/default.
+- N0 PASS8/8 successful commands/effects,0 skipped offers. Source interval
+ 15.097493797s, IMU3019/3005 callbacks and joints755/755, actual199.966964/50.008300Hz.
+  No stale/invalid/clock-rejected callback; realtime estimated upper histogram
+  bins max6/21ms, not SRT conservative clock bounds/physical ages. Max terminal
+  observation209.008667ms includes poll wait; original5s/closed matching proof.
+- N5 FAIL before measurement,45s sender-readiness wait. Operator46 timeline rows:
+  CONTROLpub0/sub1, HELLOpub0/sub1, sent434/received0; sampled maxima also0 reverse
+  pubs/callbacks. Robot46rows matches4 endpoints, sent438/received407, notready.
+  Both journal/handler/QoS eligible; stable single process epoch each, no failed
+  coordinator flag. Both N5 journals empty, no measurement marker/command/effect.
+  Robot aborts after operator failure. Nominal60s requested window never executed.
+- Whole-run competitor live189 polls,128024.432286bps over48.182803s, actualload
+  gate passes;512kbit/16packet/dynamic neighbors/system defaults unchanged. All
+  PCAP populations pass/zero kernel drops: N0robot7282/operator7252, N5robot7294/
+  operator7312. Different tap totals are not packet-loss subtraction authority.
+- Cohort/harness exit1 retained. No retry/control-first fallback/newdecode. Existing
+  native4096byte fragmentation mechanism/contradicted ROS N0 transfer hypothesis
+  remain separate; no unique original/current fragmentation/ARP/qdisc/CPU cause.
+- `evidence/m3-dds-loaded-confirmation-2026-11-09/`: compact gate report, complete
+  original verdicts/strict closed command proof, sampled startup states,146 raw
+  hashes and4 immutable closed fresh journals. Raw packets/resources/fulltyped/
+  source/inspect/environment/journal streams stay local.112 Python source hashes
+  and full matched/preserved archive/runtime chain fixed; provider unchanged.
+  All6 native children controlled exit0/no forcedkill, both scenarios exit before
+  namespace teardown;4 owned containers/2 networks removed; no credential created.
+
+`M3_ACCEPTANCE_REVIEW.md` consolidates the actual remaining gates. DDS cold failure
+is a comparison outcome, not an instruction to tune DDS until successful. No
+steady-window performance/security/age equivalence follows from a failed startup.
+Next: retained N5 SENSOR freshness/bounds assessment and explicit comparison
+limitations; no automatic new cohort. N3 auditedFAIL/source-slot decision remains
+open and prospective; old historical118/34/98/12/stoppedN5/4211 untouched. PR2draft/
+M3open/Intrinsic-M4 untouched; no tuning/forced expiry/replay or acceptance waiver.
+
+
+### 2026-11-09 — Offline retained N5 SENSOR freshness/bounds assessment
+
+- Explicit user constraint: retained captures only, no tuning/new experiments.
+  `tools/m3_n5_sensor_audit.py` reads the whole frozen probe cohort1fdf7cb,
+  N0/15s control and N5/1701/300s, never launches peers/traffic or opens journals.
+ 303 original raw hashes verified before/after; six frozen source Git blobs match
+  captured source inventory. Existing probe/sender-reconcile runtime chains fixed.
+- N5 source interval300.147813012s,75,037 produced/75,034 ingress/72,240 SDK handoffs/
+ 28,290 receiver decisions/27,750 publications/typed observations. Histograms are
+  full RPC checkpoint deltas, counts22,990IMU/4,760joints; not last diagnostic tail.
+  Upper age p50/p95/p99/max bins106/134/144/179ms IMU and113/141/152/183ms joints.
+  Exact window maxima178.324341/182.559637ms, each new cumulative maximum, <250ms.
+  Six pipeline balances0; empty qualified unchanged-owner/context checkpoints.
+- Receiver539 rejected:465 clock age unqualified/invalid,0 stale_sample,74 other
+  unclassified. Preserve all47,287 source-unobserved samples;43,950 SDK-to-decoded
+  gap is not exclusive WAN loss/FEC retirement. Unknown/missing ages have no
+  publication percentile. No per-SAMPLE trace exists in these logs. Ages are
+  ingress-to-prepublish authorization under original mapper model, not physical
+  sensor age/typed-observer arrival age or uninterrupted availability.
+- Frozen fixed8-slot arrays and2 configured sensor routes retain one latest sample
+  per route at each persistent ingress/outbound/receive stage. Structural bound,
+  not measured high-water. All six pending fields0 at both checkpoints; continuous
+  occupancy peak unavailable. Separate BIND/CONTROL/transient/provider/FEC/RMW/
+  kernel memory outside this slot claim. No production source or limits changed.
+- Complete SENSOR observer:2,983 active sender/2,875 receiver fully source-contained
+  reads, one original owner/generation/socket each. Premeasurementrobot-bridge-1
+  contributes0 eligible reads and is unavailable, never a0 occupancy peak/stitch.
+  Smoothed sender sendbuffer packets0..59,bytes59..26679,flight0..61; receiver
+  bytes35..196 despite packet gauge0. No SDKhardpeak claim. FC256/SRT+UDP buffers
+ 262144 each are checked source requests, not normalized readback/allocator caps.
+  Sampled endpoint RSS sums297828352/196771840bytes include observer/workers and
+  can double-count/miss peaks; no whole-stack memory/leak/resource-parity proof.
+- `evidence/m3-n5-sensor-retained-audit-2026-11-09/`: full assessment/checkpoints,
+  input hashes, source/binary proof and compact gate decision.6 new offline guards,
+ 413 total host checks PASS. Initial focused discovery also counted4 imported
+  existing accounting tests; final discovery avoids duplicates. No runtime build/
+  experiment/capture/tuning, journal recovery, expiry or historical command replay.
+
+Close the publication-age assessment for this retained run and record structural
+bridge bounds; keep continuous availability/queue peaks/hard SDKprocess caps
+unavailable. Not newest-build/all-seed/fullN5/M3 acceptance. Next comparison/
+acceptance statement with explicit limits and prospective N3 source-slot decision;
+no new experiment. N3auditedFAIL, defaultDDSN5coldFAIL and old UNKNOWN/stopped scopes
+unchanged. PR2draft/M3open/Intrinsic-M4untouched.
+
+
+### 2026-11-09 — Comparison and M3 acceptance statement delivered, no experiments
+
+- Explicit user request: comparison/M3 acceptance statement with limits retained,
+  no tuning/new experiments. `M3_COMPARISON_AND_ACCEPTANCE.md` is the canonical
+  conclusion; `evidence/m3-comparison-acceptance-2026-11-09/` supplies machine
+  decision and50-report hash index. Documentation/retained JSON checks only;
+  SDK81/ROS41/host413 validation is reused, not re-executed. No runtime/native build,
+  capture/traffic, journal open/recovery, forced expiry or historical replay.
+- Four original three-seed600s N1/N2 primary totals checked against per-seed rows:
+  SRT900/900 successes/effects atN1 andN2,0 skipped offers; DDSN1 892attempts,
+ 890successes/effects+2receiver-backed expiries,8skips; DDSN2 843attempts,
+ 830successes/effects+12receiver-backed expiries+1nonadmission,57skips. Distinct
+  recorded series, no pooled success probability/current-build/causal ranking.
+- Explicit older DDSN2/2903robot population exception170340filtered vs170338file,
+  kernel0 remains unreconciled; executionPASS never means all capture/age gates
+  qualify. DDSN1/N2 age gate remains open; rejected/unavailable clock populations
+  stay out of accepted percentiles with visible denominators. Source ages differ.
+- RetainedN5probe build128/128,22skips and all27750 publication upper bounds
+  <=182.559637ms support their own command/freshness/slot properties; preserve
+ 465unknownage/47287source-unobserved and unmeasured queue/memory/availability.
+  LatestDDSN0passes8/8; defaultN5coldFAIL before measurement has no steady-window
+  denominator, not0% success or a comparative speed/resource ratio.
+- No general SRT superiority or DDS equivalence established. Security/cost,
+  topology/observer/build/run-time, age origin, tick/RSS/PCAP and hardware limits
+  explicit. Demonstrated selective bridge capabilities are distinct from a
+  controlled transport advantage. DDS failure is an observed comparator outcome,
+  not an instruction to tune until it passes. No unique historical cause assigned.
+- Acceptance conclusion: M3 NOT accepted as complete under unchanged plan.
+  N3auditedFAIL still5prefixPASS/case6threeIMUskips/last3outside_stop_boundary;
+  no threshold relaxation or retry. Latestcandidate lacks complete inherited
+  profile/seed proof; older matrices retain exact build scope. Comparison age/
+  capture/nonmeasurement boundaries remain explicit. No invented mandatory hard
+  memory/hardware threshold, waiver, merge or M4 authorization.
+
+The comparison/acceptance reporting request is complete; open qualification is
+not hidden and no new experiment is queued automatically. M0–M2 retain recorded
+acceptance; PR2draft/M3open/Intrinsic-M4untouched. Future scope/source-slot changes
+must be explicit/prospective and cannot retrospectively reclassify failed cases.
+
+
+### 2026-11-09 — Concrete N3/current-build closure plan, no execution
+
+- User requests concrete remaining-M3 plan starting N3/current-build coverage,
+  without tuning/new experiments. `M3_CLOSURE_PLAN.md` and
+  `evidence/m3-closure-plan-2026-11-09/{plan,coverage-ledger,readiness}.json`
+  are prepared planning artifacts, execution disabled/not scheduled. No runtime
+  build/test/traffic/capture/journal recovery/expiry/replay or threshold change.
+- Fixed planning candidate sender-reconcile-929d1f7c7727; full manifest SHA
+ 929d1f7c7727b6c9ba363762074557873d0ffeb6ed6a2b4ab75957d341ee0fc7.
+  Read-only matched/preserved-chain check:13 binary/archive/test entries match,
+ 86 recorded native inputs unchanged, provider clean at52be7c86. SDK81/ROS41/
+  host413 retained, not rerun. Future harness changes need a fresh driver freeze;
+  no production native rebuild required merely to select the existing candidate.
+- Applied current zero-skip window guard to9 hash-checked original N3 result
+  JSONs, offline only. First5 remain qualifying prefix; case6threeIMUskips is
+  rejected; last3 individual window checks pass but remain outside_stop_boundary.
+  No cohort splice/resumption/retroactive9of9PASS, no relaxed gate. Future strict
+  route, if explicitly authorized, is one new9-case30s baseline/one/two-loss
+  cohort at1701,2903,4211; stop first failed gate, no retry-until-pass.
+- Concrete current-build readiness blockers: tools/m3_n4.py still binds oldSDK/
+  peer executable; tools/m3_n4_ros.py binds oldROS. Need isolated currentIPC4 peer
+  link and explicit SDK/worker/ROS child prefix checks before N4 current-build
+  claims. All-stage strict orchestrator also not ready; raw run_m3 exit0 must not
+  schedule later slots before independent progress/source/capture/cleanup checks.
+  No adapter/assessor implementation or fixture build performed in this task.
+- Proposed future order/counts, not authorization: N3x9, combinedN0/300sx1,
+  N4x19 (4native phasesx3directions+QUERYx1+ROSsensorx3+ROScrashx3),
+  N1x3/600s,N2x3/600s,N5x3/300s.38 cases total; N3+combined nominal source5070s/
+ 84.5min excludes N4/all overhead, not wallclock promise. N4 sensor adds45 nominal
+  source seconds. No six-second expiry experiment, no newDDS candidate/cold run.
+- Gates and outputs fixed: N3 zero skips/1%/30..31s, original trace budgets and
+  selected SDK source/parity identities; combined full populations/age<=250ms/
+  sixbalances/positive strict closed-success progress; phase-specific N4 safe
+  outcomes remain separate from all-success progress. First failed declared gate,
+  hash drift, timeout or cleanup failure stops all later work; actually executed
+  after missed gate remains explicit. No tuning/retry/fallback/old4211resume.
+
+The concrete planning request is complete; no new experiment follows automatically.
+Further prep can remain offline, but current no-new-experiments scope must be
+explicitly changed before live execution. Current M3notaccepted/PR2draft/M4untouched
+and comparison limits remain. This plan creates no waiver or merge permission.
+
+
+### 2026-11-09 — Offline closure source preparation
+
+- Current continue scope remains no tuning/new experiments. No builds, Docker,
+  ROS/fixture launches, traffic/capture, journal recovery, forced expiry or replay.
+- N4 native/ROS runners now select explicit layouts, verify child prefixes and
+  preserve all production timing/settings. Standalone CMake imports the selected
+  SDK worker and emits peer/SDK/header/archive/provider/source binding metadata.
+  Private IPC4 retains existing CLI flag `--worker-ipc-v3`. Nonbaseline missing or
+  stale binding refuses before output/lab creation. Actual candidate fixture is
+  not built; binding remains absent. CMake source-reviewed only.
+- New closed-case strict assessor reuses N3 raw validators, combined SENSOR and
+  durable command progress, N4 phase/freshness/crash outcomes, frozen provenance,
+  outage kernel/bracket/drop checks and recorded cleanup. Combined capture uses
+  original summaries rather than independent full packet reparsing. Callback-only
+  stop controller is offline-tested; no live dispatcher is implemented/wired.
+-427 offline Python checks pass. Read-only retained N3 baseline passes, known
+  two-loss2903 still rejects skipped slots. All13 candidate manifest entries and
+ 86 native inputs unchanged, provider52be7c86 clean/archive unchanged. No SDK/ROS
+  rebuild/tests repeated; prior SDK81/ROS41 retain their original scope.
+- Evidence: `evidence/m3-offline-closure-preparation-2026-11-09/README.md`,
+  readiness-update/verification/source-snapshot JSON and validation logs. Snapshot
+  has null native fixture binding and is not a complete live campaign freeze.
+- Next offline work: live-dispatcher design/wiring with prospective freeze and
+  mocked transitions. Isolated fixture build/link and any live qualification
+  remain pending separately authorized scope. All38 planned cases disabled;
+  M3notaccepted/PR2draft/M4untouched. Do not retry/splice old N3 or replay118.
+
+
+### 2026-11-09 — Dispatcher wired; isolated N4 compile/link validated
+
+- User explicitly authorizes wiring dispatcher and native fixture build/link,
+  without tuning or starting experiments. One standalone build completed in the
+  pinned amd64/Jazzy image with --network none, no network capabilities. No peer,
+  worker, ROS workload, capture, impairment, campaign case, expiry/recovery/replay.
+- `tools/m3_campaign_dispatcher.py` maps all38 exact predeclared slots to single
+  cases; QUERY is2s alone, never the legacy six-second remaining-native batch.
+  Combined adapter uses fixed layout/image/output, skip-build, native capture,
+  existing command/start/sender/CONTROL+SENSOR provider diagnostics. Settings
+  unchanged, no probe expansion or ARP study. `run_m3.main(argv)` gains explicit
+  fresh output and immutable image selection; shared source inventory adds root
+  CMakeLists. Before/after source/build/binding drift, strict outcome/cleanup
+  rejection or inner failure stops all later slots. No retries or resume.
+- Disabled freeze prepared: exact plan/38 invocations, candidate/preserved chain,
+  native binding, provider/image/helper/source hashes. No authorization grant.
+  Live dispatcher requires later explicit scope change plus separate exact
+  freeze/order/fresh `.local` output grant. Tests mock all adapter boundaries;
+  dispatcher has not run live. A passing campaign never auto-accepts M3.
+- New isolated `build/m3-n4-sender-reconcile-peer` compiled/linked C++20 Release
+  with Werror against existing SDK. Static audit verifies prefixes, macro worker,
+  linker contributions (sixSDK archives+pinnedprovider), ELF64/x86-64/needed libs,
+  no RPATH,36 binding files. Native preflight now passes. Private IPC4 still
+  launches --worker-ipc-v3. No loader/IPC/runtime qualification or fixture run.
+-440 offline Python tests pass;13 dispatcher tests include exact mapping/grants,
+  output reuse/outside-root refusal, pre/post drift and cleanup-failure stop.
+  Failed intermediate test log retained (macOS temp /var alias fixed). Optional
+  rg filter absent in image was replaced by direct readelf inspection. No native
+  rebuild for these corrections; initial unused SQLite direct-dependency audit
+  assumption corrected to actual ELF dependencies. All13 candidate entries and
+ 86 native inputs unchanged; provider52be7c86 clean/archive unchanged. SDK81/ROS41
+  remain prior evidence; not rerun. Original N3fail/comparison limits unchanged.
+- Evidence `evidence/m3-dispatcher-fixture-validation-2026-11-09/README.md`,
+  link-proof/fixture-binding/campaign-freeze/readiness-update JSON, static
+  verify-build.py and logs. Original planning/earlier readiness snapshots preserved.
+- Preparation task complete; all38 live slots disabled/unscheduled. Next live
+  stage, only if separately authorized: strict9-case N3 then fixed N0/N4/N1/N2/N5
+  order, stop first failed gate. M3notaccepted/PR2draft/Intrinsic-M4untouched.
+
+
+### 2026-11-09 — Authorized strict N3 cohort;8 PASS then shutdown FAIL
+
+- User explicitly authorizes exact9-case N3 on frozen matched build, no tuning,
+  stop first failed gate, remaining stages disabled. Original freeze still matches
+  before/after:13 candidate entries,86 native inputs, source/helper/nativefixture/
+  provider/image/preserved chain. No frozen source/tool/binary change or build.
+- General dispatcher requires38-case grant. New evidence-local run-n3-only.py
+  is hash-bound with a precise9-case grant, using unchanged frozen single-case
+  adapters, strict assessor and sequence controller. No broad grant fabricated;
+  all29 other slots explicit disabled. Two mocked driver controls pass (nine-only
+  success path, first failed assessment stops). Prior440 suite retained, not rerun.
+- Fresh `.local/m3-n3-frozen-cohort-20261109T192408181359Z`: seeds1701/2903/4211,
+  baseline/one/two-loss each30s, exact declared order, no retries. First8 pass full
+  independent strict/raw assessment and owned cleanup before subsequent launch.
+  All first8 zero source skips,30.053400722..30.059300180s, cadence within1%, six
+  balances0, complete trace/capture identities/populations, per-route age buckets
+  <=60ms IMU/37ms joints. Reduction/missing counts remain; no lossless/physical age
+  inference. New two-loss2903 passes; original older failed cohort stays failed.
+- First failure is finalcase N3-two-loss-4211: operator-bridge-0 does not exit
+  during unchanged5s SIGINT wait; force-killed/-9 after~5.011041044s. Robot source
+  and bridge exit0 without force. Scenario exitsnonzero, strict assessor refuses;
+  no later launch. Cause of shutdown delay not established. Fault restored, each
+  selected classifier1drop; postmeasurement source/SDK/typed accounting/capture
+  revalidation not reached after child failure and cannot be inferred PASS.
+- Cohort FAIL (8strictPASS/1FAIL), no N3 slots remain after case9 and all29 other
+  campaign slots remain disabled/unexecuted. Owned container/network/credential
+  cleanup confirmed all9 cases. Original full freeze still matches;9 older N3
+  result hashes match. No operator intervention/threshold increase/retry/expiry/
+  historical118 replay or cohortsplice. PrivateIPC4 unchanged, no N4fixture run.
+- `evidence/m3-n3-frozen-cohort-2026-11-09/README.md`, gate-report/campaign/grant/
+  preflight/postflight, eight strict proofs, failed original child/error records
+  and913 local raw hashes (~301MB) retained. Source/main/runtime code unchanged;
+  only documentation and new evidence-local scoped driver/control/publisher added.
+- Requested execution complete. Next action is retained-evidence/source diagnosis
+  of operator shutdown, then separate engineering/validation decision. Do not
+  auto-rerun two-loss4211 or start N0/N4/N1/N2/N5. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Retained shutdown diagnosis reaches observation limit
+
+- User requests diagnosis only, no tuning/retry/new experiments; remaining stages
+  disabled. Read-only retained913 raw hashes + original complete freeze verify.
+  No production/source/tool changes, build, ROS/Docker/fixture launch, process
+  attachment, journal recovery, expiry/replay, new tracer or suite rerun.
+- `evidence/m3-n3-shutdown-diagnosis-2026-11-09/{README.md,assessment.json,
+  input-hashes.json,analyze.py}` compare all9 same-build operator exits and matching
+  source.8 clean SIGINT-to-reap167.531..221.600ms, finalcase forced-kill/-9 after
+ 5.011041044s. Signal-send return does not prove handler/destructor entry.
+- Failed operator metrics3.165358251s pre-signal ready/clocktrue, faults0,
+  commands_sent0, all3pending sensor0. Last process sample102.537375ms pre-signal;
+  OOM/throttle counters0 and capsmax only at that pre-signal observation. Native
+  packet streams' last records943.992..944.018ms pre-signal. No post-signal thread
+  state, stack/wchan or lifecycle markers. Sampler runs only during scenario spin;
+  synchronous stop_children does not collect through its5s wait. Recorders stop
+  before release/cleanup by existing host order. More old packets cannot fill gap.
+- Failed log7308 consecutive sample events, missing footer; last sample event
+ 5.478214919s pre-signal falls within clean5.097..5.560s gaps. Absence of footer
+  alone does not localize hang. No command traces enabled. Parent alive-at-poll/
+  SIGINT/timeout/forcedkill proves lifecycle failure, not unique internal cause.
+- Actual operator worker is plain SDK journal worker (callee/sender branch), NOT
+  ROS rate backend, which belongs to clean robot caller side. Bridge itselfROS.
+  Code path: main spin->node reset->destructor timers->endpoint stop/join->trace
+  drain/footer->members. Endpoint stops worker (nominal2s kill/4s join thresholds),
+  then transport.join; no total timeout on surrounding native joins. Transport
+  closes sockets/epoll and destroys RUN-LOCAL Provider (srt_cleanup) before its
+  thread completes. Thus provider cleanup remains inside join candidate path;
+  do not incorrectly exclude it as a later member destructor. No evidence pins
+  ROS executor vs worker join vs transport/socket/provider join vs trace drain.
+- Root cause remains undetermined, diagnosis complete to retained limit. No
+  justified specific patch, no budget/rate/queue/clock/provider change. Proposed
+  next discriminating evidence is narrow shutdown stage + blocked stack/worker
+  visibility with independent observer surviving synchronous wait, only after a
+  separate explicit scope decision. Not implemented/scheduled/executed now.
+- Keep cohort8PASS/1FAIL, case9 measurement gates not reached remain unqualified,
+  all29 other cases disabled, no retry/splice. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Default-off shutdown visibility prepared; no experiments
+
+- User explicitly authorizes default-off shutdown-stage tracing and independent
+  blocked-stack observer, no tuning/new experiments; remaining29 stages disabled.
+  Implemented native source/ROS and N3 harness flags, no actual bridge/worker/
+  observer-target/GDB attach/campaign launch. Prior8PASS/1FAIL unchanged.
+- New ShutdownTrace header: empty TransportConfig pointer by default; explicit
+  ROS shutdown_diagnostics=false/pathempty. Enabled trace uses exclusive0600
+  separate regularfile, cap256, bounded formatting/write/drop counts, Linux PID/
+  TID/monotonic/sequence/stage/socket handle. No stdout dependency or raw signal
+  handler. Weak ROS context shutdown callback only when opted in. Stage seams:
+  spin/destructor/timers, endpoint worker stop/join, transport session/socket/
+  epoll/run-local Provider cleanup and join, trace drain and node reset. No IPC,
+  journal/ticket/context/outcome authority; frame4/CLI-v3 unchanged. File I/O may
+  still block; enabled observations add workload, not real-time guarantees.
+- Independent Python observer owns a separate session/group, arms beforeSIGINT,
+  follows registered PID+start_ticks tree only (8process/64thread/16KiBread/
+ 48samples/250ms/12s budget), captures task stat/wchan/syscall/kernel stacks and
+  time/identity proof. Denied stacks/reuse/truncation/budget explicit. Parent's
+  unchanged5s child wait does not drive observer; observer teardown excluded from
+  child timing, readiness errors never prevent child cleanup. Opted-in diagnostic
+  control failures remain failed, not fake command outcomes or stack availability.
+- Optional explicit GDB mode after2s, no automatic install/caps/ptrace relaxation;
+  no auto-load/init/debuginfod, frameargsnone,32frames/64KiB, watchdog and isolated
+  group cleanup. Attach brackets intrusive, resumption not verified; cannot infer
+  unchanged production timing. Kernel-only procfs remains observer default.
+- Defaults: all flags false; campaign invocations unchanged/no diagnostics enabled.
+  N3 source runner/scenario forward only explicitly requested shutdown flags;
+  demo installs observer/helper. No calibrated runtime layout/grant added.
+-456 Python tests PASS (fake proc/child and mocked GDB/group signals). One native
+  file-only primitive contract PASS. Isolated SDK/ROS bridge compile prefixes
+  install/bridge-shutdown-trace-compile and install/m3-shutdown-trace-ros-compile
+  verified importing newSDK and containing stage markers. Message underlay reused.
+  New unit had Werror indentation issue, fixed and failedlog retained. No SDK/
+  ROS runtime suite or live observer/calibration; historicalSDK81/ROS41 not promoted.
+- Old13 candidate binaries/preserved chain and913rawfiles verify unchanged. New
+  sources intentionally drift old full freeze; refusal verified, not rewritten.
+  Public TransportConfig C++ layout changes require matched consumer rebuild;
+  compile-only prefixes are not campaign candidates. Any future run needs new
+  verified/calibrated matched build+prospective freeze and separate explicit scope.
+- Evidence: evidence/m3-shutdown-visibility-preparation-2026-11-09/README.md,
+  verification/source-snapshot/compilation-artifacts and validationlogs. Rootcause
+  still unknown; new visibility is preparation only. No case9retry/splice or
+  N0/N4/N1/N2/N5 advance. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — Bounded live shutdown calibration; partial PASS/access FAIL
+
+- User authorizes bounded live calibration on new matched build, no tuning or
+  two-loss4211 retry, remaining campaign stages disabled. Predeclared PLAN has
+  exactly3 one-shot slots: N0sensor1701/10s off; same with stages+procfs observer;
+  separate finite3s condition-variable blocked target, noROS/SRT/network command.
+  Stop first failed live gate, no fallback/permission/image/cap changes, noGDB.
+- New SDK install/bridge-shutdown-trace-calibration and all3ROS packages under
+  install/m3-shutdown-trace-calibration-ros built fresh/pinned image/provider.
+  New shutdown-tracing layout13-entry manifest includesSDK/worker/ROS+fixture,
+  recursively preserves allold chains including sender-reconcile. ActualCMake
+  import/embedded workerprefix verified. Source/parser choices extended, defaults
+  unchanged. Offline457 Python tests +2 gate controls PASS beforelivecapture.
+- Initial evidence-local wrapper import collision failed before any case/output
+  existed; tools/helper order fixed, gatecontrols rerun, new prospective freeze.
+  Invalidated freeze/preflight +failedlogs retained; no live case retry. Source/
+  driver/fixture/plan/inventory frozen beforeactualrun, still match afterward.
+- Actual .local/m3-shutdown-live-calibration-20261109T213149536405Z:
+  default-off PASS full original10s sensor/cadence/zero-skip/age/accounting/capture/
+  shutdown/cleanup, no stage/observer outputs. Enabled PASS same +51operator/
+ 42robot real stage records, contiguousIDs/zero drops/stage pairs; observers ready
+  beforeSIGINT, each1contained post-signal sample and complete lifecycle.
+  Operatorwait223.842ms off/221.282on; robot340.790off/342.737on, not overhead ratio.
+- Separatefixture exits0/unforced after3.061764543s under unchanged5s wait,5valid
+  stages, distinct observer covers11post-signal samples/22threadreads while parent
+  blocks. Bothtasks observedS/futex_do_wait. All22post-signal kernelstack reads
+  PermissionError/errno13,0nonempty stacks;24total reads unavailable. Specific
+  kernelpermissionrule notattributed. wchan/syscall aren't stack substitutes.
+  Observercontrolcomplete/notexhausted; stackaccess mandatorygateFAIL, stop.
+- Overall2slotPASS/1FAIL (stack access), not fully calibrated. No toolsinstalled,
+  caps/sysctls/ptrace/queues/rates/crypto/clock/5sbudget changes, no original4211
+  retry or newqualificationmatrixcase. GDB/eu-stack/pstack absentpinnedimage;
+  procfs selectedprospectively. No realdebuggerattach or newprivileges. Next
+  prerequisite is separate bounded access/tooling scope; no automatic escalation.
+- All owned SENSOR namespaces/credentials removed and blockedcontainer--rm exited.
+  New13candidate/preserved chain +preparation artifacts +913 originalN3raw files
+  verifyunchanged.219newlocalfiles (~23MB) retained/hash-indexed. Publish compact
+  gate-report/calibration/realstage/observerdenials, fullraw local. Evidencefolder
+  evidence/m3-shutdown-live-calibration-2026-11-09/README.md; manifestimmutable
+  inventoryscope (no PASS inferred), PLAN/freeze/driver bound, postflightverifies.
+- Original N38PASS/1FAIL and unknownhangcause unchanged. Newbuild matched but
+  calibrationpartial, no stackcapture readiness claim, no N3credit/splice/9of9.
+  All29 N0/N4/N1/N2/N5 campaign cases disabled. M3notaccepted/PR2draft/M4untouched.
+
+
+### 2026-11-09 — One observer-only permission attempt; pre-exec FAIL
+
+- User authorizes narrowly scoped observer stack-access preparation and rerun
+  onlyblockedfixture; no tuning/two-loss4211 or campaign advance. Predeclared1run
+  with exact existingfixturebinary/SDK13,3s hold/5swait, no rebuild. All29disabled.
+- Added tools/m3_observer_permissions.py (opt-in only), native-x86 classicBPF
+  deny filter and selfcapdrop/NNP functions. Offline461PythonPASS (4new policy
+  checks) +1evidence-local finalgate syntheticcontrolPASS. No native filter was
+  installed by tests; correctBPFemulation did not testarchitecturecompatibility.
+- MinimalRO bundle only5files (fixture/observer/cleanup/controller/permission
+  helper), freshnamedvolume/out, DockerrootfsRO/networknone/privatePID, cap-drop
+  ALL cap-addSYS_ADMIN,NNP, defaultDockerseccomp retained; notprivileged/nohost
+  PID/proc/socket/workspaceRW. Intendedtargetcaps0 beforeexec, observercap21 plus
+  addedfilter, supervisorcaps0 beforesignal. NoSYS_PTRACE/GDB/newimage/sysctl.
+- Actual1targetattempt .local/observer-stack-permissions-20261109T221741624697Z:
+  containerpolicyinspectPASS,targetready, Observer Popen fails opaque
+  SubprocessError:Exceptionoccurredinpreexec_fn. No ready/JSONL/per-role proof.
+  Exactnestederrno/call notretained, no kernelstackcalibration/captureattempt.
+  Targetpreexec selfdrop check passed by controlpath, but plannedroleattestation
+  not reached; do not infer observercap/filter enforcement from configuration.
+- Read-onlydaemonmetadataaarch64 vsimage/processamd64; helpernative-x86filter
+  and process-only architecturecheck are a concretecompatibilityblocker. Exact
+  preexec cause notproven. I missed native-daemon architecture preflight, which
+  shouldhave rejectedthis beforetargetlaunch. Do not use this asreadyARM64 recipe.
+- Failurecleanup:supervisorfinalCapEff/Prm/Inh/Amb0,NNP1,bnd21only; target exits0
+  unforcedafter3.074699502s,5originalmarkers. Container+namedvolume removed0 and
+  absent. No furtherattempt/policyfallback/escalation, no tuning or4211retry.
+- Evidence evidence/m3-observer-stack-permissions-2026-11-09/README.md, frozen
+  PLAN/profile/readonlybundle sources, gate/result/child/finalcaps/postflight/
+  rawhashes. All13matched entries, earliercalibrationindex and913N3raw verify
+  unchanged. No source/fixture edit afterattempt; intendedsourcefreeze stillmatches.
+- Next prerequisite:compatible daemon-nativeobserverpolicy or nativeexecution,
+  plus explicitpreexecerrorretention before anyotherliveattempt. Notimplemented
+  orlaunched now. Prioroff/healthy-stage/waitsamplingPASS retained, prior22stack
+  readsdeniedFAIL unchanged, thissetupFAIL separate. Stackaccess uncalibrated,
+  originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Native observer filtering; OCI readiness FAIL before target
+
+- User authorized architecture-compatible observer filtering, explicit pre-exec
+  diagnostics and only blocked-thread calibration. Predeclared exactly one
+  native readiness check, then one unchanged target only if readiness passed.
+- tools/m3_observer_filtering.py selects daemon-native named allowlist/default
+  deny; rejects emulated observers. ARM64 observer pinned ROS digest, original
+  amd64 target/13 matched entries untouched. No SDK/ROS rebuild or tuning.
+- Native observer sidecar alone configured SYS_ADMIN/NNP/custom filter, minimal
+  RO bundle/root, private output volume/network-none. Planned target/supervisor
+  capability sets including bounding zero; private-PID join only. No SYS_PTRACE,
+  host namespace/socket, privileged/unconfined or global permission change.
+- Explicit launcher stages, errno/type/message/traceback and execv replace
+  preexec_fn. Docker stderr/State.Error cover pre-interpreter failures. Offline
+  467 tests PASS, including four policy and two error-path controls, before freeze.
+- Exactly one readiness attempt: OCI exit1, 'reopen exec fifo: get safe
+  /proc/thread-self/fd handle: fstatfs fsmount:fscontext:proc: operation not
+  permitted'. Frozen allowlist omits fstatfs. No Python entry or observer ready;
+  cannot claim the single missing call is the entire bootstrap gap. Zero blocked
+  target runs, no policy relaxation or retry after the first failed gate.
+- Readiness container/output volume removed/absent. Sources/helper/profile and
+  full preserved build chain match freeze; original 913 N3 raw files, 219 older
+  calibration artifacts and previous permission attempt unchanged. Raw evidence
+  and helper bundle indexed under evidence/m3-observer-native-filter-2026-11-10.
+- Native selection implemented; runtime filter compatibility/stack access still
+  unqualified. Next prerequisite is offline OCI-bootstrap syscall review and a
+  separate frozen readiness check. No next attempt queued. Original N3 8PASS/1FAIL,
+  unknown hang cause; all29 remaining campaign cases disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Reviewed OCI bootstrap; native readiness and blocked stacks PASS
+
+- User authorized runtime-bootstrap review, observer filter update, readiness,
+  then only blocked-thread calibration. No tuning/two-loss4211 retry; all29
+  remaining campaign cases disabled. New prospective one-shot freeze; prior
+  failed profiles/freezes/attempts unchanged.
+- Daemon runc1.5.2/v1.5.2-0-g29dd3dc2, nativeARM64. Upstream tag path applies
+  NNP seccomp before FIFO reopen; safe procfs validates fstatfs/fstat then uses
+  openat2 on supported kernels. Descriptor cleanup uses the same wrapper. Added
+  only fstatfs/openat2; previous common IO/memory/clock/signal/exec calls retained.
+  No mount/namespace/credential/ptrace/network/process-memory/fork/clone grants.
+  Source-review correspondence, not runtime binary reproducibility. References
+  and local source hashes retained; all468Python tests PASS before freeze.
+- Native ARM64 pinned observer, original amd64 image/fixture/13matched entries,
+  original3s hold/5s wait unchanged; no SDK/ROS/native rebuild. Minimal RO helper
+  bundle/root, networknone, fresh output volume. Observer-only SYS_ADMIN,NNP1,
+  exact custom native policy; target/supervisor all capability sets inclbounding0
+  and default seccomp. No hostPID/proc/socket/workspace exposure/global change.
+- Exactly1readiness PASS (entry/preexec_verified/self_check_passed,exit0), then
+  exactly1unchangedtarget PASS. Native sidecar joins only ownedtarget privatePID,
+  identity PID7/start_ticks435,observerPID9,ready beforeSIGINT. SharedbootID,
+  zero time offsets. Explicit entry/verification/exec records survive.
+- Target exits0/unforced3.053350251s; all5original markers correct/zero drops.
+  12fully-contained post-signal blocked samples/24nonempty stack reads, both
+  original TIDs7/8, no denied/truncated/identity/budget failures. Both ARM64 futex
+  kernel waits; total13samples26reads0unavailable, complete parent_stopfooter.
+  No GDB/attach/userspace stacks or overhead-equivalence claim. Kernel stacks
+  belong to ARM64 Linux executing the amd64 fixture through emulation.
+- All3owned containers/bothvolumes removed/absent, no forcedcleanup. Source,
+  input/helper/profile and matched13/preserved build chain verify unchanged.
+  Prior913N3 raw files,219oldcalibration files and previousobserverattempts match
+  retained indexes. 97local artifacts/helper/reviewedsourcefiles hash-indexed;
+  actualstackJSONL and gate/caps/stage/child/ready/exec/postflight published under
+  evidence/m3-observer-bootstrap-calibration-2026-11-10.
+- Synthetic kernel-stack capture calibrated on this host/policy. No original
+  bridge hang attribution, real shutdown failure reproduction, user frames or
+  N3 closure. Original8PASS/1FAIL unchanged. No next experiment queued, no4211
+  retry/tuning/expiry/replay. All29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Prepared one operator bridge shutdown diagnostic; execution disabled
+
+- User requested preparation only. No bridge, sidecar, capture, Docker object or
+  network mutation started; no execution authorization file created. New disabled
+  prospective freeze binds one healthy N0 SENSOR1701/10s, capture/trace enabled,
+  matched shutdown-tracing SDK/ROS13 and original5s stop_children wait. No selected
+  losses/commands, tuning/expiry/replay/two-loss4211 retry or campaign dispatch.
+- Evidence-local N0-only adapter removes selected-loss branches; CLI requires a
+  separate exact scope/freeze-SHA authorization and refuses other cases/options,
+  changed source/build/runtime/profile, existing output or unrelated live containers.
+  Default scenario/campaign adapters unchanged; all29 remaining cases disabled.
+- Stage tracing both roles; native ARM64 calibrated observer only on operator
+  bridge/plain SDK journal-worker descendants. Host arms sidecar after SENSOR
+  capture/result barriers and before release/SIGINT. Explicit entry/preexec/exec,
+  ready, identity/boot/time and permission gates; no extended child wait/hold.
+- Same calibrated profile/image/minimal RO5file bundle; sidecar SYS_ADMIN only,
+  NNP, default-deny/native filter, networknone/private ownedPID/rootFSRO, private
+  outputvolume. No SYS_PTRACE/GDB/privileged/host namespaces/proc/socket/workspace
+  or credential exposure. Lab NET_ADMIN/BPF remain as existing capture fixture.
+- New bridge-only exec wrapper drops bounding and all active/inheritable/ambient
+  capabilities, enables NNP/same-UID dumpability. Bridge/worker credentials and
+  journal/trace access must qualify live; no fallback if unavailable. This wrapper
+  and bridge sidecar integration are offline prepared, not already live validated.
+- Healthy shutdown needs original complete stages/zero drops, exit0/unforced,
+  source/typed/capture/accounting/cadence gates and bounded observer finalization.
+  Fast clean exit may have zero post-signal samples; at least1 real bridge kernel
+  stack required. Forced child kill stays FAIL, with >=2post-signal samples and
+  nonempty stacks needed for complete hang observation. Raw failures retained;
+  sidecar exported/reaped before lab PID namespace removal. No inferred cause.
+- 475Python tests PASS (7new authorization/scope/no-Docker/capdrop/cleanup/coverage
+  controls); ctypes Linux calls and ROS bridge execution mocked or unexecuted.
+  Prepared freeze/helper/source and13matched/preserved chain verify unchanged.
+  All913originalN3raw/219oldcalibration/bothfailedobserver/latestPASS artifacts
+  retain indexed hashes. No native/SDK/ROS rebuild. Prefix objects/output absent.
+- Package evidence/m3-bridge-shutdown-preparation-2026-11-10 includes PLAN,
+  executable-but-disabled driver, scenario/capdrop/sidecar/assessor, immutable
+  freeze/readiness/postflight and test reports. No authorization file or live
+  result. Original N3 8PASS/1FAIL/unknowncause unchanged; M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Authorized N0/1701/10s bridge diagnostic; observer gate FAIL
+
+- User authorized exactly prepared single N0 seed1701/10s, stop first failed
+  gate, no tuning or two-loss4211 retry, all29 remaining campaign cases disabled.
+  Separate exact authorization binds prepared freeze aa167cf71bc3; preparation
+  freeze/scripts/bundle unchanged. All13matched/preserved chain, source/inputs,
+  runtime/image and retained raw indexes pass preflight; no live container overlap.
+- Exactly one attempt .local/bridge-shutdown-diagnostic-20261110T073724485219Z:
+  both bridge capdrop/identity proofs allcapsets inclbounding0/NNP1/Seccomp2.
+  Session/SENSOR ready and both result barriers reached; source fence duration
+  10.053922838s. Measurement capture closes and interface features match.
+- FIRST FAIL: observer isolation mismatch. Raw Docker CapAdd ['CAP_SYS_ADMIN']
+  versus prepared literal ['SYS_ADMIN']; all other combined check fields match.
+  Normalized role is exactly intended SYS_ADMIN. I missed CAP_ normalization
+  in this separate sidecar gate, though prior synthetic driver normalizes it.
+  Observer created/inspected only, no docker start/entry/exec/ready/stacks. No
+  denied-stack, kernel/filter or broader-permission failure can be inferred.
+- Driver exits1. Secondary assessor missing operator-observer-ready is downstream
+  of primary gate, explicitly mapped in gate-report. No source/cadence/typed/age/
+  packet qualification after this gate; barrier results alone are not full PASS.
+  No fix, changed freeze/profile/capability, retry or next case executed.
+- Abort/release cleanup uses unchanged5s child waits. Operator bridge exits0,
+  unforced223.895250ms; robot source172.833417ms, robot bridge326.048375ms, both
+  exits0/unforced. Operator51/robot39stage records, zero drops, lastpoint
+  main_context_shutdown_end. No observer during cleanup; real stack integration
+  remains unvalidated, original hang cause unknown. Prior synthetic PASS retained.
+- Two lab containers, created-unstarted observer, internal network and output
+  volume removed/absent, credential deleted. Source/inputs/matched13/preserved
+  chain and original913N3raw/219oldcalibration/previousobserverindexes unchanged.
+  No native/SDK/ROS rebuild or heavy tests overlapped run. Offline475 result not
+  rerun or extended into a live integration claim.109closed local artifacts hashed.
+- Evidence evidence/m3-bridge-shutdown-diagnostic-2026-11-10: prospective PLAN,
+  authorization/preflight, primary/secondary gate reports, child/stage/identity/
+  policy/commands, postflight/raw index. Prepared one-shot output now exists;
+  cannot re-run it. Next prerequisite is narrow capability-name normalization
+  with regression control/new freeze, not a runtime tuning change. No automatic
+  follow-up authorization or attempt. OriginalN3 8PASS/1FAIL, all29disabled,
+  M3open/PR2draft/M4untouched; no two-loss4211/expiry/replay/commands.
+
+
+### 2026-11-10 — Capability-name correction; new N0 diagnostic lifecycle gate FAIL
+
+- User authorizes narrow capability validation fix/regression and one new frozen
+  N0seed1701/10s attempt, first failed gate stops, no tuning/two-loss4211, all29
+  remaining cases disabled. Copied evidence-local harness preserves old scripts/
+  freeze/109raw records. Sidecar normalizes optional CAP_ before exactSYS_ADMIN
+  set check; all other isolation gates unchanged. Three regression controls use
+  retained Docker policy, both spellings/no mutation, missing/wrong/extra caps,
+  and each other isolation mismatch. All478Python PASS before freeze; no overlap.
+- New freeze ef3b21177073, matched13/preserved builds, exact calibrated observer
+  policy/image/helper/runtime and all prior raw indexes verify. No SDK/ROS/native
+  rebuild or production-source/filter/budget change. Separate exact authorization
+  permits one new output .local/bridge-shutdown-capability-fix-20261110T075305613021Z.
+- Capability/config gate nowPASS; native observer entry/preexec/exec/ready before
+  SIGINT with exactidentity/sharedclock/capsNNPseccomp. RootbridgePID141 and plain
+  journalworkerPID157 observed. Three samples/28nonempty stacks/0denials; initial
+  23bridge+1worker reads, then1containedpostsignal sample with4bridge stacks and
+  worker gone_or_reused, finalsample afterrootreap. No truncation/budgetfailure,
+  complete all_owned_processes_gone footer, observerexit0/unforced.
+- FIRST FAIL at unchanged coverage assessor: live target observation incomplete.
+  It rejects every registered non-sampled process before rootreap, including that
+  workergone row. Actual worker_join_end34558644098ns precedes samplebegin
+  34697387390ns, consistent with ordinary workerexit during teardown. Raw status
+  conflates gone/reused, so no unique PIDreuse/crash assertion or retrospective
+  gate waiver. No postfailure source/rule change, fallback or furtherattempt.
+- Underlying SENSOR adapterPASS retained separately; finaldiagnosticFAIL/exit1.
+  Later diagnostic full-stage checks not reached. Operator exits0/unforced
+  221.450875ms, robotbridge320.953167ms, source167.404875ms; original5swait unchanged.
+  Real kernel capture works on this root; full lifecycle acceptance stillFAIL.
+  Originalfaultedhang not reproduced/attributed; no userspace/GDB/overhead claim.
+- Two lab containers+observer/network/outputvolume removed/absent, credential
+  deleted, allsupervisedchildren/observerreaped noforce. New source/input/helper/
+  matched13/preserved chain and all old indexed raw records match postflight.
+  116closedlocal artifacts hash-indexed; source/profile notedited afterattempt.
+- Evidence evidence/m3-bridge-shutdown-capability-fix-2026-11-10 includesPLAN,
+  regression/fulltests, newfreeze/auth/preflight, exactobserverJSONL/caps/ready/
+  exec/stage/child/policy, both result statuses, gate/postflight/rawindex. Next
+  prerequisite is separately reviewed owned-worker exit versus PIDreuse lifecycle
+  handling using retained join/stack evidence; no automaticfix/rerun. OriginalN3
+  8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Explicit worker exit/reuse distinction; robot stage gate FAIL
+
+- User authorizes lifecycle distinction/regressions and one new N0seed1701/10s
+  freeze, first failed gate stops; no tuning/two-loss4211, all29stages disabled.
+- Evidence-local collector copy adds explicit matching/process_missing(ENOENT)/
+  pid_reused(differentstartticks)/identity_unavailable outcomes, observed identity/
+  name/parent/checktimestamp. Original collector and all earlier freezes/captures
+  preserved. Exact calibrated native policy/image/permissions/sample budgets and
+  original5s child wait remain; no SDK/ROS/native rebuild or runtime tuning.
+- Only pre-signal sampled unique journal-worker identity with direct rootparent/
+  name, ordered unique same-thread/root/sequence/drop-checked workerjoin markers,
+  then ENOENT within sample time can confirm workertermination. No workerexitcode/
+  cause claim (joinend records completion irrespective return). PIDreuse/readerror
+  before or afterrootreap, missingjoin/wrongworker/premature/rootdisappearance,
+  identity race/ambiguouslegacy/budget/truncation remainfailed. Six new regressions
+  plus full484Python PASS beforefreeze, no tests/build overlap livecapture.
+- Freeze178e40eebcab, exactauth, one output
+  .local/bridge-shutdown-lifecycle-20261110T080138295230Z. All13matched/preserved
+  builds/currentruntime/newsource-input and previous rawindexes verifiedbefore.
+- Native observer startup/clock/permissions/identity/ready beforeSIGINT PASS.
+  Three samples26successful stack reads0denied, finalall_owned_processes_gone/
+  no budgetfailure. Withinchildwait2samples25nonempty reads/1postsignal sample;
+  workerPID158/startticks1123 explicitlyENOENT afterjoinend31113468430ns, accepted
+  lifecycle proof. No PIDreuse or identity-readfailure. PriorambiguousFAIL intact.
+- FIRST FAIL next full-stage gate: robot missing socket_close_begin/end. Operator
+ 51/robot39zero-drop records end main_context_shutdown_end. No marker substitute,
+  stagegate relaxation, patch/fallback or retry followed. Missingmarkersalone
+  do not prove leak/hang. Underlying SENSOR adapterPASS separate from final
+  diagnosticFAIL/exit1; later diagnostic SENSOR/capture assessmentnotreached.
+- Operator exits0/unforced220.430292ms, robotbridge334.928375ms, source167.202875ms;
+  original5swait unchanged. Allownedcontainers/network/observervolume removed/
+  absent, credentialdeleted, noforcedcleanup. Newsource/input/helper/matched13/
+  preservedchain and everyprior rawindex matchpostflight;116newrawfiles hashed.
+- Evidence evidence/m3-bridge-shutdown-lifecycle-2026-11-10 includesexplicit
+  collector/assessor, tests/PLAN/newfreeze/auth/proof, rawobserver/stage/child/
+  policy/entry/exec/ready, bothstatuses/gate/postflight/index. Next prerequisite:
+  retained-evidence robot socket-close trace coverage review, no autorun. Original
+  N3 8PASS/1FAIL/unknowncause; no replay/expiry/tuning/4211/all29disabled,
+  M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Retained robot socket-marker diagnosis; no runtime work
+
+- User authorizes retained-evidence diagnosis only, no tuning/two-loss4211/new
+  experiments, all29 remaining campaign cases disabled. No Docker/bridge/source/
+  observer/capture, testfixture/build, native/source/harness/gate/filter change.
+- Source transport.cpp close_fd only executes for valid SRTSOCKET; each inner
+  epoll-remove/closebegin/closeend marker further requires stopping||shutting_down.
+  It calls srt_close then sets slotinvalid; returnvalue unlogged/unchecked. Normal
+  lost/apply/drop/reconnect close paths beforelocalstop are untraced. Caller
+  listener slots nevercreated; unconditional finalCONTROL/SENSOR wrappers can
+  execute with allslotsinvalid. Assessor requires socketclose markers globally
+  withoutdispositioncondition: contract mismatch, not evidence of actualhang/leak.
+- Compared8retained roletraces across originalenabledcalibration and3later N0
+  attempts. All have identical39non-socket pointmultisets/contiguoussequence/
+  zero reported drops. Operators51=39+4triplets; oldrobot42=39+1; laterrobots39
+  have0triplets. Latestrobot completeouter session/CONTROL/SENSOR/epoll/provider/
+  transport/endpoint/node/context boundaries. Source-supported inference: final
+  caller linkslotsalreadyinvalid, not missing outercleanup execution. No fdentry
+  snapshot or srtclose-result proof; no every-handle/no-leak success assertion.
+- Timeline operator lastsocketclose31119523430ns, source reap31266105055ns,
+  robotSIGINT31266139055ns, transportshutdown31280543847ns. Peer-last-close to
+  robotSIGINT146.615625ms. Reverse childcleanup stops/reaps robot source before
+  bridgeSIGINT. Peer-loss close beforelocalstop is stronglyconsistent; exact
+  event/timestamp/provider/session/error path unavailable, not uniquely proven.
+- Robot readybarrier27790434388ns/sampletrace25525464178ns and packet stop-before
+ 29999485972ns precede peer shutdown. Endpointprocess sample30944188055ns also
+  beforepeerclose and containsno socketstate. No robotstack observer or enabled
+  command/provider close log. Cannot reconstruct earlier fdtransitions from these.
+- Offline analyze.py/report.json reproducecounts/timing/observationbounds and
+  sourcehashbinding; latestsource/inputfreeze, matched13/preservedbuildchain and
+  oldrawindexes including latest116 records verify. Transport source also matches
+  original shutdown-build freeze. Prior484tests retained scope; no tests/build run.
+- Future correction scope (unimplemented): explicit per-channel valid-close vs
+  alreadyinvalid disposition/phase/FD and close outcome where available, with
+  conditional gate requiring positive disposition evidence and missing/error
+  controls. Do not simply remove mandatorymarkers or inferclose success. No
+  prospective run prepared/queued/authorized by this analysis. Evidence under
+  evidence/m3-robot-socket-close-diagnosis-2026-11-10; priorN0 stageFAIL unchanged,
+  originalN3 8PASS/1FAIL/unknowncause, all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Explicit socket dispositions/results; new bounded N0 diagnostic PASS
+
+- User authorizes explicit socket tracing/matching gates/regressions and one new
+  N0seed1701/10s freeze, stop firstfailedgate, no tuning/two-loss4211, all29disabled.
+- Native transport emits control/sensor data/listener fd dispositions unconditionally
+  at final sweep. -1alreadyinvalid; validfd actualclosebracket includes original
+  srt_close return. Header helper callscloseexactlyonce/preservesresult, same
+  runtimeinvalidation/count/order; no queue/clock/rate/crypto/retry/5swait change.
+  One observation decision perclosecall avoids partial diagnosticflag races.
+- Matching gate demands4unique correctlyphased/threaded dispositions, validfd
+  close/result0/end, no orphan/missing/duplicate/wrongfd/thread/phase/drops. All
+  common stages retained; positive already-invalid evidence replaces unconditional
+  socketpresence. Record sequence population not concurrentfilewriteorder; same
+  threadjoin/close order stillstrict.7newPython regression controls/full491PASS;
+  extendednativefile tracecontractPASS defaultoff/onecall/success/erroroutcomes.
+- Separate Release SDK build/install bridge-socket-disposition and ROS3packages
+  m3-socket-disposition-ros in unchanged pinnedamd64image/networknone/provider.
+  Matched14 inventory includes nativecontractbinary/provider; oldshutdown13/full
+  earlierchain verifiedpreserved. OnlyexpectedmessagesCMakeunusedSDK/SRTvarwarning.
+  No olderprefixoverwrite. Evidence-localruntimeverifier; scenarioaddsnewROSchoice
+  withoutdefaultchange, no generalcampaignadapter/IPC4 --worker-ipc-v3 change.
+- Freeze bc59e3d73dc0, exactauth, one output
+  .local/socket-disposition-20261110T082437633698Z. No heavychecks/build overlap.
+  Observer calibratednativeimage/policy/permissions/budgets unchanged, operatoronly.
+- FINAL PASS: operator59/robot43zero-drop stages, all lifecycle/common/slot/result
+  gates. Robot4slots explicit-1/no locallytracedclose. Operator datafdslots-1 at
+  finalsweep with2earliersessionstop closes,2listeners validclosedthen; all4close
+  returns0. No inference about pre-stopclose outcome/everyhandleleakfreedom, no
+  retrospective promotion of missingmarkersFAIL. Observer27nonemptyreads/0denied,
+  1containedpostsignal sample, registeredworker exit proof andboundedfooterPASS.
+- Strict SENSOR accounting/capturePASS:10.054288796s,200.014147/50.028402Hz,
+  zerosourceskips, sixbalances0, ageuppermax69/80ms.2514produced2394observed,
+  120accounted upstream/admission/replacement/publication/observer-stage differences.
+  Latest-only delivery, not lossless/physicalage/N3 qualification or generalcompare.
+- Operator exits0/unforced215.842500ms, robotbridge326.124084ms, source165.464791ms;
+  original5swaits. Allcontainers/network/volume removed/absent, credentialdeleted,
+  noforcedcleanup. Source/input/new14/old13/provider/fullchain/previousrawindexes
+  matchpostflight;116newrawfileshashed. Both adapter/finalassessmentPASS/driver0.
+- Evidence evidence/m3-socket-disposition-2026-11-10 has source/build recipe,
+  native/Pythonvalidation, manifests/newfreeze/auth/PLAN, exactslot/outcome/stage/
+  observer/child/capture/proofs, gate/postflight/index. One-shotconsumed; no further
+  runqueued. OriginalN3 8PASS/1FAIL/unknownhang retained, no4211retry/tuning/expiry/
+  replay/all29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Two-loss seed2903 shutdown diagnostic prepared; execution disabled
+
+- User requests preparation only using newmatchedbuild/tracing/observer, no tuning/
+  two-loss4211, remainingcampaignstages disabled. No fault/source/bridge/capture/
+  observer/nativefixture/build/Docker object started or configured, no authfile.
+- Fixed one-two-loss-2903-30s-operator-bridge-shutdown-diagnostic scope. Existing
+  30s N3 fixture duration, seed2903, firstmixedrow1positions2/3/source msgs7/8,
+  current socket-disposition14/oldshutdown13/fullchain/provider unchanged.
+  Nativebuildinputs and capturehelpers match prior healthyN0PASS; no rebuild.
+- Evidence-local adapter derives fresh ISN/socketID/SENSOR UDPtuple after binding
+  capture, installs exactexistingu32rules beforepublicationarm; initialcounters0,
+  exactly1packet/drop eachafterbarriers, restoreownedhook beforecaptureclosure/
+  observerarm. Existing parity/SDK/typed/timing/two-loss proof and strictsource/
+  cadence/zero-skips/accounting/age/capture gates retained. No randomloss/tuning/
+  addedload/commands/expiry/replay or generaldispatcher/campaignresumption.
+- Newfixeddriver refuses allotherlosses/seeds/durations/capture/tracingmodes incl
+ 4211 and requires exactscope/freezeSHA separatefutureauthorization. Missinggrant,
+  runtime/input/native drift, unrelatedlivecontainers/existingoutput fail before
+  labcreation. No case splicing or retrospective promotion of older2903/4211.
+- Exact calibrated scenario/capdrop/sidecar/observer/lifecycle/socket-gate bytes
+  retained. Stage tracingbothroles, nativeobserver operator/plain SDKworkeronly,
+  arm before release/SIGINT, samepermissions/filter/budgets/privatePID/output/
+  ROminimalhelper/NNP and bridgecapsets0. Original5swaits, no timeoutstretch.
+- 497Python testsPASS (6new exactscope/4211refusal/broadgrant/freshselection/control-
+  tuplerejection/no-Docker-withoutauth/calibratedbytes controls). These do not
+  execute packetdrops or liveintegration. Two-loss on thisbuild remainsunvalidated.
+- prepare.py verifies14matched/old13/preservedchain, nativebuildsources/capture
+  helpers and allpriorrawindexes, readsdaemonversion, writes disablednewfreeze/
+  localROhelperbundle only. Postflight source/inputfreeze/nativebuild/oldrawverify,
+  output/authorization/prefixobjects absent, live_runs0. FrozenN0PASS remainsvalid
+  in recorded scope; oldN3 8PASS/1FAIL/unknowncause preserved. No experimentqueued.
+- Package evidence/m3-two-loss-2903-preparation-2026-11-10 includes PLAN/README,
+  fixedfault/shutdown hostadapter+originalvalidators, exactcomponents/manifests,
+  newfreeze/readiness/postflight/testlogs. Future one-shot muststopfirstfailedgate,
+  restoreselectors/captures/children/sidecar/labobjects/credential and preserve raw
+  failures; no fallback/retry. All29remainingstagesdisabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — One authorized two-loss2903/30s shutdown diagnostic PASS
+
+- User authorizes exactly prepared single2903/30s/two-loss case, stopfirstfailedgate,
+  no tuning/two-loss4211, allremainingstagesdisabled. Separateexactauth binds
+  preparedfreezeb9edfe65b927; source/input/helper/tracing/filter/14matched/old13/
+  fullpreservedchain/provider/87nativeinputs and oldrawindexes passpreflight.
+- One output .local/two-loss-2903-shutdown-20261110T083854934922Z. Freshbinding
+  ISN/socket/tuple mapsrow1positions2/3source msgs7/8;2u32initialcounters0, each
+  exactly1packet/drop494/438bytes. Ownedhookrestored/emptyreadback beforecapture
+  closure/observerarm. SDK/native/PCAP/parity/typed two-loss proofPASS, exact
+  receiverdecisionmissingmsgs[7,8], SRTgap2. No randomloss/parameterchange.
+- Source30.053584597s,200.009419/50.010673Hz,0skips,sixbalances0,ageuppermax26/41ms.
+  7514produced7254observed:260accounted upstreamDDS8/admission19/outboundreplace230/
+  selectedSRTgap2/receivereplace1. Latest-only, not lossless/physicalage/N3fullclaim.
+- Observer nativeentry/exec/permission/identity/clock/ready beforeSIGINT PASS,
+  25successfulstackreads0unavailable,24nonemptyinsidewait/1containedpostsignal,
+  confirmedregisteredworker absenceafterjoin, completeboundedfooter. NoGDB/SYS_PTRACE/
+  overheadclaim, unchangednativepolicy/image/caps/NNP/budgets/privatePID/ROhelper.
+- Stage/dispositionPASS operator59/robot43zero-droprecords. Robot4slots-1/no local
+  close; operator2datacloses during sessionstop plus2listenercloses atfinalsweep,
+  all4tracedreturns0. No inferredearlierrobotcloseresult/everyhandleleakproof.
+  Operator exits0/unforced216.091042ms, robotbridge316.515126ms, source167.677083ms;
+  original5swaits unchanged. Both adapter/finaldiagnosticPASS/driver0, nofailedgate.
+- Allselectors/captures/children/observer/labcontainers/network/volume cleanedup,
+  credentialdeleted, absenceverified/noforce. Source/input/14matched/old13/provider/
+  fullchain/native87/previousrawindexes matchpostflight.124newclosedrawfiles hashed.
+  No nativebuild/heavychecks/othercase overlapped; prior497offline tests notrerun.
+- Evidence evidence/m3-two-loss-2903-execution-2026-11-10 includesprospectivePLAN/
+  auth/preflight, fullresult/assessment/selectedcounter-restorationproof, exact
+  stage/slot/result/observer/child/ready/exec/policy, postflight/index. Faultlogs
+  copied fromactualmeasurement subdir after routinepublishpath correction; raw
+  case and statuses untouched/no rerun. Preparedfiles immutable; one-shotconsumed.
+- This is one newdiagnosticPASS, not originalN3splice/fullqualification/oldFAIL
+  promotion or original4211hang reproduction/attribution. No followingcasequeued;
+  all29remain disabled, no tuning/4211/expiry/replay/commands,
+  originalN3 8PASS/1FAIL/unknowncause/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Narrow two-loss4211 diagnostic prepared only; execution prohibited
+
+- User explicitly requests preparing seed4211 using matchedbuild/tracing/observer,
+  do NOT runyet/no tuning/allremainingstagesdisabled. Earlier4211 exclusion is
+  superseded only for preparation, not liveexecution. No authfile/process/drop/
+  classifier/capture/bridge/observer/nativefixture/build/Dockerobject ornetwork
+  mutation created/started. Localmetadata/ROhelperbundle only; daemonmetadata read.
+- Scope one-two-loss-4211-30s-operator-bridge-shutdown-diagnostic. Same30s source
+  window, row1positions2/3msgs7/8, freshbindingISN/socket/SENSORtuple, original
+  counters0->1each, restoration/two-lossparity/SDK/native/PCAP/typed/conservation/
+  cadence/age/zero-skips/5swait gates as passing2903. No othercase/load/commands/
+  expiry/replay/campaignresumption/historicalprefixsplice or acceptancepromotion.
+- Reuses exact14matched/oldshutdown13/provider/fullchain/87nativeinputs/capture
+  helpers; no rebuild/sourcepolicychange. Scenario/capdrop/nativeobserver/filter/
+  lifecycle/socketgate bytes identical to validated N0/two-loss2903. Newhostcode
+  only changes fixedseed/scope/path/assessmentcase/provenance. Seed4211 integration
+  on thisbuild remainsunexecuted; originalarchived4211hang/failure unknown/preserved.
+- Observability fixed: tracebothroles, native ARM64 observer operator/plainjournal
+  workerdescendants only, readybeforeSIGINT, samePID/startticks/clocks/capsNNP/
+  minimalRO/privatePID/output/networknone. Same confirmedworkerexit-vs-reuse and
+  positive4socketdispositions/actualtracedreturns. Samebudgets; no GDB/SYS_PTRACE/
+  unconfined/privileged/hostnamespace/socket/globalsetting or shutdownwaitstretch.
+- Futuredriver needs exactscope/freeze-SHA AND execute=true AND explicit
+  seed4211_execution_authorized=true, retaininghistorical4211failure/no_tuning/
+  all29disabled. No suchrecordexists. OldN0/2903/broader/prepgrants, wrongtuple,
+  runtime/source/input/native drift, existingoutput/unrelatedlivecontainers refuse
+  beforelabcreation. No automatic readiness/experiment/secondcase.
+- 503Python testsPASS (6new seed4211scope/explicitgrant/history-preservation/
+  missinggrant-beforeDocker/tuple-selection/componentbyte controls). Tests mocked/
+  offline, no nativefixture or packetdrop. Prepare/postflightsource/input/14matched/
+  old13/native87/provider/earlierraw indexes including latest2903PASS124rawfiles
+  verifyunchanged. OriginalN3raw913 and allpriorFAILs preserved.
+- Package evidence/m3-two-loss-4211-preparation-2026-11-10 includes PLAN/README,
+  fixeddisabledadapter/gates/exactcomponents/manifests, newfreeze/readiness/
+  postflight/tests. Sourceoutput/auth/prefixobjects absent, live_runs0. A future
+  explicitlyauthorized one-shot muststopfirstfailedgate and restoreselectors/
+  captures/children/observer/lab/credential preservingrawFAILs; no fallback/retry.
+  All29disabled/originalN3 8PASS/1FAIL/unknowncause/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — One explicitly authorized current-build4211/30s diagnostic PASS
+
+- User now authorizes preparedseed4211 once, stopfirstfailedgate/no tuning or
+  automaticretries/all29remainingstagesdisabled. Separateexactgrant explicitly
+  seed4211_execution_authorized=true binds freeze6c5908a45f7a. Preparedfiles/
+  source/input/helper/gates/native14/old13/fullchain/provider/native87/capture/
+  runtime/oldraw verify; no rebuild/unrelatedlivecontainer/heavyoverlap.
+- One output .local/two-loss-4211-shutdown-20261110T085945930188Z. FreshISN/socket/
+  SENSORtuple mapsrow1positions2/3msgs7/8; two u32initialcounters0/final1packet/drop
+  each494/438bytes, ownedhookrestored/emptyreadback beforecaptureclosure/observerarm.
+  SDK/native/PCAP/parity/typedproofPASS;exactreceiverdecisionmissing[7,8]/SRTgap2.
+- Source30.054013639s,200.006564/50.009959Hz,0skips, sixbalances0,ageupper34/44ms.
+  7514produced7264observed:250accounted upstreamDDS10/admission7/outboundreplace230/
+  selectedSRTgap2/observerDDS1. Latest-onlydelivery, not lossless/physicalage.
+- Nativeobserverentry/exec/capsNNPfilter/clock/identity/ready beforeSIGINT PASS;
+  27nonemptyreads0unavailable,1containedpostsignal, registeredworker absentafterjoin,
+  normalboundedfooter. Sameobserverpolicy/image/permissions/budgets/privatePID/RO
+  helper and bridgecaps0; no GDB/userspace/exitcode/cause/overhead claim.
+- Operator59/robot43zero-drop stages, allcommon/lifecycle/positivefd/result gates
+  PASS. Robot4slots-1/no localclose. Operator2datacloses atsessionstop+2listeners
+  atfinalsweep, all4tracedreturns0. No earlierrobotcloseoutcome/everyhandle claim.
+- Operator exits0/unforced216.513750ms, robotbridge326.382042ms, source165.040833ms;
+  original5swait unchanged. Both underlyingadapter/finaldiagnosticPASS/driver0;
+  nofailedgate, retry, follow-oncase or stage. No commands/expiry/replay/tuning.
+- Selectors/captures/children/observer/labcontainers/network/volume cleanedup,
+  credentialdeleted/absenceverified/noforce. Source/input14matched/old13/native87/
+  provider/fullchain/previousrawindexes matchpostflight.124newrawfiles indexed;
+  no tests/nativefixture/build repeated, prior503offlinevalidation retains scope.
+- Evidence evidence/m3-two-loss-4211-execution-2026-11-10 includesPLAN/auth/preflight,
+  exactselecteddrop/restoration/result/assess/stage/slot/observer/child/ready/exec/
+  policy andpostflight/hashrecords. Preparationimmutable; authorizedoutputconsumed.
+- Historicalfailure not reproduced, attributed or provedfixed. Newcurrentbuild/
+  tracing/bridgecapdrop/observer/freshsession differs from originalcohort context;
+  do not infer same-instrumentation-free overhead or a deterministicfix. Original
+  N3 8PASS/1FAIL/unknownhang and alloldFAILs/raw preserved, no passingsplice,
+  all29disabled/M3open/PR2draft/M4untouched. No automaticexperiment queued.
+
+
+### 2026-11-10 — Fresh strict nine-case N3 cohort prepared only; execution disabled
+
+- User requests freshstrict9N3 onmatchedbuild withtracing/observer, doNOT runyet,
+  no tuning/automaticretries, firstfailedgate stops, allremainingstagesdisabled.
+  No grantfile/cohortcase/bridge/source/capture/observer/fault/nativefixture/build/
+  Dockerobject/networkmutation started. Read-onlymetadata/hashes/localROhelpers.
+- Fixed historicalseed-major order: baseline/one/two losses1701 cases1..3,
+  2903cases4..6,4211cases7..9, all30s. Baseline no selector; one msg8 row1pos3,
+  two msgs7/8pos2/3; freshbinding/ISN/socket/tuple/counters/credential/journal/
+  lab/observer eachcase. No isolatedsinglePASS or olderprefixcredit/splice.
+  All29later IDs explicitlybound/notdispatched; no general38-case controller.
+- Reuse14matchedsocket-disposition/old13/fullchain/provider/native87/capturehelpers,
+  exactcalibratedscenario/capdrop/nativeobserver/filter/lifecycle/socket gates.
+  No rebuild/parameter/IPC4 --worker-ipc-v3 change. Newmatrix/one-loss integration
+  withthistracing context offlineprepared, notliverevalidated/full9PASS.
+- Strictsource0skips/1%cadence/30..31s/modelage<=250/sixbalances0/sourceSDKtyped/
+  nativePCAPidentity/count/footer/rawreparse/faultrestoration/parity/one-repair/
+  two-gap2 gates unchanged. Stagebothroles/operator-onlydescendantstacks before
+  releaseSIGINT, exactclock/PIDstartticks/capsNNP/ready, workerENOENTjoinproof/
+  reusefail,4positivefd dispositions/results. Original5swait/budgets, noholds.
+- Caseproduction thenfullassessment includingresourceabsence/hashpostflight
+  BEFOREnextcase. Firstproduction/evidence/shutdown/cleanup/hashfailure yields
+  FAIL/laternot_executed; no repeat/resume/subset/reorder. Existingparentoutput
+  refused. Unexpectedexceptions best-effortcleanup frozenuniquecaseobserver/
+  recordedownedlabnames, preservepartialexports/forcedcleanupFAIL. No cleanup
+  exception/absence assumption canbePASS. No nextstage after9/9 or M3acceptance.
+- Newexactgrantmustlistall9ordered IDs/all29disabled IDs/freezeSHA/explicit4211/
+  historypreservation/no_tuning/no_auto_retry; oldsingle/original/fullcampaign
+  grants refused. Nonecreated. Source/input/runtime/image/native/build/oldraw/
+  unrelatedlive/oldprefixobjects checkedbeforecohort/beforecase/aftercase.
+- 511Python testsPASS (8new order/grant/legacy/no-Docker/scope/selection/stop-boundary/
+  all-nine-once/noresume/componentidentity/ownedemergencycleanup controls). Mocked
+  callbacks/selections/tempmetadata only, no nativefixtures/packetdrops. Postflight
+  confirms source/inputfreeze/14matched/old13/native87/priorrawindexesincllatest4211
+  PASS124files, output/auth/prefixobjects absent/live_cases0.
+- Package evidence/m3-strict-n3-preparation-2026-11-10 includes PLAN/cases and
+  disabledcase-plan, fixedadapter/strictassessor/sequence/cleanup, exactcomponents/
+  manifests, newfreeze/readiness/postflight/tests. HistoricalN3 8PASS/1FAIL/unknown
+  hang unchanged; no autorunqueued. All29disabled/M3open/PR2draft/M4untouched.
+
+
+### 2026-11-10 — Fresh strict nine-case N3 cohort PASS9/9; later29 remain disabled
+
+- User authorizes preparedexact9N3 onfrozenmatchedbuild/tracing/observer, first
+  failedgate stops/no tuning/automaticretries/alllaterstagesdisabled. Exactgrant
+  bindsfreeze45036de78761/all9orderedIDs/all29disabledIDs/explicit4211/history
+  preservation. Newoutput .local/strict-n3-cohort-20261110T093928707959Z only.
+- All9freshcasesPASS in historicalseed-majororder baseline/one/two1701,2903,4211.
+  No isolatedPASS credit/oldprefixsplice/subset/retry orfailedgate. Driver0. Each
+  sourcewindow30.053486889..30.059827848s,0skips/1%cadence/sixbalances0/modelage<=250,
+  completefooters and strict source/SDK/payload/typed/nativePCAP revalidationPASS.
+  Globalpublishedageuppermax43msIMU/57msjoints, not physicalages.67,630produced/
+  65,076observed;2,554accounted delivery-stage differences, not losslessavailability.
+- Baselines no selector. One-loss8 eachfreshbinding/1drop/restored/parity/SDK/typed
+  repairPASS. Two-loss7/8 eachfreshbinding/1dropeach/restored/mixedrow/parity/exact
+  receivergap2PASS. Counter/capture/actualpopulation independentlyreparsed percase.
+- Allroles stagePASS operator59/robot43each/zero drops; commonandexplicit4slot/
+  fd/thread/phase/close-result gatesPASS. Operator4tracedreturns0each, robotfinal
+  slots-1; no earlierclose/no-leakclaim. CalibratednativeobserverreadybeforeSIGINT,
+  identity/clocks/capsNNP/filter/budgets, registeredworkermissing-afterjoin vsPID
+  reuse/readfailure controlsPASS.28stackreads/case252total0unavailable,boundedfooter.
+  No GDB/userframes/overheadequivalenceclaim; originalhangnotreproduced/attributed.
+- Allchildrenexit0/unforced, unchanged5s waits. Maxoperator223.085584ms, robotbridge
+  351.491750ms. Eachcase fullassessment+cleanup/hash/absence PASS BEFOREnextproduce.
+  All18labcontainers/9observers/9networks/9volumes removed/absent,9credentialsdeleted,
+  selectorrestoration/captureclosure confirmed, noforced/emergencycleanup.
+- No nativebuild/source/helper/gate/policy/rate/queue/clock/timeout change orheavy
+  checkoverlap. Source/input/new14/old13/native87/provider/fullchain/previousraw
+  indexes verifythroughout+finalarchiveaudit.1,092newrawfiles302,649,191bytes hashed.
+  Prior511offline tests retain theirscope, not rerun as extralivequalification.
+- Evidence evidence/m3-strict-n3-execution-2026-11-10 hasPLAN/auth/preflight/exact
+  executionlog, compactall9gate summary/rawcohortSHA, percasefullstrictassessments/
+  stage/observer/child/ready/exec/postflight, archivehashes andfinalintegritycleanup.
+  OriginalN3old8PASS/1FAIL and oldercohort/diagnosticFAILs unchanged. Thisnew9/9
+  closes fresh instrumentedN3 cohort outcome only, not oldhangcause, uninstrumented
+  overhead, latercurrentbuildcoverage or fullM3acceptance. All29latercasesdisabled,
+  no merge/nextcasequeued/M3open/PR2draft/M4untouched.
+
+
+## 2026-11-10 — Current-build N0 prepared; execution disabled
+
+Prepared exactly N0-combined-1701, campaign ordinal10, 300s combined SENSOR/COMMAND
+on the same socket-disposition matched SDK/ROS build. Scope follows the existing
+closure plan; no new seeds, shortened smoke, impairment or old diagnostic credit.
+All29 previously unexecuted cases remain unexecuted. The other28 N4/N1/N2/N5
+cases are explicitly disabled; the completed fresh N3 cohort is not reexecuted.
+
+Evidence: evidence/m3-current-n0-preparation-2026-11-10/. Disabled freeze SHA256
+1c15050c52086b710b161c28f046db416bd31361d7db1971e3c99417f01840ea binds source,
+inputs,14 current binaries/preserved13/full build chain,87 native inputs, pinned
+images/runtime, retained raw/public indexes and fresh output/read-only observer
+bundle. Exact future authorization is mandatory and was not created. No live
+fixture, Docker object, capture, bridge, observer or readiness experiment started;
+only read-only Docker metadata inspection and local offline work occurred.
+
+Evidence-local combined adapter keeps the original workload and dynamic-neighbor
+N0 path. A subclass adds calibrated bridge capability reduction/identity, actual
+signal brackets and retained child outcomes. Host arms the native observer before
+releasing the original finish request. Existing5s child waits, native observer
+policy/budgets, stages/socket gates and combined command/journal/capture/source
+assessor remain in force. Combined-path integration is not live calibrated yet.
+Any readiness, measurement, shutdown, cleanup or integrity failure ends this
+one-case sequence; no automatic retry/resume/next-stage entry point.
+
+All511 existing Python tests and8 targeted offline tests pass. Targeted tests
+cover exact scope/grant refusal, no-Docker unauthorized entry, profile/seed/duration/
+build refusal, once-only/stop/no-resume, calibrated component equality, shutdown
+success/forced-failure retention and observer-release ordering. Initial local
+wrapper import-order test failure was fixed before freeze; native source and
+installed builds were unchanged. Final syntax, source/input/build/prior-evidence
+and absent-output checks pass. Public package hashes cover validation records.
+
+No tuning or native rebuild. Fresh strict N3 stays9/9, historical N3 stays8/1 with
+unknown hang cause. Future N0 PASS would close only this current-build N0 case;
+M3 acceptance, diagnostic overhead, physical age and other profiles remain open.
+PR2 stays draft; no merge or later case queued; M4 untouched.
+
+
+## 2026-11-10 — Authorized N0 attempt failed at startup; no retry
+
+User explicitly authorizes exactly prepared N0-combined-1701/300s on freeze
+1c15050c52086b710b161c28f046db416bd31361d7db1971e3c99417f01840ea, stop first
+failed gate, no tuning/automatic retries, other stages disabled. Exact separate
+grant/preflight in evidence/m3-current-n0-execution-2026-11-10/. Unchanged driver
+invoked once; exit1, one failed row, zero passed rows or retries.
+
+Robot Diagnostic.start_bridge fails require_role(status(self.bridge.pid),0):
+role capability set differs from declared scope. Both pre-exec records attest
+zero capability sets/NNP1; actual failing /proc values were not retained and robot
+identity write was not reached. No unique cause or permission change inferred.
+Operator bridge identity and partial stages retained without qualification.
+300s measurement-start, full results, normal release/observer-ready and strict
+assessment are absent. No observer was started. Secondary capture/final trace/
+provider status failures retained. No N0 or clean shutdown qualification credit.
+
+Frozen failure path invokes owned emergency cleanup. Both container removals0;
+observer/volume absent, network already absent. Final independent absence checks
+confirm all owned objects absent and credential deleted. Source/input/preparation
+public/current14/preserved13/full chain/native87 unchanged; all prior raw indexes
+verify, including fresh N3 nine-case PASS and historical failures. New raw archive
+64 files/387,888bytes hash-indexed; public failure evidence and summary retained.
+No source/helper/gate/tuning/build change, tests during run, retry, new freeze or
+further experiment. N0 remains an acceptance gap; other28 unexecuted cases disabled.
+Fresh N3 remains9/9, historical8/1 unknown hang preserved. M3 open, PR2 draft,
+no merge/next case queued, M4 untouched. Next unresolved step is retained-evidence
+startup capability-attestation diagnosis; no repair or rerun was made here.
+
+
+## 2026-11-10 — Retained N0 diagnosis: stale per-role readiness marker
+
+Diagnosed only retained evidence; no runtime/helper/gate edit, test run, Docker
+call, tuning, retry, new freeze or experiment. Evidence at
+ evidence/m3-current-n0-capability-diagnosis-2026-11-10/.
+Inherited combined Driver.robot first launches wrong-hash bridge_node, confirms
+expected exit/type-hash error, then accepts real start. Diagnostic.start wraps
+both launches with the same robot-bridge-preexec.json destination. start_bridge
+checks existence only: no marker PID/token/start_ticks or exec-phase binding.
+Thus the negative launch leaves a stale readiness file able to bypass waiting
+for the real child to reduce capabilities. This confirmed harness defect is the
+best-supported failure mechanism; the actual transient capability state is not
+captured and runtime causality remains limited, not proven privilege escalation.
+
+Retained wrong-hash.log/robot-ready.json/control.json confirm the sequence. Saved
+pre-exec PID127/zero capabilities precedes real start request by1.512270762s in
+retained filesystem mtimes, corroborative metadata rather than original hash-bound
+kernel-monotonic lifecycle trace. Real robot bridge log empty, no refreshed marker
+or robot identity; failing status/PID/start_ticks absent. Operator Name=python3
+snapshot and source predicate do not attest the execed bridge phase. No differing
+capability field, cap-drop syscall failure or later privileged execution inferred.
+N3 measure path starts one bridge per role without inherited negative-test robot
+sequence. Previous511+8 offline tests omitted that multi-launch readiness path.
+N3 nine-case PASS preserved; failed N0 remains failed/no coverage or clean shutdown.
+
+Future repair proposal only: immutable per-launch negative/positive attestation,
+current token/PID/start_ticks, atomic complete record, exact retained status and
+exec-phase distinction; stale/wrong-PID/partial/pre-drop/exit/phase regression
+controls before separately authorized calibration. Do not relax capabilities or
+substitute a fixed delay. No implementation/test/experiment authorized here.
+
+Frozen source/inputs/current14/native87 and prior raw/public indexes verify,
+including64 failed N0 artifacts and1,092 fresh N3 artifacts. Diagnosis input/public
+hashes and small retained record copies published; old artifacts unchanged.
+Other28 stages stay disabled, M3 open/PR2 draft/M4 untouched; no next case queued.
+
+
+## 2026-11-10 — Launch-specific readiness corrected; offline verification PASS
+
+User authorizes fixing launch identity and retaining failed capability snapshots,
+o N0 rerun/tuning/automatic retries, other stages disabled. New candidate harness
+at evidence/m3-current-n0-readiness-fix-2026-11-10/ preserves the old frozen N0
+preparation, execution failure and diagnosis unchanged. It contains corrected
+scenario/wrapper, pure readiness helper, selected host adapter and offline tests.
+No new campaign freeze or execution grant is made. Old driver remains bound to
+old inputs; it cannot silently select this revision. Future live qualification
+requires separately preparing the corrected freeze and explicit authorization.
+
+Every bridge launch including wrong-hash gets a unique token and record path.
+Parent registers PID/start_ticks/PPid; wrapper atomically publishes a complete
+capabilities_reduced_preexec record with launch context and bracketed identity.
+Parent checks exact token/name/role/binary and process identity before applying
+unchanged zero-capability/NNP/seccomp checks to a single retained status read.
+Negative-test/legacy markers cannot release the current child. Foreign records,
+PID reuse, identity change, partial/wrong-phase records and child exit fail closed.
+Absent record waits within original5s budget; no new delay or capability waiver.
+
+First per-launch/per-side failure stores exact evaluated permissions, identity
+brackets, expected identity, launch/phase/error; read errors explicit. Wrapper
+reduction/exec, registration, timeout and early-exit failures retain snapshots.
+Readiness is explicitly pre-exec wrapper evidence, not execed-bridge attestation;
+existing ROS session/clock/typed-stream gates remain application readiness.
+Original reduce and Benchmark ASTs unchanged; no policy/rate/clock/queue/wait/
+observer change or native rebuild. Host adapter selects the corrected scenario.
+
+All21 targeted offline tests and511 existing tests pass; compile-only syntax
+checks pass. Synthetic procfs/mocked child/reduce/exec and actual extracted
+Diagnostic methods verify stale negative/legacy marker rejection, unique launch
+contexts, wait-before-current-ready, wrong PID/token/phase, PID reuse/change,
+partial record, failed cap/NNP snapshot retention, exit/unavailable/timeout,
+atomic publication/no overwrite and reduce→publish→exec order. No Docker call,
+Linux capability syscall, bridge/capture/observer process or live experiment.
+
+Original frozen source/inputs/current14/preserved13/full runtime chain/native87
+and prior raw/public indexes verify, including failed N0 and fresh N3 nine-case
+PASS. Package input/public hashes and validation logs retained. No N0 retry,
+new freeze or further case. N0 remains unqualified; other28 stages disabled,
+M3 open/PR2 draft/M4 untouched. Live behavior remains unvalidated for this fix.
+
+
+## 2026-11-10 — Corrected-readiness N0 freeze prepared, not run
+
+User authorizes new N0/1701/300s freeze with corrected launch readiness only;
+no execution/tuning/automatic retry, other stages disabled. Package:
+ evidence/m3-current-n0-corrected-preparation-2026-11-10/.
+Freeze SHA2567b5c7d9222062c86b9447cbd6c2d430138f3b4574c5a66b16cee637409386f69.
+Execution disabled, authorization absent, zero live runs. Output reserved but
+absent: .local/corrected-n0-coverage-20261110T104303571352Z. Fresh read-only local
+observer bundle/prefix bound; no Docker object or readiness experiment started.
+
+Exactly campaign ordinal10/N0-combined-1701/300s,28 other unexecuted cases explicitly
+disabled and completed N3 excluded. New scope current-build-N0-combined-launch-
+readiness-v2-socket-disposition plus required launch-specific-v1 grant revision
+refuses old N0/N3 grants. Future explicit grant must bind exact new freeze/order/
+disabled IDs/history/no-tuning/no-retry; no grant made. Old driver/failure stay
+immutable and cannot silently use corrected code. Stop first failed gate, no
+resume or later-stage dispatch; full cleanup/integrity required before acceptance.
+
+Local host adapter is byte-identical to corrected harness workload.py and selects
+its exact scenario.py/bridge_exec.py/launch_readiness.py. All corrected public
+inputs and immutable calibrated observer/lifecycle/socket/assessor components
+hash-bound. Same SDK/ROS current14/preserved13/full chain/provider/native87,
+pinned target/native observer images/runtime; no source/build/policy/budget/rate/
+clock/queue change. Dynamic-neighbor N0 combined workload unchanged. Wrapper
+pre-exec readiness is not execed-bridge or successful application readiness.
+
+Nine new preparation and21 readiness tests pass offline with mocked callbacks/
+processes and temporary metadata; no fixture. Original511 existing-test PASS log
+is retained/hash-bound, not rerun or given new live scope. Syntax plus original
+source/inputs/build/full prior raw/public indexes verify before freeze and again
+through the disabled driver's read-only verify. Docker version/info/image/list
+calls only; no create/start/pull/build or mutation. New bundle is local files only.
+
+Public package hashes/readiness/postflight and logs published. N0 remains failed/
+unqualified until a separately authorized future run passes. Fresh N3 stays9/9,
+historical failures unchanged. Combined corrected-harness live behavior remains
+unvalidated. Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued,
+Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Corrected N0 attempt fails registration; snapshots retained
+
+Explicit user authorization recorded for the new7b5c7d922206 freeze, exactly
+N0-combined-1701/300s, first failed gate/no tuning/no automatic retry/other28 disabled.
+Unchanged driver invoked once, exit1, one failed row and no passing coverage.
+Evidence: evidence/m3-current-n0-corrected-execution-2026-11-10/.
+
+Both concurrent role startups fail register→stable KeyError:'ppid'. Operator
+snapshot first: PID111; robot negative wrong-hash launch PID133. New unique
+launch tokens/paths and exact parent failure snapshots retained. Identity brackets
+have pid/start_ticks/state only; permissions contain PPid75 and capability/NNP
+fields. Initial caps nonzero/NNP0 are pre-reduction registration observations;
+zero-cap attestation was not reached, not a capability-policy violation claim.
+
+Retained source shows unqualified shutdown_observer identity import; runtime
+scenario puts ROS demo scripts before evidence helper. ROS identity returns the
+exact observed3fields; evidence helper includesppid/name. Offline tests used the
+latter, missing runtime import-path/schema integration. Runtime module __file__
+not recorded, so origin is a supported static inference; immediate missing-field
+failure and exact snapshots are direct evidence. No new experiment/reproduction,
+code fix, tuning or test was run during/after this attempt.
+
+Robot-ready/measurement-start/fullresults/normalrelease/observerready/strictassessment
+absent; no observer started. No N0 measurement or shutdown qualification credit.
+Secondary capture reconciliation/command/provider final-status errors preserved.
+Owned normal/emergency cleanup records retained; final independent metadata
+confirms lab containers/network/observer/volume absent, credential deleted. No
+clean child-exit claim. Frozen source/inputs/corrected harness/current14/preserved13/
+fullchain/native87 and all historical raw/public indexes verify. New archive
+57files/286,585bytes hash-bound; public tracebacks and launch snapshots published.
+
+No retry/new freeze/nativebuild/further case. Next correction would explicitly
+bind identity helper and test real runtime import order; it was not made here.
+Original N0 FAIL and both old/new N3 outcomes preserved; other28 stages disabled,
+M3 open, PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Explicit identity binding and runtime-import regressions PASS
+
+User authorizes helper binding/runtime-order regressions/offline verification only;
+no N0 rerun/tuning/automatic retry, other stages disabled. New candidate at
+ evidence/m3-current-n0-identity-binding-fix-2026-11-10/.
+launch_readiness now loads exact frozen prior N0 shutdown_observer.py bytes,
+SHAf4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3,
+compiles the checked bytes in private _robotweax_n0_launch_identity_v1 and binds
+identity. No unqualified helper import/cache/bytecode fallback; missing/changed
+intended helper fails closed. ppid/name schema preserved, not replaced or waived.
+
+Snapshots/exported identity retain intended helper path/SHA/private module/schema;
+readiness claiming another binding refused. Per-launch token/PID/start_ticks/PPid,
+atomic readiness, exact failed status and unchanged capability/NNP/seccomp/phase
+checks remain. Scenario/wrapper byte-identical to prior fix; host adapter changes
+only scenario path. No native/build/workload/policy/budget/clock/rate/queue tuning.
+Wrapper readiness is still pre-exec, application ROS gates unchanged.
+
+All30 targeted and511 existing tests pass offline.22 readiness controls plus8
+binding/import tests include4 fresh Python interpreters with actual runtime
+search order and actual ROS shutdown_observer cached first, then poisoned cache
+variants for both actual parent scenario and wrapper imports. Scenario only maps
+/workspace root to checkout and stubs ROS-facing dependencies; remaining imports
+execute as written. Synthetic procfs registration/publication/attestation passes
+withppid/name; failed cap snapshots retain actual status and helper provenance.
+Missing/changed helper and foreign provenance fail; original reduce/Benchmark/
+Diagnostic ASTs unchanged. No capability syscall/bridge/capture/observer/N0 fixture,
+Docker call or new live experiment. Ordinary offline Python test interpreters only.
+
+Syntax/frozen source/inputs/current14/preserved13/full chain/native87 and prior
+public/raw indexes verify unchanged, including both failed N0 archives. Candidate
+input/public hashes, validation logs and audit retained. No new campaign freeze,
+execution grant or live output; immutable old drivers do not silently select fix.
+N0 remains unqualified pending separate preparation/authorization/live gates.
+Other28 cases disabled; N3 recorded outcomes unchanged, M3 open/PR2 draft,
+no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Explicit-identity N0 freeze prepared; no live run
+
+User requests new N0/1701/300s freeze with explicitly bound helper, do not run,
+no tuning/automatic retry, other stages disabled. Package:
+ evidence/m3-current-n0-bound-preparation-2026-11-10/.
+Freeze66f21a2916b9e38ff44f65d289715f10f59f4d377d8502ffe7752eada51becc6.
+Execution disabled, authorization absent, zero live cases. Reserved output absent:
+.local/bound-n0-coverage-20261110T113643640555Z. Fresh prefix/read-only local
+observer bundle bound; no Docker object/bridge/capture/observer or experiment.
+
+One campaign ordinal10/N0-combined-1701/300s; other28 N4/N1/N2/N5 IDs disabled,
+completed N3 excluded. Scope current-build-N0-combined-explicit-identity-v3-socket-
+disposition and revision explicit-identity-v1. New exact future grant additionally
+requires intended helper SHA; old N0/N3 grants refused. No resume/retry or later
+stage dispatch. First failed gate stops; cleanup/integrity remain mandatory.
+
+Byte-identical candidate adapter selects explicit-identity fix scenario/wrapper/
+readiness helper, all frozen inputs. Exact prior N0 identity helper path and
+SHAf4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3,
+private module _robotweax_n0_launch_identity_v1 bound in freeze and verified by
+driver. No import-order/cache fallback. Per-launch atomic readiness, exact failed
+status/helper provenance, PID/start_ticks/PPid and original cap/NNP/seccomp gates
+remain. Pre-exec wrapper evidence is not execed/application readiness.
+
+Ten preparation and30 identity/readiness tests pass offline; candidate511-test
+PASS log retained/hash-bound with original scope, not rerun/live credit. Syntax
+and source/input/current14/preserved13/full chain/provider/native87/prior raw/public
+checks pass before freeze and through the disabled driver verifier. Docker only
+read-only version/info/image/list metadata; no create/start/pull/build/mutation.
+No policy/workload/rate/queue/clock/wait/filter/budget change or native rebuild.
+
+Public package hashes/readiness/postflight/logs published; both failed N0 attempts,
+old freezes and N3 outcomes immutable. Corrected combined live path remains
+unvalidated, N0 unqualified pending separate explicit live authorization/gates.
+Other28 stages disabled; M3 open, PR2 draft, no merge/next case queued, M4 untouched.
+
+
+## 2026-11-10 — Explicit-identity N0 fails warmup trace creation; no retry
+
+Exact user grant for new66f21a2916b9 freeze/N0-combined-1701/300s recorded in
+ evidence/m3-current-n0-bound-execution-2026-11-10/. Unchanged driver invoked once,
+exit1, one failed row/no passing coverage. Stop first failure, no tuning/automatic
+retry, all28 other IDs disabled and completed N3 excluded. No code/helper/gate/
+build or policy change; prior failures immutable.
+
+Identity-helper fix passes registration/startup. Four unique pre-exec launches
+(operator, wrong-hash negative robot, initial robot, planned warmup robot reset)
+retain bound helper SHA/private module/ppid/name and zero caps/NNP1. Operator and
+replacement robot parent identity exports retain bound helper/zero caps. Negative
+type-hash test passes; warmup initial robot PID141 exits0/unforced with51stages.
+The existing reset_link warmup transition then starts PID177, whose complete log
+says cannot create shutdown trace; exits1 in fresh-link readiness wait. Last
+control sequence3 reset_link; measurement-start absent. These launches are one
+planned case, not automatic retries; no extra case/reset after failure.
+
+Retained source: Benchmark gives every robot launch robot-shutdown-stages.jsonl;
+reset_link stop/start reuses it; ShutdownTrace requires O_CREAT|O_EXCL. Existing
+trace contains PID141, replacementPID177 fails creation. Exact open errno not
+logged, no syscall reconstruction/experiment. No trace-path or gate repair here.
+No fullresults/end-release/observerready/strictassessment; no observer started,
+N0measurement or final shutdown qualification. Warmup0 exit is partial evidence.
+Secondary endpoint_measurements/capture/final-command/provider errors retained.
+
+Owned normal/emergency cleanup recorded, final independent Docker metadata
+confirms lab containers/network/observer/volume absent and credential deleted.
+No complete clean-child claim. Source/input/explicit harness/current14/preserved13/
+fullchain/native87 and preparation/old raw/public indexes unchanged.74 newrawfiles/
+703,520bytes indexed, public four launch records/identities/traceback/exit/stages/
+child/cleanup and authorization/provenance retained. No tests/nativebuild duringrun.
+
+No retry/newfreeze/further experiment. Future trace-lifecycle repair would need
+per-launch paths and matching assessment; not implemented/authorized here. N0
+unqualified, N3 original/new outcomes preserved, other28 stages disabled, M3 open,
+PR2 draft, no merge/next case queued and M4 untouched.
+
+
+## 2026-11-10 — Per-launch trace/lifecycle correction verified offline
+
+User authorizes per-launch shutdown traces and matching lifecycle assessment,
+offline only/no N0 rerun/tuning/automatic retries, other stages disabled. New
+candidate: evidence/m3-current-n0-trace-lifecycle-fix-2026-11-10/.
+Diagnostic assigns each positive launch a trace path from role/name/token beside
+its unique readiness record; does not unlink/truncate/reassign old traces.
+Original native O_CREAT|O_EXCL/256limit retained. Expected wrong-hash negative
+startup unchanged, no successful-shutdown trace required for intentional exit1.
+
+Per-role catalog records negative/warmup/measurement context, registered
+PID/start_ticks/PPid, readiness/identity/trace paths, attestation and return code.
+Each positive gets unique identity export; role compatibility identity remains
+for unchanged sidecar but must equal final measurement launch. Child outcomes
+carry token/start_ticks/purpose/paths; early exits remain failed outcomes and
+recorded children are not duplicated. Original SIGINT/5s/force-failure stop owns
+process handling. Unexpected extra positive launches refused.
+
+launch_assessment validates exact catalog/topology and negative outcome, all
+readiness/helper provenance and per-token child identities. Both warmup/final
+robot and final operator independently pass unchanged stage/socket gates. Trace
+clock window bound to its pre-exec snapshot/reap/SIGINT, warmup precedes final,
+so same-PID stale-trace substitution fails. Missing/extra/reordered/duplicate
+launches, child outcomes or traces, foreign/legacy/reused paths and mixed stage
+identity fail closed. assess.py takes final operator child/identity/trace for
+existing native observer/worker-stack coverage; no warmup/robot stack claim.
+Combined SENSOR/command/journal/capture/provider/cleanup gates unchanged.
+
+26 lifecycle/trace tests and4 fresh-interpreter runtime-import tests plus all511
+existing tests pass offline. Mocked Popen models exclusive file creation and
+preserves first trace through planned warmup replacement. Synthetic catalogs
+exercise missing/swapped/reused-PID traces, child reorder/token/ticks mismatch,
+negative/early/forced exits, wrong compatibility identity, existing socket errors,
+unique/current identity exports and full assessor observer selection. Retained
+closed traces/stacks are fixture data only; synthetic robot clocks offset to be
+disjoint. No live qualification credit or old FAIL replacement. Actual import
+order/ROS cached-helper controls retained for both new parent/wrapper.
+
+launch_readiness.py/bridge_exec.py byte-identical to explicit-identity fix;
+Benchmark and reduce ASTs unchanged; stage/socket/observer lifecycle gate copies
+byte-identical to calibrated originals. Host adapter changes only scenario path.
+No native source/build, policy/rate/queue/clock/wait/filter/sampling tuning. Tests
+use temporary files/mocked children and ordinary Python interpreters; no Docker,
+capability syscall, ROS node, bridge/capture/observer/N0 workload or experiment.
+
+Syntax/source/inputs/current14/preserved13/full chain/native87 and retained public/
+raw indexes verify unchanged, including all3 failed N0 attempts. Candidate input/
+public hashes/logs/audit published. No new campaign freeze/grant/live output;
+old frozen drivers cannot silently select this revision. Future live run needs
+separate preparation and explicit authorization; live behavior still unvalidated.
+Other28 stages disabled, N0 unqualified, historical/new N3 outcomes preserved,
+M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Whole Python lifecycle stabilized and verified offline
+
+User authorizes complete startup/warmup/restart/shutdown offline stabilization;
+no N0 rerun/tuning/automatic retries, other stages disabled. Candidate:
+ evidence/m3-current-n0-lifecycle-stabilization-2026-11-10/.
+39 lifecycle tests (26 prior +13 whole-flow),4 fresh runtime-import and511 existing
+tests PASS; syntax/integrity audit PASS. No Linux capability syscall, Docker call,
+ROS node, bridge/capture/observer/N0 or native build. Ordinary offline Python
+interpreters/threads, virtual clocks and temporary files only.
+
+Whole-flow model executes actual inherited Driver.robot and all6 actual operator
+file-RPC requests/replies, Benchmark start/reset/stop, Diagnostic launch/readiness/
+stop/cleanup and wrapper main with native boundaries mocked. Profile test confirms
+production methods and host arm-release/observer-finally/lab/credential cleanup
+AST blocks execute. Success covers operator/simulator/negative startup, real
+warmup startup/pause/shutdown, one fresh replacement, resume/pause, observer before
+finish RPC, final robot/simulator/operator shutdown and owned cleanup. Real
+per-launch lifecycle assessor consumes generated records. Full assessor test uses
+modeled observer and excludes combined SENSOR/command validation; failed host
+result cannot pass just because children exited cleanly.
+
+Injected spawn refusal, capability failure, unexpected negative success, trace
+collision, warmup/final timeout and observer arm/close faults stop without extra
+startup/replacement retry. No finish RPC without release. Failures survive cleanup
+and cannot pass assessment. Owned children terminate, modeled lab/observer/credential
+cleanup checked. Virtual5s stop timeout is original, not tuning. Real worker,
+SRT/ROS scheduling, kernel stacks and300s measurement loop are not qualified by
+this model; helper provenance root only rebased in temporary test metadata.
+
+Production hardening limited to Diagnostic.start closing its log/retaining a
+spawn-phase failure with no invented PID if Popen fails, and Diagnostic.cleanup
+saving final catalogs even after error cleanup. Missing normal child evidence
+stays failed, not synthesized PASS. Readiness/wrapper/launch planning/lifecycle/
+stage/socket assessors byte-identical to prior candidate; Benchmark AST unchanged.
+Host adapter changes only scenario selection. No native/policy/rate/queue/clock/
+wait/filter/sampling change. Initial model-only coordination/fixture issues were
+resolved before final tests; historical packages never modified.
+
+Frozen source/inputs/current14/preserved13/full chain/native87 and retained raw/
+public indexes verify, including all3 failed N0 attempts and prior N3 outcomes.
+Candidate input/public hashes/logs/audit published. No new freeze/grant/live output;
+old drivers do not silently select revision. Offline complete control-lifecycle
+coverage is not live N0/M3 acceptance. Future live qualification still requires
+separate preparation and explicit instruction. Other28 stages disabled, N0
+unqualified, M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Stabilized-lifecycle N0 freeze prepared, not run
+
+User requests new seed1701/300s N0 freeze with stabilized lifecycle harness,
+do not run/no tuning/automatic retries/other stages disabled. Package:
+ evidence/m3-current-n0-stable-preparation-2026-11-10/.
+Freeze98a357e418c22d67b1f46df9e44eaa33f24b66e11b2d1ce0eea3e1ebbd8c28d6.
+Execution disabled, authorization absent, zero live cases. Reserved output absent:
+.local/stable-n0-coverage-20261110T132415333712Z. Fresh prefix/read-only local
+observer bundle bound; no Docker object or bridge/capture/observer/readiness run.
+
+Exactly ordinal10/N0-combined-1701/300s; other28 IDs disabled, completed N3 excluded.
+Scope current-build-N0-combined-stabilized-lifecycle-v4-socket-disposition and
+revision stabilized-lifecycle-v1. Future grant requires exact new freeze/case/
+disabled list, identity-helper and lifecycle-assessor SHAs, historical failure
+preservation/no tuning/no retries; old grants refused. No resume/later dispatcher.
+First failed gate stops; complete cleanup/integrity still required.
+
+Host adapter selects actual stabilized scenario/wrapper. Local assess.py plus
+launch_assessment/records/readiness and calibrated stage/socket/observer lifecycle
+helpers byte-identical to verified stabilized candidate. Explicit helper source
+path/SHA/private module and per-launch assessor path/SHA frozen and checked by
+driver. This binds new catalog/token/time-based assessment, not old first-child/
+role-trace gate. Warmup/final positive traces/outcomes required; final operator
+observer selected. Negative startup and planned warmup reset unchanged. Spawn
+failure evidence/log closure and final cleanup catalog hardening retained.
+
+12 preparation and39 lifecycle tests (13 whole-flow included),4 fresh runtime-
+import tests PASS offline. Candidate511-test PASS retained/hash-bound within
+original scope, not rerun/live credit. Syntax/source/input/current14/preserved13/
+full chain/provider/native87 and historical raw/public archives verify before
+freeze and through disabled driver verifier. Docker only read-only version/info/
+image/list metadata; no create/start/pull/build/mutation. Same pinned images,
+workload/rates/queues/clocks/crypto/waits/filter/sampling settings; no native build.
+
+Public package hashes/logs/readiness/postflight published. Offline modeled Python
+lifecycle does not qualify live300s ROS/SRT data plane, worker/kernel/observer
+behavior or Docker teardown. Prior freezes and all3 failed N0 runs immutable,
+N3 recorded outcomes preserved. New code still needs separate explicit live
+execution authorization and all gates. Other28 stages disabled; N0 unqualified,
+M3 open/PR2 draft, no merge/next case queued, Intrinsic/M4 untouched.
+
+
+## 2026-11-10 — Stabilized N0 seed1701/300s PASS; other28 disabled
+
+Exact user grant for freeze98a357e418c2 recorded in
+ evidence/m3-current-n0-stable-execution-2026-11-10/. Unchanged driver invoked once,
+exit0, one strict PASS/no failure/retry/tuning. No other case or N3 rerun. Source/
+harness/assessor/native build/policy/clock/rate/queue/wait/filter/budget unchanged;
+no tests/builds overlap measurement. Scenario300.005754387s, source300.111622428s.
+
+150commands/150confirmed successes/150effects, zero UNKNOWN/unresolved/notadmitted/
+skippedslots. Exactly1SDKhandoff each, matching closed durable sender/receiver
+journal proof. SENSOR75,028produced/72,513SDKaccepted+received/72,497published/
+72,464typedobserved, sixbalances0.2,564 accounted latest-only/upstream/observer
+losses retained, not losslessavailability. WindowSRTgap0, receiveageunknown/stale0.
+Cadence199.998918784HzIMU/50.001395743Hzjoints. Modeled publication histogram maxima
+47msIMU/38msjoints; exact in-window bounds46.665179/37.079002ms <250. Not physical/
+observerarrivalage or queuehighwater/hardmemory acceptance.
+
+PCAP156,712each reconciled/zero drops/unaccounted; native156,757/156,758complete
+zero reserve/copy errors, source-window interpretation/clock gates pass. Provider/
+command footers complete/no drops or exhaustion. Different recorder populations
+not equated. Four unique readiness contexts with explicit helper/identity/caps;
+expected negative test1, all3positive launches51stages each. Warmup retained and
+ends before final; new per-launch child/token/time/stage/socket gates pass.
+All6 locally traced closes return0; explicit slot dispositions, no leak claim.
+All4 owned children exit0/unforced under original5s waits. Signal-to-reapoperator
+241.640125ms,warmuprobot322.600958ms,finalrobot369.551792ms; simulator0/unforced.
+
+Native observer ready before shutdown, exact finaloperator PID/startticks/boot/
+cap/filter/exec proof and worker lifecycle pass. Footer5bounded samples/76kernel
+readsOK/0unavailable/noexhaustion; coverage4inwait/1postsignal. Registeredworker
+missing afterjoin confirmed, no worker-exitcode/userspace/GDB/overhead equivalence.
+Normalcleanup only; labcontainers/observer/network/volume absent, credentialdeleted.
+Postflight/source/inputs/current14/preserved13/fullchain/provider/native87 and
+prior raw/public hashes verify unchanged.112newrawfiles233,284,411bytes indexed.
+Public fullstrictassessment/commandresult/catalog/readiness/identity/traces/child/
+observer/capture/provider/authorization/cleanup proofs and summaries published.
+
+Single current-build instrumented N0 coverage now closes; old3N0FAILs and original
+N3failure/unknownhang remain unchanged, fresh N3 stays9/9. No fullM3/hardware/
+physicalage/diagnosticoverhead acceptance or futurecase authorization. Other28
+N4/N1/N2/N5 cases disabled; M3 open, PR2 draft, no merge/nextcase queued, M4 untouched.
+
+
+## 2026-11-10 — Current-build N4 prepared; no live cases
+
+The [current-build N4 preparation](evidence/m3-current-n4-preparation-2026-11-10/README.md)
+freezes exactly19 cases:13 native interruption/query,3 ROS freshness and3 ROS
+crash/restart. Freeze513f13066b30 uses the unchanged matched SDK/ROS build; the
+standalone peer alone passed isolated compilation and static link inspection.
+20 preparation tests and511 existing tests PASS offline. **No N4 case run or
+execution grant:** all19 remain disabled, with first-failure stop/no automatic
+retries/no tuning. Other9 unexecuted N1/N2/N5 cases stay disabled; completed10
+N0/N3 cases are excluded. Runtime qualification remains pending; M3 open/PR2 draft.
+
+Exact original ordinals11–29 retained, native holds2s; freshness15s/existing2s
+cut and original crash sequencing. Frozen package at
+ evidence/m3-current-n4-preparation-2026-11-10/ includes exact case plan,
+current-only adapters/ROS install guard, sequential strict assessor, bounded
+owned cleanup, separate exact-grant requirement and fresh-output/no-resume checks.
+Each strict assessment plus cleanup/provenance verification precedes advancement;
+all later rows remain not_executed on any failure. No grant file or run output.
+
+Freeze513f13066b304490c89a36a288ec4839a08ec780d8ede21269885eeb4b665b10 binds
+current14/preserved13/full matched chain,87 native inputs,37 fixture files,
+24 installed-to-source header matches,7 static archives, link/build artifacts,
+original plan and all historical raw/public hashes. Isolated standalone peer
+compile/link in pinned network-none amd64 container only; no peer/worker/ROS
+execution, outage or readiness experiment. Existing production/old fixture
+prefixes unchanged and build container removed. IPC4/existing worker flag kept.
+Public metadata/build/ELF summary logs and exact local-log hashes retained.
+
+20 new offline tests include full mocked dispatch, all19 failure boundaries,
+strict+postflight ordering, grant/scope/prefix/hold refusal, cleanup/hash checks,
+unchanged original phase/network/crash functions and ROS workload class ASTs.
+All511 existing tests PASS. Static build and mocked controls do not prove real
+IPC/ROS startup, command outcomes, crash recovery or teardown. N4 retains its
+original fixture diagnostics; no N0 stack-observer/capability equivalence claim.
+Read-only final driver verification PASS; no case scheduled or automatically
+advanced. Prior N0/N3 results and failures unchanged; no M3 acceptance/merge/M4.
+
+
+## 2026-11-10 — N4 cohort stopped:16PASS/1FAIL/2not-executed
+
+The [current-build N4 execution](evidence/m3-current-n4-execution-2026-11-10/README.md)
+stopped at the first failed gate: **16 PASS / 1 FAIL / 2 NOT EXECUTED**. All13
+native and3 ROS freshness cases pass; crash-before-admission fails strict audit
+comparison. Retained proofs differ only in trace-name map integer versus JSON
+string keys; JSON-round-tripped proofs match, but the case remains FAIL. All17
+cleanup/integrity postflights pass. No tuning/retry/fix or further run; two N4
+crash cases and nine other unexecuted cases stay disabled, completed10 N0/N3
+excluded. M3 open/PR2 draft/M4 untouched.
+
+Exactly one authorized invocation of preparedfreeze513f13066b30 at source12ec019.
+Driverexit1,17 started rows11–27; rows28/29 never started, no directories.13 native
+successes each1effect/1originalCOMMAND, durable journal/deadline/phase/query proof.
+Three freshness cases sixbalances0 each, modeled age maxima18/29ms; losses884,
+138,796 respectively retained. Original N4 diagnostics/scope, not N0 observer,
+physicalage or hardware qualification.
+
+Firstfailedstrictgate ROS crash audit differs; innercrashchecks passed. Readonly
+retainedcomparison finds only sender_trace.point_names/reason_names intkeys versus
+JSONstrkeys; normalizedJSONexactmatch. Frozenassessor untouched and failedstatus
+preserved; no protocol-defect claim. Innerstate8/reason2/invalidproof/0effects,
+receiverempty/NOT_FOUND beyondoriginaldeadline/1handoff remain observations only.
+No replay/forcedexpiry or acceptancewaiver. All17 cleanup/integrity postflights
+and final source/inputs/current14/preserved13/fullchain/native87/fixture37/prior
+archives/preparation publicindex verify. Complete1018 rawfiles/28,981,196bytes
+hash-bound; publicproofs/failurecomparison/logs/gatereport in executionpackage.
+No build/test/tuning or otherstage overlap; old freezes/failures immutable.
+Next: offline serializationfix/regressions, not automatic rerun or newgrant.
+
+
+## 2026-11-10 — N4 crash proof JSON boundary fixed offline
+
+The [N4 assessor JSON fix](evidence/m3-current-n4-assessor-json-fix-2026-11-10/README.md)
+is verified offline:10 regressions,20 preparation tests and511 existing tests PASS.
+The separate candidate normalizes recomputed crash proofs at the JSON boundary;
+all17 retained started cases reassess consistently, while the original failure
+reproduces. Original live result remains16 PASS/1 FAIL/2 NOT EXECUTED. No live
+run, Docker call, build, new freeze/grant, tuning or retry; two remaining N4 and
+nine other unexecuted cases stay disabled. M3 open/PR2 draft/M4 untouched.
+
+Evidence-local candidate assess.py changes only crash proof representation:
+json.loads(json.dumps(check_crash(...),allow_nan=False)) before saved-proof equality.
+No frozen or baseline file edited. No proof fields removed, changed semantics,
+waiver, replay/expiry authority or journal outcome substitution. Original phase,
+provenance/outcome/deadline/onehandoff/crash/shutdown/cleanup remain unchanged.
+
+10 regression methods reproduce oldfailure and persisted comparisons for all3
+modes (synthetic effect/committed proof boundaries only), actual trace schema,
+changed/missing/extra/reordered evidence refusal, exception/inner/shutdown refusal,
+nonfinite refusal and returnedproof stability.20 original preparation and511
+existing tests also PASS. Actual offline candidate reassessment over all17 retained
+outputs passes; oldassessor stillfails ROS crash audit differs. Source/build/full
+chain/native87/fixture37/alloldrawpublic/priorpreparation/execution index checks
+pass before/after; originalcohort/17strictdecisions unchanged. No new liveacceptance.
+
+No executiondriver/newfreeze/grant in candidatepackage, no Docker/build/livecase.
+Future liveuse requires explicit separate preparation binding exact candidateSHA;
+oldstoppeddriver cannot silently select it. No automatic resume/retry or laterstage.
+
+
+## 2026-11-10 — Fresh corrected-assessor N4 freeze prepared only
+
+The [fresh N4 freeze](evidence/m3-current-n4-corrected-preparation-2026-11-10/README.md)
+is prepared with the corrected assessor: freezeecb0d1346932 binds all19 original
+ordered cases and exact assessordd1fa84dc1ed on the unchanged matched build/fixture.
+**Execution disabled: no grant, live run, rebuild, tuning or automatic retry.**
+8 binding,20 preparation,10 JSON regression and511 existing tests PASS. Prior
+16PASS/1FAIL/2not-executed stays unchanged; nine other unexecuted cases disabled,
+ten completed N0/N3 excluded. M3 open/PR2 draft/M4 untouched.
+
+Freezeecb0d134693279a679907d6791c0518bfe85308d9146c69f83f3a4f2e3aafef1
+binds candidate assessordd1fa84dc1ed576ee607c78e584002662575af19ce1f3e19d479f87e1257671e
+byte-for-byte. New packageevidence/m3-current-n4-corrected-preparation-2026-11-10/
+contains exact19-case plan, correctedassessor binding, unchanged sequentialdriver
+and scopedadapters; onlyROSscript paths rebase to identical scripts in newpackage.
+Native13 uses original2s holds; freshness3 uses15s source/2s cut; crash3 retains
+original before/effect/committed sequencing. Phase/deadline/outcome/freshness/
+replay/shutdown/cleanup gates unchanged. Everystrictresult+postflight beforeadvance;
+firstfailure stopslaterrows. Oldgrantrefused against actualnewfreezeSHA, newgrant
+notcreated. Freshoutput.local/current-n4-corrected-cohort-20261110T144156203713Z
+absent, all19 newrows unexecuted; noresume/retry orcaseautomaticallyscheduled.
+
+New8 bindingtests cover actualfreshinterpreter importorder selecting exactcorrected
+assessor, origin/localhashdrift andoldgrant/replacementrefusal, unchangedboundaries
+andpriorstop preservation. Copied20 preparationtests,10 JSONregressions and511
+existingtestsPASS. Finalreadonlydriver.verify passes frozeninputs/source/current14/
+preserved13/fullchain/provider/native87/fixture37/oldbuildartifacts andallprior
+rawpublicindexes includingstopped1018raw andofflinefix. Onlymanifestpath changes,
+manifest/buildSHA unchanged. Dockermetadata inspected only; no build/container/
+network/fixture/worker/ROS launch. Newpublicindex bindsfullpackage/readiness/postflight.
+Priorfreeze/grant/failedcase/17strictdecisions/16PASS1FAIL2notexecuted unchanged.
+M3notaccepted, PR2draft, no merge/IntrinsicM4 orotherstage progression.
+
+
+## 2026-11-10 — Fresh corrected-assessor N4 cohort19/19 PASS
+
+The [fresh corrected-assessor N4 cohort](evidence/m3-current-n4-corrected-execution-2026-11-10/README.md)
+**PASSES19/19** on freezeecb0d1346932:13 native,3 ROS freshness and3 crash/restart
+cases. Driverexit0, all19 strict/cleanup/integrity gates pass; no tuning or retries.
+Original crash uncertainty/committed-result/no-replay semantics retained. Previous
+N4 failure unchanged. Current-build N0, fresh N3 and bounded N4 now pass within
+recorded scope; nine N1/N2/N5 cases remain disabled. M3 open/PR2 draft/M4 untouched.
+
+One authorized invocation at source10e4895/freezeecb0d1346932, driver0.
+All19 original rows11–29 strictpassed plus cleanup/integrity beforeadvance.
+Native13 allstate4/reason0/validproof/1effect/1COMMAND, originalphase/2soutage/
+5sdeadline/conservativereceiver/journalproof/queryretrieval gatespass.
+Freshness3 sixbalances0each, modeleduppermax72/87,28/32,75/75ms<250; produced/
+observed3765/2841,3765/3622,3764/2942 with924/143/822accountedmissing retained.
+No physicalage/losslessavailability/packetobserver/capability/hardware equivalence.
+
+Crashbefore UNKNOWN8/reason2/invalidproof/0effects/receiverempty/NOT_FOUND beyond
+originaldeadline; effect UNKNOWN8/reason1/invalidproof/1effect; committed
+SUCCEEDED4/reason0/validproof/1effect. Originalowner/session/trace/onehandoff/
+noreplay gatespass. Expectedbridge/worker fault events separated from final
+normalchildshutdown; simulatornotphysicalproof. No replay/forcedexpiry authority.
+
+Finalreadonlychecks source/inputs/current14/preserved13/fullchain/native87/
+fixture37/correctedassessordd1fa84dc1ed/preparationpublic/alloldrawpublic PASS;
+all19 ownedcontainer/networkabsence andcredentialdeleted. No tuning/build/tests
+orchecker/helper/trace/budget/clock/rate/queue/wait/filter changesduringcohort.
+Publicgrant/driverlog/cohort/gatereport/caseproofs/shutdown/crash/postflight and
+1140rawfile/30,643,570byte index retained. Previous16PASS1FAIL2notexecuted N4
+andallhistoricalfailures unchanged. Scopecloses currentbuildboundedN4only.
+Remaining9 N1/N2/N5 unexecuteddisabled; nextstepseparatepreparation, notautomatic
+runornewgrant. M3open/PR2draft/no merge/IntrinsicM4.
+
+
+## 2026-11-10 — Nine remaining N1/N2/N5 cases prepared only
+
+The [nine remaining current-build cases](evidence/m3-current-long-preparation-2026-11-10/README.md)
+are prepared in freeze868a21578a61: N1/N2 three seeds each at600s, then N5 three
+seeds at300s, unchanged matched build and stabilized lifecycle/observer. **No live
+run or grant; execution disabled, no tuning or automatic retries.** All29 completed
+N0/N3/N4 IDs are excluded/disabled.21 preparation,39 lifecycle,4 import and511
+existing tests PASS. Prior failures unchanged; M3 open/PR2 draft/M4 untouched.
+
+Freeze868a21578a61a3d5e67d047fa76c95c24ea70c1965c5b71d6f9f5902d292d12e
+binds exact originalrows30–38: N1 seeds1701/2903/4211×600s, N2 same×600s,
+N5 same×300s.4500s nominalsource only, notwallclockestimate. Allnine unexecuted;
+all29completedN0/N3/N4 IDs disabled/excluded, no rerun/subset/smoke/resume/batch.
+Futureoutput.local/current-long-cohort-20261110T152312809927Z absent. Prefix
+current-long-20261110t152312809927z pluscaseID givesfreshobservernames/volumes;
+readonly5-filebundlebound. Exactfuturegrant required, oldN0/N3/N4 grantsrefused.
+
+Reuseoriginal200/50Hz,2scommandperiod,5sbudget,250msSENSOR,200msclockinterval,
+N1(20/5ms,1%) N2(60/15ms,3%) queues256, N5roots512kbit/s/4096burst/32768limit,
+children16 andUDP128K competitor1024bytes/source+60s, dynamicneighbors. Original
+capture/diagnostics/5swaits/filter/budgets unchanged. Onlyhostallowedprofile/
+seed/durationguard+identicalscenario-path rebase; scenario/wrapper/lifecycle/
+readiness/identity/stage/socket/observer componentsbyteidenticaltostabilizedN0.
+Existingstrictcombinedage/accounting/capture/frame/cadence/closedjournals/
+positiveprogress/shutdown gatesretained. Additionalclosedprofilegate checksexact
+installcommands/kernelsettings; missing/changedreadback fails, nogatewaived.
+Strictassessment andpostflightmustfinishbeforeadvance, firstfailure stopsalltail;
+assessmentexceptions stillpostflight, hostexceptions boundedownedcleanup/noretry.
+
+21preparation+39lifecycle+4freshidentity/import+511existing testsPASSoffline.
+Wholelifecyclerebasednewpackage; combined/profilegatesmockedoutside lifecycle
+model, profilechecksseparatelytested. Notlive600s/load/capture/observerqualification.
+Initialpreparationonlycheck wronglyread N3cohort.json andstoppedbeforeDocker/
+freeze/bundle/output; correctedtopublishedgate-report.json withactual9/9status
+andnewregression. validation/preparation-correction.json retainslookupfailure.
+
+Finalreadonlydriver.verify source/frozeninputs/current14/preserved13/fullSDK/
+ROS/provider/native87/oldfixture/everypriorpublicrawindex (inclN4new1140files)
+PASS; no build/Dockermutation/containers/network/worker/ROS/experiment. New
+publicindex/readiness/postflight/finalverification/caseplan/settings bound. Existing
+N0/N3/N4 passes andalloldfailuresimmutable. No M3acceptance/merge/laterstage/M4.
+
+
+## 2026-11-10 — Nine-case cohort stopped1PASS/1FAIL/7unexecuted
+
+The [N1/N2/N5 cohort](evidence/m3-current-long-execution-2026-11-10/README.md)
+stopped at the first failed gate: **1 PASS /1 FAIL /7 NOT EXECUTED**. N1/1701/600s
+passes all strict gates (300/300 commands). N1/2903 inner workload passes but
+strict observer coverage fails on3 ENOENT thread-stack reads after SIGINT; normal
+child exit0 does not waive missing evidence. Both cleanup/integrity postflights
+pass. No tuning/retry/fix or later case; seven remaining cases and other stages
+stay disabled. M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze868a21578a61/source71fd47c, driverexit1.
+N1/1701 strictPASS,300/300successes/effects/onehandoff,0unresolved/notadmitted/
+skipped; source600.108476067s,150027produced/110725observed/39302accountedmissing,
+sixbalances0, modeledpublicationuppermax156/165ms<250. No physicalage/lossless/
+hardmemory/diagnosticoverhead equivalence. Observer76readsOK/0unavailable.
+
+N1/2903 innerpassed600s but strict lifecycle.coverage fails live target kernel
+stack unavailable beforecombined/progress/profile revalidation. Observerfooter
+5samples/88readsOK/3unavailable/noexhaustion. PostSIGINT/prereap sample4, matching
+rootPID111 but TIDs128/129/130 kernel_stack ENOENT. Sample1262083806197–1262085394281,
+signalend1262055193239,reap1262292549697ns; child0/unforced~237ms. Missingperthread
+files compatiblewith shutdownthreadexit, notconfirmedproof, no uniquecause or
+SRTdefect established. Missingdata notwaived; caseFAILpreserved. Inner300state4/
+reason0outcomes,0unresolved/notadmitted,150032/110908/39124missing/sixbalances0/
+age126/104ms retained only, notstrictacceptance orcompletedgatecredit.
+
+Sevenlatercases nooutputdirs, noN1/4211,N2,N5 orcompletedN0/N3/N4dispatch.
+Bothcleanup/postflightandfinalfrozeninput/source/current14/preserved13/fullchain/
+native87/observerbundle/identity/preparationpublic/allpriorarchives PASS; owned
+lab/observer/network/volumeabsent,credentialsdeleted. Publicfullstrict/launch/
+readiness/stages/observerJSONL+failedreads/capturefooter/profile/operatorresults,
+selectedrunfields+omittedkeylist/hash, cohort/grant/log/gatereport/postflight bound.
+Full238rawfiles/927,231,952bytes indexed; bigcaptures/fullrun/endpoint/journals
+localonly/hashbound. No tuning/build/tests/source/filter/queue/clock/rate/wait/
+budget edits/retry/newexperiment. Next retainedthreadlifecyclediagnosis only,
+no fix/newfreeze/grant/automaticlatercase/merge/M3acceptance/IntrinsicM4.
+
+
+## 2026-11-10 — N1/2903 task-stack diagnosis, retained only
+
+The [offline N1/2903 diagnosis](evidence/m3-n1-2903-thread-evidence-diagnosis-2026-11-10/README.md)
+identifies a task enumeration/read race during provider cleanup:3 named SRT
+threads have12 ENOENT file reads while their parent remains alive. The assessor
+checks parent lifetime without per-task exit evidence. Normal cleanup exit is
+strongly supported, but individual exit/reuse proof is absent; failure remains.
+No fix/tuning/test/experiment/Docker/retry or new grant. Original1PASS/1FAIL/7not-
+executed unchanged; remaining cases disabled, M3 open/PR2 draft/M4 untouched.
+
+MissingTIDs128rwx-shard-0/start64890,129rwx-shard-1/start64890,
+130rwx-readiness/start64891 allhave3successfulpreSIGINTtaskstats/stacks, lastsample
+ends-221.795625ms. Failingrow4 +28.612958..30.201042ms (relativeSIGINTend) lists
+all3 butstat/wchan/syscall/stack eachENOENT; rootPID111/start64834matchingafterread.
+Sampleinsideprovider srt_cleanup bracket+24.318083..30.882958ms, afterjournalworker
+join+24.494792. Otherstacksreadable, footer5samples/88OK3missing/noexhaustion.
+Operatornormal0/unforcedreaped+237.356458ms; nextsample+281ms rootmissing.
+
+Frozencollector enumeratestaskdirectory once thenreadssequentially; keepsonlyroot
+identitypostcheck. Frozenassessor equatesrootlifetime/inwaitwithalllistedtaskstack
+availability; no per-taskgone/reuseproof. Exactpurecoveragefailure reproducedfrom
+retaineddata. Pinnedprovider52be7c86ee1f/clean/archive3fa56e487e6c namesandnormal
+stop/join pathsupportexpectedteardown. Passing1701postsample+65.527msoccursafter
+cleanup+21.904..27.918ms, skipsracewindow. NumericPID/TIDnevercompareacrosscases
+withoutnamespace/startidentity. No blanketpermissiondenial/hungthread/SRTdefect
+claim, no causal seedinference. Per-taskexit/order/reuse notconfirmed, cleanup
+returnvalueuntraced; originalFAILandlateruncreditedgatespreserved.
+
+Nextboundedtaskidentity/absencevisibility/classification+offlineregressions
+recommended only, notimplemented; do notwaiveallENOENT/countmissingasOK or
+expandpermissions/rates/queues/sampling/budgets. No tests/builds/Docker/liveprocfs/
+collector/experiments/retries ornewfreeze/grant. Before/afterfrozen source/inputs/
+current14/preserved13/fullchain/native87/allrawpublic PASS, originalcohort/strict
+hashesunchanged, sevenoutputdirsabsent. Evidenceanalyze.py/report/timelines/
+sourceexcerpts+SHA/log/inputindex/postflight/publicindex retained. M3open/PR2draft,
+no merge/IntrinsicM4, no latercasequeued.
+
+
+## 2026-11-10 — Default-off per-task visibility, offline only
+
+The [per-task visibility candidate](evidence/m3-task-identity-visibility-2026-11-10/README.md)
+adds default-off, bounded task identity/read/absence records with28 offline
+regressions and511 existing tests PASS. One stack attempt; explicit missing,
+reuse/error/truncation evidence,512-entry bounded history. No gate/filter/driver
+change, live experiment, tuning, retry or new freeze/grant. N1/2903 remains FAIL,
+cohort1PASS/1FAIL/7not-executed unchanged; remaining cases/stages disabled. M3 open.
+
+Separatecandidate shutdown_observer.py at evidence/m3-task-identity-visibility-2026-11-10/,
+SHA6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e.
+--task-visibility requiresprocfs, defaultoff. Existingcollect/identity/read/GDB/
+parentObserver ASTunchanged; oldsidecar/entry/filter/bundle/driver/assessoruntouched.
+No livebinding, newfreeze/grant, calibration or casequeued. No budget/period/
+permission/transport/profile/queue/clock/wait tuning. Extra diagnosticwork not
+claimedoldobserveroverheadequivalent.
+
+Optinrecords enumeratebracket, pertask5readbrackets/results, finalstatidentity,
+finaldirectorypresence, before/afterTID+startticks/name/state, parentidentityfinal,
+boundedpriorhint/reuseflag/lifetimestatus. 65directoryentriesmaximum,64sampled
+threads×8processes,512historyentries onepastonly; old16Kbread/48samples/.25s/12s
+unchanged. Fixed7owntaskfileoperations including2newchecks; childidentityreads
+unchanged/outside7. Stackattempt1, no stack retry/poll/backoff. Overflowexplicit,
+notgloballylowest64; oldthreads_truncatedfailurepreserved. Priorhintsnotexitproof.
+Everynewrecord confirmed_exitfalse; rawerrno/unavailable/truncation andfooter
+countsretained; disappearance/status neverconvertedintoOK, no blanketENOENTwaiver.
+
+28temporaryprocfs/deterministicmutationregressionsPASS inclenum/stat/stackexit,
+TIDreuse/reappearance, invalid/truncatedidentity, denied/I/O/ENOTDIRreads,
+parentreuse/missing, histories/pruning/caps, boundedscan/scope/overflow/error,
+actualmodelloop/defaultCLIoff/flagrefusal/ASTconstants. Existing511testsalsoPASS;
+notnative/syscall/filter/realprocfs/loadedtimingqualification. Unchangedfrozen
+coverage againrejectsretainedN1/2903; failure/1PASS1FAIL7notexecuted preserved.
+
+Integritysource/inputs/current14/preserved13/fullchain/provider/native87/oldbundle/
+alloldrawpublic (238files927231952bytes)+previousdiagnosisinputs PASS. Candidate
+binding/inputhashes/postflight/publicindex/logsretained. No build/Docker/live
+observer/processkill/permissionsyscall/experiments/retry, no failedrecord relabel.
+Remainingseven/otherstagesdisabled,29completedexcluded; M3open/PR2draft/M4untouched.
+
+
+## 2026-11-10 — Bounded task-visibility calibration prepared, not run
+
+The [bounded visibility calibration](evidence/m3-task-visibility-calibration-corrected-preparation-2026-11-10/README.md)
+is prepared in corrected freeze6357a2c0f58d: one native readiness check then one
+controlled task fixture, exact candidate6deab3c5e83e/private host binding, unchanged
+policy/budgets. **Not run; no grant, tuning, retries or N1/2903 rerun.**23 offline
+preparation tests pass; unchanged28 candidate/511 existing results retained. Earlier
+freeze4e8c9ee78f1f failed host-import verification and is preserved. N1 failure/
+1PASS1FAIL7unexecuted unchanged; all38 campaign IDs disabled, M3 open/PR2 draft.
+
+Correctedfreeze6357a2c0f58d5c40751a7e96e52d6825ade3a29b2ad03bc6bcef0ca903474f9c
+binds candidate6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e.
+Exactfuturegrant required:1 nativeobserver --self-check (hash/import/bootstrap,
+no target collection), then1 controlled Python parent/worker fixture on pinned
+amd64 image; nativeARMobserver in exactownedtargetPIDnamespace. Two live matched
+workerstacksbefore release, recordedjoin+matchingabsence whileparentalive, then
+controlledSIGINT/normalexit underoriginal5s childwait. CANDconfirmed_exitfalse
+retained, no blanketmissingstackwaiver. No exactN1race/overhead/SDK/ROS/campaign
+qualification, no N1/2903 rerun. Source/targetfilters/caps/budgetsunchanged.
+
+Ninefilebundle readonly444/555; observerSYS_ADMINonly/NNP/defaultdenyseccomp/
+readonlyroot/networknone, target/supervisorcap0/NNP/defaultseccomp/readonlyroot/
+networknone. Original48/.25s/12s/8proc/64task/16Kbreadlimits, fixed6s hostphase,
+8MiBsnapshotguard/20scommandcaps andboundedhandshakes. Freshprefix
+tvis-cal-20261110t170526723486z; output.local/task-visibility-calibration-20261110T170526723486Z
+absent, no grant. One-shot exact2-stage driver stopsfirstfailedgate, no subset/
+resume/retry; boundedownedcleanup/closedexports/postflight. All38campaignIDs
+explicitdisabled, remaining7 unchanged, oldcampaigngrantsrefused.
+
+Firstprep4e8c9ee78f1fc1f0c698384dbb6535e54bfe36404ef8e57b17244d295d6043d3
+stoppedfinalhostimport beforeDockerverification/grant/nativeexecution: combined
+assessor import made genericROS shutdown_observer win, task_identity unavailable.
+Immutablefirstfreeze/source/bundle/failure/publicindex retained. Correctedcal
+assessor binds exactcollectorpath/SHAcheckedbytes toprivatemodule, ignorescached
+ROS anddoesnotaltergenericcache.23rdregressionactualhostimportorder/cachedROS/
+wrongbyte refusalpasses. Nativecollector/entry/fixture/policy/budgets same; no
+campaignassessorchange. Initialoffline threadbootstrap/pathaliasmodel failures
+remainfirstprepvalidationlogs; correctedmodelsfinalpassing, notnativeattempts.
+
+23preparation tests PASS inclfullmockedDocker orchestration/actualfixturemethods
+againsttemporaryprocfs/mockedsignals/unitPythonthread/freshbundleandhostimports,
+firstreadinessfailbeforetarget, schemafailbeforerelease, foreignnamespacebefore
+observerstart, changedidentity/access/clock/footer/stage/grant refusal/cleanup.
+28candidate+511existing logsreusedbyteidentical (unchangedsource), notlivecredit.
+Finalreadonlydriver.verify source/inputs/current14/preserved13/fullchain/provider/
+native87/allpriorrawpublic/previousdiagnosis+candidate+firstfailedprep/bundle and
+originalN1/2903assessmentSHA PASS. Publicindex/finalverification recordprepared
+only. No builds/Dockermutation/liveprocfs/permissionsyscall/campaign/experiments.
+N1/2903 FAIL/1PASS1FAIL7notexecuted retained; no tuning/retry/newexecutiongrant/
+M3acceptance/merge/IntrinsicM4, no nextcasequeued.
+
+
+## 2026-11-10 — Bounded native task visibility calibration PASS
+
+The [bounded task-visibility calibration](evidence/m3-task-visibility-calibration-execution-2026-11-10/README.md)
+PASSES readiness plus one controlled fixture on freeze6357a2c0f58d. Two matched
+worker observations then a complete-enumeration absence hint;5 native stack reads
+OK/0unavailable, all task/read/schema/policy gates and cleanup/integrity pass.
+No tuning/retry/N1 rerun; its FAIL and1PASS1FAIL7unexecuted remain unchanged, all38
+campaign IDs disabled. This calibrates visibility only, not a new acceptance rule.
+M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze6357a2c0f58d/source1970eaa, driver0.
+One nativeARMreadinesscheck thenone controlledamd64Pythontarget (parentPID7/start609,
+workerTID8/start625), exactcandidate6deab3c5e83e+activation/privatehostbinding.
+Live2samples6661634919..6912879252ns; release7028505960, workerreturn7029026044,
+joined7030193752; latercompleteenumabsence7164042710..7164353294 (priorhintmatches),
+SIGINTbegin7234302919. Candidateconfirmed_exitfalseallrecords, no stackwaiver.
+Footer3samples/5stackOK0unavailable/noexhaustion/parent_stop/noGDB.5taskrecords,
+30contentOK+5directorypresent; allboundidentity/read/stage/clock/schema gatespass.
+Childexit0/unforced/18.381750ms signalend-to-reap<original5s; notbridgeperformance.
+AllsamplespreSIGINT, no exactmidreadrace/TIDreuse/postSIGINT availabilityvalidation.
+
+3containers/2volumes createdonce, nativeobserverSYS_ADMINonlyNNP/unchangedfilter/
+readonlyroot+bundle/networknone/exactownedPIDns; target+supervisorcap0/NNP/seccomp.
+No permission/period/budget/transport/settings/build/testoverlap/tuning/retry.
+5normalpredeclaredreadinessfilecopymisses retained, no gatefail/restart.
+Bothcleanup/postflightandfinalreadonlysource/inputs/current14/preserved13/full
+chain/native87/bundle/privatehelper/alloldpublicraw/preparationindex PASS.
+ExactN1/2903assessmentSHA andold1PASS1FAIL7notexecuted immutable, sevenlaterdirs
+absent; no38campaigncase invoked.77rawfiles600527bytes indexed, allrawoutputs
+bytecopiedpublic run/ +grant/preflight/log/gatereport/schema-summary/postflight.
+Earlierimport-failedpreparation preserved; no testsreruncredited.
+
+Scopeonecontrolledfixture nativevisibility/access only, no nativeSDK/ROS/SRT
+workload/overheadequivalence/hardware/M3acceptance. Campaignassessor/filter/driver
+unchanged, confirmedexitacceptancerulenotimplemented. Nextofflineassessmentrules
+fornewmetadata, notautomaticfreshfreeze/grant/N1retry/latercase/merge/IntrinsicM4.
+
+
+## 2026-11-10 — Offline per-thread assessment rules and regressions
+
+The [offline per-thread assessment candidate](evidence/m3-task-metadata-assessment-2026-11-10/README.md)
+adds strict schema, identity, timing and prior-cache rules plus a prospective
+lifecycle adapter.42 new /28 collector /23 preparation /511 existing tests PASS.
+Retained calibration:5 readable records and1 observed absence,0 confirmed task
+exits. Native post-SIGINT/race coverage remains unqualified; no campaign integration,
+freeze, grant or live run. N1/2903 FAIL and1PASS/1FAIL/7unexecuted remain unchanged;
+all38 campaign IDs disabled, no tuning/retries. M3 open/PR2 draft/M4 untouched.
+
+Separate evidence-local task_assessment.py recomputes calibrated schema1 raw
+identities/lifetimes, private SHA-bound parser, ordered read/parent brackets and
+exact previous-sample hint cache. Rejects unsupported/legacy metadata, denied or
+truncated reads, observed reuse, incomplete scan/history/clock/footer/populations.
+Observed absence is separate from readable stacks, raw counters and process exit;
+confirmed_task_exits remains0. No no-reuse/exact-exit/cause assertion.
+
+Separate lifecycle.py retains process/registered-worker/join/root-reap/forced-kill
+gates and allows supported task disappearance only wholly post-SIGINT/pre-reap.
+No frozen assessor/driver/filter/collector/source/build changes or runtime wiring.
+Retained native calibration parses5 readable+1 pre-SIGINT enumerationabsence;
+post-SIGINT adapter/midread race/SDK/ROS/overhead unqualified. Old N1 lacks schema,
+candidate refuses it; old frozen gate reproduces original missingstack failure.
+
+42 new,28 collector,23 preparation,511 root offline tests independently PASS.
+Initial test-model mistakes retained in logs (empty stages/aliasing/wrong worker
+ppid), corrected offline, no native failures or retries. verify.py checks all old
+indexes/raw/source/current14/preserved13/fullchain/native87/calibration77files
+600527bytes and original verdicts, seven laterdirs absent. No Docker/liveprocfs/
+experiments/tuning/build/retry/newfreeze/grant/M3acceptance/merge/IntrinsicM4.
+Next separately scoped preparation/review only, no live execution authorized.
+
+
+## 2026-11-10 — Post-SIGINT per-thread calibration prepared, not run
+
+The [bounded native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze8acc653d87ad, **not run; execution disabled and no grant**.
+33 offline preparation tests pass. Exact assessment candidate; two pre-signal
+and two post-signal readable worker samples, then controlled join/absence before
+parent exit, with unchanged five-second child wait and observer policy/budgets.
+Unrelated CI remains running and blocks future execution preflight; untouched.
+No tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted are preserved;
+all38 campaign IDs stay disabled, M3 open/PR2 draft/M4 untouched.
+
+Freeze8acc653d87ad0da691cd992b059e566d0a3c2550d93efe310202a283f7fa245e, base sourcecf603b9,
+exact collector6deab3c5e83e and byte-identical assessment409a8812042b /
+lifecycle4fafc85e3d4d. Private binding checks originals/copies; generic ROS,
+task_assessment and lifecycle caches cannot replace reviewed candidate bytes.
+Native ARM observer/pinned amd64 controlled Python target only; no SDK/ROS/SRT
+workload. One readiness --self-check then one fixture, first-failure stop, no
+subset/resume/retry. No authorization created or live calibration queued.
+
+Parent holds after SIGINT. Unchanged stop_children sends signal, records end,
+then a wrapper's wait-entry witness is emitted (regression verifies ordering
+and unchanged timeout5). Two matching readable worker samples after witness and
+handler observation precede release. Controlled worker join precedes supported
+absence; exact candidate validates cache/raw/identity/times and lifecycle window.
+Only supported absence allows parent-exit acknowledgement. Final native footer,
+normal child exit0/unforced/within5s, candidate lifecycle0confirmed-task-exits
+and separate raw/absence counters required. Synthetic task join is not SDK worker
+process-exit evidence. Exact midread race/no-unseen-reuse/SDK/ROS/overhead remain
+unqualified; no historical reclassification or M3 acceptance follows.
+
+Observer filter/SYS_ADMINonlyNNP/readonly/networknone/exactownedPIDns and target
+cap0/NNP/defaultseccomp/readonly/networknone unchanged. 48/.25s/12s/8proc/64task/
+16KiB/512history unchanged. Prephase6s, new postphase3s, childcontrol4s, original
+ownedchild5s; snapshot8MiB/commands20s. Limits do not promise overallwallclock.
+Readonly9file bundle.local/task-post-sigint-calibration-bundle-20261110T181016559412Z; future output
+.local/task-post-sigint-calibration-20261110T181016559412Z absent. Native bundle uses updated target/controller,
+unchanged collector/entry/stop/filter/policy/architecture plus activation binding;
+assessment candidates stay host-only. No native build or permission expansion.
+
+33 fresh preparation tests PASS inclfullmodeledDocker/actualfixturemethods in
+temporaryprocfs/mockedsignal/unitthread/freshimports, oldgrant/refreeze/output
+refusal, pre/post/absence firstfailure boundaries, deadline and waitwitness tests.
+42 assessment/28collector/511existing logs reusedbyteidentical, no newlivecredit.
+Initial offline genericROS fixture-control import failure retained/corrected in
+model only. Preparation then stopped beforefreeze on unrelated CI container
+codex-pr77-ci-20261110; initialblocker retained. Preparation records activity;
+executionverify stillrequireszero livecontainers (33rdtest), no quiescencewaiver.
+That CIcontainer isuntouched. Finalread-onlypreflight reportsbusy, notexecutionready.
+
+Final SHA/source/current14/preserved13/fullchain/native87/allpriorrawpublic/
+originalN1assessment/candidate/bundle checksPASS; sevenremainingdirsabsent.
+No Docker mutation/liveprocfs/experiments/tuning/retry/newgrant. Remaining38IDs
+explicitdisabled; N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved. PR2 draft,
+M3 open/IntrinsicM4 untouched. Future explicitgrant mustbind thisnewfreeze and
+postSIGINTscope+candidatehashes; runtime mustbequiescentbeforeanycreation.
+
+
+## 2026-11-10 — Native post-SIGINT per-thread calibration PASS
+
+The [native post-SIGINT calibration](evidence/m3-task-post-sigint-calibration-execution-2026-11-10/README.md)
+PASSES readiness and one controlled fixture on freeze8acc653d87ad. Two post-signal
+readable worker observations precede controlled join and supported enumeration
+absence while parent lives; exact candidate lifecycle gate passes.9 raw stacks
+OK/0unavailable, child exit0/unforced/747.3345ms signal-end-to-reap. Cleanup and
+integrity PASS. No tuning/retries/N1 rerun; its FAIL and1PASS/1FAIL/7unexecuted
+remain unchanged, all38 campaign IDs disabled. This qualifies one controlled
+post-signal absence path; exact mid-read race/SDK/ROS/overhead remain unqualified.
+M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze8acc653d87ad/basecf603b9, driver0.
+Runtimequiescent/source/input/fullbuild/native87/preparationindex preflight PASS;
+priorunrelatedCI absent, no unrelatedobjectstop. NativeARMreadiness --self-check
+then1 pinnedamd64controlledPythontarget. Exactcollector6deab3c5e83e pluscandidate
+metadata409a8812042b/lifecycle4fafc85e3d4d, no script/filter/budget/config changes.
+
+ParentPID7/start769 workerTID8/start785; sharedboot/zerooffsets. Prelive2samples
+8260212753..8511473462ns. SIGINT8632200837..8632290170; waitwitness8632295462,
+handlerseen8632702878; postlive2samples8763077170..9017513712. Release9105082587,
+return9105331879, joined9106451629; completeenumabsence9269246545..9269270045
+matchesreconstructedpriorworkeridentity whileparentstable. Ack9324531629,
+exitstage9324679212, reap9379624670. Exit0/unforced, signalend-to-reap747.3345ms
+<original5s. Scopedfixturetiming only; no bridgeperformancecredit.
+
+Final5samples/9stackOK0unavailable/noexhaustion/parent_stop/noGDB.9taskrecords,
+54contentOK/9directorypresent. Candidate9readable/1observeddisappearance,
+3postsignalsamples/0confirmedtaskexits/no workerprocessexitclaim. Omittedworker
+rawstacknot_attempted, neverfakeOK. No actualmidreadENOENT/forcedreuse/SDK/ROS/SRT/
+overheadequivalence qualification, no oldN1schema retrofit/assessor replacement.
+
+3containers/2volumescreatedonce+removed; observerSYS_ADMINonlyNNP/unchangedfilter/
+readonly/networknone/exactownedPIDnamespace, target+supervisorcap0NNP/seccomp.
+5ordinaryreadinessfilecopymissesretained; nofailedgate/retry/restart/tuning.
+89rawfiles779775bytes indexed andbytecopiedpublicrun/, exactgrant/log/preflight/
+gatereport/schema-summary/postflight/publicindex. No build/testoverlap/testsrun.
+Finalreadonlysource/current14/preserved13/fullchain/native87/alloldpublicraw/
+preparationindex/owncleanup PASS, originalN1assessmentSHA unchanged, sevenlaterdirs
+absent.1PASS1FAIL7notexecuted/all38IDsdisabled; no nextcase/newcampaigngrant/M3
+acceptance/merge/IntrinsicM4. Preparation remains immutable history, not reused.
+
+
+## 2026-11-10 — Calibrated task assessor wired into disabled campaign harness
+
+The [campaign per-thread assessor integration](evidence/m3-campaign-task-assessment-integration-2026-11-10/README.md)
+is wired and verified offline:25 integration,42 assessor and511 existing tests
+PASS. Exact calibrated collector/assessor, explicit native activation and closed
+launch/exec/clock gates feed the unchanged campaign workload/profile checks.
+Execution remains blocked:all38 IDs/stages disabled, no freeze/grant/live run,
+tuning or retries. N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved. Native
+integrated SDK/ROS/race/overhead coverage remains open; M3 open/PR2 draft/M4 untouched.
+
+Prospective evidence-local harness copies immutable LONG launch/scenario/socket/
+stage/profile helpers, byte-identical calibrated metadata409a8812042b/
+lifecycle4fafc85e3d4d/collector6deab3c5e83e/nativeentry. Private graphmanifest
+binds all host helpers independent of generic caches. Workload references new
+scenario/sidecar. Sidecar argv explicit--task-visibility; nativeentry binding
+checks calibratedcollector; arming requires hash/activation proof. Sixfile native
+bundle descriptor includescollector-binding; no bundle actuallycreated.
+
+assess.py connects exactcandidatecoverage to observer_gate closed-file bootstrap/
+export equality, root/ready/exec/boot/zerooffset/profile/cap binding, then unchanged
+realcombined SENSOR/command/capture, profile andcleanup gates. No oldschemafallback,
+rawmissingstackwaiver/taskexitclaim. Driver.verify rejects oldfreezes absentnew
+candidate/modulemanifest/bundlebinding before any runtimequery.
+
+Driver main+dispatch/workloadmain/sidecararm unconditionallydisabled beforeIO;
+cases.authorize rejectsallgrants, allowedfalse/enabledIDsempty/all38disabled.
+Nineprofile tuples retained onlyassessmentgrammar, nofuturecohortselection.
+No freeze/authorization/readiness/nativebundle/liveoutput or campaignintegration
+into frozenoldfiles. A future explicitpreparation mustreviewinterlocks/selectscope
+andfreeze all integrationbytes; no automaticN1retry/laterstageexecution authorized.
+
+25 integrationtests PASS inclcomplete modeled assessment using unchanged real
+combined/profiles/cleanup, copied retained journals/workload andtemporary modeled
+launch/retimedobserver records. No realcasecredit or originalcapturemutation.
+Actualsidecarbody AST executed onlyinfakeDocker test; productionguard remains.
+Failuregates/oldgrants/oldfreeze/privategraph/freshimports tested. Initial overlay
+leftovertrace/listtype mistakes retained+corrected offline; existingSQLitehelper
+ResourceWarnings visible.42assessor+511existing tests independentlyrerunPASS.
+RetainednativepostSIGINT lifecycle passes unchanged, historicalN1 originalgate
+stillfails missingstack; newgate refuses schema. verify.py filesystemaudit PASS
+source/current14/preserved13/fullchain/native87/alloldpublicraw/calibrations/
+verdicts; sevenlaterdirsabsent. No Docker/liveprocfs/tuning/retries/builds/native
+experiments/newfreeze/grant/M3acceptance/merge/IntrinsicM4. ExactmidreadENOENT/
+unseenreuse/integratedSDKROS/overheadequivalence unqualified. PR2 staysdraft.
+
+
+## 2026-11-10 — Bounded integrated SDK/ROS calibration prepared, not run
+
+The [bounded native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-preparation-2026-11-10/README.md)
+is prepared on freeze4d64d753f6eb, **not run; execution disabled, no grant**.
+One native readiness check then one N0/1701/10s diagnostic on unchanged matched
+SDK/ROS builds, integrated per-thread/launch/workload gates and original five-second
+child waits.28 preparation tests PASS; runtime read-only preflight quiescent.
+All38 campaign IDs/stages disabled, N1/2903 FAIL and1PASS/1FAIL/7unexecuted preserved.
+No tuning/retries/builds/live run. Short diagnostic is not campaign coverage;
+actual SDK/ROS gates remain unqualified until run. M3 open/PR2 draft/M4 untouched.
+
+Freeze4d64d753f6ebe398a28cf447cbcc1632170facd0f3b6b0726a86c7c55aa5222a, base3047c86.
+Exactly1 nativeARM readinessselfcheck +1 pinnedamd64 LinuxSDKROSunderemulation
+N0/1701/10source seconds. CalibrationslotSDKROS-calibration-N0-1701-10s distinct
+fromall38campaignIDs inclN0/1701/300. No N1/2903 retry, no campaign stage enabled.
+Exactfuturegrant required scope+freeze+manifest+1readiness/1fixture+all exclusions;
+oldgrants refused. Process-local guard verifies grant/files and exactfixtureout/
+bundle/prefix; originalofflineintegrationblockers untouched. No grant created.
+
+Privategraph exactcollector6deab3c5e83e/metadata409a8812042b/lifecycle4fafc85e3d4d,
+nativeentry/stabilizedscenario/bridgewrapper/launch/socket/stage/profile helpers
+byteidentical. SDKphase requires2preSPI readablematchingroot/namedSDKprovider
+(rwx-shard-0/rwx-shard-1/rwx-readiness, anyone perqualifyingsample) before original
+normalshutdownrelease. No postsignalhold/forcedabsence/childwaitextension. Exact
+integratedclosedmetadata/execclock/provenance/combinedSENSORcommandcapture/profile/
+cleanup gates; onlyboundedSDKROScalibrationqualification. No fakelegacy metadata.
+
+Sixfile nativebundle.local/sdkros-task-calibration-bundle-20261110T195336822172Z readonly444/555;
+futureoutput.local/sdkros-task-calibration-20261110T195336822172Z absent. ObserverSYS_ADMINonlyNNP/defaultdeny/
+readonly/networknone/exactoperatorPIDnamespace; NetworkLab NET_ADMIN+BPF/root
+mountpolicy unchanged, bridgechildcap0NNP/seccomp. No permission or runtime tuning.
+48/.25s/12s/8proc/64task/512history/16KiB unchanged; SDKvisibility6s/snapshot8MiB,
+originalbarrier15s/scenario130s/childwait5s. Newhostfixturewatchdog240s withowned
+processgroup TERM/2s/KILL/5s onalreadyfailedboundary andscopedemergencycleanup.
+Readiness20s/sidecar15scommandcaps; boundedphases nottotalwallclockguarantee.
+
+28fresh preparation tests PASS: exactscope/oldgrant/inactiveoutputguard/private
+imports, fullfakeDocker readiness-beforefixture/firstfailure cleanup, ownedwatchdog,
+SDKpresence/schema/error/deadline, preservedbytes anddirectprivatebuildmanifest.
+SDKassessor testreal launch/socket/lifecycle/bootstrap/provider/profile/cleanup;
+unchangedcommoncombinedcallbackmocked because retained600sN1 evidence isnot10s
+SDKproof.25integration/42assessor/511existing logs reusedbyteidentical; notnative
+credit. Initialfakepolicyfile omission retained/corrected offline. Preparation
+stoppedbeforefreeze/runtimequeries onmissinglocalbinarymanifest; exactLONGmanifest
+copied, pathrelocationnormed explicitly, missing/pathmodel failures retained.
+All14matched/13preserved/fullchain/native87 hashesunchanged. No nativeattempt/retry.
+
+Read-onlyruntime/images/source/build/priorindex/input verificationPASS, quiescent;
+finalprivatebinding/readinessgrantabsence/futureoutputabsence/readonlybundle/
+originalN1assessmentSHA/sevenlaterdirsabsence PASS. Originalfailedcohortunchanged,
+all38campaignIDs disabled.0 native readiness/SDKfixtures/builds/Dockermutations;
+M3open/PR2draft/IntrinsicM4untouched. No queuedrun or nextcase. ActualSDK provider
+names/shortwindowcadence/nativeaccess/SDKshutdown remainfuturegates; exactmidread
+ENOENT/unseenreuse/overhead notguaranteed, fastnormalshutdownmayhavenopostSPIabsence.
+
+
+## 2026-11-10 — Integrated native SDK/ROS calibration PASS
+
+The [integrated native SDK/ROS calibration](evidence/m3-sdkros-task-calibration-execution-2026-11-10/README.md)
+PASSES both gates on one invocation of freeze4d64d753f6eb: actual N0/1701/10s
+SDK/ROS startup/warmup/restart, source/command/capture/profile and calibrated
+observer/lifecycle gates.100 stacks OK/0unavailable,19 post-SIGINT enumeration
+absences; five commands/effects and six SENSOR balances zero. Cleanup/integrity
+PASS; no tuning/retries/N1 rerun. Its FAIL and1PASS/1FAIL/7unexecuted preserved;
+all38 campaign IDs/stages disabled. Short calibration is not campaign coverage
+or exact missing-read-race qualification. M3 open/PR2 draft/M4 untouched.
+
+One exactgrant/invocation freeze4d64d753f6eb/base3047c86; driver0.
+Quiescentruntime/frozeninputs preflightPASS andverifybeforefixture.1nativeARM
+readinessselfcheck then1 pinnedamd64SDKROS N0/1701/10s actualdiagnostic; no builds/
+tests/tuning/retry/watchdog escalation. Existing--rm versionscontainer inventory
+precedesownedfixture. Nativeentry/collector6deab3c5e83e/metadata409a8812042b/
+lifecycle4fafc85e3d4d/source/policies/budgets/buildsunchanged.
+
+Host2SDKproviderobservationsbeforerelease; final4preSIGINT samples showall3
+rwx-shard-0/rwx-shard-1/rwx-readiness. Root111/start1537, journalworker127/start1600.
+SIGINT39482225892..39482340725, workerjoinend39501931309; post samplecompleteenum
+absence39648475850..39648541475 omits19previousrootTIDs inclall3providerthreads,
+rootstillmatching; workerprocessmissingafterregisteredjoin. Reap39718305100,
+rootmissingonlyafterreap nextsample. Exit0/unforced235.964375msfromsignalend<5s.
+Footer6total/5prereap/1postsignal/100stackOK0unavailable/noexhaustion/
+all_owned_processes_gone.600contentOK/100directorypresent.19taskobservations
+not_attempted/0confirmedtaskexits, workerprocessabsenceproofseparate/noexitcause.
+No exactmidreadENOENT/unseenreuse/overheadequivalence qualification.
+
+Actualsourcewindow10.156861921s,imu199.963337Hz/joints50.015448Hz.2539produced/
+2449observed,90accounted(5admission+85outboundreplacement); all6balances0 and
+SRTaccept-receivergap0. Publicationageuppermax15msimu/29msjoint<original250ms.
+5commands/5confirmedsuccesses/effects,0UNKNOWN/unresolved/skippedslots, journals
+andcapturegatespass. No old600sevidencerelabeled, actualrealcombinedgatepassed.
+Operatorfinal+robotwarmup/final all51shutdownrecords; negativehashasdeclared.
+OneSDKfixture/observer/normalwarmup, no retry.1normalreadyfilecopymissretained,
+no driver/networkcommandfailures or failedgates. Original NetworkLab privileges/
+cap0bridgeattestation/nativeobserverSYS_ADMINonlyNNP/filter/readonly/networknone/
+exactPIDnamespace unchanged. Readiness/endpoints/observer/network/volumesremoved,
+credentialdeleted; readonlysource/fullmatchedchain/native87/oldindexes/input/
+preparationindex/originalN1assessmenthashPASS; sevenlaterdirsabsent.
+
+114rawfiles11799641bytes indexedandbytecopiedpublicrun/ inclpcaps/monotonic
+captures/journals/catalogs/traces/assessment. Gatereport/schema-summary/postflight
+andgrant retained. No testsrun duringcalibration or extraqualification credit.
+N1/2903 FAIL/cohort1PASS1FAIL7notexecuted preserved;all38campaignIDs/stagesdisabled.
+This10sSDKROScalibration isnot300sN0/newLONGcoverage/M3acceptance. No nextcase/new
+campaigngrant/retry/merge/IntrinsicM4; PR2draft/M3open. Futurecampaignpreparation
+requires separateexplicit scope/authorization; historicalfailure notoverwritten.
+
+
+## 2026-11-10 — Seven remaining calibrated LONG cases prepared, not run
+
+The [seven remaining N1/N2/N5 cases](evidence/m3-current-remaining-preparation-2026-11-10/README.md)
+are prepared on freeze df3cfbabfe3b, **not run; execution disabled, no grant**.
+Order:N1/4211;N2/1701,2903,4211;N5/1701,2903,4211, with original600s/300s source
+windows (3,300s nominal).25 offline preparation tests PASS; calibrated SDK/ROS
+harness/builds/visibility/profile settings unchanged; read-only preflight quiescent.
+N1/1701 PASS and N1/2903 FAIL excluded and preserved; other N0/N3/N4 stages disabled.
+No tuning/retries/builds/live cases. Stop first failed gate if later authorized.
+M3 open/PR2 draft/M4 untouched.
+
+Freezedf3cfbabfe3bf4f3a1cc77a280454bdea021501cad410c5acdb320ec94b0a65e, base685e1bf.
+ExactorderedIDs N1-combined-4211,N2-combined-1701,N2-combined-2903,
+N2-combined-4211,N5-combined-1701,N5-combined-2903,N5-combined-4211; ordinals32..38.
+4x600s+3x300s=3300source seconds, no wallclockestimate.31IDs excluded:29completed
+N0/N3/N4 plusoriginalN1/1701PASS andN1/2903FAIL. Otherstagesdisabled; prepared7
+alsoexecutiondisabled until exactfuturegrant. No subset/reorder/resume/retry,
+no newreadiness/calibration stage, no grantcreated, no casequeued.
+
+ExactnativeSDKROScalibration4d64d753f6eb PASS +114rawfiles/closedjournals/indexes
+bound prerequisite; originalcalibration/historicalcohort/verdicts untouched.
+Collector6deab3c5e83e/metadata409a8812042b/lifecycle4fafc85e3d4d/SDKvisibility/
+bootstrapclock/stabilizedscenario/launch/socket/stage/profile helpers byteidentical.
+Privategraph/6file readonlynativebundle; onlycasegrammar/grant/casecontext/dispatch/
+qualificationlabels changed. Workloadguard checksprofile/seed/duration aswellas
+exactselectedoutput/bundle/prefix. Oldgrants andoldN1/N0-cal slots refused.
+
+Beforeeachfuturecase verifyquiescentruntime/images/source/fullmatchedbuild/
+native87/frozeninputs/allretainedindexes andfreshoutput. Existingstrictreal
+SENSORcommandcapture/profile/launch/stage/socket/metadata/join/execclock/cleanup
+gates mandatory. TwoSDKprovider observations before normal shutdownrelease.
+Original5schildwait/48samples/.25s/12s/8proc/64task/512history/16KiBread/6svisibility/
+8MiBsnapshot/permissions/isolations unchanged. Original settings.json exactcopy
+inclN5UDP128Kcompetitor/dynamicneighbors/profilecommands. Hostwatchdogsource+240s
+(840sN1N2/540sN5), ownedgroupTERM/2s/KILL/5s onalreadyfailedboundary+ownedcleanup;
+noextensiontochild/observer/command/SENSOR budgets or overallwallclockguarantee.
+
+25preparationtests PASS: scopedgrant/7order/31exclusions/oldgrants/inactiveguard/
+parameters/privateimports/buildmanifest, fullfake7dispatchonce, strict/producer/
+postflight/provenance failures stopeachunexecutedtail, hostwatchdogs,7original
+profile readbacks+mutation refusal, integratedmetadata gate/labels andcal-slot
+refusal. Temporaryoverlays/mockunchangedcombinedcallback notrealLONGcredit.
+28SDKprep/25integration/42assessor/511existing logs reusedbyteidentical, notrerun.
+Initialpreparationstoppedbeforefreeze/runtimequeries onstaleSDKcalstate guard;
+explicit7prepared/31excluded/0enabled IDs added+directregression, failure retained.
+No nativeattempt/retry/tuning/build. Finalreadonlyruntime/source/current14/
+preserved13/fullchain/native87/oldrawpublic/SDKprerequisite/input verificationPASS,
+quiescent. Newlocalbuildmanifestpath only; identicalbinarymanifestSHA/buildbytes.
+
+Readonlybundle.local/current-remaining-observer-bundle-20261110T212827698078Z (6files444/dir555);
+futureoutput.local/current-remaining-cohort-20261110T212827698078Z absent. No authorization/readiness execution/
+case/native experiment; oldsevenunexecuteddirsabsent andoriginalN1assessmentSHA/
+oldcohortSHA unchanged. Original1PASS1FAIL7NOTEXECUTED remains; freshfuturecohort
+wouldwrite separatepath, neveroverwriteoldresults. ExactmidreadENOENT/unseenreuse/
+overheadequivalence/longprofile coverage remainunqualified; N1/2903 failure still
+anexplicitgap. No M3acceptance/merge/IntrinsicM4. PR2draft; futureexactgrantrequired.
+
+
+## 2026-11-11 — Seven remaining calibrated LONG cases PASS7/7
+
+The [seven remaining calibrated LONG cases](evidence/m3-current-remaining-execution-2026-11-11/README.md)
+PASS7/7 on one invocation of freeze df3cfbabfe3b. All1,567 admitted commands/effects
+succeed; all six SENSOR balances zero per case. N5's83 skipped slots remain explicit.
+712 readable stacks/1 supported DDS-thread ENOENT, with raw unavailability retained;
+SDK/launch/profile/capture/cleanup gates pass. No tuning/retries/extra cases or builds.
+N1/2903 historical FAIL preserved; other stages stayed disabled. Eight distinct
+LONG IDs now have passing current-build results; N1/2903 remains an acceptance gap.
+M3 open/PR2 draft/M4 untouched.
+
+Exactly1 orderedgrant/invocation freeze df3cfbabfe3b/base685e1bf; driver0.
+N1/4211 +all3N2 source600s each; all3N5 source300s each. All strictcalibrated
+metadata/SDKvisibility/launch/socket/stage/execclock/realSENSORcommandcapture/
+originalprofile/competitor/cleanup gatesPASS. Quiescentpreflight+percasepostflight/
+finalfrozenintegrityPASS. No tuning/retry/watchdog/build/testoverlap/extraSDKcheck/
+N0N3N4case/N1oldcase. Otherstages/31excludedIDs untouched. No nextcasequeued.
+
+Commands:N1/4211=300;N2/1701,2903,4211=300each;N5/1701=125,2903=116,4211=126.
+All1567admitted confirmed/effects,0UNKNOWN/unresolved/not_admitted. N5skips25/34/24
+(total83) andmaxadjacentintentgaps6011.849253/6022.526002/6013.721337ms retained;
+notcontinuous2scadence orlatencyguarantee. All6SENSORbalances0percase. Maxobserved
+publicationageupper227ms<250ms. Original losses/replacements/expiry countersremain
+itemized; accountingbalance notlossfree. Sourcewindows600.114364/600.137076/
+600.166043/600.135985/300.112504/300.147483/300.132933s. Cadencegatespass.
+
+Observer712readable/1rawunavailable/121supportedtaskobservations/0confirmedtaskexits.
+AllpositiveSDKlaunchesexit0unforced, operatorsignalend-to-reap176.528251..225.823501ms.
+OneN2/2903 DDSwatchdogTID116/start129398 waslistedthenall6contentreads+dircheck
+ENOENT, matchingroot111/start129366, verifiedpreviousidentity. Enumerationend
+1908692352745; missingread/absence1908692738703..1908692801995; SIGINTend
+1908642148911; reap1908818677162. Newruleobserved_absence_after_prior_identity,
+rawstackunavailable remainsunavailable/noexits/no-unseenreuse/causeassertion.
+ActualDDS enumeration/readabsence path, notretrofitoldN1SRTproviderproof.
+Allotherobservationsenumerationabsence; percasefullmetadata inobserver-summary.
+
+823rawfiles2359812816bytes locallyretainedandindexed at frozenremainingoutput;
+publiccases661byteidenticalselectedrawexports41625410bytes +percase selectedrun
+summaries. LargePCAP/mono/fullrunJSON/longtraceslocalonly; export-map mapscopied
+bytesandlistsomissions.2MiBexportselectiononly,nogate/rawretentionchange.
+Closedjournals included. Complete strictreplayrequireslocalindexedraw. Rootcohort/
+postflight/grant/preflight/gatereport/observer-summary/publicandlocalindexesretain
+scope/results. Independentallownedcontainers/networks/volumesabsence+credentials
+removed. Allsource/current14/preserved13/fullchain/native87/input/oldrawpublic/
+preparationindex/originalN1assessmentSHA/originalcohortSHA PASS.0newtests/builds.
+
+Originalsnapshot1PASS1FAIL7NOT_EXECUTED immutable; sevenoldunexecuteddirsabsent,
+fresh7outputsseparate. CurrentdistinctLONGcoverage8passingIDs incloldN1/1701;
+N1/2903originalFAIL excludednotrerun/notrequalified, remainsacceptancegap. NoM3
+acceptance/merge/IntrinsicM4. PR2draft; no automaticnewfreeze/grant/extraexperiment.
+
+## 2026-11-11 — Consolidated acceptance and fresh N1 preparation
+
+The [consolidated acceptance record](evidence/m3-acceptance-consolidation-2026-11-11/README.md) maps all 38 planned M3 case IDs to retained verdicts: **37 passing IDs and the original N1/2903 strict failure**. Results span multiple freezes and harness revisions. M3 remains open; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) stays draft/unmerged. M0–M2 retain their recorded simulator acceptance; M4/Intrinsic has not started.
+
+A separate [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-preparation-2026-11-11/README.md) is **prepared, not run**, on freeze `b3609d03e5ac`. It uses the unchanged matched build and calibrated harness. No authorization grant exists; all other 37 case IDs and other campaign stages are disabled. No tuning, automatic retries, or historical failure revision is authorized. Execution must await a separate instruction and stop at the first failed gate.
+
+27 offline preparation regressions pass. Preparation performed read-only runtime/image metadata queries and verified retained hashes; the runtime was quiescent. No live workload, build, tuning, retry or authorization grant. Full freeze `b3609d03e5ac4976f04b5067df68c6b8d94b38390052217d1221c856709232bb`; future output `.local/fresh-n1-2903-qualification-20261111T084548314895Z`. The separate original failed capture and original one-pass/one-fail/seven-not-executed cohort remain immutable. See current acceptance and closure documents rather than older chronological status paragraphs.
+
+## 2026-11-11 — Fresh N1/2903 strict PASS
+
+The [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-execution-2026-11-11/README.md) **passed** on one invocation of freeze `b3609d03e5ac`. The latest [acceptance update](evidence/m3-fresh-n1-2903-execution-2026-11-11/acceptance-update.json) now records passing evidence for **all 38 planned distinct M3 case IDs**, across separate freezes and harness revisions. The original N1/2903 strict failure and original one-pass/one-fail/seven-not-executed cohort remain immutable. Historical failures are not overwritten.
+
+M3 remains open pending an explicit scoped acceptance decision; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) remains draft/unmerged, and M4/Intrinsic has not started. No next run or stage is enabled. No tuning or automatic retries occurred.
+
+Driver exit 0; source 600.123054899 s; 300 successes/effects, no unknown/unresolved/not-admitted/skips; SENSOR balances zero, IMU/joint upper maxima 224/235 ms; observer 100 readable/0 unavailable/19 supported task absences. Cleanup and immutable-input/index checks pass, runtime quiescent. One invocation only; no tuning/retry/build/test/extra case. All 37 other IDs and other stages remained disabled. Raw data and selected public exports retained/indexed. Next step is an explicit scoped acceptance review.
+
+## 2026-11-11 — Scoped M3 acceptance recommendation prepared
+
+The complete retained-evidence review supports accepting the recorded local Linux amd64/Jazzy simulator qualification on the exact pinned instrumented build, with historical failures and limits attached. Canonical proposal: `M3_SCOPED_ACCEPTANCE.md`; immutable review package: `evidence/m3-scoped-acceptance-2026-11-11/`. Formal milestone approval remains pending, PR2 draft/unmerged, all38 campaign IDs and M4 disabled. No new experiments, Docker calls, builds/native tests, tuning, expiry forcing or command replay.
+
+Read-only audit passed for10,085 unique artifacts /4,908,067,685bytes /60indexes; all38 distinct latest passing IDs; same14 matched build entries and87 native inputs across six separately frozen series. Harness/observer revisions keep their own scopes. Historical N3 zero-skip/stop-boundary and two-loss4211 shutdown failures, N0 harness failures, N4 JSON assessor failure and original N1/2903 missing-stack failure remain unchanged. Intent118 stays UNKNOWN; fresh success does not resolve it. N5 skips/cadence, modeled age/accounting, DDS comparison gaps, hardware/clock/memory/overhead/security limits and unexplained hang causes remain explicit. Next decision is formal scoped acceptance; no automatic merge/M4 or new test is enabled.
+
+## 2026-11-11 — M3 formally accepted within documented scope
+
+The user explicitly approved M3 within the documented local Linux amd64/Jazzy simulator scope on the exact matched instrumented SDK/ROS/provider build. Formal decision: `M3_ACCEPTANCE_DECISION.md`; machine-readable baseline: `baselines/m3-acceptance.json`; immutable approval package: `evidence/m3-acceptance-decision-2026-11-11/`. The reviewed proposal/review at `a99d7ba` remains byte-identical. All38 distinct IDs have passing evidence, with historical failures and all remaining limitations incorporated into acceptance.
+
+Original N1/2903 failure and1PASS/1FAIL/7unexecuted cohort remain unchanged; old N3 hang cause is unproved, historical intent118 stays UNKNOWN and is not replayed. No broad DDS superiority, hardware, cross-host, real-time, memory-peak or observer-overhead claim. No new experiment, Docker call, native test/build, tuning, retry, recovery or forced expiry. PR2 remains draft/unmerged, merge/release not authorized; all campaign execution and M4 remain disabled. Scope approval is complete; no next step is automatically enabled.
+
+## 2026-11-11 — PR2 prepared for final human review, still draft
+
+`PR2_REVIEW_GUIDE.md` maps final implementation paths, private worker IPC4 matched-rebuild requirements, retained validation and38-ID acceptance evidence. `evidence/pr2-final-review-2026-11-11/` preserves the previous PR description and observed remote state, a pre-preparation base32c53b2/head e14f98c diff inventory (13,787files;13,491evidence/296other), final body, and acceptance/link/hash checks. This is review preparation, not a line-by-line approval or new test result.
+
+Observed GitHub state: open/draft/unmerged/mergeable; no status contexts, PR-triggered workflow runs, submitted reviews or inline threads reported. No configured branch workflow directory; required-check satisfaction and human approval are not established. Formal scoped M3 acceptance, historical failures/UNKNOWN and every limitation remain unchanged. No runtime, build, test, tuning, retry, replay, release or merge. All campaign execution/M4 stay disabled; no reviewers requested automatically. The PR body is replaced by the concise final implementation summary, with old chronology retained verbatim in github-before.json.
+
+## 2026-11-11 — Final review packaging finding fixed offline
+
+Installed demo now includes existing `scenario_timeline.py`, fixing the unconditional import in installed `m3_dds_scenario.py`. New `tests/test_demo_installed_imports.py` stages the real CMake script install declarations in a temporary language-free fixture, checks static local import closure, verifies a missing transitive-helper negative case, and imports the staged pure helper with isolated Python. Expected red result3tests/2failures and green3/3 are retained under `evidence/m3-demo-import-closure-fix-2026-11-11/`. No ROS/native build/runtime, Docker, live experiment, tuning or retry.
+
+The acceptance decision/proposal/review and original failure/cohort are unchanged. Accepted14 installed artifacts/other86 native inputs verify identical; the demo CMake declaration is the sole explicit source delta to the accepted87-input manifest. Its before/after hash is recorded; old freezes are not rebound, qualified install prefixes not changed, and no rebuilt artifact is newly qualified. Scoped M3 acceptance, failure history and limitations persist. PR2 draft/unmerged; M4/campaign execution disabled.

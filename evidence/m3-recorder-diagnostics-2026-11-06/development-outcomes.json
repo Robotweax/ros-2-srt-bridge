@@ -1,0 +1,716 @@
+[
+  {
+    "label": "n5-60-no-history",
+    "source_commit": "013927f",
+    "harness_status": "passed",
+    "command_summary": {
+      "attempts": 3,
+      "not_admitted": 0,
+      "unresolved": 1,
+      "terminal_observation_latency_ms": {
+        "count": 2,
+        "p50": 1948.887834,
+        "p95": 3932.166127,
+        "p99": 3932.166127,
+        "maximum": 3932.166127
+      },
+      "by_state_reason": {
+        "4/0": {
+          "count": 2,
+          "p50": 1948.887834,
+          "p95": 3932.166127,
+          "p99": 3932.166127,
+          "maximum": 3932.166127
+        }
+      },
+      "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+    },
+    "sender_unknown_ids": [
+      "03000000000000000000000000000000"
+    ],
+    "sender_only": [
+      "03000000000000000000000000000000"
+    ],
+    "receiver_successes": 2,
+    "poll_summaries": [
+      {
+        "number": 1,
+        "status_observations": null,
+        "omitted": 0,
+        "first": null,
+        "last": null,
+        "terminal": 4
+      },
+      {
+        "number": 2,
+        "status_observations": null,
+        "omitted": 0,
+        "first": null,
+        "last": null,
+        "terminal": 4
+      },
+      {
+        "number": 3,
+        "status_observations": null,
+        "omitted": 0,
+        "first": null,
+        "last": null,
+        "terminal": null
+      }
+    ],
+    "pcap": {
+      "operator": {
+        "records": 23436,
+        "kernel_drops": 0
+      },
+      "robot": {
+        "records": 23436,
+        "kernel_drops": 0
+      }
+    },
+    "recorder_diagnostics": {
+      "robot": {
+        "samples": 846,
+        "processes": [
+          {
+            "pid": 51,
+            "start_ticks": 2735,
+            "observations": 841,
+            "states": {
+              "R": 16,
+              "S": 825
+            },
+            "first": {
+              "pid": 51,
+              "state": "S",
+              "start_ticks": 2735,
+              "cpu_ticks": 3,
+              "scheduler": {
+                "runtime_ns": 45998666,
+                "runqueue_wait_ns": 5634290,
+                "timeslices": 44
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 24,
+                "nonvoluntary_ctxt_switches": 20
+              }
+            },
+            "last": {
+              "pid": 51,
+              "state": "R",
+              "start_ticks": 2735,
+              "cpu_ticks": 45,
+              "scheduler": {
+                "runtime_ns": 462548596,
+                "runqueue_wait_ns": 544720146,
+                "timeslices": 42901
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 42219,
+                "nonvoluntary_ctxt_switches": 682
+              }
+            }
+          }
+        ],
+        "missing_process_samples": 5,
+        "sample_errors": 0,
+        "maximum_sample_gap_ns": 111486125,
+        "maximum_read_span_ns": 3874250,
+        "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; no root-cause or capture-completeness inference"
+      },
+      "operator": {
+        "samples": 847,
+        "processes": [
+          {
+            "pid": 51,
+            "start_ticks": 2735,
+            "observations": 840,
+            "states": {
+              "D": 1,
+              "R": 9,
+              "S": 830
+            },
+            "first": {
+              "pid": 51,
+              "state": "S",
+              "start_ticks": 2735,
+              "cpu_ticks": 4,
+              "scheduler": {
+                "runtime_ns": 41677209,
+                "runqueue_wait_ns": 561249,
+                "timeslices": 29
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 23,
+                "nonvoluntary_ctxt_switches": 6
+              }
+            },
+            "last": {
+              "pid": 51,
+              "state": "D",
+              "start_ticks": 2735,
+              "cpu_ticks": 64,
+              "scheduler": {
+                "runtime_ns": 643033806,
+                "runqueue_wait_ns": 245152338,
+                "timeslices": 42268
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 42122,
+                "nonvoluntary_ctxt_switches": 146
+              }
+            }
+          }
+        ],
+        "missing_process_samples": 7,
+        "sample_errors": 0,
+        "maximum_sample_gap_ns": 111170583,
+        "maximum_read_span_ns": 4094333,
+        "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; no root-cause or capture-completeness inference"
+      }
+    },
+    "scope": "development observations, not a replacement N5 qualification; unresolved intents retain uncertainty"
+  },
+  {
+    "label": "n5-30-with-history",
+    "source_commit": "56b7b8a",
+    "harness_status": "passed",
+    "command_summary": {
+      "attempts": 12,
+      "not_admitted": 0,
+      "unresolved": 0,
+      "terminal_observation_latency_ms": {
+        "count": 12,
+        "p50": 895.097334,
+        "p95": 3043.632751,
+        "p99": 3043.632751,
+        "maximum": 3043.632751
+      },
+      "by_state_reason": {
+        "4/0": {
+          "count": 12,
+          "p50": 895.097334,
+          "p95": 3043.632751,
+          "p99": 3043.632751,
+          "maximum": 3043.632751
+        }
+      },
+      "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+    },
+    "sender_unknown_ids": [],
+    "sender_only": [],
+    "receiver_successes": 12,
+    "poll_summaries": [
+      {
+        "number": 1,
+        "status_observations": 3,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 247831785861,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 248207470237,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 2,
+        "status_observations": 11,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 249838403279,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 251861767613,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 3,
+        "status_observations": 8,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 253851894989,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 255262664532,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 4,
+        "status_observations": 15,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 255838336449,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 258778501533,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 5,
+        "status_observations": 4,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 259833658867,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 260412986909,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 6,
+        "status_observations": 6,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 261840486535,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 262839625035,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 7,
+        "status_observations": 2,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 263845565536,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 264000592036,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 8,
+        "status_observations": 5,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 265840569120,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 266633947412,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 9,
+        "status_observations": 5,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 267832195996,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 268611426538,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 10,
+        "status_observations": 15,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 269829774247,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 272722705497,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 11,
+        "status_observations": 7,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 273832706123,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 275037942332,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      },
+      {
+        "number": 12,
+        "status_observations": 5,
+        "omitted": 0,
+        "first": {
+          "found": true,
+          "state": 1,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 0,
+          "query_queued": true,
+          "peer_error": 0,
+          "observed_monotonic_ns": 275848058165,
+          "budget_elapsed": false
+        },
+        "last": {
+          "found": true,
+          "state": 4,
+          "reason": 0,
+          "local_error": 0,
+          "revision": 3,
+          "query_queued": false,
+          "peer_error": 0,
+          "observed_monotonic_ns": 276640546041,
+          "budget_elapsed": false
+        },
+        "terminal": 4
+      }
+    ],
+    "pcap": {
+      "operator": {
+        "records": 11399,
+        "kernel_drops": 0
+      },
+      "robot": {
+        "records": 11399,
+        "kernel_drops": 0
+      }
+    },
+    "recorder_diagnostics": {
+      "robot": {
+        "samples": 482,
+        "processes": [
+          {
+            "pid": 51,
+            "start_ticks": 23538,
+            "observations": 477,
+            "states": {
+              "D": 1,
+              "R": 11,
+              "S": 465
+            },
+            "first": {
+              "pid": 51,
+              "state": "S",
+              "start_ticks": 23538,
+              "cpu_ticks": 3,
+              "scheduler": {
+                "runtime_ns": 38660750,
+                "runqueue_wait_ns": 8237293,
+                "timeslices": 33
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 23,
+                "nonvoluntary_ctxt_switches": 10
+              }
+            },
+            "last": {
+              "pid": 51,
+              "state": "D",
+              "start_ticks": 23538,
+              "cpu_ticks": 25,
+              "scheduler": {
+                "runtime_ns": 259075999,
+                "runqueue_wait_ns": 324054081,
+                "timeslices": 20887
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 20547,
+                "nonvoluntary_ctxt_switches": 340
+              }
+            }
+          }
+        ],
+        "missing_process_samples": 5,
+        "sample_errors": 0,
+        "unavailable_field_observations": {
+          "io": 477
+        },
+        "maximum_sample_gap_ns": 111363250,
+        "maximum_read_span_ns": 5356750,
+        "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; wchan=0 can mean restricted/unavailable; scheduler counters depend on kernel configuration; no root-cause or capture-completeness inference"
+      },
+      "operator": {
+        "samples": 483,
+        "processes": [
+          {
+            "pid": 51,
+            "start_ticks": 23538,
+            "observations": 476,
+            "states": {
+              "R": 4,
+              "S": 472
+            },
+            "first": {
+              "pid": 51,
+              "state": "S",
+              "start_ticks": 23538,
+              "cpu_ticks": 3,
+              "scheduler": {
+                "runtime_ns": 39475376,
+                "runqueue_wait_ns": 3335208,
+                "timeslices": 31
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 25,
+                "nonvoluntary_ctxt_switches": 6
+              }
+            },
+            "last": {
+              "pid": 51,
+              "state": "S",
+              "start_ticks": 23538,
+              "cpu_ticks": 32,
+              "scheduler": {
+                "runtime_ns": 332175072,
+                "runqueue_wait_ns": 170606547,
+                "timeslices": 20578
+              },
+              "unavailable": [
+                {
+                  "field": "io",
+                  "error": "PermissionError"
+                }
+              ],
+              "wchan": "0",
+              "context_switches": {
+                "voluntary_ctxt_switches": 20507,
+                "nonvoluntary_ctxt_switches": 71
+              }
+            }
+          }
+        ],
+        "missing_process_samples": 7,
+        "sample_errors": 0,
+        "unavailable_field_observations": {
+          "io": 476
+        },
+        "maximum_sample_gap_ns": 112644334,
+        "maximum_read_span_ns": 3940917,
+        "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; wchan=0 can mean restricted/unavailable; scheduler counters depend on kernel configuration; no root-cause or capture-completeness inference"
+      }
+    },
+    "scope": "development observations, not a replacement N5 qualification; unresolved intents retain uncertainty"
+  }
+]

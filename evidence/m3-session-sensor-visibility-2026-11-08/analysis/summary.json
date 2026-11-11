@@ -1,0 +1,2261 @@
+[
+  {
+    "label": "srt-N0-2903",
+    "status": "passed",
+    "harness_status": "passed",
+    "command_audit": {
+      "attempts": 8,
+      "confirmed_successes": 8,
+      "unknown": 0,
+      "effects": 8,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 0,
+    "durable": {
+      "complete": true,
+      "verified_expired": 0,
+      "all_success": true,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "application": {
+      "source_produced": 3774,
+      "observer_received": 3652,
+      "missing": 122,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 3,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 118,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 15.097196506,
+      "source_actual_hz": {
+        "imu": 199.9709018028728,
+        "joints": 50.00928481655149
+      },
+      "published": 3653,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 2905,
+          "rounding": "up to 1ms",
+          "maximum_ms": 14,
+          "p50_ms": 9,
+          "p95_ms": 11,
+          "p99_ms": 12
+        },
+        "joint": {
+          "count": 748,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "sensor_processes": {
+      "operator-bridge-0.log": [
+        {
+          "identity": [
+            "9581f7f8700aa28ba97322c45711678c",
+            1,
+            466499106
+          ],
+          "sessions": [
+            "f4382cd4a1963ffb97accb057dff1f92"
+          ],
+          "contained_pairs": 0,
+          "contained_first_read_ns": null,
+          "contained_last_read_ns": null,
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 0,
+            "unique_sent": 0,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 0,
+            "data_received": 52,
+            "retransmitted": 0,
+            "ack_sent": 18,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 29594,
+            "unique_sent": 0,
+            "unique_received": 42,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 10,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              0
+            ],
+            "send_buffer_bytes": [
+              0,
+              0
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              72
+            ],
+            "flight_packets": [
+              0,
+              0
+            ],
+            "rtt_ms": [
+              0.338,
+              1.341
+            ],
+            "flow_window_packets": [
+              178,
+              178
+            ],
+            "congestion_window_packets": [
+              178,
+              178
+            ]
+          },
+          "before_close_records": 1
+        },
+        {
+          "identity": [
+            "9581f7f8700aa28ba97322c45711678c",
+            2,
+            657071544
+          ],
+          "sessions": [
+            "452630655f5dca543bf242c2e9490904"
+          ],
+          "contained_pairs": 147,
+          "contained_first_read_ns": [
+            297918745802,
+            297918748844
+          ],
+          "contained_last_read_ns": [
+            312881170975,
+            312881173600
+          ],
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 4524,
+            "retransmitted": 0,
+            "ack_sent": 1437,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 2622360,
+            "unique_sent": 0,
+            "unique_received": 3619,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 905,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 0,
+            "data_received": 4567,
+            "retransmitted": 0,
+            "ack_sent": 1453,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 2646642,
+            "unique_sent": 0,
+            "unique_received": 3654,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 913,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              0
+            ],
+            "send_buffer_bytes": [
+              0,
+              0
+            ],
+            "receive_buffer_packets": [
+              0,
+              1
+            ],
+            "receive_buffer_bytes": [
+              0,
+              335
+            ],
+            "flight_packets": [
+              0,
+              0
+            ],
+            "rtt_ms": [
+              0.272,
+              2.218
+            ],
+            "flow_window_packets": [
+              178,
+              178
+            ],
+            "congestion_window_packets": [
+              178,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ],
+      "robot-bridge-1.log": [
+        {
+          "identity": [
+            "b6ed5b89e5610ddb77343709e54b3623",
+            1,
+            127666759
+          ],
+          "sessions": [
+            "f4382cd4a1963ffb97accb057dff1f92",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 0,
+          "contained_first_read_ns": null,
+          "contained_last_read_ns": null,
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 0,
+            "unique_sent": 0,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 52,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 18,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 29594,
+            "bytes_received": 0,
+            "unique_sent": 42,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 10,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              1
+            ],
+            "send_buffer_bytes": [
+              69,
+              202
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              0
+            ],
+            "flight_packets": [
+              0,
+              2
+            ],
+            "rtt_ms": [
+              0.796,
+              100
+            ],
+            "flow_window_packets": [
+              177,
+              178
+            ],
+            "congestion_window_packets": [
+              177,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ],
+      "robot-bridge-2.log": [
+        {
+          "identity": [
+            "57fe9bfa408ead72e13905fd8d5c9a37",
+            1,
+            357579132
+          ],
+          "sessions": [
+            "452630655f5dca543bf242c2e9490904",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 149,
+          "contained_first_read_ns": [
+            297848080802,
+            297848122011
+          ],
+          "contained_last_read_ns": [
+            312838327434,
+            312838330225
+          ],
+          "partial_window_totals": {
+            "data_sent": 4532,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 1439,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 2626640,
+            "bytes_received": 0,
+            "unique_sent": 3626,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 906,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 4567,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 1453,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 2646642,
+            "bytes_received": 0,
+            "unique_sent": 3654,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 913,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              2
+            ],
+            "send_buffer_bytes": [
+              4,
+              874
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              0
+            ],
+            "flight_packets": [
+              0,
+              3
+            ],
+            "rtt_ms": [
+              0.283,
+              2.253
+            ],
+            "flow_window_packets": [
+              177,
+              178
+            ],
+            "congestion_window_packets": [
+              177,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ]
+    },
+    "control_summary": {
+      "gaps": 0,
+      "active_control_events": 0,
+      "loss_windows": []
+    },
+    "analysis_status": {
+      "sensor": "passed",
+      "telemetry": "passed",
+      "control": "passed"
+    }
+  },
+  {
+    "label": "srt-N5-2903",
+    "status": "failed",
+    "harness_status": "passed",
+    "command_audit": {
+      "attempts": 12,
+      "confirmed_successes": 11,
+      "unknown": 0,
+      "effects": 11,
+      "unresolved": 1,
+      "not_admitted": 0,
+      "all_succeeded": false,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 138,
+    "durable": {
+      "complete": false,
+      "verified_expired": 0,
+      "all_success": false,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "application": {
+      "source_produced": 75036,
+      "observer_received": 7704,
+      "missing": 67332,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 148,
+        "ingress_replaced": 32,
+        "ingress_flushed": 1617,
+        "input_rejected": 46,
+        "outbound_replaced": 2289,
+        "outbound_expired": 0,
+        "outbound_flushed": 14,
+        "srt_accept_to_receiver_gap": 62624,
+        "receiver_rejected": 559,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 2,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 300.140548761,
+      "source_actual_hz": {
+        "imu": 199.99963433064792,
+        "joints": 50.0032403550737
+      },
+      "published": 7704,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 6352,
+          "rounding": "up to 1ms",
+          "maximum_ms": 162,
+          "p50_ms": 106,
+          "p95_ms": 134,
+          "p99_ms": 144
+        },
+        "joint": {
+          "count": 1352,
+          "rounding": "up to 1ms",
+          "maximum_ms": 167,
+          "p50_ms": 113,
+          "p95_ms": 141,
+          "p99_ms": 150
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    },
+    "sensor_processes": {
+      "operator-bridge-0.log": [
+        {
+          "identity": [
+            "e4b93129a175a0490785076e9e854976",
+            1,
+            960671666
+          ],
+          "sessions": [
+            "fd23caecb6f243ab0dfef18addff1155"
+          ],
+          "contained_pairs": 0,
+          "contained_first_read_ns": null,
+          "contained_last_read_ns": null,
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 0,
+            "unique_sent": 0,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 0,
+            "data_received": 47,
+            "retransmitted": 0,
+            "ack_sent": 60,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 24210,
+            "unique_sent": 0,
+            "unique_received": 42,
+            "sender_loss": 0,
+            "receiver_loss": 38,
+            "sender_drop": 0,
+            "receiver_drop": 38,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 5,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              0
+            ],
+            "send_buffer_bytes": [
+              0,
+              0
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              32
+            ],
+            "flight_packets": [
+              0,
+              0
+            ],
+            "rtt_ms": [
+              0.396,
+              85.05
+            ],
+            "flow_window_packets": [
+              178,
+              178
+            ],
+            "congestion_window_packets": [
+              178,
+              178
+            ]
+          },
+          "before_close_records": 1
+        },
+        {
+          "identity": [
+            "e4b93129a175a0490785076e9e854976",
+            2,
+            540810572
+          ],
+          "sessions": [
+            "3211ea392b669dfab6bcbcc4d3958a13",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 305,
+          "contained_first_read_ns": [
+            336008107902,
+            336008110694
+          ],
+          "contained_last_read_ns": [
+            367853289583,
+            367853295750
+          ],
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 3044,
+            "retransmitted": 0,
+            "ack_sent": 6211,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 1530200,
+            "unique_sent": 0,
+            "unique_received": 2834,
+            "sender_loss": 0,
+            "receiver_loss": 4514,
+            "sender_drop": 0,
+            "receiver_drop": 4493,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 233,
+            "receiver_filter_supply": 26,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 0,
+            "data_received": 3058,
+            "retransmitted": 0,
+            "ack_sent": 6219,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 1537506,
+            "unique_sent": 0,
+            "unique_received": 2846,
+            "sender_loss": 0,
+            "receiver_loss": 4514,
+            "sender_drop": 0,
+            "receiver_drop": 4493,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 235,
+            "receiver_filter_supply": 26,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              0
+            ],
+            "send_buffer_bytes": [
+              0,
+              0
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              174
+            ],
+            "flight_packets": [
+              0,
+              0
+            ],
+            "rtt_ms": [
+              2.601,
+              112.312
+            ],
+            "flow_window_packets": [
+              178,
+              178
+            ],
+            "congestion_window_packets": [
+              178,
+              178
+            ]
+          },
+          "before_close_records": 1
+        },
+        {
+          "identity": [
+            "e4b93129a175a0490785076e9e854976",
+            3,
+            54013376
+          ],
+          "sessions": [
+            "98e86d2bdb02d4bc39e57a857e02dbf4",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 2547,
+          "contained_first_read_ns": [
+            368495973375,
+            368495975959
+          ],
+          "contained_last_read_ns": [
+            636082281497,
+            636082284080
+          ],
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 20815,
+            "retransmitted": 0,
+            "ack_sent": 52632,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 9674808,
+            "unique_sent": 0,
+            "unique_received": 5413,
+            "sender_loss": 0,
+            "receiver_loss": 7947,
+            "sender_drop": 0,
+            "receiver_drop": 8262,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 359,
+            "receiver_filter_supply": 30,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 0,
+            "data_received": 20832,
+            "retransmitted": 0,
+            "ack_sent": 60410,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 9683450,
+            "unique_sent": 0,
+            "unique_received": 5421,
+            "sender_loss": 0,
+            "receiver_loss": 7947,
+            "sender_drop": 0,
+            "receiver_drop": 8272,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 361,
+            "receiver_filter_supply": 30,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              0
+            ],
+            "send_buffer_bytes": [
+              0,
+              0
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              196
+            ],
+            "flight_packets": [
+              0,
+              0
+            ],
+            "rtt_ms": [
+              0.228,
+              110.987
+            ],
+            "flow_window_packets": [
+              178,
+              178
+            ],
+            "congestion_window_packets": [
+              178,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ],
+      "robot-bridge-1.log": [
+        {
+          "identity": [
+            "9fbc84102c46c21c5a588c407c16ab9b",
+            1,
+            953821639
+          ],
+          "sessions": [
+            "fd23caecb6f243ab0dfef18addff1155",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 0,
+          "contained_first_read_ns": null,
+          "contained_last_read_ns": null,
+          "partial_window_totals": {
+            "data_sent": 0,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 0,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 0,
+            "bytes_received": 0,
+            "unique_sent": 0,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 0,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 101,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 60,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 58122,
+            "bytes_received": 0,
+            "unique_sent": 81,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 0,
+            "receiver_drop": 0,
+            "sender_filter_extra": 20,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              7
+            ],
+            "send_buffer_bytes": [
+              47,
+              3124
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              0
+            ],
+            "flight_packets": [
+              0,
+              33
+            ],
+            "rtt_ms": [
+              0.944,
+              100
+            ],
+            "flow_window_packets": [
+              174,
+              178
+            ],
+            "congestion_window_packets": [
+              174,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ],
+      "robot-bridge-2.log": [
+        {
+          "identity": [
+            "d08eec68582e3f94ae22c20d134d8185",
+            1,
+            227256778
+          ],
+          "sessions": [
+            "3211ea392b669dfab6bcbcc4d3958a13",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 316,
+          "contained_first_read_ns": [
+            336035394236,
+            336035397319
+          ],
+          "contained_last_read_ns": [
+            367837801333,
+            367837810708
+          ],
+          "partial_window_totals": {
+            "data_sent": 9147,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 4516,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 5302240,
+            "bytes_received": 0,
+            "unique_sent": 7317,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 1034,
+            "receiver_drop": 0,
+            "sender_filter_extra": 1830,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 9175,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 4526,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 5317802,
+            "bytes_received": 0,
+            "unique_sent": 7340,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 1034,
+            "receiver_drop": 0,
+            "sender_filter_extra": 1835,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              59
+            ],
+            "send_buffer_bytes": [
+              5,
+              26753
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              0
+            ],
+            "flight_packets": [
+              0,
+              61
+            ],
+            "rtt_ms": [
+              2.925,
+              111.064
+            ],
+            "flow_window_packets": [
+              166,
+              178
+            ],
+            "congestion_window_packets": [
+              166,
+              178
+            ]
+          },
+          "before_close_records": 1
+        },
+        {
+          "identity": [
+            "d08eec68582e3f94ae22c20d134d8185",
+            2,
+            528800384
+          ],
+          "sessions": [
+            "98e86d2bdb02d4bc39e57a857e02dbf4",
+            "00000000000000000000000000000000"
+          ],
+          "contained_pairs": 2660,
+          "contained_first_read_ns": [
+            368459265500,
+            368459268750
+          ],
+          "contained_last_read_ns": [
+            636030453205,
+            636030455747
+          ],
+          "partial_window_totals": {
+            "data_sent": 79414,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 52625,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 46031088,
+            "bytes_received": 0,
+            "unique_sent": 63531,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 50135,
+            "receiver_drop": 0,
+            "sender_filter_extra": 15883,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "lifetime_last_cumulative": {
+            "data_sent": 79438,
+            "data_received": 0,
+            "retransmitted": 0,
+            "ack_sent": 0,
+            "ack_received": 60395,
+            "nak_sent": 0,
+            "nak_received": 0,
+            "undecrypt": 0,
+            "bytes_sent": 46044170,
+            "bytes_received": 0,
+            "unique_sent": 63551,
+            "unique_received": 0,
+            "sender_loss": 0,
+            "receiver_loss": 0,
+            "sender_drop": 50210,
+            "receiver_drop": 0,
+            "sender_filter_extra": 15887,
+            "receiver_filter_extra": 0,
+            "receiver_filter_supply": 0,
+            "receiver_filter_loss": 0
+          },
+          "gauges_minmax": {
+            "send_buffer_packets": [
+              0,
+              60
+            ],
+            "send_buffer_bytes": [
+              0,
+              27179
+            ],
+            "receive_buffer_packets": [
+              0,
+              0
+            ],
+            "receive_buffer_bytes": [
+              0,
+              0
+            ],
+            "flight_packets": [
+              0,
+              61
+            ],
+            "rtt_ms": [
+              0.228,
+              111.235
+            ],
+            "flow_window_packets": [
+              164,
+              178
+            ],
+            "congestion_window_packets": [
+              164,
+              178
+            ]
+          },
+          "before_close_records": 1
+        }
+      ]
+    },
+    "control_summary": {
+      "gaps": 4,
+      "active_control_events": 4,
+      "loss_windows": [
+        {
+          "flow": {
+            "direction": "out",
+            "source": "172.19.0.3",
+            "destination": "172.19.0.2",
+            "source_port": 46081,
+            "destination_port": 10080,
+            "destination_socket_id": 736810697
+          },
+          "window_ns": [
+            367853197250,
+            367853282208
+          ],
+          "classification": "mapping_withheld",
+          "why": "session association unavailable",
+          "process": "operator-bridge-0.log",
+          "event_ns": 367853282208,
+          "quiet_ns": 84958,
+          "kind": "receiver_last_observation_to_loss"
+        },
+        {
+          "flow": {
+            "direction": "out",
+            "source": "172.19.0.2",
+            "destination": "172.19.0.3",
+            "source_port": 10080,
+            "destination_port": 46081,
+            "destination_socket_id": 535481175
+          },
+          "window_ns": [
+            362832902456,
+            367837546083
+          ],
+          "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+          "sender_process": "operator-bridge-0.log",
+          "sender_identity": [
+            "e4b93129a175a0490785076e9e854976",
+            2,
+            736810697
+          ],
+          "receiver_process": "robot-bridge-2.log",
+          "receiver_identity": [
+            "d08eec68582e3f94ae22c20d134d8185",
+            1,
+            535481175
+          ],
+          "provider": {
+            "adjacent_pairs": [
+              {
+                "previous_read_ns": [
+                  362880522956,
+                  362880532664
+                ],
+                "current_read_ns": [
+                  362986479123,
+                  362986488581
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  362986479123,
+                  362986488581
+                ],
+                "current_read_ns": [
+                  363091720706,
+                  363091731789
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363091720706,
+                  363091731789
+                ],
+                "current_read_ns": [
+                  363197780706,
+                  363197789665
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 1,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363197780706,
+                  363197789665
+                ],
+                "current_read_ns": [
+                  363299010873,
+                  363299019623
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 161,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363299010873,
+                  363299019623
+                ],
+                "current_read_ns": [
+                  363405302790,
+                  363405313040
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363405302790,
+                  363405313040
+                ],
+                "current_read_ns": [
+                  363512615123,
+                  363512624206
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 1,
+                  "retransmitted": 1,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 161,
+                  "bytes_received": 161
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363512615123,
+                  363512624206
+                ],
+                "current_read_ns": [
+                  363622413040,
+                  363622422790
+                ],
+                "counters": {
+                  "data_sent": 3,
+                  "data_received": 0,
+                  "retransmitted": 2,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 455,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363622413040,
+                  363622422790
+                ],
+                "current_read_ns": [
+                  363722516498,
+                  363722530248
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363722516498,
+                  363722530248
+                ],
+                "current_read_ns": [
+                  363829287498,
+                  363829298040
+                ],
+                "counters": {
+                  "data_sent": 2,
+                  "data_received": 0,
+                  "retransmitted": 2,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 308,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363829287498,
+                  363829298040
+                ],
+                "current_read_ns": [
+                  363933318248,
+                  363933331165
+                ],
+                "counters": {
+                  "data_sent": 2,
+                  "data_received": 0,
+                  "retransmitted": 2,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 308,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  363933318248,
+                  363933331165
+                ],
+                "current_read_ns": [
+                  364033691123,
+                  364033699623
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364033691123,
+                  364033699623
+                ],
+                "current_read_ns": [
+                  364137170707,
+                  364137180165
+                ],
+                "counters": {
+                  "data_sent": 5,
+                  "data_received": 0,
+                  "retransmitted": 3,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 748,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364137170707,
+                  364137180165
+                ],
+                "current_read_ns": [
+                  364246240665,
+                  364246250332
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 2,
+                  "retransmitted": 0,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 140,
+                  "bytes_received": 342
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364246240665,
+                  364246250332
+                ],
+                "current_read_ns": [
+                  364346628165,
+                  364346637373
+                ],
+                "counters": {
+                  "data_sent": 6,
+                  "data_received": 0,
+                  "retransmitted": 5,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 878,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364346628165,
+                  364346637373
+                ],
+                "current_read_ns": [
+                  364448310373,
+                  364448320540
+                ],
+                "counters": {
+                  "data_sent": 6,
+                  "data_received": 1,
+                  "retransmitted": 6,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 878,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364448310373,
+                  364448320540
+                ],
+                "current_read_ns": [
+                  364555293623,
+                  364555303582
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 140,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364555293623,
+                  364555303582
+                ],
+                "current_read_ns": [
+                  364657042540,
+                  364657052082
+                ],
+                "counters": {
+                  "data_sent": 7,
+                  "data_received": 0,
+                  "retransmitted": 7,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1018,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364657042540,
+                  364657052082
+                ],
+                "current_read_ns": [
+                  364767167165,
+                  364767176957
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 140,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364767167165,
+                  364767176957
+                ],
+                "current_read_ns": [
+                  364868290999,
+                  364868299415
+                ],
+                "counters": {
+                  "data_sent": 8,
+                  "data_received": 0,
+                  "retransmitted": 8,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1158,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364868290999,
+                  364868299415
+                ],
+                "current_read_ns": [
+                  364975322999,
+                  364975332790
+                ],
+                "counters": {
+                  "data_sent": 12,
+                  "data_received": 1,
+                  "retransmitted": 10,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1760,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  364975322999,
+                  364975332790
+                ],
+                "current_read_ns": [
+                  365084661999,
+                  365084671582
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365084661999,
+                  365084671582
+                ],
+                "current_read_ns": [
+                  365188548290,
+                  365188565207
+                ],
+                "counters": {
+                  "data_sent": 11,
+                  "data_received": 1,
+                  "retransmitted": 10,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1599,
+                  "bytes_received": 161
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365188548290,
+                  365188565207
+                ],
+                "current_read_ns": [
+                  365293578916,
+                  365293589291
+                ],
+                "counters": {
+                  "data_sent": 11,
+                  "data_received": 3,
+                  "retransmitted": 11,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1599,
+                  "bytes_received": 503
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365293578916,
+                  365293589291
+                ],
+                "current_read_ns": [
+                  365401877124,
+                  365401886207
+                ],
+                "counters": {
+                  "data_sent": 1,
+                  "data_received": 2,
+                  "retransmitted": 0,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 140,
+                  "bytes_received": 356
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365401877124,
+                  365401886207
+                ],
+                "current_read_ns": [
+                  365504978624,
+                  365504988749
+                ],
+                "counters": {
+                  "data_sent": 12,
+                  "data_received": 0,
+                  "retransmitted": 12,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 1739,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365504978624,
+                  365504988749
+                ],
+                "current_read_ns": [
+                  365606321832,
+                  365606331416
+                ],
+                "counters": {
+                  "data_sent": 2,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 287,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365606321832,
+                  365606331416
+                ],
+                "current_read_ns": [
+                  365711328791,
+                  365711337457
+                ],
+                "counters": {
+                  "data_sent": 14,
+                  "data_received": 1,
+                  "retransmitted": 14,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2026,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365711328791,
+                  365711337457
+                ],
+                "current_read_ns": [
+                  365817436374,
+                  365817446624
+                ],
+                "counters": {
+                  "data_sent": 16,
+                  "data_received": 0,
+                  "retransmitted": 15,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2306,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365817436374,
+                  365817446624
+                ],
+                "current_read_ns": [
+                  365925565707,
+                  365925574041
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  365925565707,
+                  365925574041
+                ],
+                "current_read_ns": [
+                  366032631124,
+                  366032639958
+                ],
+                "counters": {
+                  "data_sent": 16,
+                  "data_received": 1,
+                  "retransmitted": 15,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2306,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366032631124,
+                  366032639958
+                ],
+                "current_read_ns": [
+                  366135691749,
+                  366135699874
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366135691749,
+                  366135699874
+                ],
+                "current_read_ns": [
+                  366237622624,
+                  366237630708
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 0,
+                  "retransmitted": 16,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366237622624,
+                  366237630708
+                ],
+                "current_read_ns": [
+                  366344810583,
+                  366344820458
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 0,
+                  "retransmitted": 17,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366344810583,
+                  366344820458
+                ],
+                "current_read_ns": [
+                  366448445291,
+                  366448489708
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 0,
+                  "retransmitted": 0,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366448445291,
+                  366448489708
+                ],
+                "current_read_ns": [
+                  366559702374,
+                  366559718708
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 0,
+                  "retransmitted": 17,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366559702374,
+                  366559718708
+                ],
+                "current_read_ns": [
+                  366667918708,
+                  366667956708
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 0,
+                  "retransmitted": 17,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366667918708,
+                  366667956708
+                ],
+                "current_read_ns": [
+                  366770247416,
+                  366770261083
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366770247416,
+                  366770261083
+                ],
+                "current_read_ns": [
+                  366874409583,
+                  366874427958
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 1,
+                  "retransmitted": 17,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 147
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366874409583,
+                  366874427958
+                ],
+                "current_read_ns": [
+                  366980164041,
+                  366980223833
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 1,
+                  "retransmitted": 0,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 195
+                }
+              },
+              {
+                "previous_read_ns": [
+                  366980164041,
+                  366980223833
+                ],
+                "current_read_ns": [
+                  367085160458,
+                  367085229291
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 0,
+                  "retransmitted": 17,
+                  "ack_sent": 0,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 0
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367085160458,
+                  367085229291
+                ],
+                "current_read_ns": [
+                  367190034583,
+                  367190056541
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 1,
+                  "retransmitted": 17,
+                  "ack_sent": 1,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 161
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367190034583,
+                  367190056541
+                ],
+                "current_read_ns": [
+                  367297256125,
+                  367297272041
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 6,
+                  "retransmitted": 0,
+                  "ack_sent": 4,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 992
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367297256125,
+                  367297272041
+                ],
+                "current_read_ns": [
+                  367400389333,
+                  367400428417
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 4,
+                  "retransmitted": 17,
+                  "ack_sent": 3,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 684
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367400389333,
+                  367400428417
+                ],
+                "current_read_ns": [
+                  367507471667,
+                  367507490958
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 3,
+                  "retransmitted": 0,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 503
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367507471667,
+                  367507490958
+                ],
+                "current_read_ns": [
+                  367614209875,
+                  367614286917
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 3,
+                  "retransmitted": 17,
+                  "ack_sent": 3,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 489
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367614209875,
+                  367614286917
+                ],
+                "current_read_ns": [
+                  367722348042,
+                  367722372375
+                ],
+                "counters": {
+                  "data_sent": 17,
+                  "data_received": 4,
+                  "retransmitted": 17,
+                  "ack_sent": 2,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 2446,
+                  "bytes_received": 698
+                }
+              },
+              {
+                "previous_read_ns": [
+                  367722348042,
+                  367722372375
+                ],
+                "current_read_ns": [
+                  367828233292,
+                  367828393917
+                ],
+                "counters": {
+                  "data_sent": 0,
+                  "data_received": 4,
+                  "retransmitted": 0,
+                  "ack_sent": 3,
+                  "ack_received": 0,
+                  "nak_sent": 0,
+                  "nak_received": 0,
+                  "undecrypt": 0,
+                  "bytes_sent": 0,
+                  "bytes_received": 650
+                }
+              }
+            ],
+            "totals": {
+              "data_sent": 309,
+              "data_received": 47,
+              "retransmitted": 292,
+              "ack_sent": 42,
+              "ack_received": 0,
+              "nak_sent": 1,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 44715,
+              "bytes_received": 7851
+            }
+          },
+          "source_old_flow_observations": 0,
+          "peer_old_flow_observations": 0,
+          "process": "robot-bridge-2.log",
+          "event_ns": 367837546083,
+          "quiet_ns": 5004643627,
+          "kind": "receiver_last_observation_to_loss"
+        }
+      ]
+    },
+    "analysis_status": {
+      "sensor": "passed",
+      "telemetry": "passed",
+      "control": "passed"
+    }
+  }
+]

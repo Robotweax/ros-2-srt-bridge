@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 229, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 219, in main
+    try:getattr(driver,args.role)()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 146, in operator
+    self.load.launch();self.wait(self.load.ready,'journaled DDS sender ready')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_dds_scenario.py", line 90, in wait
+    raise RuntimeError('timeout: '+label)
+RuntimeError: timeout: journaled DDS sender ready

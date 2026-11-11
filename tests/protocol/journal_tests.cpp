@@ -56,6 +56,28 @@ void recovery_and_sender(){
     remote.state=CommandState::accepted;remote.result={};remote.revision=1;
     check(j.observe_remote(id(1),100,status(remote),400)==JournalError::invalid_state,"late status downgraded result");
 }
+void sender_reconciliation(){
+    auto o=options("receipt.sqlite",JournalSide::sender);auto c=context();c.source_epoch=o.process_epoch;
+    {CommandJournal j(o);auto a=j.admit(id(1),100,rate(),c,100);check(bool(a),"receipt admission");j.admit(id(2),100,rate(),c,100);
+        auto bad=c;bad.session=id(99);check(j.reconcile_sender(id(1),100,rate(),bad,200).error==JournalError::conflict,"wrong receipt session");
+        bad=c;++bad.deadline_ns;check(j.reconcile_sender(id(1),100,rate(),bad,200).error==JournalError::conflict,"renewed receipt deadline");
+        bad=c;bad.source_epoch=id(99);check(j.reconcile_sender(id(1),100,rate(),bad,200).error==JournalError::conflict,"wrong receipt epoch");
+        bad=c;++bad.source_monotonic_ns;check(j.reconcile_sender(id(1),100,rate(),bad,200).error==JournalError::conflict,"wrong receipt origin");
+        check(j.reconcile_sender(id(1),101,rate(),c,200).error==JournalError::conflict,"wrong receipt route");
+        auto r=rate();r.rate_hz=200;check(j.reconcile_sender(id(1),100,r,c,200).error==JournalError::conflict,"wrong receipt payload");
+        auto unknown=j.reconcile_sender(id(1),100,rate(),c,200);check(unknown&&unknown.entry->state==CommandState::unknown&&unknown.entry->reason==CommandReason::reconcile_required&&!unknown.entry->revision&&!unknown.entry->result.valid&&!unknown.entry->finished_ns&&unknown.entry->context.deadline_ns==c.deadline_ns,"receipt manufactured result/expiry");
+        check(j.get(id(2)).entry->state==CommandState::local_queued,"receipt invalidated unrelated command");
+        check(j.reconcile_sender(id(1),100,rate(),c,201).entry->state==CommandState::unknown,"receipt journal idempotence");
+        auto e=*a.entry;e.state=CommandState::accepted;e.revision=1;check(j.observe_remote(id(1),100,status(e),250)==JournalError::none,"UNKNOWN did not reconcile to peer acceptance");
+        check(j.reconcile_sender(id(1),100,rate(),c,300).entry->state==CommandState::accepted,"receipt overwrote newer acceptance");
+        e.state=CommandState::succeeded;e.revision=3;e.result={100,1,true};check(j.observe_remote(id(1),100,status(e),350)==JournalError::none,"peer result reconciliation");
+        auto final=j.reconcile_sender(id(1),100,rate(),c,400);check(final&&final.entry->state==CommandState::succeeded&&final.entry->revision==3&&final.entry->result==e.result,"receipt overwrote final peer result");
+    }
+    o.process_epoch=id(9);CommandJournal reopened(o);check(reopened.reconcile_sender(id(1),100,rate(),c,500).error==JournalError::context_lost,"old receipt owner accepted");
+    auto f=options("receipt-storage.sqlite",JournalSide::sender);JournalFaults faults;f.test_faults=&faults;
+    {CommandJournal j(f);check(bool(j.admit(id(1),100,rate(),c,100)),"storage receipt admission");faults.full=true;faults.writes_before_failure=0;auto failed=j.reconcile_sender(id(1),100,rate(),c,200);check(failed.error==JournalError::storage&&!failed.entry&&!j.healthy(),"receipt storage failure fabricated state");}
+    auto receiver=options("receipt-receiver.sqlite");CommandJournal j(receiver);check(j.reconcile_sender(id(1),100,rate(),c,200).error==JournalError::invalid,"receiver accepted sender receipt");
+}
 void storage_and_capacity(){
     auto o=options("capacity.sqlite");o.max_entries=4;
     {CommandJournal j(o);for(unsigned i=1;i<=4;++i)check(bool(j.admit(id(i),100,rate(),context(),100)),"capacity admission");
@@ -82,5 +104,5 @@ void storage_and_capacity(){
 }
 int main(){try{root=std::filesystem::current_path()/("journal-artifacts-"+std::to_string(getpid()));for(unsigned suffix=0;std::filesystem::exists(root);++suffix)root=std::filesystem::current_path()/("journal-artifacts-"+std::to_string(getpid())+"-"+std::to_string(suffix));
     std::filesystem::create_directories(root);
-    basic();recovery_and_sender();storage_and_capacity();std::cout<<"PASS journal contract: "<<checks<<" checks, WAL/FULL, quota and storage faults\n";
+    basic();recovery_and_sender();storage_and_capacity();sender_reconciliation();std::cout<<"PASS journal contract: "<<checks<<" checks, WAL/FULL, quota and storage faults\n";
 }catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}

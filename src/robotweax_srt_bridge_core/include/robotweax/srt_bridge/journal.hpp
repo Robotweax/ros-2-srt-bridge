@@ -58,6 +58,7 @@ public:
     JournalResult decline(Identity id,CommandState state,CommandReason reason,std::uint64_t now);
     JournalResult finish(Identity id,CommandState state,CommandReason reason,RateResult result,std::uint64_t now);
     JournalError invalidate_session(Identity session,std::uint64_t now);
+    JournalResult reconcile_sender(Identity id,std::uint32_t route,RateCommand command,CommandContext context,std::uint64_t now);
     JournalError observe_remote(Identity id,std::uint32_t route,const CommandStatus& status,std::uint64_t now);
     bool sender_may_transmit(Identity id,Identity session,std::uint64_t now);
     std::uint64_t file_bytes() const;

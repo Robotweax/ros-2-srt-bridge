@@ -1,0 +1,22 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "docker",
+    "run",
+    "--rm",
+    "--pull=never",
+    "--platform",
+    "linux/amd64",
+    "--network",
+    "none",
+    "-v",
+    "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace",
+    "-w",
+    "/workspace/.local/m3-command34-start-fence/controls/execution_start_ipv6",
+    "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+    "/workspace/build/m3-sdk/tests/native/execution_start_tests",
+    "ipv6"
+  ],
+  "timeout_seconds": 90,
+  "retries": 0
+}

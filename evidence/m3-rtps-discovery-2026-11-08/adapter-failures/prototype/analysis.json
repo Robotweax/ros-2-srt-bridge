@@ -1,0 +1,131 @@
+{
+  "status": "failed",
+  "retrospective": true,
+  "original_run": ".local/m3-dds-combined/20261108T113346564620Z",
+  "source_commit": "58018d3737e1b23962428fc2c3f017abf973e40c",
+  "commands": [
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-70d7ba2b6a",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "sh",
+      "-c",
+      "tshark --version; dpkg-query -W tshark libwireshark17t64; sha256sum /usr/bin/tshark /usr/lib/x86_64-linux-gnu/libwireshark.so.17"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-623e43f511",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ]
+  ],
+  "tool_image_id": "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+  "original_status": "failed",
+  "addresses": {
+    "robot": "172.19.0.2",
+    "operator": "172.19.0.3"
+  },
+  "inputs": {
+    "operator": {
+      "path": ".local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "sha256": "ec5009199d8d7be32ee7344736b2d32e39635069c295c19160d2a974a5b6cb1b",
+      "integrity": {
+        "records": 7114,
+        "first_timestamp_ns": 1794137628215807000,
+        "last_timestamp_ns": 1794137676283951000,
+        "classes": {
+          "in/other_udp": {
+            "packets": 269,
+            "ethernet_bytes": 285734,
+            "udp_payload_bytes": 274436
+          },
+          "out/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "out/dds_rtps": {
+            "packets": 1236,
+            "ethernet_bytes": 400032,
+            "udp_payload_bytes": 348120
+          },
+          "in/dds_rtps": {
+            "packets": 5502,
+            "ethernet_bytes": 2618804,
+            "udp_payload_bytes": 2387720
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 74,
+            "ethernet_bytes": 81564,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 79048
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 32,
+            "ethernet_bytes": 36504,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 35416
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 7114,
+        "tcpdump_reported_filtered_packets": 7114,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    }
+  },
+  "error": "missing field rtps.sm.guidPrefix"
+}

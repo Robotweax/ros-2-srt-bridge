@@ -20,14 +20,7 @@ from robotweax_srt_bridge_msgs.msg import BridgeState, SimulatorState, CommandSt
 from robotweax_srt_bridge_msgs.srv import ExecuteCommand, GetCommandStatus
 
 
-def write(path, value):
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, indent=2) + '\n')
-    temporary.replace(path)
-
-
-def read(path):
-    return json.loads(path.read_text()) if path.exists() else {}
+from scenario_files import read, write
 
 
 class Driver(Node):
@@ -36,6 +29,7 @@ class Driver(Node):
         self.args = args
         self.run = Path(args.run)
         self.processes = []
+        self.control_sequence = 0
         self.retired = set()
         self.bridge = None
         self.sim = None
@@ -180,7 +174,8 @@ class Driver(Node):
         assert response.results[0].successful
 
     def robot_command(self, action, **values):
-        sequence = read(self.run / 'control.json').get('sequence', 0) + 1
+        self.control_sequence += 1
+        sequence = self.control_sequence
         write(self.run / 'control.json', dict(sequence=sequence, action=action, **values))
         self.wait(lambda: read(self.run / 'robot-reply.json').get('sequence') == sequence,
                   'robot action ' + action)
@@ -202,6 +197,9 @@ class Driver(Node):
             except FileNotFoundError:
                 pass
         return None
+
+    def robot_action(self, action, request, response):
+        return False
 
     def robot(self):
         self.sim = self.start('rate_simulator', 'simulator')
@@ -261,6 +259,8 @@ class Driver(Node):
                 write(self.run / 'robot-final.json', {'shutdowns': self.shutdowns, 'source_samples': self.source})
                 write(self.run / 'robot-reply.json', response)
                 return
+            elif self.robot_action(action, request, response):
+                pass
             else:
                 raise RuntimeError('unknown robot action')
             write(self.run / 'robot-reply.json', response)

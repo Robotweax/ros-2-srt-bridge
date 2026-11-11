@@ -1,0 +1,207 @@
+{
+  "full_N3_qualification": false,
+  "cases": [
+    {
+      "name": "original-1701",
+      "base_seed": 1701,
+      "source_commit": "cb2468b67b5557fac8dbc52a54a9d5962cb8027c",
+      "status": "failed",
+      "error": "missing or duplicate final sample status",
+      "scope": "original stopped cohort",
+      "source_actual_hz": null,
+      "source_produced": null,
+      "typed_observed": null,
+      "losses": null,
+      "balances": null,
+      "selected_sources": null
+    },
+    {
+      "name": "original-2903",
+      "base_seed": 2903,
+      "status": "not_executed",
+      "scope": "original stopped cohort",
+      "reason": "first original run failed; not replaced by independent lifecycle fixtures"
+    },
+    {
+      "name": "original-4211",
+      "base_seed": 4211,
+      "status": "not_executed",
+      "scope": "original stopped cohort",
+      "reason": "first original run failed; not replaced by independent lifecycle fixtures"
+    },
+    {
+      "name": "lifecycle-1701",
+      "base_seed": 1701,
+      "source_commit": "5d9b9f31a5e33f8d99f45db3c5575ce714aef367",
+      "status": "passed",
+      "error": null,
+      "scope": "separate child-lifecycle diagnostic",
+      "source_actual_hz": {
+        "imu": 200.01180153174494,
+        "joints": 50.02781510217191
+      },
+      "source_produced": 2514,
+      "typed_observed": 2426,
+      "losses": {
+        "upstream_dds": 2,
+        "validation": 0,
+        "admission": 5,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 79,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 6,
+          "source_payload_sha256": "8a88e93dcdec1b7c0da67c17e2720ce679ff31d8561db930206ebcf1b3507e90",
+          "envelope_sequence": 6,
+          "subsequent_observations": 1926
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "b99452d8a6c1ab18c0a51701d472d2578573b30c9f0dbb44103f0b879189ef20",
+          "envelope_sequence": 2,
+          "subsequent_observations": 495
+        }
+      ]
+    },
+    {
+      "name": "lifecycle-2903",
+      "base_seed": 2903,
+      "source_commit": "053c9bf281a4e03af87706cdc2be0b2f0b3365e5",
+      "status": "passed",
+      "error": null,
+      "scope": "separate observed-cleanup repetition",
+      "source_actual_hz": {
+        "imu": 200.01207919791472,
+        "joints": 50.027884553232774
+      },
+      "source_produced": 2514,
+      "typed_observed": 2428,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 2,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 79,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 5,
+          "source_payload_sha256": "54b5d6ab2e1b43395a0a53668a77c9f96b389e28658b7aa516294c948ca41adb",
+          "envelope_sequence": 5,
+          "subsequent_observations": 1927
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "85523e79e9c008cb22f563aa10fd67608ded1fe1e724a87b1e2844c28a71124e",
+          "envelope_sequence": 2,
+          "subsequent_observations": 496
+        }
+      ]
+    },
+    {
+      "name": "lifecycle-4211",
+      "base_seed": 4211,
+      "source_commit": "053c9bf281a4e03af87706cdc2be0b2f0b3365e5",
+      "status": "passed",
+      "error": null,
+      "scope": "separate observed-cleanup repetition",
+      "source_actual_hz": {
+        "imu": 200.01682048961243,
+        "joints": 50.02907046557685
+      },
+      "source_produced": 2514,
+      "typed_observed": 2431,
+      "losses": {
+        "upstream_dds": 1,
+        "validation": 0,
+        "admission": 1,
+        "ingress_replaced": 1,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 78,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 2,
+        "receiver_rejected": 0,
+        "receive_replaced": 0,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 0
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "selected_sources": [
+        {
+          "message_number": 7,
+          "source_route": 1,
+          "source_counter": 5,
+          "source_payload_sha256": "44a8ec293d7b17c981d5058ecb99035de9085e103817f40019f43f99f482b3b2",
+          "envelope_sequence": 5,
+          "subsequent_observations": 1930
+        },
+        {
+          "message_number": 8,
+          "source_route": 2,
+          "source_counter": 2,
+          "source_payload_sha256": "8462d7ad92f470e2248c8751ac1814baa0393fc67e5f4fe78f7c3f95322adff2",
+          "envelope_sequence": 2,
+          "subsequent_observations": 496
+        }
+      ]
+    }
+  ]
+}

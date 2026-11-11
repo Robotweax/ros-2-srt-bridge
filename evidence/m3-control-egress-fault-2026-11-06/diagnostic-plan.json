@@ -1,0 +1,13 @@
+{
+  "qualification": false,
+  "purpose": "Validate the signature of selected provider sends accepted while a known CONTROL-only tc egress filter withholds packets before the native tap",
+  "executions": 1,
+  "profile": "N0",
+  "seconds": 45,
+  "seed": 1701,
+  "fault": {"role": "operator", "direction": "operator to robot CONTROL", "after_observing_measurement_start_host_seconds": 15, "requested_duration_host_seconds": 6, "selector": "owned eth0 IPv4 UDP, destination robot/32, source port 10080; tc egress u32 gact drop", "restoration": "delete only dedicated preference 49152, verify empty readback"},
+  "observers": ["provider statistics", "command trace", "native monotonic v2 capture", "PCAP immediate", "recorder diagnostics"],
+  "prerequisites": ["112 host tests", "syntax checks", "runtime inventory identical to previously tested SDK/ROS build", "source and selector committed before execution"],
+  "analysis": ["Retain original manifest even on failure; do not retry", "Require common VM clock and complete native captures covering pre-fault and restoration windows", "Validate pinned provider archive before equating SDK handle to wire socket ID", "Select recent pre-install provider identity independently for both roles; map old flow by tuple and destination socket ID", "Compare only adjacent available same-identity provider reads entirely inside guaranteed VM active interval", "Retain filter packet/drop/byte counters and VM install/remove brackets", "Require positive reverse CONTROL and SENSOR observations plus post-restoration CONTROL", "Retain all command UNKNOWNs, skipped slots and sensor deficits"],
+  "limits": ["Known injected filter drop does not identify historical N5 initiating cause", "This is not full N4 command-phase qualification", "Selected send counters omit keepalive/handshake/ACKACK; no exact equality with filter drops is expected", "Provider reads add timing overhead", "No physical-delivery, nonexecution or performance inference", "Only tools/tests change; transport policy, SDK, ROS binaries, dependency pin and default runner behavior remain unchanged"]
+}

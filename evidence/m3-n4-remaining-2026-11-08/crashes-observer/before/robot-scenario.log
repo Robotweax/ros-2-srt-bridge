@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_n4_crash.py", line 133, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_n4_crash.py", line 126, in main
+    try:getattr(d,a.role)()
+        ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_n4_crash.py", line 81, in robot
+    response.update(device=self.device_snapshot(),journal=self.journal(),metrics=self.metrics(),crashes=self.crashes)
+                                                          ^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/m3_ros_n4_crash.py", line 49, in journal
+    def journal(self):return visible_entries(self.run/'robot.sqlite')
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ros2/robotweax_srt_bridge_demo/scripts/scenario_journal.py", line 9, in visible_entries
+    return [dict(id=identity.hex(),state=state-10) for identity,state in db.execute('SELECT id,state FROM entries').fetchall()]
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked

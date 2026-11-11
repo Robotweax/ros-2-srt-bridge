@@ -1,0 +1,2187 @@
+[
+  {
+    "label": "sender-N0-1701",
+    "run": ".local/m3/20261109T135445270703Z",
+    "harness_status": "passed",
+    "audit": {
+      "attempts": 8,
+      "confirmed_successes": 8,
+      "unknown": 0,
+      "effects": 8,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 0,
+    "durable": {
+      "complete": true,
+      "verified_expired": 0,
+      "all_success": true,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "active_context_events": 0,
+    "sender_counts": {
+      "45": 0,
+      "46": 8,
+      "47": 63,
+      "48": 36
+    },
+    "clock_groups": [],
+    "start_branches": {
+      "worker_handler_invoked": 8
+    },
+    "unavailable_starts": [],
+    "minimum_actual_slack_ns": {
+      "consume": 4070295041,
+      "second_gate": 4070221166,
+      "command_budget_at_consume": 4926282137
+    },
+    "primary_packet_windows": [],
+    "positive_reply_steps": 0,
+    "missing_source_reply_steps": [],
+    "packet_counts": {
+      "operator": {
+        "driver_start": 2,
+        "qdisc_drop": 0,
+        "other_free": 0,
+        "consumed_before_driver": 0
+      },
+      "robot": {
+        "driver_start": 2,
+        "qdisc_drop": 0,
+        "other_free": 0,
+        "consumed_before_driver": 0
+      }
+    },
+    "measurement": {
+      "source_produced": 3786,
+      "observer_received": 3672,
+      "missing": 114,
+      "losses": {
+        "upstream_dds": 0,
+        "validation": 0,
+        "admission": 5,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 107,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 1
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 15.144773548,
+      "source_actual_hz": {
+        "imu": 199.936961117512,
+        "joints": 50.050269658875195
+      },
+      "published": 3673,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 2922,
+          "rounding": "up to 1ms",
+          "maximum_ms": 15,
+          "p50_ms": 10,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 751,
+          "rounding": "up to 1ms",
+          "maximum_ms": 29,
+          "p50_ms": 17,
+          "p95_ms": 26,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    }
+  },
+  {
+    "label": "sender-N5-1701",
+    "run": ".local/m3/20261109T135531879199Z",
+    "harness_status": "passed",
+    "audit": {
+      "attempts": 128,
+      "confirmed_successes": 128,
+      "unknown": 0,
+      "effects": 128,
+      "unresolved": 0,
+      "not_admitted": 0,
+      "all_succeeded": true,
+      "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+    },
+    "skipped": 22,
+    "durable": {
+      "complete": true,
+      "verified_expired": 0,
+      "all_success": true,
+      "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+    },
+    "active_context_events": 0,
+    "sender_counts": {
+      "45": 2,
+      "46": 128,
+      "47": 3116,
+      "48": 2002
+    },
+    "clock_groups": [
+      {
+        "number": 3,
+        "deferral_to_recovery_ns": 385096458,
+        "original_budget_remaining_at_recovery_ns": 4604150917
+      }
+    ],
+    "start_branches": {
+      "worker_handler_invoked": 128
+    },
+    "unavailable_starts": [],
+    "minimum_actual_slack_ns": {
+      "consume": 899657540,
+      "second_gate": 899657040,
+      "command_budget_at_consume": 1229803969
+    },
+    "primary_packet_windows": [
+      {
+        "family": "adjacent_gap",
+        "requester": "operator",
+        "responder": "robot",
+        "window_ns": [
+          160220372864,
+          164338473033
+        ],
+        "roles": {
+          "operator": {
+            "window_ns": [
+              160220372864,
+              164338473033
+            ],
+            "lifetimes": [],
+            "created_counts": {
+              "driver_start": 0,
+              "qdisc_drop": 0,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          },
+          "robot": {
+            "window_ns": [
+              160220372864,
+              164338473033
+            ],
+            "lifetimes": [
+              {
+                "cookie": 12,
+                "outcome": "qdisc_drop",
+                "created_ns": 160230382823,
+                "terminal_ns": 160230397489,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [],
+                "reason": "SKB_DROP_REASON_QDISC_DROP"
+              },
+              {
+                "cookie": 13,
+                "outcome": "qdisc_drop",
+                "created_ns": 161247621240,
+                "terminal_ns": 161247632906,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [],
+                "reason": "SKB_DROP_REASON_QDISC_DROP"
+              },
+              {
+                "cookie": 14,
+                "outcome": "qdisc_drop",
+                "created_ns": 162271200490,
+                "terminal_ns": 162271210365,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [],
+                "reason": "SKB_DROP_REASON_QDISC_DROP"
+              },
+              {
+                "cookie": 15,
+                "outcome": "qdisc_drop",
+                "created_ns": 163297152407,
+                "terminal_ns": 163297168491,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [],
+                "reason": "SKB_DROP_REASON_QDISC_DROP"
+              },
+              {
+                "cookie": 16,
+                "outcome": "driver_start",
+                "created_ns": 164319410491,
+                "terminal_ns": 164335540075,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [
+                  {
+                    "handle": 65536,
+                    "parent": 4294967295,
+                    "enqueue_ns": 164319421575,
+                    "dequeue_ns": 164335515991,
+                    "residence_ns": 16094416
+                  }
+                ],
+                "reason": null
+              }
+            ],
+            "created_counts": {
+              "driver_start": 1,
+              "qdisc_drop": 4,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          }
+        }
+      },
+      {
+        "family": "adjacent_gap",
+        "requester": "operator",
+        "responder": "robot",
+        "window_ns": [
+          239565654651,
+          240649769609
+        ],
+        "roles": {
+          "operator": {
+            "window_ns": [
+              239565654651,
+              240649769609
+            ],
+            "lifetimes": [],
+            "created_counts": {
+              "driver_start": 0,
+              "qdisc_drop": 0,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          },
+          "robot": {
+            "window_ns": [
+              239565654651,
+              240649769609
+            ],
+            "lifetimes": [
+              {
+                "cookie": 22,
+                "outcome": "qdisc_drop",
+                "created_ns": 239584085568,
+                "terminal_ns": 239584106318,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [],
+                "reason": "SKB_DROP_REASON_QDISC_DROP"
+              },
+              {
+                "cookie": 23,
+                "outcome": "driver_start",
+                "created_ns": 240607102859,
+                "terminal_ns": 240649727193,
+                "created_inside": true,
+                "terminal_inside": true,
+                "carry_in": false,
+                "carry_out": false,
+                "residence": [
+                  {
+                    "handle": 65536,
+                    "parent": 4294967295,
+                    "enqueue_ns": 240607119526,
+                    "dequeue_ns": 240649703026,
+                    "residence_ns": 42583500
+                  }
+                ],
+                "reason": null
+              }
+            ],
+            "created_counts": {
+              "driver_start": 1,
+              "qdisc_drop": 1,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          }
+        }
+      },
+      {
+        "family": "adjacent_gap",
+        "requester": "robot",
+        "responder": "operator",
+        "window_ns": [
+          281650410586,
+          282788594962
+        ],
+        "roles": {
+          "operator": {
+            "window_ns": [
+              281650410586,
+              282788594962
+            ],
+            "lifetimes": [],
+            "created_counts": {
+              "driver_start": 0,
+              "qdisc_drop": 0,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          },
+          "robot": {
+            "window_ns": [
+              281650410586,
+              282788594962
+            ],
+            "lifetimes": [],
+            "created_counts": {
+              "driver_start": 0,
+              "qdisc_drop": 0,
+              "other_free": 0,
+              "consumed_before_driver": 0
+            },
+            "carry_in_ids": [],
+            "carry_out_ids": [],
+            "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+          }
+        }
+      }
+    ],
+    "positive_reply_steps": 33,
+    "missing_source_reply_steps": [
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          104814326922,
+          105036427048
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            104814326922,
+            105036427048
+          ],
+          "inner_read_gap_ns": [
+            104836312964,
+            105014576048
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            104814326922,
+            105036427048
+          ],
+          "lifetimes": [
+            {
+              "cookie": 3,
+              "outcome": "qdisc_drop",
+              "created_ns": 104927093006,
+              "terminal_ns": 104927117922,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          105815567048,
+          106038436965
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            105815567048,
+            106038436965
+          ],
+          "inner_read_gap_ns": [
+            105838165590,
+            106015681590
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            105815567048,
+            106038436965
+          ],
+          "lifetimes": [
+            {
+              "cookie": 4,
+              "outcome": "qdisc_drop",
+              "created_ns": 105951096423,
+              "terminal_ns": 105951112548,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          106816637007,
+          107039228090
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            106816637007,
+            107039228090
+          ],
+          "inner_read_gap_ns": [
+            106839453757,
+            107016799340
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            106816637007,
+            107039228090
+          ],
+          "lifetimes": [
+            {
+              "cookie": 5,
+              "outcome": "qdisc_drop",
+              "created_ns": 106975163507,
+              "terminal_ns": 106975177590,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          107818351132,
+          108041660091
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            107818351132,
+            108041660091
+          ],
+          "inner_read_gap_ns": [
+            107840625216,
+            108018610507
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            107818351132,
+            108041660091
+          ],
+          "lifetimes": [
+            {
+              "cookie": 6,
+              "outcome": "driver_start",
+              "created_ns": 108005159966,
+              "terminal_ns": 108106639299,
+              "created_inside": true,
+              "terminal_inside": false,
+              "carry_in": false,
+              "carry_out": true,
+              "residence": [
+                {
+                  "handle": 65536,
+                  "parent": 4294967295,
+                  "enqueue_ns": 108005191257,
+                  "dequeue_ns": 108106619841,
+                  "residence_ns": 101428584
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "created_counts": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [
+            6
+          ],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          131850688185,
+          132073645560
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            131850688185,
+            132073645560
+          ],
+          "inner_read_gap_ns": [
+            131873890143,
+            132050876977
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            131850688185,
+            132073645560
+          ],
+          "lifetimes": [
+            {
+              "cookie": 7,
+              "outcome": "qdisc_drop",
+              "created_ns": 132063184227,
+              "terminal_ns": 132063233185,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          157091912238,
+          157316858113
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            157091912238,
+            157316858113
+          ],
+          "inner_read_gap_ns": [
+            157115239529,
+            157293907946
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            157091912238,
+            157316858113
+          ],
+          "lifetimes": [
+            {
+              "cookie": 9,
+              "outcome": "qdisc_drop",
+              "created_ns": 157151125571,
+              "terminal_ns": 157151142696,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          158095041655,
+          158317574155
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            158095041655,
+            158317574155
+          ],
+          "inner_read_gap_ns": [
+            158117524822,
+            158295172738
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            158095041655,
+            158317574155
+          ],
+          "lifetimes": [
+            {
+              "cookie": 10,
+              "outcome": "qdisc_drop",
+              "created_ns": 158175148863,
+              "terminal_ns": 158175164988,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          159095905655,
+          159319502947
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            159095905655,
+            159319502947
+          ],
+          "inner_read_gap_ns": [
+            159119770905,
+            159296086697
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            159095905655,
+            159319502947
+          ],
+          "lifetimes": [
+            {
+              "cookie": 11,
+              "outcome": "qdisc_drop",
+              "created_ns": 159199105905,
+              "terminal_ns": 159199165530,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          160097093239,
+          160319746323
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            160097093239,
+            160319746323
+          ],
+          "inner_read_gap_ns": [
+            160119320698,
+            160297262281
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            160097093239,
+            160319746323
+          ],
+          "lifetimes": [
+            {
+              "cookie": 12,
+              "outcome": "qdisc_drop",
+              "created_ns": 160230382823,
+              "terminal_ns": 160230397489,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          161098763031,
+          161321404448
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            161098763031,
+            161321404448
+          ],
+          "inner_read_gap_ns": [
+            161121433948,
+            161299118531
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            161098763031,
+            161321404448
+          ],
+          "lifetimes": [
+            {
+              "cookie": 13,
+              "outcome": "qdisc_drop",
+              "created_ns": 161247621240,
+              "terminal_ns": 161247632906,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          162101334823,
+          162324222532
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            162101334823,
+            162324222532
+          ],
+          "inner_read_gap_ns": [
+            162123443073,
+            162301472865
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            162101334823,
+            162324222532
+          ],
+          "lifetimes": [
+            {
+              "cookie": 14,
+              "outcome": "qdisc_drop",
+              "created_ns": 162271200490,
+              "terminal_ns": 162271210365,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          163102400116,
+          163325661907
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            163102400116,
+            163325661907
+          ],
+          "inner_read_gap_ns": [
+            163125423657,
+            163302675741
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            163102400116,
+            163325661907
+          ],
+          "lifetimes": [
+            {
+              "cookie": 15,
+              "outcome": "qdisc_drop",
+              "created_ns": 163297152407,
+              "terminal_ns": 163297168491,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          164103620283,
+          164327724366
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            164103620283,
+            164327724366
+          ],
+          "inner_read_gap_ns": [
+            164125956491,
+            164303743741
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            164103620283,
+            164327724366
+          ],
+          "lifetimes": [
+            {
+              "cookie": 16,
+              "outcome": "driver_start",
+              "created_ns": 164319410491,
+              "terminal_ns": 164335540075,
+              "created_inside": true,
+              "terminal_inside": false,
+              "carry_in": false,
+              "carry_out": true,
+              "residence": [
+                {
+                  "handle": 65536,
+                  "parent": 4294967295,
+                  "enqueue_ns": 164319421575,
+                  "dequeue_ns": 164335515991,
+                  "residence_ns": 16094416
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "created_counts": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [
+            16
+          ],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          236413666108,
+          236636340025
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            236413666108,
+            236636340025
+          ],
+          "inner_read_gap_ns": [
+            236435886775,
+            236614078191
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            236413666108,
+            236636340025
+          ],
+          "lifetimes": [
+            {
+              "cookie": 19,
+              "outcome": "qdisc_drop",
+              "created_ns": 236511212691,
+              "terminal_ns": 236511225733,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          237414897275,
+          237637539609
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            237414897275,
+            237637539609
+          ],
+          "inner_read_gap_ns": [
+            237437559858,
+            237614987484
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            237414897275,
+            237637539609
+          ],
+          "lifetimes": [
+            {
+              "cookie": 20,
+              "outcome": "qdisc_drop",
+              "created_ns": 237535079275,
+              "terminal_ns": 237535091650,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          238416074359,
+          238639763442
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            238416074359,
+            238639763442
+          ],
+          "inner_read_gap_ns": [
+            238450907692,
+            238616325234
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            238416074359,
+            238639763442
+          ],
+          "lifetimes": [
+            {
+              "cookie": 21,
+              "outcome": "qdisc_drop",
+              "created_ns": 238559078026,
+              "terminal_ns": 238559088651,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          239416945609,
+          239639331068
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            239416945609,
+            239639331068
+          ],
+          "inner_read_gap_ns": [
+            239439840276,
+            239617167318
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            239416945609,
+            239639331068
+          ],
+          "lifetimes": [
+            {
+              "cookie": 22,
+              "outcome": "qdisc_drop",
+              "created_ns": 239584085568,
+              "terminal_ns": 239584106318,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          240418137651,
+          240641122859
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            240418137651,
+            240641122859
+          ],
+          "inner_read_gap_ns": [
+            240440808276,
+            240618301734
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            240418137651,
+            240641122859
+          ],
+          "lifetimes": [
+            {
+              "cookie": 23,
+              "outcome": "driver_start",
+              "created_ns": 240607102859,
+              "terminal_ns": 240649727193,
+              "created_inside": true,
+              "terminal_inside": false,
+              "carry_in": false,
+              "carry_out": true,
+              "residence": [
+                {
+                  "handle": 65536,
+                  "parent": 4294967295,
+                  "enqueue_ns": 240607119526,
+                  "dequeue_ns": 240649703026,
+                  "residence_ns": 42583500
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "created_counts": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [
+            23
+          ],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          264455416454,
+          264680538371
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            264455416454,
+            264680538371
+          ],
+          "inner_read_gap_ns": [
+            264478639537,
+            264657565621
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            264455416454,
+            264680538371
+          ],
+          "lifetimes": [
+            {
+              "cookie": 24,
+              "outcome": "driver_start",
+              "created_ns": 264671345246,
+              "terminal_ns": 264756948079,
+              "created_inside": true,
+              "terminal_inside": false,
+              "carry_in": false,
+              "carry_out": true,
+              "residence": [
+                {
+                  "handle": 65536,
+                  "parent": 4294967295,
+                  "enqueue_ns": 264671361662,
+                  "dequeue_ns": 264756925829,
+                  "residence_ns": 85564167
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "created_counts": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [
+            24
+          ],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          288694129423,
+          288916948215
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            288694129423,
+            288916948215
+          ],
+          "inner_read_gap_ns": [
+            288716066173,
+            288894568256
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            288694129423,
+            288916948215
+          ],
+          "lifetimes": [
+            {
+              "cookie": 25,
+              "outcome": "qdisc_drop",
+              "created_ns": 288735213548,
+              "terminal_ns": 288735229590,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          313736317476,
+          313958534268
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            313736317476,
+            313958534268
+          ],
+          "inner_read_gap_ns": [
+            313758760601,
+            313936515685
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            313736317476,
+            313958534268
+          ],
+          "lifetimes": [
+            {
+              "cookie": 27,
+              "outcome": "qdisc_drop",
+              "created_ns": 313823208351,
+              "terminal_ns": 313823240310,
+              "created_inside": true,
+              "terminal_inside": true,
+              "carry_in": false,
+              "carry_out": false,
+              "residence": [],
+              "reason": "SKB_DROP_REASON_QDISC_DROP"
+            }
+          ],
+          "created_counts": {
+            "driver_start": 0,
+            "qdisc_drop": 1,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      },
+      {
+        "responder": "robot",
+        "requester": "operator",
+        "outer_read_envelope_ns": [
+          338774168404,
+          338996662738
+        ],
+        "counter_delta": {
+          "eligible": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          },
+          "verdict": {
+            "packets": 1,
+            "bytes": 42,
+            "drops": 0
+          }
+        },
+        "witness": {
+          "classification": "reply_eligibility_and_pass_growth_without_source_reply_observation",
+          "source_replies_in_outer_envelope": 0,
+          "peer_replies_in_outer_envelope": 0,
+          "source_replies_between_reads": 0,
+          "outer_read_envelope_ns": [
+            338774168404,
+            338996662738
+          ],
+          "inner_read_gap_ns": [
+            338796641279,
+            338974308113
+          ],
+          "delta": {
+            "eligible": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            },
+            "verdict": {
+              "packets": 1,
+              "bytes": 42,
+              "drops": 0
+            }
+          },
+          "scope": "Reported cumulative reply growth versus observations over wider read envelope; non-atomic PIPE/PASS, no counter-minus-tap drop count, exact cause or generation absence inference."
+        },
+        "trace": {
+          "window_ns": [
+            338774168404,
+            338996662738
+          ],
+          "lifetimes": [
+            {
+              "cookie": 29,
+              "outcome": "driver_start",
+              "created_ns": 338911070446,
+              "terminal_ns": 339035668863,
+              "created_inside": true,
+              "terminal_inside": false,
+              "carry_in": false,
+              "carry_out": true,
+              "residence": [
+                {
+                  "handle": 65536,
+                  "parent": 4294967295,
+                  "enqueue_ns": 338911088321,
+                  "dequeue_ns": 339035633988,
+                  "residence_ns": 124545667
+                }
+              ],
+              "reason": null
+            }
+          ],
+          "created_counts": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "carry_in_ids": [],
+          "carry_out_ids": [
+            29
+          ],
+          "scope": "Inclusive boundaries; creation and terminal membership separate; carry-out is not a drop; actual lifecycle terminal class retained, no aggregate subtraction."
+        }
+      }
+    ],
+    "packet_counts": {
+      "operator": {
+        "driver_start": 6,
+        "qdisc_drop": 0,
+        "other_free": 0,
+        "consumed_before_driver": 0
+      },
+      "robot": {
+        "driver_start": 13,
+        "qdisc_drop": 17,
+        "other_free": 0,
+        "consumed_before_driver": 0
+      }
+    },
+    "measurement": {
+      "source_produced": 75026,
+      "observer_received": 27663,
+      "missing": 47363,
+      "losses": {
+        "upstream_dds": 39,
+        "validation": 0,
+        "admission": 97,
+        "ingress_replaced": 2,
+        "ingress_flushed": 869,
+        "input_rejected": 8,
+        "outbound_replaced": 2227,
+        "outbound_expired": 0,
+        "outbound_flushed": 6,
+        "srt_accept_to_receiver_gap": 43709,
+        "receiver_rejected": 391,
+        "receive_replaced": 12,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 300.119134888,
+      "source_actual_hz": {
+        "imu": 199.9872484718396,
+        "joints": 50.000144128097716
+      },
+      "published": 27666,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 22888,
+          "rounding": "up to 1ms",
+          "maximum_ms": 196,
+          "p50_ms": 106,
+          "p95_ms": 133,
+          "p99_ms": 147
+        },
+        "joint": {
+          "count": 4778,
+          "rounding": "up to 1ms",
+          "maximum_ms": 182,
+          "p50_ms": 113,
+          "p95_ms": 141,
+          "p99_ms": 154
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    }
+  }
+]

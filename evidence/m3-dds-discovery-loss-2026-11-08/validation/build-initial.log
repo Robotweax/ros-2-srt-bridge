@@ -1,0 +1,299 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")
+-- Configuring done (1.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/build/m3-dds-discovery-peer
+[1/2] Building CXX object CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o
+FAILED: CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o
+/usr/bin/c++ -DFASTCDR_DYN_LINK -DFASTRTPS_DYN_LINK -DFOONATHAN_MEMORY=1 -DFOONATHAN_MEMORY_VERSION_MAJOR=0 -DFOONATHAN_MEMORY_VERSION_MINOR=7 -DFOONATHAN_MEMORY_VERSION_PATCH=3 -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64 -isystem /opt/ros/jazzy/include/fastrtps -isystem /opt/ros/jazzy/include/fastcdr -isystem /opt/ros/jazzy/include/foonathan_memory -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Werror -MD -MT CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o -MF CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o.d -o CMakeFiles/m3_dds_discovery_peer.dir/main.cpp.o -c /workspace/tools/m3_dds_discovery_peer/main.cpp
+/workspace/tools/m3_dds_discovery_peer/main.cpp:29:37: error: ‘namespace dds = eprosima::fastdds::eprosima::fastdds::dds;’ conflicts with a previous declaration
+   29 | namespace dds=eprosima::fastdds::dds;
+      |                                     ^
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/ContentFilteredTopic.hpp:24,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/DomainParticipant.hpp:33,
+                 from /workspace/tools/m3_dds_discovery_peer/main.cpp:3:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/Topic.hpp:30:11: note: previous declaration ‘namespace dds { }’
+   30 | namespace dds {
+      |           ^~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:38:49: error: expected class-name before ‘{’ token
+   38 | class HelloType final:public dds::TopicDataType {
+      |                                                 ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:43:10: error: ‘bool HelloType::serialize(void*, eprosima::fastrtps::rtps::SerializedPayload_t*)’ marked ‘override’, but does not override
+   43 |     bool serialize(void* data,rtps::SerializedPayload_t* payload) override {
+      |          ^~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:49:10: error: ‘bool HelloType::deserialize(eprosima::fastrtps::rtps::SerializedPayload_t*, void*)’ marked ‘override’, but does not override
+   49 |     bool deserialize(rtps::SerializedPayload_t* payload,void* data) override {
+      |          ^~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:54:31: error: ‘std::function<unsigned int()> HelloType::getSerializedSizeProvider(void*)’ marked ‘override’, but does not override
+   54 |     std::function<uint32_t()> getSerializedSizeProvider(void*) override {return [](){return 28;};}
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:55:11: error: ‘void* HelloType::createData()’ marked ‘override’, but does not override
+   55 |     void* createData() override {return new Hello;}
+      |           ^~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:56:10: error: ‘void HelloType::deleteData(void*)’ marked ‘override’, but does not override
+   56 |     void deleteData(void* p) override {delete static_cast<Hello*>(p);}
+      |          ^~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:57:10: error: ‘bool HelloType::getKey(void*, eprosima::fastrtps::rtps::InstanceHandle_t*, bool)’ marked ‘override’, but does not override
+   57 |     bool getKey(void*,rtps::InstanceHandle_t*,bool) override {return false;}
+      |          ^~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In constructor ‘HelloType::HelloType()’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:42:17: error: ‘setName’ was not declared in this scope
+   42 |     HelloType(){setName("M3DiscoveryHelloV1");m_typeSize=28;m_isGetKeyDefined=false;auto_fill_type_object(false);auto_fill_type_information(false);}
+      |                 ^~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:42:47: error: ‘m_typeSize’ was not declared in this scope
+   42 |     HelloType(){setName("M3DiscoveryHelloV1");m_typeSize=28;m_isGetKeyDefined=false;auto_fill_type_object(false);auto_fill_type_information(false);}
+      |                                               ^~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:42:61: error: ‘m_isGetKeyDefined’ was not declared in this scope
+   42 |     HelloType(){setName("M3DiscoveryHelloV1");m_typeSize=28;m_isGetKeyDefined=false;auto_fill_type_object(false);auto_fill_type_information(false);}
+      |                                                             ^~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:42:85: error: ‘auto_fill_type_object’ was not declared in this scope
+   42 |     HelloType(){setName("M3DiscoveryHelloV1");m_typeSize=28;m_isGetKeyDefined=false;auto_fill_type_object(false);auto_fill_type_information(false);}
+      |                                                                                     ^~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:42:114: error: ‘auto_fill_type_information’ was not declared in this scope
+   42 |     HelloType(){setName("M3DiscoveryHelloV1");m_typeSize=28;m_isGetKeyDefined=false;auto_fill_type_object(false);auto_fill_type_information(false);}
+      |                                                                                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘bool HelloType::deserialize(eprosima::fastrtps::rtps::SerializedPayload_t*, void*)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:50:9: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+   50 |         if(payload->length!=28)return false;const auto* p=payload->data;
+      |         ^~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:50:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   50 |         if(payload->length!=28)return false;const auto* p=payload->data;
+      |                                             ^~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: At global scope:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:64:65: error: expected class-name before ‘{’ token
+   64 | struct ParticipantListener final:dds::DomainParticipantListener {
+      |                                                                 ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:67:35: error: ‘dds::DomainParticipant’ has not been declared
+   67 |     void on_participant_discovery(dds::DomainParticipant*,rtps::ParticipantDiscoveryInfo&& info) override {
+      |                                   ^~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:67:10: error: ‘void ParticipantListener::on_participant_discovery(int*, eprosima::fastrtps::rtps::ParticipantDiscoveryInfo&&)’ marked ‘override’, but does not override
+   67 |     void on_participant_discovery(dds::DomainParticipant*,rtps::ParticipantDiscoveryInfo&& info) override {
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:73:53: error: expected class-name before ‘{’ token
+   73 | struct WriterListener final:dds::DataWriterListener {
+      |                                                     ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:76:33: error: ‘dds::DataWriter’ has not been declared
+   76 |     void on_publication_matched(dds::DataWriter*,const dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                 ^~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:76:61: error: ‘PublicationMatchedStatus’ in namespace ‘dds’ does not name a type
+   76 |     void on_publication_matched(dds::DataWriter*,const dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:76:10: error: ‘void WriterListener::on_publication_matched(int*, const int&)’ marked ‘override’, but does not override
+   76 |     void on_publication_matched(dds::DataWriter*,const dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘void WriterListener::on_publication_matched(int*, const int&)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:76:110: error: request for member ‘current_count’ in ‘s’, which is of non-class type ‘const int’
+   76 |     void on_publication_matched(dds::DataWriter*,const dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                                                                              ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:76:194: error: request for member ‘current_count’ in ‘s’, which is of non-class type ‘const int’
+   76 |     void on_publication_matched(dds::DataWriter*,const dds::PublicationMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"writer_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                                                                                                                                                                  ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: At global scope:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:78:53: error: expected class-name before ‘{’ token
+   78 | struct ReaderListener final:dds::DataReaderListener {
+      |                                                     ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:81:34: error: ‘dds::DataReader’ has not been declared
+   81 |     void on_subscription_matched(dds::DataReader*,const dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                  ^~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:81:62: error: ‘SubscriptionMatchedStatus’ in namespace ‘dds’ does not name a type
+   81 |     void on_subscription_matched(dds::DataReader*,const dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:82:28: error: ‘dds::DataReader’ has not been declared
+   82 |     void on_data_available(dds::DataReader* reader) override {
+      |                            ^~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:81:10: error: ‘void ReaderListener::on_subscription_matched(int*, const int&)’ marked ‘override’, but does not override
+   81 |     void on_subscription_matched(dds::DataReader*,const dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:82:10: error: ‘void ReaderListener::on_data_available(int*)’ marked ‘override’, but does not override
+   82 |     void on_data_available(dds::DataReader* reader) override {
+      |          ^~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘void ReaderListener::on_subscription_matched(int*, const int&)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:81:112: error: request for member ‘current_count’ in ‘s’, which is of non-class type ‘const int’
+   81 |     void on_subscription_matched(dds::DataReader*,const dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                                                                                ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:81:196: error: request for member ‘current_count’ in ‘s’, which is of non-class type ‘const int’
+   81 |     void on_subscription_matched(dds::DataReader*,const dds::SubscriptionMatchedStatus& s) override {matches=s.current_count;trace.emit("\"event\":\"reader_match\",\"current\":"+std::to_string(s.current_count));}
+      |                                                                                                                                                                                                    ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘void ReaderListener::on_data_available(int*)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:83:22: error: ‘SampleInfo’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::SampleInfo’?
+   83 |         Hello h;dds::SampleInfo info;
+      |                      ^~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/DataReader.hpp:37,
+                 from /workspace/tools/m3_dds_discovery_peer/main.cpp:9:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/SampleInfo.hpp:68:8: note: ‘eprosima::fastdds::dds::SampleInfo’ declared here
+   68 | struct SampleInfo
+      |        ^~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:84:23: error: request for member ‘take_next_sample’ in ‘* reader’, which is of non-class type ‘int’
+   84 |         while(reader->take_next_sample(&h,&info)==dds::ReturnCode_t::RETCODE_OK){
+      |                       ^~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:84:44: error: ‘info’ was not declared in this scope
+   84 |         while(reader->take_next_sample(&h,&info)==dds::ReturnCode_t::RETCODE_OK){
+      |                                            ^~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:84:56: error: ‘dds::ReturnCode_t’ has not been declared
+   84 |         while(reader->take_next_sample(&h,&info)==dds::ReturnCode_t::RETCODE_OK){
+      |                                                        ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: At global scope:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:93:10: error: ‘DomainParticipant’ in namespace ‘dds’ does not name a type
+   93 |     dds::DomainParticipant* p=nullptr;
+      |          ^~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In member function ‘bool ParticipantGuard::close()’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:94:22: error: ‘p’ was not declared in this scope
+   94 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==dds::ReturnCode_t::RETCODE_OK&&b==dds::ReturnCode_t::RETCODE_OK;}
+      |                      ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:94:46: error: ‘p’ was not declared in this scope
+   94 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==dds::ReturnCode_t::RETCODE_OK&&b==dds::ReturnCode_t::RETCODE_OK;}
+      |                                              ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:94:122: error: ‘dds::DomainParticipantFactory’ has not been declared
+   94 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==dds::ReturnCode_t::RETCODE_OK&&b==dds::ReturnCode_t::RETCODE_OK;}
+      |                                                                                                                          ^~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:94:203: error: ‘dds::ReturnCode_t’ has not been declared
+   94 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==dds::ReturnCode_t::RETCODE_OK&&b==dds::ReturnCode_t::RETCODE_OK;}
+      |                                                                                                                                                                                                           ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:94:237: error: ‘dds::ReturnCode_t’ has not been declared
+   94 |     bool close(){if(!p)return true;auto* old=p;p=nullptr;const auto a=old->delete_contained_entities();const auto b=dds::DomainParticipantFactory::get_instance()->delete_participant(old);return a==dds::ReturnCode_t::RETCODE_OK&&b==dds::ReturnCode_t::RETCODE_OK;}
+      |                                                                                                                                                                                                                                             ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp: In function ‘int main(int, char**)’:
+/workspace/tools/m3_dds_discovery_peer/main.cpp:104:14: error: ‘DomainParticipantQos’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::DomainParticipantQos’?
+  104 |         dds::DomainParticipantQos qos; qos.name("m3_fragment_"+role);qos.transport().use_builtin_transports=false;
+      |              ^~~~~~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/DomainParticipantFactory.hpp:25,
+                 from /workspace/tools/m3_dds_discovery_peer/main.cpp:2:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/qos/DomainParticipantQos.hpp:41:7: note: ‘eprosima::fastdds::dds::DomainParticipantQos’ declared here
+   41 | class DomainParticipantQos
+      |       ^~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:104:40: error: ‘qos’ was not declared in this scope; did you mean ‘cos’?
+  104 |         dds::DomainParticipantQos qos; qos.name("m3_fragment_"+role);qos.transport().use_builtin_transports=false;
+      |                                        ^~~
+      |                                        cos
+/workspace/tools/m3_dds_discovery_peer/main.cpp:108:15: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  108 |         guard.p=dds::DomainParticipantFactory::get_instance()->create_participant(60,qos,&participant_listener);require(guard.p,"participant creation failed");
+      |               ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:108:22: error: ‘dds::DomainParticipantFactory’ has not been declared
+  108 |         guard.p=dds::DomainParticipantFactory::get_instance()->create_participant(60,qos,&participant_listener);require(guard.p,"participant creation failed");
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:108:127: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  108 |         guard.p=dds::DomainParticipantFactory::get_instance()->create_participant(60,qos,&participant_listener);require(guard.p,"participant creation failed");
+      |                                                                                                                               ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:109:14: error: ‘TypeSupport’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::TypeSupport’?
+  109 |         dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==dds::ReturnCode_t::RETCODE_OK,"type registration failed");
+      |              ^~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/DomainParticipant.hpp:35:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/TypeSupport.hpp:45:7: note: ‘eprosima::fastdds::dds::TypeSupport’ declared here
+   45 | class TypeSupport : public std::shared_ptr<fastdds::dds::TopicDataType>
+      |       ^~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:109:54: error: ‘type’ was not declared in this scope; did you mean ‘std::__cmp_cat::type’?
+  109 |         dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==dds::ReturnCode_t::RETCODE_OK,"type registration failed");
+      |                                                      ^~~~
+      |                                                      std::__cmp_cat::type
+In file included from /usr/include/c++/13/bits/stl_pair.h:65,
+                 from /usr/include/c++/13/bits/stl_tempbuf.h:62,
+                 from /usr/include/c++/13/memory:66,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/rtps/attributes/RTPSParticipantAttributes.h:22,
+                 from /opt/ros/jazzy/include/fastrtps/fastrtps/attributes/ParticipantAttributes.h:23,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/DomainParticipantFactory.hpp:23:
+/usr/include/c++/13/compare:49:11: note: ‘std::__cmp_cat::type’ declared here
+   49 |     using type = signed char;
+      |           ^~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:109:79: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  109 |         dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==dds::ReturnCode_t::RETCODE_OK,"type registration failed");
+      |                                                                               ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:109:88: error: ‘dds::ReturnCode_t’ has not been declared
+  109 |         dds::TypeSupport type(new HelloType);require(type.register_type(guard.p)==dds::ReturnCode_t::RETCODE_OK,"type registration failed");
+      |                                                                                        ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:110:31: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  110 |         auto* publisher=guard.p->create_publisher(dds::PUBLISHER_QOS_DEFAULT);auto* subscriber=guard.p->create_subscriber(dds::SUBSCRIBER_QOS_DEFAULT);require(publisher&&subscriber,"owner creation failed");
+      |                               ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:110:56: error: ‘PUBLISHER_QOS_DEFAULT’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT’?
+  110 |         auto* publisher=guard.p->create_publisher(dds::PUBLISHER_QOS_DEFAULT);auto* subscriber=guard.p->create_subscriber(dds::SUBSCRIBER_QOS_DEFAULT);require(publisher&&subscriber,"owner creation failed");
+      |                                                        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/publisher/qos/DataWriterQos.hpp:25,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/dds/publisher/Publisher.hpp:24,
+                 from /workspace/tools/m3_dds_discovery_peer/main.cpp:5:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/publisher/qos/PublisherQos.hpp:204:39: note: ‘eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT’ declared here
+  204 | RTPS_DllAPI extern const PublisherQos PUBLISHER_QOS_DEFAULT;
+      |                                       ^~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:110:102: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  110 |         auto* publisher=guard.p->create_publisher(dds::PUBLISHER_QOS_DEFAULT);auto* subscriber=guard.p->create_subscriber(dds::SUBSCRIBER_QOS_DEFAULT);require(publisher&&subscriber,"owner creation failed");
+      |                                                                                                      ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:110:128: error: ‘SUBSCRIBER_QOS_DEFAULT’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT’?
+  110 |         auto* publisher=guard.p->create_publisher(dds::PUBLISHER_QOS_DEFAULT);auto* subscriber=guard.p->create_subscriber(dds::SUBSCRIBER_QOS_DEFAULT);require(publisher&&subscriber,"owner creation failed");
+      |                                                                                                                                ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/qos/DataReaderQos.hpp:26,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/Subscriber.hpp:25,
+                 from /workspace/tools/m3_dds_discovery_peer/main.cpp:8:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/qos/SubscriberQos.hpp:204:40: note: ‘eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT’ declared here
+  204 | RTPS_DllAPI extern const SubscriberQos SUBSCRIBER_QOS_DEFAULT;
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:111:25: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  111 |         auto* out=guard.p->create_topic(number==1?"M3FragmentHelloOperator":"M3FragmentHelloRobot",type.get_type_name(),dds::TOPIC_QOS_DEFAULT);
+      |                         ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:111:126: error: ‘TOPIC_QOS_DEFAULT’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::TOPIC_QOS_DEFAULT’?
+  111 |         auto* out=guard.p->create_topic(number==1?"M3FragmentHelloOperator":"M3FragmentHelloRobot",type.get_type_name(),dds::TOPIC_QOS_DEFAULT);
+      |                                                                                                                              ^~~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/Topic.hpp:26:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/qos/TopicQos.hpp:546:35: note: ‘eprosima::fastdds::dds::TOPIC_QOS_DEFAULT’ declared here
+  546 | RTPS_DllAPI extern const TopicQos TOPIC_QOS_DEFAULT;
+      |                                   ^~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:112:24: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  112 |         auto* in=guard.p->create_topic(number==1?"M3FragmentHelloRobot":"M3FragmentHelloOperator",type.get_type_name(),dds::TOPIC_QOS_DEFAULT);require(out&&in,"topic creation failed");
+      |                        ^
+/workspace/tools/m3_dds_discovery_peer/main.cpp:112:125: error: ‘TOPIC_QOS_DEFAULT’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::TOPIC_QOS_DEFAULT’?
+  112 |         auto* in=guard.p->create_topic(number==1?"M3FragmentHelloRobot":"M3FragmentHelloOperator",type.get_type_name(),dds::TOPIC_QOS_DEFAULT);require(out&&in,"topic creation failed");
+      |                                                                                                                             ^~~~~~~~~~~~~~~~~
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/qos/TopicQos.hpp:546:35: note: ‘eprosima::fastdds::dds::TOPIC_QOS_DEFAULT’ declared here
+  546 | RTPS_DllAPI extern const TopicQos TOPIC_QOS_DEFAULT;
+      |                                   ^~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:14: error: ‘DataWriterQos’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::DataWriterQos’?
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |              ^~~~~~~~~~~~~
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/publisher/qos/DataWriterQos.hpp:79:7: note: ‘eprosima::fastdds::dds::DataWriterQos’ declared here
+   79 | class DataWriterQos
+      |       ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:36: error: ‘DataReaderQos’ is not a member of ‘dds’; did you mean ‘eprosima::fastdds::dds::DataReaderQos’?
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |                                    ^~~~~~~~~~~~~
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/subscriber/qos/DataReaderQos.hpp:175:7: note: ‘eprosima::fastdds::dds::DataReaderQos’ declared here
+  175 | class DataReaderQos
+      |       ^~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:53: error: ‘wq’ was not declared in this scope
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |                                                     ^~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:80: error: ‘BEST_EFFORT_RELIABILITY_QOS’ is not a member of ‘dds’
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |                                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:80: note: suggested alternatives:
+In file included from /opt/ros/jazzy/include/fastrtps/fastrtps/attributes/TopicAttributes.h:25,
+                 from /opt/ros/jazzy/include/fastrtps/fastdds/dds/topic/qos/TopicQos.hpp:24:
+/opt/ros/jazzy/include/fastrtps/fastrtps/qos/QosPolicies.h:51:36: note:   ‘eprosima::fastrtps::BEST_EFFORT_RELIABILITY_QOS’
+   51 | constexpr ReliabilityQosPolicyKind BEST_EFFORT_RELIABILITY_QOS = ReliabilityQosPolicyKind::BEST_EFFORT_RELIABILITY_QOS;
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/fastrtps/fastdds/dds/domain/qos/DomainParticipantQos.hpp:25:
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/core/policy/QosPolicies.hpp:549:5: note:   ‘eprosima::fastdds::dds::BEST_EFFORT_RELIABILITY_QOS’
+  549 |     BEST_EFFORT_RELIABILITY_QOS = 0x01,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:108: error: ‘rq’ was not declared in this scope
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |                                                                                                            ^~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:135: error: ‘BEST_EFFORT_RELIABILITY_QOS’ is not a member of ‘dds’
+  113 |         dds::DataWriterQos wq;dds::DataReaderQos rq;wq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;rq.reliability().kind=dds::BEST_EFFORT_RELIABILITY_QOS;wq.history().depth=1;rq.history().depth=1;wq.data_sharing().off();rq.data_sharing().off();
+      |                                                                                                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:113:135: note: suggested alternatives:
+/opt/ros/jazzy/include/fastrtps/fastrtps/qos/QosPolicies.h:51:36: note:   ‘eprosima::fastrtps::BEST_EFFORT_RELIABILITY_QOS’
+   51 | constexpr ReliabilityQosPolicyKind BEST_EFFORT_RELIABILITY_QOS = ReliabilityQosPolicyKind::BEST_EFFORT_RELIABILITY_QOS;
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/opt/ros/jazzy/include/fastrtps/fastdds/dds/core/policy/QosPolicies.hpp:549:5: note:   ‘eprosima::fastdds::dds::BEST_EFFORT_RELIABILITY_QOS’
+  549 |     BEST_EFFORT_RELIABILITY_QOS = 0x01,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:121:122: error: ‘dds::ReturnCode_t’ has not been declared
+  121 |             if(stamp>=next_send){Hello h;h.role=number;h.sequence=++sent;h.sent_ns=stamp;require(writer->write(&h)==dds::ReturnCode_t::RETCODE_OK,"HELLO write failed");next_send=stamp+100000000;}
+      |                                                                                                                          ^~~~~~~~~~~~
+/workspace/tools/m3_dds_discovery_peer/main.cpp:123:171: error: ‘struct ParticipantGuard’ has no member named ‘p’
+  123 |                 const std::string state="\"event\":\"state\",\"pid\":"+std::to_string(getpid())+",\"started_ns\":"+std::to_string(begun)+",\"participant\":\""+text(guard.p->guid())+"\",\"writer\":\""+text(writer->guid())+"\",\"reader\":\""+text(reader->guid())+"\",\"writer_metadata_bytes\":"+std::to_string(metadata.size())+",\"reader_metadata_bytes\":"+std::to_string(metadata.size())+",\"peer_discovered\":"+(participant_listener.peer?"true":"false")+",\"writer_matches\":"+std::to_string(writer_listener.matches)+",\"reader_matches\":"+std::to_string(reader_listener.matches)+",\"sent\":"+std::to_string(sent)+",\"received\":"+std::to_string(reader_listener.received)+",\"invalid\":"+std::to_string(reader_listener.invalid);
+      |                                                                                                                                                                           ^
+cc1plus: all warnings being treated as errors
+ninja: build stopped: subcommand failed.

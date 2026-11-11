@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "proof": {
+    "gate": "N3_strict_window_and_recorded_capture",
+    "window": {
+      "source_produced": 7515,
+      "observer_received": 7256,
+      "missing": 259,
+      "losses": {
+        "upstream_dds": 15,
+        "validation": 0,
+        "admission": 6,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 234,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 2,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 2
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 30.057820014,
+      "source_actual_hz": {
+        "imu": 200.01450528347686,
+        "joints": 50.003626320869216
+      },
+      "published": 7258,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 5771,
+          "rounding": "up to 1ms",
+          "maximum_ms": 33,
+          "p50_ms": 9,
+          "p95_ms": 12,
+          "p99_ms": 13
+        },
+        "joint": {
+          "count": 1487,
+          "rounding": "up to 1ms",
+          "maximum_ms": 33,
+          "p50_ms": 18,
+          "p95_ms": 27,
+          "p99_ms": 28
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    }
+  },
+  "cleanup": "recorded_owned_removal_complete"
+}

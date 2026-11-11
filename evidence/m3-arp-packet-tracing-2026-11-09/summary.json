@@ -1,0 +1,956 @@
+[
+  {
+    "cohort": "calibration-v1",
+    "source_commit": "88ba3f1a560b26dc3fb57692b48d07a81c2bc71e",
+    "rows": [
+      {
+        "label": "N0",
+        "status": "failed",
+        "error": "no calibrated reply lifetimes",
+        "root_configurations": {
+          "operator": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          },
+          "robot": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          }
+        },
+        "run": ".local/m3-arp-packet-tracing-2026-11-09/N0",
+        "trace_status": {},
+        "packet_counts": {}
+      },
+      {
+        "label": "N5",
+        "status": "not_executed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "cohort": "calibration-v2",
+    "source_commit": "38f0af4472692dd54e90b9e7df226d8b494cc852",
+    "rows": [
+      {
+        "label": "N0",
+        "status": "passed",
+        "error": null,
+        "root_configurations": {
+          "operator": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          },
+          "robot": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          }
+        },
+        "run": ".local/m3-arp-packet-tracing-v2-2026-11-09/N0",
+        "trace_status": {
+          "complete": true,
+          "deadline": false,
+          "created": 30,
+          "emitted": 120,
+          "records": 120,
+          "reserve_failed": 0,
+          "map_failed": 0,
+          "read_failed": 0,
+          "collision": 0,
+          "retired": 30,
+          "pending": 0,
+          "ready_ns": 987255856867,
+          "detach_before_ns": 996007925454,
+          "detached_hooks": 6,
+          "time_namespace_zero": true
+        },
+        "packet_counts": {
+          "driver_start": 30,
+          "qdisc_drop": 0,
+          "other_free": 0,
+          "consumed_before_driver": 0
+        }
+      },
+      {
+        "label": "N5",
+        "status": "passed",
+        "error": null,
+        "root_configurations": {
+          "operator": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          },
+          "robot": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ],
+            "after": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              }
+            ]
+          }
+        },
+        "run": ".local/m3-arp-packet-tracing-v2-2026-11-09/N5",
+        "trace_status": {
+          "complete": true,
+          "deadline": false,
+          "created": 30,
+          "emitted": 80,
+          "records": 80,
+          "reserve_failed": 0,
+          "map_failed": 0,
+          "read_failed": 0,
+          "collision": 0,
+          "retired": 30,
+          "pending": 0,
+          "ready_ns": 1001993301248,
+          "detach_before_ns": 1011481456044,
+          "detached_hooks": 6,
+          "time_namespace_zero": true
+        },
+        "packet_counts": {
+          "driver_start": 10,
+          "qdisc_drop": 20,
+          "other_free": 0,
+          "consumed_before_driver": 0
+        }
+      }
+    ]
+  },
+  {
+    "cohort": "loaded",
+    "source_commit": "5544747509ca075cb9f5e60e20ee71b44fb281fd",
+    "rows": [
+      {
+        "label": "srt-N0-2903",
+        "status": "passed",
+        "error": null,
+        "root_configurations": {
+          "operator": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ]
+          },
+          "robot": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ],
+            "after": [
+              {
+                "kind": "netem",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "limit": 256,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ]
+          }
+        },
+        "run": ".local/m3/20261109T075500099828Z",
+        "harness_status": "passed",
+        "audit": {
+          "attempts": 8,
+          "confirmed_successes": 8,
+          "unknown": 0,
+          "effects": 8,
+          "unresolved": 0,
+          "not_admitted": 0,
+          "all_succeeded": true,
+          "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+        },
+        "skipped": 0,
+        "durable_outcomes": {
+          "complete": true,
+          "verified_expired": 0,
+          "all_success": true,
+          "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+        },
+        "active_context_events": 0,
+        "packet_counts": {
+          "operator": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "robot": {
+            "driver_start": 1,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          }
+        },
+        "trace_status": {
+          "operator": {
+            "complete": true,
+            "deadline": false,
+            "created": 1,
+            "emitted": 4,
+            "records": 4,
+            "reserve_failed": 0,
+            "map_failed": 0,
+            "read_failed": 0,
+            "collision": 0,
+            "retired": 1,
+            "pending": 0,
+            "ready_ns": 1231583908352,
+            "detach_before_ns": 1265854436951,
+            "detached_hooks": 6,
+            "time_namespace_zero": true
+          },
+          "robot": {
+            "complete": true,
+            "deadline": false,
+            "created": 1,
+            "emitted": 4,
+            "records": 4,
+            "reserve_failed": 0,
+            "map_failed": 0,
+            "read_failed": 0,
+            "collision": 0,
+            "retired": 1,
+            "pending": 0,
+            "ready_ns": 1231665176144,
+            "detach_before_ns": 1266022351493,
+            "detached_hooks": 6,
+            "time_namespace_zero": true
+          }
+        },
+        "sensor_measurement": {
+          "source_produced": 3788,
+          "observer_received": 3654,
+          "missing": 134,
+          "losses": {
+            "upstream_dds": 1,
+            "validation": 0,
+            "admission": 4,
+            "ingress_replaced": 0,
+            "ingress_flushed": 0,
+            "input_rejected": 0,
+            "outbound_replaced": 129,
+            "outbound_expired": 0,
+            "outbound_flushed": 0,
+            "srt_accept_to_receiver_gap": 0,
+            "receiver_rejected": 0,
+            "receive_replaced": 0,
+            "receive_flushed": 0,
+            "poll_expired": 0,
+            "publication_rejected": 0,
+            "observer_dds": 0
+          },
+          "balances": {
+            "typed_ingress": 0,
+            "ingress_mailbox": 0,
+            "outbound_queue": 0,
+            "receive_mailbox": 0,
+            "publication": 0,
+            "end_to_end": 0
+          },
+          "source_enabled_seconds": 15.14694934,
+          "source_actual_hz": {
+            "imu": 200.04028085037484,
+            "joints": 50.043080159928756
+          },
+          "published": 3654,
+          "age_upper_histograms": {
+            "imu": {
+              "count": 2903,
+              "rounding": "up to 1ms",
+              "maximum_ms": 14,
+              "p50_ms": 9,
+              "p95_ms": 12,
+              "p99_ms": 13
+            },
+            "joint": {
+              "count": 751,
+              "rounding": "up to 1ms",
+              "maximum_ms": 29,
+              "p50_ms": 17,
+              "p95_ms": 26,
+              "p99_ms": 27
+            }
+          },
+          "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+        },
+        "non_success_commands": [],
+        "non_success_journal_audits": []
+      },
+      {
+        "label": "srt-N5-2903",
+        "status": "failed",
+        "error": "command progress failed; uncertainty retained",
+        "root_configurations": {
+          "operator": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ],
+            "after": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2904,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ]
+          },
+          "robot": {
+            "unchanged": true,
+            "before": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ],
+            "after": [
+              {
+                "kind": "tbf",
+                "root": true,
+                "handle": "1:",
+                "parent": null,
+                "options": {
+                  "rate": 64000,
+                  "burst": 4096,
+                  "lat": 448000
+                }
+              },
+              {
+                "kind": "netem",
+                "root": null,
+                "handle": "10:",
+                "parent": "1:1",
+                "options": {
+                  "limit": 16,
+                  "seed": 2903,
+                  "ecn": false,
+                  "gap": 0
+                }
+              },
+              {
+                "kind": "clsact",
+                "root": null,
+                "handle": "ffff:",
+                "parent": "ffff:fff1",
+                "options": {}
+              }
+            ]
+          }
+        },
+        "run": ".local/m3/20261109T075543179775Z",
+        "harness_status": "passed",
+        "audit": {
+          "attempts": 122,
+          "confirmed_successes": 121,
+          "unknown": 0,
+          "effects": 121,
+          "unresolved": 0,
+          "not_admitted": 0,
+          "all_succeeded": false,
+          "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+        },
+        "skipped": 28,
+        "durable_outcomes": {
+          "complete": false,
+          "verified_expired": 0,
+          "all_success": false,
+          "scope": "success or qualified durable expiry only; not all-success deadline qualification"
+        },
+        "active_context_events": 0,
+        "packet_counts": {
+          "operator": {
+            "driver_start": 12,
+            "qdisc_drop": 0,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          },
+          "robot": {
+            "driver_start": 10,
+            "qdisc_drop": 16,
+            "other_free": 0,
+            "consumed_before_driver": 0
+          }
+        },
+        "trace_status": {
+          "operator": {
+            "complete": true,
+            "deadline": false,
+            "created": 12,
+            "emitted": 48,
+            "records": 48,
+            "reserve_failed": 0,
+            "map_failed": 0,
+            "read_failed": 0,
+            "collision": 0,
+            "retired": 12,
+            "pending": 0,
+            "ready_ns": 1274733272789,
+            "detach_before_ns": 1593942755600,
+            "detached_hooks": 6,
+            "time_namespace_zero": true
+          },
+          "robot": {
+            "complete": true,
+            "deadline": false,
+            "created": 26,
+            "emitted": 72,
+            "records": 72,
+            "reserve_failed": 0,
+            "map_failed": 0,
+            "read_failed": 0,
+            "collision": 0,
+            "retired": 26,
+            "pending": 0,
+            "ready_ns": 1274809900956,
+            "detach_before_ns": 1594118770017,
+            "detached_hooks": 6,
+            "time_namespace_zero": true
+          }
+        },
+        "sensor_measurement": {
+          "source_produced": 75031,
+          "observer_received": 22522,
+          "missing": 52509,
+          "losses": {
+            "upstream_dds": 2,
+            "validation": 0,
+            "admission": 84,
+            "ingress_replaced": 1,
+            "ingress_flushed": 1382,
+            "input_rejected": 10,
+            "outbound_replaced": 2552,
+            "outbound_expired": 0,
+            "outbound_flushed": 15,
+            "srt_accept_to_receiver_gap": 47016,
+            "receiver_rejected": 1446,
+            "receive_replaced": 0,
+            "receive_flushed": 0,
+            "poll_expired": 0,
+            "publication_rejected": 1,
+            "observer_dds": 0
+          },
+          "balances": {
+            "typed_ingress": 0,
+            "ingress_mailbox": 0,
+            "outbound_queue": 0,
+            "receive_mailbox": 0,
+            "publication": 0,
+            "end_to_end": 0
+          },
+          "source_enabled_seconds": 300.122270595,
+          "source_actual_hz": {
+            "imu": 199.99848688669755,
+            "joints": 50.002953696999036
+          },
+          "published": 22522,
+          "age_upper_histograms": {
+            "imu": {
+              "count": 18579,
+              "rounding": "up to 1ms",
+              "maximum_ms": 200,
+              "p50_ms": 107,
+              "p95_ms": 135,
+              "p99_ms": 148
+            },
+            "joint": {
+              "count": 3943,
+              "rounding": "up to 1ms",
+              "maximum_ms": 185,
+              "p50_ms": 113,
+              "p95_ms": 143,
+              "p99_ms": 155
+            }
+          },
+          "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+        },
+        "non_success_commands": [
+          {
+            "number": 34,
+            "submission": 0,
+            "submitted_monotonic_ns": 1372502936917,
+            "queued_response_monotonic_ns": 1372553951209,
+            "expected_generation": 33,
+            "new_generation": 34,
+            "status_observations": 6,
+            "last_status_observation": {
+              "found": true,
+              "state": 6,
+              "reason": 1,
+              "local_error": 0,
+              "revision": 3,
+              "query_queued": false,
+              "peer_error": 0,
+              "observed_monotonic_ns": 1373608267542,
+              "budget_elapsed": false
+            },
+            "status_observation_history": [
+              {
+                "found": true,
+                "state": 1,
+                "reason": 0,
+                "local_error": 0,
+                "revision": 0,
+                "query_queued": true,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1372604801334,
+                "budget_elapsed": false
+              },
+              {
+                "found": true,
+                "state": 1,
+                "reason": 0,
+                "local_error": 0,
+                "revision": 0,
+                "query_queued": true,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1372761588792,
+                "budget_elapsed": false
+              },
+              {
+                "found": true,
+                "state": 1,
+                "reason": 0,
+                "local_error": 0,
+                "revision": 0,
+                "query_queued": true,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1372979371209,
+                "budget_elapsed": false
+              },
+              {
+                "found": true,
+                "state": 1,
+                "reason": 0,
+                "local_error": 0,
+                "revision": 0,
+                "query_queued": true,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1373187594001,
+                "budget_elapsed": false
+              },
+              {
+                "found": true,
+                "state": 1,
+                "reason": 0,
+                "local_error": 0,
+                "revision": 0,
+                "query_queued": true,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1373398924751,
+                "budget_elapsed": false
+              },
+              {
+                "found": true,
+                "state": 6,
+                "reason": 1,
+                "local_error": 0,
+                "revision": 3,
+                "query_queued": false,
+                "peer_error": 0,
+                "observed_monotonic_ns": 1373608267542,
+                "budget_elapsed": false
+              }
+            ],
+            "terminal": 6,
+            "reason": 1,
+            "result_valid": false,
+            "result_rate_hz": 0,
+            "result_generation": 0,
+            "result_observed_monotonic_ns": 1373608285084
+          }
+        ],
+        "non_success_journal_audits": [
+          {
+            "number": 34,
+            "terminal": 6,
+            "sdk_handoffs": 1,
+            "sender": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "bba13c24618acbcf2d5316cfcff264283b3d2a1c091965c28a870603552777e7",
+              "source_epoch": "24f00f984744841840378a44e06f8cb6",
+              "session": "563a511455db6dd1c422c5a653dc7a02",
+              "owner_epoch": "24f00f984744841840378a44e06f8cb6",
+              "source_ns": 1372503476959,
+              "admitted_ns": 1372507216292,
+              "dispatched_ns": 0,
+              "finished_ns": 1373440130876,
+              "deadline_ns": 1377503476959,
+              "result_valid": false,
+              "result_generation": 0
+            },
+            "receiver": {
+              "state": 6,
+              "reason": 1,
+              "revision": 3,
+              "route": 100,
+              "payload_hash": "bba13c24618acbcf2d5316cfcff264283b3d2a1c091965c28a870603552777e7",
+              "source_epoch": "24f00f984744841840378a44e06f8cb6",
+              "session": "563a511455db6dd1c422c5a653dc7a02",
+              "owner_epoch": "8c3d0a4c20ed01ecea65a657b7ea6d0b",
+              "source_ns": 1372503476959,
+              "admitted_ns": 1372520033250,
+              "dispatched_ns": 1372531105375,
+              "finished_ns": 1372540388250,
+              "deadline_ns": 1377412640946,
+              "result_valid": false,
+              "result_generation": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

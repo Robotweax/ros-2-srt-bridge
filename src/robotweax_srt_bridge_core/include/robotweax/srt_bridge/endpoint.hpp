@@ -47,6 +47,7 @@ public:
     bool poll(CommandEvent& event);
     EndpointSnapshot snapshot() const;
     TransportOwner& transport() noexcept;
+    bool resume_test_barrier() noexcept; // Only enabled by explicit test-only worker barriers.
     void request_stop() noexcept;
     void join();
 private:

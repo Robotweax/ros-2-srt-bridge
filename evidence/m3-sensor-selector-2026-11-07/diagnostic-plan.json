@@ -1,0 +1,12 @@
+{
+  "status": "prospective",
+  "scope": "synthetic fixed-IHL IPv4 SRT-header selector only; not authenticated SRT/FEC or ROS qualification",
+  "cases": ["one source position3", "two source positions2/3 in same four-source row"],
+  "executions_each": 1,
+  "traffic": "12 finite synthetic headers, including parity sharing last source sequence, SRT CONTROL, other row/socket/message/ports, repeated selected identity with retransmit bit; one restored identity after filter removal",
+  "expected_drops": [2, 3],
+  "gates": ["exact known receiver/native/PCAP identity populations", "zero native reserve/copy loss", "standalone PCAP footer/file/filter reconciliation and zero kernel drops", "bounded stable drain", "sum gact drops equals selected identity executions", "verified selector removal", "unchanged interface features"],
+  "origin": "explicit synthetic initial sequence, not inferred from first observed DATA",
+  "no_retry_or_failed_case_replacement": true,
+  "next": "trusted live sender row/origin/message/socket identity before actual N3 one/two loss recovery experiments; N4 barriers remain pending"
+}

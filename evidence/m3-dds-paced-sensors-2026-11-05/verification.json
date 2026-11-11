@@ -1,0 +1,24 @@
+{
+  "dds_profile_environment": {
+    "FASTRTPS_DEFAULT_PROFILES_FILE": "/workspace/containers/dds-paced-sensors.xml",
+    "RMW_FASTRTPS_USE_QOS_FROM_XML": "1"
+  },
+  "dds_transport_xml_sha256": "1d90193632e24620d4a573625e30a213bc45951cfea53e3f4cdae6c58f9b5c78",
+  "profile_probe_binary_sha256": "872858de3f5490fdbf597e59676a996bebdc25427d4ed3f4e22cbfbd7beaae4c",
+  "profile_probe": {
+    "verified": true,
+    "sensor_topics": [
+      "/robot/imu",
+      "/robot/joint_states"
+    ],
+    "sensor_mode": "ASYNCHRONOUS",
+    "controller": "m3_sensors_32k",
+    "max_bytes_per_period": 1600,
+    "period_ms": 50,
+    "control_mode": "SYNCHRONOUS",
+    "control_controller": "default unlimited",
+    "history_memory": "PREALLOCATED_WITH_REALLOC",
+    "data_sharing": "OFF"
+  },
+  "sensor_output_policy": "explicit asynchronous sensor-only shared 1600-byte/50ms controller; KeepLast(1); not an Ethernet rate guarantee"
+}

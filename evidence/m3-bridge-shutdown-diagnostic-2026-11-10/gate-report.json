@@ -1,0 +1,70 @@
+{
+  "status": "failed_observer_configuration_gate",
+  "driver_exit_code": 1,
+  "diagnostic_runs": 1,
+  "seed": 1701,
+  "requested_source_seconds": 10,
+  "source_fence_duration_ns": 10053922838,
+  "losses": 0,
+  "primary_failure": "observer isolation mismatch",
+  "configured_capabilities": [
+    "CAP_SYS_ADMIN"
+  ],
+  "expected_raw_capabilities": [
+    "SYS_ADMIN"
+  ],
+  "failure_cause": "Prepared sidecar compares Docker capability spelling literally, without CAP_ normalization. Canonical CAP_SYS_ADMIN is the sole configured capability; observer never starts.",
+  "observer_started": false,
+  "observer_armed": false,
+  "shutdown_stacks_captured": false,
+  "secondary_assessment_error": "[Errno 2] No such file or directory: '/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/bridge-shutdown-diagnostic-20261110T073724485219Z/operator-observer-ready.json'",
+  "cleanup": {
+    "operator": [
+      {
+        "name": "operator-bridge-0",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 223895250
+      }
+    ],
+    "robot": [
+      {
+        "name": "robot-source",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 172833417
+      },
+      {
+        "name": "robot-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 326048375
+      }
+    ]
+  },
+  "retained_measurement_barriers": {
+    "operator": {
+      "result_barrier_status": "passed",
+      "stage_records": 51,
+      "stage_drops": 0,
+      "last_stage": "main_context_shutdown_end",
+      "bridge_capability_sets_zero": true
+    },
+    "robot": {
+      "result_barrier_status": "passed",
+      "stage_records": 39,
+      "stage_drops": 0,
+      "last_stage": "main_context_shutdown_end",
+      "bridge_capability_sets_zero": true
+    }
+  },
+  "measurement_accounting_and_capture_qualification_reached": false,
+  "no_tuning": true,
+  "retry_two_loss_4211": false,
+  "remaining_campaign_cases_disabled": 29,
+  "original_hang_cause": "unknown",
+  "M3_complete": false
+}

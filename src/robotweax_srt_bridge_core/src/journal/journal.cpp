@@ -208,6 +208,23 @@ JournalResult CommandJournal::finish(Identity id,CommandState state,CommandReaso
         return {JournalError::none,*e};
     }catch(const DbError& e){return p.failed(e.code);}
 }
+JournalResult CommandJournal::reconcile_sender(Identity id,std::uint32_t route,RateCommand command,CommandContext context,std::uint64_t now){
+    auto& p=*impl_;if(p.poisoned)return {JournalError::storage};
+    if(p.options.side!=JournalSide::sender||now>max_time||!valid_command(command))return {JournalError::invalid};
+    try{
+        auto e=p.load(id);if(!e)return {JournalError::not_found};
+        if(e->owner_epoch!=p.options.process_epoch)return {JournalError::context_lost};
+        if(e->route!=route||e->command!=command||e->payload_hash!=command_hash(route,command)||
+           e->context.session!=context.session||e->context.source_epoch!=context.source_epoch||e->context.source_monotonic_ns!=context.source_monotonic_ns||e->context.deadline_ns!=context.deadline_ns)return {JournalError::conflict};
+        if(now<e->admitted_ns)return {JournalError::invalid};
+        // A delayed local receipt never overwrites an authoritative peer state.
+        if(e->state==CommandState::local_queued){
+            if(e->revision||e->reason!=CommandReason::none||e->result.valid)return {JournalError::invalid_state};
+            e->state=CommandState::unknown;e->reason=CommandReason::reconcile_required;e->result={};p.mutate(*e);
+        }
+        return {JournalError::none,*e};
+    }catch(const DbError& error){return p.failed(error.code);}
+}
 JournalError CommandJournal::invalidate_session(Identity session,std::uint64_t now){
     auto& p=*impl_;if(p.poisoned)return JournalError::storage;
     try{

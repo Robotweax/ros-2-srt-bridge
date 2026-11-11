@@ -1,0 +1,103 @@
+{
+  "status": "passed",
+  "case": "pause",
+  "capture_config": {
+    "mode": "immediate",
+    "buffer_kib": 32768,
+    "snapshot_option": 0,
+    "rotation": {
+      "file_megabytes": 16,
+      "file_count": 16,
+      "nominal_retention_bytes": 256000000
+    }
+  },
+  "sent_datagrams": 2116,
+  "received_datagrams": 2116,
+  "events": [
+    {
+      "signal": "SIGSTOP",
+      "monotonic_ns": 229522852645
+    },
+    {
+      "signal": "SIGCONT",
+      "monotonic_ns": 231021634312
+    }
+  ],
+  "diagnostics": {
+    "samples": 36,
+    "processes": [
+      {
+        "pid": 15,
+        "start_ticks": 22884,
+        "observations": 34,
+        "states": {
+          "R": 8,
+          "S": 12,
+          "T": 14
+        },
+        "first": {
+          "pid": 15,
+          "state": "S",
+          "start_ticks": 22884,
+          "cpu_ticks": 2,
+          "scheduler": {
+            "runtime_ns": 28610127,
+            "runqueue_wait_ns": 15463290,
+            "timeslices": 27
+          },
+          "io": {
+            "rchar": 15735,
+            "wchar": 108,
+            "syscr": 30,
+            "syscw": 5,
+            "read_bytes": 0,
+            "write_bytes": 108,
+            "cancelled_write_bytes": 0
+          },
+          "wchan": "poll_schedule_timeout.constprop.0",
+          "context_switches": {
+            "voluntary_ctxt_switches": 19,
+            "nonvoluntary_ctxt_switches": 8
+          }
+        },
+        "last": {
+          "pid": 15,
+          "state": "S",
+          "start_ticks": 22884,
+          "cpu_ticks": 9,
+          "scheduler": {
+            "runtime_ns": 101522338,
+            "runqueue_wait_ns": 46331948,
+            "timeslices": 2365
+          },
+          "io": {
+            "rchar": 15735,
+            "wchar": 1416522,
+            "syscr": 30,
+            "syscw": 1315,
+            "read_bytes": 0,
+            "write_bytes": 1416522,
+            "cancelled_write_bytes": 0
+          },
+          "wchan": "poll_schedule_timeout.constprop.0",
+          "context_switches": {
+            "voluntary_ctxt_switches": 2357,
+            "nonvoluntary_ctxt_switches": 8
+          }
+        }
+      }
+    ],
+    "missing_process_samples": 2,
+    "sample_errors": 0,
+    "unavailable_field_observations": {},
+    "maximum_sample_gap_ns": 110952167,
+    "maximum_read_span_ns": 5623041,
+    "scope": "sampled process state and non-atomic cumulative counters; identities never merged across start times; wchan=0 can mean restricted/unavailable; scheduler counters depend on kernel configuration; no root-cause or capture-completeness inference"
+  },
+  "capture_gate_error": "unreconciled tcpdump counters: captured/filter/file counts differ or drops present",
+  "kernel_drops": 1612,
+  "captured_records": 1310,
+  "stopped_state_observations": 14,
+  "recovery_marker_captured": true,
+  "capture_gate_rejected": true
+}

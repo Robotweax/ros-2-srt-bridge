@@ -21,7 +21,8 @@ EndpointOptions config(Role role,const std::string& ip,const std::string& key,co
 struct Pair {
     EndpointOptions oc,rc;
     std::unique_ptr<CommandEndpoint> op,robot;
-    Pair(const std::string& ip,const std::filesystem::path& path,bool withhold=false,std::optional<JournalPoint> pause={},unsigned handler_pause=0,std::uint64_t timeout=3000000000ULL,bool sender_pause=false):oc(config(Role::listener,ip,secret(),path/"operator.sqlite")),rc(config(Role::caller,ip,oc.transport.passphrase,path/"robot.sqlite")){
+    Pair(const std::string& ip,const std::filesystem::path& path,bool withhold=false,std::optional<JournalPoint> pause={},unsigned handler_pause=0,std::uint64_t timeout=3000000000ULL,bool sender_pause=false,bool trace=false):oc(config(Role::listener,ip,secret(),path/"operator.sqlite")),rc(config(Role::caller,ip,oc.transport.passphrase,path/"robot.sqlite")){
+        if(trace){oc.transport.command_trace=std::make_shared<CommandTrace>();rc.transport.command_trace=std::make_shared<CommandTrace>();}
         if(sender_pause)oc.worker.test_pause_at=JournalPoint::admission_before_commit;
         op=std::make_unique<CommandEndpoint>(oc);until([&]{return op->snapshot().transport.control_port!=0;},"operator listen failed");
         rc.transport.control.port=op->snapshot().transport.control_port;rc.transport.sensor.port=op->snapshot().transport.sensor_port;rc.test_withhold_final_status=withhold;rc.worker.test_pause_at=pause;rc.worker.test_handler_pause=handler_pause;rc.operation_timeout_ns=timeout;
@@ -40,6 +41,29 @@ void normal(const std::string& ip,const std::filesystem::path& directory){Pair p
     until([&]{return p.op->query(101,id)==SubmitResult::queued;},"wrong-route query not queued");CommandEvent wrong;until([&]{return p.op->poll(wrong)&&wrong.request_id==id&&wrong.error==JournalError::conflict;},"wrong-route query did not conflict");
     until([&]{return p.op->query(100,id)==SubmitResult::queued;},"client query not queued");result(*p.op,id,CommandState::succeeded);stop(*p.op);stop(*p.robot);check(p.op->execute(100,random_identity(),{100,5000,0,1},now())==SubmitResult::stopped,"post-stop execution accepted");
 }
+void diagnostic_lifecycle(const std::string& ip,const std::filesystem::path& directory){
+    Pair p(ip,directory,false,{},0,3000000000ULL,false,true);const auto id=random_identity();
+    submit(*p.op,id,{100,5000,0,1});result(*p.op,id,CommandState::succeeded);stop(*p.op);
+    CommandTraceEvent peer_event;bool control_lost=false,session_closed=false;
+    until([&]{while(p.rc.transport.command_trace->poll(peer_event)){
+        if(peer_event.point==CommandTracePoint::link_lost&&peer_event.detail==0){
+            check(peer_event.reason==CommandTraceReason::socket_state||peer_event.reason==CommandTraceReason::receive_error||peer_event.reason==CommandTraceReason::epoll_error,"unexpected controlled socket-loss cause");control_lost=true;
+        }
+        if(peer_event.point==CommandTracePoint::session_action&&peer_event.reason==CommandTraceReason::session_decision&&(peer_event.detail&1))session_closed=true;
+    }return control_lost&&session_closed;},"controlled peer close missing link/session cause trace");
+    stop(*p.robot);
+    CommandTraceEvent e;unsigned count=0;bool admitted=false,queued=false,sent=false,stopping=false,stopped=false;
+    while(p.oc.transport.command_trace->poll(e)){
+        ++count;check(e.monotonic_ns>0&&e.owner_epoch==p.oc.transport.session.local_epoch,"trace provenance missing");
+        if(e.point==CommandTracePoint::sender_admission){admitted=true;check(e.request==id,"wrong admitted trace ID");}
+        if(e.point==CommandTracePoint::submit_result){queued=true;check(e.request==id&&e.value==unsigned(SubmitResult::queued),"wrong handoff trace");}
+        if(e.point==CommandTracePoint::provider_sent){sent=true;check(e.request==id,"wrong sent trace ID");}
+        if(e.point==CommandTracePoint::endpoint_stopping)stopping=true;
+        if(e.point==CommandTracePoint::endpoint_stopped){check(stopping,"missing shutdown boundary");stopped=true;}
+    }
+    check(admitted&&queued&&sent&&stopped,"trace missing command or lifecycle stages");
+    check(count==p.oc.transport.command_trace->attempted()&&p.oc.transport.command_trace->dropped()==0,"trace coverage missing");
+}
 void lost_result(const std::string& ip,const std::filesystem::path& directory){
     Pair p(ip,directory,false,JournalPoint::result_committed);const auto id=random_identity();submit(*p.op,id,{100,5000,0,1});
     until([&]{return p.robot->snapshot().test_paused;},"result-commit barrier missing");
@@ -50,8 +74,44 @@ void lost_result(const std::string& ip,const std::filesystem::path& directory){
     check(p.op->snapshot().commands_sent==1&&p.op->snapshot().queries_sent>0&&p.robot->snapshot().effects==0,"reconnect resent a command");
     stop(*p.op);stop(*p.robot);
 }
+void lost_before_admission_commit(const std::string& ip,const std::filesystem::path& directory){
+    Pair p(ip,directory,false,JournalPoint::admission_before_commit,0,20000000000ULL,false,true);
+    const auto id=random_identity();const auto invoked=now();const auto old_session=p.op->snapshot().transport.context.session;
+    submit(*p.op,id,{100,5000,0,1});
+    until([&]{return p.robot->snapshot().test_paused;},"receiver admission barrier missing");
+    check(p.op->snapshot().commands_sent==1&&p.robot->snapshot().effects==0,"admission barrier not after one sender handoff/before effect");
+    stop(*p.robot);p.robot.reset();
+    p.rc.worker.test_pause_at.reset();p.rc.transport.session.local_epoch=random_identity();p.rc.worker.journal.process_epoch=p.rc.transport.session.local_epoch;
+    p.robot=std::make_unique<CommandEndpoint>(p.rc);p.ready();
+    check(p.op->snapshot().transport.context.session!=old_session,"admission-loss fixture did not reconnect");
+    bool queried=false,unknown=false,not_found=false;CommandEvent event;
+    until([&]{
+        if(!queried)queried=p.op->query(100,id)==SubmitResult::queued;
+        while(p.op->poll(event))if(event.request_id==id){
+            if(event.error==JournalError::none&&event.entry&&event.entry->state==CommandState::unknown){
+                check(event.entry->reason==CommandReason::reconcile_required&&!event.entry->result.valid&&event.entry->revision==0,"admission loss invented authoritative outcome");unknown=true;
+            }
+            if(event.peer_error&&event.peer_error->code==ControlErrorCode::not_found)not_found=true;
+        }
+        return unknown&&not_found;
+    },"missing retained uncertainty/peer NOT_FOUND after admission loss");
+    until([&]{return now()>=invoked+5050000000ULL;},"original command budget did not elapse");
+    until([&]{return p.op->query(100,id)==SubmitResult::queued;},"post-budget query not admitted");
+    auto retained=result(*p.op,id,CommandState::unknown);
+    check(retained.entry->reason==CommandReason::reconcile_required&&!retained.entry->result.valid&&retained.entry->revision==0,"budget/absence converted uncertainty to expiry or success");
+    check(p.op->snapshot().commands_sent==1&&p.robot->snapshot().effects==0,"admission-loss recovery replayed the command");
+    stop(*p.op);stop(*p.robot);
+    CommandTraceEvent e;unsigned sends=0;bool link_lost=false,live_unknown=false;
+    while(p.oc.transport.command_trace->poll(e)){
+        if(e.point==CommandTracePoint::provider_sent&&e.request==id)++sends;
+        if(e.point==CommandTracePoint::link_lost&&e.detail==0)link_lost=true;
+        if(e.point==CommandTracePoint::worker_unknown&&e.request==id&&e.entry_owner_epoch==e.owner_epoch)live_unknown=true;
+    }
+    check(sends==1&&link_lost&&live_unknown&&p.oc.transport.command_trace->dropped()==0,"admission-loss provenance incomplete");
+    std::cout<<"PASS admission-before-commit peer loss: UNKNOWN retained after budget/NOT_FOUND, no replay/effect\n";
+}
 void unknown_restart(const std::string& ip,const std::filesystem::path& directory){
-    Pair p(ip,directory,false,{},2);const auto id=random_identity();submit(*p.op,id,{100,5000,0,1});
+    Pair p(ip,directory,false,{},2,3000000000ULL,false,true);const auto old_epoch=p.oc.transport.session.local_epoch;const auto id=random_identity();submit(*p.op,id,{100,5000,0,1});
     until([&]{return p.robot->snapshot().test_paused;},"running handler barrier missing");check(p.robot->snapshot().effects==0,"before-effect barrier applied effect");
     const auto ports=p.op->snapshot().transport;stop(*p.robot);stop(*p.op);p.robot.reset();p.op.reset();
     p.oc.transport.control.port=ports.control_port;p.oc.transport.sensor.port=ports.sensor_port;p.oc.transport.session.local_epoch=random_identity();p.oc.worker.journal.process_epoch=p.oc.transport.session.local_epoch;
@@ -59,6 +119,11 @@ void unknown_restart(const std::string& ip,const std::filesystem::path& director
     p.rc.worker.test_handler_pause=0;p.rc.transport.session.local_epoch=random_identity();p.rc.worker.journal.process_epoch=p.rc.transport.session.local_epoch;
     p.robot=std::make_unique<CommandEndpoint>(p.rc);p.ready();submit(*p.op,id,{100,5000,0,1});CommandEvent unknown;until([&]{while(p.op->poll(unknown))if(unknown.request_id==id&&unknown.error==JournalError::none&&unknown.entry&&unknown.entry->state==CommandState::unknown&&unknown.entry->reason==CommandReason::context_lost)return true;return false;},"recovered uncertainty not reconciled with peer");
     check(p.op->snapshot().commands_sent==0&&p.robot->snapshot().effects==0,"UNKNOWN restart automatically replayed");stop(*p.op);stop(*p.robot);
+    CommandTraceEvent e;bool recovered=false;
+    while(p.oc.transport.command_trace->poll(e))if(e.point==CommandTracePoint::worker_unknown&&e.request==id&&e.owner_epoch==p.oc.transport.session.local_epoch){
+        check(e.entry_owner_epoch==old_epoch&&e.entry_owner_epoch!=e.owner_epoch,"recovery trace lost original owner epoch");recovered=true;
+    }
+    check(recovered,"missing recovered UNKNOWN trace");
 }
 void timeout(const std::string& ip,const std::filesystem::path& directory){
     Pair p(ip,directory,false,{},2,1000000000ULL);const auto id=random_identity();submit(*p.op,id,{100,5000,0,1});
@@ -78,4 +143,4 @@ void bounded_shutdown(const std::string& ip,const std::filesystem::path& directo
     check(cancelled==queued+1,"unresolved local callbacks lost at shutdown");check(p.robot->snapshot().effects==0,"uncommitted sender admission executed");stop(*p.robot);
 }
 }
-int main(int argc,char** argv){try{check(argc==2,"family required");const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";auto dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(dir);++n)dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(dir);normal(ip,dir/"normal");lost_result(ip,dir/"lost-result");unknown_restart(ip,dir/"unknown");timeout(ip,dir/"timeout");bounded_shutdown(ip,dir/"bounded");std::cout<<"PASS command endpoint "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}
+int main(int argc,char** argv){try{check(argc==2,"family required");const auto ip=std::string(argv[1])=="ipv6"?"::1":"127.0.0.1";auto dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid()));for(unsigned n=0;std::filesystem::exists(dir);++n)dir=std::filesystem::current_path()/("endpoint-"+std::to_string(getpid())+"-"+std::to_string(n));std::filesystem::create_directories(dir);normal(ip,dir/"normal");diagnostic_lifecycle(ip,dir/"trace");lost_result(ip,dir/"lost-result");lost_before_admission_commit(ip,dir/"admission-loss");unknown_restart(ip,dir/"unknown");timeout(ip,dir/"timeout");bounded_shutdown(ip,dir/"bounded");std::cout<<"PASS command endpoint "<<argv[1]<<": "<<checks<<" checks\n";return 0;}catch(const std::exception& e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}}

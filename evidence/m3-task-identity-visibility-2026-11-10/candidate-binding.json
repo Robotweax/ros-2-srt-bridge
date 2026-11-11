@@ -1,0 +1,38 @@
+{
+  "status": "offline_candidate_default_off_no_live_binding",
+  "original_collector": {
+    "path": "evidence/m3-current-long-preparation-2026-11-10/shutdown_observer.py",
+    "sha256": "f4b2d9ed4f31bded2772d61081b7a9de8ac88ebfabc7ef690f24f149515868d3"
+  },
+  "candidate_collector": {
+    "path": "evidence/m3-task-identity-visibility-2026-11-10/shutdown_observer.py",
+    "sha256": "6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e"
+  },
+  "activation": "explicit --task-visibility in procfs mode only",
+  "schema_version": 1,
+  "limits": {
+    "processes": 8,
+    "threads_per_process": 64,
+    "bytes_per_read": 16384,
+    "samples": 48,
+    "period_seconds": 0.25,
+    "original_time_limit_seconds": 12,
+    "entries_examined_per_process": 65,
+    "history_identities": 512,
+    "stack_attempts_per_task": 1,
+    "task_file_operations_per_task": 7,
+    "additional_fixed_task_file_operations_per_task": 2
+  },
+  "unchanged": [
+    "old collect/identity/read helpers",
+    "GDB code and parent Observer class",
+    "sampling and read/process/thread/sample/time budgets",
+    "frozen observer/filter/entry/driver/assessor",
+    "SDK/ROS/provider/builds"
+  ],
+  "confirmed_exit_never_inferred": true,
+  "new_freeze": false,
+  "new_authorization": false,
+  "live_calibrated": false,
+  "existing_child_discovery_unchanged": true
+}

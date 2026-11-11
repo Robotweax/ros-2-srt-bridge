@@ -1,0 +1,39 @@
+-- Install configuration: "Release"
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/m2_scenario.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/m3_scenario.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/m3_dds_scenario.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/dds_clock.py
+-- Installing: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/dds_command_load.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/command_workload.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/m3_dds_commands_scenario.py
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/ament_index/resource_index/package_run_dependencies/robotweax_srt_bridge_demo
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/ament_index/resource_index/parent_prefix_path/robotweax_srt_bridge_demo
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/environment/ament_prefix_path.sh
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/environment/ament_prefix_path.dsv
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/environment/path.sh
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/environment/path.dsv
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/local_setup.bash
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/local_setup.sh
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/local_setup.zsh
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/local_setup.dsv
+-- Installing: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/package.dsv
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/ament_index/resource_index/packages/robotweax_srt_bridge_demo
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/cmake/robotweax_srt_bridge_demoConfig.cmake
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/cmake/robotweax_srt_bridge_demoConfig-version.cmake
+-- Up-to-date: /workspace/install/m3-ros/robotweax_srt_bridge_demo/share/robotweax_srt_bridge_demo/package.xml
+usage: m3_dds_scenario.py [-h] --role {robot,operator} --run RUN --seconds
+                          SECONDS [--commands]
+
+Direct Best Effort sensor baseline. File coordination carries controls only.
+Optional --commands adds the journaled Reliable DDS coordinator and steady
+load. All participants run in the same Linux VM/time namespace; header age is
+a realtime estimate, deliberately distinct from SRT's conservative clock
+bound.
+
+options:
+  -h, --help            show this help message and exit
+  --role {robot,operator}
+  --run RUN
+  --seconds SECONDS
+  --commands            journaled Reliable DDS commands every two seconds

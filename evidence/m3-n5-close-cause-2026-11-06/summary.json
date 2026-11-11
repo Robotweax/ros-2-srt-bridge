@@ -1,0 +1,193 @@
+{
+  "harness_status": "passed",
+  "errors": {},
+  "qualification": false,
+  "complete_m3_acceptance": false,
+  "command_window_ns": [
+    2812921992905,
+    3112946630000
+  ],
+  "active_window_close_events": [],
+  "reset_observed": false,
+  "command_summary": {
+    "attempts": 133,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 133,
+      "p50": 890.573584,
+      "p95": 2540.639001,
+      "p99": 3180.89746,
+      "maximum": 4009.261627
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 133,
+        "p50": 890.573584,
+        "p95": 2540.639001,
+        "p99": 3180.89746,
+        "maximum": 4009.261627
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+  },
+  "effects": 133,
+  "skipped": 17,
+  "trace_counts": {
+    "operator-bridge-0.log": {
+      "records": 417,
+      "attempted": 417,
+      "dropped": 0,
+      "complete": true,
+      "counts": {
+        "endpoint_started": 1,
+        "session_changed": 2,
+        "invalidate_requested": 2,
+        "invalidate_completed": 2,
+        "sender_admission": 133,
+        "submit_result": 133,
+        "worker_unknown": 0,
+        "endpoint_stopping": 1,
+        "endpoint_stopped": 1,
+        "mailbox_flushed": 0,
+        "input_dropped": 0,
+        "make_rejected": 0,
+        "queue_rejected": 0,
+        "outbound_dropped": 0,
+        "provider_sent": 133,
+        "provider_error": 0,
+        "outbound_flushed": 0,
+        "transport_stopping": 1,
+        "clock_deferred": 0,
+        "session_action": 4,
+        "link_lost": 4
+      }
+    },
+    "robot-bridge-1.log": {
+      "records": 5,
+      "attempted": 5,
+      "dropped": 0,
+      "complete": true,
+      "counts": {
+        "endpoint_started": 1,
+        "session_changed": 0,
+        "invalidate_requested": 0,
+        "invalidate_completed": 0,
+        "sender_admission": 0,
+        "submit_result": 0,
+        "worker_unknown": 0,
+        "endpoint_stopping": 1,
+        "endpoint_stopped": 1,
+        "mailbox_flushed": 0,
+        "input_dropped": 0,
+        "make_rejected": 0,
+        "queue_rejected": 0,
+        "outbound_dropped": 0,
+        "provider_sent": 0,
+        "provider_error": 0,
+        "outbound_flushed": 0,
+        "transport_stopping": 1,
+        "clock_deferred": 0,
+        "session_action": 1,
+        "link_lost": 0
+      }
+    },
+    "robot-bridge-2.log": {
+      "records": 5,
+      "attempted": 5,
+      "dropped": 0,
+      "complete": true,
+      "counts": {
+        "endpoint_started": 1,
+        "session_changed": 0,
+        "invalidate_requested": 0,
+        "invalidate_completed": 0,
+        "sender_admission": 0,
+        "submit_result": 0,
+        "worker_unknown": 0,
+        "endpoint_stopping": 1,
+        "endpoint_stopped": 1,
+        "mailbox_flushed": 0,
+        "input_dropped": 0,
+        "make_rejected": 0,
+        "queue_rejected": 0,
+        "outbound_dropped": 0,
+        "provider_sent": 0,
+        "provider_error": 0,
+        "outbound_flushed": 0,
+        "transport_stopping": 1,
+        "clock_deferred": 0,
+        "session_action": 1,
+        "link_lost": 0
+      }
+    }
+  },
+  "pcap_drops": {
+    "operator": 0,
+    "robot": 0
+  },
+  "sender_only": [],
+  "sender_unknown": [],
+  "status_divergences": [],
+  "measurement": {
+    "source_produced": 75041,
+    "observer_received": 2327,
+    "missing": 72714,
+    "losses": {
+      "upstream_dds": 1,
+      "validation": 0,
+      "admission": 87,
+      "ingress_replaced": 0,
+      "ingress_flushed": 114,
+      "input_rejected": 0,
+      "outbound_replaced": 2268,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 70230,
+      "receiver_rejected": 13,
+      "receive_replaced": 0,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 1,
+      "observer_dds": 0
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 300.169673637,
+    "source_actual_hz": {
+      "imu": 199.99355455407417,
+      "joints": 50.0017200876549
+    },
+    "published": 2327,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 1946,
+        "rounding": "up to 1ms",
+        "maximum_ms": 162,
+        "p50_ms": 107,
+        "p95_ms": 133,
+        "p99_ms": 143
+      },
+      "joint": {
+        "count": 381,
+        "rounding": "up to 1ms",
+        "maximum_ms": 159,
+        "p50_ms": 113,
+        "p95_ms": 141,
+        "p99_ms": 151
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "cgroup_windows_replayed": 4,
+  "realtime_windows_qualified": {
+    "source_enabled": false,
+    "fenced_observation": false
+  }
+}

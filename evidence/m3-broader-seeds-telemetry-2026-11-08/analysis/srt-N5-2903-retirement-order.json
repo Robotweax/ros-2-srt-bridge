@@ -1,0 +1,89 @@
+{
+  "status": "passed",
+  "telemetry_file": ".local/m3-broader-seeds-build/srt-N5-2903-telemetry.json",
+  "telemetry_sha256": "73eb41c896dc9405f4330cde997b6ae08c96c14aa7a15aad60006c9622b779af",
+  "analysis_source_sha256": "7b4d42fe2a76781578bc282ebcc40b7428ef63dce51e304ce52d079c28dc44bc",
+  "analysis": {
+    "run": ".local/m3/20261108T192149714504Z",
+    "scope": "whole operator capture FILE order, same UDP flow/destination socket and exact sequence; not realtime/socket processing order, authenticated acceptance, typed SAMPLE mapping or unique internal cause",
+    "flows": [
+      {
+        "flow": [
+          "172.19.0.3",
+          "172.19.0.2",
+          39912,
+          10081,
+          36921185
+        ],
+        "data_packets": 43,
+        "unique_data_sequences": 43,
+        "retirement_controls": 0,
+        "unique_retired_sequences": 0,
+        "repeated_retirement_controls": 0,
+        "unsupported_controls": 0,
+        "data_packets_after_prior_same_sequence_retirement": 0,
+        "unique_data_sequences_after_prior_retirement": 0,
+        "data_sequences_eventually_named_by_retirement": 0,
+        "boundaries": {
+          "3": 43
+        },
+        "encryption_key_flags": {
+          "1": 43
+        }
+      },
+      {
+        "flow": [
+          "172.19.0.3",
+          "172.19.0.2",
+          52041,
+          10081,
+          365886064
+        ],
+        "data_packets": 22050,
+        "unique_data_sequences": 22050,
+        "retirement_controls": 741,
+        "unique_retired_sequences": 559,
+        "repeated_retirement_controls": 182,
+        "unsupported_controls": 0,
+        "data_packets_after_prior_same_sequence_retirement": 0,
+        "unique_data_sequences_after_prior_retirement": 0,
+        "data_sequences_eventually_named_by_retirement": 178,
+        "boundaries": {
+          "3": 22050
+        },
+        "encryption_key_flags": {
+          "1": 22050
+        }
+      },
+      {
+        "flow": [
+          "172.19.0.3",
+          "172.19.0.2",
+          43092,
+          10081,
+          307186200
+        ],
+        "data_packets": 4982,
+        "unique_data_sequences": 4982,
+        "retirement_controls": 2460,
+        "unique_retired_sequences": 431,
+        "repeated_retirement_controls": 2029,
+        "unsupported_controls": 0,
+        "data_packets_after_prior_same_sequence_retirement": 0,
+        "unique_data_sequences_after_prior_retirement": 0,
+        "data_sequences_eventually_named_by_retirement": 139,
+        "boundaries": {
+          "3": 4982
+        },
+        "encryption_key_flags": {
+          "1": 4982
+        }
+      }
+    ],
+    "limitations": [
+      "A cleartext DROP_REQUEST can be rejected or remain pending until the peer send horizon permits it.",
+      "Prior capture control is not proof the provider applied retirement before an application read.",
+      "Later DATA with a previously retired sequence is consistent with late/discarded data; no decryption/provider-internal observation here."
+    ]
+  }
+}

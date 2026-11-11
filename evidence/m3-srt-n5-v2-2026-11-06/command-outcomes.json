@@ -1,0 +1,95 @@
+[
+  {
+    "seed": 1701,
+    "overall_status": "passed",
+    "capture_error": null,
+    "attempts": 131,
+    "not_admitted": 0,
+    "unresolved": 0,
+    "terminal_observation_latency_ms": {
+      "count": 131,
+      "p50": 1302.418918,
+      "p95": 2801.596418,
+      "p99": 3618.65796,
+      "maximum": 3666.526294
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 131,
+        "p50": 1302.418918,
+        "p95": 2801.596418,
+        "p99": 3618.65796,
+        "maximum": 3666.526294
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately",
+    "effects": 131,
+    "skipped_slots": 19,
+    "journal_sender_unknown": 0,
+    "sender_only": [],
+    "receiver_only": [],
+    "status_divergences": [],
+    "pending_intent": null,
+    "competitor_check": {
+      "protocol": "UDP",
+      "target_bitrate": 128000,
+      "block_bytes": 1024,
+      "bytes": 5064704,
+      "seconds": 316.489271,
+      "offered_bits_per_second": 128022.13443753676,
+      "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+      "alive_poll_checks": 1234
+    }
+  },
+  {
+    "seed": 2903,
+    "overall_status": "failed",
+    "capture_error": "unreconciled tcpdump counters: captured/filter/file counts differ or drops present",
+    "attempts": 105,
+    "not_admitted": 0,
+    "unresolved": 1,
+    "terminal_observation_latency_ms": {
+      "count": 104,
+      "p50": 1100.544084,
+      "p95": 3412.247085,
+      "p99": 5143.682461,
+      "maximum": 5376.374335
+    },
+    "by_state_reason": {
+      "4/0": {
+        "count": 104,
+        "p50": 1100.544084,
+        "p95": 3412.247085,
+        "p99": 5143.682461,
+        "maximum": 5376.374335
+      }
+    },
+    "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately",
+    "effects": 104,
+    "skipped_slots": 45,
+    "journal_sender_unknown": 1,
+    "sender_only": [
+      "69000000000000000000000000000000"
+    ],
+    "receiver_only": [],
+    "status_divergences": [],
+    "pending_intent": {
+      "number": 105,
+      "submission": 0,
+      "submitted_monotonic_ns": 1772760892803,
+      "queued_response_monotonic_ns": 1772823916678,
+      "expected_generation": 104,
+      "new_generation": 105
+    },
+    "competitor_check": {
+      "protocol": "UDP",
+      "target_bitrate": 128000,
+      "block_bytes": 1024,
+      "bytes": 5197824,
+      "seconds": 324.841218,
+      "offered_bits_per_second": 128008.9769888746,
+      "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+      "alive_poll_checks": 1266
+    }
+  }
+]

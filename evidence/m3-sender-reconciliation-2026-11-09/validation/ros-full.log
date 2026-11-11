@@ -1,0 +1,40 @@
+Starting >>> robotweax_srt_bridge_msgs
+[Processing: robotweax_srt_bridge_msgs]
+Finished <<< robotweax_srt_bridge_msgs [33.1s]
+Starting >>> robotweax_srt_bridge
+Finished <<< robotweax_srt_bridge [28.8s]
+Starting >>> robotweax_srt_bridge_demo
+Finished <<< robotweax_srt_bridge_demo [21.7s]
+
+Summary: 3 packages finished [1min 24s]
+Starting >>> robotweax_ros2_srt_bridge
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/colcon_core/executor/__init__.py", line 91, in __call__
+    rc = await self.task(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/colcon_core/task/__init__.py", line 120, in __call__
+    return await task_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/colcon_cmake/task/cmake/test.py", line 44, in test
+    assert os.path.exists(args.build_base), \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Has this package been built before?
+--- stderr: robotweax_ros2_srt_bridge
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/colcon_core/executor/__init__.py", line 91, in __call__
+    rc = await self.task(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/colcon_core/task/__init__.py", line 120, in __call__
+    return await task_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/colcon_cmake/task/cmake/test.py", line 44, in test
+    assert os.path.exists(args.build_base), \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Has this package been built before?
+---
+Failed   <<< robotweax_ros2_srt_bridge [0.01s, exited with code 1]
+
+Summary: 0 packages finished [3.75s]
+  1 package failed: robotweax_ros2_srt_bridge
+  1 package had stderr output: robotweax_ros2_srt_bridge
+Has this package been built before?

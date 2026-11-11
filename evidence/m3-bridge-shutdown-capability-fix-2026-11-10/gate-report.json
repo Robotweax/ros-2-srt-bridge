@@ -1,0 +1,66 @@
+{
+  "status": "failed_observer_lifecycle_coverage_gate",
+  "driver_exit_code": 1,
+  "live_runs": 1,
+  "seed": 1701,
+  "seconds": 10,
+  "losses": 0,
+  "python_tests": 478,
+  "regression_controls": 3,
+  "capability_normalization_gate_passed": true,
+  "observer_started": true,
+  "observer_armed_before_signal": true,
+  "observer_exit_code": 0,
+  "total_observer_samples": 3,
+  "kernel_stack_reads_ok": 28,
+  "kernel_stack_reads_unavailable": 0,
+  "contained_post_signal_samples": 1,
+  "nonempty_root_post_signal_stacks": 4,
+  "first_failure": "live target observation incomplete",
+  "failed_process": {
+    "identity": {
+      "pid": 157,
+      "start_ticks": 1211,
+      "state": "S"
+    },
+    "status": "gone_or_reused"
+  },
+  "failed_sample_begin_ns": 34697387390,
+  "worker_join_end_ns": 34558644098,
+  "interpretation": "Registered worker becomes gone_or_reused after its recorded worker_join_end while bridge is still before reap. Frozen coverage gate rejects every such process row. Consistent with ordinary worker exit; no proof of PID reuse or original bridge-hang cause.",
+  "underlying_workload_status": "passed",
+  "final_diagnostic_status": "failed",
+  "later_diagnostic_stage_assessment_reached": false,
+  "cleanup": {
+    "operator": [
+      {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 221450875
+      }
+    ],
+    "robot": [
+      {
+        "name": "robot-source",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 167404875
+      },
+      {
+        "name": "robot-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 320953167
+      }
+    ]
+  },
+  "no_tuning": true,
+  "retry_two_loss_4211": false,
+  "remaining_campaign_cases_disabled": 29,
+  "original_hang_cause": "unknown",
+  "M3_complete": false
+}

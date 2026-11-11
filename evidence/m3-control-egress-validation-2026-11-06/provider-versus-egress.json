@@ -1,0 +1,2118 @@
+{
+  "known_fault_signature_observed": true,
+  "fault": {
+    "role": "operator",
+    "peer": "robot",
+    "install": {
+      "begin_ns": 32809191139,
+      "end_ns": 32832206222,
+      "argv": [
+        "tc",
+        "filter",
+        "add",
+        "dev",
+        "eth0",
+        "egress",
+        "protocol",
+        "ip",
+        "pref",
+        "49152",
+        "u32",
+        "match",
+        "ip",
+        "protocol",
+        "17",
+        "0xff",
+        "match",
+        "ip",
+        "dst",
+        "172.19.0.3/32",
+        "match",
+        "ip",
+        "sport",
+        "10080",
+        "0xffff",
+        "action",
+        "drop"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "initial_counters": {
+      "packets": 0,
+      "drops": 0,
+      "bytes": 0
+    },
+    "restored": true,
+    "scope": "known CONTROL-only tc egress drop; owned IPv4 peers; SENSOR selector excluded; not historical cause or N4 phase qualification",
+    "final_counters": {
+      "packets": 303,
+      "drops": 303,
+      "bytes": 39356
+    },
+    "remove": {
+      "begin_ns": 39242519809,
+      "end_ns": 39262363350,
+      "argv": [
+        "tc",
+        "filter",
+        "del",
+        "dev",
+        "eth0",
+        "egress",
+        "protocol",
+        "ip",
+        "pref",
+        "49152"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "guaranteed_active_ns": [
+      32832206222,
+      39242519809
+    ]
+  },
+  "clock_proof": "946ceec4-45c3-4fcc-ac26-4d00fe32f873\nmonotonic           0         0\nboottime            0         0\n",
+  "selected": {
+    "operator": {
+      "process": "operator-bridge-0.log",
+      "baseline": {
+        "sequence": 240,
+        "begin_ns": 32708664306,
+        "end_ns": 32708676806,
+        "generation": 2,
+        "socket": 93653610,
+        "state_before": 5,
+        "state_after": 5,
+        "unavailable": 0,
+        "error": 0,
+        "idle_timeout_ms": 5000,
+        "available": 1,
+        "idle_timeout_available": 1,
+        "before_close": 0,
+        "data_sent": 60,
+        "data_received": 67,
+        "retransmitted": 0,
+        "ack_sent": 73,
+        "ack_received": 60,
+        "nak_sent": 0,
+        "nak_received": 0,
+        "undecrypt": 0,
+        "bytes_sent": 9136,
+        "bytes_received": 11256,
+        "send_buffer_packets": 0,
+        "send_buffer_bytes": 7,
+        "receive_buffer_packets": 0,
+        "receive_buffer_bytes": 7,
+        "flight_packets": 0,
+        "rtt_ms": 1.783,
+        "owner_epoch": "44baf617bd5c257526acdc51a477ee16",
+        "session": "10dc3036f8533dc7581675348b8209ac"
+      },
+      "deltas": {
+        "adjacent_pairs": [
+          {
+            "previous_read_ns": [
+              32909874139,
+              32909885639
+            ],
+            "current_read_ns": [
+              33011231931,
+              33011244181
+            ],
+            "counters": {
+              "data_sent": 0,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 0,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33011231931,
+              33011244181
+            ],
+            "current_read_ns": [
+              33111928181,
+              33111940848
+            ],
+            "counters": {
+              "data_sent": 0,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 0,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33111928181,
+              33111940848
+            ],
+            "current_read_ns": [
+              33213369181,
+              33213378639
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 2,
+              "retransmitted": 1,
+              "ack_sent": 3,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 292
+            }
+          },
+          {
+            "previous_read_ns": [
+              33213369181,
+              33213378639
+            ],
+            "current_read_ns": [
+              33314537056,
+              33314548931
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33314537056,
+              33314548931
+            ],
+            "current_read_ns": [
+              33416310264,
+              33416319806
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33416310264,
+              33416319806
+            ],
+            "current_read_ns": [
+              33516622181,
+              33516633889
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33516622181,
+              33516633889
+            ],
+            "current_read_ns": [
+              33618054931,
+              33618065306
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33618054931,
+              33618065306
+            ],
+            "current_read_ns": [
+              33718242889,
+              33718252306
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33718242889,
+              33718252306
+            ],
+            "current_read_ns": [
+              33819392890,
+              33819400890
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33819392890,
+              33819400890
+            ],
+            "current_read_ns": [
+              33920527515,
+              33920535931
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              33920527515,
+              33920535931
+            ],
+            "current_read_ns": [
+              34021630306,
+              34021638931
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34021630306,
+              34021638931
+            ],
+            "current_read_ns": [
+              34122315598,
+              34122324181
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34122315598,
+              34122324181
+            ],
+            "current_read_ns": [
+              34224436098,
+              34224449890
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34224436098,
+              34224449890
+            ],
+            "current_read_ns": [
+              34325541931,
+              34325550681
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34325541931,
+              34325550681
+            ],
+            "current_read_ns": [
+              34426294806,
+              34426303598
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34426294806,
+              34426303598
+            ],
+            "current_read_ns": [
+              34526650890,
+              34526659348
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34526650890,
+              34526659348
+            ],
+            "current_read_ns": [
+              34629797515,
+              34629807640
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34629797515,
+              34629807640
+            ],
+            "current_read_ns": [
+              34731346932,
+              34731356348
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34731346932,
+              34731356348
+            ],
+            "current_read_ns": [
+              34831841098,
+              34831849515
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34831841098,
+              34831849515
+            ],
+            "current_read_ns": [
+              34933282765,
+              34933292015
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              34933282765,
+              34933292015
+            ],
+            "current_read_ns": [
+              35033604765,
+              35033615598
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35033604765,
+              35033615598
+            ],
+            "current_read_ns": [
+              35134668557,
+              35134677307
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35134668557,
+              35134677307
+            ],
+            "current_read_ns": [
+              35235345432,
+              35235355515
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35235345432,
+              35235355515
+            ],
+            "current_read_ns": [
+              35336365307,
+              35336383224
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35336365307,
+              35336383224
+            ],
+            "current_read_ns": [
+              35437630974,
+              35437642182
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35437630974,
+              35437642182
+            ],
+            "current_read_ns": [
+              35538309182,
+              35538318724
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35538309182,
+              35538318724
+            ],
+            "current_read_ns": [
+              35639805224,
+              35639814265
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35639805224,
+              35639814265
+            ],
+            "current_read_ns": [
+              35740382849,
+              35740393182
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35740382849,
+              35740393182
+            ],
+            "current_read_ns": [
+              35841264057,
+              35841272807
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              35841264057,
+              35841272807
+            ],
+            "current_read_ns": [
+              35942327099,
+              35942336682
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 3,
+              "retransmitted": 3,
+              "ack_sent": 3,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 438
+            }
+          },
+          {
+            "previous_read_ns": [
+              35942327099,
+              35942336682
+            ],
+            "current_read_ns": [
+              36043088016,
+              36043097016
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36043088016,
+              36043097016
+            ],
+            "current_read_ns": [
+              36144032349,
+              36144044974
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36144032349,
+              36144044974
+            ],
+            "current_read_ns": [
+              36244713307,
+              36244723266
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36244713307,
+              36244723266
+            ],
+            "current_read_ns": [
+              36345936307,
+              36345945224
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36345936307,
+              36345945224
+            ],
+            "current_read_ns": [
+              36446692516,
+              36446704557
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36446692516,
+              36446704557
+            ],
+            "current_read_ns": [
+              36548658849,
+              36548668974
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36548658849,
+              36548668974
+            ],
+            "current_read_ns": [
+              36649637558,
+              36649647724
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36649637558,
+              36649647724
+            ],
+            "current_read_ns": [
+              36751604766,
+              36751615641
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36751604766,
+              36751615641
+            ],
+            "current_read_ns": [
+              36851640224,
+              36851651933
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36851640224,
+              36851651933
+            ],
+            "current_read_ns": [
+              36953644391,
+              36953653308
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 462,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              36953644391,
+              36953653308
+            ],
+            "current_read_ns": [
+              37055718141,
+              37055729808
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 4,
+              "retransmitted": 4,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 608,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              37055718141,
+              37055729808
+            ],
+            "current_read_ns": [
+              37156604058,
+              37156612058
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 4,
+              "retransmitted": 3,
+              "ack_sent": 4,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 450,
+              "bytes_received": 584
+            }
+          },
+          {
+            "previous_read_ns": [
+              37156604058,
+              37156612058
+            ],
+            "current_read_ns": [
+              37177381266,
+              37177393349
+            ],
+            "counters": {
+              "data_sent": 1,
+              "data_received": 1,
+              "retransmitted": 1,
+              "ack_sent": 1,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 158,
+              "bytes_received": 146
+            }
+          }
+        ],
+        "totals": {
+          "data_sent": 137,
+          "data_received": 158,
+          "retransmitted": 135,
+          "ack_sent": 159,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 20830,
+          "bytes_received": 23068
+        }
+      }
+    },
+    "robot": {
+      "process": "robot-bridge-2.log",
+      "baseline": {
+        "sequence": 199,
+        "begin_ns": 32767845681,
+        "end_ns": 32767863347,
+        "generation": 1,
+        "socket": 377403938,
+        "state_before": 5,
+        "state_after": 5,
+        "unavailable": 0,
+        "error": 0,
+        "idle_timeout_ms": 5000,
+        "available": 1,
+        "idle_timeout_available": 1,
+        "before_close": 0,
+        "data_sent": 67,
+        "data_received": 60,
+        "retransmitted": 0,
+        "ack_sent": 60,
+        "ack_received": 73,
+        "nak_sent": 0,
+        "nak_received": 0,
+        "undecrypt": 0,
+        "bytes_sent": 11256,
+        "bytes_received": 9136,
+        "send_buffer_packets": 0,
+        "send_buffer_bytes": 9,
+        "receive_buffer_packets": 0,
+        "receive_buffer_bytes": 2,
+        "flight_packets": 0,
+        "rtt_ms": 1.53,
+        "owner_epoch": "64b64c9a2fd1c717cc48025f2559b122",
+        "session": "10dc3036f8533dc7581675348b8209ac"
+      },
+      "deltas": {
+        "adjacent_pairs": [
+          {
+            "previous_read_ns": [
+              32868409722,
+              32868429264
+            ],
+            "current_read_ns": [
+              32969118597,
+              32969133681
+            ],
+            "counters": {
+              "data_sent": 0,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 0,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              32969118597,
+              32969133681
+            ],
+            "current_read_ns": [
+              33069798847,
+              33069812556
+            ],
+            "counters": {
+              "data_sent": 0,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 0,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33069798847,
+              33069812556
+            ],
+            "current_read_ns": [
+              33170813223,
+              33170823431
+            ],
+            "counters": {
+              "data_sent": 1,
+              "data_received": 0,
+              "retransmitted": 0,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 146,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33170813223,
+              33170823431
+            ],
+            "current_read_ns": [
+              33271133014,
+              33271143098
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 0,
+              "retransmitted": 3,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 438,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33271133014,
+              33271143098
+            ],
+            "current_read_ns": [
+              33371429473,
+              33371440056
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33371429473,
+              33371440056
+            ],
+            "current_read_ns": [
+              33471724723,
+              33471739848
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33471724723,
+              33471739848
+            ],
+            "current_read_ns": [
+              33572711389,
+              33572723139
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33572711389,
+              33572723139
+            ],
+            "current_read_ns": [
+              33673708806,
+              33673744389
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33673708806,
+              33673744389
+            ],
+            "current_read_ns": [
+              33773973181,
+              33773982139
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33773973181,
+              33773982139
+            ],
+            "current_read_ns": [
+              33874693598,
+              33874708765
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33874693598,
+              33874708765
+            ],
+            "current_read_ns": [
+              33975393056,
+              33975403140
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              33975393056,
+              33975403140
+            ],
+            "current_read_ns": [
+              34075751973,
+              34075764681
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34075751973,
+              34075764681
+            ],
+            "current_read_ns": [
+              34176348140,
+              34176358723
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34176348140,
+              34176358723
+            ],
+            "current_read_ns": [
+              34277548556,
+              34277558515
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34277548556,
+              34277558515
+            ],
+            "current_read_ns": [
+              34378363098,
+              34378373098
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34378363098,
+              34378373098
+            ],
+            "current_read_ns": [
+              34478651140,
+              34478662681
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34478651140,
+              34478662681
+            ],
+            "current_read_ns": [
+              34578728307,
+              34578740223
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34578728307,
+              34578740223
+            ],
+            "current_read_ns": [
+              34679374848,
+              34679385807
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34679374848,
+              34679385807
+            ],
+            "current_read_ns": [
+              34780150307,
+              34780159890
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34780150307,
+              34780159890
+            ],
+            "current_read_ns": [
+              34880304140,
+              34880315723
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34880304140,
+              34880315723
+            ],
+            "current_read_ns": [
+              34981351515,
+              34981366432
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              34981351515,
+              34981366432
+            ],
+            "current_read_ns": [
+              35082109432,
+              35082120390
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35082109432,
+              35082120390
+            ],
+            "current_read_ns": [
+              35182314890,
+              35182327307
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35182314890,
+              35182327307
+            ],
+            "current_read_ns": [
+              35283234932,
+              35283247724
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35283234932,
+              35283247724
+            ],
+            "current_read_ns": [
+              35384149599,
+              35384159349
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35384149599,
+              35384159349
+            ],
+            "current_read_ns": [
+              35484675682,
+              35484686432
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35484675682,
+              35484686432
+            ],
+            "current_read_ns": [
+              35585640307,
+              35585650599
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 0,
+              "retransmitted": 3,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 438,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35585640307,
+              35585650599
+            ],
+            "current_read_ns": [
+              35685911099,
+              35685920974
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35685911099,
+              35685920974
+            ],
+            "current_read_ns": [
+              35786290682,
+              35786303057
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35786290682,
+              35786303057
+            ],
+            "current_read_ns": [
+              35886907057,
+              35886917557
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35886907057,
+              35886917557
+            ],
+            "current_read_ns": [
+              35987997974,
+              35988018141
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              35987997974,
+              35988018141
+            ],
+            "current_read_ns": [
+              36089426141,
+              36089447182
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36089426141,
+              36089447182
+            ],
+            "current_read_ns": [
+              36189678849,
+              36189689849
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36189678849,
+              36189689849
+            ],
+            "current_read_ns": [
+              36290647641,
+              36290660432
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36290647641,
+              36290660432
+            ],
+            "current_read_ns": [
+              36391674557,
+              36391687432
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36391674557,
+              36391687432
+            ],
+            "current_read_ns": [
+              36492445557,
+              36492455724
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36492445557,
+              36492455724
+            ],
+            "current_read_ns": [
+              36593380141,
+              36593390474
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36593380141,
+              36593390474
+            ],
+            "current_read_ns": [
+              36693777933,
+              36693794891
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36693777933,
+              36693794891
+            ],
+            "current_read_ns": [
+              36794771766,
+              36794785141
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36794771766,
+              36794785141
+            ],
+            "current_read_ns": [
+              36895772433,
+              36895782849
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36895772433,
+              36895782849
+            ],
+            "current_read_ns": [
+              36996882974,
+              36996894766
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              36996882974,
+              36996894766
+            ],
+            "current_read_ns": [
+              37097839933,
+              37097849891
+            ],
+            "counters": {
+              "data_sent": 4,
+              "data_received": 0,
+              "retransmitted": 4,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 584,
+              "bytes_received": 0
+            }
+          },
+          {
+            "previous_read_ns": [
+              37097839933,
+              37097849891
+            ],
+            "current_read_ns": [
+              37178520266,
+              37178536808
+            ],
+            "counters": {
+              "data_sent": 3,
+              "data_received": 0,
+              "retransmitted": 3,
+              "ack_sent": 0,
+              "ack_received": 0,
+              "nak_sent": 0,
+              "nak_received": 0,
+              "undecrypt": 0,
+              "bytes_sent": 438,
+              "bytes_received": 0
+            }
+          }
+        ],
+        "totals": {
+          "data_sent": 158,
+          "data_received": 0,
+          "retransmitted": 157,
+          "ack_sent": 0,
+          "ack_received": 0,
+          "nak_sent": 0,
+          "nak_received": 0,
+          "undecrypt": 0,
+          "bytes_sent": 23068,
+          "bytes_received": 0
+        }
+      }
+    }
+  },
+  "captures": {
+    "operator": {
+      "native_sha256": "d630bebc22149e7bd0b3b1bdc20355f8fef89d3403ca6499c4bbea701330195a",
+      "sensor_observations_during_fault": {
+        "in/sensor_source_data": 1046,
+        "out/sensor_srt_control": 416,
+        "in/sensor_srt_control": 417,
+        "in/sensor_fec_parity": 262
+      },
+      "old_flow_during_fault": 0,
+      "all_control_out_during_fault": 0,
+      "old_reverse_during_fault": 159,
+      "control_out_after_restoration": 92
+    },
+    "robot": {
+      "native_sha256": "cea3e2eaaa85ed1f32649b2eb2f03747233037e27557361fa4504c8feb850ce6",
+      "sensor_observations_during_fault": {
+        "out/sensor_source_data": 1046,
+        "in/sensor_srt_control": 416,
+        "out/sensor_srt_control": 417,
+        "out/sensor_fec_parity": 262
+      },
+      "old_flow_during_fault": 0,
+      "all_control_out_during_fault": 166,
+      "old_reverse_during_fault": 159,
+      "control_out_after_restoration": 92
+    }
+  },
+  "old_flow": [
+    "172.19.0.2",
+    "172.19.0.3",
+    10080,
+    47615,
+    377403938
+  ],
+  "provider_pin_contract": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "analysis_window_ns": [
+    30832206222,
+    42242519809
+  ],
+  "scope": "known filter drop only; provider selected send counters can grow with no post-filter CONTROL observation; no historical cause, physical delivery or command nonexecution inference; deltas exclude unavailable/identity-crossing pairs; handle/wire-ID association requires this provider pin"
+}

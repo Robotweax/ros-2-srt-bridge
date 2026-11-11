@@ -1,0 +1,38 @@
+test_installed_local_import_closure (test_demo_installed_imports.InstalledDemoImportsTests.test_installed_local_import_closure) ... FAIL
+test_missing_transitive_helper_is_detected (test_demo_installed_imports.InstalledDemoImportsTests.test_missing_transitive_helper_is_detected) ... ok
+test_timeline_imports_without_source_tree_on_path (test_demo_installed_imports.InstalledDemoImportsTests.test_timeline_imports_without_source_tree_on_path) ... FAIL
+
+======================================================================
+FAIL: test_installed_local_import_closure (test_demo_installed_imports.InstalledDemoImportsTests.test_installed_local_import_closure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_demo_installed_imports.py", line 69, in test_installed_local_import_closure
+    self.assertEqual(missing_local_imports(self.installed, self.source_modules), [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [('m3_dds_scenario.py', 27, 'scenario_timeline')] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+('m3_dds_scenario.py', 27, 'scenario_timeline')
+
+- [('m3_dds_scenario.py', 27, 'scenario_timeline')]
++ []
+
+======================================================================
+FAIL: test_timeline_imports_without_source_tree_on_path (test_demo_installed_imports.InstalledDemoImportsTests.test_timeline_imports_without_source_tree_on_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_demo_installed_imports.py", line 93, in test_timeline_imports_without_source_tree_on_path
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys; sys.path.insert(0, sys.argv[1]); import scenario_timeline; assert scenario_timeline.__file__ == sys.argv[2]
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'scenario_timeline'
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.207s
+
+FAILED (failures=2)

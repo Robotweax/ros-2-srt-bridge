@@ -1,0 +1,173 @@
+[
+  {
+    "label": "create-readiness-volume",
+    "argv": [
+      "docker",
+      "volume",
+      "create",
+      "sdkros-cal-20261110t195336822172z-ready-out"
+    ],
+    "exit_code": 0,
+    "stdout": "sdkros-cal-20261110t195336822172z-ready-out\n",
+    "stderr": ""
+  },
+  {
+    "label": "create-native-readiness",
+    "argv": [
+      "docker",
+      "create",
+      "--name",
+      "sdkros-cal-20261110t195336822172z-ready",
+      "--pull=never",
+      "--platform",
+      "linux/arm64",
+      "--network",
+      "none",
+      "--read-only",
+      "--cap-drop",
+      "ALL",
+      "--cap-add",
+      "SYS_ADMIN",
+      "--security-opt",
+      "no-new-privileges=true",
+      "--security-opt",
+      "seccomp=/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/evidence/m3-sdkros-task-calibration-preparation-2026-11-10/observer-seccomp.json",
+      "--mount",
+      "type=bind,source=/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-bundle-20261110T195336822172Z,target=/cal,readonly",
+      "--mount",
+      "type=volume,source=sdkros-cal-20261110t195336822172z-ready-out,target=/out",
+      "--tmpfs",
+      "/tmp:rw,noexec,nosuid,nodev,size=16m",
+      "-e",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "--entrypoint",
+      "/usr/bin/python3",
+      "ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617",
+      "/cal/observer_entry.py",
+      "--self-check"
+    ],
+    "exit_code": 0,
+    "stdout": "bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b\n",
+    "stderr": ""
+  },
+  {
+    "label": "inspect-readiness-policy",
+    "argv": [
+      "docker",
+      "inspect",
+      "sdkros-cal-20261110t195336822172z-ready"
+    ],
+    "exit_code": 0,
+    "stdout": "[\n    {\n        \"Id\": \"bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b\",\n        \"Created\": \"2026-11-10T21:01:35.015080709Z\",\n        \"Path\": \"/usr/bin/python3\",\n        \"Args\": [\n            \"/cal/observer_entry.py\",\n            \"--self-check\"\n        ],\n        \"State\": {\n            \"Status\": \"created\",\n            \"Running\": false,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 0,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"0001-01-01T00:00:00Z\",\n            \"FinishedAt\": \"0001-01-01T00:00:00Z\"\n        },\n        \"Image\": \"sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617\",\n        \"ResolvConfPath\": \"\",\n        \"HostnamePath\": \"\",\n        \"HostsPath\": \"\",\n        \"LogPath\": \"\",\n        \"Name\": \"/sdkros-cal-20261110t195336822172z-ready\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"none\",\n            \"PortBindings\": {},\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": [\n                \"CAP_SYS_ADMIN\"\n            ],\n            \"CapDrop\": [\n                \"ALL\"\n            ],\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": true,\n            \"SecurityOpt\": [\n                \"no-new-privileges=true\",\n                \"seccomp={\\\"defaultAction\\\":\\\"SCMP_ACT_ERRNO\\\",\\\"defaultErrnoRet\\\":1,\\\"architectures\\\":[\\\"SCMP_ARCH_AARCH64\\\"],\\\"syscalls\\\":[{\\\"names\\\":[\\\"access\\\",\\\"brk\\\",\\\"clock_getres\\\",\\\"clock_gettime\\\",\\\"clock_nanosleep\\\",\\\"close\\\",\\\"close_range\\\",\\\"dup\\\",\\\"dup3\\\",\\\"epoll_create1\\\",\\\"epoll_ctl\\\",\\\"epoll_pwait\\\",\\\"execve\\\",\\\"execveat\\\",\\\"exit\\\",\\\"exit_group\\\",\\\"faccessat\\\",\\\"faccessat2\\\",\\\"fchmod\\\",\\\"fchmodat\\\",\\\"fcntl\\\",\\\"fdatasync\\\",\\\"fstat\\\",\\\"fstatfs\\\",\\\"fsync\\\",\\\"ftruncate\\\",\\\"futex\\\",\\\"getcpu\\\",\\\"getcwd\\\",\\\"getdents64\\\",\\\"getegid\\\",\\\"geteuid\\\",\\\"getgid\\\",\\\"getgroups\\\",\\\"getpid\\\",\\\"getppid\\\",\\\"getrandom\\\",\\\"getresgid\\\",\\\"getresuid\\\",\\\"getrlimit\\\",\\\"gettid\\\",\\\"gettimeofday\\\",\\\"getuid\\\",\\\"ioctl\\\",\\\"lseek\\\",\\\"madvise\\\",\\\"membarrier\\\",\\\"mkdir\\\",\\\"mkdirat\\\",\\\"mmap\\\",\\\"mprotect\\\",\\\"mremap\\\",\\\"munmap\\\",\\\"nanosleep\\\",\\\"newfstatat\\\",\\\"openat\\\",\\\"openat2\\\",\\\"pipe2\\\",\\\"poll\\\",\\\"ppoll\\\",\\\"pread64\\\",\\\"prlimit64\\\",\\\"pselect6\\\",\\\"pwrite64\\\",\\\"read\\\",\\\"readlink\\\",\\\"readlinkat\\\",\\\"readv\\\",\\\"renameat\\\",\\\"renameat2\\\",\\\"restart_syscall\\\",\\\"rseq\\\",\\\"rt_sigaction\\\",\\\"rt_sigprocmask\\\",\\\"rt_sigreturn\\\",\\\"sched_getaffinity\\\",\\\"sched_yield\\\",\\\"set_robust_list\\\",\\\"set_tid_address\\\",\\\"sigaltstack\\\",\\\"statx\\\",\\\"sysinfo\\\",\\\"times\\\",\\\"umask\\\",\\\"uname\\\",\\\"unlink\\\",\\\"unlinkat\\\",\\\"write\\\",\\\"writev\\\"],\\\"action\\\":\\\"SCMP_ACT_ALLOW\\\"}]}\"\n            ],\n            \"Tmpfs\": {\n                \"/tmp\": \"rw,noexec,nosuid,nodev,size=16m\"\n            },\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": false,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"Mounts\": [\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-bundle-20261110T195336822172Z\",\n                    \"Target\": \"/cal\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"volume\",\n                    \"Source\": \"sdkros-cal-20261110t195336822172z-ready-out\",\n                    \"Target\": \"/out\"\n                }\n            ],\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-bundle-20261110T195336822172Z\",\n                \"Destination\": \"/cal\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"volume\",\n                \"Name\": \"sdkros-cal-20261110t195336822172z-ready-out\",\n                \"Source\": \"/var/lib/docker/volumes/sdkros-cal-20261110t195336822172z-ready-out/_data\",\n                \"Destination\": \"/out\",\n                \"Driver\": \"local\",\n                \"Mode\": \"z\",\n                \"RW\": true,\n                \"Propagation\": \"\"\n            }\n        ],\n        \"Config\": {\n            \"Hostname\": \"bb6a188c8730\",\n            \"Domainname\": \"\",\n            \"User\": \"\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": true,\n            \"AttachStderr\": true,\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PYTHONDONTWRITEBYTECODE=1\",\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"LANG=C.UTF-8\",\n                \"LC_ALL=C.UTF-8\",\n                \"ROS_DISTRO=jazzy\"\n            ],\n            \"Cmd\": [\n                \"/cal/observer_entry.py\",\n                \"--self-check\"\n            ],\n            \"Image\": \"ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"\",\n            \"Entrypoint\": [\n                \"/usr/bin/python3\"\n            ],\n            \"Labels\": {\n                \"org.opencontainers.image.version\": \"24.04\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"\",\n            \"SandboxKey\": \"\",\n            \"Ports\": {},\n            \"Networks\": {\n                \"none\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"\",\n                    \"EndpointID\": \"\",\n                    \"Gateway\": \"\",\n                    \"IPAddress\": \"\",\n                    \"MacAddress\": \"\",\n                    \"IPPrefixLen\": 0,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.oci.image.manifest.v1+json\",\n            \"digest\": \"sha256:1db94fb5490d0a9c5485e27624c9cf26206c6ff4b26136291628ce8de14f7a6c\",\n            \"size\": 2907,\n            \"annotations\": {\n                \"com.docker.official-images.bashbrew.arch\": \"arm64v8\",\n                \"org.opencontainers.image.base.digest\": \"sha256:8bd60d9590fc2f17281b9f8812cd9a6f54b8f82e3d19fb91469e1e9239d77dd4\",\n                \"org.opencontainers.image.base.name\": \"ros:jazzy-ros-core-noble\",\n                \"org.opencontainers.image.created\": \"2026-10-27T00:31:27Z\",\n                \"org.opencontainers.image.revision\": \"0038f1c3a11aa0fc573d698b39ab5c204aad5a40\",\n                \"org.opencontainers.image.source\": \"https://github.com/osrf/docker_images.git#0038f1c3a11aa0fc573d698b39ab5c204aad5a40:ros/jazzy/ubuntu/noble/ros-base\",\n                \"org.opencontainers.image.url\": \"https://hub.docker.com/_/ros\",\n                \"org.opencontainers.image.version\": \"jazzy-ros-base\"\n            },\n            \"platform\": {\n                \"architecture\": \"arm64\",\n                \"os\": \"linux\",\n                \"variant\": \"v8\"\n            }\n        }\n    }\n]\n",
+    "stderr": ""
+  },
+  {
+    "label": "one-native-readiness",
+    "argv": [
+      "docker",
+      "start",
+      "--attach",
+      "sdkros-cal-20261110t195336822172z-ready"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "readiness-final-state",
+    "argv": [
+      "docker",
+      "inspect",
+      "sdkros-cal-20261110t195336822172z-ready"
+    ],
+    "exit_code": 0,
+    "stdout": "[\n    {\n        \"Id\": \"bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b\",\n        \"Created\": \"2026-11-10T21:01:35.015080709Z\",\n        \"Path\": \"/usr/bin/python3\",\n        \"Args\": [\n            \"/cal/observer_entry.py\",\n            \"--self-check\"\n        ],\n        \"State\": {\n            \"Status\": \"exited\",\n            \"Running\": false,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 0,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-11-10T21:01:35.367075626Z\",\n            \"FinishedAt\": \"2026-11-10T21:01:35.585995043Z\"\n        },\n        \"Image\": \"sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/bb6a188c8730460baf918f15097c58f2def7d2f5b09bc5b49ee732395ba3d97b/hosts\",\n        \"LogPath\": \"\",\n        \"Name\": \"/sdkros-cal-20261110t195336822172z-ready\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlayfs\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"\",\n            \"LogConfig\": {\n                \"Type\": \"local\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"none\",\n            \"PortBindings\": {},\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": [\n                \"CAP_SYS_ADMIN\"\n            ],\n            \"CapDrop\": [\n                \"ALL\"\n            ],\n            \"CgroupnsMode\": \"private\",\n            \"Dns\": null,\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": true,\n            \"SecurityOpt\": [\n                \"no-new-privileges=true\",\n                \"seccomp={\\\"defaultAction\\\":\\\"SCMP_ACT_ERRNO\\\",\\\"defaultErrnoRet\\\":1,\\\"architectures\\\":[\\\"SCMP_ARCH_AARCH64\\\"],\\\"syscalls\\\":[{\\\"names\\\":[\\\"access\\\",\\\"brk\\\",\\\"clock_getres\\\",\\\"clock_gettime\\\",\\\"clock_nanosleep\\\",\\\"close\\\",\\\"close_range\\\",\\\"dup\\\",\\\"dup3\\\",\\\"epoll_create1\\\",\\\"epoll_ctl\\\",\\\"epoll_pwait\\\",\\\"execve\\\",\\\"execveat\\\",\\\"exit\\\",\\\"exit_group\\\",\\\"faccessat\\\",\\\"faccessat2\\\",\\\"fchmod\\\",\\\"fchmodat\\\",\\\"fcntl\\\",\\\"fdatasync\\\",\\\"fstat\\\",\\\"fstatfs\\\",\\\"fsync\\\",\\\"ftruncate\\\",\\\"futex\\\",\\\"getcpu\\\",\\\"getcwd\\\",\\\"getdents64\\\",\\\"getegid\\\",\\\"geteuid\\\",\\\"getgid\\\",\\\"getgroups\\\",\\\"getpid\\\",\\\"getppid\\\",\\\"getrandom\\\",\\\"getresgid\\\",\\\"getresuid\\\",\\\"getrlimit\\\",\\\"gettid\\\",\\\"gettimeofday\\\",\\\"getuid\\\",\\\"ioctl\\\",\\\"lseek\\\",\\\"madvise\\\",\\\"membarrier\\\",\\\"mkdir\\\",\\\"mkdirat\\\",\\\"mmap\\\",\\\"mprotect\\\",\\\"mremap\\\",\\\"munmap\\\",\\\"nanosleep\\\",\\\"newfstatat\\\",\\\"openat\\\",\\\"openat2\\\",\\\"pipe2\\\",\\\"poll\\\",\\\"ppoll\\\",\\\"pread64\\\",\\\"prlimit64\\\",\\\"pselect6\\\",\\\"pwrite64\\\",\\\"read\\\",\\\"readlink\\\",\\\"readlinkat\\\",\\\"readv\\\",\\\"renameat\\\",\\\"renameat2\\\",\\\"restart_syscall\\\",\\\"rseq\\\",\\\"rt_sigaction\\\",\\\"rt_sigprocmask\\\",\\\"rt_sigreturn\\\",\\\"sched_getaffinity\\\",\\\"sched_yield\\\",\\\"set_robust_list\\\",\\\"set_tid_address\\\",\\\"sigaltstack\\\",\\\"statx\\\",\\\"sysinfo\\\",\\\"times\\\",\\\"umask\\\",\\\"uname\\\",\\\"unlink\\\",\\\"unlinkat\\\",\\\"write\\\",\\\"writev\\\"],\\\"action\\\":\\\"SCMP_ACT_ALLOW\\\"}]}\"\n            ],\n            \"Tmpfs\": {\n                \"/tmp\": \"rw,noexec,nosuid,nodev,size=16m\"\n            },\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 0,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 0,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": null,\n            \"PidsLimit\": null,\n            \"Ulimits\": null,\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"Mounts\": [\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-bundle-20261110T195336822172Z\",\n                    \"Target\": \"/cal\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"volume\",\n                    \"Source\": \"sdkros-cal-20261110t195336822172z-ready-out\",\n                    \"Target\": \"/out\"\n                }\n            ],\n            \"MaskedPaths\": [\n                \"/proc/acpi\",\n                \"/proc/asound\",\n                \"/proc/interrupts\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/sys/devices/virtual/powercap\",\n                \"/sys/firmware\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"Storage\": {\n            \"RootFS\": {\n                \"Snapshot\": {\n                    \"Name\": \"overlayfs\"\n                }\n            }\n        },\n        \"Mounts\": [\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-bundle-20261110T195336822172Z\",\n                \"Destination\": \"/cal\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"volume\",\n                \"Name\": \"sdkros-cal-20261110t195336822172z-ready-out\",\n                \"Source\": \"/var/lib/docker/volumes/sdkros-cal-20261110t195336822172z-ready-out/_data\",\n                \"Destination\": \"/out\",\n                \"Driver\": \"local\",\n                \"Mode\": \"z\",\n                \"RW\": true,\n                \"Propagation\": \"\"\n            }\n        ],\n        \"Config\": {\n            \"Hostname\": \"bb6a188c8730\",\n            \"Domainname\": \"\",\n            \"User\": \"\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": true,\n            \"AttachStderr\": true,\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"PYTHONDONTWRITEBYTECODE=1\",\n                \"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n                \"LANG=C.UTF-8\",\n                \"LC_ALL=C.UTF-8\",\n                \"ROS_DISTRO=jazzy\"\n            ],\n            \"Cmd\": [\n                \"/cal/observer_entry.py\",\n                \"--self-check\"\n            ],\n            \"Image\": \"ros@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"\",\n            \"Entrypoint\": [\n                \"/usr/bin/python3\"\n            ],\n            \"Labels\": {\n                \"org.opencontainers.image.version\": \"24.04\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"SandboxID\": \"\",\n            \"SandboxKey\": \"\",\n            \"Ports\": {},\n            \"Networks\": {\n                \"none\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"DriverOpts\": null,\n                    \"GwPriority\": 0,\n                    \"NetworkID\": \"b609e1792c51754abd9a7788b33df80f261fcbea806f8a1fec0a6d83ac2fd3de\",\n                    \"EndpointID\": \"\",\n                    \"Gateway\": \"\",\n                    \"IPAddress\": \"\",\n                    \"MacAddress\": \"\",\n                    \"IPPrefixLen\": 0,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DNSNames\": null\n                }\n            }\n        },\n        \"ImageManifestDescriptor\": {\n            \"mediaType\": \"application/vnd.oci.image.manifest.v1+json\",\n            \"digest\": \"sha256:1db94fb5490d0a9c5485e27624c9cf26206c6ff4b26136291628ce8de14f7a6c\",\n            \"size\": 2907,\n            \"annotations\": {\n                \"com.docker.official-images.bashbrew.arch\": \"arm64v8\",\n                \"org.opencontainers.image.base.digest\": \"sha256:8bd60d9590fc2f17281b9f8812cd9a6f54b8f82e3d19fb91469e1e9239d77dd4\",\n                \"org.opencontainers.image.base.name\": \"ros:jazzy-ros-core-noble\",\n                \"org.opencontainers.image.created\": \"2026-10-27T00:31:27Z\",\n                \"org.opencontainers.image.revision\": \"0038f1c3a11aa0fc573d698b39ab5c204aad5a40\",\n                \"org.opencontainers.image.source\": \"https://github.com/osrf/docker_images.git#0038f1c3a11aa0fc573d698b39ab5c204aad5a40:ros/jazzy/ubuntu/noble/ros-base\",\n                \"org.opencontainers.image.url\": \"https://hub.docker.com/_/ros\",\n                \"org.opencontainers.image.version\": \"jazzy-ros-base\"\n            },\n            \"platform\": {\n                \"architecture\": \"arm64\",\n                \"os\": \"linux\",\n                \"variant\": \"v8\"\n            }\n        }\n    }\n]\n",
+    "stderr": ""
+  },
+  {
+    "label": "export-readiness",
+    "argv": [
+      "docker",
+      "cp",
+      "sdkros-cal-20261110t195336822172z-ready:/out/.",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/sdkros-task-calibration-20261110T195336822172Z/readiness"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "readiness-logs",
+    "argv": [
+      "docker",
+      "logs",
+      "sdkros-cal-20261110t195336822172z-ready"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "remove-readiness",
+    "argv": [
+      "docker",
+      "rm",
+      "--force",
+      "sdkros-cal-20261110t195336822172z-ready"
+    ],
+    "exit_code": 0,
+    "stdout": "sdkros-cal-20261110t195336822172z-ready\n",
+    "stderr": ""
+  },
+  {
+    "label": "remove-readiness-volume",
+    "argv": [
+      "docker",
+      "volume",
+      "rm",
+      "sdkros-cal-20261110t195336822172z-ready-out"
+    ],
+    "exit_code": 0,
+    "stdout": "sdkros-cal-20261110t195336822172z-ready-out\n",
+    "stderr": ""
+  },
+  {
+    "label": "postflight-inventory",
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--format",
+      "{{.Names}}"
+    ],
+    "exit_code": 0,
+    "stdout": "codex-pr77-ci-20261110\nrobotweax-windows-filecc-local\nrobotweax-sensor-x86\nrobotweax-sensor-investigation\nsrt-issue331-build\nsrt-issue331\nsrt-aggregation-netem-receiver-1\nsrt-aggregation-netem-sender-1\n",
+    "stderr": ""
+  },
+  {
+    "label": "postflight-inventory",
+    "argv": [
+      "docker",
+      "network",
+      "ls",
+      "--format",
+      "{{.Name}}"
+    ],
+    "exit_code": 0,
+    "stdout": "bridge\nhost\nnone\nsrt-aggregation-netem_impairment\nsrt-network-web-lab_default\n",
+    "stderr": ""
+  },
+  {
+    "label": "postflight-inventory",
+    "argv": [
+      "docker",
+      "volume",
+      "ls",
+      "--format",
+      "{{.Name}}"
+    ],
+    "exit_code": 0,
+    "stdout": "1db5ee844dad7d09d548ec1ec602330720f3628d1b13a571de7122a9f0e51ce2\n21acaefcd2aec22afc96bb235280540d008fbf0110b840ba9ace0e721d08f829\n31e4fae859f7943fe7a0c451b6af2029cf914ea93a8977e57b4b31a7a0eef83d\n91ff2213bbc05cfef910e76926aa9616dcc5b701d5fdfc824ac2974b73e10431\n4742a0933e3ec80d57a9cbc1944756b3b4524d686e66487387d64cdfed5e7f36\n35833c59a5fa79dbe888674c0c790baf1e61791128f5e921cc1e42a2f13a9b21\na7ed5c57fde34c1873fcc38515b776a4ff975e12891cc779c561a8b445219649\ncddf8f5b3bbdc134d8bfdae51f07ecbca90648a98ee1cda7eb78a67bd5587791\nd0645e6f513ab55f6d0ca40ae0ba0bed7d5adde351b416fc366487cbfd9d22db\nddadc420d887261f721a54d39a954c4df82599a3b77f851612ef6bc73b74e086\nsrt-issue360-20261023_control-plane-audit-export\nsrt-issue360-20261023_control-plane-pki\nsrt-issue360-20261023_control-plane-postgres\nsrt-issue360-20261023_evidence-store-data\nsrt-issue360-20261023_lab-agent-identity\nsrt-issue360-20261023_lab-agent-state\nsrt-lab-hardening_control-plane-audit-export\nsrt-lab-hardening_control-plane-pki\nsrt-lab-hardening_control-plane-postgres\nsrt-network-web-lab_control-plane-audit-export\nsrt-network-web-lab_control-plane-pki\nsrt-network-web-lab_control-plane-postgres\n",
+    "stderr": ""
+  }
+]

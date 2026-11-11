@@ -1,0 +1,397 @@
+{
+  "status": "passed_single_current_build_stabilized_N0",
+  "driver_exit_code": 0,
+  "case_id": "N0-combined-1701",
+  "seed": 1701,
+  "planned_source_seconds": 300,
+  "measured_scenario_seconds": 300.005754387,
+  "source_enabled_seconds": 300.111622428,
+  "live_attempts": 1,
+  "passed_cases": 1,
+  "failed_cases": 0,
+  "retries": 0,
+  "command_audit": {
+    "attempts": 150,
+    "confirmed_successes": 150,
+    "unknown": 0,
+    "effects": 150,
+    "unresolved": 0,
+    "not_admitted": 0,
+    "all_succeeded": true,
+    "scope": "effect count bounded by distinct intents; UNKNOWN/unresolved may have effects; no nonexecution inferred"
+  },
+  "skipped_command_slots": 0,
+  "unique_sdk_handoffs_and_durable_journals_verified": true,
+  "maximum_adjacent_intent_gap_ms": 2023.399626,
+  "sensor_window": {
+    "source_produced": 75028,
+    "observer_received": 72464,
+    "missing": 2564,
+    "losses": {
+      "upstream_dds": 26,
+      "validation": 0,
+      "admission": 118,
+      "ingress_replaced": 1,
+      "ingress_flushed": 0,
+      "input_rejected": 0,
+      "outbound_replaced": 2370,
+      "outbound_expired": 0,
+      "outbound_flushed": 0,
+      "srt_accept_to_receiver_gap": 0,
+      "receiver_rejected": 0,
+      "receive_replaced": 16,
+      "receive_flushed": 0,
+      "poll_expired": 0,
+      "publication_rejected": 0,
+      "observer_dds": 33
+    },
+    "balances": {
+      "typed_ingress": 0,
+      "ingress_mailbox": 0,
+      "outbound_queue": 0,
+      "receive_mailbox": 0,
+      "publication": 0,
+      "end_to_end": 0
+    },
+    "source_enabled_seconds": 300.111622428,
+    "source_actual_hz": {
+      "imu": 199.99891878362666,
+      "joints": 50.001395742679385
+    },
+    "published": 72497,
+    "age_upper_histograms": {
+      "imu": {
+        "count": 57666,
+        "rounding": "up to 1ms",
+        "maximum_ms": 47,
+        "p50_ms": 9,
+        "p95_ms": 12,
+        "p99_ms": 13
+      },
+      "joint": {
+        "count": 14831,
+        "rounding": "up to 1ms",
+        "maximum_ms": 38,
+        "p50_ms": 17,
+        "p95_ms": 26,
+        "p99_ms": 27
+      }
+    },
+    "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+  },
+  "publication_age": {
+    "imu": {
+      "histogram": {
+        "count": 57666,
+        "rounding": "up to 1ms",
+        "maximum_ms": 47,
+        "p50_ms": 9,
+        "p95_ms": 12,
+        "p99_ms": 13
+      },
+      "cumulative_begin_max_ns": 18622786,
+      "cumulative_end_max_ns": 46665179,
+      "exact_window_max_ns": 46665179,
+      "exact_max_scope": "new cumulative maximum belongs to checkpoint interval",
+      "nonempty": true,
+      "freshness_gate": "supported"
+    },
+    "joint": {
+      "histogram": {
+        "count": 14831,
+        "rounding": "up to 1ms",
+        "maximum_ms": 38,
+        "p50_ms": 17,
+        "p95_ms": 26,
+        "p99_ms": 27
+      },
+      "cumulative_begin_max_ns": 17356289,
+      "cumulative_end_max_ns": 37079002,
+      "exact_window_max_ns": 37079002,
+      "exact_max_scope": "new cumulative maximum belongs to checkpoint interval",
+      "nonempty": true,
+      "freshness_gate": "supported"
+    }
+  },
+  "sensor_populations": {
+    "source": 75028,
+    "sdk_accepted": 72513,
+    "received": 72513,
+    "rejected": 0,
+    "unknown_age_rejected": 0,
+    "stale_rejected": 0,
+    "other_rejected_unclassified": 0,
+    "accepted_at_receive": 72513,
+    "published": 72497,
+    "typed_observed": 72464,
+    "unobserved_source": 2564
+  },
+  "occupancy": {
+    "begin": {
+      "sender": {
+        "sensor_ingress_pending": 0,
+        "sensor_outbound_pending": 0,
+        "sensor_receive_pending": 0
+      },
+      "receiver": {
+        "sensor_ingress_pending": 0,
+        "sensor_outbound_pending": 0,
+        "sensor_receive_pending": 0
+      }
+    },
+    "end": {
+      "sender": {
+        "sensor_ingress_pending": 0,
+        "sensor_outbound_pending": 0,
+        "sensor_receive_pending": 0
+      },
+      "receiver": {
+        "sensor_ingress_pending": 0,
+        "sensor_outbound_pending": 0,
+        "sensor_receive_pending": 0
+      }
+    }
+  },
+  "queue_high_water_not_measured": true,
+  "per_launch_lifecycle": {
+    "operator": {
+      "measurement": {
+        "token": "a7641d4712628de94c2690095f863f7a",
+        "pid": 111,
+        "start_ticks": 859,
+        "child": {
+          "name": "operator-bridge-0",
+          "pid": 111,
+          "forced_kill": false,
+          "signal_begin_ns": 322586462021,
+          "signal_end_ns": 322586673937,
+          "passed": true,
+          "end_ns": 322828102146,
+          "returncode": 0,
+          "launch_token": "a7641d4712628de94c2690095f863f7a",
+          "purpose": "measurement",
+          "start_ticks": 859,
+          "trace_path": "launch-readiness/operator-operator-bridge-0-a7641d4712628de94c2690095f863f7a.shutdown.jsonl",
+          "identity_path": "launch-readiness/operator-operator-bridge-0-a7641d4712628de94c2690095f863f7a.identity.json"
+        },
+        "signal_to_reap_ns": 241640125,
+        "stage_records": 51,
+        "socket_proof": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": 989496041,
+              "disposition": "closed",
+              "close_result": 0
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": 307100806,
+              "disposition": "closed",
+              "close_result": 0
+            }
+          },
+          "traced_successful_close_fds": [
+            989496041,
+            307100806
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      }
+    },
+    "robot": {
+      "warmup": {
+        "token": "e9cb02d809f01a2d76cfa143c03c1133",
+        "pid": 141,
+        "start_ticks": 1079,
+        "child": {
+          "name": "robot-bridge-1",
+          "pid": 141,
+          "forced_kill": false,
+          "signal_begin_ns": 12752099255,
+          "signal_end_ns": 12752233213,
+          "passed": true,
+          "end_ns": 13074700213,
+          "returncode": 0,
+          "launch_token": "e9cb02d809f01a2d76cfa143c03c1133",
+          "purpose": "warmup",
+          "start_ticks": 1079,
+          "trace_path": "launch-readiness/robot-robot-bridge-1-e9cb02d809f01a2d76cfa143c03c1133.shutdown.jsonl",
+          "identity_path": "launch-readiness/robot-robot-bridge-1-e9cb02d809f01a2d76cfa143c03c1133.identity.json"
+        },
+        "signal_to_reap_ns": 322600958,
+        "stage_records": 51,
+        "socket_proof": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [
+            875887423,
+            810036231
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      },
+      "measurement": {
+        "token": "9449d27a4f3e9c8bead1f6d96a1fb42a",
+        "pid": 177,
+        "start_ticks": 1307,
+        "child": {
+          "name": "robot-bridge-2",
+          "pid": 177,
+          "forced_kill": false,
+          "signal_begin_ns": 321998173979,
+          "signal_end_ns": 321998219937,
+          "passed": true,
+          "end_ns": 322367725771,
+          "returncode": 0,
+          "launch_token": "9449d27a4f3e9c8bead1f6d96a1fb42a",
+          "purpose": "measurement",
+          "start_ticks": 1307,
+          "trace_path": "launch-readiness/robot-robot-bridge-2-9449d27a4f3e9c8bead1f6d96a1fb42a.shutdown.jsonl",
+          "identity_path": "launch-readiness/robot-robot-bridge-2-9449d27a4f3e9c8bead1f6d96a1fb42a.identity.json"
+        },
+        "signal_to_reap_ns": 369551792,
+        "stage_records": 51,
+        "socket_proof": {
+          "slots": {
+            "control_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "control_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_fd_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            },
+            "sensor_listener_disposition": {
+              "fd": -1,
+              "disposition": "already_invalid",
+              "close_result": null
+            }
+          },
+          "traced_successful_close_fds": [
+            293496215,
+            1045774588
+          ],
+          "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+        }
+      }
+    }
+  },
+  "observer": {
+    "samples": 4,
+    "post_signal_samples": 1,
+    "nonempty_kernel_stacks": 76,
+    "confirmed_worker_exits": [
+      {
+        "pid": 127,
+        "start_ticks": 915
+      }
+    ],
+    "worker_join_end_ns": 322611072854,
+    "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+    "clean_fast_exit_may_have_no_post_signal_sample": true
+  },
+  "observer_footer": {
+    "kind": "status",
+    "completed": true,
+    "reason": "all_owned_processes_gone",
+    "samples": 5,
+    "sample_limit": 48,
+    "budget_exhausted": false,
+    "kernel_stack_reads_ok": 76,
+    "kernel_stack_reads_unavailable": 0,
+    "userspace_stacks_requested": false,
+    "end_ns": 322946435146,
+    "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+  },
+  "all4_children_exit0_unforced": true,
+  "pcap_records": {
+    "operator": 156712,
+    "robot": 156712
+  },
+  "native_records": {
+    "operator": 156757,
+    "robot": 156758
+  },
+  "capture_population_and_zero_drop_gates_passed": true,
+  "freeze_sha256": "98a357e418c22d67b1f46df9e44eaa33f24b66e11b2d1ce0eea3e1ebbd8c28d6",
+  "raw_cohort_sha256": "1b3012650b13cb58952e9d04c57668634d3bafaed9839302e1a4367a8fd02f49",
+  "raw_run_sha256": "cae2acbaf79936214059bbdcc4b681ba26bf1c10d8cc8e6c63a729f3b527103e",
+  "matched_entries": 14,
+  "preserved_shutdown_entries": 13,
+  "native_inputs": 87,
+  "raw_files": 112,
+  "raw_bytes": 233284411,
+  "no_tuning": true,
+  "no_automatic_retries": true,
+  "disabled_case_ids": [
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "remaining_campaign_cases_disabled": 28,
+  "completed_N3_not_reexecuted": true,
+  "historical_failures_preserved": true,
+  "original_hang_cause": "unknown",
+  "M3_complete": false
+}

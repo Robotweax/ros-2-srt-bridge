@@ -1,0 +1,33 @@
+{
+  "cohort_status": "failed at second fixture pre-arm capture gate; no retry",
+  "one_loss": {
+    "status": "passed",
+    "source_calls": 19,
+    "sdk_admitted": 19,
+    "busy": 0,
+    "published": 19,
+    "selected_source_id": 6,
+    "selected_SRT_message": 8,
+    "classifier_drops": 1,
+    "selected_wire_source_absent": true,
+    "selected_typed_payload_observed_while_filter_active": true,
+    "native_source_parity": [
+      18,
+      5
+    ],
+    "pcap_file_captured_filter_each": 23,
+    "sender_trace_records": 39,
+    "trace_drops_exhaustion": 0,
+    "publication_age_upper_max_ns": 9398555
+  },
+  "two_loss": {
+    "status": "failed",
+    "fault_armed": false,
+    "source_published": false,
+    "reason": "pre-arm robot captured8/filter10 versus operator8/8, zero kernel drops; repeated stable unequal counts; native selected prefix population8 matches PCAP8 both endpoints, unexplained excess counter",
+    "no_rescue_or_reconstruction": true
+  },
+  "host_tests": 179,
+  "complete_M3_acceptance": false,
+  "next": "resolve startup/filter statistics population scope before a separately planned two-loss ROS attempt; earlier failed cohorts and exact historical capture/reset causes remain open"
+}

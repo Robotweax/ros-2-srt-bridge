@@ -1,0 +1,516 @@
+{
+  "case": "fragment-cut",
+  "status": "passed",
+  "qualification": false,
+  "provenance": {
+    "source_commit": "5ba20c1eed19d3f02f4a12b3d91fe29bca6fb46e",
+    "image": "ros2-srt-m3@sha256:379b2ed9b14c5d3166ba236e219a2068b88ff1f9bb52ee4451207369426eebab",
+    "probe_sha256": "19603e5ac6b2de82d15bacc4fbf681aeef1388b35fd796bdf3fa24e0184834eb",
+    "runtime_sha256": {
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/bridge_node": "3895dc3c5965e04d37c8a395ff5b6b6f6a2095bdd0dafbaff025d573f434a545",
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/ros_rate_worker": "c43f6ad26275aa5a06b3c5d58b11daaf85ee68cf8f9f62390f2882fda047195a",
+      "install/m3-ros/robotweax_srt_bridge/lib/robotweax_srt_bridge/dds_command_node": "b85c46b0e8e31ff6ec1c1b499e1d5951cb3412a2e4d067a420fcf6410722470b",
+      "install/m3-ros/robotweax_srt_bridge_demo/lib/robotweax_srt_bridge_demo/rate_simulator": "b3dc5e33efd6272f87015540ad204819e45265eec51773b0627d2fef6f30c258",
+      "install/bridge-m3/bin/robotweax-journal-worker": "86573a71a22e03841158853d7bb458573bc524c83fd59d156a6cbad25c8ac62f",
+      "install/bridge-m3/lib/librobotweax_srt_bridge_endpoint.a": "8b2677b13f222c889acfc87bbb3b7522cc59a525c1fa6275979bdd815c46d547",
+      "install/bridge-m3/lib/librobotweax_srt_bridge_transport.a": "2bf179fdde58cf298fb379034b45f0e4a007072ba5721a1c600ec8492de1a32a",
+      "install/srt-m0/lib/librobotweax-srt.a": "3fa56e487e6c6408d9e41779d18aba9ff866978892ddbe3b88ac12fc51141673"
+    }
+  },
+  "interfaces": {
+    "robot": [
+      {
+        "ifindex": 11,
+        "link_index": 40,
+        "ifname": "eth0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1500,
+        "qdisc": "netem",
+        "operstate": "UP",
+        "linkmode": "DEFAULT",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "6e:b5:ee:0c:1b:b7",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 0
+      }
+    ],
+    "operator": [
+      {
+        "ifindex": 11,
+        "link_index": 41,
+        "ifname": "eth0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1500,
+        "qdisc": "netem",
+        "operstate": "UP",
+        "linkmode": "DEFAULT",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "ea:1d:52:0c:4f:58",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 0
+      }
+    ]
+  },
+  "clock_proof": {
+    "robot": "94a8789a-1435-42a4-b375-70b597b799e7\nmonotonic           0         0\nboottime            0         0\n",
+    "operator": "94a8789a-1435-42a4-b375-70b597b799e7\nmonotonic           0         0\nboottime            0         0\n"
+  },
+  "install": {
+    "begin_ns": 2484521625300,
+    "end_ns": 2484543792842,
+    "argv": [
+      "tc",
+      "filter",
+      "add",
+      "dev",
+      "eth0",
+      "egress",
+      "protocol",
+      "ip",
+      "pref",
+      "49146",
+      "u32",
+      "match",
+      "u8",
+      "0x45",
+      "0xff",
+      "at",
+      "0",
+      "match",
+      "ip",
+      "protocol",
+      "17",
+      "0xff",
+      "match",
+      "ip",
+      "src",
+      "172.19.0.2/32",
+      "match",
+      "ip",
+      "dst",
+      "172.19.0.3/32",
+      "match",
+      "u16",
+      "0x00b9",
+      "0x1fff",
+      "at",
+      "6",
+      "action",
+      "drop"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "initial_counters": [
+    {
+      "packets": 0,
+      "drops": 0,
+      "bytes": 0
+    }
+  ],
+  "initial": {
+    "robot": {
+      "monotonic_ns": 2485549073759,
+      "event": "state",
+      "pid": 114,
+      "started_ns": 2485547699259,
+      "participant": "010f3dea7200d2cc00000000000001c1",
+      "writer": "010f3dea7200d2cc0000000000000103",
+      "reader": "010f3dea7200d2cc0000000000000204",
+      "writer_metadata_bytes": 4096,
+      "reader_metadata_bytes": 4096,
+      "peer_discovered": true,
+      "writer_matches": 0,
+      "reader_matches": 0,
+      "sent": 1,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0,
+      "unread": 0
+    },
+    "operator": {
+      "monotonic_ns": 2485544947717,
+      "event": "state",
+      "pid": 89,
+      "started_ns": 2485542668175,
+      "participant": "010f8e235900ca7600000000000001c1",
+      "writer": "010f8e235900ca760000000000000103",
+      "reader": "010f8e235900ca760000000000000204",
+      "writer_metadata_bytes": 0,
+      "reader_metadata_bytes": 0,
+      "peer_discovered": false,
+      "writer_matches": 0,
+      "reader_matches": 0,
+      "sent": 1,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0,
+      "unread": 0
+    }
+  },
+  "hold": {
+    "begin_ns": 2485944899842,
+    "end_ns": 2493945477096
+  },
+  "blocked": {
+    "robot": {
+      "monotonic_ns": 2493784121304,
+      "event": "state",
+      "pid": 114,
+      "started_ns": 2485547699259,
+      "participant": "010f3dea7200d2cc00000000000001c1",
+      "writer": "010f3dea7200d2cc0000000000000103",
+      "reader": "010f3dea7200d2cc0000000000000204",
+      "writer_metadata_bytes": 4096,
+      "reader_metadata_bytes": 4096,
+      "peer_discovered": true,
+      "writer_matches": 1,
+      "reader_matches": 1,
+      "sent": 78,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0,
+      "unread": 0
+    },
+    "operator": {
+      "monotonic_ns": 2493764768096,
+      "event": "state",
+      "pid": 89,
+      "started_ns": 2485542668175,
+      "participant": "010f8e235900ca7600000000000001c1",
+      "writer": "010f8e235900ca760000000000000103",
+      "reader": "010f8e235900ca760000000000000204",
+      "writer_metadata_bytes": 0,
+      "reader_metadata_bytes": 0,
+      "peer_discovered": true,
+      "writer_matches": 0,
+      "reader_matches": 0,
+      "sent": 78,
+      "received": 0,
+      "invalid": 0,
+      "reader_callbacks": 0,
+      "take_errors": 0,
+      "decode_calls": 0,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 0,
+      "unread": 0
+    }
+  },
+  "drops": [
+    {
+      "packets": 18,
+      "drops": 18,
+      "bytes": 27252
+    }
+  ],
+  "remove": {
+    "begin_ns": 2494182715929,
+    "end_ns": 2494204360513,
+    "argv": [
+      "tc",
+      "qdisc",
+      "del",
+      "dev",
+      "eth0",
+      "clsact"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "qualified": {
+    "robot": {
+      "monotonic_ns": 2495009308096,
+      "event": "state",
+      "pid": 114,
+      "started_ns": 2485547699259,
+      "participant": "010f3dea7200d2cc00000000000001c1",
+      "writer": "010f3dea7200d2cc0000000000000103",
+      "reader": "010f3dea7200d2cc0000000000000204",
+      "writer_metadata_bytes": 4096,
+      "reader_metadata_bytes": 4096,
+      "peer_discovered": true,
+      "writer_matches": 1,
+      "reader_matches": 1,
+      "sent": 90,
+      "received": 3,
+      "invalid": 0,
+      "reader_callbacks": 3,
+      "take_errors": 0,
+      "decode_calls": 3,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 28,
+      "unread": 0
+    },
+    "operator": {
+      "monotonic_ns": 2494997503763,
+      "event": "state",
+      "pid": 89,
+      "started_ns": 2485542668175,
+      "participant": "010f8e235900ca7600000000000001c1",
+      "writer": "010f8e235900ca760000000000000103",
+      "reader": "010f8e235900ca760000000000000204",
+      "writer_metadata_bytes": 0,
+      "reader_metadata_bytes": 0,
+      "peer_discovered": true,
+      "writer_matches": 1,
+      "reader_matches": 1,
+      "sent": 90,
+      "received": 3,
+      "invalid": 0,
+      "reader_callbacks": 3,
+      "take_errors": 0,
+      "decode_calls": 3,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 28,
+      "unread": 0
+    }
+  },
+  "steady": {
+    "begin_ns": 2495191453013,
+    "end_ns": 2498191861098
+  },
+  "final": {
+    "robot": {
+      "monotonic_ns": 2498089423348,
+      "event": "state",
+      "pid": 114,
+      "started_ns": 2485547699259,
+      "participant": "010f3dea7200d2cc00000000000001c1",
+      "writer": "010f3dea7200d2cc0000000000000103",
+      "reader": "010f3dea7200d2cc0000000000000204",
+      "writer_metadata_bytes": 4096,
+      "reader_metadata_bytes": 4096,
+      "peer_discovered": true,
+      "writer_matches": 1,
+      "reader_matches": 1,
+      "sent": 119,
+      "received": 32,
+      "invalid": 0,
+      "reader_callbacks": 32,
+      "take_errors": 0,
+      "decode_calls": 32,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 28,
+      "unread": 0
+    },
+    "operator": {
+      "monotonic_ns": 2498060574306,
+      "event": "state",
+      "pid": 89,
+      "started_ns": 2485542668175,
+      "participant": "010f8e235900ca7600000000000001c1",
+      "writer": "010f8e235900ca760000000000000103",
+      "reader": "010f8e235900ca760000000000000204",
+      "writer_metadata_bytes": 0,
+      "reader_metadata_bytes": 0,
+      "peer_discovered": true,
+      "writer_matches": 1,
+      "reader_matches": 1,
+      "sent": 118,
+      "received": 32,
+      "invalid": 0,
+      "reader_callbacks": 32,
+      "take_errors": 0,
+      "decode_calls": 32,
+      "decode_bad_length": 0,
+      "decode_bad_header": 0,
+      "last_payload_length": 28,
+      "unread": 0
+    }
+  },
+  "shutdown": {
+    "robot": {
+      "passed": true,
+      "children": [
+        {
+          "name": "native-dds",
+          "pid": 114,
+          "begin_ns": 2498231550556,
+          "initial_returncode": null,
+          "signal_sent": true,
+          "forced_kill": false,
+          "returncode": 0,
+          "error": null,
+          "signal_begin_ns": 2498231579515,
+          "signal_end_ns": 2498231687640,
+          "end_ns": 2498409816348,
+          "passed": true
+        }
+      ],
+      "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+    },
+    "operator": {
+      "passed": true,
+      "children": [
+        {
+          "name": "native-dds",
+          "pid": 89,
+          "begin_ns": 2498230259390,
+          "initial_returncode": null,
+          "signal_sent": true,
+          "forced_kill": false,
+          "returncode": 0,
+          "error": null,
+          "signal_begin_ns": 2498230325890,
+          "signal_end_ns": 2498230629140,
+          "end_ns": 2498409628598,
+          "passed": true
+        }
+      ],
+      "scope": "owned child processes only; explicit pre-signal status, SIGINT bracket, exit code and forced-kill outcome; not internal crash-cause attribution"
+    }
+  },
+  "assessment": {
+    "fresh_callbacks": {
+      "robot": 33,
+      "operator": 34
+    },
+    "original_endpoints_preserved": true,
+    "scope": "real native DDS endpoints and callbacks with deliberately enlarged discovery metadata; controlled N0 fixture, not ROS bridge/N5/historical cause acceptance"
+  },
+  "trace_status": {
+    "robot": {
+      "attempted": 101,
+      "recorded": 101,
+      "limit": 2048,
+      "exhausted": false,
+      "dds_closed": true,
+      "shutdown_ns": 14121834
+    },
+    "operator": {
+      "attempted": 99,
+      "recorded": 99,
+      "limit": 2048,
+      "exhausted": false,
+      "dds_closed": true,
+      "shutdown_ns": 12705667
+    }
+  },
+  "captures": {
+    "robot": {
+      "records": 282,
+      "first_timestamp_ns": 1794146880733072000,
+      "last_timestamp_ns": 1794146893464842000,
+      "classes": {
+        "out/dds_rtps": {
+          "packets": 169,
+          "ethernet_bytes": 39542,
+          "udp_payload_bytes": 32444
+        },
+        "in/dds_rtps": {
+          "packets": 87,
+          "ethernet_bytes": 23730,
+          "udp_payload_bytes": 20076
+        },
+        "out/ipv4_udp_fragment": {
+          "packets": 26,
+          "ethernet_bytes": 36732,
+          "udp_payload_bytes": null,
+          "ip_fragment_payload_bytes": 35848
+        }
+      },
+      "unaccounted": {},
+      "fec": {
+        "in": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        },
+        "out": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        }
+      },
+      "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 282,
+        "filtered_records": 282,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      }
+    },
+    "operator": {
+      "records": 264,
+      "first_timestamp_ns": 1794146880733113000,
+      "last_timestamp_ns": 1794146893464874000,
+      "classes": {
+        "in/dds_rtps": {
+          "packets": 169,
+          "ethernet_bytes": 39542,
+          "udp_payload_bytes": 32444
+        },
+        "out/dds_rtps": {
+          "packets": 87,
+          "ethernet_bytes": 23730,
+          "udp_payload_bytes": 20076
+        },
+        "in/ipv4_udp_fragment": {
+          "packets": 8,
+          "ethernet_bytes": 9480,
+          "udp_payload_bytes": null,
+          "ip_fragment_payload_bytes": 9208
+        }
+      },
+      "unaccounted": {},
+      "fec": {
+        "in": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        },
+        "out": {
+          "parity_to_source_frame_bytes": null,
+          "source_frame_bytes": 0,
+          "parity_frame_bytes": 0
+        }
+      },
+      "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+      "footer": {
+        "capture_backend": "filtered_packet_socket",
+        "captured_records": 264,
+        "filtered_records": 264,
+        "kernel_drops": 0,
+        "file_integrity_valid": true,
+        "population_reconciled": true
+      }
+    }
+  }
+}

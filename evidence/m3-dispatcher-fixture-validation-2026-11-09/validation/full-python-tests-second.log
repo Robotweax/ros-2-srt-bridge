@@ -1,0 +1,26 @@
+..........................usage: python3.14 -m unittest [-h] --freeze FREEZE [--execute]
+                              [--authorization AUTHORIZATION]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: execution requires a separate authorization file and fresh output
+.E.......................................................................................................baseline failed
+baseline passed
+fragment-cut passed
+.....................................................................................................................................................................................................................................................................................................................
+======================================================================
+ERROR: test_combined_runner_refuses_existing_output_before_lab (test_m3_campaign_dispatcher.CampaignDispatcherTests.test_combined_runner_refuses_existing_output_before_lab)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tests/test_m3_campaign_dispatcher.py", line 94, in test_combined_runner_refuses_existing_output_before_lab
+    run_m3.main(['--skip-build','--runtime-layout','sender-reconcile','--output',str(self.out)])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/run_m3.py", line 91, in main
+    run.relative_to(ROOT)
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 490, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/private/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpr8il7al6/.local/new-campaign' is not in the subpath of '/var/folders/2d/n26zdh7d4js6rgw5ncwy94x40000gn/T/tmpr8il7al6'
+
+----------------------------------------------------------------------
+Ran 440 tests in 3.265s
+
+FAILED (errors=1)

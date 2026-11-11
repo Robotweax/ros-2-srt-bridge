@@ -1,0 +1,15 @@
+versions
+/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T203905001506Z
+Traceback (most recent call last):
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/run_m3.py", line 222, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/run_m3.py", line 138, in main
+    report['controlled_control_fault']=m3_control_fault.start(lab,args.control_egress_fault)
+                                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_control_fault.py", line 57, in start
+    return dict(role=role, peer=peer, install=installed, initial_counters=counters(state), restored=False,
+                                                                          ~~~~~~~~^^^^^^^
+  File "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/tools/m3_control_fault.py", line 30, in counters
+    raise ValueError('unexpected CONTROL filter')
+ValueError: unexpected CONTROL filter

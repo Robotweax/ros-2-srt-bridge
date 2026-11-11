@@ -1,0 +1,170 @@
+{
+  "status": "observed_native_post_sigint_fixture_metadata",
+  "task_records": 9,
+  "readable_task_records": 9,
+  "observed_task_disappearances": 1,
+  "content_read_results": {
+    "ok": 54,
+    "unavailable": 0
+  },
+  "directory_presence": {
+    "present": 9,
+    "absent": 0,
+    "unavailable": 0
+  },
+  "confirmed_task_exits": 0,
+  "raw_footer": {
+    "kind": "status",
+    "completed": true,
+    "reason": "parent_stop",
+    "samples": 5,
+    "sample_limit": 48,
+    "budget_exhausted": false,
+    "kernel_stack_reads_ok": 9,
+    "kernel_stack_reads_unavailable": 0,
+    "userspace_stacks_requested": false,
+    "end_ns": 9524298962,
+    "scope": "kernel stacks may be denied; userspace GDB attaches pause target and do not qualify timing or prove resumption; no outcome/replay authority"
+  },
+  "parent_identity": {
+    "pid": 7,
+    "start_ticks": 769
+  },
+  "worker_identity": {
+    "tid": 8,
+    "start_ticks": 785,
+    "name": "python3",
+    "state": "R"
+  },
+  "signal_begin_ns": 8632200837,
+  "signal_end_ns": 8632290170,
+  "signal_wait": {
+    "calibration_id": "tvis-post-20261110t181016559412z",
+    "target_pid": 7,
+    "target_start_ticks": 769,
+    "worker_tid": 8,
+    "worker_start_ticks": 785,
+    "wait_enter_ns": 8632295462
+  },
+  "signal_seen": {
+    "calibration_id": "tvis-post-20261110t181016559412z",
+    "target_pid": 7,
+    "target_start_ticks": 769,
+    "worker_tid": 8,
+    "worker_start_ticks": 785,
+    "monotonic_ns": 8632702878
+  },
+  "pre_signal_live": {
+    "samples": 2,
+    "first_begin_ns": 8260212753,
+    "last_end_ns": 8511473462
+  },
+  "post_signal_live": {
+    "samples": 2,
+    "first_begin_ns": 8763077170,
+    "last_end_ns": 9017513712
+  },
+  "controlled_absence": {
+    "kind": "not_enumerated_after_prior_identity",
+    "observed_begin_ns": 9269246545,
+    "observed_end_ns": 9269270045,
+    "sample_begin_ns": 9269103837,
+    "sample_end_ns": 9269433045,
+    "confirmed_exit": false
+  },
+  "worker_join": {
+    "calibration_id": "tvis-post-20261110t181016559412z",
+    "target_pid": 7,
+    "target_start_ticks": 769,
+    "worker_tid": 8,
+    "worker_start_ticks": 785,
+    "joined": true,
+    "release_ns": 9105082587,
+    "monotonic_ns": 9106451629
+  },
+  "stages": [
+    {
+      "sequence": 1,
+      "point": "worker_started",
+      "monotonic_ns": 7859046420,
+      "pid": 7,
+      "tid": 8,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z",
+      "task_identity": {
+        "tid": 8,
+        "start_ticks": 785,
+        "name": "python3",
+        "state": "R"
+      }
+    },
+    {
+      "sequence": 2,
+      "point": "fixture_ready",
+      "monotonic_ns": 7861706295,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    },
+    {
+      "sequence": 3,
+      "point": "fixture_sigint",
+      "monotonic_ns": 8632702878,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    },
+    {
+      "sequence": 4,
+      "point": "worker_release",
+      "monotonic_ns": 9105082587,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    },
+    {
+      "sequence": 5,
+      "point": "worker_return",
+      "monotonic_ns": 9105331879,
+      "pid": 7,
+      "tid": 8,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    },
+    {
+      "sequence": 6,
+      "point": "worker_joined",
+      "monotonic_ns": 9106451629,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    },
+    {
+      "sequence": 7,
+      "point": "absence_acknowledged",
+      "monotonic_ns": 9324531629,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z",
+      "absence_end_ns": 9269270045
+    },
+    {
+      "sequence": 8,
+      "point": "fixture_exit",
+      "monotonic_ns": 9324679212,
+      "pid": 7,
+      "tid": 7,
+      "dropped_before": 0,
+      "calibration_id": "tvis-post-20261110t181016559412z"
+    }
+  ],
+  "signal_end_to_reap_ns": 747334500,
+  "child_end_ns": 9379624670,
+  "no_exact_mid_read_race_or_unseen_reuse_qualification": true,
+  "no_SDK_ROS_SRT_workload_or_overhead_qualification": true
+}

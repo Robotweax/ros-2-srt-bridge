@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Explicit M3 experiment: UDP/SHM packetization as udp1200, with only the two
+     sensor writers sharing 1600 bytes per 50 ms. Not an Ethernet rate guarantee.
+     Controls/discovery/services retain their default unthrottled controller. -->
+<dds xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <profiles>
+    <transport_descriptors>
+      <transport_descriptor><transport_id>m3_udp1200</transport_id><type>UDPv4</type><maxMessageSize>1200</maxMessageSize></transport_descriptor>
+      <transport_descriptor><transport_id>m3_shm1200</transport_id><type>SHM</type><maxMessageSize>1200</maxMessageSize></transport_descriptor>
+    </transport_descriptors>
+    <participant profile_name="m3_paced_sensors" is_default_profile="true">
+      <rtps>
+        <userTransports><transport_id>m3_udp1200</transport_id><transport_id>m3_shm1200</transport_id></userTransports>
+        <useBuiltinTransports>false</useBuiltinTransports>
+        <flow_controller_descriptor_list>
+          <flow_controller_descriptor><name>m3_sensors_32k</name><scheduler>FIFO</scheduler><max_bytes_per_period>1600</max_bytes_per_period><period_ms>50</period_ms></flow_controller_descriptor>
+        </flow_controller_descriptor_list>
+      </rtps>
+    </participant>
+    <publisher profile_name="m3_default_writer" is_default_profile="true">
+      <qos><publishMode><kind>SYNCHRONOUS</kind></publishMode><data_sharing><kind>OFF</kind></data_sharing></qos>
+      <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+    </publisher>
+    <subscriber profile_name="m3_default_reader" is_default_profile="true">
+      <qos><data_sharing><kind>OFF</kind></data_sharing></qos>
+      <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+    </subscriber>
+    <publisher profile_name="/robot/imu">
+      <qos><publishMode><kind>ASYNCHRONOUS</kind><flow_controller_name>m3_sensors_32k</flow_controller_name></publishMode><data_sharing><kind>OFF</kind></data_sharing></qos>
+      <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+    </publisher>
+    <publisher profile_name="/robot/joint_states">
+      <qos><publishMode><kind>ASYNCHRONOUS</kind><flow_controller_name>m3_sensors_32k</flow_controller_name></publishMode><data_sharing><kind>OFF</kind></data_sharing></qos>
+      <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+    </publisher>
+  </profiles>
+</dds>

@@ -26,6 +26,13 @@ enum class ClockError {
     none, unqualified, expired, epoch_mismatch, domain_mismatch, invalid_probe,
     clock_regressed, contradictory, arithmetic_overflow, future_sample
 };
+// Read-only owner diagnostics. No clock check or mutation is performed.
+struct ClockObservation {
+    ClockError error=ClockError::unqualified;
+    bool observed=false;
+    std::uint64_t anchor_ns=0;
+    Interval offset{};
+};
 struct AgeResult {
     ClockError error = ClockError::unqualified;
     std::optional<Interval> age_ns;
@@ -50,6 +57,7 @@ public:
     std::optional<std::uint64_t> qualification_deadline() const noexcept;
     std::optional<Interval> offset_at_probe() const noexcept;
     ClockError state() const noexcept { return error_; }
+    ClockObservation observation() const noexcept { return {error_,observed_,static_cast<std::uint64_t>(anchor_),offset_}; }
 private:
     ClockConfig config_;
     Identity local_epoch_{}, remote_epoch_{};

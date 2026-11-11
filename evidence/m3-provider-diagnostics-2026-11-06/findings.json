@@ -1,0 +1,726 @@
+{
+  "source_commit": "0ace537fc03e66cf890e54229a4805eaeaf628c4",
+  "qualification": false,
+  "runs": {
+    "smoke": {
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T201641210559Z",
+      "status": "passed",
+      "profile": "N0",
+      "seconds": 15,
+      "seed": 1701,
+      "source_hashes_match": true,
+      "command_summary": {
+        "attempts": 8,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 8,
+          "p50": 105.367583,
+          "p95": 257.626501,
+          "p99": 257.626501,
+          "maximum": 257.626501
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 8,
+            "p50": 105.367583,
+            "p95": 257.626501,
+            "p99": 257.626501,
+            "maximum": 257.626501
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 0,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 8,
+        "effects": 8
+      },
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 271,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 237,
+          "active_available_records": 148,
+          "max_read_duration_ns": 599041,
+          "max_sample_start_gap_ns": 114384041,
+          "unavailable": {
+            "1": 34
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 23,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 19,
+          "active_available_records": 0,
+          "max_read_duration_ns": 689167,
+          "max_sample_start_gap_ns": 109824000,
+          "unavailable": {
+            "1": 3,
+            "2": 1
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 226,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 222,
+          "active_available_records": 150,
+          "max_read_duration_ns": 650000,
+          "max_sample_start_gap_ns": 107928416,
+          "unavailable": {
+            "1": 3,
+            "2": 1
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        }
+      },
+      "active_control_events": [],
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 42,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "captures": {
+        "operator": {
+          "records": 8035,
+          "first_timestamp_ns": 1793996208839715000,
+          "last_timestamp_ns": 1793996233983674000,
+          "classes": {
+            "in/control_srt_control": {
+              "packets": 154,
+              "ethernet_bytes": 12828,
+              "udp_payload_bytes": 6360
+            },
+            "out/control_srt_control": {
+              "packets": 150,
+              "ethernet_bytes": 12548,
+              "udp_payload_bytes": 6248
+            },
+            "in/control_source_data": {
+              "packets": 79,
+              "ethernet_bytes": 15611,
+              "udp_payload_bytes": 12293
+            },
+            "out/control_source_data": {
+              "packets": 73,
+              "ethernet_bytes": 13544,
+              "udp_payload_bytes": 10478
+            },
+            "in/sensor_srt_control": {
+              "packets": 1487,
+              "ethernet_bytes": 93874,
+              "udp_payload_bytes": 31420
+            },
+            "out/sensor_srt_control": {
+              "packets": 1483,
+              "ethernet_bytes": 128786,
+              "udp_payload_bytes": 66500
+            },
+            "in/sensor_source_data": {
+              "packets": 3688,
+              "ethernet_bytes": 1778884,
+              "udp_payload_bytes": 1623988
+            },
+            "in/sensor_fec_parity": {
+              "packets": 921,
+              "ethernet_bytes": 1051782,
+              "udp_payload_bytes": 1013100
+            }
+          },
+          "unaccounted": {},
+          "fec": {
+            "in": {
+              "parity_to_source_frame_bytes": 0.5912594637986512,
+              "source_frame_bytes": 1778884,
+              "parity_frame_bytes": 1051782
+            },
+            "out": {
+              "parity_to_source_frame_bytes": null,
+              "source_frame_bytes": 0,
+              "parity_frame_bytes": 0
+            }
+          },
+          "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+          "tcpdump_reported_packets": 8035,
+          "tcpdump_reported_filtered_packets": 8035,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        },
+        "robot": {
+          "records": 8035,
+          "first_timestamp_ns": 1793996208839689000,
+          "last_timestamp_ns": 1793996233983646000,
+          "classes": {
+            "out/control_srt_control": {
+              "packets": 154,
+              "ethernet_bytes": 12828,
+              "udp_payload_bytes": 6360
+            },
+            "in/control_srt_control": {
+              "packets": 150,
+              "ethernet_bytes": 12548,
+              "udp_payload_bytes": 6248
+            },
+            "out/control_source_data": {
+              "packets": 79,
+              "ethernet_bytes": 15611,
+              "udp_payload_bytes": 12293
+            },
+            "in/control_source_data": {
+              "packets": 73,
+              "ethernet_bytes": 13544,
+              "udp_payload_bytes": 10478
+            },
+            "out/sensor_srt_control": {
+              "packets": 1487,
+              "ethernet_bytes": 93874,
+              "udp_payload_bytes": 31420
+            },
+            "in/sensor_srt_control": {
+              "packets": 1483,
+              "ethernet_bytes": 128786,
+              "udp_payload_bytes": 66500
+            },
+            "out/sensor_source_data": {
+              "packets": 3688,
+              "ethernet_bytes": 1778884,
+              "udp_payload_bytes": 1623988
+            },
+            "out/sensor_fec_parity": {
+              "packets": 921,
+              "ethernet_bytes": 1051782,
+              "udp_payload_bytes": 1013100
+            }
+          },
+          "unaccounted": {},
+          "fec": {
+            "in": {
+              "parity_to_source_frame_bytes": null,
+              "source_frame_bytes": 0,
+              "parity_frame_bytes": 0
+            },
+            "out": {
+              "parity_to_source_frame_bytes": 0.5912594637986512,
+              "source_frame_bytes": 1778884,
+              "parity_frame_bytes": 1051782
+            }
+          },
+          "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+          "tcpdump_reported_packets": 8035,
+          "tcpdump_reported_filtered_packets": 8035,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "pcap_population_reconciled": true,
+      "monotonic_capture_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 8050,
+          "seen": 8050,
+          "submitted": 8050,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 683728287059,
+          "stop_before_ns": 717100406116,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 8051,
+          "seen": 8051,
+          "submitted": 8051,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 683728286976,
+          "stop_before_ns": 717272372949,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 3773,
+        "observer_received": 3638,
+        "missing": 135,
+        "losses": {
+          "upstream_dds": 1,
+          "validation": 0,
+          "admission": 6,
+          "ingress_replaced": 1,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 127,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 0,
+          "receiver_rejected": 0,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 0
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 15.092026715,
+        "source_actual_hz": {
+          "imu": 199.97314191078146,
+          "joints": 50.026415554221344
+        },
+        "published": 3638,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 2890,
+            "rounding": "up to 1ms",
+            "maximum_ms": 16,
+            "p50_ms": 10,
+            "p95_ms": 12,
+            "p99_ms": 13
+          },
+          "joint": {
+            "count": 748,
+            "rounding": "up to 1ms",
+            "maximum_ms": 30,
+            "p50_ms": 17,
+            "p95_ms": 26,
+            "p99_ms": 28
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "interpretation": "No active CONTROL loss reproduced; instrumentation validation only; historical initiating cause remains open"
+    },
+    "n5": {
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261106T201731773271Z",
+      "status": "passed",
+      "profile": "N5",
+      "seconds": 90,
+      "seed": 1701,
+      "source_hashes_match": true,
+      "command_summary": {
+        "attempts": 39,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 39,
+          "p50": 907.718084,
+          "p95": 3457.620044,
+          "p99": 3813.71771,
+          "maximum": 3813.71771
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 39,
+            "p50": 907.718084,
+            "p95": 3457.620044,
+            "p99": 3813.71771,
+            "maximum": 3813.71771
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 6,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 39,
+        "effects": 39
+      },
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 974,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 938,
+          "active_available_records": 861,
+          "max_read_duration_ns": 650208,
+          "max_sample_start_gap_ns": 113283167,
+          "unavailable": {
+            "1": 36
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 24,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 20,
+          "active_available_records": 0,
+          "max_read_duration_ns": 637125,
+          "max_sample_start_gap_ns": 112572041,
+          "unavailable": {
+            "1": 3,
+            "2": 1
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 959,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "available_records": 955,
+          "active_available_records": 896,
+          "max_read_duration_ns": 673250,
+          "max_sample_start_gap_ns": 110986792,
+          "unavailable": {
+            "1": 3,
+            "2": 1
+          },
+          "idle_timeout_readbacks_ms": [
+            5000
+          ]
+        }
+      },
+      "active_control_events": [],
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 135,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "captures": {
+        "operator": {
+          "records": 39550,
+          "first_timestamp_ns": 1793996254501141000,
+          "last_timestamp_ns": 1793996360104016000,
+          "classes": {
+            "in/other_udp": {
+              "packets": 714,
+              "ethernet_bytes": 760104,
+              "udp_payload_bytes": 730116
+            },
+            "out/other_udp": {
+              "packets": 1,
+              "ethernet_bytes": 46,
+              "udp_payload_bytes": 4
+            },
+            "in/control_srt_control": {
+              "packets": 732,
+              "ethernet_bytes": 54472,
+              "udp_payload_bytes": 23728
+            },
+            "out/control_srt_control": {
+              "packets": 1217,
+              "ethernet_bytes": 95734,
+              "udp_payload_bytes": 44620
+            },
+            "in/control_source_data": {
+              "packets": 752,
+              "ethernet_bytes": 161109,
+              "udp_payload_bytes": 129525
+            },
+            "out/control_source_data": {
+              "packets": 917,
+              "ethernet_bytes": 161023,
+              "udp_payload_bytes": 122509
+            },
+            "in/sensor_srt_control": {
+              "packets": 8132,
+              "ethernet_bytes": 521996,
+              "udp_payload_bytes": 180452
+            },
+            "out/sensor_srt_control": {
+              "packets": 18323,
+              "ethernet_bytes": 1360162,
+              "udp_payload_bytes": 590596
+            },
+            "in/sensor_source_data": {
+              "packets": 8126,
+              "ethernet_bytes": 3935304,
+              "udp_payload_bytes": 3594012
+            },
+            "in/sensor_fec_parity": {
+              "packets": 636,
+              "ethernet_bytes": 726312,
+              "udp_payload_bytes": 699600
+            }
+          },
+          "unaccounted": {},
+          "fec": {
+            "in": {
+              "parity_to_source_frame_bytes": 0.18456312396704294,
+              "source_frame_bytes": 3935304,
+              "parity_frame_bytes": 726312
+            },
+            "out": {
+              "parity_to_source_frame_bytes": null,
+              "source_frame_bytes": 0,
+              "parity_frame_bytes": 0
+            }
+          },
+          "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+          "tcpdump_reported_packets": 39550,
+          "tcpdump_reported_filtered_packets": 39550,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        },
+        "robot": {
+          "records": 39550,
+          "first_timestamp_ns": 1793996254501108000,
+          "last_timestamp_ns": 1793996360103983000,
+          "classes": {
+            "out/other_udp": {
+              "packets": 714,
+              "ethernet_bytes": 760104,
+              "udp_payload_bytes": 730116
+            },
+            "in/other_udp": {
+              "packets": 1,
+              "ethernet_bytes": 46,
+              "udp_payload_bytes": 4
+            },
+            "out/control_srt_control": {
+              "packets": 732,
+              "ethernet_bytes": 54472,
+              "udp_payload_bytes": 23728
+            },
+            "in/control_srt_control": {
+              "packets": 1217,
+              "ethernet_bytes": 95734,
+              "udp_payload_bytes": 44620
+            },
+            "out/control_source_data": {
+              "packets": 752,
+              "ethernet_bytes": 161109,
+              "udp_payload_bytes": 129525
+            },
+            "in/control_source_data": {
+              "packets": 917,
+              "ethernet_bytes": 161023,
+              "udp_payload_bytes": 122509
+            },
+            "out/sensor_srt_control": {
+              "packets": 8132,
+              "ethernet_bytes": 521996,
+              "udp_payload_bytes": 180452
+            },
+            "in/sensor_srt_control": {
+              "packets": 18323,
+              "ethernet_bytes": 1360162,
+              "udp_payload_bytes": 590596
+            },
+            "out/sensor_source_data": {
+              "packets": 8126,
+              "ethernet_bytes": 3935304,
+              "udp_payload_bytes": 3594012
+            },
+            "out/sensor_fec_parity": {
+              "packets": 636,
+              "ethernet_bytes": 726312,
+              "udp_payload_bytes": 699600
+            }
+          },
+          "unaccounted": {},
+          "fec": {
+            "in": {
+              "parity_to_source_frame_bytes": null,
+              "source_frame_bytes": 0,
+              "parity_frame_bytes": 0
+            },
+            "out": {
+              "parity_to_source_frame_bytes": 0.18456312396704294,
+              "source_frame_bytes": 3935304,
+              "parity_frame_bytes": 726312
+            }
+          },
+          "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+          "tcpdump_reported_packets": 39550,
+          "tcpdump_reported_filtered_packets": 39550,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_file_integrity_valid": true,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "pcap_population_reconciled": true,
+      "monotonic_capture_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 39598,
+          "seen": 39598,
+          "submitted": 39598,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 734432723581,
+          "stop_before_ns": 841655488172,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 39603,
+          "seen": 39603,
+          "submitted": 39603,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 734432699623,
+          "stop_before_ns": 841825101547,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 22534,
+        "observer_received": 7173,
+        "missing": 15361,
+        "losses": {
+          "upstream_dds": 0,
+          "validation": 0,
+          "admission": 31,
+          "ingress_replaced": 2,
+          "ingress_flushed": 307,
+          "input_rejected": 11,
+          "outbound_replaced": 682,
+          "outbound_expired": 0,
+          "outbound_flushed": 4,
+          "srt_accept_to_receiver_gap": 14085,
+          "receiver_rejected": 239,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 0
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 90.13566825,
+        "source_actual_hz": {
+          "imu": 199.9985172351568,
+          "joints": 50.00240290557784
+        },
+        "published": 7173,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 5969,
+            "rounding": "up to 1ms",
+            "maximum_ms": 180,
+            "p50_ms": 106,
+            "p95_ms": 134,
+            "p99_ms": 145
+          },
+          "joint": {
+            "count": 1204,
+            "rounding": "up to 1ms",
+            "maximum_ms": 170,
+            "p50_ms": 113,
+            "p95_ms": 143,
+            "p99_ms": 155
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "interpretation": "No active CONTROL loss reproduced; instrumentation validation only; historical initiating cause remains open"
+    }
+  },
+  "limits": [
+    "Single diagnostic execution, no retry or replacement of failed N5 cohorts",
+    "Provider counters exclude some UDP types; API reads add mutex/bookkeeping work",
+    "Zero RTT need not represent a latency estimate",
+    "No historical initiator or delivery inference"
+  ]
+}

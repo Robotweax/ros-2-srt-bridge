@@ -5,8 +5,12 @@
 #include <robotweax/srt_bridge/errors.hpp>
 #include <robotweax/srt_bridge/bandwidth.hpp>
 #include <robotweax/srt_bridge/reconnect.hpp>
+#include <robotweax/srt_bridge/command_trace.hpp>
+#include <robotweax/srt_bridge/provider_diagnostics.hpp>
+#include <robotweax/srt_bridge/sample_trace.hpp>
 #include <robotweax/srt_bridge/session.hpp>
 #include <memory>
+#include <robotweax/srt_bridge/shutdown_trace.hpp>
 
 namespace robotweax::srt_bridge {
 struct Endpoint { std::string address; std::uint16_t port=0; };
@@ -15,6 +19,15 @@ struct TransportConfig {
     Endpoint control,sensor; // Numeric IPv4/IPv6, same family. Listener may use port zero.
     std::string passphrase;
     BandwidthConfig bandwidth{1000000,128000,131072,16384,65536};
+    std::shared_ptr<CommandTrace> command_trace{}; // Opt-in, lossy diagnostics only.
+    std::shared_ptr<ProviderDiagnostics> provider_diagnostics{}; // CONTROL only; non-clearing SDK reads add observer work.
+    std::shared_ptr<SampleTrace> sample_trace{}; // Opt-in ROS admission / SENSOR SDK handoff observations.
+    std::shared_ptr<ProviderDiagnostics> sensor_provider_diagnostics{}; // Independent opt-in SENSOR SDK reads.
+    bool start_diagnostics=false; // Requires command_trace; bounded start-stage observations.
+    bool sender_diagnostics=false; // Requires command_trace; no outcome/replay authority.
+    bool probe_diagnostics=false; // Requires command_trace; per-probe lifecycle only.
+    std::shared_ptr<ShutdownTrace> shutdown_trace{}; // Opt-in lifecycle only; no IPC or outcome authority.
+    bool test_hold_command_handoff=false; // Test-only context-loss fixture; never ROS/CLI/env configured.
 };
 struct TransportContext {
     Identity session{};
@@ -34,6 +47,8 @@ struct TransportSnapshot {
     std::size_t control_ingress=0,control_received=0;
     std::uint64_t received=0,sent=0,rejected=0,stale_work=0,sensor_replaced=0;
     std::uint64_t errors_sent=0,errors_received=0,unmatched_errors=0;
+    std::uint64_t sensor_submitted=0,sensor_ingress_replaced=0,sensor_ingress_flushed=0,sensor_inputs=0,sensor_input_rejected=0,sensor_outbound_replaced=0,sensor_outbound_expired=0,sensor_outbound_flushed=0,sensor_sent=0,sensor_receive_replaced=0,sensor_receive_flushed=0,sensor_polled=0,sensor_poll_expired=0,sensor_ingress_pending=0,sensor_outbound_pending=0,sensor_receive_pending=0;
+    std::uint64_t samples_received=0,samples_rejected=0,samples_unknown_age=0,samples_stale=0;
 };
 struct TransportMessage {
     TransportContext context{};
@@ -41,6 +56,7 @@ struct TransportMessage {
     std::array<std::byte,control_message_bytes-envelope_bytes> payload{};
     std::size_t size=0;
     std::uint64_t evaluated_ns=0,deadline_ns=0,publication_epoch=0;
+    bool expiry_only=false; // Verified stale COMMAND: journal/status only, never dispatch.
     std::span<const std::byte> body() const noexcept { return {payload.data(),size}; }
 };
 struct CommandCheck {
@@ -48,6 +64,8 @@ struct CommandCheck {
     TransportContext context{};
     SessionError error=SessionError::invalid_state;
     bool start_granted=false;
+    std::uint32_t grant_slot=UINT32_MAX;
+    std::uint64_t grant_generation=0,clock_deadline_ns=0;
     bool fresh() const noexcept { return error==SessionError::none; }
 };
 // One thread exclusively owns all provider sockets/epoll, Session, outbound
@@ -69,6 +87,9 @@ public:
     // Only a newly committed sender-worker admission can supply this ticket.
     // BUSY leaves it usable; QUEUED consumes it once. No receiver execution grant.
     SubmitResult submit_command(TransportContext context,DurableCommandTicket&& ticket);
+    // Retire only an unclaimed local ticket. Not cancellation after handoff.
+    // Retain its receipt before calling, then reconcile through its worker.
+    bool abandon_unsubmitted_command(DurableCommandTicket&& ticket);
     // CONTROL is FIFO (64); samples latest-only per route. Poll copies ownership.
     // Sample deadlines are rechecked at poll. Consumers must still recheck before
     // deferred publication. Neither poll method authorizes command execution.

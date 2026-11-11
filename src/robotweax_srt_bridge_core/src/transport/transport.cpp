@@ -1,6 +1,7 @@
 #include <robotweax/srt_bridge/transport.hpp>
 #include <robotweax/srt_bridge/queues.hpp>
 #include "../worker/execution_pool.hpp"
+#include "receiver_retention.hpp"
 #include <srt/srt.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -17,8 +18,14 @@ constexpr std::uint64_t second=1000000000;
 std::mutex provider_mutex;
 unsigned provider_users=0;
 struct Provider {
-    Provider(){std::lock_guard lock(provider_mutex);if(!provider_users&&srt_startup()==SRT_ERROR)throw std::runtime_error("SRT startup failed");++provider_users;}
-    ~Provider(){std::lock_guard lock(provider_mutex);if(!--provider_users)srt_cleanup();}
+    std::shared_ptr<ShutdownTrace> diagnostic;
+    explicit Provider(std::shared_ptr<ShutdownTrace> trace):diagnostic(std::move(trace)){std::lock_guard lock(provider_mutex);if(!provider_users&&srt_startup()==SRT_ERROR)throw std::runtime_error("SRT startup failed");++provider_users;}
+    ~Provider(){
+        shutdown_stage(diagnostic,"provider_release_begin");
+        std::lock_guard lock(provider_mutex);shutdown_stage(diagnostic,"provider_release_locked");
+        if(!--provider_users){shutdown_stage(diagnostic,"provider_cleanup_begin");srt_cleanup();shutdown_stage(diagnostic,"provider_cleanup_end");}
+        shutdown_stage(diagnostic,"provider_release_end");
+    }
 };
 void require(bool ok){if(!ok)throw std::runtime_error("transport provider operation failed");}
 template<class T> void set(SRTSOCKET s,SRT_SOCKOPT option,T value){require(srt_setsockflag(s,option,&value,sizeof(value))!=SRT_ERROR);}
@@ -67,20 +74,29 @@ struct TransportOwner::Impl {
     std::array<std::uint32_t,8> route_ids{};
     std::size_t route_count=0;
     int epoll=-1;
-    std::uint64_t next_probe=0;
+    std::uint64_t next_probe=0;std::array<std::uint64_t,2> next_provider_sample{};
+    std::uint64_t probe_sdk_busy_sequence=0; // Diagnostic suppression only.
     std::atomic<bool> stopping{false};
     std::thread thread;
     mutable std::mutex mutex;
     TransportSnapshot shared{},current{};
+    struct MailboxCounts {std::uint64_t sensor_submitted=0,sensor_ingress_replaced=0,sensor_ingress_flushed=0,sensor_inputs=0,sensor_receive_replaced=0,sensor_receive_flushed=0,sensor_polled=0,sensor_poll_expired=0;} mailbox_counts;
+    void flush_mailboxes(){
+        mailbox_counts.sensor_ingress_flushed+=std::count(sample_pending.begin(),sample_pending.end(),true);
+        mailbox_counts.sensor_receive_flushed+=std::count(sample_received.begin(),sample_received.end(),true);
+        sample_pending.fill(false);sample_received.fill(false);
+    }
     std::array<Input,8> samples{};
     std::array<bool,8> sample_pending{},sample_received{};
     std::array<Input,64> controls{};
     std::size_t input_head=0,input_count=0,input_commands=0;
+    std::optional<Input> pending_command{};bool pending_clock_reported=false;
     std::array<std::shared_ptr<DurableCommandTicket::Proof>,64> command_proofs{};
     std::array<TransportMessage,64> incoming{};
-    std::size_t output_head=0,output_count=0,sample_cursor=0;
+    std::size_t output_head=0,output_count=0,received_commands=0,sample_cursor=0;
+    ReceiverRetention retained;
     std::array<TransportMessage,8> incoming_samples{};
-    std::uint64_t publication_epoch=1;bool publication_allowed=false;
+    std::uint64_t publication_epoch=1;bool publication_allowed=false;bool shutting_down=false;
     struct CheckSlot {unsigned state=0;TransportContext context{};Envelope envelope{};CommandCheck result{};std::shared_ptr<execution_detail::Record> proof{};};
     std::array<CheckSlot,64> checks{};
     std::size_t check_cursor=0,check_poll_cursor=0;
@@ -109,13 +125,57 @@ struct TransportOwner::Impl {
     }
     explicit Impl(TransportConfig c):config(std::move(c)),control_address(config.control),sensor_address(config.sensor),
         session(config.session),queues(config.session.manifest),budget(config.bandwidth,monotonic_ns()) {
+        if(config.start_diagnostics&&!config.command_trace)throw std::invalid_argument("start diagnostics require command trace");
+        if(config.sender_diagnostics&&!config.command_trace)throw std::invalid_argument("sender diagnostics require command trace");
+        if(config.probe_diagnostics&&!config.command_trace)throw std::invalid_argument("probe diagnostics require command trace");
         if(control_address.ipv6!=sensor_address.ipv6||config.passphrase.size()<10||config.passphrase.size()>79||
            (config.session.role==Role::caller&&(!config.control.port||!config.sensor.port)))throw std::invalid_argument("invalid transport endpoints or credential length");
         for(const auto& route:config.session.manifest.routes())route_ids[route_count++]=route.id;
         thread=std::thread([this]{run();});
     }
     ~Impl(){stopping=true;if(thread.joinable())thread.join();}
+    void trace(CommandTracePoint point,CommandTraceReason reason,const Identity& id={},std::uint32_t route=0,unsigned value=0,unsigned detail=0){
+        if(!config.command_trace)return;
+        const auto c=context();
+        config.command_trace->record(CommandTraceProducer::transport,{0,monotonic_ns(),point,reason,id,c.session,config.session.local_epoch,
+            c.control_generation,c.sensor_generation,route,value,{},detail});
+    }
     TransportContext context()const{return {session.session_id(),links[0].generation,links[1].generation};}
+    static void abandon(const std::shared_ptr<DurableCommandTicket::Proof>& proof){
+        if(proof){auto expected=SubmissionDisposition::queued;proof->disposition.compare_exchange_strong(expected,SubmissionDisposition::abandoned,std::memory_order_release,std::memory_order_relaxed);}
+    }
+    static bool probe_kind(Kind kind){return kind==Kind::time_probe||kind==Kind::time_reply;}
+    static ProbeAdmissionObservation probe_fields(const OutboundManagement& out){
+        ProbeAdmissionObservation o;
+        if(const auto* p=std::get_if<TimeProbe>(&out.payload)){o.t1=p->initiator_send_ns;o.fields_available=true;}
+        if(const auto* p=std::get_if<TimeReply>(&out.payload)){o.t1=p->initiator_send_ns;o.t2=p->responder_receive_ns;o.t3=p->responder_send_ns;o.fields_available=true;}
+        return o;
+    }
+    void trace_probe(CommandTracePoint point,Kind kind,const Envelope* envelope,unsigned value,std::uint64_t evaluated,
+                     const ProbeAdmissionObservation& observation={},std::uint64_t pending_before=0,std::uint64_t ended=0,CommandTraceReason reason=CommandTraceReason::none,int transferred=0,unsigned message_bytes=0){
+        if(!config.probe_diagnostics)return;
+        CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=point;e.reason=reason;e.detail=unsigned(kind);e.value=value;
+        const auto c=context();e.session=envelope?envelope->session_id:c.session;e.owner_epoch=config.session.local_epoch;e.control_generation=c.control_generation;e.sensor_generation=c.sensor_generation;
+        if(envelope){e.entry_owner_epoch=envelope->source_epoch;e.request_sequence=envelope->sequence;e.origin_ns=envelope->source_monotonic_ns;}
+        e.evaluated_ns=evaluated;e.probe_end_ns=ended;e.probe_pending_before=pending_before;e.probe_pending_after=session.pending_probe_origin();
+        e.probe_sdk_bytes=transferred;e.probe_message_bytes=message_bytes;
+        e.probe_t1=observation.t1;e.probe_t2=observation.t2;e.probe_t3=observation.t3;e.probe_fields_available=observation.fields_available;e.probe_mapper_submitted=observation.mapper_submitted;
+        const auto clock=session.clock_observation();e.clock_error=unsigned(observation.mapper_submitted?observation.mapper_result:clock.error);
+        e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_observed=clock.observed;e.probe_anchor_ns=clock.anchor_ns;e.offset_lower_ns=clock.offset.lower;e.offset_upper_ns=clock.offset.upper;
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
+    void trace_sender(CommandTracePoint point,const Input& item,unsigned value,unsigned detail=0,CommandTraceReason reason=CommandTraceReason::none,std::uint64_t evaluated=0,std::uint64_t previous=0){
+        if(!config.sender_diagnostics)return;
+        CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=point;e.reason=reason;
+        e.request=item.request;e.route=item.route;e.session=item.context.session;e.owner_epoch=config.session.local_epoch;
+        e.control_generation=item.context.control_generation;e.sensor_generation=item.context.sensor_generation;
+        e.value=value;e.detail=detail;e.origin_ns=item.origin;e.evaluated_ns=evaluated;
+        if(item.proof){e.command_deadline_ns=item.proof->entry.context.deadline_ns;e.entry_owner_epoch=item.proof->entry.owner_epoch;}
+        if(point==CommandTracePoint::sender_clock){const auto o=session.clock_observation();e.clock_error=unsigned(o.error);e.clock_observed=o.observed;
+            e.probe_anchor_ns=o.anchor_ns;e.offset_lower_ns=o.offset.lower;e.offset_upper_ns=o.offset.upper;
+            e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_previous_deadline_ns=previous;}
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
     std::size_t index(std::uint32_t route)const{
         for(std::size_t i=0;i<route_count;++i)if(route_ids[i]==route)return i;
         return route_count;
@@ -125,18 +185,49 @@ struct TransportOwner::Impl {
         current.clock_deadline_ns=session.clock_deadline().value_or(0);current.clock_qualified=session.clock_state()==ClockError::none&&monotonic_ns()<current.clock_deadline_ns;
         current.control_retry=links[0].retry.state();current.sensor_retry=links[1].retry.state();
         std::lock_guard lock(mutex);
-        if(shared.context!=current.context||!current.running){sample_pending.fill(false);sample_received.fill(false);}
+        if(shared.context!=current.context||!current.running)flush_mailboxes();
         if(!same_control(shared.context,current.context)||!current.running){
-            current.stale_work+=input_count+output_count;receipts={};receipt_cursor=0;
+            for(std::size_t n=0;n<input_count;++n){const auto& item=controls[(input_head+n)%controls.size()];
+                abandon(item.proof);
+                if(item.kind==Kind::command)trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,item.request,item.route);}
+            if(pending_command){trace(CommandTracePoint::mailbox_flushed,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown,pending_command->request,pending_command->route);
+                abandon(pending_command->proof);
+                trace_sender(CommandTracePoint::sender_pending_release,*pending_command,5,0,current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);}
+            while(retained.size()){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,retained.front().message,unsigned(SessionError::obsolete_connection),current.running?CommandTraceReason::context_mismatch:CommandTraceReason::shutdown);
+                retained.pop();++current.stale_work;
+            }
+            received_commands=0;
+            current.stale_work+=input_count+output_count+(pending_command?1:0);pending_command.reset();receipts={};receipt_cursor=0;
             for(auto& slot:checks)if(slot.state){if(slot.proof)slot.proof->pool->revoke(*slot.proof);slot.result.error=SessionError::obsolete_connection;slot.result.start_granted=false;slot.state=2;}
             input_head=input_count=input_commands=output_head=output_count=0;
         }
         publication_allowed=current.running&&current.state==SessionState::active&&current.clock_qualified&&publication_epoch!=UINT64_MAX;
-        current.control_ingress=input_count;current.control_received=output_count;
+        current.control_ingress=input_count+(pending_command?1:0);current.control_received=output_count+retained.size();
+        current.sensor_submitted=mailbox_counts.sensor_submitted;
+        current.sensor_ingress_replaced=mailbox_counts.sensor_ingress_replaced;
+        current.sensor_ingress_flushed=mailbox_counts.sensor_ingress_flushed;
+        current.sensor_inputs=mailbox_counts.sensor_inputs;
+        current.sensor_receive_replaced=mailbox_counts.sensor_receive_replaced;
+        current.sensor_receive_flushed=mailbox_counts.sensor_receive_flushed;
+        current.sensor_polled=mailbox_counts.sensor_polled;
+        current.sensor_poll_expired=mailbox_counts.sensor_poll_expired;
+        current.sensor_ingress_pending=std::count(sample_pending.begin(),sample_pending.end(),true);
+        current.sensor_receive_pending=std::count(sample_received.begin(),sample_received.end(),true);
+        current.sensor_outbound_pending=queues.sensor_count();
+        current.sensor_outbound_replaced=queues.stats().sensor_replaced;
+        current.sensor_outbound_expired=queues.stats().sensor_expired-queues.stats().sensor_enqueue_expired;
+        current.sensor_outbound_flushed=queues.stats().sensor_flushed;
         current.sensor_replaced+=shared.sensor_replaced;shared=current;current.sensor_replaced=0;
     }
     void close_fd(SRTSOCKET& fd){
-        if(fd!=SRT_INVALID_SOCK){srt_epoll_remove_usock(epoll,fd);srt_close(fd);fd=SRT_INVALID_SOCK;}
+        if(fd!=SRT_INVALID_SOCK){
+            const bool observing=stopping.load()||shutting_down;
+            if(observing)shutdown_stage(config.shutdown_trace,"socket_epoll_remove_begin",fd);
+            srt_epoll_remove_usock(epoll,fd);
+            shutdown_socket_close(config.shutdown_trace,fd,observing,[&]{return srt_close(fd);});
+            fd=SRT_INVALID_SOCK;
+        }
     }
     SRTSOCKET create(unsigned i){
         const auto fd=srt_create_socket();require(fd!=SRT_INVALID_SOCK);
@@ -156,7 +247,44 @@ struct TransportOwner::Impl {
         require(srt_bind(link.listener,address.ptr(),address.size)!=SRT_ERROR&&srt_listen(link.listener,4)!=SRT_ERROR);add(link.listener,false);
         (i?current.sensor_port:current.control_port)=port(link.listener);
     }
+    void provider_sample(unsigned i,bool before_close=false){
+        auto& diagnostics=i?config.sensor_provider_diagnostics:config.provider_diagnostics;
+        if(!diagnostics||diagnostics->exhausted())return;
+        const auto now=monotonic_ns();
+        if(!before_close&&now<next_provider_sample[i])return;
+        next_provider_sample[i]=now+100000000ULL;
+        ProviderObservation o;o.channel=i;o.begin_ns=now;o.owner_epoch=config.session.local_epoch;
+        o.session=session.session_id();o.generation=links[i].generation;o.socket=links[i].fd;o.before_close=before_close;
+        if(links[i].fd!=SRT_INVALID_SOCK){
+            o.state_before=unsigned(srt_getsockstate(links[i].fd));o.unavailable=2;
+            int size=sizeof(o.idle_timeout_ms);
+            o.idle_timeout_available=srt_getsockflag(links[i].fd,SRTO_PEERIDLETIMEO,&o.idle_timeout_ms,&size)!=SRT_ERROR;
+            if(links[i].ready){
+                SRT_TRACEBSTATS stats{};
+                if(srt_bstats(links[i].fd,&stats,0)==SRT_ERROR){o.unavailable=3;o.error=srt_getlasterror(nullptr);}
+                else{
+                    o.available=true;o.unavailable=0;
+                    o.data_sent=stats.pktSentTotal;o.data_received=stats.pktRecvTotal;o.retransmitted=stats.pktRetransTotal;
+                    o.ack_sent=stats.pktSentACKTotal;o.ack_received=stats.pktRecvACKTotal;
+                    o.nak_sent=stats.pktSentNAKTotal;o.nak_received=stats.pktRecvNAKTotal;o.undecrypt=stats.pktRcvUndecryptTotal;
+                    o.bytes_sent=stats.byteSentTotal;o.bytes_received=stats.byteRecvTotal;
+                    o.send_buffer_packets=stats.pktSndBuf;o.send_buffer_bytes=stats.byteSndBuf;
+                    o.receive_buffer_packets=stats.pktRcvBuf;o.receive_buffer_bytes=stats.byteRcvBuf;
+                    o.flight_packets=stats.pktFlightSize;o.rtt_ms=stats.msRTT;
+                    o.unique_sent=stats.pktSentUniqueTotal;o.unique_received=stats.pktRecvUniqueTotal;
+                    o.sender_loss=stats.pktSndLossTotal;o.receiver_loss=stats.pktRcvLossTotal;
+                    o.sender_drop=stats.pktSndDropTotal;o.receiver_drop=stats.pktRcvDropTotal;
+                    o.sender_filter_extra=stats.pktSndFilterExtraTotal;o.receiver_filter_extra=stats.pktRcvFilterExtraTotal;
+                    o.receiver_filter_supply=stats.pktRcvFilterSupplyTotal;o.receiver_filter_loss=stats.pktRcvFilterLossTotal;
+                    o.flow_window_packets=stats.pktFlowWindow;o.congestion_window_packets=stats.pktCongestionWindow;
+                }
+            }
+            o.state_after=unsigned(srt_getsockstate(links[i].fd));
+        }
+        o.end_ns=monotonic_ns();diagnostics->record(o);
+    }
     void drop(unsigned i,bool permanent){
+        if(links[i].fd!=SRT_INVALID_SOCK)provider_sample(i,true);
         auto& link=links[i];close_fd(link.fd);link.ready=false;
         if(config.session.role==Role::caller){
             const auto time=monotonic_ns();
@@ -177,23 +305,30 @@ struct TransportOwner::Impl {
         }
     }
     void apply(SessionAction action){
+        if(action.close_control||action.close_sensor)
+            trace(CommandTracePoint::session_action,shutting_down?CommandTraceReason::shutdown:CommandTraceReason::session_decision,{},0,unsigned(action.error),
+                unsigned(action.close_control)|(unsigned(action.close_sensor)<<1)|(unsigned(action.flush_samples)<<2));
         if(action.close_control||(action.flush_samples&&!action.close_sensor))revoke_grants();
         const bool permanent=session.state()==SessionState::failed;
         const auto discarded=queues.apply(action);current.stale_work+=discarded.count;
-        if(action.close_control){command_proofs={};receipts={};receipt_cursor=0;}
+        for(std::size_t n=0;n<discarded.count;++n)trace(CommandTracePoint::outbound_flushed,shutting_down?CommandTraceReason::shutdown:CommandTraceReason::context_mismatch,discarded.ids[n]);
+        if(action.close_control){for(const auto& proof:command_proofs)abandon(proof);command_proofs={};receipts={};receipt_cursor=0;probe_sdk_busy_sequence=0;}
         if(action.close_sensor)drop(1,permanent);
         if(action.close_control){drop(0,permanent);next_probe=0;}
         if(permanent){current.fault=TransportFault::protocol;links[0].retry.permanent_failure();links[1].retry.permanent_failure();}
-        if(action.flush_samples){std::lock_guard lock(mutex);sample_pending.fill(false);sample_received.fill(false);publication_allowed=false;if(publication_epoch!=UINT64_MAX)++publication_epoch;}
+        if(action.flush_samples){std::lock_guard lock(mutex);flush_mailboxes();publication_allowed=false;if(publication_epoch!=UINT64_MAX)++publication_epoch;}
         if(action.send){
             std::array<std::byte,management_payload_bytes> bytes{};auto& out=*action.send;
             const auto encoded=encode_management(out.payload,bytes);require(bool(encoded));
             const auto body=std::span(bytes).first(encoded.bytes_written);
+            const auto probe_time=config.probe_diagnostics&&probe_kind(out.envelope.kind)?monotonic_ns():0;
             const auto result=out.connection.channel==Channel::control?queues.control(out.connection,out.envelope,body):queues.binding(out.connection,out.envelope,body);
+            if(probe_time)trace_probe(CommandTracePoint::probe_queue,out.envelope.kind,&out.envelope,unsigned(result),probe_time,probe_fields(out));
             if(result!=QueueError::none){++current.rejected;apply(session.control_lost(links[0].generation));}
         }
     }
-    void lost(unsigned i){
+    void lost(unsigned i,CommandTraceReason reason,unsigned value=0){
+        trace(CommandTracePoint::link_lost,reason,{},0,value,i);
         if(!links[i].ready){drop(i,false);return;}
         apply(i?session.sensor_lost(links[i].generation):session.control_lost(links[i].generation));
     }
@@ -228,21 +363,104 @@ struct TransportOwner::Impl {
         apply(i?session.sensor_connected(link.generation,security,monotonic_ns(),config.session.role==Role::caller?random_identity():Identity{}):
             session.control_connected(link.generation,security,monotonic_ns(),config.session.role==Role::listener?random_identity():Identity{}));
     }
-    bool control_space(){std::lock_guard lock(mutex);return output_count<incoming.size()&&queues.control_count()<64;}
+    void trace_receiver(CommandTracePoint point,const TransportMessage& message,unsigned value,CommandTraceReason reason=CommandTraceReason::none,const SampleResult* result=nullptr){
+        if(!config.command_trace)return;
+        CommandTraceEvent e{0,monotonic_ns(),point,reason,message.envelope.request_id,message.context.session,config.session.local_epoch,
+            message.context.control_generation,message.context.sensor_generation,message.envelope.route_id,value,{},unsigned(Kind::command)};
+        e.request_sequence=message.envelope.sequence;e.origin_ns=message.envelope.source_monotonic_ns;e.evaluated_ns=result?result->evaluated_ns:message.evaluated_ns;
+        e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_error=unsigned(session.clock_state());e.age_error=result?unsigned(result->age.error):0;
+        if(result&&result->age.age_ns){e.age_lower_ns=result->age.age_ns->lower;e.age_upper_ns=result->age.age_ns->upper;}
+        if(point==CommandTracePoint::receiver_expiry_admission){e.expiry_deadline_ns=message.deadline_ns;e.budget_ms=message.envelope.valid_for_ms;}
+        config.command_trace->record(CommandTraceProducer::transport,e);
+    }
+    void process_retained(){
+        for(unsigned n=0;n<8&&retained.size();++n){
+            const auto time=monotonic_ns();const auto message=retained.front().message;
+            if(!retained.matches(context())||!control_ready(session.state())){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::obsolete_connection),CommandTraceReason::context_mismatch);retained.pop();++current.stale_work;continue;
+            }
+            const auto result=session.check_command(message.envelope,time);apply(result.action);
+            const auto expired=ReceiverRetention::expiry_deadline(message.envelope,result);
+            if(!expired&&retained.expired(time)){
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(SessionError::clock_unqualified),CommandTraceReason::deadline);
+                retained.pop();queue_error(message.envelope,ControlErrorCode::clock_unqualified);++current.rejected;continue;
+            }
+            if(!result.envelope&&!expired){
+                if(ReceiverRetention::soft_gap(result)||ReceiverRetention::ambiguous(message.envelope,result))break;
+                trace_receiver(CommandTracePoint::receiver_retained_dropped,message,unsigned(result.action.error),CommandTraceReason::session_rejected,&result);retained.pop();++current.rejected;
+                if(result.action.error==SessionError::stale_sample)queue_error(message.envelope,ControlErrorCode::start_expired);
+                else if(result.action.error==SessionError::clock_unqualified)queue_error(message.envelope,ControlErrorCode::clock_unqualified);
+                continue;
+            }
+            auto ready=message;const auto maximum=std::uint64_t(message.envelope.valid_for_ms)*1000000;
+            ready.evaluated_ns=result.evaluated_ns;ready.expiry_only=expired.has_value();
+            if(expired)ready.deadline_ns=*expired;
+            else{
+                require(result.age.age_ns&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=maximum);
+                ready.deadline_ns=result.evaluated_ns+maximum-std::uint64_t(result.age.age_ns->upper);
+            }
+            {std::lock_guard lock(mutex);require(output_count<incoming.size()&&received_commands<ReceiverRetention::command_capacity);
+                retained.pop();incoming[(output_head+output_count++)%incoming.size()]=ready;++received_commands;}
+            ++current.received;trace_receiver(expired?CommandTracePoint::receiver_expiry_admission:CommandTracePoint::receiver_resumed,ready,unsigned(expired?SessionError::stale_sample:SessionError::none),CommandTraceReason::none,&result);
+        }
+    }
+    bool control_space(){std::lock_guard lock(mutex);return output_count+retained.size()<incoming.size()&&queues.control_count()<64;}
     void receive(unsigned i){
         auto& link=links[i];
         for(unsigned n=0;n<8&&link.ready&&link.fd!=SRT_INVALID_SOCK;++n){
             if(!i&&!control_space())return; // Backpressure before consuming any CONTROL frame.
             std::array<std::byte,control_message_bytes+1> bytes{};
-            const int count=srt_recvmsg(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size());
-            if(count==SRT_ERROR){if(srt_getlasterror(nullptr)!=SRT_EASYNCRCV)lost(i);return;}
+            const bool observing=i&&bool(config.sample_trace);SRT_MSGCTRL metadata=srt_msgctrl_default;
+            const auto receive_begin=observing?monotonic_ns():0;
+            const int count=observing?srt_recvmsg2(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size(),&metadata):
+                srt_recvmsg(link.fd,reinterpret_cast<char*>(bytes.data()),bytes.size());
+            if(count==SRT_ERROR){const auto error=srt_getlasterror(nullptr);if(error!=SRT_EASYNCRCV)lost(i,CommandTraceReason::receive_error,unsigned(error));return;}
             const auto decoded=decode(std::span(bytes).first(count),channel(i),std::span(route_ids).first(route_count));
-            if(!decoded){++current.rejected;lost(i);return;}
+            if(!decoded){++current.rejected;lost(i,CommandTraceReason::wire_decode,unsigned(decoded.error));return;}
             const auto& view=decoded.message;const auto kind=view.envelope.kind;const Connection connection{channel(i),link.generation};
-            if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){apply(session.receive(connection,view,monotonic_ns()));continue;}
-            const auto result=i?session.admit_sample(connection,view,monotonic_ns()):session.admit_control(connection,view,monotonic_ns());
-            apply(result.action);if(!result.envelope){
+            if(kind!=Kind::sample&&kind!=Kind::command&&kind!=Kind::query&&kind!=Kind::status&&kind!=Kind::error){
+                const auto pending=config.probe_diagnostics&&probe_kind(kind)?session.pending_probe_origin():0;
+                const auto time=monotonic_ns();ProbeAdmissionObservation observation;
+                auto action=session.receive(connection,view,time,config.probe_diagnostics&&probe_kind(kind)?&observation:nullptr);
+                if(probe_kind(kind))trace_probe(CommandTracePoint::probe_admission,kind,&view.envelope,unsigned(action.error),time,observation,pending);
+                apply(action);continue;}
+            if(kind==Kind::sample)++current.samples_received;
+            const auto admission_ns=monotonic_ns();
+            const auto result=i?session.admit_sample(connection,view,admission_ns):session.admit_control(connection,view,admission_ns);
+            if(config.command_trace&&(kind==Kind::command||kind==Kind::query)){
+                const auto c=context();
+                CommandTraceEvent e{0,monotonic_ns(),CommandTracePoint::control_admission,CommandTraceReason::none,
+                    view.envelope.request_id,view.envelope.session_id,config.session.local_epoch,c.control_generation,c.sensor_generation,
+                    view.envelope.route_id,unsigned(result.action.error),{},unsigned(kind)};
+                e.request_sequence=view.envelope.sequence;e.origin_ns=view.envelope.source_monotonic_ns;e.evaluated_ns=admission_ns;
+                e.clock_deadline_ns=session.clock_deadline().value_or(0);e.clock_error=unsigned(session.clock_state());e.age_error=unsigned(result.age.error);
+                config.command_trace->record(CommandTraceProducer::transport,e);
+            }
+            if(observing&&kind==Kind::sample){
+                SampleTraceEvent e;e.point=unsigned(SampleTracePoint::receiver_decision);e.begin_ns=receive_begin;e.end_ns=monotonic_ns();
+                e.origin_ns=view.envelope.source_monotonic_ns;e.owner_epoch=config.session.local_epoch;e.session=view.envelope.session_id;e.source_epoch=view.envelope.source_epoch;
+                e.control_generation=links[0].generation;e.sensor_generation=link.generation;e.envelope_sequence=view.envelope.sequence;e.route=view.envelope.route_id;
+                e.kind=unsigned(kind);e.result=unsigned(result.action.error);e.bytes=count;e.socket=link.fd;e.message_number=metadata.msgno;
+                config.sample_trace->record(SampleTraceLane::transport,e);
+            }
+            apply(result.action);
+            const auto expired=kind==Kind::command?ReceiverRetention::expiry_deadline(view.envelope,result):std::optional<std::uint64_t>{};
+            const bool wait_command=kind==Kind::command&&(ReceiverRetention::soft_gap(result)||ReceiverRetention::ambiguous(view.envelope,result));
+            if(kind==Kind::command&&(wait_command||((result.envelope||expired)&&retained.size()))){
+                TransportMessage pending;pending.context=context();pending.envelope=view.envelope;pending.size=view.payload.size();pending.evaluated_ns=admission_ns;
+                std::copy(view.payload.begin(),view.payload.end(),pending.payload.begin());
+                bool saved;{std::lock_guard lock(mutex);saved=retained.push(pending,admission_ns,output_count,received_commands);}
+                if(saved)trace_receiver(CommandTracePoint::receiver_deferred,pending,unsigned(result.action.error));
+                else{trace_receiver(CommandTracePoint::receiver_capacity_rejected,pending,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;}
+                continue;
+            }
+            if(!result.envelope&&!expired){
                 ++current.rejected;
+                if(kind==Kind::sample){
+                    ++current.samples_rejected;
+                    if(result.action.error==SessionError::clock_unqualified||result.action.error==SessionError::clock_invalid)++current.samples_unknown_age;
+                    if(result.action.error==SessionError::stale_sample)++current.samples_stale;
+                }
                 switch(result.action.error){
                     case SessionError::clock_unqualified:queue_error(view.envelope,ControlErrorCode::clock_unqualified);break;
                     case SessionError::stale_sample:queue_error(view.envelope,ControlErrorCode::start_expired);break;
@@ -252,16 +470,22 @@ struct TransportOwner::Impl {
                 continue;
             }
             if(kind==Kind::error){const auto error=decode_control_error(view.payload);require(error.has_value());if(!match_error(view.envelope,*error)){++current.unmatched_errors;++current.rejected;continue;}++current.errors_received;}
-            TransportMessage message;message.context=context();message.envelope=*result.envelope;message.size=view.payload.size();
+            TransportMessage message;message.context=context();message.envelope=expired?view.envelope:*result.envelope;message.expiry_only=expired.has_value();message.size=view.payload.size();
             std::copy(view.payload.begin(),view.payload.end(),message.payload.begin());message.evaluated_ns=result.evaluated_ns;
-            if(kind==Kind::sample||kind==Kind::command){
+            if(expired)message.deadline_ns=*expired;
+            else if(kind==Kind::sample||kind==Kind::command){
                 const auto max_age=std::uint64_t(message.envelope.valid_for_ms)*1000000;
                 require(result.age.age_ns.has_value()&&result.age.age_ns->upper>=0&&std::uint64_t(result.age.age_ns->upper)<=max_age);
                 message.deadline_ns=result.evaluated_ns+max_age-std::uint64_t(result.age.age_ns->upper);
             }
+            if(kind==Kind::command){
+                bool room;{std::lock_guard lock(mutex);room=retained.room(output_count,received_commands);}
+                if(!room){trace_receiver(CommandTracePoint::receiver_capacity_rejected,message,unsigned(ControlErrorCode::busy),CommandTraceReason::queue_rejected);queue_error(view.envelope,ControlErrorCode::busy);++current.rejected;continue;}
+            }
+            if(expired)trace_receiver(CommandTracePoint::receiver_expiry_admission,message,unsigned(SessionError::stale_sample),CommandTraceReason::none,&result);
             std::lock_guard lock(mutex);
-            if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at])++current.sensor_replaced;incoming_samples[at]=message;sample_received[at]=true;}
-            else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;}
+            if(i){message.publication_epoch=publication_epoch;const auto at=index(message.envelope.route_id);require(at<route_count);if(sample_received[at]){++current.sensor_replaced;++mailbox_counts.sensor_receive_replaced;}incoming_samples[at]=message;sample_received[at]=true;}
+            else{require(output_count<incoming.size());incoming[(output_head+output_count++)%incoming.size()]=message;if(kind==Kind::command)++received_commands;}
             ++current.received;
         }
     }
@@ -278,6 +502,7 @@ struct TransportOwner::Impl {
             }
             if(work.proof){
                 auto& record=*work.proof;
+                if(config.start_diagnostics){result.grant_slot=record.slot;result.grant_generation=record.generation;}
                 if(result.error==SessionError::none){
                     result.deadline_ns=std::min(result.deadline_ns,record.entry.context.deadline_ns);
                     const auto clock_deadline=session.clock_deadline();
@@ -291,29 +516,70 @@ struct TransportOwner::Impl {
                     }
                 }
                 if(!result.start_granted)record.pool->revoke(record);
+                if(config.start_diagnostics){
+                    result.clock_deadline_ns=session.clock_deadline().value_or(0);
+                    CommandTraceEvent e{};e.monotonic_ns=monotonic_ns();e.point=CommandTracePoint::start_check;
+                    e.request=record.entry.request_id;e.route=record.entry.route;e.session=work.context.session;e.owner_epoch=config.session.local_epoch;
+                    e.entry_owner_epoch=record.entry.owner_epoch;e.control_generation=work.context.control_generation;e.sensor_generation=work.context.sensor_generation;
+                    e.detail=6;e.request_sequence=work.envelope.sequence;e.origin_ns=record.entry.context.source_monotonic_ns;
+                    e.check_token=result.token;e.evaluated_ns=result.evaluated_ns;e.clock_deadline_ns=result.clock_deadline_ns;e.clock_error=unsigned(session.clock_state());
+                    e.value=unsigned(result.error);e.start_granted=result.start_granted;e.grant_slot=record.slot;e.grant_generation=record.generation;
+                    e.grant_deadline_ns=result.start_granted?result.deadline_ns:0;e.command_deadline_ns=record.entry.context.deadline_ns;
+                    config.command_trace->record(CommandTraceProducer::transport,e);
+                }
             }
             std::lock_guard lock(mutex);checks[at].result=result;checks[at].state=2;
         }
     }
+    void release_pending_command(){std::lock_guard lock(mutex);pending_command.reset();}
     void inputs(){
         // One CONTROL item and eight latest samples per iteration bound owner work.
         // Keep an item in the ingress mailbox while the outgoing CONTROL FIFO is full.
         std::array<Input,9> work{};std::size_t count=0;
         {std::lock_guard lock(mutex);
-            if(input_count&&queues.control_count()<64){work[count++]=controls[input_head];if(controls[input_head].kind==Kind::command)--input_commands;controls[input_head]={};input_head=(input_head+1)%controls.size();--input_count;}
-            for(std::size_t i=0;i<route_count;++i)if(sample_pending[i]){work[count++]=samples[i];samples[i]={};sample_pending[i]=false;}
+            if(queues.control_count()<64){
+                if(pending_command)work[count++]=*pending_command;
+                else if(input_count){work[count++]=controls[input_head];
+                    if(controls[input_head].kind==Kind::command){--input_commands;pending_command=work[count-1];pending_clock_reported=false;}
+                    controls[input_head]={};input_head=(input_head+1)%controls.size();--input_count;
+                }
+            }
+            for(std::size_t i=0;i<route_count;++i)if(sample_pending[i]){work[count++]=samples[i];++mailbox_counts.sensor_inputs;samples[i]={};sample_pending[i]=false;}
         }
         for(std::size_t i=0;i<count;++i){auto& item=work[i];
-            if((item.kind==Kind::sample?item.context!=context():!same_control(item.context,context()))||(item.proof&&(!item.proof->live->load()||time_expired(item.proof->entry)))){++current.stale_work;continue;}
+            const bool bad_context=item.kind==Kind::sample?item.context!=context():!same_control(item.context,context());
+            const bool revoked=!bad_context&&item.proof&&!item.proof->live->load();
+            const bool expired=!bad_context&&!revoked&&item.proof&&time_expired(item.proof->entry);
+            if(bad_context||revoked||expired){++current.stale_work;if(item.kind==Kind::sample)++current.sensor_input_rejected;
+                abandon(item.proof);
+                if(item.kind==Kind::command)trace(CommandTracePoint::input_dropped,bad_context?CommandTraceReason::context_mismatch:
+                    revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,item.request,item.route);
+                if(item.kind==Kind::command){trace_sender(CommandTracePoint::sender_pending_release,item,1,0,bad_context?CommandTraceReason::context_mismatch:revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline);release_pending_command();}
+                continue;}
             const auto time=monotonic_ns();
+            const auto previous=config.sender_diagnostics&&item.kind==Kind::command?session.clock_deadline().value_or(0):0;
             auto made=item.kind==Kind::sample?session.make_sample(item.route,item.size,time):session.make_control(item.kind,item.route,item.request,item.size,item.origin,time);
-            apply(made.action);if(!made.envelope){++current.rejected;continue;}
+            if(item.kind==Kind::command&&made.action.error==SessionError::clock_unqualified&&!pending_clock_reported)
+                trace_sender(CommandTracePoint::sender_clock,item,unsigned(made.action.error),1,CommandTraceReason::session_rejected,time,previous);
+            if(item.kind==Kind::command&&made.envelope&&pending_clock_reported)
+                trace_sender(CommandTracePoint::sender_clock,item,0,2,CommandTraceReason::none,time,previous);
+            apply(made.action);if(!made.envelope){
+                if(item.kind==Kind::command&&made.action.error==SessionError::clock_unqualified){
+                    if(!pending_clock_reported){trace(CommandTracePoint::clock_deferred,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));pending_clock_reported=true;}
+                    continue; // Retain original proof/origin/deadline in the reserved ingress slot.
+                }
+                if(item.kind==Kind::command){abandon(item.proof);trace(CommandTracePoint::make_rejected,CommandTraceReason::session_rejected,item.request,item.route,unsigned(made.action.error));trace_sender(CommandTracePoint::sender_pending_release,item,2,0,CommandTraceReason::session_rejected);release_pending_command();}
+                ++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;continue;
+            }
             auto envelope=*made.envelope;
             if(item.kind==Kind::sample)envelope.source_monotonic_ns=item.origin; // Preserve callback ingress, not dequeue time.
             const auto body=std::span(item.bytes).first(item.size);
             const auto result=item.kind==Kind::sample?queues.sensor({Channel::sensor,links[1].generation},envelope,body,time):queues.control({Channel::control,links[0].generation},envelope,body);
-            if(result!=QueueError::none)++current.rejected;
-            else if(item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
+            if(result!=QueueError::none)abandon(item.proof);
+            if(result!=QueueError::none){if(item.kind==Kind::command)trace(CommandTracePoint::queue_rejected,CommandTraceReason::queue_rejected,item.request,item.route,unsigned(result));++current.rejected;if(item.kind==Kind::sample)++current.sensor_input_rejected;}
+            if(item.kind==Kind::command)trace_sender(CommandTracePoint::sender_pending_release,item,result==QueueError::none?4:3,0,result==QueueError::none?CommandTraceReason::none:CommandTraceReason::queue_rejected,time);
+            if(result==QueueError::none&&item.proof){const auto at=std::find(command_proofs.begin(),command_proofs.end(),nullptr);require(at!=command_proofs.end());*at=std::move(item.proof);}
+            if(item.kind==Kind::command)release_pending_command();
         }
     }
     bool time_expired(const JournalEntry& e)const{return monotonic_ns()>=e.context.deadline_ns;}
@@ -324,27 +590,69 @@ struct TransportOwner::Impl {
             auto proof=command_proofs.end();
             if(!i&&packet->envelope.kind==Kind::command){
                 proof=std::find_if(command_proofs.begin(),command_proofs.end(),[&](const auto& p){return p&&p->entry.request_id==packet->envelope.request_id;});
-                if(proof==command_proofs.end()||!(*proof)->live->load()||time_expired((*proof)->entry)){
-                    if(proof!=command_proofs.end())proof->reset();
+                const bool missing=proof==command_proofs.end();
+                const bool revoked=!missing&&!(*proof)->live->load();
+                const bool expired=!missing&&!revoked&&time_expired((*proof)->entry);
+                if(missing||revoked||expired){
+                    trace(CommandTracePoint::outbound_dropped,missing?CommandTraceReason::missing_proof:
+                        revoked?CommandTraceReason::proof_revoked:CommandTraceReason::deadline,packet->envelope.request_id,packet->envelope.route_id);
+                    if(proof!=command_proofs.end()){abandon(*proof);proof->reset();}
                     queues.control_sent();++current.rejected;continue;
                 }
             }
+            if(!i&&packet->envelope.kind==Kind::command&&config.test_hold_command_handoff)return;
             auto permit=budget.reserve(channel(i),packet->size,time);if(!permit){if(permit.error!=BudgetError::rate_limited)throw std::runtime_error("invalid budget");return;}
             const auto ttl=i?(binding?200:sensor_ttl_ms(*packet,time)):-1;
-            const int count=srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
-            const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;require(budget.finish(permit.id,count!=SRT_ERROR));
-            if(count==SRT_ERROR){if(error!=SRT_EASYNCSND)lost(i);return;}
-            require(count==static_cast<int>(packet->size));++current.sent;
+            const bool observing=i&&bool(config.sample_trace);
+            SRT_MSGCTRL metadata=srt_msgctrl_default;metadata.msgttl=ttl;metadata.inorder=0;
+            const auto trace_begin=observing?monotonic_ns():0;
+            const bool probing=config.probe_diagnostics&&!i&&probe_kind(packet->envelope.kind);
+            const auto probe_begin=probing?monotonic_ns():0;
+            const int count=observing?srt_sendmsg2(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,&metadata):
+                srt_sendmsg(links[i].fd,reinterpret_cast<const char*>(packet->bytes.data()),packet->size,ttl,0);
+            const int error=count==SRT_ERROR?srt_getlasterror(nullptr):0;
+            const auto probe_end=probing?monotonic_ns():0;
+            const auto trace_end=observing?monotonic_ns():0;
+            require(budget.finish(permit.id,count!=SRT_ERROR));
+            if(probing&&(error!=SRT_EASYNCSND||probe_sdk_busy_sequence!=packet->envelope.sequence)){
+                trace_probe(CommandTracePoint::probe_sdk,packet->envelope.kind,&packet->envelope,unsigned(error),probe_begin,{},0,probe_end,error?CommandTraceReason::provider_error:CommandTraceReason::none,count,unsigned(packet->size));
+                probe_sdk_busy_sequence=error==SRT_EASYNCSND?packet->envelope.sequence:0;
+            }
+            if(observing){
+                SampleTraceEvent e;e.begin_ns=trace_begin;e.end_ns=trace_end;e.origin_ns=packet->envelope.source_monotonic_ns;
+                e.owner_epoch=config.session.local_epoch;e.session=packet->envelope.session_id;e.source_epoch=packet->envelope.source_epoch;
+                e.control_generation=links[0].generation;e.sensor_generation=links[1].generation;
+                e.envelope_sequence=packet->envelope.sequence;e.route=packet->envelope.route_id;e.kind=unsigned(packet->envelope.kind);
+                e.bytes=packet->size;e.socket=links[i].fd;e.message_number=count==SRT_ERROR?0:metadata.msgno;
+                e.point=unsigned(count==SRT_ERROR?SampleTracePoint::sdk_error:SampleTracePoint::sdk_accepted);e.result=unsigned(error);
+                int size=sizeof(e.initial_sequence);
+                e.initial_sequence_available=srt_getsockflag(links[i].fd,SRTO_ISN,&e.initial_sequence,&size)!=SRT_ERROR&&size==sizeof(e.initial_sequence);
+                config.sample_trace->record(SampleTraceLane::transport,e);
+            }
+            if(count==SRT_ERROR){if(packet->envelope.kind==Kind::command&&error!=SRT_EASYNCSND)trace(CommandTracePoint::provider_error,CommandTraceReason::provider_error,packet->envelope.request_id,packet->envelope.route_id,unsigned(error));if(error!=SRT_EASYNCSND)lost(i,CommandTraceReason::provider_error,unsigned(error));return;}
+            require(count==static_cast<int>(packet->size));
+            if(packet->envelope.kind==Kind::command)trace(CommandTracePoint::provider_sent,CommandTraceReason::none,packet->envelope.request_id,packet->envelope.route_id);
+            ++current.sent;if(packet->envelope.kind==Kind::sample)++current.sensor_sent;
             if(packet->envelope.kind==Kind::command||packet->envelope.kind==Kind::query)remember(packet->envelope);
             else if(packet->envelope.kind==Kind::error)++current.errors_sent;
             const auto route=packet->envelope.route_id;
-            if(!i){if(proof!=command_proofs.end())proof->reset();queues.control_sent();}else if(binding)queues.binding_sent();else queues.sensor_sent(route);
+            if(!i){if(proof!=command_proofs.end()){(*proof)->disposition.store(SubmissionDisposition::sdk_accepted,std::memory_order_release);proof->reset();}queues.control_sent();}else if(binding)queues.binding_sent();else queues.sensor_sent(route);
         }
     }
     void timers(){
         refresh_grants();
-        apply(session.tick(monotonic_ns()));
-        if((control_ready(session.state())||session.state()==SessionState::synchronizing)&&monotonic_ns()>=next_probe){apply(session.begin_probe(monotonic_ns()));next_probe=monotonic_ns()+second;}
+        const auto pending=config.probe_diagnostics?session.pending_probe_origin():0;
+        const auto tick_time=monotonic_ns();auto tick=session.tick(tick_time);
+        if(pending&&!session.pending_probe_origin()){
+            ProbeAdmissionObservation o;o.t1=pending;o.fields_available=true;
+            trace_probe(CommandTracePoint::probe_pending_cleared,Kind::time_probe,nullptr,unsigned(tick.error),tick_time,o,pending,0,tick.close_control?CommandTraceReason::context_mismatch:CommandTraceReason::deadline);
+        }
+        apply(tick);
+        if((control_ready(session.state())||session.state()==SessionState::synchronizing)&&monotonic_ns()>=next_probe){
+            const auto before=config.probe_diagnostics?session.pending_probe_origin():0;const auto time=monotonic_ns();auto action=session.begin_probe(time);
+            if(config.probe_diagnostics)trace_probe(CommandTracePoint::probe_attempt,Kind::time_probe,action.send?&action.send->envelope:nullptr,unsigned(action.error),time,action.send?probe_fields(*action.send):ProbeAdmissionObservation{},before);
+            apply(action);next_probe=monotonic_ns()+second;
+        }
         for(unsigned i=0;i<2;++i){auto& link=links[i];
             if(config.session.role==Role::caller){
                 const bool enabled=!i||control_ready(session.state());
@@ -355,33 +663,58 @@ struct TransportOwner::Impl {
             }
             if(link.fd==SRT_INVALID_SOCK)continue;
             const auto state=srt_getsockstate(link.fd);
-            if(state==SRTS_BROKEN||state==SRTS_CLOSED||state==SRTS_NONEXIST){lost(i);continue;}
-            if(!link.ready){if(monotonic_ns()>=link.security_deadline){lost(i);continue;}if(state==SRTS_CONNECTED)secured(i);}
+            if(state==SRTS_BROKEN||state==SRTS_CLOSED||state==SRTS_NONEXIST){lost(i,CommandTraceReason::socket_state,unsigned(state));continue;}
+            if(!link.ready){if(monotonic_ns()>=link.security_deadline){lost(i,CommandTraceReason::security_timeout);continue;}if(state==SRTS_CONNECTED)secured(i);}
         }
     }
     void run() noexcept {
         try{
-            Provider provider;
+            Provider provider(config.shutdown_trace);
             try{
                 epoll=srt_epoll_create();require(epoll>=0);require(srt_epoll_set(epoll,SRT_EPOLL_ENABLE_EMPTY)!=SRT_ERROR);
                 if(config.session.role==Role::listener){listen(0);listen(1);}
                 current.running=true;publish();
                 while(!stopping.load(std::memory_order_relaxed)){
-                    timers();publish();process_checks();inputs();send(0);send(1);
+                    timers();provider_sample(0);provider_sample(1);publish();process_retained();process_checks();inputs();send(0);send(1);
                     if(links[0].ready){int events=SRT_EPOLL_ERR|(control_space()?SRT_EPOLL_IN:0);require(srt_epoll_update_usock(epoll,links[0].fd,&events)!=SRT_ERROR);}
-                    std::array<SRT_EPOLL_EVENT,4> events{};const int count=srt_epoll_uwait(epoll,events.data(),events.size(),10);
-                    if(count==SRT_ERROR){if(srt_getlasterror(nullptr)==SRT_ETIMEOUT)continue;throw std::runtime_error("epoll failed");}
+                    // Keep the active sender's maximum requested wait at 1ms.
+                    // If a paced sample becomes eligible sooner, poll SRT first,
+                    // then sleep only to that deadline. Never spin or round a
+                    // near-due sample past its next replacement arrival.
+                    const auto before_wait=monotonic_ns();
+                    const bool sending=config.session.role==Role::caller&&session.state()==SessionState::active;
+                    std::uint64_t wait_ns=sending?1000000:10000000;
+                    if(sending){const auto due=queues.sensor_due_ns(before_wait);if(due&&*due>before_wait)wait_ns=std::min(wait_ns,*due-before_wait);}
+                    const int wait_ms=static_cast<int>(wait_ns/1000000);
+                    const auto wake_at=before_wait+wait_ns;
+                    std::array<SRT_EPOLL_EVENT,4> events{};const int count=srt_epoll_uwait(epoll,events.data(),events.size(),wait_ms);
+                    if(count==SRT_ERROR&&srt_getlasterror(nullptr)!=SRT_ETIMEOUT)throw std::runtime_error("epoll failed");
+                    if(count<=0){
+                        if(!wait_ms){const auto time=monotonic_ns();if(time<wake_at)std::this_thread::sleep_for(std::chrono::nanoseconds(wake_at-time));}
+                        continue;
+                    }
                     for(int n=0;n<count;++n)for(unsigned i=0;i<2;++i){
                         if(events[n].fd==links[i].listener){if(events[n].events&SRT_EPOLL_ERR)throw std::runtime_error("listener failed");accept(i);}
-                        else if(events[n].fd==links[i].fd){if(events[n].events&SRT_EPOLL_ERR)lost(i);else if(links[i].ready&&(events[n].events&SRT_EPOLL_IN))receive(i);}
+                        else if(events[n].fd==links[i].fd){if(events[n].events&SRT_EPOLL_ERR)lost(i,CommandTraceReason::epoll_error,unsigned(events[n].events));else if(links[i].ready&&(events[n].events&SRT_EPOLL_IN))receive(i);}
                     }
                 }
             }catch(...){current.fault=TransportFault::io;}
-            apply(session.stop());queues.stop();links[0].retry.cancel();links[1].retry.cancel();
-            for(auto& link:links){close_fd(link.fd);close_fd(link.listener);}
+            shutdown_stage(config.shutdown_trace,"transport_shutdown_begin");
+            shutting_down=true;trace(CommandTracePoint::transport_stopping,CommandTraceReason::shutdown,{},0,unsigned(current.fault));
+            shutdown_stage(config.shutdown_trace,"transport_session_stop_begin");
+            apply(session.stop());shutdown_stage(config.shutdown_trace,"transport_session_stop_end");queues.stop();links[0].retry.cancel();links[1].retry.cancel();
+            for(unsigned i=0;i<2;++i){auto& link=links[i];
+                shutdown_stage(config.shutdown_trace,i?"sensor_close_begin":"control_close_begin");
+                shutdown_stage(config.shutdown_trace,i?"sensor_fd_disposition":"control_fd_disposition",link.fd);close_fd(link.fd);
+                shutdown_stage(config.shutdown_trace,i?"sensor_listener_disposition":"control_listener_disposition",link.listener);close_fd(link.listener);
+                shutdown_stage(config.shutdown_trace,i?"sensor_close_end":"control_close_end");
+            }
+            shutdown_stage(config.shutdown_trace,"epoll_release_begin");
             if(epoll>=0){srt_epoll_release(epoll);epoll=-1;}
+            shutdown_stage(config.shutdown_trace,"epoll_release_end");
         }catch(...){current.fault=TransportFault::provider;}
         stopping=true;current.running=false;publish();
+        shutdown_stage(config.shutdown_trace,"transport_thread_body_end");
     }
     SubmitResult enqueue_check(TransportContext context,const Envelope& command,std::uint64_t token,std::shared_ptr<execution_detail::Record> proof={}){
         if(stopping.load())return SubmitResult::stopped;
@@ -399,11 +732,12 @@ struct TransportOwner::Impl {
         if(stopping.load())return SubmitResult::stopped;
         if((item.kind==Kind::sample?item.context!=shared.context:!same_control(item.context,shared.context))||zero(item.context.session))return SubmitResult::obsolete;
         if(item.kind==Kind::sample){const auto at=index(item.route);if(at==route_count)return SubmitResult::invalid;
-            if(sample_pending[at])++shared.sensor_replaced;
+            ++mailbox_counts.sensor_submitted;
+            if(sample_pending[at]){++shared.sensor_replaced;++mailbox_counts.sensor_ingress_replaced;}
             samples[at]=item;sample_pending[at]=true;
         }else{
-            if(input_count==controls.size()||(item.proof&&input_commands==56))return SubmitResult::busy;
-            if(item.proof){if(!item.proof->live->load()||item.proof->claimed.exchange(true))return SubmitResult::obsolete;++input_commands;}
+            if(input_count+(pending_command?1:0)==controls.size()||(item.proof&&input_commands+(pending_command?1:0)==56))return SubmitResult::busy;
+            if(item.proof){if(!item.proof->live->load()||item.proof->claimed.exchange(true))return SubmitResult::obsolete;item.proof->disposition.store(SubmissionDisposition::queued,std::memory_order_release);++input_commands;}
             controls[(input_head+input_count++)%controls.size()]=std::move(item);
         }
         return SubmitResult::queued;
@@ -453,6 +787,12 @@ SubmitResult TransportOwner::submit_command(TransportContext context,DurableComm
     const auto encoded=encode_rate_command(e.command,input.bytes);if(!encoded)return SubmitResult::invalid;
     input.size=encoded.bytes_written;const auto result=impl_->submit(std::move(input));if(result==SubmitResult::queued)ticket.proof_.reset();return result;
 }
+bool TransportOwner::abandon_unsubmitted_command(DurableCommandTicket&& ticket){
+    const auto p=ticket.proof_;if(!p)return false;
+    if(impl_->config.session.role!=Role::listener||p->local_peer!=impl_->config.session.local_peer_id||p->remote_peer!=impl_->config.session.expected_peer_id||p->entry.owner_epoch!=impl_->config.session.local_epoch||p->entry.context.source_epoch!=impl_->config.session.local_epoch||!p->live->load())return false;
+    if(p->claimed.exchange(true))return false;
+    p->disposition.store(SubmissionDisposition::abandoned,std::memory_order_release);ticket.proof_.reset();return true;
+}
 SubmitResult TransportOwner::request_command_check(TransportContext context,const Envelope& command,std::uint64_t token){
     if(!token||command.kind!=Kind::command||impl_->config.session.role!=Role::caller)return SubmitResult::invalid;
     return impl_->enqueue_check(context,command,token);
@@ -474,13 +814,13 @@ bool TransportOwner::poll_command_check(CommandCheck& check){
 }
 bool TransportOwner::poll_control(TransportMessage& message){
     std::lock_guard lock(impl_->mutex);if(!impl_->output_count)return false;
-    message=impl_->incoming[impl_->output_head];impl_->incoming[impl_->output_head]={};impl_->output_head=(impl_->output_head+1)%impl_->incoming.size();--impl_->output_count;return true;
+    message=impl_->incoming[impl_->output_head];if(message.envelope.kind==Kind::command)--impl_->received_commands;impl_->incoming[impl_->output_head]={};impl_->output_head=(impl_->output_head+1)%impl_->incoming.size();--impl_->output_count;return true;
 }
 bool TransportOwner::poll_sample(TransportMessage& message){
     std::lock_guard lock(impl_->mutex);const auto time=monotonic_ns();
     for(std::size_t n=0;n<impl_->route_count;++n){const auto at=(impl_->sample_cursor+n)%impl_->route_count;if(!impl_->sample_received[at])continue;
-        impl_->sample_received[at]=false;const auto& item=impl_->incoming_samples[at];if(time>=item.deadline_ns)continue;
-        message=item;impl_->sample_cursor=(at+1)%impl_->route_count;return true;}
+        impl_->sample_received[at]=false;const auto& item=impl_->incoming_samples[at];if(time>=item.deadline_ns){++impl_->mailbox_counts.sensor_poll_expired;continue;}
+        ++impl_->mailbox_counts.sensor_polled;message=item;impl_->sample_cursor=(at+1)%impl_->route_count;return true;}
     return false;
 }
 }

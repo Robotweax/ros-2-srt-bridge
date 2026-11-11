@@ -1,0 +1,184 @@
+{
+  "status": "passed_bounded_N0_shutdown_diagnostic",
+  "driver_exit_code": 0,
+  "live_runs": 1,
+  "seed": 1701,
+  "seconds": 10,
+  "losses": 0,
+  "python_tests": 491,
+  "gate_regression_tests": 7,
+  "native_trace_contract_tests": 1,
+  "new_matched_entries": 14,
+  "preserved_shutdown_entries": 13,
+  "slot_proofs": {
+    "operator": {
+      "slots": {
+        "control_fd_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        },
+        "control_listener_disposition": {
+          "fd": 879443142,
+          "disposition": "closed",
+          "close_result": 0
+        },
+        "sensor_fd_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        },
+        "sensor_listener_disposition": {
+          "fd": 334283441,
+          "disposition": "closed",
+          "close_result": 0
+        }
+      },
+      "traced_successful_close_fds": [
+        944814408,
+        640271436,
+        879443142,
+        334283441
+      ],
+      "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+    },
+    "robot": {
+      "slots": {
+        "control_fd_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        },
+        "control_listener_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        },
+        "sensor_fd_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        },
+        "sensor_listener_disposition": {
+          "fd": -1,
+          "disposition": "already_invalid",
+          "close_result": null
+        }
+      },
+      "traced_successful_close_fds": [],
+      "scope": "final slot disposition and traced srt_close return; no earlier close outcome or leak-freedom assertion"
+    }
+  },
+  "stage_records": {
+    "operator": 59,
+    "robot": 43
+  },
+  "observer": {
+    "samples": 2,
+    "post_signal_samples": 1,
+    "nonempty_kernel_stacks": 27,
+    "confirmed_worker_exits": [
+      {
+        "pid": 157,
+        "start_ticks": 22302
+      }
+    ],
+    "worker_join_end_ns": 245390604111,
+    "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+    "clean_fast_exit_may_have_no_post_signal_sample": true
+  },
+  "total_kernel_stack_reads_ok": 27,
+  "unavailable_stack_reads": 0,
+  "observer_budget_exhausted": false,
+  "sensor_assessment": {
+    "gate": "N3_strict_window_and_recorded_capture",
+    "window": {
+      "source_produced": 2514,
+      "observer_received": 2394,
+      "missing": 120,
+      "losses": {
+        "upstream_dds": 25,
+        "validation": 0,
+        "admission": 1,
+        "ingress_replaced": 0,
+        "ingress_flushed": 0,
+        "input_rejected": 0,
+        "outbound_replaced": 90,
+        "outbound_expired": 0,
+        "outbound_flushed": 0,
+        "srt_accept_to_receiver_gap": 0,
+        "receiver_rejected": 0,
+        "receive_replaced": 1,
+        "receive_flushed": 0,
+        "poll_expired": 0,
+        "publication_rejected": 0,
+        "observer_dds": 3
+      },
+      "balances": {
+        "typed_ingress": 0,
+        "ingress_mailbox": 0,
+        "outbound_queue": 0,
+        "receive_mailbox": 0,
+        "publication": 0,
+        "end_to_end": 0
+      },
+      "source_enabled_seconds": 10.054288796,
+      "source_actual_hz": {
+        "imu": 200.01414727614116,
+        "joints": 50.028401829885134
+      },
+      "published": 2397,
+      "age_upper_histograms": {
+        "imu": {
+          "count": 1902,
+          "rounding": "up to 1ms",
+          "maximum_ms": 69,
+          "p50_ms": 10,
+          "p95_ms": 12,
+          "p99_ms": 14
+        },
+        "joint": {
+          "count": 495,
+          "rounding": "up to 1ms",
+          "maximum_ms": 80,
+          "p50_ms": 16,
+          "p95_ms": 27,
+          "p99_ms": 29
+        }
+      },
+      "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+    }
+  },
+  "cleanup": {
+    "operator": [
+      {
+        "name": "operator-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 215842500
+      }
+    ],
+    "robot": [
+      {
+        "name": "robot-source",
+        "pid": 142,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 165464791
+      },
+      {
+        "name": "robot-bridge-0",
+        "pid": 141,
+        "returncode": 0,
+        "forced_kill": false,
+        "signal_to_reap_ns": 326124084
+      }
+    ]
+  },
+  "no_tuning": true,
+  "retry_two_loss_4211": false,
+  "remaining_campaign_cases_disabled": 29,
+  "original_hang_cause": "unknown",
+  "M3_complete": false
+}

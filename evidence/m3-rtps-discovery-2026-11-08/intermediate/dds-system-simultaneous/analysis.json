@@ -1,0 +1,1093 @@
+{
+  "status": "completed",
+  "retrospective": true,
+  "original_run": ".local/m3-dds-combined/20261108T113346564620Z",
+  "source_commit": "830fc3af0e69354f7270f94086c92f8d7932e019",
+  "adapter_sha256": "0ca86729216aea93e069b7a8e94164da210948225f14e38a4706b870528029fe",
+  "commands": [
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-b71fbc3b16",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "sh",
+      "-c",
+      "tshark --version; dpkg-query -W tshark libwireshark17t64; sha256sum /usr/bin/tshark /usr/lib/x86_64-linux-gnu/libwireshark.so.17"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-4d90bf3f25",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ],
+    [
+      "docker",
+      "run",
+      "--rm",
+      "--pull=never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--cap-drop",
+      "ALL",
+      "--memory",
+      "1g",
+      "--name",
+      "ros2-srt-rtps-analysis-16b72757c0",
+      "-v",
+      "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2:/workspace:ro",
+      "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+      "tshark",
+      "-n",
+      "-2",
+      "-o",
+      "ip.defragment:TRUE",
+      "-r",
+      "/workspace/.local/m3-dds-combined/20261108T113346564620Z/robot.pcap00",
+      "-Y",
+      "rtps || ip.flags.mf || ip.frag_offset > 0",
+      "-T",
+      "pdml"
+    ]
+  ],
+  "tool_image_id": "sha256:c4fb3bf0a209a2563cb95072ccecf8830ff447f29bcd983c14b02a0fa633a98d",
+  "original_status": "failed",
+  "addresses": {
+    "robot": "172.19.0.2",
+    "operator": "172.19.0.3"
+  },
+  "inputs": {
+    "operator": {
+      "path": ".local/m3-dds-combined/20261108T113346564620Z/operator.pcap00",
+      "sha256": "ec5009199d8d7be32ee7344736b2d32e39635069c295c19160d2a974a5b6cb1b",
+      "integrity": {
+        "records": 7114,
+        "first_timestamp_ns": 1794137628215807000,
+        "last_timestamp_ns": 1794137676283951000,
+        "classes": {
+          "in/other_udp": {
+            "packets": 269,
+            "ethernet_bytes": 285734,
+            "udp_payload_bytes": 274436
+          },
+          "out/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "out/dds_rtps": {
+            "packets": 1236,
+            "ethernet_bytes": 400032,
+            "udp_payload_bytes": 348120
+          },
+          "in/dds_rtps": {
+            "packets": 5502,
+            "ethernet_bytes": 2618804,
+            "udp_payload_bytes": 2387720
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 74,
+            "ethernet_bytes": 81564,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 79048
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 32,
+            "ethernet_bytes": 36504,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 35416
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 7114,
+        "tcpdump_reported_filtered_packets": 7114,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    },
+    "robot": {
+      "path": ".local/m3-dds-combined/20261108T113346564620Z/robot.pcap00",
+      "sha256": "c4a388a9fc319bdc17c16670f35257276a4ac1d7e1c5a7e3a1002201dbd733e0",
+      "integrity": {
+        "records": 7086,
+        "first_timestamp_ns": 1794137628215793000,
+        "last_timestamp_ns": 1794137676283932000,
+        "classes": {
+          "out/other_udp": {
+            "packets": 269,
+            "ethernet_bytes": 285734,
+            "udp_payload_bytes": 274436
+          },
+          "in/other_udp": {
+            "packets": 1,
+            "ethernet_bytes": 46,
+            "udp_payload_bytes": 4
+          },
+          "in/dds_rtps": {
+            "packets": 1199,
+            "ethernet_bytes": 379682,
+            "udp_payload_bytes": 329324
+          },
+          "out/dds_rtps": {
+            "packets": 5508,
+            "ethernet_bytes": 2622104,
+            "udp_payload_bytes": 2390768
+          },
+          "in/ipv4_udp_fragment": {
+            "packets": 70,
+            "ethernet_bytes": 75508,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 73128
+          },
+          "out/ipv4_udp_fragment": {
+            "packets": 39,
+            "ethernet_bytes": 47102,
+            "udp_payload_bytes": null,
+            "ip_fragment_payload_bytes": 45776
+          }
+        },
+        "unaccounted": {},
+        "fec": {
+          "in": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          },
+          "out": {
+            "parity_to_source_frame_bytes": null,
+            "source_frame_bytes": 0,
+            "parity_frame_bytes": 0
+          }
+        },
+        "byte_scope": "captured Ethernet-shaped skb lengths; excludes preamble/FCS/physical-link overhead; qdisc/offload interpretation requires explicit environment qualification",
+        "tcpdump_reported_packets": 7086,
+        "tcpdump_reported_filtered_packets": 7086,
+        "tcpdump_kernel_drops": 0,
+        "tcpdump_file_integrity_valid": true,
+        "tcpdump_population_reconciled": true
+      }
+    }
+  },
+  "decoded_summary": {
+    "operator": {
+      "packets": 7114,
+      "fragment_frames": 56,
+      "submessages": {
+        "0x9": 5746,
+        "0x15": 5746,
+        "0x80": 6698,
+        "0xe": 5531,
+        "0x7": 727,
+        "0x6": 429,
+        "0x8": 5
+      }
+    },
+    "robot": {
+      "packets": 7086,
+      "fragment_frames": 56,
+      "submessages": {
+        "0x9": 5715,
+        "0x15": 5715,
+        "0x80": 6667,
+        "0xe": 5531,
+        "0x7": 727,
+        "0x6": 429,
+        "0x8": 5
+      }
+    }
+  },
+  "assessment": {
+    "topics": {
+      "rt/dds/commands/operator": {
+        "advertisements": {
+          "operator": {
+            "observations": 5,
+            "rows": [
+              {
+                "frame": 318,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 411,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 418,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 3305,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 5458,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": "010f8e234d007a0100000000",
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f3dea7300721f0000000000001504",
+                "submessage_sha256": "67845aaf264cc5e21e515ba04774554bf274fb30cc7cade87c740d465885fe9a",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 5,
+            "rows": [
+              {
+                "frame": 314,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 405,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 412,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 3294,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f8e23720078e30000000000001403",
+                "submessage_sha256": "f4048e04ea1bd73dbbeca22ec731ea9fd302256839956455d913b70842000f02",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 5438,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": "010f8e234d007a0100000000",
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/operator",
+                "endpoint": "010f3dea7300721f0000000000001504",
+                "submessage_sha256": "67845aaf264cc5e21e515ba04774554bf274fb30cc7cade87c740d465885fe9a",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/robot": {
+        "advertisements": {
+          "operator": {
+            "observations": 7,
+            "rows": [
+              {
+                "frame": 162,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f3dea7300721f0000000000001403",
+                "submessage_sha256": "cb4de79eee79815a816addd6dd8cd025439410d357913e80b7fdd21f9db33962",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 521,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 581,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 583,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 627,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 628,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 1654,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 7,
+            "rows": [
+              {
+                "frame": 159,
+                "source": "172.19.0.2",
+                "destination": "172.19.0.3",
+                "source_prefix": "010f3dea7300721f00000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f3dea7300721f00000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f3dea7300721f0000000000001403",
+                "submessage_sha256": "cb4de79eee79815a816addd6dd8cd025439410d357913e80b7fdd21f9db33962",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 517,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 577,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 580,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 622,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 623,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 1650,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 10,
+                "topic": "rt/dds/commands/robot",
+                "endpoint": "010f8e23720078e30000000000001504",
+                "submessage_sha256": "46a459759a9dac691bfb618d29cf81b2bccc3b9f2b01e223d1c0b11e00f8a673",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/operator_hello": {
+        "advertisements": {
+          "operator": {
+            "observations": 4,
+            "rows": [
+              {
+                "frame": 318,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 476,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 478,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              },
+              {
+                "frame": 3305,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "operator",
+                "side": "publication"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 4,
+            "rows": [
+              {
+                "frame": 314,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea720099ab00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 472,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 474,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              },
+              {
+                "frame": 3294,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000003c2",
+                "reader_entity": "000003c7",
+                "sequence": 12,
+                "topic": "rt/dds/commands/operator_hello",
+                "endpoint": "010f8e23720078e30000000000001603",
+                "submessage_sha256": "4dfd16ea59478e814b0123970777b2a2477614a69c7a967d399abe33bcd145ba",
+                "capture": "robot",
+                "side": "publication"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      },
+      "rt/dds/commands/robot_hello": {
+        "advertisements": {
+          "operator": {
+            "observations": 6,
+            "rows": [
+              {
+                "frame": 581,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 583,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 629,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 631,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 634,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              },
+              {
+                "frame": 1663,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "operator",
+                "side": "subscription"
+              }
+            ]
+          },
+          "robot": {
+            "observations": 6,
+            "rows": [
+              {
+                "frame": 577,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 580,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 624,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 626,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 629,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": null,
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              },
+              {
+                "frame": 1659,
+                "source": "172.19.0.3",
+                "destination": "172.19.0.2",
+                "source_prefix": "010f8e23720078e300000000",
+                "destination_prefix": "010f3dea4d00d70f00000000",
+                "kind": 21,
+                "writer": "010f8e23720078e300000000000004c2",
+                "reader_entity": "000004c7",
+                "sequence": 11,
+                "topic": "rt/dds/commands/robot_hello",
+                "endpoint": "010f8e23720078e30000000000001704",
+                "submessage_sha256": "b3333a3dda32f42b88c1ed1ff2a5fa6dfc0b754b3ce19c5c0143cfe8325bf809",
+                "capture": "robot",
+                "side": "subscription"
+              }
+            ]
+          }
+        },
+        "data": {
+          "operator": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          },
+          "robot": {
+            "observations": 0,
+            "by_direction": {},
+            "unique_writer_sequences": 0,
+            "rows": []
+          }
+        }
+      }
+    },
+    "cross_capture_advertisement_presence": {
+      "operator": {
+        "source_unique": 4,
+        "peer_unique": 4,
+        "present_both": 4,
+        "source_only": [],
+        "peer_only": []
+      },
+      "robot": {
+        "source_unique": 2,
+        "peer_unique": 2,
+        "present_both": 2,
+        "source_only": [],
+        "peer_only": []
+      }
+    },
+    "binding_count": 6,
+    "unbound_data_submessages": {
+      "operator": 5746,
+      "robot": 5715
+    },
+    "scope": "retrospective decoded capture observations and union GUID directory; missing observations never prove middleware absence, execution outcome or unique kernel loss cause; DATA_FRAG counts are submessages, not reconstructed application callbacks"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "analyzer_commit": "be70a6a7af625a1671d5d5f8949e729d4fb63ee1",
+  "historical_run": ".local/m3/20261106T181823876229Z",
+  "marker_ns": 1609946855232,
+  "robot_pre_reset_flow": {
+    "flow": {
+      "direction": "in",
+      "source": "172.19.0.2",
+      "destination": "172.19.0.3",
+      "source_port": 10080,
+      "destination_port": 57042,
+      "destination_socket_id": 284225821
+    },
+    "nonzero_destination_socket_id": true,
+    "observations": 253,
+    "kinds": {
+      "nak": 1,
+      "ack": 10,
+      "data": 239,
+      "ackack": 3
+    },
+    "first_ns": 1641547869497,
+    "last_ns": 1649407873209,
+    "largest_gap": {
+      "before_ns": 1642455917164,
+      "after_ns": 1647583545750,
+      "gap_ns": 5127628586
+    },
+    "shutdown_ns": [],
+    "last_before_event_ns": 1642455917164,
+    "first_at_or_after_event_ns": 1647583545750,
+    "observed_quiet_to_event_ns": 5008241503
+  },
+  "operator_reverse_pre_reset_flow": {
+    "flow": {
+      "direction": "in",
+      "source": "172.19.0.3",
+      "destination": "172.19.0.2",
+      "source_port": 57042,
+      "destination_port": 10080,
+      "destination_socket_id": 684381276
+    },
+    "nonzero_destination_socket_id": true,
+    "observations": 16,
+    "kinds": {
+      "data": 16
+    },
+    "first_ns": 1646417184333,
+    "last_ns": 1647415326583,
+    "largest_gap": {
+      "before_ns": 1646851178916,
+      "after_ns": 1647128166833,
+      "gap_ns": 276987917
+    },
+    "shutdown_ns": [],
+    "last_before_event_ns": 1647415326583,
+    "first_at_or_after_event_ns": null,
+    "observed_quiet_to_event_ns": 5001199460
+  },
+  "robot_event_ns": 1647464158667,
+  "operator_event_ns": 1652416526043,
+  "provider_commit": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "provider_source_sha256": {
+    "src/compat/transport_runtime.cpp": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440",
+    "src/compat/public_socket_options.hpp": "2e2daee90e8e5f69faf04a6d6b7dbf674d7fe722df26dc04094a3e13a19d6fb5",
+    "include/robotweax/srt/packet.hpp": "df82f1da89e251a0af15c9ab5a94221558b3f3ffceb9e3c60272409c48b5458f"
+  },
+  "provider_default_idle_ms": 5000,
+  "idle_note": "pinned source default, not a historical per-socket option readback",
+  "native_fault_observations": {
+    "ipv4": {
+      "blocked_ms": 5004,
+      "dropped_reply_datagrams": 631,
+      "forwarded_reverse_datagrams": 213
+    },
+    "ipv6": {
+      "blocked_ms": 5004,
+      "dropped_reply_datagrams": 619,
+      "forwarded_reverse_datagrams": 208
+    }
+  },
+  "historical_initiator_uniquely_proven": false,
+  "production_behavior_changed": false,
+  "qualification_replacement": false,
+  "complete_m3_acceptance": false
+}

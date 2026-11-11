@@ -1,0 +1,974 @@
+{
+  "qualification": false,
+  "plan": "diagnostic-plan.json",
+  "results": {
+    "preflight": {
+      "executed": true,
+      "source_commit": "41e6f60",
+      "source_hashes_match": true,
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T074451067100Z",
+      "original_status": "passed",
+      "neighbor_mode": "permanent",
+      "original_errors": {},
+      "analysis_error": null,
+      "journal_audit_error": null,
+      "command_summary": {
+        "attempts": 8,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 8,
+          "p50": 104.104375,
+          "p95": 259.137084,
+          "p99": 259.137084,
+          "maximum": 259.137084
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 8,
+            "p50": 104.104375,
+            "p95": 259.137084,
+            "p99": 259.137084,
+            "maximum": 259.137084
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 0,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 8,
+        "effects": 8
+      },
+      "neighbor_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 341,
+          "states": {
+            "PERMANENT": 341
+          },
+          "lladdrs": {
+            "7a:0a:26:a6:48:42": 341
+          },
+          "max_read_span_ns": 33987583,
+          "max_sample_start_gap_ns": 110097084,
+          "status": {
+            "complete": true,
+            "records": 341,
+            "limit": 75000,
+            "finished_ns": 40216335309
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.3",
+              "dev": "eth0",
+              "lladdr": "7a:0a:26:a6:48:42",
+              "used": 28,
+              "confirmed": 35,
+              "updated": 35,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        },
+        "robot": {
+          "complete": true,
+          "records": 341,
+          "states": {
+            "PERMANENT": 341
+          },
+          "lladdrs": {
+            "0e:4d:a4:1b:6a:0b": 341
+          },
+          "max_read_span_ns": 30068834,
+          "max_sample_start_gap_ns": 110109750,
+          "status": {
+            "complete": true,
+            "records": 341,
+            "limit": 75000,
+            "finished_ns": 40211626851
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.2",
+              "dev": "eth0",
+              "lladdr": "0e:4d:a4:1b:6a:0b",
+              "used": 28,
+              "confirmed": 35,
+              "updated": 35,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        }
+      },
+      "source_window_neighbor_states": {
+        "operator": {
+          "PERMANENT": 150
+        },
+        "robot": {
+          "PERMANENT": 150
+        }
+      },
+      "gaps": [],
+      "active_control_events": [],
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 266,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 641125,
+          "max_sample_start_gap_ns": 112319666
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 19,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 674875,
+          "max_sample_start_gap_ns": 111467542
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 225,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 607750,
+          "max_sample_start_gap_ns": 113630042
+        }
+      },
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 42,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "pcap": {
+        "operator": {
+          "records": 8121,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        },
+        "robot": {
+          "records": 8121,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "monotonic_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 8122,
+          "seen": 8122,
+          "submitted": 8122,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 6439274127,
+          "stop_before_ns": 39535649184,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 8125,
+          "seen": 8125,
+          "submitted": 8125,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 6435613918,
+          "stop_before_ns": 39709948226,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 3773,
+        "observer_received": 3664,
+        "missing": 109,
+        "losses": {
+          "upstream_dds": 0,
+          "validation": 0,
+          "admission": 8,
+          "ingress_replaced": 0,
+          "ingress_flushed": 0,
+          "input_rejected": 0,
+          "outbound_replaced": 96,
+          "outbound_expired": 0,
+          "outbound_flushed": 0,
+          "srt_accept_to_receiver_gap": 0,
+          "receiver_rejected": 0,
+          "receive_replaced": 4,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 1
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 15.095711299,
+        "source_actual_hz": {
+          "imu": 199.9243321644555,
+          "joints": 50.01420503120077
+        },
+        "published": 3665,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 2916,
+            "rounding": "up to 1ms",
+            "maximum_ms": 15,
+            "p50_ms": 10,
+            "p95_ms": 12,
+            "p99_ms": 13
+          },
+          "joint": {
+            "count": 749,
+            "rounding": "up to 1ms",
+            "maximum_ms": 34,
+            "p50_ms": 17,
+            "p95_ms": 27,
+            "p99_ms": 28
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": null,
+      "boot_id": "43ce1c65-4dc6-465a-beb6-178c1d04400f"
+    },
+    "dynamic": {
+      "executed": true,
+      "source_commit": "035100b",
+      "source_hashes_match": true,
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T074709774864Z",
+      "original_status": "passed",
+      "neighbor_mode": "dynamic",
+      "original_errors": {},
+      "analysis_error": null,
+      "journal_audit_error": null,
+      "command_summary": {
+        "attempts": 130,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 130,
+          "p50": 1099.227918,
+          "p95": 3190.956584,
+          "p99": 3591.733959,
+          "maximum": 5665.970169
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 130,
+            "p50": 1099.227918,
+            "p95": 3190.956584,
+            "p99": 3591.733959,
+            "maximum": 5665.970169
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 20,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 130,
+        "effects": 130
+      },
+      "neighbor_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 3180,
+          "states": {
+            "ABSENT": 8,
+            "DELAY": 357,
+            "REACHABLE": 2679,
+            "PROBE": 103,
+            "INCOMPLETE": 33
+          },
+          "lladdrs": {
+            "d2:fc:1c:18:25:3c": 3139
+          },
+          "max_read_span_ns": 26252292,
+          "max_sample_start_gap_ns": 110274417,
+          "status": {
+            "complete": true,
+            "records": 3180,
+            "limit": 75000,
+            "finished_ns": 460386763792
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.3",
+              "dev": "eth0",
+              "lladdr": "d2:fc:1c:18:25:3c",
+              "refcnt": 1,
+              "used": 8,
+              "confirmed": 2,
+              "updated": 8,
+              "probes": 4,
+              "state": [
+                "REACHABLE"
+              ]
+            }
+          ]
+        },
+        "robot": {
+          "complete": true,
+          "records": 3180,
+          "states": {
+            "ABSENT": 8,
+            "REACHABLE": 2399,
+            "DELAY": 612,
+            "PROBE": 141,
+            "INCOMPLETE": 20
+          },
+          "lladdrs": {
+            "ba:cc:12:30:bb:9a": 3152
+          },
+          "max_read_span_ns": 27647000,
+          "max_sample_start_gap_ns": 111184208,
+          "status": {
+            "complete": true,
+            "records": 3180,
+            "limit": 75000,
+            "finished_ns": 460386668417
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.2",
+              "dev": "eth0",
+              "lladdr": "ba:cc:12:30:bb:9a",
+              "refcnt": 1,
+              "used": 14,
+              "confirmed": 2,
+              "updated": 14,
+              "probes": 5,
+              "state": [
+                "REACHABLE"
+              ]
+            }
+          ]
+        }
+      },
+      "source_window_neighbor_states": {
+        "operator": {
+          "REACHABLE": 2546,
+          "DELAY": 306,
+          "PROBE": 103,
+          "INCOMPLETE": 33
+        },
+        "robot": {
+          "REACHABLE": 2216,
+          "DELAY": 612,
+          "PROBE": 141,
+          "INCOMPLETE": 20
+        }
+      },
+      "gaps": [
+        {
+          "sender": "operator",
+          "seconds": 3.232864418,
+          "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+          "neighbor_inside_states": {
+            "operator": {
+              "PROBE": 1,
+              "INCOMPLETE": 31
+            },
+            "robot": {
+              "REACHABLE": 32
+            }
+          }
+        },
+        {
+          "sender": "robot",
+          "seconds": 1.141203625,
+          "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+          "neighbor_inside_states": {
+            "operator": {
+              "REACHABLE": 11
+            },
+            "robot": {
+              "PROBE": 1,
+              "INCOMPLETE": 10
+            }
+          }
+        },
+        {
+          "sender": "robot",
+          "seconds": 1.058229125,
+          "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+          "neighbor_inside_states": {
+            "operator": {
+              "DELAY": 10
+            },
+            "robot": {
+              "INCOMPLETE": 10
+            }
+          }
+        }
+      ],
+      "active_control_events": [],
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 2993,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 718000,
+          "max_sample_start_gap_ns": 113687751
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 24,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 749459,
+          "max_sample_start_gap_ns": 110769375
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 3055,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 661541,
+          "max_sample_start_gap_ns": 111249250
+        }
+      },
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 410,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "pcap": {
+        "operator": {
+          "records": 125814,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        },
+        "robot": {
+          "records": 125814,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "monotonic_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 125902,
+          "seen": 125902,
+          "submitted": 125902,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 141563291814,
+          "stop_before_ns": 459651491416,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 125900,
+          "seen": 125900,
+          "submitted": 125900,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 141563237522,
+          "stop_before_ns": 459827583666,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 75023,
+        "observer_received": 19805,
+        "missing": 55218,
+        "losses": {
+          "upstream_dds": 0,
+          "validation": 0,
+          "admission": 89,
+          "ingress_replaced": 0,
+          "ingress_flushed": 393,
+          "input_rejected": 4,
+          "outbound_replaced": 2064,
+          "outbound_expired": 0,
+          "outbound_flushed": 5,
+          "srt_accept_to_receiver_gap": 52182,
+          "receiver_rejected": 480,
+          "receive_replaced": 1,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 0
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 300.097432344,
+        "source_actual_hz": {
+          "imu": 199.99504671270128,
+          "joints": 50.00042780372693
+        },
+        "published": 19805,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 16423,
+            "rounding": "up to 1ms",
+            "maximum_ms": 167,
+            "p50_ms": 107,
+            "p95_ms": 134,
+            "p99_ms": 144
+          },
+          "joint": {
+            "count": 3382,
+            "rounding": "up to 1ms",
+            "maximum_ms": 171,
+            "p50_ms": 114,
+            "p95_ms": 142,
+            "p99_ms": 153
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": {
+        "protocol": "UDP",
+        "target_bitrate": 128000,
+        "block_bytes": 1024,
+        "bytes": 5064704,
+        "seconds": 316.529526,
+        "offered_bits_per_second": 128005.85307798427,
+        "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+        "alive_poll_checks": 1246
+      },
+      "boot_id": "43ce1c65-4dc6-465a-beb6-178c1d04400f"
+    },
+    "permanent": {
+      "executed": true,
+      "source_commit": "035100b",
+      "source_hashes_match": true,
+      "local_run": "/Users/robotweax/Documents/Codex/robotweax-srt-public/SRT-ROS2/.local/m3/20261107T075252504462Z",
+      "original_status": "passed",
+      "neighbor_mode": "permanent",
+      "original_errors": {},
+      "analysis_error": null,
+      "journal_audit_error": null,
+      "command_summary": {
+        "attempts": 132,
+        "not_admitted": 0,
+        "unresolved": 0,
+        "terminal_observation_latency_ms": {
+          "count": 132,
+          "p50": 897.343417,
+          "p95": 2767.757585,
+          "p99": 3187.942251,
+          "maximum": 3405.111544
+        },
+        "by_state_reason": {
+          "4/0": {
+            "count": 132,
+            "p50": 897.343417,
+            "p95": 2767.757585,
+            "p99": 3187.942251,
+            "maximum": 3405.111544
+          }
+        },
+        "scope": "local Execute invocation to terminal status observation; nominal 200ms poll cadence is not a latency bound; includes service/transport/reconciliation waits; unresolved attempts excluded and counted separately"
+      },
+      "skipped_command_slots": 18,
+      "device": {
+        "sequence": 10,
+        "ok": true,
+        "rate": 200,
+        "generation": 132,
+        "effects": 132
+      },
+      "neighbor_summaries": {
+        "operator": {
+          "complete": true,
+          "records": 3167,
+          "states": {
+            "PERMANENT": 3167
+          },
+          "lladdrs": {
+            "b6:cf:1c:60:cf:3e": 3167
+          },
+          "max_read_span_ns": 34091001,
+          "max_sample_start_gap_ns": 110908209,
+          "status": {
+            "complete": true,
+            "records": 3167,
+            "limit": 75000,
+            "finished_ns": 802214449198
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.3",
+              "dev": "eth0",
+              "lladdr": "b6:cf:1c:60:cf:3e",
+              "used": 318,
+              "confirmed": 2,
+              "updated": 319,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        },
+        "robot": {
+          "complete": true,
+          "records": 3170,
+          "states": {
+            "PERMANENT": 3170
+          },
+          "lladdrs": {
+            "7e:66:a8:b7:16:92": 3170
+          },
+          "max_read_span_ns": 44683084,
+          "max_sample_start_gap_ns": 111076334,
+          "status": {
+            "complete": true,
+            "records": 3170,
+            "limit": 75000,
+            "finished_ns": 802214464031
+          },
+          "scope": "read-only sampled netlink state, no active probe or full transition/queue/drop proof; observer adds subprocess work",
+          "after": [
+            {
+              "dst": "172.19.0.2",
+              "dev": "eth0",
+              "lladdr": "7e:66:a8:b7:16:92",
+              "used": 318,
+              "confirmed": 2,
+              "updated": 319,
+              "probes": 0,
+              "state": [
+                "PERMANENT"
+              ]
+            }
+          ]
+        }
+      },
+      "source_window_neighbor_states": {
+        "operator": {
+          "PERMANENT": 2984
+        },
+        "robot": {
+          "PERMANENT": 2986
+        }
+      },
+      "gaps": [
+        {
+          "sender": "operator",
+          "seconds": 1.000092084,
+          "classification": "selected_send_counters_flat_not_udp_absence_proof",
+          "neighbor_inside_states": {
+            "operator": {
+              "PERMANENT": 10
+            },
+            "robot": {
+              "PERMANENT": 10
+            }
+          }
+        },
+        {
+          "sender": "robot",
+          "seconds": 1.314880584,
+          "classification": "selected_send_counters_increased_without_old_flow_egress_observation",
+          "neighbor_inside_states": {
+            "operator": {
+              "PERMANENT": 13
+            },
+            "robot": {
+              "PERMANENT": 13
+            }
+          }
+        }
+      ],
+      "active_control_events": [],
+      "provider": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "status": {
+            "attempted": 2983,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 622542,
+          "max_sample_start_gap_ns": 112743041
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "status": {
+            "attempted": 23,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 625291,
+          "max_sample_start_gap_ns": 110006125
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "status": {
+            "attempted": 3046,
+            "dropped": 0,
+            "exhausted": 0,
+            "limit": 75000
+          },
+          "max_read_duration_ns": 6496833,
+          "max_sample_start_gap_ns": 113649958
+        }
+      },
+      "command_diagnostics": {
+        "operator-bridge-0.log": {
+          "complete": true,
+          "attempted": 416,
+          "dropped": 0
+        },
+        "robot-bridge-1.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        },
+        "robot-bridge-2.log": {
+          "complete": true,
+          "attempted": 5,
+          "dropped": 0
+        }
+      },
+      "pcap": {
+        "operator": {
+          "records": 108233,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        },
+        "robot": {
+          "records": 108233,
+          "tcpdump_kernel_drops": 0,
+          "tcpdump_population_reconciled": true
+        }
+      },
+      "monotonic_statuses": {
+        "operator": {
+          "complete": true,
+          "records": 108254,
+          "seen": 108254,
+          "submitted": 108254,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 484018054511,
+          "stop_before_ns": 801496446906,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        },
+        "robot": {
+          "complete": true,
+          "records": 108257,
+          "seen": 108257,
+          "submitted": 108257,
+          "reserve_failed": 0,
+          "copy_failed": 0,
+          "ready_ns": 484017734927,
+          "stop_before_ns": 801676639656,
+          "ifindex": 11,
+          "time_namespace_zero": true,
+          "ring_bytes": 16777216,
+          "clock": "kernel_monotonic",
+          "artifact_version": 2,
+          "mtu": 1500,
+          "record_bytes": 168,
+          "prefix_bytes": 128
+        }
+      },
+      "measurement_window": {
+        "source_produced": 75036,
+        "observer_received": 27565,
+        "missing": 47471,
+        "losses": {
+          "upstream_dds": 7,
+          "validation": 0,
+          "admission": 87,
+          "ingress_replaced": 7,
+          "ingress_flushed": 480,
+          "input_rejected": 3,
+          "outbound_replaced": 2560,
+          "outbound_expired": 0,
+          "outbound_flushed": 3,
+          "srt_accept_to_receiver_gap": 43714,
+          "receiver_rejected": 605,
+          "receive_replaced": 0,
+          "receive_flushed": 0,
+          "poll_expired": 0,
+          "publication_rejected": 0,
+          "observer_dds": 5
+        },
+        "balances": {
+          "typed_ingress": 0,
+          "ingress_mailbox": 0,
+          "outbound_queue": 0,
+          "receive_mailbox": 0,
+          "publication": 0,
+          "end_to_end": 0
+        },
+        "source_enabled_seconds": 300.142899012,
+        "source_actual_hz": {
+          "imu": 199.99806824548605,
+          "joints": 50.00284880769399
+        },
+        "published": 27570,
+        "age_upper_histograms": {
+          "imu": {
+            "count": 22855,
+            "rounding": "up to 1ms",
+            "maximum_ms": 173,
+            "p50_ms": 107,
+            "p95_ms": 135,
+            "p99_ms": 146
+          },
+          "joint": {
+            "count": 4715,
+            "rounding": "up to 1ms",
+            "maximum_ms": 170,
+            "p50_ms": 114,
+            "p95_ms": 144,
+            "p99_ms": 156
+          }
+        },
+        "scope": "source-fenced and drained checkpoint deltas; no startup/diagnostic tail; SRT gap is not automatically WAN loss"
+      },
+      "competitor_check": {
+        "protocol": "UDP",
+        "target_bitrate": 128000,
+        "block_bytes": 1024,
+        "bytes": 5054464,
+        "seconds": 315.900041,
+        "offered_bits_per_second": 128001.60415300485,
+        "scope": "whole-run iperf client offered load; process liveness checked during scenario; not per-window delivery/loss",
+        "alive_poll_checks": 1238
+      },
+      "boot_id": "43ce1c65-4dc6-465a-beb6-178c1d04400f"
+    }
+  },
+  "measurement_order": [
+    "dynamic",
+    "permanent"
+  ],
+  "same_boot_if_both": true,
+  "limits": [
+    "One ordered pair with observer subprocess work, nondeterministic scheduling and order confounds",
+    "Permanent is a separate L2 fixture candidate, not a replacement baseline or historical fix",
+    "Sampled states do not prove exact kernel transition/drop causes",
+    "No physical delivery/realtime, performance, security parity or full M3 acceptance claim",
+    "Earlier failed cohorts/UNKNOWNs unchanged"
+  ],
+  "historical_arp_followup": {
+    "post_hoc": true,
+    "old_run": ".local/m3/20261106T181823876229Z",
+    "source_gap_seconds": 5.127369086,
+    "outgoing_arp_requests": 6,
+    "reply_before_source_resume_ns": 5250,
+    "reply_after_robot_session_change_ns": 119106083,
+    "neighbor_table_state_available": false,
+    "historical_verdict_changed": false,
+    "scope": "native hashes match earlier qualified flow archive; ARP timing association, not exact kernel cause or nonexecution proof"
+  },
+  "host_tests": {
+    "before_preflight": 134,
+    "before_measurement_slots": 136,
+    "after_output_immutability_budget_regressions": 138
+  }
+}

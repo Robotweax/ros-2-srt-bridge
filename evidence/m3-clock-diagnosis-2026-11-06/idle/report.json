@@ -1,0 +1,89 @@
+{
+  "channels": {
+    "python_realtime": {
+      "observed_model_passed": false,
+      "samples": 910,
+      "maximum_read_width_ns": 62541,
+      "violations": [
+        {
+          "index": 783,
+          "reason": "offset change exceeds 1000ppm",
+          "minimum_change_ns": 134861,
+          "elapsed_ns": 100030417,
+          "begin_ns": 1410919940016
+        }
+      ]
+    },
+    "libc_realtime": {
+      "observed_model_passed": false,
+      "samples": 910,
+      "maximum_read_width_ns": 958,
+      "violations": [
+        {
+          "index": 502,
+          "reason": "offset change exceeds 1000ppm",
+          "minimum_change_ns": 108098,
+          "elapsed_ns": 106910291,
+          "begin_ns": 1380969313003
+        },
+        {
+          "index": 783,
+          "reason": "offset change exceeds 1000ppm",
+          "minimum_change_ns": 136696,
+          "elapsed_ns": 100351749,
+          "begin_ns": 1410919728183
+        }
+      ]
+    },
+    "syscall_realtime": {
+      "observed_model_passed": false,
+      "samples": 910,
+      "maximum_read_width_ns": 1083,
+      "violations": [
+        {
+          "index": 502,
+          "reason": "offset change exceeds 1000ppm",
+          "minimum_change_ns": 108097,
+          "elapsed_ns": 106911083,
+          "begin_ns": 1380969318378
+        },
+        {
+          "index": 783,
+          "reason": "offset change exceeds 1000ppm",
+          "minimum_change_ns": 136695,
+          "elapsed_ns": 100216166,
+          "begin_ns": 1410919733058
+        }
+      ]
+    },
+    "syscall_raw": {
+      "observed_model_passed": true,
+      "samples": 910,
+      "maximum_read_width_ns": 1209,
+      "violations": []
+    },
+    "syscall_boottime": {
+      "observed_model_passed": true,
+      "samples": 910,
+      "maximum_read_width_ns": 542,
+      "violations": []
+    }
+  },
+  "realtime_model_passed": false,
+  "scope": "finite read-only diagnostic; no hidden-step guarantee, no automatic clock correction or qualification of later workload; raw/boottime are diagnostics only",
+  "requested_seconds": 95,
+  "clock_implementations": {
+    "time": {
+      "implementation": "clock_gettime(CLOCK_REALTIME)",
+      "monotonic": false,
+      "adjustable": true,
+      "resolution": 1e-09
+    },
+    "monotonic": {
+      "implementation": "clock_gettime(CLOCK_MONOTONIC)",
+      "monotonic": true,
+      "adjustable": false,
+      "resolution": 1e-09
+    }
+  }
+}

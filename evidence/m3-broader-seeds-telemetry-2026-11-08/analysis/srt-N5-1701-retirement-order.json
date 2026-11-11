@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "telemetry_file": ".local/m3-broader-seeds-build/srt-N5-1701-telemetry.json",
+  "telemetry_sha256": "df93902bb48469beb11867e1516b7901b4c6ae93dc59a78fd07194fc28920d71",
+  "analysis_source_sha256": "7b4d42fe2a76781578bc282ebcc40b7428ef63dce51e304ce52d079c28dc44bc",
+  "analysis": {
+    "run": ".local/m3/20261108T191626422171Z",
+    "scope": "whole operator capture FILE order, same UDP flow/destination socket and exact sequence; not realtime/socket processing order, authenticated acceptance, typed SAMPLE mapping or unique internal cause",
+    "flows": [
+      {
+        "flow": [
+          "172.19.0.3",
+          "172.19.0.2",
+          40692,
+          10081,
+          822424191
+        ],
+        "data_packets": 39,
+        "unique_data_sequences": 39,
+        "retirement_controls": 0,
+        "unique_retired_sequences": 0,
+        "repeated_retirement_controls": 0,
+        "unsupported_controls": 0,
+        "data_packets_after_prior_same_sequence_retirement": 0,
+        "unique_data_sequences_after_prior_retirement": 0,
+        "data_sequences_eventually_named_by_retirement": 0,
+        "boundaries": {
+          "3": 39
+        },
+        "encryption_key_flags": {
+          "1": 39
+        }
+      },
+      {
+        "flow": [
+          "172.19.0.3",
+          "172.19.0.2",
+          45037,
+          10081,
+          247471010
+        ],
+        "data_packets": 28222,
+        "unique_data_sequences": 28222,
+        "retirement_controls": 670,
+        "unique_retired_sequences": 324,
+        "repeated_retirement_controls": 346,
+        "unsupported_controls": 0,
+        "data_packets_after_prior_same_sequence_retirement": 0,
+        "unique_data_sequences_after_prior_retirement": 0,
+        "data_sequences_eventually_named_by_retirement": 122,
+        "boundaries": {
+          "3": 28222
+        },
+        "encryption_key_flags": {
+          "1": 28222
+        }
+      }
+    ],
+    "limitations": [
+      "A cleartext DROP_REQUEST can be rejected or remain pending until the peer send horizon permits it.",
+      "Prior capture control is not proof the provider applied retirement before an application read.",
+      "Later DATA with a previously retired sequence is consistent with late/discarded data; no decryption/provider-internal observation here."
+    ]
+  }
+}

@@ -38,7 +38,7 @@ struct JournalWorker::Impl {
             throw std::invalid_argument("worker requires absolute executable and serializable options");
         const auto init=worker_ipc::initialize_frame(options);
         int pair[2];if(socketpair(AF_UNIX,SOCK_SEQPACKET|SOCK_CLOEXEC|SOCK_NONBLOCK,0,pair)<0)throw std::runtime_error("worker socketpair failed");
-        try{execution=execution_detail::Pool::create();}catch(...){close(pair[0]);close(pair[1]);throw;}
+        try{execution=execution_detail::Pool::create(options.start_diagnostics);}catch(...){close(pair[0]);close(pair[1]);throw;}
         // Duplicate sources above all destination descriptors before spawn actions;
         // this is safe even when concurrent transport threads close/reuse fds.
         const int ipc_source=fcntl(pair[1],F_DUPFD_CLOEXEC,10);
@@ -100,7 +100,10 @@ struct JournalWorker::Impl {
             if(reply.journal.entry){const auto& e=*reply.journal.entry;
                 if((pending->request.operation!=WorkerOperation::invalidate_session&&e.request_id!=pending->request.request_id)||!valid_command(e.command)||e.payload_hash!=command_hash(e.route,e.command))throw std::runtime_error("invalid worker record");}
             const auto request=pending->request;const auto executed=pending->dispatch;*pending={};--count;
-            if(executed)executed->pool->revoke(*executed);
+            if(executed){
+                if(options.start_diagnostics)reply.start_observation=executed->pool->observation(*executed);
+                executed->pool->revoke(*executed);
+            }
             // The child may exit just after a committed result; that result is
             // still useful, but a dead/stopping worker cannot mint a send ticket.
             inspect();
@@ -143,7 +146,7 @@ struct JournalWorker::Impl {
     WorkerSubmission submit(const WorkerRequest& request,std::shared_ptr<execution_detail::Record> record={}){
     inspect();if(state==WorkerState::stopping||state==WorkerState::stopped)return {WorkerSubmit::stopped,0};
     if(state!=WorkerState::ready)return {WorkerSubmit::not_ready,0};
-    if(unsigned(request.operation)<1||unsigned(request.operation)>10)return {WorkerSubmit::invalid,0};
+    if(unsigned(request.operation)<1||unsigned(request.operation)>11)return {WorkerSubmit::invalid,0};
     if(count==requests.size())return {WorkerSubmit::busy,0};
     if(next==UINT64_MAX)return {WorkerSubmit::invalid,0};
     const auto token=next+1;const auto frame=worker_ipc::encode(request,token);
@@ -157,8 +160,21 @@ struct JournalWorker::Impl {
 JournalWorker::JournalWorker(WorkerOptions options):impl_(std::make_unique<Impl>(std::move(options))){}
 JournalWorker::~JournalWorker(){if(!impl_->join()&&impl_->pid>0){reap_later(impl_->pid);impl_->pid=-1;}if(impl_->socket>=0)close(impl_->socket);}
 WorkerSubmission JournalWorker::submit(const WorkerRequest& request){
-    if(request.operation==WorkerOperation::execute||request.grant_slot!=UINT32_MAX||request.grant_generation)return {WorkerSubmit::invalid,0};
+    if((request.operation==WorkerOperation::execute||request.operation==WorkerOperation::reconcile_sender)||request.grant_slot!=UINT32_MAX||request.grant_generation)return {WorkerSubmit::invalid,0};
     return impl_->submit(request);
+}
+WorkerSubmission JournalWorker::submit_reconcile(SenderSubmissionReceipt& receipt){
+    const auto p=receipt.proof_;
+    if(!p||p->live!=impl_->live||!p->live->load()||!p->claimed.load()||
+       p->disposition.load(std::memory_order_acquire)!=SubmissionDisposition::abandoned||
+       impl_->options.journal.side!=JournalSide::sender||p->entry.owner_epoch!=impl_->options.journal.process_epoch||
+       p->local_peer!=impl_->options.journal.local_peer_id||p->remote_peer!=impl_->options.journal.remote_peer_id)return {WorkerSubmit::invalid,0};
+    bool expected=false;if(!p->reconciliation_submitted.compare_exchange_strong(expected,true))return {WorkerSubmit::invalid,0};
+    WorkerRequest q;q.operation=WorkerOperation::reconcile_sender;q.request_id=p->entry.request_id;q.route=p->entry.route;
+    q.command=p->entry.command;q.context=p->entry.context;q.session=p->entry.context.session;
+    const auto result=impl_->submit(q);
+    if(result.result!=WorkerSubmit::queued)p->reconciliation_submitted.store(false);
+    return result;
 }
 WorkerSubmission JournalWorker::submit_execute(DispatchTicket&& ticket){
     const auto record=ticket.record_;

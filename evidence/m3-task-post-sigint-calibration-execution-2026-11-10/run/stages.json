@@ -1,0 +1,717 @@
+{
+  "status": "passed",
+  "rows": [
+    {
+      "slot": {
+        "id": "observer-readiness"
+      },
+      "status": "passed",
+      "produced": {
+        "status": "passed",
+        "target_launched": false
+      },
+      "assessment": {
+        "status": "passed",
+        "proof": {
+          "status": "passed",
+          "target_launched": false
+        }
+      }
+    },
+    {
+      "slot": {
+        "id": "controlled-post-sigint-assessment"
+      },
+      "status": "passed",
+      "produced": {
+        "status": "passed",
+        "scope": "one controlled native post-SIGINT metadata/lifecycle fixture only; no N1 rerun or campaign qualification",
+        "pre_signal_live": {
+          "samples": 2,
+          "first_begin_ns": 8260212753,
+          "last_end_ns": 8511473462
+        },
+        "post_signal_live": {
+          "samples": 2,
+          "first_begin_ns": 8763077170,
+          "last_end_ns": 9017513712
+        },
+        "controlled_absence": {
+          "kind": "not_enumerated_after_prior_identity",
+          "observed_begin_ns": 9269246545,
+          "observed_end_ns": 9269270045,
+          "sample_begin_ns": 9269103837,
+          "sample_end_ns": 9269433045,
+          "confirmed_exit": false
+        },
+        "candidate_metadata": {
+          "status": "consistent_metadata_only",
+          "scope": "task observations only; no capture-origin attestation, exit/no-reuse guarantee or campaign acceptance",
+          "parser_collector_sha256": "6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e",
+          "root": {
+            "pid": 7,
+            "start_ticks": 769
+          },
+          "samples": 5,
+          "readable_task_records": 9,
+          "nonempty_readable_stacks": 9,
+          "observed_disappearances": 1,
+          "raw_stack_reads_ok": 9,
+          "raw_stack_reads_unavailable": 0,
+          "confirmed_task_exits": 0,
+          "rows": [
+            {
+              "row": 1,
+              "begin_ns": 8260212753,
+              "end_ns": 8260617878,
+              "processes": [
+                {
+                  "identity": {
+                    "pid": 7,
+                    "start_ticks": 769
+                  },
+                  "status": "sampled",
+                  "tasks": [
+                    {
+                      "tid": 7,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 7,
+                        "start_ticks": 769,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    },
+                    {
+                      "tid": 8,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 8,
+                        "start_ticks": 785,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    }
+                  ],
+                  "disappearances": []
+                }
+              ]
+            },
+            {
+              "row": 2,
+              "begin_ns": 8510937753,
+              "end_ns": 8511473462,
+              "processes": [
+                {
+                  "identity": {
+                    "pid": 7,
+                    "start_ticks": 769
+                  },
+                  "status": "sampled",
+                  "tasks": [
+                    {
+                      "tid": 7,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 7,
+                        "start_ticks": 769,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    },
+                    {
+                      "tid": 8,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 8,
+                        "start_ticks": 785,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    }
+                  ],
+                  "disappearances": []
+                }
+              ]
+            },
+            {
+              "row": 3,
+              "begin_ns": 8763077170,
+              "end_ns": 8763499587,
+              "processes": [
+                {
+                  "identity": {
+                    "pid": 7,
+                    "start_ticks": 769
+                  },
+                  "status": "sampled",
+                  "tasks": [
+                    {
+                      "tid": 7,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 7,
+                        "start_ticks": 769,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    },
+                    {
+                      "tid": 8,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 8,
+                        "start_ticks": 785,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    }
+                  ],
+                  "disappearances": []
+                }
+              ]
+            },
+            {
+              "row": 4,
+              "begin_ns": 9017043670,
+              "end_ns": 9017513712,
+              "processes": [
+                {
+                  "identity": {
+                    "pid": 7,
+                    "start_ticks": 769
+                  },
+                  "status": "sampled",
+                  "tasks": [
+                    {
+                      "tid": 7,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 7,
+                        "start_ticks": 769,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    },
+                    {
+                      "tid": 8,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 8,
+                        "start_ticks": 785,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    }
+                  ],
+                  "disappearances": []
+                }
+              ]
+            },
+            {
+              "row": 5,
+              "begin_ns": 9269103837,
+              "end_ns": 9269433045,
+              "processes": [
+                {
+                  "identity": {
+                    "pid": 7,
+                    "start_ticks": 769
+                  },
+                  "status": "sampled",
+                  "tasks": [
+                    {
+                      "tid": 7,
+                      "classification": "readable_task",
+                      "task_identity": {
+                        "tid": 7,
+                        "start_ticks": 769,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "ok",
+                      "nonempty_readable_stack": true,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": null,
+                      "observed_end_ns": null
+                    }
+                  ],
+                  "disappearances": [
+                    {
+                      "tid": 8,
+                      "classification": "not_enumerated_after_prior_identity",
+                      "task_identity": {
+                        "tid": 8,
+                        "start_ticks": 785,
+                        "name": "python3",
+                        "state": "S"
+                      },
+                      "raw_stack_status": "not_attempted",
+                      "nonempty_readable_stack": false,
+                      "confirmed_exit": false,
+                      "observed_begin_ns": 9269246545,
+                      "observed_end_ns": 9269270045
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "candidate_lifecycle": {
+          "task_metadata_status": "consistent_metadata_only",
+          "observed_task_disappearances": [
+            {
+              "process_identity": {
+                "pid": 7,
+                "start_ticks": 769
+              },
+              "tid": 8,
+              "classification": "not_enumerated_after_prior_identity",
+              "task_identity": {
+                "tid": 8,
+                "start_ticks": 785,
+                "name": "python3",
+                "state": "S"
+              },
+              "raw_stack_status": "not_attempted",
+              "nonempty_readable_stack": false,
+              "confirmed_exit": false,
+              "observed_begin_ns": 9269246545,
+              "observed_end_ns": 9269270045
+            }
+          ],
+          "confirmed_task_exits": 0,
+          "raw_stack_reads_ok": 9,
+          "raw_stack_reads_unavailable": 0,
+          "samples": 5,
+          "post_signal_samples": 3,
+          "nonempty_kernel_stacks": 9,
+          "confirmed_worker_exits": [],
+          "worker_join_end_ns": null,
+          "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+          "clean_fast_exit_may_have_no_post_signal_sample": true
+        },
+        "confirmed_task_exits": 0,
+        "limitations": [
+          "no exact mid-read race guarantee",
+          "no no-reuse guarantee",
+          "no SDK/ROS/SRT workload or overhead equivalence"
+        ]
+      },
+      "assessment": {
+        "status": "passed",
+        "proof": {
+          "status": "passed",
+          "scope": "one controlled native post-SIGINT metadata/lifecycle fixture only; no N1 rerun or campaign qualification",
+          "pre_signal_live": {
+            "samples": 2,
+            "first_begin_ns": 8260212753,
+            "last_end_ns": 8511473462
+          },
+          "post_signal_live": {
+            "samples": 2,
+            "first_begin_ns": 8763077170,
+            "last_end_ns": 9017513712
+          },
+          "controlled_absence": {
+            "kind": "not_enumerated_after_prior_identity",
+            "observed_begin_ns": 9269246545,
+            "observed_end_ns": 9269270045,
+            "sample_begin_ns": 9269103837,
+            "sample_end_ns": 9269433045,
+            "confirmed_exit": false
+          },
+          "candidate_metadata": {
+            "status": "consistent_metadata_only",
+            "scope": "task observations only; no capture-origin attestation, exit/no-reuse guarantee or campaign acceptance",
+            "parser_collector_sha256": "6deab3c5e83e48b7c33dbbb4613c361469d9b62aa1bea86db0c1a8012cfae72e",
+            "root": {
+              "pid": 7,
+              "start_ticks": 769
+            },
+            "samples": 5,
+            "readable_task_records": 9,
+            "nonempty_readable_stacks": 9,
+            "observed_disappearances": 1,
+            "raw_stack_reads_ok": 9,
+            "raw_stack_reads_unavailable": 0,
+            "confirmed_task_exits": 0,
+            "rows": [
+              {
+                "row": 1,
+                "begin_ns": 8260212753,
+                "end_ns": 8260617878,
+                "processes": [
+                  {
+                    "identity": {
+                      "pid": 7,
+                      "start_ticks": 769
+                    },
+                    "status": "sampled",
+                    "tasks": [
+                      {
+                        "tid": 7,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 7,
+                          "start_ticks": 769,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      },
+                      {
+                        "tid": 8,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 8,
+                          "start_ticks": 785,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      }
+                    ],
+                    "disappearances": []
+                  }
+                ]
+              },
+              {
+                "row": 2,
+                "begin_ns": 8510937753,
+                "end_ns": 8511473462,
+                "processes": [
+                  {
+                    "identity": {
+                      "pid": 7,
+                      "start_ticks": 769
+                    },
+                    "status": "sampled",
+                    "tasks": [
+                      {
+                        "tid": 7,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 7,
+                          "start_ticks": 769,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      },
+                      {
+                        "tid": 8,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 8,
+                          "start_ticks": 785,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      }
+                    ],
+                    "disappearances": []
+                  }
+                ]
+              },
+              {
+                "row": 3,
+                "begin_ns": 8763077170,
+                "end_ns": 8763499587,
+                "processes": [
+                  {
+                    "identity": {
+                      "pid": 7,
+                      "start_ticks": 769
+                    },
+                    "status": "sampled",
+                    "tasks": [
+                      {
+                        "tid": 7,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 7,
+                          "start_ticks": 769,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      },
+                      {
+                        "tid": 8,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 8,
+                          "start_ticks": 785,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      }
+                    ],
+                    "disappearances": []
+                  }
+                ]
+              },
+              {
+                "row": 4,
+                "begin_ns": 9017043670,
+                "end_ns": 9017513712,
+                "processes": [
+                  {
+                    "identity": {
+                      "pid": 7,
+                      "start_ticks": 769
+                    },
+                    "status": "sampled",
+                    "tasks": [
+                      {
+                        "tid": 7,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 7,
+                          "start_ticks": 769,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      },
+                      {
+                        "tid": 8,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 8,
+                          "start_ticks": 785,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      }
+                    ],
+                    "disappearances": []
+                  }
+                ]
+              },
+              {
+                "row": 5,
+                "begin_ns": 9269103837,
+                "end_ns": 9269433045,
+                "processes": [
+                  {
+                    "identity": {
+                      "pid": 7,
+                      "start_ticks": 769
+                    },
+                    "status": "sampled",
+                    "tasks": [
+                      {
+                        "tid": 7,
+                        "classification": "readable_task",
+                        "task_identity": {
+                          "tid": 7,
+                          "start_ticks": 769,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "ok",
+                        "nonempty_readable_stack": true,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": null,
+                        "observed_end_ns": null
+                      }
+                    ],
+                    "disappearances": [
+                      {
+                        "tid": 8,
+                        "classification": "not_enumerated_after_prior_identity",
+                        "task_identity": {
+                          "tid": 8,
+                          "start_ticks": 785,
+                          "name": "python3",
+                          "state": "S"
+                        },
+                        "raw_stack_status": "not_attempted",
+                        "nonempty_readable_stack": false,
+                        "confirmed_exit": false,
+                        "observed_begin_ns": 9269246545,
+                        "observed_end_ns": 9269270045
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "candidate_lifecycle": {
+            "task_metadata_status": "consistent_metadata_only",
+            "observed_task_disappearances": [
+              {
+                "process_identity": {
+                  "pid": 7,
+                  "start_ticks": 769
+                },
+                "tid": 8,
+                "classification": "not_enumerated_after_prior_identity",
+                "task_identity": {
+                  "tid": 8,
+                  "start_ticks": 785,
+                  "name": "python3",
+                  "state": "S"
+                },
+                "raw_stack_status": "not_attempted",
+                "nonempty_readable_stack": false,
+                "confirmed_exit": false,
+                "observed_begin_ns": 9269246545,
+                "observed_end_ns": 9269270045
+              }
+            ],
+            "confirmed_task_exits": 0,
+            "raw_stack_reads_ok": 9,
+            "raw_stack_reads_unavailable": 0,
+            "samples": 5,
+            "post_signal_samples": 3,
+            "nonempty_kernel_stacks": 9,
+            "confirmed_worker_exits": [],
+            "worker_join_end_ns": null,
+            "scope": "registered worker absent after join completion; no worker exit-code/cause claim",
+            "clean_fast_exit_may_have_no_post_signal_sample": true
+          },
+          "confirmed_task_exits": 0,
+          "limitations": [
+            "no exact mid-read race guarantee",
+            "no no-reuse guarantee",
+            "no SDK/ROS/SRT workload or overhead equivalence"
+          ]
+        }
+      }
+    }
+  ],
+  "complete_M3_acceptance": false,
+  "scope": "one-readiness-one-native-post-sigint-task-assessment-calibration",
+  "disabled_case_ids": [
+    "N3-baseline-1701",
+    "N3-one-loss-1701",
+    "N3-two-loss-1701",
+    "N3-baseline-2903",
+    "N3-one-loss-2903",
+    "N3-two-loss-2903",
+    "N3-baseline-4211",
+    "N3-one-loss-4211",
+    "N3-two-loss-4211",
+    "N0-combined-1701",
+    "N4-admission-both",
+    "N4-admission-to-robot",
+    "N4-admission-to-operator",
+    "N4-dispatch-both",
+    "N4-dispatch-to-robot",
+    "N4-dispatch-to-operator",
+    "N4-started-both",
+    "N4-started-to-robot",
+    "N4-started-to-operator",
+    "N4-committed-both",
+    "N4-committed-to-robot",
+    "N4-committed-to-operator",
+    "N4-query-both",
+    "N4-ROS-freshness-both",
+    "N4-ROS-freshness-to-robot",
+    "N4-ROS-freshness-to-operator",
+    "N4-ROS-crash-before",
+    "N4-ROS-crash-effect",
+    "N4-ROS-crash-committed",
+    "N1-combined-1701",
+    "N1-combined-2903",
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "remaining_case_ids_disabled": [
+    "N1-combined-4211",
+    "N2-combined-1701",
+    "N2-combined-2903",
+    "N2-combined-4211",
+    "N5-combined-1701",
+    "N5-combined-2903",
+    "N5-combined-4211"
+  ],
+  "N1_2903_rerun": false,
+  "no_tuning": true,
+  "no_retries": true
+}

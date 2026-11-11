@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/tools/m3_rtps_hello.py", line 65, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/tools/m3_rtps_hello.py", line 62, in main
+    print(json.dumps(self_test() if a.self_test else inspect(a.pdml,a.prefix,a.source,a.owner),indent=2))
+                     ^^^^^^^^^^^
+  File "/workspace/tools/m3_rtps_hello.py", line 52, in self_test
+    assert decode(cdr,'01'*16) is not None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

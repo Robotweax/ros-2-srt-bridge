@@ -1,0 +1,150 @@
+{
+  "status": "passed",
+  "backend": "filtered_packet_socket",
+  "complete": true,
+  "filter": "udp port 10081 and (udp[8] & 128 = 0 or udp[8:2] = 32768)",
+  "libpcap_compile_version": "libpcap version 1.10.4 (with TPACKET_V3)",
+  "filter_program": [
+    [
+      40,
+      0,
+      0,
+      12
+    ],
+    [
+      21,
+      15,
+      0,
+      34525
+    ],
+    [
+      21,
+      0,
+      14,
+      2048
+    ],
+    [
+      48,
+      0,
+      0,
+      23
+    ],
+    [
+      21,
+      0,
+      12,
+      17
+    ],
+    [
+      40,
+      0,
+      0,
+      20
+    ],
+    [
+      69,
+      10,
+      0,
+      8191
+    ],
+    [
+      177,
+      0,
+      0,
+      14
+    ],
+    [
+      72,
+      0,
+      0,
+      14
+    ],
+    [
+      21,
+      2,
+      0,
+      10081
+    ],
+    [
+      72,
+      0,
+      0,
+      16
+    ],
+    [
+      21,
+      0,
+      5,
+      10081
+    ],
+    [
+      80,
+      0,
+      0,
+      22
+    ],
+    [
+      69,
+      0,
+      2,
+      128
+    ],
+    [
+      72,
+      0,
+      0,
+      22
+    ],
+    [
+      21,
+      0,
+      1,
+      32768
+    ],
+    [
+      6,
+      0,
+      0,
+      65535
+    ],
+    [
+      6,
+      0,
+      0,
+      0
+    ]
+  ],
+  "records": 8,
+  "kernel_packets": 8,
+  "kernel_drops": 0,
+  "truncated": 0,
+  "budget_exhausted": false,
+  "drain_snapshots": [
+    {
+      "records": 8,
+      "kernel_packets": 8,
+      "kernel_drops": 0
+    },
+    {
+      "records": 8,
+      "kernel_packets": 8,
+      "kernel_drops": 0
+    }
+  ],
+  "timestamp": "kernel SO_TIMESTAMPNS realtime, rounded down to PCAP microseconds; not monotonic age authority",
+  "scope": "owned fixed Linux/amd64 Ethernet fixture; final filter attached while protocol0 before eth0 ETH_P_ALL bind; no prefilter counter subtraction",
+  "protocol_before_bind": 0,
+  "receive_buffer_requested": 33554432,
+  "receive_buffer_actual": 8388608,
+  "attach_begin_ns": 4837076209,
+  "attach_end_ns": 4838123584,
+  "filter_before_bind": true,
+  "initial_kernel_packets": 0,
+  "bind_begin_ns": 4839884834,
+  "bind_end_ns": 4840037750,
+  "protocol_after_bind": 3,
+  "ready_ns": 4840046250,
+  "stop_before_ns": 9093592961,
+  "file_bytes": 2046,
+  "file_sha256": "e9bd6103dcfd0cf394c9069096d3faab5b5df6a16592a59431c9454d9a75d627"
+}

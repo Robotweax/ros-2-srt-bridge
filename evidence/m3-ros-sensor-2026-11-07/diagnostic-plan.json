@@ -1,0 +1,15 @@
+{
+  "status": "prospective",
+  "cases": [0,1,2],
+  "executions_each": 1,
+  "stop_on_first_failure": true,
+  "no_retry_or_replacement": true,
+  "scope": "finite IMU-only19 samples, requested20Hz; separate permanent-neighbor Docker candidate, not default200/50Hz full N3 or M3",
+  "identity": "source publisher paused until identity capture closed/drained/validated; exactly one SENSOR_BIND source DATA message1 observed at both endpoints; same owned flow outgoing handshake confirms initial sequence; no cryptographic identity claim from outer headers",
+  "phase_gap": "identity and measurement are separately closed capture phases; no continuous coverage claim; source published only after measurement capture ready and selector installed",
+  "targets": "row1 positions3 or2/3; message8 or7/8; sample IDs6 or5/6 because binding occupies source index0",
+  "gates": ["exact native and PCAP source/parity identities in both phases", "zero native copy/reserve loss and kernel drops", "standalone footer/file/filter equality and bounded stable drain", "one classifier drop per selected identity and removal", "source calls19 and exact observed payload IDs/order/digests", "single same session, qualified clocks and actual sensor QoS at checkpoints", "all six sensor accounting balances zero", "all source/mailbox/admission/publication/observer losses zero except exactly2 SRT-accept-to-receiver gap in two-loss case", "age-upper histogram population equals publications and maximum <=250ms", "unchanged interface features"],
+  "expected_publications_observations": [19,19,17],
+  "expected_measurement_source_parity_counts": [[19,5],[18,5],[17,5]],
+  "remaining": "full200/50Hz multiroute/seed matrix, deliberately late repaired-sample rejection and N4 command phases; no full M3 acceptance"
+}

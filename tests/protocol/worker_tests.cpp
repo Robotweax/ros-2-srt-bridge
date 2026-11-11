@@ -91,6 +91,8 @@ void backend_configuration(const std::filesystem::path& dir){
 void codec(){
     namespace ipc=worker_ipc;WorkerRequest q;q.operation=WorkerOperation::admit;q.request_id=random_identity();q.route=100;q.command={200,5000,8,9};q.context.source_monotonic_ns=99;
     const auto frame=ipc::encode(q,7);ipc::Reader r(frame);auto copy=ipc::request(r);check(copy.request_id==q.request_id&&copy.command==q.command&&copy.context.source_monotonic_ns==99&&r.token==7,"IPC roundtrip");
+    auto old=frame;old[5]=std::byte{3};bool refused=false;try{ipc::Reader obsolete(old);}catch(const std::exception&){refused=true;}check(refused,"old IPC worker version accepted");
+    q.operation=WorkerOperation::reconcile_sender;const auto receipt=ipc::encode(q,9);ipc::Reader receipt_reader(receipt);check(ipc::request(receipt_reader).operation==WorkerOperation::reconcile_sender,"receipt IPC operation missing");
     std::uint64_t seed=17;
     for(unsigned n=0;n<5000;++n){auto mutation=frame;seed=seed*6364136223846793005ULL+1;mutation[(seed>>16)%mutation.size()]^=std::byte((seed>>32)|1);
         try{ipc::Reader reader(mutation);(void)ipc::request(reader);}catch(const std::exception&){}++checks;}

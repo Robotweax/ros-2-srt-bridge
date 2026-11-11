@@ -109,7 +109,8 @@ SessionAction Session::sensor_connected(std::uint64_t generation, Security secur
     if (config_.role == Role::listener) return {};
     return emit(Bind{config_.local_epoch, remote_epoch_, binding_id_}, {Channel::sensor,generation}, now);
 }
-SessionAction Session::receive(Connection source, const MessageView& m, std::uint64_t now) {
+SessionAction Session::receive(Connection source, const MessageView& m, std::uint64_t now,ProbeAdmissionObservation* observation) {
+    if(observation)*observation={};
     const auto& e = m.envelope;
     if (source.channel != Channel::control && source.channel != Channel::sensor) return {SessionError::malformed};
     if (!control_up_ || (source.channel == Channel::control ? source.generation != control_generation_ :
@@ -144,17 +145,20 @@ SessionAction Session::receive(Connection source, const MessageView& m, std::uin
         high = e.sequence; session_id_ = last_session_ = e.session_id; bind_remote(e); return {};
     }
     if (e.kind == Kind::time_probe) {
+        if(observation){observation->fields_available=true;observation->t1=std::get<TimeProbe>(parsed.value).initiator_send_ns;}
         high = e.sequence;
         return emit(TimeReply{std::get<TimeProbe>(parsed.value).initiator_send_ns,now,now}, {Channel::control,control_generation_}, now);
     }
     if (e.kind == Kind::time_reply) {
         const auto& reply = std::get<TimeReply>(parsed.value);
+        if(observation){observation->fields_available=true;observation->t1=reply.initiator_send_ns;observation->t2=reply.responder_receive_ns;observation->t3=reply.responder_send_ns;}
         high = e.sequence;
         if (!pending_probe_ || *pending_probe_ != reply.initiator_send_ns || now - *pending_probe_ >= probe_timeout_ns)
             return {SessionError::probe_not_pending};
         pending_probe_.reset();
         const auto result = clock_.observe({config_.local_epoch,remote_epoch_,config_.local_clock_domain,remote_domain_,
             reply.initiator_send_ns,reply.responder_receive_ns,reply.responder_send_ns,now});
+        if(observation){observation->mapper_submitted=true;observation->mapper_result=result;}
         if (result != ClockError::none) return soft_clock(result) ? SessionAction{SessionError::clock_unqualified} : terminate(SessionError::clock_invalid, false);
         if (!local_ready_) {
             local_ready_ = true;
@@ -270,7 +274,7 @@ SampleResult Session::check_command(const Envelope& e,std::uint64_t now){
     if(e.valid_for_ms!=route->budget_ms)return {{SessionError::malformed},{},{}};
     const auto age=clock_.age_of_remote(e.source_monotonic_ns,now);
     if(age.error!=ClockError::none)return {soft_clock(age.error)||age.error==ClockError::future_sample?SessionAction{SessionError::clock_unqualified}:terminate(SessionError::clock_invalid,false),{},age};
-    if(!age.within_budget(static_cast<std::uint64_t>(route->budget_ms)*1000000))return {{SessionError::stale_sample},{},age};
+    if(!age.within_budget(static_cast<std::uint64_t>(route->budget_ms)*1000000))return {{SessionError::stale_sample},{},age,now};
     return {{},e,age,now};
 }
 SampleResult Session::admit_control(Connection source,const MessageView& m,std::uint64_t now){

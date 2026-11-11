@@ -1,0 +1,38 @@
+{
+  "status": "passed_offline_installed_import_closure_fix",
+  "pre_fix_head_sha": "74ee2b8ef6f54fe6cb8a69597badc706e32d2f29",
+  "review_finding": "P2 missing installed scenario_timeline dependency",
+  "change": {
+    "path": "ros2/robotweax_srt_bridge_demo/CMakeLists.txt",
+    "before_sha256": "8799df15975f8ab2b21e8e8e03a5d13f1c90290e1dad4d9610e9f0dd02ae22a7",
+    "after_sha256": "9ebea72d18079e69ca481f2877a0bd1c6ea386b76d7c01c6f25ebcbb5f116c2d",
+    "scope": "install list adds existing unchanged scenario_timeline.py"
+  },
+  "regression": "tests/test_demo_installed_imports.py",
+  "before": {
+    "tests": 3,
+    "failures": 2
+  },
+  "after": {
+    "tests": 3,
+    "failures": 0
+  },
+  "offline_fixture": "language-free CMake configure/install to temporary prefix; AST local import closure and isolated pure helper import",
+  "native_builds": 0,
+  "ROS_runtime_runs": 0,
+  "live_experiments": 0,
+  "Docker_calls": 0,
+  "tuning": false,
+  "retries": false,
+  "matched14_installed_artifacts_unchanged": true,
+  "other86_native_inputs_unchanged": true,
+  "only_accepted_native_input_source_delta": "ros2/robotweax_srt_bridge_demo/CMakeLists.txt",
+  "frozen_inputs_not_rebound": true,
+  "scoped_acceptance_unchanged": true,
+  "approval_does_not_extend_to_rebuilt_artifacts": true,
+  "original_failure_and_cohort_unchanged": true,
+  "PR2_keep_draft": true,
+  "merge_authorized": false,
+  "M4_enabled": false,
+  "campaign_execution_enabled": false
+}
