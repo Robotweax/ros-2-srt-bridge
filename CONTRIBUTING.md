@@ -1,12 +1,12 @@
 # Contributing
 
-Report reproducible bugs and discuss proposed changes through [GitHub Issues](https://github.com/Robotweax/ros-2-srt-bridge/issues). The source repository is public under the MIT license. Maintainer contact: [info@robotweax.ai](mailto:info@robotweax.ai).
+Report reproducible bugs and discuss proposed changes through [GitHub Issues](https://github.com/Robotweax/ros-2-srt-bridge/issues). The repository is currently private; contribution access follows its existing permissions. Maintainer contact: [info@robotweax.ai](mailto:info@robotweax.ai).
 
 ## Scope and preparation
 
 Read the [README](README.md), [architecture](ARCHITECTURE.md), [fresh-clone build guide](docs/BUILDING.md) and [scoped M3 acceptance](M3_SCOPED_ACCEPTANCE.md) before changing contracts. M3 qualifies the exact retained simulator/build artifacts only. Physical-robot safety, production networks, hard real-time behavior and general security certification are outside that acceptance. Intrinsic integration is paused; its draft plan is not an active implementation task.
 
-Use a focused branch, normally named `dev/<topic>`, from current main. Open a PR from a fork, or use a same-repository branch if you already have write access. Do not put access tokens in Git URLs or commit credentials.
+Use a focused branch, normally named `dev/<topic>`, from current main. While the repository is private and forking is disabled, contributors with branch access can open a same-repository PR; contact the maintainer if access is needed. Do not put access tokens in Git URLs or commit credentials.
 
 Submit work you have the right to contribute under the [MIT license](LICENSE). Identify third-party origins and retain their applicable notices. Do not copy dependency implementation code into bridge files without a specific provenance/license review. Update [dependency notices](THIRD_PARTY.md) when a dependency or its distribution boundary changes.
 
@@ -30,7 +30,7 @@ Review new logs, captures and PR attachments for secrets, personal data and depl
 
 Describe the concrete problem, resulting behavior, compatibility impact and validation. Include the relevant source/dependency identity and any remaining limitations. Keep unrelated generated files, build/install trees, raw run output and local settings out of the diff. Run `git diff --check` and review the complete staged diff before submitting.
 
-Open the PR as a draft while work or validation is incomplete. Maintainer review governs merge and release decisions. Public source availability does not authorize publishing binary SDKs, ROS bundles or container images; those require a separate release decision and the applicable dependency notices.
+Open the PR as a draft while work or validation is incomplete. Maintainer review governs merge and release decisions. Public visibility and release require a separate owner decision; contributions do not change the current private status.
 
 ## Security reports
 
