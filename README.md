@@ -8,6 +8,11 @@ M3 completion applies only to the exact accepted simulator/build evidence; [PR2]
 
 See [acceptance review](M3_ACCEPTANCE_REVIEW.md), [closure plan](M3_CLOSURE_PLAN.md) and [delivery plan](DELIVERY_PLAN.md). For PR2, start with the [final review guide](PR2_REVIEW_GUIDE.md); final code approval and required hosted checks are separate from scoped M3 acceptance. Historical status chronology is archived under [acceptance consolidation](evidence/m3-acceptance-consolidation-2026-11-11/README.md). Usage and implementation notes below retain their original historical context.
 
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+Third-party dependencies retain their respective licenses.
+
 ## Run M0
 
 Requires Docker with Linux amd64 execution, Python 3, Git, and a local SRT

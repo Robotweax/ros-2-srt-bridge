@@ -6,4 +6,5 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   msg/CommandStatus.msg msg/BridgeState.msg msg/SimulatorState.msg msg/DdsCommandFrame.msg msg/DdsCommandState.msg
   srv/ExecuteCommand.srv srv/GetCommandStatus.srv srv/ApplyMeasurementRate.srv srv/GetBridgeMetrics.srv srv/SetPublishing.srv)
 ament_export_dependencies(rosidl_default_runtime)
+install(FILES LICENSE DESTINATION share/${PROJECT_NAME} COMPONENT licenses)
 ament_package()
