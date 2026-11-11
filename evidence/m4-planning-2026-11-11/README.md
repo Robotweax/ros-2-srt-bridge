@@ -1,0 +1,7 @@
+# M4 planning record — no implementation or experiment
+
+[M4_PLAN.md](../../M4_PLAN.md) proposes a gated, state-first integration with the actual pinned Intrinsic simulation runtime, then the existing rate-command contract applied only to the adapter's own telemetry poller. It is not a generic Intrinsic command API or permission to change hardware/controller settings. The target integration repository is observed empty and remains untouched.
+
+`plan.json` records the disabled stages/cases, unresolved environment/fixture/artifact pins, candidate APIs, next eligible phase and carried-forward limitations. `upstream-sources.json` records primary pinned-source URLs/blob IDs and the read-only target repository observation. `planning-input-hashes.json` binds local source constraints and unchanged M3 acceptance/failure records. `verification.json` records document/data/hash checks only; no implementation, installer, checkout of the target repo, build, runtime discovery, test, experiment, tuning, replay or target-repository write occurred. No execution grant or freeze is created.
+
+PR2's merge does not start M4. Earlier draft/no-merge and pending acceptance records remain dated history. M3's exact simulator/build scope, original failures/UNKNOWN and limitations remain unchanged. A new Intrinsic/Lyrical build cannot inherit M3's accepted Jazzy binary qualification. The planning branch/PR is documentation only, kept in the bridge repo so no initial target-repository commit is implied.

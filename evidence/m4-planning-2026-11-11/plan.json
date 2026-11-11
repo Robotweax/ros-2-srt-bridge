@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-11",
+  "milestone": "M4",
+  "status": "planning_only_not_authorized",
+  "target_repository": "https://github.com/Robotweax/intrinsic-core-srt-integration",
+  "target_repository_observed_empty": true,
+  "target_repository_initialized": false,
+  "canonical_plan": "M4_PLAN.md",
+  "M3_status": "accepted_within_documented_scope",
+  "M3_decision": "baselines/m3-acceptance.json",
+  "bridge_merge_commit": "87d97f0faa8a1779c0f8d72b62a04dedc1b483e5",
+  "provider_candidate_pin": "52be7c86ee1f303cbb0c8718c364217e4dd97a36",
+  "intrinsic_candidate_pin": "723c3ee01f155f7a8bb04e449d917fe8ac5784e9",
+  "runtime_qualified": false,
+  "proposed_host": "native x86-64 Ubuntu26.04; availability/access unconfirmed",
+  "ROS_distro": "Lyrical candidate, actual package/runtime verification required",
+  "runtime_image_digest": null,
+  "simulation_fixture": null,
+  "SDK_endpoint": null,
+  "proposed_read_only_apis": [
+    "ICON Client.list_parts / ListParts",
+    "ICON Client.get_config / GetConfig",
+    "ICON Client.get_status / GetStatus"
+  ],
+  "proposed_SENSOR": {
+    "route": 2,
+    "type": "sensor_msgs/msg/JointState",
+    "parts": 1,
+    "joints": "1..6 exact configured mapping",
+    "poll_target_hz": 20,
+    "local_publication_age_bound_ms": 250,
+    "physical_source_age_claim": false
+  },
+  "proposed_CONTROL": {
+    "schema": "existing SetMeasurementRateCommand",
+    "effect": "adapter-owned telemetry polling schedule only",
+    "rates_hz": [
+      10,
+      20
+    ],
+    "generations": [
+      0,
+      1,
+      2
+    ],
+    "original_start_budget_ms": 5000,
+    "generic_diagnostic_API_claim": false,
+    "native_intrinsic_mutation": false,
+    "scope_agreement_required_before_implementation": true
+  },
+  "stages": [
+    {
+      "id": "P0",
+      "name": "Interface and environment decision",
+      "effort": "0.5\u20131 engineering day; host/provisioning wait unknown",
+      "requires": [
+        "phase authorization",
+        "native x86-64 Ubuntu26.04 host/access",
+        "deployed-artifact/release-to-candidate mapping",
+        "simulation fixture and endpoint/type contract",
+        "agreement on adapter polling-rate diagnostic"
+      ],
+      "output": [
+        "docs/API_INVENTORY.md",
+        "docs/ENVIRONMENT.md"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    },
+    {
+      "id": "P1",
+      "name": "Initialize integration repository and compatible build",
+      "effort": "1\u20133 engineering days",
+      "requires": [
+        "P0 passed",
+        "implementation/build authorization"
+      ],
+      "output": [
+        "repository README/architecture/handoff",
+        "pinned dependency manifest",
+        "separate matched Lyrical builds and installed checks"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    },
+    {
+      "id": "P2",
+      "name": "Contracts and offline adapter implementation",
+      "effort": "2\u20133 engineering days",
+      "requires": [
+        "P1 passed",
+        "reviewed contract/crash windows/finite limits"
+      ],
+      "output": [
+        "docs/STATE_CONTRACT.md",
+        "docs/COMMAND_CONTRACT.md",
+        "bounded mapper/poller and durable apply/dedup store",
+        "offline tests"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    },
+    {
+      "id": "P3",
+      "name": "Actual pinned-runtime state-only integration",
+      "effort": "1\u20132 engineering days",
+      "requires": [
+        "P2 passed",
+        "separate runtime/deployment and bounded-run authorization",
+        "new freeze"
+      ],
+      "output": [
+        "bounded readiness and real-runtime state export evidence"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    },
+    {
+      "id": "P4",
+      "name": "Poll-rate CONTROL and bounded fault cases",
+      "effort": "1\u20132 engineering days",
+      "requires": [
+        "P3 passed",
+        "new matched build/freeze and exact case authorization"
+      ],
+      "output": [
+        "rate/generation/runtime observation proof",
+        "bounded fault/recovery evidence"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    },
+    {
+      "id": "P5",
+      "name": "Scoped M4 acceptance review",
+      "effort": "0.5\u20131 engineering day",
+      "requires": [
+        "required cases passed or explicit retained failures/limitations",
+        "separate user acceptance decision"
+      ],
+      "output": [
+        "M4 scoped acceptance statement and immutable source/build/evidence index"
+      ],
+      "implementation_enabled": false,
+      "execution_enabled": false,
+      "status": "proposed_disabled"
+    }
+  ],
+  "proposed_cases": [
+    {
+      "id": "O1",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "O2",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "R0",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "S1",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "C1",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F1",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F2",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F3",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F4",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F5",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    },
+    {
+      "id": "F6",
+      "status": "proposed_disabled",
+      "execution_enabled": false
+    }
+  ],
+  "case_parameters_require_predeclared_freeze": true,
+  "current_execution_grants": 0,
+  "current_freezes_created": 0,
+  "next_eligible_phase_after_separate_authorization": "P0 interface/environment inspection only",
+  "implementation_enabled": false,
+  "builds_enabled": false,
+  "deployments_enabled": false,
+  "execution_enabled": false,
+  "M4_enabled": false,
+  "live_runs": 0,
+  "Docker_calls": 0,
+  "target_repository_write_operations": 0,
+  "tuning": false,
+  "retries": false,
+  "physical_robot_operations": false,
+  "historical_failures_preserved": true,
+  "original_failure_reference": {
+    "path": "evidence/m3-current-long-execution-2026-11-10/cases/N1-combined-2903/strict-assessment.json",
+    "sha256": "e9cf84c7b6beffe584cfc06134d44c263b4884fcf166b3e113a7430cdedd7d30",
+    "cohort_path": "evidence/m3-current-long-execution-2026-11-10/cohort.json",
+    "cohort_sha256": "3277c483ed49e5c806875d1988ec6f7f03593a155da98c8531c5ca9200ccd325"
+  },
+  "limitations_carried_forward": [
+    "N5 skipped83 command slots and roughly6s adjacent intent gaps; no continuous2s service guarantee",
+    "zero SENSOR imbalance is not loss-free delivery; original age/admission bounds apply",
+    "observer-supported DDS ENOENT does not reconstruct original SRT-provider task metadata or prove no unseen reuse",
+    "DDS age/capture-population/security/resource comparison remains scoped; failed loaded cold startup supplies no steady-window denominator",
+    "no general transport superiority, observer-overhead equivalence, physical-robot, hard-real-time or cross-host-clock qualification",
+    "original shutdown hang root cause unknown; fresh passes do not prove removal",
+    "N4 has its recorded fixture/ROS gates, not uniform independent native stack/packet/overhead coverage",
+    "same native build across different harness revisions is not a single frozen statistical campaign",
+    "large raw captures and full traces remain indexed local-only; public export is selected",
+    "continuous queue high-water, whole-stack hard memory peaks and general security certification unqualified"
+  ],
+  "M3_freezes_rebound": false,
+  "M4_acceptance_granted": false
+}
