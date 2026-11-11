@@ -4,7 +4,7 @@ This guide builds the current source and installed packages. It does not launch 
 
 ## 1. Clone the bridge
 
-Git and network access are needed for the source downloads. While the repository is private, use a GitHub account or credential helper with repository access; do not put a token into the clone URL.
+Git and network access are needed for source downloads. The public bridge and SRT repositories can be cloned without GitHub authentication; do not put a token into the clone URL.
 
 ```bash
 git clone https://github.com/Robotweax/ros-2-srt-bridge.git

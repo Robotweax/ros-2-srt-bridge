@@ -8,7 +8,7 @@ SENSOR uses bounded, latest-sample queues with freshness checks. CONTROL uses a 
 
 - **M3 accepted within its documented simulator/build scope:** 38 distinct planned case IDs have passing evidence across separate freezes and harness revisions. Historical failures and intent 118 UNKNOWN remain preserved.
 - [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2), [MIT licensing PR4](https://github.com/Robotweax/ros-2-srt-bridge/pull/4) and [disclosure-review PR5](https://github.com/Robotweax/ros-2-srt-bridge/pull/5) are merged.
-- The repository remains private. The owner chose to [retain the reviewed history and evidence](PUBLICATION_RETENTION_DECISION.md). The [wiki review](PUBLICATION_WIKI_REVIEW.md) confirmed no existing pages. The [final source-publication readiness review](PUBLICATION_READINESS_REVIEW.md) found no blockers within its documented scope; publication still requires an explicit owner decision and a current hosted-surface check.
+- **Source code is public under the MIT license as of 2026-11-11.** The owner authorized publication with the [reviewed history and evidence retained](PUBLICATION_RETENTION_DECISION.md), following the [wiki review](PUBLICATION_WIKI_REVIEW.md) and [source-publication readiness review](PUBLICATION_READINESS_REVIEW.md). Those dated reports describe the pre-publication state. This source publication includes no binary SDK, ROS bundle or container-image release.
 - **Intrinsic integration is paused.** Its separate repository and draft PR1 do not provide runtime qualification or an active M4 implementation.
 
 Start with the [formal M3 decision](M3_ACCEPTANCE_DECISION.md), [scoped acceptance](M3_SCOPED_ACCEPTANCE.md) and [disclosure review](PUBLICATION_DISCLOSURE_REVIEW.md). Acceptance applies to the exact retained simulator/build artifacts. New builds have their own provenance and do not inherit that qualification.
@@ -63,7 +63,7 @@ Maintained by **Robotweax GmbH** — [info@robotweax.ai](mailto:info@robotweax.a
 
 Use [GitHub Issues](https://github.com/Robotweax/ros-2-srt-bridge/issues) for general questions and reproducible bugs. Email suspected security issues privately with the subject `ROS 2 SRT Bridge security report`; include the affected commit and a minimal reproducer, with secrets and confidential payloads removed. Do not put sensitive reports or credentials in public issues.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, verification and evidence preservation, and [THIRD_PARTY.md](THIRD_PARTY.md) for dependency licenses and distribution boundaries.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, verification and evidence preservation, and [THIRD_PARTY.md](THIRD_PARTY.md) for dependency licenses and distribution boundaries. The contribution guide preserves its pre-publication access notes as a hash-bound historical record. Source contributions now use a fork, or a same-repository branch if you have write access; its former private-status statements are superseded by this README. Public source availability does not authorize binary or image releases.
 
 ## License
 
