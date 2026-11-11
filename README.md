@@ -6,7 +6,7 @@ The [fresh N1/2903/600s qualification](evidence/m3-fresh-n1-2903-execution-2026-
 
 M3 completion applies only to the exact accepted simulator/build evidence; [PR2](https://github.com/Robotweax/ros-2-srt-bridge/pull/2) remains draft/unmerged, and M4/Intrinsic has not started. No next run or stage is enabled. Historical failures are preserved.
 
-See [acceptance review](M3_ACCEPTANCE_REVIEW.md), [closure plan](M3_CLOSURE_PLAN.md) and [delivery plan](DELIVERY_PLAN.md). Historical status chronology is archived under [acceptance consolidation](evidence/m3-acceptance-consolidation-2026-11-11/README.md). Usage and implementation notes below retain their original historical context.
+See [acceptance review](M3_ACCEPTANCE_REVIEW.md), [closure plan](M3_CLOSURE_PLAN.md) and [delivery plan](DELIVERY_PLAN.md). For PR2, start with the [final review guide](PR2_REVIEW_GUIDE.md); final code approval and required hosted checks are separate from scoped M3 acceptance. Historical status chronology is archived under [acceptance consolidation](evidence/m3-acceptance-consolidation-2026-11-11/README.md). Usage and implementation notes below retain their original historical context.
 
 ## Run M0
 
