@@ -1,5 +1,14 @@
 # ROS 2 SRT Bridge
 
+The [seven remaining calibrated LONG cases](evidence/m3-current-remaining-execution-2026-11-11/README.md)
+PASS7/7 on one invocation of freeze df3cfbabfe3b. All1,567 admitted commands/effects
+succeed; all six SENSOR balances zero per case. N5's83 skipped slots remain explicit.
+712 readable stacks/1 supported DDS-thread ENOENT, with raw unavailability retained;
+SDK/launch/profile/capture/cleanup gates pass. No tuning/retries/extra cases or builds.
+N1/2903 historical FAIL preserved; other stages stayed disabled. Eight distinct
+LONG IDs now have passing current-build results; N1/2903 remains an acceptance gap.
+M3 open/PR2 draft/M4 untouched.
+
 The [seven remaining N1/N2/N5 cases](evidence/m3-current-remaining-preparation-2026-11-10/README.md)
 are prepared on freeze df3cfbabfe3b, **not run; execution disabled, no grant**.
 Order:N1/4211;N2/1701,2903,4211;N5/1701,2903,4211, with original600s/300s source

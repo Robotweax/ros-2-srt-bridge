@@ -6178,3 +6178,55 @@ oldcohortSHA unchanged. Original1PASS1FAIL7NOTEXECUTED remains; freshfuturecohor
 wouldwrite separatepath, neveroverwriteoldresults. ExactmidreadENOENT/unseenreuse/
 overheadequivalence/longprofile coverage remainunqualified; N1/2903 failure still
 anexplicitgap. No M3acceptance/merge/IntrinsicM4. PR2draft; futureexactgrantrequired.
+
+
+## 2026-11-11 — Seven remaining calibrated LONG cases PASS7/7
+
+The [seven remaining calibrated LONG cases](evidence/m3-current-remaining-execution-2026-11-11/README.md)
+PASS7/7 on one invocation of freeze df3cfbabfe3b. All1,567 admitted commands/effects
+succeed; all six SENSOR balances zero per case. N5's83 skipped slots remain explicit.
+712 readable stacks/1 supported DDS-thread ENOENT, with raw unavailability retained;
+SDK/launch/profile/capture/cleanup gates pass. No tuning/retries/extra cases or builds.
+N1/2903 historical FAIL preserved; other stages stayed disabled. Eight distinct
+LONG IDs now have passing current-build results; N1/2903 remains an acceptance gap.
+M3 open/PR2 draft/M4 untouched.
+
+Exactly1 orderedgrant/invocation freeze df3cfbabfe3b/base685e1bf; driver0.
+N1/4211 +all3N2 source600s each; all3N5 source300s each. All strictcalibrated
+metadata/SDKvisibility/launch/socket/stage/execclock/realSENSORcommandcapture/
+originalprofile/competitor/cleanup gatesPASS. Quiescentpreflight+percasepostflight/
+finalfrozenintegrityPASS. No tuning/retry/watchdog/build/testoverlap/extraSDKcheck/
+N0N3N4case/N1oldcase. Otherstages/31excludedIDs untouched. No nextcasequeued.
+
+Commands:N1/4211=300;N2/1701,2903,4211=300each;N5/1701=125,2903=116,4211=126.
+All1567admitted confirmed/effects,0UNKNOWN/unresolved/not_admitted. N5skips25/34/24
+(total83) andmaxadjacentintentgaps6011.849253/6022.526002/6013.721337ms retained;
+notcontinuous2scadence orlatencyguarantee. All6SENSORbalances0percase. Maxobserved
+publicationageupper227ms<250ms. Original losses/replacements/expiry countersremain
+itemized; accountingbalance notlossfree. Sourcewindows600.114364/600.137076/
+600.166043/600.135985/300.112504/300.147483/300.132933s. Cadencegatespass.
+
+Observer712readable/1rawunavailable/121supportedtaskobservations/0confirmedtaskexits.
+AllpositiveSDKlaunchesexit0unforced, operatorsignalend-to-reap176.528251..225.823501ms.
+OneN2/2903 DDSwatchdogTID116/start129398 waslistedthenall6contentreads+dircheck
+ENOENT, matchingroot111/start129366, verifiedpreviousidentity. Enumerationend
+1908692352745; missingread/absence1908692738703..1908692801995; SIGINTend
+1908642148911; reap1908818677162. Newruleobserved_absence_after_prior_identity,
+rawstackunavailable remainsunavailable/noexits/no-unseenreuse/causeassertion.
+ActualDDS enumeration/readabsence path, notretrofitoldN1SRTproviderproof.
+Allotherobservationsenumerationabsence; percasefullmetadata inobserver-summary.
+
+823rawfiles2359812816bytes locallyretainedandindexed at frozenremainingoutput;
+publiccases661byteidenticalselectedrawexports41625410bytes +percase selectedrun
+summaries. LargePCAP/mono/fullrunJSON/longtraceslocalonly; export-map mapscopied
+bytesandlistsomissions.2MiBexportselectiononly,nogate/rawretentionchange.
+Closedjournals included. Complete strictreplayrequireslocalindexedraw. Rootcohort/
+postflight/grant/preflight/gatereport/observer-summary/publicandlocalindexesretain
+scope/results. Independentallownedcontainers/networks/volumesabsence+credentials
+removed. Allsource/current14/preserved13/fullchain/native87/input/oldrawpublic/
+preparationindex/originalN1assessmentSHA/originalcohortSHA PASS.0newtests/builds.
+
+Originalsnapshot1PASS1FAIL7NOT_EXECUTED immutable; sevenoldunexecuteddirsabsent,
+fresh7outputsseparate. CurrentdistinctLONGcoverage8passingIDs incloldN1/1701;
+N1/2903originalFAIL excludednotrerun/notrequalified, remainsacceptancegap. NoM3
+acceptance/merge/IntrinsicM4. PR2draft; no automaticnewfreeze/grant/extraexperiment.
