@@ -1,6 +1,9 @@
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 get_filename_component(_bridge_root "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+install(FILES "${_bridge_root}/LICENSE"
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/robotweax-srt-bridge
+  COMPONENT licenses)
 set(_bridge_features core)
 set(_bridge_targets robotweax_srt_bridge_core)
 set_target_properties(robotweax_srt_bridge_core PROPERTIES EXPORT_NAME core)
