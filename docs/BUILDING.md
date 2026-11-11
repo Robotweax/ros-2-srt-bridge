@@ -142,3 +142,9 @@ Package discovery confirms installation, not transport communication or simulato
 - Intrinsic integration remains paused and is not a dependency of this guide.
 
 The [README](../README.md), [architecture](../ARCHITECTURE.md) and [scoped acceptance](../M3_SCOPED_ACCEPTANCE.md) describe supported contracts and their limits.
+
+## Verification of these instructions
+
+The documented command blocks were checked from fresh GitHub checkouts of bridge commit `1e52b76fd7eff6fd040f1be6fe79905dacadd106` and the SRT pin above. The portable core passed all five contract tests on macOS arm64. A separate Linux amd64 container build, with networking disabled and empty SRT/bridge/ROS prefixes, built and installed the full SDK and all three ROS packages; package discovery and four installed license copies were checked.
+
+The Linux validation reused an existing Ubuntu/ROS dependency image, recorded by its actual image ID. Apt/rosdep bootstrap was not executed on a fresh host. No bridge node, simulator or M3 campaign was launched. This is source/build/install verification, not runtime qualification or a replacement M3 baseline. [Validation details](../evidence/publication-docs-2026-11-11/build-verification.json).
